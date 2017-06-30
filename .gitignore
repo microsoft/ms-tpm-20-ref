@@ -286,3 +286,7 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# TPM simulator run-time/state files
+NVChip
+RsaKeyCacheCrt.data
