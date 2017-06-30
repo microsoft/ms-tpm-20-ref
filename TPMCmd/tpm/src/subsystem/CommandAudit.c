@@ -40,6 +40,7 @@
 #include "Tpm.h"
 
 //** Functions
+
 //*** CommandAuditPreInstall_Init()
 // This function initializes the command audit list. This function is simulates
 // the behavior of manufacturing. A function is used instead of a structure
@@ -48,7 +49,6 @@
 //
 // This function would not be implemented outside of a manufacturing or
 // simulation environment.
-
 void
 CommandAuditPreInstall_Init(
     void
@@ -214,8 +214,9 @@ CommandAuditCapGetCCList(
             {
                 // If we have not filled up the return list, add this command
                 // code to its
-                TPM_CC      cc = s_ccAttr[commandIndex].commandIndex;
-                if(s_ccAttr[commandIndex].V)
+                TPM_CC      cc = GET_ATTRIBUTE(s_ccAttr[commandIndex], 
+                                               TPMA_CC, commandIndex);
+                if(IS_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, V))   
                     cc += (1 << 29);
                 commandList->commandCodes[commandList->count] = cc;
                 commandList->count++;

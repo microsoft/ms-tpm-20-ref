@@ -67,8 +67,8 @@ TPM2_ECDH_ZGen(
     if(eccKey->publicArea.type != TPM_ALG_ECC)
         return TPM_RCS_KEY + RC_ECDH_ZGen_keyHandle;
     // Selected key needs to be unrestricted with the 'decrypt' attribute
-    if(eccKey->publicArea.objectAttributes.restricted == SET
-       || eccKey->publicArea.objectAttributes.decrypt != SET)
+    if(IS_ATTRIBUTE(eccKey->publicArea.objectAttributes, TPMA_OBJECT, restricted)
+       || !IS_ATTRIBUTE(eccKey->publicArea.objectAttributes, TPMA_OBJECT, decrypt))
         return TPM_RCS_ATTRIBUTES + RC_ECDH_ZGen_keyHandle;
     // Make sure the scheme allows this use
     if(eccKey->publicArea.parameters.eccDetail.scheme.scheme != TPM_ALG_ECDH

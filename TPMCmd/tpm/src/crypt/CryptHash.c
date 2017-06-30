@@ -59,14 +59,6 @@ HASH_DEF_TEMPLATE(SHA384);
 HASH_DEF_TEMPLATE(SHA512);
 #endif
 
-#if 0
-SMAC_METHODS        hashMethods = {(SEQUENCE_DATA_METHOD)CryptDigestUpdate, 
-                                    CryptHashEnd};
-SMAC_METHODS        hmacMethods = {(SEQUENCE_DATA_METHOD)CryptDigestUpdate, 
-                                    CryptHmacEnd};
-#endif
-
-
 HASH_DEF nullDef = {{0}};
 
 //** Obligatory Initialization Functions
@@ -579,7 +571,7 @@ CryptDigestUpdateInt(
     UINT64           intValue       // IN: integer value to be hashed
     )
 {
-#if LITTLE_ENDIAN_TPM == YES
+#if LITTLE_ENDIAN_TPM
     intValue = REVERSE_ENDIAN_64(intValue);
 #endif
     CryptDigestUpdate(state, intSize, &((BYTE *)&intValue)[8 - intSize]);
@@ -822,20 +814,20 @@ CryptKDFa(
     UINT32          *counterInOut,  // IN/OUT: caller may provide the iteration
                                     //     counter for incremental operations to
                                     //     avoid large intermediate buffers.
-    BOOL             once           // IN: TRUE - only 1 iteration is performed
-                                    //     FALSE if iteration count determined by
-                                    //     "sizeInBits"
+    UINT16           blocks         // IN: If non-zero, this is the maximum number
+                                    //     of blocks to be returned, regardless
+                                    //     of sizeInBit
     )
 {
-    UINT32                   counter = 0;    // counter value
-    INT16                    bytes;          // number of bytes to produce
+    UINT32                   counter = 0;       // counter value
+    INT16                    bytes;             // number of bytes to produce
+    UINT16                   generated;         // number of bytes generated
     BYTE                    *stream = keyStream;
     HMAC_STATE               hState;
     UINT16                   digestSize = CryptHashGetDigestSize(hashAlg);
 
     pAssert(key != NULL && keyStream != NULL);
-    pAssert(once == FALSE || (sizeInBits & 7) == 0);
-
+    
     if(digestSize == 0)
         return 0;
 
@@ -846,26 +838,26 @@ CryptKDFa(
     // it is a fatal error.
     pAssert(((sizeInBits + 7) / 8) <= INT16_MAX);
 
-    bytes = once ? digestSize : (INT16)((sizeInBits + 7) / 8);
+    // The number of bytes to be generated is the smaller of the sizeInBits bytes or
+    // the number of requested blocks. The number of blocks is the smaller of the
+    // number requested or the number allowed by sizeInBits. A partial block is
+    // a full block.
+    bytes = (blocks > 0) ? blocks * digestSize : (UINT16)BITS_TO_BYTES(sizeInBits);
+    generated = bytes;
 
     // Generate required bytes
     for(; bytes > 0; bytes -= digestSize)
     {
         counter++;
-        if(bytes < digestSize)
-            digestSize = bytes;
-
         // Start HMAC
         if(CryptHmacStart(&hState, hashAlg, key->size, key->buffer) == 0)
             return 0;
-
         // Adding counter
         CryptDigestUpdateInt(&hState.hashState, 4, counter);
 
         // Adding label
         if(label != NULL)
             HASH_DATA(&hState.hashState, label->size, (BYTE *)label->buffer);
-
         // Add a null. SP108 is not very clear about when the 0 is needed but to
         // make this like the previous version that did not add an 0x00 after
         // a null-terminated string, this version will only add a null byte
@@ -875,7 +867,6 @@ CryptKDFa(
            || (label->size == 0)
            || (label->buffer[label->size - 1] != 0))
             CryptDigestUpdateInt(&hState.hashState, 1, 0);
-
         // Adding contextU
         if(contextU != NULL)
             HASH_DATA(&hState.hashState, contextU->size, contextU->buffer);
@@ -885,15 +876,22 @@ CryptKDFa(
         // Adding size in bits
         CryptDigestUpdateInt(&hState.hashState, 4, sizeInBits);
 
-        CryptHmacEnd(&hState, digestSize, stream);
+        // Complete and put the data in the buffer
+        CryptHmacEnd(&hState, bytes, stream);
         stream = &stream[digestSize];
     }
-    // Mask off bits if the required bits is not a multiple of byte size
-    if((sizeInBits % 8) != 0)
+    // Mask off bits if the required bits is not a multiple of byte size. Only do
+    // this if this is a call that is returning all the blocks indicated in
+    // sizeInBits
+#if 0 //?? Masking in the KDF is disabled. If the calling function wants something
+      //?? less than even number of bytes, then the caller should do the masking 
+      //?? because there is no universal way to do it here
+    if((blocks == 0) && (sizeInBits % 8) != 0)
         keyStream[0] &= ((1 << (sizeInBits % 8)) - 1);
+#endif
     if(counterInOut != NULL)
         *counterInOut = counter;
-    return (UINT16)((sizeInBits + 7) / 8);
+    return generated;
 }
 
 //*** CryptKDFe()

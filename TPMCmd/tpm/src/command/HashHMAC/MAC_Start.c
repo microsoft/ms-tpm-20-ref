@@ -75,10 +75,10 @@ TPM2_MAC_Start(
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, RC_MAC_Start_inScheme);    
     // Make sure that the key is not restricted
-    if(publicArea->objectAttributes.restricted == SET)
+    if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, restricted))
         return TPM_RCS_ATTRIBUTES + RC_MAC_Start_handle;
     // and that it is a signing key
-    if(publicArea->objectAttributes.sign != SET)
+    if(!IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign))
         return TPM_RCS_KEY + RC_MAC_Start_handle;
 
 // Internal Data Update

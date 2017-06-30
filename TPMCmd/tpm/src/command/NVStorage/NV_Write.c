@@ -94,8 +94,8 @@ TPM2_NV_Write(
     // full sized.
     // Note: if the requested size is the same as the Index data size, then offset
     // will have to be zero. Otherwise, the range check above would have failed.
-    if(IsNv_TPMA_NV_WRITEALL(attributes)
-       && in->data.t.size < nvIndex->publicArea.dataSize)
+    if(IS_ATTRIBUTE(attributes, TPMA_NV, WRITEALL)
+       && in->data.t.size < nvIndex->publicArea.dataSize)   
         return TPM_RC_NV_RANGE;
 
 // Internal Data Update

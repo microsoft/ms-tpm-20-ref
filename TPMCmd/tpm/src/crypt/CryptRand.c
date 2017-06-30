@@ -613,16 +613,20 @@ DRBG_InstantiateSeededKdf(
     TPM_ALG_ID       kdf,           // IN: the KDF to use
     TPM2B           *seed,          // IN: the seed to use
     const TPM2B     *label,         // IN: a label for the generation process.
-    TPM2B           *context        // IN: the context value
+    TPM2B           *context,       // IN: the context value
+    UINT32           limit          // IN: Maximum number of bits from the KDF
     )
 {
     state->magic = KDF_MAGIC;
+    state->limit = limit;
     state->seed = seed;
     state->hash = hashAlg;
     state->kdf = kdf;
     state->label = label;
     state->context = context;
-    state->counter = 1;
+    state->digestSize = CryptHashGetDigestSize(hashAlg);
+    state->counter = 0;
+    state->residual.t.size = 0;
     return TRUE;
 }
 
@@ -740,19 +744,80 @@ DRBG_Generate(
     UINT16           randomSize     // IN: the number of bytes to generate
     )
 {
-//
     if(state == NULL)
         state = (RAND_STATE *)&drbgDefault;
 
-    // If the caller used a KDF state, generate a sequence from the KDF
+    // If the caller used a KDF state, generate a sequence from the KDF not to 
+    // exceed the limit.
     if(state->kdf.magic == KDF_MAGIC)
     {
         KDF_STATE       *kdf = (KDF_STATE *)state;
-        UINT32           count = (UINT32)kdf->counter;
-        if((randomSize != 0) && (random != NULL))
-            CryptKDFa(kdf->hash, kdf->seed, kdf->label, kdf->context, NULL,
-                      randomSize * 8, random, &count, 0);
-        kdf->counter = count;
+        UINT32           counter = (UINT32)kdf->counter;
+        INT32            bytesLeft = randomSize;
+
+        if(random == NULL)
+            return 0;
+        // If the number of bytes to be returned would put the generator 
+        // over the limit, then return 0
+        if((((kdf->counter * kdf->digestSize) + randomSize) * 8) > kdf->limit)
+            return 0;
+        // Process partial and full blocks until all requested bytes provided
+        while(bytesLeft > 0)
+        {
+            // If there is any residual data in the buffer, copy it to the output
+            // buffer
+            if(kdf->residual.t.size > 0)
+            {
+                INT32      size;
+//
+                // Don't use more of the residual than will fit or more than are
+                // available
+                size = MIN(kdf->residual.t.size, bytesLeft);
+                
+                // Copy some or all of the residual to the output. The residual is
+                // at the end of the buffer. The residual might be a full buffer.
+                MemoryCopy(random,
+                           &kdf->residual.t.buffer
+                           [kdf->digestSize - kdf->residual.t.size], size);
+                
+                // Advance the buffer pointer
+                random += size;
+
+                // Reduce the number of bytes left to get
+                bytesLeft -= size;
+
+                // And reduce the residual size appropriately
+                kdf->residual.t.size -= (UINT16)size;
+            } 
+            else
+            {
+                UINT16           blocks = (UINT16)(bytesLeft / kdf->digestSize);
+// 
+                // Get the number of required full blocks
+                if(blocks > 0)
+                {
+                    UINT16      size = blocks * kdf->digestSize;
+// Get some number of full blocks and put them in the return buffer
+                    CryptKDFa(kdf->hash, kdf->seed, kdf->label, kdf->context, NULL,
+                              kdf->limit, random, &counter, blocks);
+
+                    // reduce the size remaining to be moved and advance the pointer
+                    bytesLeft -= size;
+                    random += size;
+                }
+                else
+                {
+                    // Fill the residual buffer with a full block and then loop to
+                    // top to get part of it copied to the output.
+                    kdf->residual.t.size = CryptKDFa(kdf->hash, kdf->seed,
+                                                     kdf->label, kdf->context, NULL,
+                                                     kdf->limit,
+                                                     kdf->residual.t.buffer,
+                                                     &counter, 1);
+                }
+            }
+        }
+        kdf->counter = counter;
         return randomSize;
     }
     else if(state->drbg.magic == DRBG_MAGIC)
@@ -855,6 +920,7 @@ DRBG_Uninstantiate(
     return TPM_RC_SUCCESS;
 }
 
+#if 0
 //*** CryptRandMinMax()
 // This function generates a value that as not larger than (2^'max') - 1 
 // and no smaller than 2^('min' - 1). For example, if 'max' == 4 and 'min' == 2, then 
@@ -879,3 +945,4 @@ CryptRandMinMax(
     BnToBytes(bn, out, &size);
     return size;
 }
+#endif

@@ -49,7 +49,7 @@
 // of the instance data.
 // All the data is instanced in Global.c.
 #if !defined _TPM_H_
-#error "Should not be called"
+#error "Should only be instanced in TPM.h"
 #endif
 
 
@@ -61,7 +61,6 @@
 //#define SELF_TEST
 _REDUCE_WARNING_LEVEL_(2)
 #include <string.h>
-//#include <setjmp.h>
 #include <stddef.h>
 _NORMAL_WARNING_LEVEL_
 
@@ -471,7 +470,7 @@ typedef BYTE            *NV_RAM_REF;
 // little endian system. This will put the bytes with the 4-octet values in the
 // correct order but will swap the pinLimit and pinCount values. When written, the
 // PIN index is simply handled as a normal index with the octets in canonical order.
-#if BIG_ENDIAN_TPM == YES
+#if BIG_ENDIAN_TPM
 typedef struct
 {
     UINT32      pinCount;

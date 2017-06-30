@@ -60,7 +60,7 @@ TPM2_VerifySignature(
 
 // Input Validation
     // The object to validate the signature must be a signing key.
-    if(signObject->publicArea.objectAttributes.sign != SET)
+    if(!IS_ATTRIBUTE(signObject->publicArea.objectAttributes, TPMA_OBJECT, sign))
         return TPM_RCS_ATTRIBUTES + RC_VerifySignature_keyHandle;
 
     // Validate Signature.  TPM_RC_SCHEME, TPM_RC_HANDLE or TPM_RC_SIGNATURE

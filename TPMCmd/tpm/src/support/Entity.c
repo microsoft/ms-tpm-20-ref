@@ -440,7 +440,8 @@ EntityGetHierarchy(
             // If only the platform can delete the index, then it is
             // considered to be in the platform hierarchy, otherwise it
             // is in the owner hierarchy.
-            if(IsNv_TPMA_NV_PLATFORMCREATE(nvIndex->publicArea.attributes))
+            if(IS_ATTRIBUTE(nvIndex->publicArea.attributes, TPMA_NV, 
+                            PLATFORMCREATE))
                 hierarchy = TPM_RH_PLATFORM;
             else
                 hierarchy = TPM_RH_OWNER;

@@ -115,13 +115,15 @@ TPM2_Import(
     TPM2B_DATA               data;                   // symmetric key
     TPMT_SENSITIVE           sensitive;
     TPM2B_NAME               name;
+    TPMA_OBJECT              attributes; 
     UINT16                   innerKeySize = 0;       // encrypt key size for inner
                                                      // wrapper
 
 // Input Validation
+    // to save typing
+    attributes = in->objectPublic.publicArea.objectAttributes;
     // FixedTPM and fixedParent must be CLEAR
-    if(in->objectPublic.publicArea.objectAttributes.fixedTPM == SET
-       || in->objectPublic.publicArea.objectAttributes.fixedParent == SET)
+    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM) || IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedParent))
         return TPM_RCS_ATTRIBUTES + RC_Import_objectPublic;
 
     // Get parent pointer
@@ -146,7 +148,7 @@ TPM2_Import(
             return TPM_RCS_SIZE + RC_Import_encryptionKey;
         // If encryptedDuplication is SET, then the object must have an inner
         // wrapper
-        if(in->objectPublic.publicArea.objectAttributes.encryptedDuplication)
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, encryptedDuplication))
             return TPM_RCS_ATTRIBUTES + RC_Import_encryptionKey;
     }
     // See if there is an outer wrapper
@@ -170,7 +172,7 @@ TPM2_Import(
     {
         // If encrytpedDuplication is set, then the object must have an outer
         // wrapper
-        if(in->objectPublic.publicArea.objectAttributes.encryptedDuplication)
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, encryptedDuplication))
             return TPM_RCS_ATTRIBUTES + RC_Import_inSymSeed;
         data.t.size = 0;
     }
@@ -191,7 +193,7 @@ TPM2_Import(
     // If the parent of this object has fixedTPM SET, then validate this
     // object as if it were being loaded so that validation can be skipped 
     // when it is actually loaded. 
-    if(parentObject->publicArea.objectAttributes.fixedTPM == SET)
+    if(IS_ATTRIBUTE(parentObject->publicArea.objectAttributes, TPMA_OBJECT, fixedTPM))
     {
         result = ObjectLoad(NULL, NULL, &in->objectPublic.publicArea, 
                             &sensitive, RC_Import_objectPublic, RC_Import_duplicate,

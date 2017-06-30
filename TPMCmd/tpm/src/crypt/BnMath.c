@@ -535,14 +535,21 @@ BnGetRandomBits(
     RAND_STATE      *rand
 )
 {
-    TPM2B_TYPE(LARGEST, LARGEST_NUMBER);
-    TPM2B_LARGEST   large;
+    // Since this could be used for ECC key generation using the extra bits method,
+    // make sure that the value is large enough
+    TPM2B_TYPE(LARGEST, LARGEST_NUMBER + 8);
+    TPM2B_LARGEST    large;
 //
     large.b.size = (UINT16)BITS_TO_BYTES(bits);
-    DRBG_Generate(rand, large.t.buffer, large.t.size);
-    BnFrom2B(n, &large.b);
-    BnMaskBits(n, bits);
-    return TRUE;
+    if(DRBG_Generate(rand, large.t.buffer, large.t.size) == large.t.size)
+    {
+        if(BnFrom2B(n, &large.b) != NULL)
+        {
+            if(BnMaskBits(n, bits))
+                return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 //*** BnGenerateRandomInRange()

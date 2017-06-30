@@ -150,7 +150,8 @@ DRBG_InstantiateSeededKdf(
     TPM_ALG_ID       kdf,           // IN: the KDF to use
     TPM2B           *seed,          // IN: the seed to use
     const TPM2B     *label,         // IN: a label for the generation process.
-    TPM2B           *context        // IN: the context value
+    TPM2B           *context,       // IN: the context value
+    UINT32           limit          // IN: Maximum number of bits from the kdf
     );
 
 //**** DRBG_AdditionalData()
@@ -230,6 +231,7 @@ DRBG_Uninstantiate(
     DRBG_STATE      *drbgState      // IN/OUT: working state to erase
     );
 
+#if 0
 //*** CryptRandMinMax()
 // This function generates a value that as not larger than (2^'max') - 1
 // and no smaller than 2^('min' - 1). For example, if 'max' == 4 and 'min' == 2, then
@@ -242,6 +244,7 @@ CryptRandMinMax(
     UINT32           min,
     RAND_STATE      *rand
     );
+#endif
 
 
 #endif  // _CRYPTRAND_FP_H_

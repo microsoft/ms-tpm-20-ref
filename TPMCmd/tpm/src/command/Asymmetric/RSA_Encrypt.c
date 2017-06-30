@@ -69,7 +69,7 @@ TPM2_RSA_Encrypt(
     if(rsaKey->publicArea.type != TPM_ALG_RSA)
         return TPM_RCS_KEY + RC_RSA_Encrypt_keyHandle;
     // selected key must have the decryption attribute
-    if(rsaKey->publicArea.objectAttributes.decrypt != SET)
+    if(!IS_ATTRIBUTE(rsaKey->publicArea.objectAttributes, TPMA_OBJECT, decrypt))
         return TPM_RCS_ATTRIBUTES + RC_RSA_Encrypt_keyHandle;
 
     // Is there a label?

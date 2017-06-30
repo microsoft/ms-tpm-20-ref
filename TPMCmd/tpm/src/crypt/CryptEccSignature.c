@@ -203,12 +203,10 @@ Exit:
 //
 //
 // Regrettably, the parameters in this function kind of collide with the parameter
-// names used in ECSCHNORR making for a lot of confusion. In particular, the 'k'
-// value in this function is
-// value in this function u
-//
+// names used in ECSCHNORR making for a lot of confusion. //
 //  return type: TPM_RC
 //      TPM_RC_SCHEME       unsupported hash algorithm
+//      TPM_RC_NO_RESULT    cannot get values from random number generator
 static TPM_RC
 BnSignEcdaa(
     TPM2B_ECC_PARAMETER     *nonceK,        // OUT: nonce component of the signature
@@ -235,14 +233,18 @@ BnSignEcdaa(
         retVal = TPM_RC_VALUE;
     else
     {
-        // This allocation is here because k is not defined until CrypGenerateR()
-        // is done.
+        // This allocation is here because 'r' doesn't have a value until 
+        // CrypGenerateR() is done.
         ECC_INITIALIZED(bnR, &r);
         do
         {
             // generate nonceK such that 0 < nonceK < n
             // use bnT as a temp.
-            BnEccGetPrivate(bnT, AccessCurveData(E), rand);
+            if(!BnEccGetPrivate(bnT, AccessCurveData(E), rand))
+            {
+                retVal = TPM_RC_NO_RESULT;
+                break;
+            }
             BnTo2B(bnT, &nonceK->b, 0);
 
             T.t.size = CryptHashStart(&state, scheme->details.ecdaa.hashAlg);

@@ -42,7 +42,7 @@
 // Complete a sequence and flush the object.
 */
 // return type: TPM_RC
-//      TPM_RC_TYPE             'sequenceHandle' does not reference a hash or HMAC
+//      TPM_RC_MODE             'sequenceHandle' does not reference a hash or HMAC
 //                              sequence object
 TPM_RC
 TPM2_SequenceComplete(
@@ -51,9 +51,7 @@ TPM2_SequenceComplete(
     )
 {
     HASH_OBJECT                      *hashObject;
-
 // Input validation
-
     // Get hash object pointer
     hashObject = (HASH_OBJECT *)HandleToObject(in->sequenceHandle);
 
@@ -61,7 +59,6 @@ TPM2_SequenceComplete(
     if(hashObject->attributes.hashSeq == CLEAR
        && hashObject->attributes.hmacSeq == CLEAR)
         return TPM_RCS_MODE + RC_SequenceComplete_sequenceHandle;
-
 // Command Output
     if(hashObject->attributes.hashSeq == SET)           // sequence object for hash
     {
@@ -75,8 +72,6 @@ TPM2_SequenceComplete(
         out->result.t.size = CryptHashEnd(&hashObject->state.hashState[0], 
                                          sizeof(out->result.t.buffer),
                                          out->result.t.buffer);
-
-
         // Check if the first block of the sequence has been received
         if(hashObject->attributes.firstBlock == CLEAR)
         {
@@ -85,7 +80,6 @@ TPM2_SequenceComplete(
             if(TicketIsSafe(&in->buffer.b))
                 hashObject->attributes.ticketSafe = SET;
         }
-
         // Output ticket
         out->validation.tag = TPM_ST_HASHCHECK;
         out->validation.hierarchy = in->hierarchy;
@@ -128,9 +122,7 @@ TPM2_SequenceComplete(
         out->validation.hierarchy = TPM_RH_NULL;
         out->validation.digest.t.size = 0;
     }
-
 // Internal Data Update
-
     // mark sequence object as evict so it will be flushed on the way out
     hashObject->attributes.evict = SET;
 

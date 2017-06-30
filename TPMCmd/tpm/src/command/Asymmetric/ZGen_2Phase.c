@@ -69,9 +69,8 @@ TPM2_ZGen_2Phase(
         return TPM_RCS_KEY + RC_ZGen_2Phase_keyA;
 
     // keyA must not be restricted and must be a decrypt key
-    if(eccKey->publicArea.objectAttributes.restricted == SET
-       || eccKey->publicArea.objectAttributes.decrypt != SET
-       )
+    if(IS_ATTRIBUTE(eccKey->publicArea.objectAttributes, TPMA_OBJECT, restricted)
+       || !IS_ATTRIBUTE(eccKey->publicArea.objectAttributes, TPMA_OBJECT, decrypt))
         return TPM_RCS_ATTRIBUTES + RC_ZGen_2Phase_keyA;
 
     // if the scheme of keyA is TPM_ALG_NULL, then use the input scheme; otherwise

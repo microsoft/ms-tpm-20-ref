@@ -119,14 +119,16 @@ GetClosestCommandIndex(
         // entry.
         // Note: Put this check first so that the typical case of only one vendor-
         // specific command doesn't waste any more time.
-        if(s_ccAttr[LIBRARY_COMMAND_ARRAY_SIZE].commandIndex >= searchIndex)
+        if(GET_ATTRIBUTE(s_ccAttr[LIBRARY_COMMAND_ARRAY_SIZE], TPMA_CC, 
+                         commandIndex) >= searchIndex)
         {
             // the vendor array is always assumed to be packed so there is
             // no need to check to see if the command is implemented
             return LIBRARY_COMMAND_ARRAY_SIZE;
         }
         // See if this is out of range on the top
-        if(s_ccAttr[COMMAND_COUNT - 1].commandIndex < searchIndex)
+        if(GET_ATTRIBUTE(s_ccAttr[COMMAND_COUNT - 1], TPMA_CC, commandIndex) 
+           < searchIndex)
         {
             return UNIMPLEMENTED_COMMAND_INDEX;
         }
@@ -139,7 +141,8 @@ GetClosestCommandIndex(
         while(min <= max)
         {
             commandIndex = (min + max + 1) / 2;
-            diff = s_ccAttr[commandIndex].commandIndex - searchIndex;
+            diff = GET_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, commandIndex)
+                - searchIndex;
             if(diff == 0)
                 return commandIndex;
             if(diff > 0)
@@ -166,7 +169,8 @@ GetClosestCommandIndex(
     }
     // Get here if the V-Bit was not set in 'commandCode'
 
-    if(s_ccAttr[LIBRARY_COMMAND_ARRAY_SIZE - 1].commandIndex < searchIndex)
+    if(GET_ATTRIBUTE(s_ccAttr[LIBRARY_COMMAND_ARRAY_SIZE - 1], TPMA_CC, 
+                     commandIndex) < searchIndex)
     {
         // requested index is out of the range to the top
 #if VENDOR_COMMAND_ARRAY_SIZE > 0
@@ -185,7 +189,7 @@ GetClosestCommandIndex(
     }
     // If the request is lower than any value in the array, then return
     // the lowest value (needs to be an index for an implemented command
-    if(s_ccAttr[0].commandIndex >= searchIndex)
+    if(GET_ATTRIBUTE(s_ccAttr[0], TPMA_CC, commandIndex) >= searchIndex)
     {
         return NextImplementedIndex(0);
     }
@@ -207,7 +211,8 @@ GetClosestCommandIndex(
         while(min <= max)
         {
             commandIndex = (min + max + 1) / 2;
-            diff = s_ccAttr[commandIndex].commandIndex - searchIndex;
+            diff = GET_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, 
+                                 commandIndex) - searchIndex;
             if(diff == 0)
                 return commandIndex;
             if(diff > 0)
@@ -272,9 +277,9 @@ CommandCodeToCommandIndex(
     // requested, then the command is not implemented.
     if(commandIndex != UNIMPLEMENTED_COMMAND_INDEX)
     {
-        if((s_ccAttr[commandIndex].commandIndex != searchIndex)
-           || ((s_ccAttr[commandIndex].V == SET) && !vendor)
-           || ((s_ccAttr[commandIndex].V == CLEAR) && vendor))
+        if((GET_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, commandIndex) 
+            != searchIndex)
+           || (IS_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, V)) != vendor)
             commandIndex = UNIMPLEMENTED_COMMAND_INDEX;
     }
     return commandIndex;
@@ -307,8 +312,9 @@ GetCommandCode(
     COMMAND_INDEX    commandIndex   // IN: the command index
     )
 {
-    TPM_CC              commandCode = s_ccAttr[commandIndex].commandIndex;
-    if(s_ccAttr[commandIndex].V)
+    TPM_CC           commandCode = GET_ATTRIBUTE(s_ccAttr[commandIndex],
+                                                 TPMA_CC, commandIndex);
+    if(IS_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, V))
         commandCode += CC_VEND;
     return commandCode;
 }
@@ -426,9 +432,9 @@ IsWriteOperation(
 #ifdef  WRITE_LOCK
     return ((s_commandAttributes[commandIndex] & WRITE_LOCK) != 0);
 #else
-    if(!s_ccAttr[commandIndex].V)
+    if(!IS_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, V))
     {
-        switch(s_ccAttr[commandIndex].commandIndex)
+        switch(GET_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, commandIndex))
         {
             case TPM_CC_NV_Write:
 #if CC_NV_Increment
@@ -468,9 +474,9 @@ IsReadOperation(
     return ((s_commandAttributes[commandIndex] & READ_LOCK) != 0);
 #else
 
-    if(!s_ccAttr[commandIndex].V)
+    if(!IS_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, V))
     {
-        switch(s_ccAttr[commandIndex].commandIndex)
+        switch(GET_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, commandIndex))
         {
             case TPM_CC_NV_Read:
             case TPM_CC_PolicyNV:
@@ -546,6 +552,6 @@ IsVendorCommand(
     COMMAND_INDEX    commandIndex   // IN: command index to check
     )
 {
-    return (s_ccAttr[commandIndex].V == SET);
+    return (IS_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, V));
 }
 #endif // INLINE_FUNCTIONS

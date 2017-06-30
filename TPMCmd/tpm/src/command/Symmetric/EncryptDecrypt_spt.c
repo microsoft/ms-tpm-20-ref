@@ -70,18 +70,20 @@ EncryptDecryptShared(
     BOOL                 OK;
 // Input Validation
     symKey = HandleToObject(keyHandleIn);
-//??    mode = symKey->publicArea.parameters.symDetail.sym.mode.sym;
     mode = symKey->publicArea.parameters.symDetail.sym.mode.sym;
 
     // The input key should be a symmetric key
     if(symKey->publicArea.type != TPM_ALG_SYMCIPHER)
         return TPM_RCS_KEY + RC_EncryptDecrypt_keyHandle;
     // The key must be unrestricted and allow the selected operation
-    OK = symKey->publicArea.objectAttributes.restricted != SET;
+    OK = !IS_ATTRIBUTE(symKey->publicArea.objectAttributes, 
+                       TPMA_OBJECT, restricted);
     if(YES == decryptIn)
-        OK = OK && symKey->publicArea.objectAttributes.decrypt == SET;
+        OK = OK && IS_ATTRIBUTE(symKey->publicArea.objectAttributes, 
+                                TPMA_OBJECT, decrypt);
     else
-        OK = OK && symKey->publicArea.objectAttributes.sign == SET;
+        OK = OK && IS_ATTRIBUTE(symKey->publicArea.objectAttributes, 
+                                TPMA_OBJECT, sign);
     if(!OK)
         return TPM_RCS_ATTRIBUTES + RC_EncryptDecrypt_keyHandle;
 

@@ -77,13 +77,13 @@ TPM2_NV_ReadLock(
     // It is not an error to read lock an uninitialized Index.
     
     // if TPMA_NV_READ_STCLEAR is not set, the index can not be read-locked
-    if(nvAttributes.TPMA_NV_READ_STCLEAR == CLEAR)
+    if(!IS_ATTRIBUTE(nvAttributes, TPMA_NV, READ_STCLEAR))   
         return TPM_RCS_ATTRIBUTES + RC_NV_ReadLock_nvIndex;
 
 // Internal Data Update
 
     // Set the READLOCK attribute
-    nvAttributes.TPMA_NV_READLOCKED = SET;
+    SET_ATTRIBUTE(nvAttributes, TPMA_NV, READLOCKED);
 
     // Write NV info back
     return NvWriteIndexAttributes(nvIndex->publicArea.nvIndex,

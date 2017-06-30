@@ -154,7 +154,8 @@ CryptGenerateKeyDes(
         BYTE                    *pK = sensitive->sensitive.sym.t.buffer;
         int                      i = (sensitive->sensitive.sym.t.size + 7) / 8;
 // Use the random number generator to generate the required number of bits
-        DRBG_Generate(rand, pK, sensitive->sensitive.sym.t.size);
+        if(DRBG_Generate(rand, pK, sensitive->sensitive.sym.t.size) == 0)
+            return TPM_RC_NO_RESULT;
         for(; i > 0; pK += 8, i--)
         {
             UINT64      k = BYTE_ARRAY_TO_UINT64(pK);
@@ -164,8 +165,6 @@ CryptGenerateKeyDes(
     } while(!CryptDesValidateKey(&sensitive->sensitive.sym));
     return TPM_RC_SUCCESS;
 }
-
-
 
 #endif
 //***

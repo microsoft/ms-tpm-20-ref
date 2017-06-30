@@ -35,7 +35,7 @@
 /*(Auto)
 
     Created by TpmStructures Version 2.7 Sept 13, 2016
-    This file created on Mar 31, 2017, 11:12:17AM 
+    This file created on May  8, 2017, 10:36:21PM 
 
 */
 
@@ -72,9 +72,11 @@
 
 
 // Table 0:1 - Defines for Processor Values (DefinesTable)
-#define  BIG_ENDIAN_TPM       NO
-#define  LITTLE_ENDIAN_TPM    YES
-#define  AUTO_ALIGN           NO
+#define  BIG_ENDIAN_TPM             NO
+#define  LITTLE_ENDIAN_TPM          !BIG_ENDIAN_TPM
+#define  MOST_SIGNIFICANT_BIT_0     NO
+#define  LEAST_SIGNIFICANT_BIT_0    !MOST_SIGNIFICANT_BIT_0
+#define  AUTO_ALIGN                 NO
 
 
 // Table 0:2 - Defines for Implemented Algorithms (ImplementedDefines)
@@ -355,6 +357,7 @@
 #define  CRT_FORMAT_RSA                 YES
 #define  VENDOR_COMMAND_COUNT           0
 #define  MAX_VENDOR_BUFFER_SIZE         1024
+#define  TPM_MAX_DERIVATION_BITS        16384
 
 
 // Table 1:2 - Definition of TPM_ALG_ID Constants  (TPM_ALG_ID_Processing)

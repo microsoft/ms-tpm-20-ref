@@ -32,11 +32,10 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 /*(Auto)
 
     Created by TpmStructures Version 2.7 Sept 13, 2016
-    This file created on Mar 23, 2017, 02:04:27PM 
+    This file created on May  8, 2017, 11:50:00AM 
 
 */
 
@@ -57,367 +56,367 @@
 // but tuned for different purpose
 const TPMA_CC    s_ccAttr [] = {
 #if (PAD_LIST  || CC_NV_UndefineSpaceSpecial)
-        {0x011f, 0, 1, 0, 0, 2, 0, 0, 0},     // TPM_CC_NV_UndefineSpaceSpecial
+        TPMA_CC_INITIALIZER(0x011f, 0, 1, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_EvictControl)
-        {0x0120, 0, 1, 0, 0, 2, 0, 0, 0},     // TPM_CC_EvictControl
+        TPMA_CC_INITIALIZER(0x0120, 0, 1, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_HierarchyControl)
-        {0x0121, 0, 1, 1, 0, 1, 0, 0, 0},     // TPM_CC_HierarchyControl
+        TPMA_CC_INITIALIZER(0x0121, 0, 1, 1, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_UndefineSpace)
-        {0x0122, 0, 1, 0, 0, 2, 0, 0, 0},     // TPM_CC_NV_UndefineSpace
+        TPMA_CC_INITIALIZER(0x0122, 0, 1, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST )
-        {0x0123, 0, 0, 0, 0, 0, 0, 0, 0},     // 
+        TPMA_CC_INITIALIZER(0x0123, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ChangeEPS)
-        {0x0124, 0, 1, 1, 0, 1, 0, 0, 0},     // TPM_CC_ChangeEPS
+        TPMA_CC_INITIALIZER(0x0124, 0, 1, 1, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ChangePPS)
-        {0x0125, 0, 1, 1, 0, 1, 0, 0, 0},     // TPM_CC_ChangePPS
+        TPMA_CC_INITIALIZER(0x0125, 0, 1, 1, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Clear)
-        {0x0126, 0, 1, 1, 0, 1, 0, 0, 0},     // TPM_CC_Clear
+        TPMA_CC_INITIALIZER(0x0126, 0, 1, 1, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ClearControl)
-        {0x0127, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_ClearControl
+        TPMA_CC_INITIALIZER(0x0127, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ClockSet)
-        {0x0128, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_ClockSet
+        TPMA_CC_INITIALIZER(0x0128, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_HierarchyChangeAuth)
-        {0x0129, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_HierarchyChangeAuth
+        TPMA_CC_INITIALIZER(0x0129, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_DefineSpace)
-        {0x012a, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_NV_DefineSpace
+        TPMA_CC_INITIALIZER(0x012a, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PCR_Allocate)
-        {0x012b, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_PCR_Allocate
+        TPMA_CC_INITIALIZER(0x012b, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PCR_SetAuthPolicy)
-        {0x012c, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_PCR_SetAuthPolicy
+        TPMA_CC_INITIALIZER(0x012c, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PP_Commands)
-        {0x012d, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_PP_Commands
+        TPMA_CC_INITIALIZER(0x012d, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_SetPrimaryPolicy)
-        {0x012e, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_SetPrimaryPolicy
+        TPMA_CC_INITIALIZER(0x012e, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_FieldUpgradeStart)
-        {0x012f, 0, 0, 0, 0, 2, 0, 0, 0},     // TPM_CC_FieldUpgradeStart
+        TPMA_CC_INITIALIZER(0x012f, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ClockRateAdjust)
-        {0x0130, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_ClockRateAdjust
+        TPMA_CC_INITIALIZER(0x0130, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_CreatePrimary)
-        {0x0131, 0, 0, 0, 0, 1, 1, 0, 0},     // TPM_CC_CreatePrimary
+        TPMA_CC_INITIALIZER(0x0131, 0, 0, 0, 0, 1, 1, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_GlobalWriteLock)
-        {0x0132, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_NV_GlobalWriteLock
+        TPMA_CC_INITIALIZER(0x0132, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_GetCommandAuditDigest)
-        {0x0133, 0, 1, 0, 0, 2, 0, 0, 0},     // TPM_CC_GetCommandAuditDigest
+        TPMA_CC_INITIALIZER(0x0133, 0, 1, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_Increment)
-        {0x0134, 0, 1, 0, 0, 2, 0, 0, 0},     // TPM_CC_NV_Increment
+        TPMA_CC_INITIALIZER(0x0134, 0, 1, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_SetBits)
-        {0x0135, 0, 1, 0, 0, 2, 0, 0, 0},     // TPM_CC_NV_SetBits
+        TPMA_CC_INITIALIZER(0x0135, 0, 1, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_Extend)
-        {0x0136, 0, 1, 0, 0, 2, 0, 0, 0},     // TPM_CC_NV_Extend
+        TPMA_CC_INITIALIZER(0x0136, 0, 1, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_Write)
-        {0x0137, 0, 1, 0, 0, 2, 0, 0, 0},     // TPM_CC_NV_Write
+        TPMA_CC_INITIALIZER(0x0137, 0, 1, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_WriteLock)
-        {0x0138, 0, 1, 0, 0, 2, 0, 0, 0},     // TPM_CC_NV_WriteLock
+        TPMA_CC_INITIALIZER(0x0138, 0, 1, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_DictionaryAttackLockReset)
-        {0x0139, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_DictionaryAttackLockReset
+        TPMA_CC_INITIALIZER(0x0139, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_DictionaryAttackParameters)
-        {0x013a, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_DictionaryAttackParameters
+        TPMA_CC_INITIALIZER(0x013a, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_ChangeAuth)
-        {0x013b, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_NV_ChangeAuth
+        TPMA_CC_INITIALIZER(0x013b, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PCR_Event)
-        {0x013c, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_PCR_Event
+        TPMA_CC_INITIALIZER(0x013c, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PCR_Reset)
-        {0x013d, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_PCR_Reset
+        TPMA_CC_INITIALIZER(0x013d, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_SequenceComplete)
-        {0x013e, 0, 0, 0, 1, 1, 0, 0, 0},     // TPM_CC_SequenceComplete
+        TPMA_CC_INITIALIZER(0x013e, 0, 0, 0, 1, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_SetAlgorithmSet)
-        {0x013f, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_SetAlgorithmSet
+        TPMA_CC_INITIALIZER(0x013f, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_SetCommandCodeAuditStatus)
-        {0x0140, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_SetCommandCodeAuditStatus
+        TPMA_CC_INITIALIZER(0x0140, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_FieldUpgradeData)
-        {0x0141, 0, 1, 0, 0, 0, 0, 0, 0},     // TPM_CC_FieldUpgradeData
+        TPMA_CC_INITIALIZER(0x0141, 0, 1, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_IncrementalSelfTest)
-        {0x0142, 0, 1, 0, 0, 0, 0, 0, 0},     // TPM_CC_IncrementalSelfTest
+        TPMA_CC_INITIALIZER(0x0142, 0, 1, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_SelfTest)
-        {0x0143, 0, 1, 0, 0, 0, 0, 0, 0},     // TPM_CC_SelfTest
+        TPMA_CC_INITIALIZER(0x0143, 0, 1, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Startup)
-        {0x0144, 0, 1, 0, 0, 0, 0, 0, 0},     // TPM_CC_Startup
+        TPMA_CC_INITIALIZER(0x0144, 0, 1, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Shutdown)
-        {0x0145, 0, 1, 0, 0, 0, 0, 0, 0},     // TPM_CC_Shutdown
+        TPMA_CC_INITIALIZER(0x0145, 0, 1, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_StirRandom)
-        {0x0146, 0, 1, 0, 0, 0, 0, 0, 0},     // TPM_CC_StirRandom
+        TPMA_CC_INITIALIZER(0x0146, 0, 1, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ActivateCredential)
-        {0x0147, 0, 0, 0, 0, 2, 0, 0, 0},     // TPM_CC_ActivateCredential
+        TPMA_CC_INITIALIZER(0x0147, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Certify)
-        {0x0148, 0, 0, 0, 0, 2, 0, 0, 0},     // TPM_CC_Certify
+        TPMA_CC_INITIALIZER(0x0148, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyNV)
-        {0x0149, 0, 0, 0, 0, 3, 0, 0, 0},     // TPM_CC_PolicyNV
+        TPMA_CC_INITIALIZER(0x0149, 0, 0, 0, 0, 3, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_CertifyCreation)
-        {0x014a, 0, 0, 0, 0, 2, 0, 0, 0},     // TPM_CC_CertifyCreation
+        TPMA_CC_INITIALIZER(0x014a, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Duplicate)
-        {0x014b, 0, 0, 0, 0, 2, 0, 0, 0},     // TPM_CC_Duplicate
+        TPMA_CC_INITIALIZER(0x014b, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_GetTime)
-        {0x014c, 0, 0, 0, 0, 2, 0, 0, 0},     // TPM_CC_GetTime
+        TPMA_CC_INITIALIZER(0x014c, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_GetSessionAuditDigest)
-        {0x014d, 0, 0, 0, 0, 3, 0, 0, 0},     // TPM_CC_GetSessionAuditDigest
+        TPMA_CC_INITIALIZER(0x014d, 0, 0, 0, 0, 3, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_Read)
-        {0x014e, 0, 0, 0, 0, 2, 0, 0, 0},     // TPM_CC_NV_Read
+        TPMA_CC_INITIALIZER(0x014e, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_ReadLock)
-        {0x014f, 0, 1, 0, 0, 2, 0, 0, 0},     // TPM_CC_NV_ReadLock
+        TPMA_CC_INITIALIZER(0x014f, 0, 1, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ObjectChangeAuth)
-        {0x0150, 0, 0, 0, 0, 2, 0, 0, 0},     // TPM_CC_ObjectChangeAuth
+        TPMA_CC_INITIALIZER(0x0150, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicySecret)
-        {0x0151, 0, 0, 0, 0, 2, 0, 0, 0},     // TPM_CC_PolicySecret
+        TPMA_CC_INITIALIZER(0x0151, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Rewrap)
-        {0x0152, 0, 0, 0, 0, 2, 0, 0, 0},     // TPM_CC_Rewrap
+        TPMA_CC_INITIALIZER(0x0152, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Create)
-        {0x0153, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_Create
+        TPMA_CC_INITIALIZER(0x0153, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ECDH_ZGen)
-        {0x0154, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_ECDH_ZGen
+        TPMA_CC_INITIALIZER(0x0154, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || (CC_HMAC || CC_MAC))
-        {0x0155, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_HMAC TPM_CC_MAC
+        TPMA_CC_INITIALIZER(0x0155, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Import)
-        {0x0156, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_Import
+        TPMA_CC_INITIALIZER(0x0156, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Load)
-        {0x0157, 0, 0, 0, 0, 1, 1, 0, 0},     // TPM_CC_Load
+        TPMA_CC_INITIALIZER(0x0157, 0, 0, 0, 0, 1, 1, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Quote)
-        {0x0158, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_Quote
+        TPMA_CC_INITIALIZER(0x0158, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_RSA_Decrypt)
-        {0x0159, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_RSA_Decrypt
+        TPMA_CC_INITIALIZER(0x0159, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST )
-        {0x015a, 0, 0, 0, 0, 0, 0, 0, 0},     // 
+        TPMA_CC_INITIALIZER(0x015a, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || (CC_HMAC_Start || CC_MAC_Start))
-        {0x015b, 0, 0, 0, 0, 1, 1, 0, 0},     // TPM_CC_HMAC_Start TPM_CC_MAC_Start
+        TPMA_CC_INITIALIZER(0x015b, 0, 0, 0, 0, 1, 1, 0, 0),
 #endif
 #if (PAD_LIST  || CC_SequenceUpdate)
-        {0x015c, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_SequenceUpdate
+        TPMA_CC_INITIALIZER(0x015c, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Sign)
-        {0x015d, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_Sign
+        TPMA_CC_INITIALIZER(0x015d, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Unseal)
-        {0x015e, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_Unseal
+        TPMA_CC_INITIALIZER(0x015e, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST )
-        {0x015f, 0, 0, 0, 0, 0, 0, 0, 0},     // 
+        TPMA_CC_INITIALIZER(0x015f, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicySigned)
-        {0x0160, 0, 0, 0, 0, 2, 0, 0, 0},     // TPM_CC_PolicySigned
+        TPMA_CC_INITIALIZER(0x0160, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ContextLoad)
-        {0x0161, 0, 0, 0, 0, 0, 1, 0, 0},     // TPM_CC_ContextLoad
+        TPMA_CC_INITIALIZER(0x0161, 0, 0, 0, 0, 0, 1, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ContextSave)
-        {0x0162, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_ContextSave
+        TPMA_CC_INITIALIZER(0x0162, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ECDH_KeyGen)
-        {0x0163, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_ECDH_KeyGen
+        TPMA_CC_INITIALIZER(0x0163, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_EncryptDecrypt)
-        {0x0164, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_EncryptDecrypt
+        TPMA_CC_INITIALIZER(0x0164, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_FlushContext)
-        {0x0165, 0, 0, 0, 0, 0, 0, 0, 0},     // TPM_CC_FlushContext
+        TPMA_CC_INITIALIZER(0x0165, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST )
-        {0x0166, 0, 0, 0, 0, 0, 0, 0, 0},     // 
+        TPMA_CC_INITIALIZER(0x0166, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_LoadExternal)
-        {0x0167, 0, 0, 0, 0, 0, 1, 0, 0},     // TPM_CC_LoadExternal
+        TPMA_CC_INITIALIZER(0x0167, 0, 0, 0, 0, 0, 1, 0, 0),
 #endif
 #if (PAD_LIST  || CC_MakeCredential)
-        {0x0168, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_MakeCredential
+        TPMA_CC_INITIALIZER(0x0168, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_ReadPublic)
-        {0x0169, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_NV_ReadPublic
+        TPMA_CC_INITIALIZER(0x0169, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyAuthorize)
-        {0x016a, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyAuthorize
+        TPMA_CC_INITIALIZER(0x016a, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyAuthValue)
-        {0x016b, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyAuthValue
+        TPMA_CC_INITIALIZER(0x016b, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyCommandCode)
-        {0x016c, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyCommandCode
+        TPMA_CC_INITIALIZER(0x016c, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyCounterTimer)
-        {0x016d, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyCounterTimer
+        TPMA_CC_INITIALIZER(0x016d, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyCpHash)
-        {0x016e, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyCpHash
+        TPMA_CC_INITIALIZER(0x016e, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyLocality)
-        {0x016f, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyLocality
+        TPMA_CC_INITIALIZER(0x016f, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyNameHash)
-        {0x0170, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyNameHash
+        TPMA_CC_INITIALIZER(0x0170, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyOR)
-        {0x0171, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyOR
+        TPMA_CC_INITIALIZER(0x0171, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyTicket)
-        {0x0172, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyTicket
+        TPMA_CC_INITIALIZER(0x0172, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ReadPublic)
-        {0x0173, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_ReadPublic
+        TPMA_CC_INITIALIZER(0x0173, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_RSA_Encrypt)
-        {0x0174, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_RSA_Encrypt
+        TPMA_CC_INITIALIZER(0x0174, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST )
-        {0x0175, 0, 0, 0, 0, 0, 0, 0, 0},     // 
+        TPMA_CC_INITIALIZER(0x0175, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_StartAuthSession)
-        {0x0176, 0, 0, 0, 0, 2, 1, 0, 0},     // TPM_CC_StartAuthSession
+        TPMA_CC_INITIALIZER(0x0176, 0, 0, 0, 0, 2, 1, 0, 0),
 #endif
 #if (PAD_LIST  || CC_VerifySignature)
-        {0x0177, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_VerifySignature
+        TPMA_CC_INITIALIZER(0x0177, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ECC_Parameters)
-        {0x0178, 0, 0, 0, 0, 0, 0, 0, 0},     // TPM_CC_ECC_Parameters
+        TPMA_CC_INITIALIZER(0x0178, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_FirmwareRead)
-        {0x0179, 0, 0, 0, 0, 0, 0, 0, 0},     // TPM_CC_FirmwareRead
+        TPMA_CC_INITIALIZER(0x0179, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_GetCapability)
-        {0x017a, 0, 0, 0, 0, 0, 0, 0, 0},     // TPM_CC_GetCapability
+        TPMA_CC_INITIALIZER(0x017a, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_GetRandom)
-        {0x017b, 0, 0, 0, 0, 0, 0, 0, 0},     // TPM_CC_GetRandom
+        TPMA_CC_INITIALIZER(0x017b, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_GetTestResult)
-        {0x017c, 0, 0, 0, 0, 0, 0, 0, 0},     // TPM_CC_GetTestResult
+        TPMA_CC_INITIALIZER(0x017c, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Hash)
-        {0x017d, 0, 0, 0, 0, 0, 0, 0, 0},     // TPM_CC_Hash
+        TPMA_CC_INITIALIZER(0x017d, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PCR_Read)
-        {0x017e, 0, 0, 0, 0, 0, 0, 0, 0},     // TPM_CC_PCR_Read
+        TPMA_CC_INITIALIZER(0x017e, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyPCR)
-        {0x017f, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyPCR
+        TPMA_CC_INITIALIZER(0x017f, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyRestart)
-        {0x0180, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyRestart
+        TPMA_CC_INITIALIZER(0x0180, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ReadClock)
-        {0x0181, 0, 0, 0, 0, 0, 0, 0, 0},     // TPM_CC_ReadClock
+        TPMA_CC_INITIALIZER(0x0181, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PCR_Extend)
-        {0x0182, 0, 1, 0, 0, 1, 0, 0, 0},     // TPM_CC_PCR_Extend
+        TPMA_CC_INITIALIZER(0x0182, 0, 1, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PCR_SetAuthValue)
-        {0x0183, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PCR_SetAuthValue
+        TPMA_CC_INITIALIZER(0x0183, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_NV_Certify)
-        {0x0184, 0, 0, 0, 0, 3, 0, 0, 0},     // TPM_CC_NV_Certify
+        TPMA_CC_INITIALIZER(0x0184, 0, 0, 0, 0, 3, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_EventSequenceComplete)
-        {0x0185, 0, 1, 0, 1, 2, 0, 0, 0},     // TPM_CC_EventSequenceComplete
+        TPMA_CC_INITIALIZER(0x0185, 0, 1, 0, 1, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_HashSequenceStart)
-        {0x0186, 0, 0, 0, 0, 0, 1, 0, 0},     // TPM_CC_HashSequenceStart
+        TPMA_CC_INITIALIZER(0x0186, 0, 0, 0, 0, 0, 1, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyPhysicalPresence)
-        {0x0187, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyPhysicalPresence
+        TPMA_CC_INITIALIZER(0x0187, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyDuplicationSelect)
-        {0x0188, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyDuplicationSelect
+        TPMA_CC_INITIALIZER(0x0188, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyGetDigest)
-        {0x0189, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyGetDigest
+        TPMA_CC_INITIALIZER(0x0189, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_TestParms)
-        {0x018a, 0, 0, 0, 0, 0, 0, 0, 0},     // TPM_CC_TestParms
+        TPMA_CC_INITIALIZER(0x018a, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Commit)
-        {0x018b, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_Commit
+        TPMA_CC_INITIALIZER(0x018b, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyPassword)
-        {0x018c, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyPassword
+        TPMA_CC_INITIALIZER(0x018c, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_ZGen_2Phase)
-        {0x018d, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_ZGen_2Phase
+        TPMA_CC_INITIALIZER(0x018d, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_EC_Ephemeral)
-        {0x018e, 0, 0, 0, 0, 0, 0, 0, 0},     // TPM_CC_EC_Ephemeral
+        TPMA_CC_INITIALIZER(0x018e, 0, 0, 0, 0, 0, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyNvWritten)
-        {0x018f, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyNvWritten
+        TPMA_CC_INITIALIZER(0x018f, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyTemplate)
-        {0x0190, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_PolicyTemplate
+        TPMA_CC_INITIALIZER(0x0190, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_CreateLoaded)
-        {0x0191, 0, 0, 0, 0, 1, 1, 0, 0},     // TPM_CC_CreateLoaded
+        TPMA_CC_INITIALIZER(0x0191, 0, 0, 0, 0, 1, 1, 0, 0),
 #endif
 #if (PAD_LIST  || CC_PolicyAuthorizeNV)
-        {0x0192, 0, 0, 0, 0, 3, 0, 0, 0},     // TPM_CC_PolicyAuthorizeNV
+        TPMA_CC_INITIALIZER(0x0192, 0, 0, 0, 0, 3, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_EncryptDecrypt2)
-        {0x0193, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_EncryptDecrypt2
+        TPMA_CC_INITIALIZER(0x0193, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_AC_GetCapability)
-        {0x0194, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_AC_GetCapability
+        TPMA_CC_INITIALIZER(0x0194, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_AC_Send)
-        {0x0195, 0, 0, 0, 0, 3, 0, 0, 0},     // TPM_CC_AC_Send
+        TPMA_CC_INITIALIZER(0x0195, 0, 0, 0, 0, 3, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Policy_AC_SendSelect)
-        {0x0196, 0, 0, 0, 0, 1, 0, 0, 0},     // TPM_CC_Policy_AC_SendSelect
+        TPMA_CC_INITIALIZER(0x0196, 0, 0, 0, 0, 1, 0, 0, 0),
 #endif
 #if (PAD_LIST  || CC_Vendor_TCG_Test)
-        {0x0000, 0, 0, 0, 0, 0, 0, 1, 0},     // TPM_CC_Vendor_TCG_Test
+        TPMA_CC_INITIALIZER(0x0000, 0, 0, 0, 0, 0, 0, 1, 0),
 #endif
         {0}
 };

@@ -82,7 +82,7 @@ TPM2_NV_Extend(
     // Perform the write.
     oldDigest.t.size = CryptHashGetDigestSize(nvIndex->publicArea.nameAlg);
     pAssert(oldDigest.t.size <= sizeof(oldDigest.t.buffer));
-    if(IsNv_TPMA_NV_WRITTEN(nvIndex->publicArea.attributes))
+    if(IS_ATTRIBUTE(nvIndex->publicArea.attributes, TPMA_NV, WRITTEN))   
     {
         NvGetIndexData(nvIndex, locator, 0, oldDigest.t.size, oldDigest.t.buffer);
     }

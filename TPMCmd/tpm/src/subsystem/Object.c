@@ -54,7 +54,6 @@ ObjectFlush(
     )
 {
     object->attributes.occupied = CLEAR;
-//    MemorySet(&object->attributes, 0, sizeof(OBJECT_ATTRIBUTES));
 }
 
 //*** ObjectSetInUse()
@@ -75,7 +74,7 @@ ObjectStartup(
     )
 {
     UINT32      i;
-
+//
     // object slots initialization
     for(i = 0; i < MAX_LOADED_OBJECTS; i++)
     {
@@ -96,7 +95,7 @@ ObjectCleanupEvict(
     )
 {
     UINT32      i;
-
+//
     // This has to be iterated because a command may have two handles
     // and they may both be persistent.
     // This could be made to be more efficient so that a search is not needed.
@@ -131,7 +130,6 @@ IsObjectPresent(
     // will now be greater than or equal to MAX_LOADED_OBJECTS
     if(slotIndex >= MAX_LOADED_OBJECTS)
         return FALSE;
-
     // Indicate if the slot is occupied
     return (s_objects[slotIndex].attributes.occupied == TRUE);
 }
@@ -164,11 +162,11 @@ HandleToObject(
     )
 {
     UINT32              index;
+//
     // Return NULL if the handle references a permanent handle because there is no
     // associated OBJECT.
     if(HandleGetType(handle) == TPM_HT_PERMANENT)
         return NULL; 
-
     // In this implementation, the handle is determined by the slot occupied by the
     // object.
     index = handle - TRANSIENT_FIRST;
@@ -204,6 +202,7 @@ GetQualifiedName(
     )
 {
     OBJECT      *object;
+//
     switch(HandleGetType(handle))
     {
         case TPM_HT_PERMANENT:
@@ -261,7 +260,7 @@ GetHeriarchy(
     )
 {
     OBJECT          *object = HandleToObject(handle);
-
+//
     return ObjectGetHierarchy(object);
 }
 
@@ -279,6 +278,7 @@ FindEmptyObjectSlot(
 {
     UINT32               i;
     OBJECT              *object;
+//
     for(i = 0; i < MAX_LOADED_OBJECTS; i++)
     {
         object = &s_objects[i];
@@ -302,6 +302,7 @@ ObjectAllocateSlot(
     )
 {
     OBJECT          *object = FindEmptyObjectSlot(handle);
+//
     if(object != NULL)
     {
         // if found, mark as occupied
@@ -321,11 +322,12 @@ ObjectSetLoadedAttributes(
     )
 {
     OBJECT              *parent = HandleToObject(parentHandle);
-
+    TPMA_OBJECT          objectAttributes = object->publicArea.objectAttributes;
+//
     // Copy the stClear attribute from the public area. This could be overwritten
     // if the parent has stClear SET
-    object->attributes.stClear = object->publicArea.objectAttributes.stClear;
-
+    object->attributes.stClear = 
+        IS_ATTRIBUTE(objectAttributes, TPMA_OBJECT, stClear);
     // If parent handle is a permanent handle, it is a primary (unless it is NULL
     if(parent == NULL)
     {
@@ -352,7 +354,7 @@ ObjectSetLoadedAttributes(
     {
         // is this a stClear object
         object->attributes.stClear =
-            (object->publicArea.objectAttributes.stClear == SET
+            (IS_ATTRIBUTE(objectAttributes, TPMA_OBJECT, stClear)
              || (parent->attributes.stClear == SET));
         object->attributes.epsHierarchy = parent->attributes.epsHierarchy;
         object->attributes.spsHierarchy = parent->attributes.spsHierarchy;
@@ -362,7 +364,6 @@ ObjectSetLoadedAttributes(
         object->attributes.temporary = parent->attributes.temporary 
             || object->attributes.external;
     }
-
     // If this is an external object, set the QN == name but don't SET other
     // key properties ('parent' or 'derived')
     if(object->attributes.external)
@@ -370,9 +371,9 @@ ObjectSetLoadedAttributes(
     else
     {
         // check attributes for different types of parents
-        if(object->publicArea.objectAttributes.restricted
+        if(IS_ATTRIBUTE(objectAttributes, TPMA_OBJECT, restricted)
            && !object->attributes.publicOnly
-           && object->publicArea.objectAttributes.decrypt
+           && IS_ATTRIBUTE(objectAttributes, TPMA_OBJECT, decrypt)
            && object->publicArea.nameAlg != TPM_ALG_NULL)
         {
             // This is a parent. If it is not a KEYEDHASH, it is an ordinary parent.
@@ -413,9 +414,8 @@ ObjectLoad(
 {
     TPM_RC           result = TPM_RC_SUCCESS;
     BOOL             doCheck;
-
-
-// Do validations of public area object descriptions
+//
+    // Do validations of public area object descriptions
 
     // Is this public only or a no-name object?
     if(sensitive == NULL || publicArea->nameAlg == TPM_ALG_NULL)
@@ -428,7 +428,7 @@ ObjectLoad(
     {
         // For any sensitive area, make sure that the seedSize is no larger than the
         // digest size of nameAlg
-#if 0
+#if 1 //??
         if(sensitive->seedValue.t.size  
                 > CryptHashGetDigestSize(publicArea->nameAlg))
             return TPM_RC_SENSITIVE;    // not a 'safe' return code so no add
@@ -438,7 +438,6 @@ ObjectLoad(
     }
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, blamePublic);
-
     // If object == NULL, then this is am import. For import, load is not called
     // unless the parent is fixedTPM. 
     if(object == NULL)
@@ -446,13 +445,13 @@ ObjectLoad(
     // If the parent is not NULL, then this is an ordinary load and we only check
     // if the parent is not fixedTPM
     else if(parent != NULL)
-        doCheck = parent->publicArea.objectAttributes.fixedTPM == CLEAR;
+        doCheck = !IS_ATTRIBUTE(parent->publicArea.objectAttributes, 
+                                TPMA_OBJECT, fixedTPM);
     else
         // This is a loadExternal. Check everything.
         // Note: the check functions will filter things based on the name algorithm
         // and whether or not both parts are loaded.
         doCheck = TRUE;
-
     // Note: the parent will be NULL if this is a load external. CryptValidateKeys()
     // will only check the parts that need to be checked based on the settings
     // of publicOnly and nameAlg.
@@ -467,13 +466,11 @@ ObjectLoad(
     // If this is an import, we are done
     if(object == NULL || result != TPM_RC_SUCCESS)
         return result;
-
     // Set the name, if one was provided
     if(name != NULL)
         object->name = *name;
     else
         object->name.t.size = 0;
-
     // Initialize public
     object->publicArea = *publicArea;
 
@@ -525,7 +522,7 @@ AllocateSequenceSlot(
         object->attributes.temporary = SET;
 
         // A sequence object is DA exempt.
-        object->objectAttributes.noDA = SET;
+        SET_ATTRIBUTE(object->objectAttributes, TPMA_OBJECT, noDA);
 
         // Copy the authorization value
         if(auth != NULL)
@@ -551,13 +548,12 @@ ObjectCreateHMACSequence(
     )
 {
     HASH_OBJECT         *hmacObject;
-
+//
     // Try to allocate a slot for new object
     hmacObject = AllocateSequenceSlot(newHandle, auth);
 
     if(hmacObject == NULL)
         return TPM_RC_OBJECT_MEMORY;
-
     // Set HMAC sequence bit
     hmacObject->attributes.hmacSeq = SET;
 
@@ -587,11 +583,10 @@ ObjectCreateHashSequence(
     )
 {
     HASH_OBJECT         *hashObject = AllocateSequenceSlot(newHandle, auth);
-
+//
     // See if slot allocated
     if(hashObject == NULL)
         return TPM_RC_OBJECT_MEMORY;
-
     // Set hash sequence bit
     hashObject->attributes.hashSeq = SET;
 
@@ -614,18 +609,16 @@ ObjectCreateEventSequence(
     HASH_OBJECT         *hashObject = AllocateSequenceSlot(newHandle, auth);
     UINT32               count;
     TPM_ALG_ID           hash;
-
+//
     // See if slot allocated
     if(hashObject == NULL)
         return TPM_RC_OBJECT_MEMORY;
-
     // Set the event sequence attribute
     hashObject->attributes.eventSeq = SET;
 
     // Initialize hash states for each implemented PCR algorithms
     for(count = 0; (hash = CryptHashGetAlgByIndex(count)) != TPM_ALG_NULL; count++)
         CryptHashStart(&hashObject->state.hashState[count], hash);
-
     return TPM_RC_SUCCESS;
 }
 
@@ -640,13 +633,14 @@ ObjectTerminateEvent(
     HASH_OBJECT         *hashObject;
     int                  count;
     BYTE                 buffer[MAX_DIGEST_SIZE];
+//
     hashObject = (HASH_OBJECT *)HandleToObject(g_DRTMHandle);
 
     // Don't assume that this is a proper sequence object
     if(hashObject->attributes.eventSeq)
     {
         // If it is, close any open hash contexts. This is done in case
-        // the crypto implementation has some context values that need to be
+        // the cryptographic implementation has some context values that need to be
         // cleaned up (hygiene).
         //
         for(count = 0; CryptHashGetAlgByIndex(count) != TPM_ALG_NULL; count++)
@@ -656,7 +650,6 @@ ObjectTerminateEvent(
         // Flush sequence object
         FlushObject(g_DRTMHandle);
     }
-
     g_DRTMHandle = TPM_RH_UNASSIGNED;
 }
 
@@ -673,7 +666,7 @@ ObjectContextLoad(
     )
 {
     OBJECT      *newObject = ObjectAllocateSlot(handle);
-
+//
     // Try to allocate a slot for new object
     if(newObject != NULL)
     {
@@ -705,6 +698,7 @@ FlushObject(
     )
 {
     UINT32      index = handle - TRANSIENT_FIRST;
+//
     pAssert(index < MAX_LOADED_OBJECTS);
     // Clear all the object attributes
     MemorySet((BYTE*)&(s_objects[index].attributes),
@@ -721,7 +715,7 @@ ObjectFlushHierarchy(
     )
 {
     UINT16          i;
-
+//
     // iterate object slots
     for(i = 0; i < MAX_LOADED_OBJECTS; i++)
     {
@@ -769,7 +763,7 @@ ObjectLoadEvict(
     TPM_RC          result;
     TPM_HANDLE      evictHandle = *handle;   // Save the evict handle
     OBJECT          *object;
-
+//
     // If this is an index that references a persistent object created by
     // the platform, then return TPM_RH_HANDLE if the phEnable is FALSE
     if(*handle >= PLATFORM_PERSISTENT)
@@ -781,12 +775,10 @@ ObjectLoadEvict(
     // belongs to owner
     else if(gc.shEnable == CLEAR)
         return TPM_RC_HANDLE;
-
     // Try to allocate a slot for an object
     object = ObjectAllocateSlot(handle);
     if(object == NULL)
         return TPM_RC_OBJECT_MEMORY;
-
     // Copy persistent object to transient object slot.  A TPM_RC_HANDLE
     // may be returned at this point. This will mark the slot as containing
     // a transient object so that it will be flushed at the end of the
@@ -796,7 +788,6 @@ ObjectLoadEvict(
     // Bail out if this failed
     if(result != TPM_RC_SUCCESS)
         return result;
-
     // check the object to see if it is in the endorsement hierarchy
     // if it is and this is not a TPM2_EvictControl() command, indicate
     // that the hierarchy is disabled.
@@ -815,20 +806,15 @@ ObjectLoadEvict(
 TPM2B_NAME *
 ObjectComputeName(
     UINT32           size,          // IN: the size of the area to digest
-    BYTE            *publicArea,    // IN: the public area to digest area
+    BYTE            *publicArea,    // IN: the public area to digest
     TPM_ALG_ID       nameAlg,       // IN: the hash algorithm to use
     TPM2B_NAME      *name           // OUT: Computed name
     )
 {
-    HASH_STATE           hashState;         // hash state
-// Start hash stack
-    name->t.size = CryptHashStart(&hashState, nameAlg);
-    // Adding public area
-    CryptDigestUpdate(&hashState, size, publicArea);
-
-    // Complete hash leaving room for the name algorithm
-    CryptHashEnd(&hashState, name->t.size, &name->t.name[2]);
-
+    // Hash the publicArea into the name buffer leaving room for the nameAlg
+    name->t.size = CryptHashBlock(nameAlg, size, publicArea, 
+                                  sizeof(name->t.name) - 2, 
+                                  &name->t.name[2]);
     // set the nameAlg
     UINT16_TO_BYTE_ARRAY(nameAlg, name->t.name);
     name->t.size += 2;
@@ -848,7 +834,7 @@ PublicMarshalAndComputeName(
     TPM2B_TEMPLATE       marshaled;     // this is big enough to hold a
                                         //  marshaled TPMT_PUBLIC
     BYTE                *buffer = (BYTE *)&marshaled.t.buffer;
-
+//
     // if the nameAlg is NULL then there is no name.
     if(publicArea->nameAlg == TPM_ALG_NULL)
         name->t.size = 0;
@@ -863,21 +849,11 @@ PublicMarshalAndComputeName(
     return name;
 }
 
-//*** AlgOfName()
-// This function as a macro returns the nameAlg from a TPM2B_NAME.
-TPMI_ALG_HASH
-AlgOfName(
-    TPM2B_NAME      *name
-    )
-{
-    return BYTE_ARRAY_TO_UINT16(name->t.name);
-}
-
 //*** ComputeQualifiedName()
 // This function computes the qualified name of an object.
 void
 ComputeQualifiedName(
-    TPM_HANDLE       parentHandle,  // IN: parent's name
+    TPM_HANDLE       parentHandle,  // IN: parent's handle
     TPM_ALG_ID       nameAlg,       // IN: name hash
     TPM2B_NAME      *name,          // IN: name of the object
     TPM2B_NAME      *qualifiedName  // OUT: qualified name of the object
@@ -885,9 +861,10 @@ ComputeQualifiedName(
 {
     HASH_STATE      hashState;   // hash state
     TPM2B_NAME      parentName;
-
+//
     if(parentHandle == TPM_RH_UNASSIGNED)
     {
+        MemoryCopy2B(&qualifiedName->b, &name->b, sizeof(qualifiedName->t.name));
         *qualifiedName = *name;
     }
     else
@@ -928,10 +905,11 @@ ObjectIsStorage(
 {
     OBJECT           *object = HandleToObject(handle);
     TPMT_PUBLIC      *publicArea = ((object != NULL) ? &object->publicArea : NULL);
+//
     return (publicArea != NULL
-            && publicArea->objectAttributes.restricted == SET
-            && publicArea->objectAttributes.decrypt == SET
-            && publicArea->objectAttributes.sign == CLEAR
+            && IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, restricted)
+            && IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, decrypt)
+            && !IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign)
             && (object->publicArea.type == ALG_RSA_VALUE
                 || object->publicArea.type == ALG_ECC_VALUE));
 }
@@ -952,7 +930,7 @@ ObjectCapGetLoaded(
 {
     TPMI_YES_NO          more = NO;
     UINT32               i;
-
+//
     pAssert(HandleGetType(handle) == TPM_HT_TRANSIENT);
 
     // Initialize output handle list
@@ -999,7 +977,7 @@ ObjectCapGetTransientAvail(
 {
     UINT32      i;
     UINT32      num = 0;
-
+//
     // Iterate object slot to get the number of unoccupied slots
     for(i = 0; i < MAX_LOADED_OBJECTS; i++)
     {

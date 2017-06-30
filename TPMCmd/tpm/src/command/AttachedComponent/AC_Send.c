@@ -89,9 +89,11 @@ TPM2_AC_Send(
     else if(HandleGetType(in->authHandle) != TPM_HT_PERMANENT)
         return TPM_RCS_HANDLE + RC_AC_Send_authHandle;
     // Make sure that the object to be duplicated has the right attributes
-    if(object->publicArea.objectAttributes.encryptedDuplication
-       || object->publicArea.objectAttributes.fixedParent
-       || object->publicArea.objectAttributes.fixedTPM)
+    if(IS_ATTRIBUTE(object->publicArea.objectAttributes, 
+                    TPMA_OBJECT, encryptedDuplication)
+       || IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, 
+                       fixedParent)
+       || IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, fixedTPM))
         return TPM_RCS_ATTRIBUTES + RC_AC_Send_sendObject;
 // Command output
     // Do the implementation dependent send

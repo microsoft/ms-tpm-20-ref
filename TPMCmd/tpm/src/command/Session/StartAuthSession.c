@@ -98,7 +98,7 @@ TPM2_StartAuthSession(
             return TPM_RCS_HANDLE + RC_StartAuthSession_tpmKey;
         // HMAC session input handle check.
         // tpmKey should be a decryption key
-        if(tpmKey->publicArea.objectAttributes.decrypt != SET)
+        if(!IS_ATTRIBUTE(tpmKey->publicArea.objectAttributes, TPMA_OBJECT, decrypt))
             return TPM_RCS_ATTRIBUTES + RC_StartAuthSession_tpmKey;
         // Secret Decryption.  A TPM_RC_VALUE, TPM_RC_KEY or Unmarshal errors
         // may be returned at this point

@@ -73,10 +73,10 @@ TPM2_MAC(
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, RC_MAC_inScheme);
     // Make sure that the key is not restricted
-    if(publicArea->objectAttributes.restricted == SET)
+    if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, restricted))
         return TPM_RCS_ATTRIBUTES + RC_MAC_handle;
     // and that it is a signing key
-    if(publicArea->objectAttributes.sign != SET)
+    if(!IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign))
         return TPM_RCS_KEY + RC_MAC_handle;
 // Command Output
     out->outMAC.t.size = CryptMacStart(&state, &publicArea->parameters, 

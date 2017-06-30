@@ -370,13 +370,13 @@ CreateChecks(
 //
     // If the caller indicates that they have provided the data, then make sure that
     // they have provided some data.
-    if((attributes.sensitiveDataOrigin == CLEAR)
+    if((!IS_ATTRIBUTE(attributes, TPMA_OBJECT, sensitiveDataOrigin))
        && (sensitiveDataSize == 0))
         return TPM_RCS_ATTRIBUTES;
     // For an ordinary object, data can only be provided when sensitiveDataOrigin
     // is CLEAR
     if((parentObject != NULL)
-       && (attributes.sensitiveDataOrigin == SET)
+       && (IS_ATTRIBUTE(attributes, TPMA_OBJECT, sensitiveDataOrigin))
        && (sensitiveDataSize != 0))
         return TPM_RCS_ATTRIBUTES;
     switch(publicArea->type)
@@ -384,8 +384,9 @@ CreateChecks(
         case TPM_ALG_KEYEDHASH:
             // if this is a data object (sign == decrypt == CLEAR) then the
             // TPM cannot be the data source.
-            if(!attributes.sign && !attributes.decrypt
-               && attributes.sensitiveDataOrigin)
+            if(!IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
+               && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt)
+               && IS_ATTRIBUTE(attributes, TPMA_OBJECT, sensitiveDataOrigin))
                 result = TPM_RC_ATTRIBUTES;
             // comment out the next line in order to prevent a fixedTPM derivation
             // parent
@@ -394,13 +395,14 @@ CreateChecks(
             // A restricted key symmetric key (SYMCIPHER and KEYEDHASH)
             // must have sensitiveDataOrigin SET unless it has fixedParent and 
             // fixedTPM CLEAR.
-            if(attributes.restricted)
-                if(!attributes.sensitiveDataOrigin)
-                    if(attributes.fixedParent || attributes.fixedTPM)
+            if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted))
+                if(!IS_ATTRIBUTE(attributes, TPMA_OBJECT, sensitiveDataOrigin))
+                    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedParent)
+                       || IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM))
                         result = TPM_RCS_ATTRIBUTES;
             break;
         default: // Asymmetric keys cannot have the sensitive portion provided
-            if(!attributes.sensitiveDataOrigin)
+            if(!IS_ATTRIBUTE(attributes, TPMA_OBJECT, sensitiveDataOrigin))
                 result = TPM_RCS_ATTRIBUTES;
             break;
     }
@@ -444,22 +446,25 @@ SchemeChecks(
             // If this is a decrypt key, then only the block cipher modes (not
             // SMAC) are valid. TPM_ALG_NULL is OK too. If this is a 'sign' key,
             // then any mode that got through the unmarshaling is OK.
-            if(attributes.decrypt && !CryptSymModeIsValid(symAlgs->mode.sym, TRUE))
+            if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt)
+               && !CryptSymModeIsValid(symAlgs->mode.sym, TRUE))
                 return TPM_RCS_SCHEME;
             break;
         case TPM_ALG_KEYEDHASH:
             scheme = parms->keyedHashDetail.scheme.scheme;
             // if both sign and decrypt
-            if(attributes.sign == attributes.decrypt)
+            if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
+               == IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
             {
                 // if both sign and decrypt are set or clear, then need
                 // TPM_ALG_NULL as scheme
                 if(scheme != TPM_ALG_NULL)
                     return TPM_RCS_SCHEME;
             }
-            else if(attributes.sign && scheme != TPM_ALG_HMAC)
+            else if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
+                    && scheme != TPM_ALG_HMAC)
                 return TPM_RCS_SCHEME;
-            else if(attributes.decrypt)
+            else if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
             {
                 if(scheme != TPM_ALG_XOR)
                     return TPM_RCS_SCHEME;
@@ -467,7 +472,7 @@ SchemeChecks(
                 // SP800-108 for this implementation. This is the only derivation
                 // supported by this implementation. Other implementations could
                 // support additional schemes. There is no default.
-                if(attributes.restricted)
+                if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted))
                 {
                     if(parms->keyedHashDetail.scheme.details.xor.kdf 
                        != TPM_ALG_KDF1_SP800_108)
@@ -485,13 +490,14 @@ SchemeChecks(
             // if the key is both sign and decrypt, then the scheme must be
             // TPM_ALG_NULL because there is no way to specify both a sign and a
             // decrypt scheme in the key.
-            if(attributes.sign == attributes.decrypt)
+            if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
+               == IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
             {
                 // scheme must be TPM_ALG_NULL
                 if(scheme != TPM_ALG_NULL)
                     return TPM_RCS_SCHEME;
             }
-            else if(attributes.sign)
+            else if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign))
             {
                 // If this is a signing key, see if it has a signing scheme
                 if(CryptIsAsymSignScheme(publicArea->type, scheme))
@@ -506,13 +512,14 @@ SchemeChecks(
                     // signing key that does not have a proper signing scheme.
                     // This is OK if the key is not restricted and its scheme
                     // is TPM_ALG_NULL
-                    if(attributes.restricted || scheme != TPM_ALG_NULL)
+                    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted) 
+                       || scheme != TPM_ALG_NULL)
                         return TPM_RCS_SCHEME;
                 }
             }
-            else if(attributes.decrypt)
+            else if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
             {
-                if(attributes.restricted)
+                if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted))
                 {
                     // for a restricted decryption key (a parent), scheme 
                     // is required to be TPM_ALG_NULL
@@ -528,7 +535,8 @@ SchemeChecks(
                         return TPM_RCS_SCHEME;
                 }
             }
-            if(!attributes.restricted || !attributes.decrypt)
+            if(!IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted) 
+               || !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
             {
                 // For an asymmetric key that is not a parent, the symmetric
                 // algorithms must be TPM_ALG_NULL
@@ -570,7 +578,9 @@ SchemeChecks(
     // If this is a restricted decryption key with symmetric algorithms, then it 
     // is an ordinary parent (not a derivation parent). It needs to specific
     // symmetric algorithms other than TPM_ALG_NULL
-    if(symAlgs != NULL && attributes.restricted && attributes.decrypt)
+    if(symAlgs != NULL 
+       && IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted) 
+       && IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
     {
         if(symAlgs->algorithm == TPM_ALG_NULL)
             return TPM_RCS_SYMMETRIC;
@@ -583,7 +593,8 @@ SchemeChecks(
 #endif
         // If this parent is not duplicable, then the symmetric algorithms 
         // (encryption and hash) must match those of its parent
-        if(attributes.fixedParent && (parentObject != NULL))
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedParent) 
+           && (parentObject != NULL))
         {
             if(publicArea->nameAlg != parentObject->publicArea.nameAlg)
                 return TPM_RCS_HASH;
@@ -635,48 +646,56 @@ PublicAttributesValidation(
         return TPM_RCS_SIZE;
     // If the parent is fixedTPM (including a Primary Object) the object must have
     // the same value for fixedTPM and fixedParent
-    if(parentObject == NULL || parentAttributes.fixedTPM == SET)
+    if(parentObject == NULL 
+       || IS_ATTRIBUTE(parentAttributes, TPMA_OBJECT, fixedTPM))
     {
-        if(attributes.fixedParent != attributes.fixedTPM)
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedParent) 
+           != IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM))
             return TPM_RCS_ATTRIBUTES;
     }
     else
     {
         // The parent is not fixedTPM so the object can't be fixedTPM
-        if(attributes.fixedTPM == SET)
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM))
             return  TPM_RCS_ATTRIBUTES;
     }
     // See if sign and decrypt are the same
-    if(attributes.sign == attributes.decrypt)
+    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
+       == IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
     {
         // a restricted key cannot have both SET or both CLEAR
-        if(attributes.restricted)
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted))
             return TPM_RC_ATTRIBUTES;
         // only a data object may have both sign and decrypt CLEAR
         // BTW, since we know that decrypt==sign, no need to check both
-        if(publicArea->type != TPM_ALG_KEYEDHASH && !attributes.sign)
+        if(publicArea->type != TPM_ALG_KEYEDHASH 
+           && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign))
             return TPM_RC_ATTRIBUTES;
     }
     // If the object can't be duplicated (directly or indirectly) then there
     // is no justification for having encryptedDuplication SET
-    if(attributes.fixedTPM == SET && attributes.encryptedDuplication == SET)
+    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM) 
+       && IS_ATTRIBUTE(attributes, TPMA_OBJECT, encryptedDuplication))
         return TPM_RCS_ATTRIBUTES;
     // If a parent object has fixedTPM CLEAR, the child must have the
     // same encryptedDuplication value as its parent.
     // Primary objects are considered to have a fixedTPM parent (the seeds).
-    if(parentObject != NULL && parentAttributes.fixedTPM == CLEAR)
+    if(parentObject != NULL 
+       && !IS_ATTRIBUTE(parentAttributes, TPMA_OBJECT, fixedTPM))
     {
-        if(attributes.encryptedDuplication != parentAttributes.encryptedDuplication)
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, encryptedDuplication) 
+           != IS_ATTRIBUTE(parentAttributes, TPMA_OBJECT, encryptedDuplication))
             return TPM_RCS_ATTRIBUTES;
     }
     // Special checks for derived objects
     if((parentObject != NULL) && (parentObject->attributes.derivation == SET))
     {
         // A derived object has the same settings for fixedTPM as its parent
-        if(attributes.fixedTPM != parentAttributes.fixedTPM)
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM) 
+           != IS_ATTRIBUTE(parentAttributes, TPMA_OBJECT, fixedTPM))
             return TPM_RCS_ATTRIBUTES;
         // A derived object is required to be fixedParent
-        if(!attributes.fixedParent)
+        if(!IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedParent))
             return TPM_RCS_ATTRIBUTES;
     }
     return SchemeChecks(parentObject, publicArea);

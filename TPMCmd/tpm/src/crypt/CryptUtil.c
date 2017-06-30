@@ -117,6 +117,7 @@ CryptHMACVerifySignature(
 //*** CryptGenerateKeyedHash()
 // This function creates a keyedHash object.
 // Return type: TPM_RC
+//   TPM_RC_NO_RESULT       cannot get values from random number generator
 //   TPM_RC_SIZE            sensitive data size is larger than allowed for
 //                          the scheme
 static TPM_RC
@@ -156,8 +157,8 @@ CryptGenerateKeyedHash(
     //If the user provided the key, check that it is a proper size
     if(sensitiveCreate->data.t.size != 0)
     {
-        if(publicArea->objectAttributes.decrypt
-           || publicArea->objectAttributes.sign)
+        if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, decrypt)
+           || IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign))
         {
             if(sensitiveCreate->data.t.size > hashBlockSize)
                 return TPM_RC_SIZE;
@@ -173,12 +174,12 @@ CryptGenerateKeyedHash(
     }
     else
     {
-        // If the TPM is going to generate the data, then set the size to be the
+        // The TPM is going to generate the data so set the size to be the
         // size of the digest of the algorithm
-        int                      sizeInBits = digestSize * 8;
-        TPM2B_SENSITIVE_DATA    *key = &sensitive->sensitive.bits; 
-        key->t.size = CryptRandMinMax(key->t.buffer, sizeInBits, sizeInBits / 2, 
-                                      rand);
+        sensitive->sensitive.bits.t.size =
+            DRBG_Generate(rand, sensitive->sensitive.bits.t.buffer, digestSize);
+        if(sensitive->sensitive.bits.t.size == 0)
+            return TPM_RC_NO_RESULT;
     }
     return TPM_RC_SUCCESS;
 }
@@ -303,9 +304,10 @@ ParmEncryptSym(
 // This function generates a symmetric cipher key. The derivation process is
 // determined by the type of the provided 'rand'
 // Return type: TPM_RC
-//   TPM_RCS_KEY_SIZE       key size in the public area does not match the size
+//   TPM_RC_NO_RESULT       cannot get a random value      
+//   TPM_RC_KEY_SIZE        key size in the public area does not match the size
 //                          in the sensitive creation area
-//   TPM_RCS_KEY            provided key value is not allowed
+//   TPM_RC_KEY             provided key value is not allowed
 static TPM_RC
 CryptGenerateKeySymmetric(
     TPMT_PUBLIC             *publicArea,        // IN/OUT: The public area template
@@ -333,15 +335,16 @@ CryptGenerateKeySymmetric(
 #ifdef TPM_ALG_TDES
     else if(publicArea->parameters.symDetail.sym.algorithm == TPM_ALG_TDES)
     {
-        sensitive->sensitive.sym.t.size = keyBits / 8;
         result = CryptGenerateKeyDes(publicArea, sensitive, rand);
     }
 #endif
     else
     {
-        sensitive->sensitive.sym.t.size = CryptRandMinMax(
-                    sensitive->sensitive.sym.t.buffer, keyBits, keyBits / 2, rand);
-        result = TPM_RC_SUCCESS;
+        sensitive->sensitive.sym.t.size = 
+            DRBG_Generate(rand, sensitive->sensitive.sym.t.buffer, 
+                          BITS_TO_BYTES(keyBits));
+        result = (sensitive->sensitive.sym.t.size == 0) 
+            ? TPM_RC_NO_RESULT : TPM_RC_SUCCESS;
     }
     return result;
 }
@@ -534,9 +537,8 @@ CryptSecretEncrypt(
     scheme.scheme = TPM_ALG_OAEP;
     scheme.details.anySig.hashAlg = encryptKey->publicArea.nameAlg;
 
-    if(encryptKey->publicArea.objectAttributes.decrypt != SET)
+    if(!IS_ATTRIBUTE(encryptKey->publicArea.objectAttributes, TPMA_OBJECT, decrypt))
         return TPM_RC_ATTRIBUTES;
-
     switch(encryptKey->publicArea.type)
     {
 #ifdef TPM_ALG_RSA
@@ -957,8 +959,8 @@ CryptComputeSymmetricUnique(
 {
     // For parents (symmetric and derivation), use an HMAC to compute
     // the 'unique' field
-    if(publicArea->objectAttributes.restricted 
-       && publicArea->objectAttributes.decrypt)
+    if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, restricted)
+       && IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, decrypt))
     {
         // Unique field is HMAC(sensitive->seedValue, sensitive->sensitive)
         HMAC_STATE      hmacState;
@@ -1009,6 +1011,7 @@ CryptComputeSymmetricUnique(
 //   TPM_RC_KEY             a provided key is not an allowed value
 //   TPM_RC_KEY_SIZE        key size in the public area does not match the size
 //                          in the sensitive creation area for a symmetric key
+//   TPM_RC_NO_RESULT       unable to get random values (only in derivation)
 //   TPM_RC_RANGE           for an RSA key, the exponent is not supported
 //   TPM_RC_SIZE            sensitive data size is larger than allowed for the
 //                          scheme for a keyed hash object
@@ -1034,7 +1037,8 @@ CryptCreateObject(
 
     // If the TPM is the source of the data, set the size of the provided data to
     // zero so that there's no confusion about what to do.
-    if(object->publicArea.objectAttributes.sensitiveDataOrigin)
+    if(IS_ATTRIBUTE(object->publicArea.objectAttributes, 
+                    TPMA_OBJECT, sensitiveDataOrigin))
         sensitiveCreate->data.t.size = 0;
 
     // Generate the key and unique fields for the asymmetric keys and just the
@@ -1074,20 +1078,20 @@ CryptCreateObject(
         return result;
 // Create the sensitive seed value
     // If this is a primary key in the endorsement hierarchy, stir the DRBG state
-    // This implementation uses the proof of the storage hierarchy but the
-    // proof of the endorsement hierarchy would also work
+    // This implementation uses both shProof and ehProof to make sure that there
+    // is no leakage of either.
     if(object->attributes.primary && object->attributes.epsHierarchy)
+    {
         DRBG_AdditionalData((DRBG_STATE *)rand, &gp.shProof.b);
-
-    // Set the seed value to the size of the digest produced by the nameAlg
-    object->sensitive.seedValue.b.size
-        = CryptHashGetDigestSize(publicArea->nameAlg);
-    object->sensitive.seedValue.t.size = CryptRandMinMax(
-                object->sensitive.seedValue.t.buffer,
-                object->sensitive.seedValue.t.size * 8,
-                object->sensitive.seedValue.t.size * 8 / 2, rand);
-
-    // For symmetric values, need to compute the unique value
+        DRBG_AdditionalData((DRBG_STATE *)rand, &gp.ehProof.b);
+    }
+    // Generate a seedValue that is the size of the digest produced by nameAlg
+    object->sensitive.seedValue.t.size =
+        DRBG_Generate(rand, object->sensitive.seedValue.t.buffer, 
+                      CryptHashGetDigestSize(publicArea->nameAlg));
+    if(object->sensitive.seedValue.t.size == 0)
+        return TPM_RC_NO_RESULT;
+    // For symmetric objects, need to compute the unique value for the public area
     if(publicArea->type == TPM_ALG_SYMCIPHER
        || publicArea->type == TPM_ALG_KEYEDHASH)
     {
@@ -1097,9 +1101,9 @@ CryptCreateObject(
     else
     {
         // if this is an asymmetric key and it isn't a parent, then
-        // can get rid of the seed.
-        if(publicArea->objectAttributes.sign 
-           || !publicArea->objectAttributes.restricted)
+        // get rid of the seed.
+        if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign)
+           || !IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, restricted))
             memset(&object->sensitive.seedValue, 0, 
                    sizeof(object->sensitive.seedValue));
     }
@@ -1830,8 +1834,8 @@ CryptValidateKeys(
     }
     // For a parent, need to check that the seedValue is the correct size for
     // protections. It should be at least half the size of the nameAlg
-    if(publicArea->objectAttributes.restricted
-       && publicArea->objectAttributes.decrypt
+    if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, restricted)
+       && IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, decrypt)
        && sensitive != NULL
        && publicArea->nameAlg != TPM_ALG_NULL)
     {

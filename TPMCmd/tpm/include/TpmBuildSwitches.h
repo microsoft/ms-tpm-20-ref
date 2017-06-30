@@ -203,4 +203,15 @@
 //#define SKIP_PROOF_ERRORS
 #endif
 
+// This define is used to eliminate the use of bit-fields. It can be enable for
+// big- or little-endian machines but is required of big-endian system that number
+// bits in registers from left to right. Little-endian machines number from right 
+// to left with the least significant bit having assigned a bit number of 0. These
+// are LSb0 machines (they are also little-endian so they are also least-significant
+// byte 0 (LSB0) machines. Big-endian (MSB0) machines may number in either direction
+// (MSb0 or LSb0). For an MSB0+MSb0 machine this value should be defined
+#ifndef NO_BIT_FIELD_STRUCTURES
+//#   define NO_BIT_FIELD_STRUCTURES
+#endif
+
 #endif // _TPM_BUILD_SWITCHES_H_

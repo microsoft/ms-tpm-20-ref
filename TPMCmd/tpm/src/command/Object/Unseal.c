@@ -51,22 +51,18 @@ TPM2_Unseal(
     )
 {
     OBJECT                  *object;
-
 // Input Validation
-
     // Get pointer to loaded object
     object = HandleToObject(in->itemHandle);
 
     // Input handle must be a data object
     if(object->publicArea.type != TPM_ALG_KEYEDHASH)
         return TPM_RCS_TYPE + RC_Unseal_itemHandle;
-    if(object->publicArea.objectAttributes.decrypt == SET
-       || object->publicArea.objectAttributes.sign == SET
-       || object->publicArea.objectAttributes.restricted == SET)
+    if(IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, decrypt)
+       || IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, sign)
+       || IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, restricted))
         return TPM_RCS_ATTRIBUTES + RC_Unseal_itemHandle;
-
 // Command Output
-
     // Copy data
     out->outData = object->sensitive.sensitive.bits;
     return TPM_RC_SUCCESS;

@@ -76,7 +76,7 @@ TPM2_NV_SetBits(
         return TPM_RCS_ATTRIBUTES + RC_NV_SetBits_nvIndex;
 
     // If index is not been written, initialize it
-    if(!IsNv_TPMA_NV_WRITTEN(nvIndex->publicArea.attributes))
+    if(!IS_ATTRIBUTE(nvIndex->publicArea.attributes, TPMA_NV, WRITTEN))   
         oldValue = 0;
     else
         // Read index data

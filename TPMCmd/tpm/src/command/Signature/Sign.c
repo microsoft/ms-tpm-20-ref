@@ -76,7 +76,7 @@ TPM2_Sign(
 
     // If validation is provided, or the key is restricted, check the ticket
     if(in->validation.digest.t.size != 0
-       || signObject->publicArea.objectAttributes.restricted == SET)
+       || IS_ATTRIBUTE(signObject->publicArea.objectAttributes, TPMA_OBJECT, restricted))
     {
         // Compute and compare ticket
         TicketComputeHashCheck(in->validation.hierarchy,

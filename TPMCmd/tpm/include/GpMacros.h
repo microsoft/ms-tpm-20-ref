@@ -202,7 +202,7 @@
 #   elif defined ALG_SM3_256 && ALG_SM3_256 == YES
 #       define CONTEXT_HASH_ALGORITHM    SM3_256
 #   elif defined ALG_SHA1 && ALG_SHA1 == YES
-#       define CONTEXT_HASH_ALGORITHM    SHA1
+#       define CONTEXT_HASH_ALGORITHM  SHA1  
 #   endif
 #   define CONTEXT_INTEGRITY_HASH_ALG  CONCAT(TPM_ALG_, CONTEXT_HASH_ALGORITHM)
 #endif
@@ -287,7 +287,6 @@
 // than 32 bytes.
 #ifndef LABEL_MAX_BUFFER
 #define LABEL_MAX_BUFFER MIN(32, MIN(MAX_ECC_KEY_BYTES, MAX_DIGEST_SIZE))
-//??#define LABEL_MAX_BUFFER MIN(MAX_ECC_KEY_BYTES, MAX_DIGEST_SIZE)
 #endif
 
 // This bit is used to indicate that an authorization ticket expires on TPM Reset
@@ -298,5 +297,25 @@
 // time in ms. Sealing the MSb for a flag means that the TPM needs to be reset
 // at least once every 292,471,208 years rather than once every 584,942,417 years.
 #define EXPIRATION_BIT ((UINT64)1 << 63)
+
+// Check for consistency of the bit ordering an bit fields
+#if BIG_ENDIAN_TPM && MOST_SIGNIFICANT_BIT_0 && !defined NO_BIT_FIELD_STRUCTURES
+#   error "Settings not consistent"
+#endif
+
+// These macros are used to handle the variation in handling of bit fields. If 
+#ifndef NO_BIT_FIELD_STRUCTURES // The default, old version, with bit fields
+#   define IS_ATTRIBUTE(a, type, b)    ((a.b != 0))
+#   define SET_ATTRIBUTE(a, type, b)       (a.b = SET)
+#   define CLEAR_ATTRIBUTE(a, type, b)     (a.b = CLEAR)
+#   define GET_ATTRIBUTE(a, type, b)        (a.b)
+#else
+#   define IS_ATTRIBUTE(a, type, b)         ((a & type##_##b) != 0)
+#   define SET_ATTRIBUTE(a, type, b)        (a |= type##_##b)
+#   define CLEAR_ATTRIBUTE(a, type, b)      (a &= ~type##_##b)
+#   define GET_ATTRIBUTE(a, type, b)        \
+        (type)((a & type##_##b) >> type##_##b##_SHIFT)
+#endif
+
 
 #endif // GP_MACROS_H

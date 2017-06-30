@@ -144,7 +144,7 @@ BnFromHex(
         if(i == 1)
             *d = FromHex(*p);
     }
-#if BIG_ENDIAN_TPM == NO
+#if !BIG_ENDIAN_TPM
     for(i = 0; i < wordCount; i++)
         bn->d[i] = SWAP_CRYPT_WORD(bn->d[i]);
 #endif // BIG_ENDIAN_TPM
@@ -190,30 +190,33 @@ BnToBytes(
     }
     else
     {
+#if BIG_ENDIAN_TPM
+        // Copy the constant input value into a modifiable value
+        BN_VAR(bnL, LARGEST_NUMBER_BITS * 2);
+        BnCopy(bnL, bn);
+        // byte swap the words in the local value to make them little-endian
+        for(count = 0; count < bnL->size; count++)
+            bnL->d[count] = SWAP_CRYPT_WORD(bnL->d[count]);
+        bn = (bigConst)bnL;
+#endif
         if(*size == 0)
             *size = (NUMBYTES)requiredSize;
         pAssert(requiredSize <= *size);
-
-#if BIG_ENDIAN_TPM
-        // byte swap the words to make them little-endian
-        for(count = 0; count < bn->size; count++)
-            bn->d[count] = SWAP_CRYPT_WORD(bn->d[count]);
-#endif
         // Byte swap the number (not words but the whole value)
         count = *size;
+        // Start from the least significant word and offset to the most significant
+        // byte which is in some high word
         pFrom = (BYTE *)(&bn->d[0]) + requiredSize - 1;
         pTo = buffer;
 
+        // If the number of output bytes is larger than the number bytes required
+        // for the input number, pad with zeros
         for(count = *size; count > requiredSize; count--)
             *pTo++ = 0;
+        // Move the most significant byte at the end of the BigNum to the next most
+        // significant byte position of the 2B and repeat for all significant bytes.
         for(; requiredSize > 0; requiredSize--)
             *pTo++ = *pFrom--;
-
-#if BIG_ENDIAN_TPM
-        // Put the input back into big-endian format
-        for(count = 0; count < bn->size; count++)
-            bn->d[count] = SWAP_CRYPT_WORD(bn->d[count]);
-#endif
     }
     return TRUE;
 }

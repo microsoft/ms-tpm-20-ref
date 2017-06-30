@@ -139,7 +139,8 @@ TPM2_CreateLoaded(
             return TPM_RCS_TYPE + RC_CreateLoaded_inPublic;
         // sensitiveDataOrigin has to be CLEAR in a derived object. Since this 
         // is specific to a derived object, it is checked here.
-        if(publicArea->objectAttributes.sensitiveDataOrigin)
+        if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, 
+                        sensitiveDataOrigin))
             return TPM_RCS_ATTRIBUTES;
         // Check the reset of the attributes
         result = PublicAttributesValidation(parent, publicArea);
@@ -156,7 +157,8 @@ TPM2_CreateLoaded(
                                   scheme->details.xor.kdf,
                                   &parent->sensitive.sensitive.bits.b, 
                                   &labelContext.label.b,
-                                  &labelContext.context.b);
+                                  &labelContext.context.b,
+                                  TPM_MAX_DERIVATION_BITS);
         // Clear the sensitive size so that the creation functions will not try 
         // to use this value.
         in->inSensitive.sensitive.data.t.size = 0;

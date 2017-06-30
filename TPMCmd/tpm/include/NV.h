@@ -42,56 +42,48 @@
 #ifndef    _NV_H_
 #define    _NV_H_
 
+
 #ifdef     TPM_NT_ORDINARY
-#   define NV_ATTRIBUTES_TO_TYPE(attributes) (attributes.TPM_NT)
+// If TPM_NT_ORDINARY is defined, then the TPM_NT field is present in a TPMA_NV
+#   define GET_TPM_NT(attributes) GET_ATTRIBUTE(attributes, TPMA_NV, TPM_NT)
 #else
-#   define NV_ATTRIBUTES_TO_TYPE(attributes)        \
-        (   attributes.TPMA_NV_COUNTER              \
-        +   (attributes.TPMA_NV_BITS << 1)          \
-        +   (attributes.TPMA_NV_EXTEND << 2)        \
+// If TPM_NT_ORDINARY is not defined, then need to synthesize it from the
+// attributes
+#   define GetNv_TPM_NV(attributes)                             \
+        (   IS_ATTRIBUTE(attributes, TPMA_NV, COUNTER)          \
+        +   (IS_ATTRIBUTE(attributes, TPMA_NV, BITS) << 1)      \
+        +   (IS_ATTRIBUTE(attributes, TPMA_NV, EXTEND) << 2)    \
         )
+#   define TPM_NT_ORDINARY (0)
+#   define TPM_NT_COUNTER  (1)
+#   define TPM_NT_BITS     (2)
+#   define TPM_NT_EXTEND   (4)
 #endif
+
 
 //** Attribute Macros
 // These macros are used to isolate the differences in the way that the index type
 // changed in version 1.21 of the specification
-#ifdef TPM_NT_ORDINARY
-#   define  IsNvOrdinaryIndex(attributes) (attributes.TPM_NT == TPM_NT_ORDINARY)
-#else
-#   define IsNvOrdinaryIndex(attributes)                                    \
-            ((attributes.TPMA_NV_COUNTER == CLEAR)                          \
-            && (attributes.TPMA_NV_BITS == CLEAR)                           \
-            && (attributes.TPMA_NV_EXTEND == CLEAR)
-#   define TPM_NT_ORDINARY  (0)
-#endif
+#   define IsNvOrdinaryIndex(attributes)                        \
+                (GET_TPM_NT(attributes) == TPM_NT_ORDINARY)
 
-#ifdef  TPM_NT_COUNTER
-#   define  IsNvCounterIndex(attributes) (attributes.TPM_NT == TPM_NT_COUNTER)
-#else
-#   define IsNvCounterIndex(attributes) (attributes.TPMA_NV_COUNTER == SET)
-#   define  TPM_NT_COUNTER  (1)
-#endif
+#   define  IsNvCounterIndex(attributes)                        \
+                (GET_TPM_NT(attributes) == TPM_NT_COUNTER)
 
-#ifdef  TPM_NT_BITS
-#   define  IsNvBitsIndex(attributes) (attributes.TPM_NT == TPM_NT_BITS)
-#else
-#   define  IsNvBitsIndex(attributes) (attributes.TPMA_NV_BITS == SET)
-#   define  TPM_NT_BITS (2)
-#endif
+#   define  IsNvBitsIndex(attributes)                           \
+               (GET_TPM_NT(attributes) == TPM_NT_BITS)
 
-#ifdef  TPM_NT_EXTEND
-#   define  IsNvExtendIndex(attributes) (attributes.TPM_NT == TPM_NT_EXTEND)
-#else
-#   define IsNvExtendIndex(attributes) (attributes.TPMA_NV_EXTEND == SET)
-#   define  TPM_NT_EXTEND   (4)
-#endif
+#   define  IsNvExtendIndex(attributes)                         \
+                (GET_TPM_NT(attributes) == TPM_NT_EXTEND)
 
 #ifdef TPM_NT_PIN_PASS
-#   define  IsNvPinPassIndex(attributes) (attributes.TPM_NT == TPM_NT_PIN_PASS)
+#   define  IsNvPinPassIndex(attributes)                        \
+                (GET_TPM_NT(attributes) == TPM_NT_PIN_PASS)
 #endif
 
 #ifdef TPM_NT_PIN_FAIL
-#   define  IsNvPinFailIndex(attributes) (attributes.TPM_NT == TPM_NT_PIN_FAIL)
+#   define  IsNvPinFailIndex(attributes)                        \
+                (GET_TPM_NT(attributes) == TPM_NT_PIN_FAIL)
 #endif
 
 typedef struct {

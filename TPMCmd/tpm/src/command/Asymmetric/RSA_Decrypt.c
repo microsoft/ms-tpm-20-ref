@@ -78,8 +78,8 @@ TPM2_RSA_Decrypt(
         return TPM_RCS_KEY + RC_RSA_Decrypt_keyHandle;
 
     // The selected key must be an unrestricted decryption key
-    if(rsaKey->publicArea.objectAttributes.restricted == SET
-       || rsaKey->publicArea.objectAttributes.decrypt == CLEAR)
+    if(IS_ATTRIBUTE(rsaKey->publicArea.objectAttributes, TPMA_OBJECT, restricted)
+       || !IS_ATTRIBUTE(rsaKey->publicArea.objectAttributes, TPMA_OBJECT, decrypt))
         return TPM_RCS_ATTRIBUTES + RC_RSA_Decrypt_keyHandle;
 
     // NOTE: Proper operation of this command requires that the sensitive area

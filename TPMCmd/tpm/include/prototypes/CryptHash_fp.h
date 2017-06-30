@@ -377,7 +377,7 @@ CryptKDFa(
     UINT32          *counterInOut,  // IN/OUT: caller may provide the iteration
                                     //     counter for incremental operations to
                                     //     avoid large intermediate buffers.
-    BOOL             once           // IN: TRUE - only 1 iteration is performed
+    UINT16             once           // IN: TRUE - only 1 iteration is performed
                                     //     FALSE if iteration count determined by
                                     //     "sizeInBits"
     );

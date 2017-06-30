@@ -149,11 +149,14 @@ typedef struct
 {
     UINT64               counter;
     UINT32               magic;
+    UINT32               limit;
     TPM2B               *seed;
     const TPM2B         *label;
     TPM2B               *context;
     TPM_ALG_ID           hash;
     TPM_ALG_ID           kdf;
+    UINT16               digestSize;
+    TPM2B_DIGEST         residual;
 } KDF_STATE, *pKDR_STATE;
 #define KDF_MAGIC    ((UINT32) 0x4048444a) // "KDF " backwards
 

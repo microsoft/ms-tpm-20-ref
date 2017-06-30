@@ -1322,7 +1322,7 @@ CryptRsaGenerateKey(
         }
         retVal = TPM_RC_SUCCESS;
         // Do a trial encryption decryption if this is a signing key
-        if(publicArea->objectAttributes.sign)
+        if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign))
         {
             BN_RSA(temp1);
             BN_RSA(temp2);

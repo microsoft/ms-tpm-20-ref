@@ -69,8 +69,9 @@ TPM2_MakeCredential(
     // input key must be an asymmetric, restricted decryption key
     // NOTE: Needs to be restricted to have a symmetric value.
     if(!CryptIsAsymAlgorithm(object->publicArea.type)
-       || object->publicArea.objectAttributes.decrypt == CLEAR
-       || object->publicArea.objectAttributes.restricted == CLEAR)
+       || !IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, decrypt)
+       || !IS_ATTRIBUTE(object->publicArea.objectAttributes, 
+                        TPMA_OBJECT, restricted))
         return TPM_RCS_TYPE + RC_MakeCredential_handle;
 
     // The credential information may not be larger than the digest size used for

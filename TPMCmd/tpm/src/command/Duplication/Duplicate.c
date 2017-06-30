@@ -82,7 +82,7 @@ TPM2_Duplicate(
     newParent = HandleToObject(in->newParentHandle);
 
     // duplicate key must have fixParent bit CLEAR.
-    if(object->publicArea.objectAttributes.fixedParent == SET)
+    if(IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, fixedParent))
         return TPM_RCS_ATTRIBUTES + RC_Duplicate_objectHandle;
 
     // Do not duplicate object with NULL nameAlg
@@ -96,7 +96,8 @@ TPM2_Duplicate(
 
     // If the duplicated object has encryptedDuplication SET, then there must be
     // an inner wrapper and the new parent may not be TPM_RH_NULL
-    if(object->publicArea.objectAttributes.encryptedDuplication == SET)
+    if(IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, 
+                    encryptedDuplication))
     {
         if(in->symmetricAlg.algorithm == TPM_ALG_NULL)
             return TPM_RCS_SYMMETRIC + RC_Duplicate_symmetricAlg;
