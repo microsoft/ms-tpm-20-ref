@@ -149,7 +149,7 @@
 #ifndef NDEBUG
 
 // In some cases, the relationship between two values may be dependent
-// on things that change based on various selections like the chosen crypto
+// on things that change based on various selections like the chosen cryptographic
 // libraries. It is possible that these selections will result in incompatible
 // settings. These are often detectable by the compiler but it isn't always 
 // possible to do the check in the preprocessor code. For example, when the
@@ -176,6 +176,18 @@
 //#  define DRBG_DEBUG_PRINT
 #endif
 
+// If an assertion event it not going to produce any trace information (function and
+// line number) then define NO_FAIL_TRACE
+#ifndef NO_FAIL_TRACE
+//#   define NO_FAIL_TRACE
+#endif
+
 #endif // NDEBUG
+
+// If the implementation is going to give lockout time credit for time up to the
+// last orderly shutdown, then uncomment this variable
+#ifndef ACCUMULATE_SELF_HEAL_TIMER
+#define ACCUMULATE_SELF_HEAL_TIMER
+#endif // ACCUMULATE_SELF_HEAL_TIMER
 
 #endif // _TPM_BUILD_SWITCHES_H_

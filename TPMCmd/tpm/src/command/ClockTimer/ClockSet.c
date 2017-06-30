@@ -52,7 +52,6 @@ TPM2_ClockSet(
 #define CLOCK_UPDATE_MASK  ~((1ULL << NV_CLOCK_UPDATE_INTERVAL)- 1)
 
 // Input Validation
-
     // new time can not be bigger than 0xFFFF000000000000 or smaller than
     // current clock
     if(in->newTime > 0xFFFF000000000000ULL
@@ -60,8 +59,11 @@ TPM2_ClockSet(
         return TPM_RCS_VALUE + RC_ClockSet_newTime;
 
 // Internal Data Update
+    // Can't modify the clock if NV is not available.
+    RETURN_IF_NV_IS_NOT_AVAILABLE;
 
-    return TimeClockUpdate(in->newTime);
+    TimeClockUpdate(in->newTime);
+    return TPM_RC_SUCCESS;
 }
 
 #endif // CC_ClockSet

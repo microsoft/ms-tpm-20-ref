@@ -60,7 +60,7 @@ UINT64               g_time;
 #ifdef CLOCK_STOPS
 CLOCK_NONCE          g_timeEpoch;
 #endif
-BOOL                 g_timeNewEpochNeeded;
+//BOOL                 g_timeNewEpochNeeded;
 
 BOOL                 g_pcrReConfig;
 
@@ -119,8 +119,11 @@ TPM2B_DIGEST         s_cpHashForCommandAudit;
 #endif
 
 //*** DA.c
+#ifndef ACCUMULATE_SELF_HEAL_TIMER
+
 UINT64               s_selfHealTimer;
 UINT64               s_lockoutTimer;
+#endif // !ACCUMULATE_SELF_HEAL_TIMER
 
 //*** NV.c
 UINT64               s_maxCounter;

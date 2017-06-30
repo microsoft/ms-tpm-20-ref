@@ -430,6 +430,8 @@ CryptSymmetricDecrypt(
 
     TEST(algorithm);
     blockSize = CryptGetSymmetricBlockSize(algorithm, keySizeInBits);
+    if(blockSize == 0)
+        return TPM_RC_FAILURE;
     // If the iv is provided, then it is expected to be block sized. In some cases,
     // the caller is providing an array of 0's that is equal to [MAX_SYM_BLOCK_SIZE]
     // with no knowledge of the actual block size. This function will set it.

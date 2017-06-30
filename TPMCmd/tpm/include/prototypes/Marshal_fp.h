@@ -34,10 +34,10 @@
  */
 /*(Auto)
  *    Created by TpmMarshal.pl version 2.1 September 17, 2015
- *    This file created on Sep 27, 2016, 04:02:56 PM
+ *    This file created on Dec 12, 2016, 03:42:12 PM
  
     Processed by TpmReferencesAndReturns Version 1.2, July 27, 2015
-    Date: Sep 27, 2016 Time: 04:02:57 PM
+    Date: Dec 12, 2016 Time: 03:42:12 PM
 
 */
 
@@ -1094,19 +1094,10 @@ TPMS_SENSITIVE_CREATE_Marshal(TPMS_SENSITIVE_CREATE *source, BYTE **buffer, INT3
 
 
 // Table 2:140 - Definition of TPM2B_SENSITIVE_CREATE Structure  (StructureTable)
-#ifdef UT_BYTE_TPM2B_SENSITIVE_CREATE
 TPM_RC
 TPM2B_SENSITIVE_CREATE_Unmarshal(TPM2B_SENSITIVE_CREATE *target, BYTE **buffer, INT32 *size);
 UINT16
 TPM2B_SENSITIVE_CREATE_Marshal(TPM2B_SENSITIVE_CREATE *source, BYTE **buffer, INT32 *size);
-
-#else
-TPM_RC
-TPM2B_SENSITIVE_CREATE_Unmarshal(TPM2B_SENSITIVE_CREATE *target, BYTE **buffer, INT32 *size);
-UINT16
-TPM2B_SENSITIVE_CREATE_Marshal(TPM2B_SENSITIVE_CREATE *source, BYTE **buffer, INT32 *size);
-
-#endif
 
 
 // Table 2:141 - Definition of TPMS_SCHEME_HASH Structure (StructureTable)
@@ -1415,19 +1406,11 @@ TPMS_ECC_POINT_Marshal(TPMS_ECC_POINT *source, BYTE **buffer, INT32 *size);
 
 // Table 2:169 - Definition of TPM2B_ECC_POINT Structure (StructureTable)
 #if         ALG_ECC
-#ifdef UT_BYTE_TPM2B_ECC_POINT
 TPM_RC
 TPM2B_ECC_POINT_Unmarshal(TPM2B_ECC_POINT *target, BYTE **buffer, INT32 *size);
 UINT16
 TPM2B_ECC_POINT_Marshal(TPM2B_ECC_POINT *source, BYTE **buffer, INT32 *size);
 
-#else
-TPM_RC
-TPM2B_ECC_POINT_Unmarshal(TPM2B_ECC_POINT *target, BYTE **buffer, INT32 *size);
-UINT16
-TPM2B_ECC_POINT_Marshal(TPM2B_ECC_POINT *source, BYTE **buffer, INT32 *size);
-
-#endif
 #endif // ALG_ECC
 
 
@@ -1642,19 +1625,10 @@ TPMT_PUBLIC_Marshal(TPMT_PUBLIC *source, BYTE **buffer, INT32 *size);
 
 
 // Table 2:191 - Definition of TPM2B_PUBLIC Structure (StructureTable)
-#ifdef UT_BYTE_TPM2B_PUBLIC
-TPM_RC
-TPM2B_PUBLIC_Unmarshal(TPM2B_PUBLIC *target, BYTE **buffer, INT32 *size);
-UINT16
-TPM2B_PUBLIC_Marshal(TPM2B_PUBLIC *source, BYTE **buffer, INT32 *size);
-
-#else
 TPM_RC
 TPM2B_PUBLIC_Unmarshal(TPM2B_PUBLIC *target, BYTE **buffer, INT32 *size, BOOL flag);
 UINT16
 TPM2B_PUBLIC_Marshal(TPM2B_PUBLIC *source, BYTE **buffer, INT32 *size);
-
-#endif
 
 
 // Table 2:192 - Definition of TPM2B_TEMPLATE Structure (StructureTable)
@@ -1686,19 +1660,10 @@ TPMT_SENSITIVE_Marshal(TPMT_SENSITIVE *source, BYTE **buffer, INT32 *size);
 
 
 // Table 2:196 - Definition of TPM2B_SENSITIVE Structure  (StructureTable)
-#ifdef UT_BYTE_TPM2B_SENSITIVE
 TPM_RC
 TPM2B_SENSITIVE_Unmarshal(TPM2B_SENSITIVE *target, BYTE **buffer, INT32 *size);
 UINT16
 TPM2B_SENSITIVE_Marshal(TPM2B_SENSITIVE *source, BYTE **buffer, INT32 *size);
-
-#else
-TPM_RC
-TPM2B_SENSITIVE_Unmarshal(TPM2B_SENSITIVE *target, BYTE **buffer, INT32 *size);
-UINT16
-TPM2B_SENSITIVE_Marshal(TPM2B_SENSITIVE *source, BYTE **buffer, INT32 *size);
-
-#endif
 
 
 // Table 2:197 - Definition of _PRIVATE Structure  (StructureTable)
@@ -1759,19 +1724,10 @@ TPMS_NV_PUBLIC_Marshal(TPMS_NV_PUBLIC *source, BYTE **buffer, INT32 *size);
 
 
 // Table 2:206 - Definition of TPM2B_NV_PUBLIC Structure (StructureTable)
-#ifdef UT_BYTE_TPM2B_NV_PUBLIC
 TPM_RC
 TPM2B_NV_PUBLIC_Unmarshal(TPM2B_NV_PUBLIC *target, BYTE **buffer, INT32 *size);
 UINT16
 TPM2B_NV_PUBLIC_Marshal(TPM2B_NV_PUBLIC *source, BYTE **buffer, INT32 *size);
-
-#else
-TPM_RC
-TPM2B_NV_PUBLIC_Unmarshal(TPM2B_NV_PUBLIC *target, BYTE **buffer, INT32 *size);
-UINT16
-TPM2B_NV_PUBLIC_Marshal(TPM2B_NV_PUBLIC *source, BYTE **buffer, INT32 *size);
-
-#endif
 
 
 // Table 2:207 - Definition of TPM2B_CONTEXT_SENSITIVE Structure  (StructureTable)
@@ -1810,19 +1766,11 @@ TPMS_CREATION_DATA_Marshal(TPMS_CREATION_DATA *source, BYTE **buffer, INT32 *siz
 
 
 // Table 2:213 - Definition of TPM2B_CREATION_DATA Structure  (StructureTable)
-#ifdef UT_BYTE_TPM2B_CREATION_DATA
 TPM_RC
 TPM2B_CREATION_DATA_Unmarshal(TPM2B_CREATION_DATA *target, BYTE **buffer, INT32 *size);
 UINT16
 TPM2B_CREATION_DATA_Marshal(TPM2B_CREATION_DATA *source, BYTE **buffer, INT32 *size);
 
-#else
-TPM_RC
-TPM2B_CREATION_DATA_Unmarshal(TPM2B_CREATION_DATA *target, BYTE **buffer, INT32 *size);
-UINT16
-TPM2B_CREATION_DATA_Marshal(TPM2B_CREATION_DATA *source, BYTE **buffer, INT32 *size);
-
-#endif
 // Array Marshal/Unmarshal for BYTE
 TPM_RC
 BYTE_Array_Unmarshal(BYTE *target, BYTE **buffer, INT32 *size, INT32 count);

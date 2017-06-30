@@ -42,10 +42,7 @@
 // Creates a primary or temporary object from a primary seed.
 */
 // return type: TPM_RC
-//   TPM_RC_ATTRIBUTES      'sensitiveDataOrigin' is CLEAR when 'sensitive.data' is
-//                          an Empty Buffer, or is SET when 'sensitive.data' is not
-//                          empty;
-//                          'fixedTPM', 'fixedParent', or 'encryptedDuplication'
+//   TPM_RC_ATTRIBUTES      'fixedTPM', 'fixedParent', or 'encryptedDuplication'
 //                          attributes are inconsistent between themselves or with
 //                          those of the parent object;
 //                          inconsistent 'restricted', 'decrypt' and 'sign'
@@ -94,15 +91,14 @@ TPM2_CreatePrimary(
     // Check attributes in input public area. CreateChecks() checks the things that
     // are unique to creation and then validates the attributes and values that are
     // common to create and load.
-    result = CreateChecks(NULL, publicArea);
+    result = CreateChecks(NULL, publicArea, 
+                          in->inSensitive.sensitive.data.t.size);
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, RC_CreatePrimary_inPublic);
-
     // Validate the sensitive area values
     if(!AdjustAuthSize(&in->inSensitive.sensitive.userAuth,
                        publicArea->nameAlg))
         return TPM_RCS_SIZE + RC_CreatePrimary_inSensitive;
-
 // Command output
     // Compute the name using out->name as a scratch area (this is not the value
     // that ultimately will be returned, then instantiate the state that will be

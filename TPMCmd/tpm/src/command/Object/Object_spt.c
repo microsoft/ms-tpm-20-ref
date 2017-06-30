@@ -127,15 +127,12 @@ ComputeProtectionKeyParms(
         *keyBits = symDef->keyBits.sym;
         symKey->t.size = (*keyBits + 7) / 8;
     }
-
     // Get seed for KDF
     if(seed == NULL)
         seed = GetSeedForKDF(protector);
-
     // KDFa to generate symmetric key and IV value
     CryptKDFa(hashAlg, seed, STORAGE_KEY, name, NULL,
               symKey->t.size * 8, symKey->t.buffer, NULL, FALSE);
-
     return;
 }
 
@@ -191,14 +188,12 @@ ComputeOuterIntegrity(
     // Get seed for KDF
     if(seed == NULL)
         seed = GetSeedForKDF(protector);
-
     // Determine the HMAC key bits
     hmacKey.t.size = CryptHashGetDigestSize(hashAlg);
 
     // KDFa to generate HMAC key
     CryptKDFa(hashAlg, seed, INTEGRITY_KEY, NULL, NULL,
               hmacKey.t.size * 8, hmacKey.t.buffer, NULL, FALSE);
-
     // Start HMAC and get the size of the digest which will become the integrity
     integrity->t.size = CryptHmacStart2B(&hmacState, hashAlg, &hmacKey.b);
 
@@ -226,7 +221,7 @@ ComputeInnerIntegrity(
     )
 {
     HASH_STATE      hashState;
-
+//
     // Start hash and get the size of the digest which will become the integrity
     integrity->t.size = CryptHashStart(&hashState, hashAlg);
 
@@ -262,11 +257,10 @@ ProduceInnerIntegrity(
     )
 {
     BYTE            *sensitiveData; // pointer to the sensitive data
-
     TPM2B_DIGEST     integrity;
     UINT16           integritySize;
     BYTE            *buffer;        // Auxiliary buffer pointer
-
+//
     // sensitiveData points to the beginning of sensitive data in innerBuffer
     integritySize = sizeof(UINT16) + CryptHashGetDigestSize(hashAlg);
     sensitiveData = innerBuffer + integritySize;
@@ -296,12 +290,11 @@ CheckInnerIntegrity(
     )
 {
     TPM_RC          result;
-
     TPM2B_DIGEST    integrity;
     TPM2B_DIGEST    integrityToCompare;
     BYTE            *buffer;                // Auxiliary buffer pointer
     INT32           size;
-
+//
     // Unmarshal integrity
     buffer = innerBuffer;
     size = (INT32)dataSize;
@@ -311,7 +304,6 @@ CheckInnerIntegrity(
         // Compute integrity to compare
         ComputeInnerIntegrity(hashAlg, name, (UINT16)size, buffer,
                               &integrityToCompare);
-
         // Compare outer blob integrity
         if(!MemoryEqual2B(&integrity.b, &integrityToCompare.b))
             result = TPM_RC_INTEGRITY;
@@ -332,9 +324,9 @@ AdjustAuthSize(
     )
 {
     UINT16               digestSize;
+//
     // If there is no nameAlg, then this is a LoadExternal and the authVale can
     // be any size up to the maximum allowed by the 
-
     digestSize = (nameAlg == TPM_ALG_NULL) ? sizeof(TPMU_HA) 
         : CryptHashGetDigestSize(nameAlg);
     if(digestSize < MemoryRemoveTrailingZeros(auth))
@@ -342,6 +334,7 @@ AdjustAuthSize(
     else if(digestSize > auth->t.size)
         MemoryPad2B(&auth->b, digestSize);
     auth->t.size = digestSize;
+
     return TRUE;
 }
 
@@ -369,28 +362,43 @@ ObjectIsParent(
 TPM_RC
 CreateChecks(
     OBJECT              *parentObject,
-    TPMT_PUBLIC         *publicArea
+    TPMT_PUBLIC         *publicArea,
+    UINT16               sensitiveDataSize
     )
 {
     TPMA_OBJECT          attributes = publicArea->objectAttributes;
     TPM_RC               result = TPM_RC_SUCCESS;
-
+//
+    // If the caller indicates that they have provided the data, then make sure that
+    // they have provided some data.
+    if((attributes.sensitiveDataOrigin == CLEAR)
+       && (sensitiveDataSize == 0))
+        return TPM_RCS_ATTRIBUTES;
+    // For an ordinary object, data can only be provided when sensitiveDataOrigin
+    // is CLEAR
+    if((parentObject != NULL)
+       && (attributes.sensitiveDataOrigin == SET)
+       && (sensitiveDataSize != 0))
+        return TPM_RCS_ATTRIBUTES;
     switch(publicArea->type)
     {
+        case TPM_ALG_KEYEDHASH:
+            // if this is a data object (sign == decrypt == CLEAR) then the
+            // TPM cannot be the data source.
+            if(!attributes.sign && !attributes.decrypt
+               && attributes.sensitiveDataOrigin)
+                result = TPM_RC_ATTRIBUTES;
+            // comment out the next line in order to prevent a fixedTPM derivation
+            // parent
+            break;  
         case TPM_ALG_SYMCIPHER:
-            // A restricted key must have sensitiveDataOrigin SET unless it has
-            // fixedParent and fixedTPM CLEAR.
+            // A restricted key symmetric key (SYMCIPHER and KEYEDHASH)
+            // must have sensitiveDataOrigin SET unless it has fixedParent and 
+            // fixedTPM CLEAR.
             if(attributes.restricted)
                 if(!attributes.sensitiveDataOrigin)
                     if(attributes.fixedParent || attributes.fixedTPM)
                         result = TPM_RCS_ATTRIBUTES;
-            break;
-        case TPM_ALG_KEYEDHASH:
-            // if this is a data object (sign == decrypt == CLEAR) then the
-            // TPM cannot be the data source.
-            if(!attributes.sign && !attributes.decrypt 
-               && attributes.sensitiveDataOrigin)
-            result = TPM_RC_ATTRIBUTES;
             break;
         default: // Asymmetric keys cannot have the sensitive portion provided
             if(!attributes.sensitiveDataOrigin)
@@ -429,7 +437,7 @@ SchemeChecks(
     TPM_ALG_ID               scheme = TPM_ALG_NULL;
     TPMA_OBJECT              attributes = publicArea->objectAttributes;
     TPMU_PUBLIC_PARMS        *parms = &publicArea->parameters;
-
+//
     switch(publicArea->type)
     {
         case TPM_ALG_SYMCIPHER:
@@ -562,6 +570,13 @@ SchemeChecks(
     {
         if(symAlgs->algorithm == TPM_ALG_NULL)
             return TPM_RCS_SYMMETRIC;
+#if 0       //??
+// This next check is under investigation. Need to see if it will break Windows 
+// before it is enabled. If it does not, then it should be default because a 
+// the mode used with a parent is always CFB and P2 indicates as much.
+        if(symAlgs->mode.sym != TPM_ALG_CFB)
+            return TPM_RCS_MODE;
+#endif
         // If this parent is not duplicable, then the symmetric algorithms 
         // (encryption and hash) must match those of its parent
         if(attributes.fixedParent && (parentObject != NULL))
@@ -603,20 +618,17 @@ PublicAttributesValidation(
 {
     TPMA_OBJECT      attributes = publicArea->objectAttributes;
     TPMA_OBJECT      parentAttributes = {0};
-
+//
     if(parentObject != NULL)
         parentAttributes = parentObject->publicArea.objectAttributes;
-
     if(publicArea->nameAlg == TPM_ALG_NULL)
         return TPM_RCS_HASH;
-
     // If there is an authPolicy, it needs to be the size of the digest produced
     // by the nameAlg of the object
     if((publicArea->authPolicy.t.size != 0
         && (publicArea->authPolicy.t.size
             != CryptHashGetDigestSize(publicArea->nameAlg))))
         return TPM_RCS_SIZE;
-
     // If the parent is fixedTPM (including a Primary Object) the object must have
     // the same value for fixedTPM and fixedParent
     if(parentObject == NULL || parentAttributes.fixedTPM == SET)
@@ -682,7 +694,7 @@ FillInCreationData(
     BYTE                 creationBuffer[sizeof(TPMS_CREATION_DATA)];
     BYTE                *buffer;
     HASH_STATE           hashState;
-
+//
     // Fill in TPMS_CREATION_DATA in outCreation
 
     // Compute PCR digest
@@ -695,7 +707,6 @@ FillInCreationData(
     // Get locality
     outCreation->creationData.locality
         = LocalityGetAttributes(_plat__LocalityGet());
-
     outCreation->creationData.parentNameAlg = TPM_ALG_NULL;
 
     // If the parent is either a primary seed or TPM_ALG_NULL, then  the Name
@@ -705,7 +716,6 @@ FillInCreationData(
         buffer = &outCreation->creationData.parentName.t.name[0];
         outCreation->creationData.parentName.t.size =
             TPM_HANDLE_Marshal(&parentHandle, &buffer, NULL);
-
         // For a primary or temporary object, the parent name (a handle) and the
         // parent's QN are the same
         outCreation->creationData.parentQualifiedName
@@ -714,7 +724,7 @@ FillInCreationData(
     else         // Regular object
     {
         OBJECT          *parentObject = HandleToObject(parentHandle);
-
+//
         // Set name algorithm
         outCreation->creationData.parentNameAlg =
             parentObject->publicArea.nameAlg;
@@ -725,7 +735,6 @@ FillInCreationData(
         outCreation->creationData.parentQualifiedName =
             parentObject->qualifiedName;
     }
-
     // Copy outside information
     outCreation->creationData.outsideInfo = *outsideData;
 
@@ -733,8 +742,7 @@ FillInCreationData(
     buffer = creationBuffer;
     outCreation->size = TPMS_CREATION_DATA_Marshal(&outCreation->creationData,
                                                    &buffer, NULL);
-
-                             // Compute hash for creation field in public template
+    // Compute hash for creation field in public template
     creationDigest->t.size = CryptHashStart(&hashState, nameHashAlg);
     CryptDigestUpdate(&hashState, outCreation->size, creationBuffer);
     CryptHashEnd2B(&hashState, &creationDigest->b);
@@ -797,13 +805,11 @@ ProduceOuterWrap(
     TPM2B_IV        ivRNG;          // IV from RNG
     TPM2B_IV        *iv = NULL;
     UINT16          ivSize = 0;     // size of iv area, including the size field
-
     BYTE            *sensitiveData; // pointer to the sensitive data
-
     TPM2B_DIGEST    integrity;
     UINT16          integritySize;
     BYTE            *buffer;        // Auxiliary buffer pointer
-
+//
     // Compute the beginning of sensitive data.  The outer integrity should
     // always exist if this function is called to make an outer wrap
     integritySize = sizeof(UINT16) + CryptHashGetDigestSize(hashAlg);
@@ -829,7 +835,6 @@ ProduceOuterWrap(
         // Use iv for encryption
         iv = &ivRNG;
     }
-
     // Compute symmetric key parameters for outer buffer encryption
     ComputeProtectionKeyParms(protector, hashAlg, name, seed,
                               &symAlg, &keyBits, &symKey);
@@ -837,12 +842,10 @@ ProduceOuterWrap(
     CryptSymmetricEncrypt(sensitiveData, symAlg, keyBits,
                           symKey.t.buffer, iv, TPM_ALG_CFB, dataSize,
                           sensitiveData);
-
     // Compute outer integrity.  Integrity computation includes the optional IV
     // area
     ComputeOuterIntegrity(name, protector, hashAlg, seed, dataSize + ivSize,
                           outerBuffer + integritySize, &integrity);
-
     // Add integrity at the beginning of outer buffer
     buffer = outerBuffer;
     TPM2B_DIGEST_Marshal(&integrity, &buffer, NULL);
@@ -887,13 +890,11 @@ UnwrapOuter(
     UINT16          keyBits = 0;
     TPM2B_IV        ivIn;               // input IV retrieved from input buffer
     TPM2B_IV        *iv = NULL;
-
     BYTE            *sensitiveData;     // pointer to the sensitive data
-
     TPM2B_DIGEST    integrityToCompare;
     TPM2B_DIGEST    integrity;
     INT32           size;
-
+//
     // Unmarshal integrity
     sensitiveData = outerBuffer;
     size = (INT32)dataSize;
@@ -904,15 +905,12 @@ UnwrapOuter(
         ComputeOuterIntegrity(name, protector, hashAlg, seed,
                               (UINT16)size, sensitiveData,
                               &integrityToCompare);
-
         // Compare outer blob integrity
         if(!MemoryEqual2B(&integrity.b, &integrityToCompare.b))
             return TPM_RCS_INTEGRITY;
-
         // Get the symmetric algorithm parameters used for encryption
         ComputeProtectionKeyParms(protector, hashAlg, name, seed,
                                   &symAlg, &keyBits, &symKey);
-
         // Retrieve IV if it is used
         if(useIV)
         {
@@ -929,7 +927,7 @@ UnwrapOuter(
         }
     }
     // If no errors, decrypt private in place. Since this function uses CFB, 
-    // CryptSymmetricDecrypt() will not return any errors (it may fail but it will
+    // CryptSymmetricDecrypt() will not return any errors. It may fail but it will
     // not return an error.
     if(result == TPM_RC_SUCCESS)
         CryptSymmetricDecrypt(sensitiveData, symAlg, keyBits,
@@ -950,17 +948,21 @@ MarshalSensitive(
     TPMI_ALG_HASH        nameAlg            // IN:
     )
 {
-    BYTE                *sizeField = buffer;
+    BYTE                *sizeField = buffer;    // saved so that size can be 
+                                                // marshaled after it is known
     UINT16               retVal;
-   // Pad the authValue if needed
+//
+    // Pad the authValue if needed
     MemoryPad2B(&sensitive->authValue.b, CryptHashGetDigestSize(nameAlg));
     buffer += 2;
+
     // Marshal the structure
     retVal = TPMT_SENSITIVE_Marshal(sensitive, &buffer, NULL);
+
     // Marshal the size
     retVal = (UINT16)(retVal + UINT16_Marshal(&retVal, &sizeField, NULL));
-    return retVal;
 
+    return retVal;
 }
 
 //*** SensitiveToPrivate()
@@ -1143,7 +1145,6 @@ SensitiveToDuplicate(
     TPM2B_PRIVATE       *outPrivate     // OUT: output private structure
     )
 {
-    BYTE            *buffer;        // Auxiliary buffer pointer
     BYTE            *sensitiveData; // pointer to the sensitive data
     TPMI_ALG_HASH   outerHash = TPM_ALG_NULL;// The hash algorithm for outer wrap
     TPMI_ALG_HASH   innerHash = TPM_ALG_NULL;// The hash algorithm for inner wrap
@@ -1164,8 +1165,10 @@ SensitiveToDuplicate(
     if(symDef->algorithm != TPM_ALG_NULL)
     {
         doInnerWrap = TRUE;
+
         // Use self nameAlg as inner hash algorithm
         innerHash = nameAlg;
+
         // Adjust sensitive data pointer
         sensitiveData += sizeof(UINT16) + CryptHashGetDigestSize(innerHash);
     }
@@ -1173,22 +1176,14 @@ SensitiveToDuplicate(
     if(seed->size != 0)
     {
         doOuterWrap = TRUE;
+
         // Use parent nameAlg as outer hash algorithm
         outerHash = ObjectGetNameAlg(parent);
+
         // Adjust sensitive data pointer
         sensitiveData += sizeof(UINT16) + CryptHashGetDigestSize(outerHash);
     }
-    // Marshal sensitive area, leaving the leading 2 bytes for size
-    buffer = sensitiveData + sizeof(UINT16);
-    dataSize = TPMT_SENSITIVE_Marshal(sensitive, &buffer, NULL);
-
-    // Adding size before the data area
-    buffer = sensitiveData;
-    UINT16_Marshal(&dataSize, &buffer, NULL);
-
-    // Adjust the dataSize to include the size field
-    dataSize += sizeof(UINT16);
-
+    // Marshal sensitive area
     dataSize = MarshalSensitive(sensitiveData, sensitive, nameAlg);
 
     // Apply inner wrap for duplication blob.  It includes both integrity and
@@ -1203,7 +1198,6 @@ SensitiveToDuplicate(
             innerBuffer += sizeof(UINT16) + CryptHashGetDigestSize(outerHash);
         dataSize = ProduceInnerIntegrity(name, innerHash, dataSize,
                                          innerBuffer);
-
         // Generate inner encryption key if needed
         if(innerSymKey->t.size == 0)
         {
@@ -1274,13 +1268,12 @@ DuplicateToSensitive(
     )
 {
     TPM_RC               result;
-
     BYTE                *buffer;
     INT32                size;
     BYTE                *sensitiveData; // pointer to the sensitive data
     UINT16               dataSize;
     UINT16               dataSizeInput;
-
+//
     // Make sure that name is provided
     pAssert(name != NULL && name->size != 0);
 
@@ -1301,7 +1294,6 @@ DuplicateToSensitive(
                              dataSize, sensitiveData);
         if(result != TPM_RC_SUCCESS)
             return result;
-
         // Adjust sensitive data pointer and size
         sensitiveData += sizeof(UINT16) + CryptHashGetDigestSize(outerHash);
         dataSize -= sizeof(UINT16) + CryptHashGetDigestSize(outerHash);
@@ -1316,17 +1308,14 @@ DuplicateToSensitive(
         CryptSymmetricDecrypt(sensitiveData, symDef->algorithm,
                               symDef->keyBits.sym, innerSymKey->buffer, NULL,
                               TPM_ALG_CFB, dataSize, sensitiveData);
-
         // Check inner integrity
         result = CheckInnerIntegrity(name, nameAlg, dataSize, sensitiveData);
         if(result != TPM_RC_SUCCESS)
             return result;
-
         // Adjust sensitive data pointer and size
         sensitiveData += sizeof(UINT16) + CryptHashGetDigestSize(nameAlg);
         dataSize -= sizeof(UINT16) + CryptHashGetDigestSize(nameAlg);
     }
-
     // Unmarshal input data size
     buffer = sensitiveData;
     size = (INT32)dataSize;
@@ -1339,6 +1328,7 @@ DuplicateToSensitive(
         {
             // Unmarshal sensitive buffer to sensitive structure
             result = TPMT_SENSITIVE_Unmarshal(sensitive, &buffer, &size);
+
             // if the results is OK make sure that all the data was unmarshaled
             if(result == TPM_RC_SUCCESS && size != 0)
                 result = TPM_RC_SIZE;
@@ -1367,7 +1357,7 @@ SecretToCredential(
     BYTE                *sensitiveData; // pointer to the sensitive data
     TPMI_ALG_HASH        outerHash;     // The hash algorithm for outer wrap
     UINT16               dataSize;      // data blob size
-
+//
     pAssert(secret != NULL && outIDObject != NULL);
 
     // use protector's name algorithm as outer hash
@@ -1376,19 +1366,13 @@ SecretToCredential(
     // Marshal secret area to credential buffer, leave space for integrity
     sensitiveData = outIDObject->t.credential
         + sizeof(UINT16) + CryptHashGetDigestSize(outerHash);
-
 // Marshal secret area
     buffer = sensitiveData;
     dataSize = TPM2B_DIGEST_Marshal(secret, &buffer, NULL);
 
     // Apply outer wrap
-    outIDObject->t.size = ProduceOuterWrap(protector,
-                                           name,
-                                           outerHash,
-                                           seed,
-                                           FALSE,
-                                           dataSize,
-                                           outIDObject->t.credential);
+    outIDObject->t.size = ProduceOuterWrap(protector, name, outerHash, seed, FALSE,
+                                           dataSize, outIDObject->t.credential);
     return;
 }
 
@@ -1421,7 +1405,7 @@ CredentialToSecret(
     TPMI_ALG_HASH            outerHash;     // The hash algorithm for outer wrap
     BYTE                    *sensitiveData; // pointer to the sensitive data
     UINT16                   dataSize;
-
+//
     // use protector's name algorithm as outer hash
     outerHash = ObjectGetNameAlg(protector);
 
@@ -1435,11 +1419,11 @@ CredentialToSecret(
             + sizeof(UINT16) + CryptHashGetDigestSize(outerHash);
         dataSize = inIDObject->size
             - (sizeof(UINT16) + CryptHashGetDigestSize(outerHash));
-
- // Unmarshal secret buffer to TPM2B_DIGEST structure
+        // Unmarshal secret buffer to TPM2B_DIGEST structure
         buffer = sensitiveData;
         size = (INT32)dataSize;
         result = TPM2B_DIGEST_Unmarshal(secret, &buffer, &size);
+
         // If there were no other unmarshaling errors, make sure that the
         // expected amount of data was recovered
         if(result == TPM_RC_SUCCESS && size != 0)
@@ -1468,6 +1452,7 @@ MemoryRemoveTrailingZeros(
 // that 'label' or 'context' can end up being an Empty Buffer.
 TPM_RC
 SetLabelAndContext(
+    TPMS_DERIVE             *labelContext,  // OUT: the recovered label and context
     TPMT_PUBLIC             *publicArea,    // IN/OUT: the public area containing 
                                             //         the unmarshaled template
     TPM2B_SENSITIVE_DATA    *sensitive      // IN: the sensitive data
@@ -1476,28 +1461,30 @@ SetLabelAndContext(
     TPM_RC                   result;
     INT32                    size;
     BYTE                    *buff;
-    TPM2B_LABEL              label;
+//
+    // In case neither the sensitive nor publicArea have a label or a context
+    labelContext->label.b.size = 0;
+    labelContext->context.b.size = 0;
 
     // Unmarshal a TPMS_DERIVE from the TPM2B_SENSITIVE_DATA buffer
-    size = sensitive->t.size;
     // If there is something to unmarshal...
-    if(size != 0)
+    if(sensitive->t.size != 0)
     {
+        size = sensitive->t.size;
         buff = sensitive->t.buffer;
-        result = TPM2B_LABEL_Unmarshal(&label, &buff, &size);
+        result = TPMS_DERIVE_Unmarshal(labelContext, &buff, &size);
         if(result != TPM_RC_SUCCESS)
             return result;
-        // If there is a label in the publicArea, it overrides
-        if(publicArea->unique.derive.label.t.size == 0)
-            MemoryCopy2B(&publicArea->unique.derive.label.b, &label.b, 
-                         sizeof(publicArea->unique.derive.label.t.buffer));
-        result = TPM2B_LABEL_Unmarshal(&label, &buff, &size);
-        if(result != TPM_RC_SUCCESS)
-            return result;
-        if(publicArea->unique.derive.context.t.size == 0)
-            MemoryCopy2B(&publicArea->unique.derive.context.b, &label.b, 
-                         sizeof(publicArea->unique.derive.context.t.buffer));
     }
+    // If there is a label string in publicArea, it overrides
+    if(publicArea->unique.derive.label.t.size != 0)
+        MemoryCopy2B(&labelContext->label.b, &publicArea->unique.derive.label.b,
+                     sizeof(labelContext->label.t.buffer));
+    // if there is a context string in publicArea, it overrides
+    if(publicArea->unique.derive.context.t.size != 0)
+        MemoryCopy2B(&labelContext->context.b,
+                     &publicArea->unique.derive.context.b,
+                     sizeof(labelContext->label.t.buffer));
     return TPM_RC_SUCCESS;
 }
 
@@ -1522,6 +1509,7 @@ UnmarshalToPublic(
     // make sure that tOut is zeroed so that there are no remnants from previous
     // uses
     MemorySet(tOut, 0, sizeof(TPMT_PUBLIC));
+
     // Unmarshal a TPMT_PUBLIC but don't allow a nameAlg of TPM_ALG_NULL
     result = TPMT_PUBLIC_Unmarshal(tOut, &buffer, &size, FALSE);
     if((result == TPM_RC_SUCCESS) && (derivation == TRUE))

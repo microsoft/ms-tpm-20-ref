@@ -46,10 +46,10 @@
 #include "swap.h"
 #include "VendorString.h"
 
-#ifdef SELF_TEST
 
 //** For Self-test
 // These macros are used in CryptUtil to invoke the incremental self test.
+#ifdef SELF_TEST
 #   define     TEST(alg) if(TEST_BIT(alg, g_toTest)) CryptTestAlgorithm(alg, NULL)
 
 // Use of TPM_ALG_NULL is reserved for RSAEP/RSADP testing. If someone is wanting
@@ -71,7 +71,7 @@
 #endif
 
 #ifdef NO_FAIL_TRACE
-#   define FAIL(errorCode) (TmpFAIL(errorCode))
+#   define FAIL(errorCode) (TpmFail(errorCode))
 #else
 #   define FAIL(errorCode) (TpmFail(FUNCTION_NAME, __LINE__, errorCode))
 #endif
@@ -90,14 +90,14 @@
 #endif
 
 // This macro tests that a condition is TRUE and puts the TPM into failure mode
-// if it is not. If longjmp is being used, then the FAIL(FATAL_ERROR_) macro makes a call from
-// which there is no return. Otherwise, it returns and the function will exit
-// with the appropriate return code.
+// if it is not. If longjmp is being used, then the FAIL(FATAL_ERROR_) macro makes 
+// a call from which there is no return. Otherwise, it returns and the function 
+// will exit with the appropriate return code.
 #define REQUIRE(condition, errorCode, returnCode)       \
     {                                                   \
         if(!!(condition))                               \
         {                                               \
-            FAIL(FATAL_ERROR_errorCode);                            \
+            FAIL(FATAL_ERROR_errorCode);                \
             FAIL_RETURN(returnCode);                    \
         }                                               \
     }
@@ -105,12 +105,10 @@
 #define PARAMETER_CHECK(condition, returnCode)          \
     REQUIRE((condition), PARAMETER, returnCode)
 
-#if defined(EMPTY_ASSERT)
+#if defined EMPTY_ASSERT
 #   define pAssert(a)  ((void)0)
 #else
-// The additional parameter following FAIL(FATAL_ERROR_) is so that the expression within
-// parenthesis has an lvalue. FAIL has no value so the expression is not complete.
-#   define pAssert(a) (!!(a) ? 1 : (FAIL(FATAL_ERROR_PARAMETER), 0))
+#   define pAssert(a) {if(!(a)) FAIL(FATAL_ERROR_PARAMETER);}
 #endif
 
 //** Derived from Vendor-specific values
@@ -123,7 +121,7 @@
 
 //** Compile-time Checks
 // In some cases, the relationship between two values may be dependent
-// on things that change based on various selections like the chosen crypto
+// on things that change based on various selections like the chosen cryptographic
 // libraries. It is possible that these selections will result in incompatible
 // settings. These are often detectable by the compiler but it isn't always 
 // possible to do the check in the preprocessor code. For example, when the
@@ -223,18 +221,19 @@
 #define CONTEXT_ENCRYPT_KEY_BYTES       ((CONTEXT_ENCRYPT_KEY_BITS+7)/8)
 #endif
 
-#ifndef MAX_ECC_KEY_BYTES
-#define MAX_ECC_KEY_BYTES 0
+#if ALG_ECC
+#   define LABEL_MAX_BUFFER MAX_ECC_KEY_BYTES
+#else
+#   define LABEL_MAX_BUFFER MAX_DIGEST_SIZE
 #endif
 
-// Handle case when no ecc is defined
-#ifndef MAX_ECC_KEY_BYTES
-#   define MAX_ECC_KEY_BYTES    MAX_DIGEST_SIZE
-#endif
-#define LABEL_MAX_BUFFER   MIN(MAX_ECC_KEY_BYTES, MAX_DIGEST_SIZE)
-
-#if LABEL_MAX_BUFFER < 32
-#error "The size allowed for the label is not large enough for interoperability."
-#endif
+// This bit is used to indicate that an authorization ticket expires on TPM Reset
+// and TPM Restart.It is added to the timeout value returned by TPM2_PoliySigned()
+// and TPM2_PolicySecret() and used by TPM2_PolicyTicket(). The timeout value is 
+// relative to Time (g_time). Time is reset whenever the TPM loses power and cannot
+// be moved forward by the user (as can Clock). g_time is a 64-bit value expressing
+// time in ms. Sealing the MSb for a flag means that the TPM needs to be reset
+// at least once every 292,471,208 years rather than once every 584,942,417 years.
+#define EXPIRATION_BIT ((UINT64)1 << 63)
 
 #endif // GP_MACROS_H

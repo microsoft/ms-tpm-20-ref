@@ -119,21 +119,13 @@ TPM2_Create(
     // Copy the input structure to the allocated structure
     *publicArea = in->inPublic.publicArea;
 
-
-    // The sensitiveDataOrigin attribute must be consistent with the setting of
-    // the size of the data object in inSensitive.
-    if((publicArea->objectAttributes.sensitiveDataOrigin == SET)
-       != (in->inSensitive.sensitive.data.t.size == 0))
-        // Mismatch between the object attributes and the parameter.
-        return TPM_RCS_ATTRIBUTES + RC_Create_inSensitive;
-
     // Check attributes in input public area. CreateChecks() checks the things that
     // are unique to creation and then validates the attributes and values that are
     // common to create and load.
-    result = CreateChecks(parentObject, publicArea);
+    result = CreateChecks(parentObject, publicArea, 
+                          in->inSensitive.sensitive.data.t.size);
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, RC_Create_inPublic);
-
     // Clean up the authValue if necessary
     if(!AdjustAuthSize(&in->inSensitive.sensitive.userAuth, publicArea->nameAlg))
         return TPM_RCS_SIZE + RC_Create_inSensitive;

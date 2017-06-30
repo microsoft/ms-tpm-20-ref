@@ -95,19 +95,23 @@ TPM2_PolicySecret(
        && !NvIsPinPassIndex(in->authHandle))
     {
         BOOL        expiresOnReset = (in->nonceTPM.t.size == 0);
-        // Generate timeout buffer.  The format of output timeout buffer is
-        // TPM-specific.
-        // In this implementation, the timeout parameter is the timeout relative
-        // to g_time with a one byte flag to indicate if the ticket will expire on 
-        // TPM Reset
-        out->timeout.t.size = sizeof(authTimeout) + 1;
-        UINT64_TO_BYTE_ARRAY(authTimeout, out->timeout.t.buffer);
-        out->timeout.t.buffer[sizeof(authTimeout)] = (BYTE)expiresOnReset;
-        
         // Compute policy ticket
+        authTimeout &= ~EXPIRATION_BIT;
         TicketComputeAuth(TPM_ST_AUTH_SECRET, EntityGetHierarchy(in->authHandle),
                           authTimeout, expiresOnReset, &in->cpHashA, &in->policyRef,
                           &entityName, &out->policyTicket);
+        // Generate timeout buffer.  The format of output timeout buffer is
+        // TPM-specific.
+        // Note: In this implementation, the timeout buffer value is computed after 
+        // the ticket is produced so, when the ticket is checked, the expiration
+        // flag needs to be extracted before the ticket is checked.
+        out->timeout.t.size = sizeof(authTimeout);
+        // In the Windows compatible version, the least-significant bit of the
+        // timeout value is used as a flag to indicate if the authorization expires
+        // on reset. The flag is the MSb.
+        if(expiresOnReset)
+            authTimeout |= EXPIRATION_BIT;
+        UINT64_TO_BYTE_ARRAY(authTimeout, out->timeout.t.buffer);
     }
     else
     {

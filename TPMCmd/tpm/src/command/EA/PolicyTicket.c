@@ -75,14 +75,18 @@ TPM2_PolicyTicket(
     // would be a substitute.
     if(session->attributes.isTrialPolicy)
         return TPM_RCS_ATTRIBUTES + RC_PolicyTicket_policySession;
-
     // Restore timeout data.  The format of timeout buffer is TPM-specific.
-    // In this implementation, we simply copy the value of timeout to the
-    // buffer.
-    if(in->timeout.t.size != sizeof(UINT64) + 1)
+    // In this implementation, the most significant bit of the timeout value is
+    // used as the flag to indicate that the ticket expires on TPM Reset or 
+    // TPM Restart. The flag has to be removed before the parameters and ticket
+    // are checked.
+    if(in->timeout.t.size != sizeof(UINT64))
         return TPM_RCS_SIZE + RC_PolicyTicket_timeout;
     authTimeout = BYTE_ARRAY_TO_UINT64(in->timeout.t.buffer);
-    expiresOnReset = in->timeout.t.buffer[sizeof(authTimeout)];
+
+    // extract the flag
+    expiresOnReset = (authTimeout & EXPIRATION_BIT) != 0;
+    authTimeout &= ~EXPIRATION_BIT;
 
     // Do the normal checks on the cpHashA and timeout values
     result = PolicyParameterChecks(session, authTimeout,
@@ -93,14 +97,11 @@ TPM2_PolicyTicket(
                                    RC_PolicyTicket_timeout);
     if(result != TPM_RC_SUCCESS)
         return result;
-
     // Validate Ticket
     // Re-generate policy ticket by input parameters
     TicketComputeAuth(in->ticket.tag, in->ticket.hierarchy, 
                       authTimeout, expiresOnReset, &in->cpHashA, &in->policyRef, 
                       &in->authName, &ticketToCompare);
-
-
     // Compare generated digest with input ticket digest
     if(!MemoryEqual2B(&in->ticket.digest.b, &ticketToCompare.digest.b))
         return TPM_RCS_TICKET + RC_PolicyTicket_ticket;

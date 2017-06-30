@@ -57,18 +57,7 @@ TimePowerOn(
     void
     )
 {
-    // If the timer was reset or stopped, we need a new epoch 
-    if(_plat__TimerWasReset())
-    {
-        g_timeNewEpochNeeded = TRUE;
-        // If the timer was reset, need to reset the base time of the TPM. By
-        // resetting to zero here, the TPM can capture the time that passed between
-        // when the system timer was reset and when the first call is made to 
-        // _plat__TimeRead().
-        g_time = 0;
-        // And reset the DA timers
-        DAInit();
-    }
+    g_time = _plat__TimerRead();
 }
 
 //*** TimeNewEpoch()
@@ -87,7 +76,6 @@ TimeNewEpoch(
     gp.timeEpoch++;
     NV_SYNC_PERSISTENT(timeEpoch);
 #endif
-    g_timeNewEpochNeeded = FALSE;
     // Clean out any lingering state
     _plat__TimerWasStopped();
 }
@@ -111,25 +99,18 @@ TimeStartup(
     // the same as previously saved.  Otherwise, it is not safe.
     if(!NV_IS_ORDERLY)
         go.clockSafe = NO;
-
-    // Before Startup, the TPM will not do clock updates. At startup, need to
-    // do a time update.
-    TimeUpdate();
     return;
 }
 
-//***TimeClockUpdate()
+//*** TimeClockUpdate()
 // This function updates go.clock. If 'newTime' requires an update of NV, then
 // NV is checked for availability. If it is not available or is rate limiting, then
 // go.clock is not updated and the function returns an error. If 'newTime' would
 // not cause an NV write, then go.clock is updated. If an NV write occurs, then
 // go.safe is SET.
-// return type: TPM_RC
-//  TPM_RC_NV_RATE          NV cannot be written because it is rate limiting
-//  TPM_RC_NV_UNAVAILABLE   NV cannot be accessed
-TPM_RC
+void
 TimeClockUpdate(
-    UINT64           newTime
+    UINT64           newTime    // IN: New time value in mS.
     )
 {
 #define CLOCK_UPDATE_MASK  ((1ULL << NV_CLOCK_UPDATE_INTERVAL)- 1)
@@ -137,7 +118,7 @@ TimeClockUpdate(
     // Check to see if the update will cause a need for an nvClock update
     if((newTime | CLOCK_UPDATE_MASK) > (go.clock | CLOCK_UPDATE_MASK))
     {
-        RETURN_IF_NV_IS_NOT_AVAILABLE;
+        pAssert(g_NvStatus == TPM_RC_SUCCESS);
 
         // Going to update the NV time state so SET the safe flag
         go.clockSafe = YES;
@@ -151,7 +132,6 @@ TimeClockUpdate(
         // No NV update needed so just update
         go.clock = newTime;
 
-    return TPM_RC_SUCCESS;
 }
 
 //*** TimeUpdate()
@@ -167,14 +147,17 @@ TimeUpdate(
     void
     )
 {
-        UINT64          elapsed;
+    UINT64          elapsed;
 //
-    if(g_timeNewEpochNeeded)
+    // Make sure that we consume the current _plat__TimerWasStopped() state.
+   if(_plat__TimerWasStopped())
+    {
         TimeNewEpoch();
-
+    }
     // Get the difference between this call and the last time we updated the tick
     // timer.
     elapsed = _plat__TimerRead() - g_time;
+    // Don't read +
     g_time += elapsed;
 
     // Don't need to check the result because it has to be success because have
@@ -183,8 +166,6 @@ TimeUpdate(
 
     // Call self healing logic for dictionary attack parameters
     DASelfHeal();
-
-
 }
 
 //*** TimeUpdateToCurrent()
@@ -206,39 +187,17 @@ TimeUpdate(
 void
 TimeUpdateToCurrent(
     void
-    )
+)
 {
-    UINT64          elapsed;
-//
     // Can't update time during the dark interval or when rate limiting so don't
-    // make any modifications to the internal clock value
-    if(!NV_IS_AVAILABLE)
+    // make any modifications to the internal clock value. Also, defer any clock
+    // processing until TPM has run TPM2_Startup()
+    if(!NV_IS_AVAILABLE || !TPMIsStarted())
         return;
-    // Make sure that we consume the current _plat__TimerWasStopped() state.
-    g_timeNewEpochNeeded |= _plat__TimerWasStopped();
 
-    // If we need a new epoch but the TPM has not started, don't generate the new
-    // epoch here because the crypto has not been initialized by TPM2_Startup().
-    // Instead, just continue and let TPM2_Startup() processing create the
-    // new epoch if needed.
-    if(g_timeNewEpochNeeded && TPMIsStarted())
-    {
-        TimeNewEpoch();
-    }
-    // Get the difference between this call and the last time we updated the tick
-    // timer.
-    elapsed = _plat__TimerRead() - g_time;
-    g_time += elapsed;
-
-    // Don't need to check the result because it has to be success because have
-    // already checked that NV is available.
-    TimeClockUpdate(go.clock + elapsed);
-
-    // Call self healing logic for dictionary attack parameters
-    DASelfHeal();
-
-    return;
+    TimeUpdate();
 }
+
 
 //*** TimeSetAdjustRate()
 // This function is used to perform rate adjustment on 'Time' and 'Clock'.

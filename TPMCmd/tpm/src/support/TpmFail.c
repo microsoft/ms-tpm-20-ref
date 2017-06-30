@@ -174,16 +174,23 @@ SetForceFailureMode(
 // failure values to be returned on TPM2_GetTestResult().
 NORETURN void
 TpmFail(
+#ifndef NO_FAIL_TRACE
     const char      *function,
     int              line,
+#endif
     int              code
     )
 {
     // Save the values that indicate where the error occurred.
     // On a 64-bit machine, this may truncate the address of the string
     // of the function name where the error occurred.
+#ifndef NO_FAIL_TRACE
     s_failFunction = *(UINT32*)&function;
     s_failLine = line;
+#else
+    s_failFunction = NULL;
+    s_failLine = 0;
+#endif
     s_failCode = code;
 
     // We are in failure mode

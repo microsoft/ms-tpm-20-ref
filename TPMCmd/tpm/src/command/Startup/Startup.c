@@ -144,6 +144,10 @@ TPM2_Startup(
     // state has been read in from NV.
     CryptStartup(startup);
 
+    // When the cryptographic library has been started, indicate that a TPM2_Startup 
+    // command has been received.
+    TPMRegisterStartup();
+
     // Read the platform unique value that is used as VENDOR_PERMANENT
     // authorization value
     g_platformUniqueDetails.t.size 
@@ -227,10 +231,6 @@ TPM2_Startup(
 
     NV_SYNC_PERSISTENT(orderlyState);
 
-    // Update TPM internal states if command succeeded.
-    // Record a TPM2_Startup command has been received.
-    TPMRegisterStartup();
-   
     // This can be reset after the first completion of a TPM2_Startup() after
     // a power loss. It can probably be reset earlier but this is an OK place.
     g_powerWasLost = FALSE;

@@ -58,9 +58,9 @@ typedef  UINT32             TPM_SPEC;
 #define  TPM_SPEC_LEVEL          (TPM_SPEC)(SPEC_LEVEL)
 #define  SPEC_VERSION            138
 #define  TPM_SPEC_VERSION        (TPM_SPEC)(SPEC_VERSION)
-#define  SPEC_YEAR               2016
+#define  SPEC_YEAR               2017
 #define  TPM_SPEC_YEAR           (TPM_SPEC)(SPEC_YEAR)
-#define  SPEC_DAY_OF_YEAR        273
+#define  SPEC_DAY_OF_YEAR        61
 #define  TPM_SPEC_DAY_OF_YEAR    (TPM_SPEC)(SPEC_DAY_OF_YEAR)
 
 // Table 2:7 - Definition of TPM_GENERATED Constants  (EnumTable)
