@@ -243,7 +243,8 @@ IsPolicySessionRequired(
         {
             OBJECT      *object = HandleToObject(s_associatedHandles[sessionIndex]);
 
-            if(!IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, adminWithPolicy))
+            if(!IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, 
+                             adminWithPolicy))
                 return FALSE;
         }
         return TRUE;
@@ -1905,7 +1906,6 @@ UpdateAuditSessionStatus(
                 if(g_exclusiveAuditSession != auditSession)
                     g_exclusiveAuditSession = TPM_RH_UNASSIGNED;
             }
-
             // Report audit session exclusivity.
             if(g_exclusiveAuditSession == auditSession)
             {

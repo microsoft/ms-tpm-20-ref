@@ -429,9 +429,9 @@ typedef struct PCR_AUTH_VALUE
     TPM2B_DIGEST        auth[NUM_AUTHVALUE_PCR_GROUP];
 } PCR_AUTHVALUE;
 
-//**Startup
 
-//***STARTUP_TYPE
+
+//**STARTUP_TYPE
 // This enumeration is the possible startup types. The type is determined
 // by the combination of TPM2_ShutDown and TPM2_Startup.
 typedef enum

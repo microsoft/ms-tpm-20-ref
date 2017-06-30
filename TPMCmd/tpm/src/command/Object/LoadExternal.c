@@ -100,9 +100,12 @@ TPM2_LoadExternal(
         // An external object with a sensitive area must have fixedTPM == CLEAR
         // fixedParent == CLEAR so that it does not appear to be a key created by
         // this TPM. 
-        if(IS_ATTRIBUTE(in->inPublic.publicArea.objectAttributes, TPMA_OBJECT, fixedTPM)
-           || IS_ATTRIBUTE(in->inPublic.publicArea.objectAttributes, TPMA_OBJECT, fixedParent)
-           || IS_ATTRIBUTE(in->inPublic.publicArea.objectAttributes, TPMA_OBJECT, restricted))
+        if(IS_ATTRIBUTE(in->inPublic.publicArea.objectAttributes, TPMA_OBJECT, 
+                        fixedTPM)
+           || IS_ATTRIBUTE(in->inPublic.publicArea.objectAttributes, TPMA_OBJECT, 
+                           fixedParent)
+           || IS_ATTRIBUTE(in->inPublic.publicArea.objectAttributes, TPMA_OBJECT, 
+                           restricted))
             return TPM_RCS_ATTRIBUTES + RC_LoadExternal_inPublic;
 
         // Have sensitive point to something other than NULL so that object 

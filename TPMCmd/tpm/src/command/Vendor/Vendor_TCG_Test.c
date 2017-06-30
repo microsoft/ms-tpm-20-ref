@@ -39,7 +39,6 @@
 
 #if defined TPM_CC_Vendor_TCG_Test      // Conditional expansion of this file
 
-// A dummy function for testing.
 TPM_RC
 TPM2_Vendor_TCG_Test(
     Vendor_TCG_Test_In        *in,            // IN: input parameter list

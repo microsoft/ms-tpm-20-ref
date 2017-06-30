@@ -97,14 +97,6 @@ ALGORITHM_VECTOR     g_toTest;
 
 CRYPTO_SELF_TEST_STATE    g_cryptoSelfTestState;    // This structure contains the 
                                                     // cryptographic self-test 
-
-#if 0
-#ifdef TPM_ALG_ECC
-//*** ECC Curves
-ECC_CURVE   c_curves[ECC_CURVE_COUNT];
-#endif
-#endif // 0
-
 #ifdef SIMULATION
 BOOL                 g_forceFailureMode;
 #endif

@@ -77,7 +77,7 @@ TPM2_Rewrap(
         return TPM_RCS_HANDLE + RC_Rewrap_oldParent;
     if(in->oldParent != TPM_RH_NULL)
     {
-        OBJECT              *oldParent = HandleToObject(in->oldParent);;
+        OBJECT              *oldParent = HandleToObject(in->oldParent);
 
         // old parent key must be a storage object
         if(!ObjectIsStorage(in->oldParent))

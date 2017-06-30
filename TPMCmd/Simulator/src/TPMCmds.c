@@ -81,8 +81,8 @@ Usage(
 }
 
 //*** main()
-// This is the main entry point for the simulator.
-/* main:  register the interface, start listening for clients */
+// This is the main entry point for the simulator. 
+// It registers the interface and starts listening for clients
 int
 main(
     int              argc,

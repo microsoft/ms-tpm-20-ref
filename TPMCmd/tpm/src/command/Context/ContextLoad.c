@@ -43,7 +43,7 @@
 /*(See part 3 specification)
 // Load context
 */
-// See discussion about the context format in ContextSave.c.
+
 // return type: TPM_RC
 //    TPM_RC_CONTEXT_GAP        there is only one available slot and this is not
 //                              the oldest saved session context
@@ -60,19 +60,18 @@ TPM2_ContextLoad(
     ContextLoad_Out     *out            // OUT: output parameter list
     )
 {
-// Local Variables
     TPM_RC              result;
-
     TPM2B_DIGEST        integrityToCompare;
     TPM2B_DIGEST        integrity;
     BYTE                *buffer;    // defined to save some typing
     INT32               size;       // defined to save some typing
-
     TPM_HT              handleType;
     TPM2B_SYM_KEY       symKey;
     TPM2B_IV            iv;
 
 // Input Validation
+
+// See discussion about the context format in TPM2_ContextSave Detailed Actions
 
     // IF this is a session context, make sure that the sequence number is
     // consistent with the version in the slot

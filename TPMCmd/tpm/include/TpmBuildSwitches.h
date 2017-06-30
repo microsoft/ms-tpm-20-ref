@@ -214,4 +214,12 @@
 //#   define NO_BIT_FIELD_STRUCTURES
 #endif
 
+// Change these definitions to turn all algorithms or commands ON or OFF. That is,
+// to turn all algorithms on, set ALG_NO to YES. This is mostly useful as a debug
+// feature.
+#define      ALG_YES      YES
+#define      ALG_NO       NO
+#define      CC_YES       YES
+#define      CC_NO        NO
+
 #endif // _TPM_BUILD_SWITCHES_H_

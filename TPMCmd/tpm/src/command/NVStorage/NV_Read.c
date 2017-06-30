@@ -53,7 +53,7 @@
 //                                      by 'nvIndex'
 //      TPM_RC_NV_UNINITIALIZED         the Index referenced by 'nvIndex' has
 //                                      not been initialized (written)
-//      TPM_RC_NV_VALUE                 the read size is larger than the
+//      TPM_RC_VALUE                    the read size is larger than the
 //                                      MAX_NV_BUFFER_SIZE
 TPM_RC
 TPM2_NV_Read(

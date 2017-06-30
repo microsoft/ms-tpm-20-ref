@@ -49,10 +49,9 @@
 //   TPM_RC_ASYMMETRIC      non-duplicable storage key represented by 'objectPublic'
 //                          and its parent referenced by 'parentHandle' have
 //                          different public parameters
-//   TPM_RC_ATTRIBUTES      attributes 'FixedTPM' and 'fixedParent' of
-//                          'objectPublic' are not both CLEAR; or
-//                          'inSymSeed' is nonempty and 'parentHandle' does not
-//                          reference a decryption key; or
+//   TPM_RC_ATTRIBUTES      'FixedTPM' and 'fixedParent' of 'objectPublic' are not
+//                          both CLEAR; or 'inSymSeed' is nonempty and 
+//                          'parentHandle' does not reference a decryption key; or
 //                          'objectPublic' and 'parentHandle' have incompatible
 //                          or inconsistent attributes; or
 //                          encrytpedDuplication is SET in 'objectPublic' but the
@@ -123,7 +122,8 @@ TPM2_Import(
     // to save typing
     attributes = in->objectPublic.publicArea.objectAttributes;
     // FixedTPM and fixedParent must be CLEAR
-    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM) || IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedParent))
+    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM) 
+       || IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedParent))
         return TPM_RCS_ATTRIBUTES + RC_Import_objectPublic;
 
     // Get parent pointer

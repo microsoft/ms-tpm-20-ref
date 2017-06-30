@@ -38,7 +38,6 @@
 
 #ifdef TPM_CC_PolicyLocality  // Conditional expansion of this file
 
-// Limit a policy to a specific locality
 // return type: TPM_RC
 //      TPM_RC_RANGE          all the locality values selected by
 //                            'locality' have been disabled

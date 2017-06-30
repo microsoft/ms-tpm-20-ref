@@ -77,9 +77,7 @@ TPM2_CreateLoaded(
     CreateLoaded_Out   *out            // OUT: output parameter list
     )
 {
-// Local variables
     TPM_RC                       result = TPM_RC_SUCCESS;
-    // These are the values used in object creation
     OBJECT                      *parent = HandleToObject(in->parentHandle);
     OBJECT                      *newObject;
     BOOL                         derivation;

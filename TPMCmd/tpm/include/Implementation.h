@@ -35,7 +35,7 @@
 /*(Auto)
 
     Created by TpmStructures Version 2.7 Sept 13, 2016
-    This file created on May  8, 2017, 10:36:21PM 
+    This file created on Jun 15, 2017, 04:14:45PM 
 
 */
 
@@ -357,7 +357,7 @@
 #define  CRT_FORMAT_RSA                 YES
 #define  VENDOR_COMMAND_COUNT           0
 #define  MAX_VENDOR_BUFFER_SIZE         1024
-#define  TPM_MAX_DERIVATION_BITS        16384
+#define  TPM_MAX_DERIVATION_BITS        8192
 
 
 // Table 1:2 - Definition of TPM_ALG_ID Constants  (TPM_ALG_ID_Processing)

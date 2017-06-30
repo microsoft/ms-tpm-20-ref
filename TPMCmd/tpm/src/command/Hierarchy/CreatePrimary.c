@@ -69,7 +69,6 @@ TPM2_CreatePrimary(
     CreatePrimary_Out   *out            // OUT: output parameter list
     )
 {
-// Local variables
     TPM_RC               result = TPM_RC_SUCCESS;
     TPMT_PUBLIC         *publicArea;
     DRBG_STATE           rand;

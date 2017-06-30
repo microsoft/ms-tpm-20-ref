@@ -42,7 +42,6 @@
 /*(See part 3 specification)
 // This command returns various information regarding Attached Components
 */
-// return type: TPM_RC
 TPM_RC
 TPM2_AC_GetCapability(
     AC_GetCapability_In    *in,            // IN: input parameter list

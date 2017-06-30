@@ -46,7 +46,6 @@
 // In the reference implementation, this function is only reachable if the TPM is
 // not in failure mode meaning that all tests that have been run have completed
 // successfully. There is not test data and the test result is TPM_RC_SUCCESS.
-
 TPM_RC
 TPM2_GetTestResult(
     GetTestResult_Out   *out            // OUT: output parameter list

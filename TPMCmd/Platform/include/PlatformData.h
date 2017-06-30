@@ -48,10 +48,6 @@
 extern int     s_isCanceled;
 
 #include    <time.h>
-typedef struct {
-        time_t tv_sec;  // Seconds - >= 0
-        long   tv_nsec; // Nanoseconds - [0, 999999999]
-} timespec_t;
 
 #ifndef HARDWARE_CLOCK
 // This is the value returned the last time that the system clock was read. This

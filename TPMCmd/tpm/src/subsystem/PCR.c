@@ -858,7 +858,7 @@ PCRRead(
                         pcr++;
                     }
                     // Exit inner loop
-                    break;;
+                    break;
                 }
                 // Need the size of each digest
                 digest->digests[digest->count].t.size =

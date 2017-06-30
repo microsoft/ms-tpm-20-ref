@@ -86,7 +86,11 @@ TPM2_NV_Certify(
     // any wrap issues with addition)
     if((UINT32)in->size + (UINT32)in->offset > (UINT32)nvIndex->publicArea.dataSize)
         return TPM_RC_NV_RANGE;
-    // Make sure the data will fit the return buffer
+    // Make sure the data will fit the return buffer.
+    // NOTE: This check may be modified if the output buffer will not hold the
+    // maximum sized NV buffer as part of the certified data. The difference in
+    // size could be substantial if the signature scheme was produced a large
+    // signature (e.g., RSA 4096).
     if(in->size > MAX_NV_BUFFER_SIZE)
         return TPM_RCS_VALUE + RC_NV_Certify_size;
 
