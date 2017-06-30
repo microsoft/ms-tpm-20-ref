@@ -75,7 +75,7 @@ string.
 // A vendor-specific FIRMWARE_V1 is required here. It is
 // the more significant 32-bits of a vendor-specific value
 // indicating the version of the firmware
-//#define   FIRMWARE_V1         (0x20170302)
+//#define   FIRMWARE_V1         (0x20170417)
 
 // A vendor-specific FIRMWARE_V2 may be provided here. If present, it is the less 
 // significant 32-bits of the version of the firmware. 

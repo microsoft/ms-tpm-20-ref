@@ -57,15 +57,15 @@ HierarchyPreInstall_Init(
     gp.disableClear = FALSE;
 
     // Initialize Primary Seeds
-    gp.EPSeed.t.size = PRIMARY_SEED_SIZE;
-    CryptRandomGenerate(PRIMARY_SEED_SIZE, gp.EPSeed.t.buffer);
-    gp.SPSeed.t.size = PRIMARY_SEED_SIZE;
-    CryptRandomGenerate(PRIMARY_SEED_SIZE, gp.SPSeed.t.buffer);
-    gp.PPSeed.t.size = PRIMARY_SEED_SIZE;
+    gp.EPSeed.t.size = sizeof(gp.EPSeed.t.buffer);
+    gp.SPSeed.t.size = sizeof(gp.SPSeed.t.buffer);
+    gp.PPSeed.t.size = sizeof(gp.PPSeed.t.buffer);
+    CryptRandomGenerate(gp.EPSeed.t.size, gp.EPSeed.t.buffer);
+    CryptRandomGenerate(gp.SPSeed.t.size, gp.SPSeed.t.buffer);
 #ifdef USE_PLATFORM_EPS
-    _plat__GetEPS(PRIMARY_SEED_SIZE, gp.EPSeed.t.buffer);
+    _plat__GetEPS(gp.PPSeed.t.size, gp.EPSeed.t.buffer);
 #else
-    CryptRandomGenerate(PRIMARY_SEED_SIZE, gp.PPSeed.t.buffer);
+    CryptRandomGenerate(gp.PPSeed.t.size, gp.PPSeed.t.buffer);
 #endif
 
     // Initialize owner, endorsement and lockout auth
@@ -82,9 +82,9 @@ HierarchyPreInstall_Init(
     gp.lockoutPolicy.t.size = 0;
 
     // Initialize ehProof, shProof and phProof
-    gp.phProof.t.size = PROOF_SIZE;
-    gp.shProof.t.size = PROOF_SIZE;
-    gp.ehProof.t.size = PROOF_SIZE;
+    gp.phProof.t.size = sizeof(gp.phProof.t.buffer);
+    gp.shProof.t.size = sizeof(gp.shProof.t.buffer);
+    gp.ehProof.t.size = sizeof(gp.ehProof.t.buffer);
     CryptRandomGenerate(gp.phProof.t.size, gp.phProof.t.buffer);
     CryptRandomGenerate(gp.shProof.t.size, gp.shProof.t.buffer);
     CryptRandomGenerate(gp.ehProof.t.size, gp.ehProof.t.buffer);
@@ -135,11 +135,10 @@ HierarchyStartup(
     // nullProof and nullSeed are updated at every TPM_RESET
     if((type != SU_RESTART) && (type != SU_RESUME))
     {
-        gr.nullProof.t.size = PROOF_SIZE;
-        CryptRandomGenerate(gr.nullProof.t.size,
-                            gr.nullProof.t.buffer);
-        gr.nullSeed.t.size = PRIMARY_SEED_SIZE;
-        CryptRandomGenerate(PRIMARY_SEED_SIZE, gr.nullSeed.t.buffer);
+        gr.nullProof.t.size = sizeof(gr.nullProof.t.buffer);
+        CryptRandomGenerate(gr.nullProof.t.size, gr.nullProof.t.buffer);
+        gr.nullSeed.t.size = sizeof(gr.nullProof.t.buffer);
+        CryptRandomGenerate(gr.nullProof.t.size, gr.nullSeed.t.buffer);
     }
 
     return;
@@ -148,36 +147,36 @@ HierarchyStartup(
 //*** HierarchyGetProof()
 // This function finds the proof value associated with a hierarchy.It returns a
 // pointer to the proof value.
-TPM2B_AUTH *
+TPM2B_PROOF *
 HierarchyGetProof(
     TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy constant
     )
 {
-    TPM2B_AUTH          *auth = NULL;
+    TPM2B_PROOF         *proof = NULL;
 
     switch(hierarchy)
     {
         case TPM_RH_PLATFORM:
             // phProof for TPM_RH_PLATFORM
-            auth = &gp.phProof;
+            proof = &gp.phProof;
             break;
         case TPM_RH_ENDORSEMENT:
             // ehProof for TPM_RH_ENDORSEMENT
-            auth = &gp.ehProof;
+            proof = &gp.ehProof;
             break;
         case TPM_RH_OWNER:
             // shProof for TPM_RH_OWNER
-            auth = &gp.shProof;
+            proof = &gp.shProof;
             break;
         case TPM_RH_NULL:
             // nullProof for TPM_RH_NULL
-            auth = &gr.nullProof;
+            proof = &gr.nullProof;
             break;
         default:
             FAIL(FATAL_ERROR_INTERNAL);
             break;
     }
-    return auth;
+    return proof;
 }
 
 //*** HierarchyGetPrimarySeed()

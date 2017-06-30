@@ -33,10 +33,6 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined _TPM_H_
-#error "Should not be called"
-#endif
-
 //** Description
 
 // This file contains internal global type definitions and data declarations that
@@ -52,6 +48,10 @@
 // data is private to the module but is collected here to simplify the management
 // of the instance data.
 // All the data is instanced in Global.c.
+#if !defined _TPM_H_
+#error "Should not be called"
+#endif
+
 
 //** Includes
 
@@ -103,6 +103,10 @@ typedef BYTE    TIME_INFO[sizeof(TPMS_TIME_INFO)];
 
 // A NAME is a BYTE array that can contain a TPMU_NAME
 typedef BYTE    NAME[sizeof(TPMU_NAME)];
+
+// Definition for a PROOF value
+TPM2B_TYPE(PROOF, PROOF_SIZE);
+
 
 // A CLOCK_NONCE is used to tag the time value in the authorization session and
 // in the ticket computation so that the ticket expires when there is a time
@@ -518,7 +522,9 @@ extern TPM_HANDLE       g_exclusiveAuditSession;
 
 //*** g_time
 // This is the value in which we keep the current command time. This is initialized
-// at the start of each command. The time is in mS.
+// at the start of each command. The time is the accumulated time since the last
+// time that the TPM's timer was last powered up. Clock is the accumulated time
+// since the last time that the TPM was cleared. g_time is in mS.
 extern  UINT64          g_time;
 
 //*** g_timeEpoch
@@ -715,9 +721,9 @@ typedef struct
     // Note there is a nullSeed in the state_reset memory.
 
     // Hierarchy proofs
-    TPM2B_AUTH          phProof;
-    TPM2B_AUTH          shProof;
-    TPM2B_AUTH          ehProof;
+    TPM2B_PROOF          phProof;
+    TPM2B_PROOF          shProof;
+    TPM2B_PROOF          ehProof;
     // Note there is a nullProof in the state_reset memory.
 
 //*********************************************************************************
@@ -944,7 +950,7 @@ typedef struct state_reset_data
 //*****************************************************************************
 //          Hierarchy Control
 //*****************************************************************************
-    TPM2B_AUTH          nullProof;          // The proof value associated with
+    TPM2B_PROOF         nullProof;          // The proof value associated with
                                             // the TPM_RH_NULL hierarchy. The
                                             // default reset value is from the RNG.
 

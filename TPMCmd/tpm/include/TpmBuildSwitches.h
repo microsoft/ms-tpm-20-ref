@@ -190,4 +190,17 @@
 #define ACCUMULATE_SELF_HEAL_TIMER
 #endif // ACCUMULATE_SELF_HEAL_TIMER
 
+// If the implementation is to compute the sizes of the proof and primary seed size
+// values based on the implemented algorithms, then use this define.
+#ifndef USE_SPEC_COMPLIANT_PROOFS
+#define  USE_SPEC_COMPLIANT_PROOFS
+#endif
+
+// Comment this out to allow compile to continue even though the chosen proof values
+// do not match the compliant values. This is written so that someone would
+// have to proactively ignore errors.
+#ifndef SKIP_PROOF_ERRORS 
+//#define SKIP_PROOF_ERRORS
+#endif
+
 #endif // _TPM_BUILD_SWITCHES_H_

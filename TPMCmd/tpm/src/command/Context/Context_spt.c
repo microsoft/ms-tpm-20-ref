@@ -68,7 +68,7 @@ ComputeContextProtectionKey(
 {
     UINT16           symKeyBits;    // number of bits in the parent's
                                     //   symmetric key
-    TPM2B_AUTH      *proof = NULL;  // the proof value to use. Is null for
+    TPM2B_PROOF     *proof = NULL;  // the proof value to use. Is null for
                                     //   everything but a primary object in
                                     //   the Endorsement Hierarchy
 
@@ -144,7 +144,7 @@ ComputeContextIntegrity(
     )
 {
     HMAC_STATE          hmacState;
-    TPM2B_AUTH          *proof;
+    TPM2B_PROOF        *proof;
     UINT16              integritySize;
 
     // Get proof value

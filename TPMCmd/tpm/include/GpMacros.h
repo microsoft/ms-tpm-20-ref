@@ -210,8 +210,72 @@
 #define CONTEXT_INTEGRITY_HASH_SIZE     CONCAT(CONTEXT_HASH_ALGORITHM, _DIGEST_SIZE)
 #endif
 
+#ifdef TPM_ALG_RSA
+#define     RSA_SECURITY_STRENGTH (MAX_RSA_KEY_BITS >= 15360 ? 256 :          \
+                                  (MAX_RSA_KEY_BITS >=  7680 ? 192 :          \
+                                  (MAX_RSA_KEY_BITS >=  3072 ? 128 :          \
+                                  (MAX_RSA_KEY_BITS >=  2048 ? 112 :          \
+                                  (MAX_RSA_KEY_BITS >=  1024 ?  80 :  0)))))
+#else
+#define     RSA_SECURITY_STRENGTH   0
+#endif
 
-#define PROOF_SIZE                      CONTEXT_INTEGRITY_HASH_SIZE
+#ifdef TPM_ALG_ECC
+#define     ECC_SECURITY_STRENGTH (MAX_ECC_KEY_BITS >= 521 ? 256 :              \
+                                  (MAX_ECC_KEY_BITS >= 384 ? 192 :              \
+                                  (MAX_ECC_KEY_BITS >= 256 ? 128 : 0)))
+#else
+#define     ECC_SECURITY_STRENGTH   0
+#endif // TPM_AGL_ECC
+
+#define     MAX_ASYM_SECURITY_STRENGTH                                          \
+                        MAX(RSA_SECURITY_STRENGTH, ECC_SECURITY_STRENGTH)
+
+#define     MAX_HASH_SECURITY_STRENGTH  ((CONTEXT_INTEGRITY_HASH_SIZE * 8) / 2)
+
+// Unless some algorithm is broken...
+#define     MAX_SYM_SECURITY_STRENGTH   MAX_SYM_KEY_BITS
+
+#define MAX_SECURITY_STRENGTH_BITS                                              \
+                        MAX(MAX_ASYM_SECURITY_STRENGTH,                         \
+                        MAX(MAX_SYM_SECURITY_STRENGTH,                          \
+                            MAX_HASH_SECURITY_STRENGTH))
+
+// This is the size that was used before the 1.38 errata requiring that P1.14.4 be
+// followed
+#define PROOF_SIZE      CONTEXT_INTEGRITY_HASH_SIZE
+
+// As required by P1.14.4
+#define COMPLIANT_PROOF_SIZE                                                    \
+            (MAX(CONTEXT_INTEGRITY_HASH_SIZE, (2 * MAX_SYM_KEY_BYTES)))
+      
+// As required by P1.14.3.1
+#define COMPLIANT_PRIMARY_SEED_SIZE                                             \
+    BITS_TO_BYTES(MAX_SECURITY_STRENGTH_BITS * 2)
+
+// This is the pre-errata version
+#ifndef PRIMARY_SEED_SIZE
+#   define PRIMARY_SEED_SIZE    PROOF_SIZE
+#endif
+
+#ifdef USE_SPEC_COMPLIANT_PROOFS
+#   undef PROOF_SIZE
+#   define PROOF_SIZE           COMPLIANT_PROOF_SIZE
+#   undef PRIMARY_SEED_SIZE
+#   define PRIMARY_SEED_SIZE    COMPLIANT_PRIMARY_SEED_SIZE
+#endif  // USE_SPEC_COMPLIANT_PROOFS || !defined PRIMARY_SEED_SIZE
+
+#ifndef SKIP_PROOF_ERRORS 
+#   if PROOF_SIZE < COMPLIANT_PROOF_SIZE
+#       error "PROOF_SIZE is not compliant with TPM specification"
+#   endif
+#   if PRIMARY_SEED_SIZE < COMPLIANT_PRIMARY_SEED_SIZE
+#       error  "Implementation.h specifies a non-compliant PRIMARY_SEED_SIZE"
+#   endif
+#endif
+
+
+
 
 // If CONTEXT_ENCRYP_ALG is defined, then the vendor is using the old style table
 #ifndef CONTEXT_ENCRYPT_ALG
@@ -221,10 +285,10 @@
 #define CONTEXT_ENCRYPT_KEY_BYTES       ((CONTEXT_ENCRYPT_KEY_BITS+7)/8)
 #endif
 
-#if ALG_ECC
-#   define LABEL_MAX_BUFFER MAX_ECC_KEY_BYTES
-#else
-#   define LABEL_MAX_BUFFER MAX_DIGEST_SIZE
+// This is updated to follow the requirement of P2 that the label not be larger
+// than 32 bytes.
+#ifndef LABEL_MAX_BUFFER
+#define LABEL_MAX_BUFFER MIN(32, MIN(MAX_ECC_KEY_BYTES, MAX_DIGEST_SIZE))
 #endif
 
 // This bit is used to indicate that an authorization ticket expires on TPM Reset
