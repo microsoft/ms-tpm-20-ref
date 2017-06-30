@@ -56,7 +56,6 @@ HandleGetType(
 // This function returns the permanent handle that is equal to the input value or
 // is the next higher value. If there is no handle with the input value and there
 // is no next higher value, it returns 0:
-// return type: TPM_HANDLE
 TPM_HANDLE
 NextPermanentHandle(
     TPM_HANDLE       inHandle       // IN: the handle to check
@@ -139,7 +138,7 @@ PermanentCapGetHandles(
     return more;
 }
 
-//*** PermanentCapGetPolicy()
+//*** PermanentHandleGetPolicy()
 // This function returns a list of the permanent handles of PCR, started from
 // 'handle'. If 'handle' is larger than the largest permanent handle, an empty list
 // will be returned with 'more' set to NO.

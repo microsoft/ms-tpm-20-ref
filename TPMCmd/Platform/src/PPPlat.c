@@ -42,6 +42,7 @@
 #include "Platform_fp.h"
 
 //** Functions
+
 //***_plat__PhysicalPresenceAsserted()
 // Check if physical presence is signaled
 // return type: int

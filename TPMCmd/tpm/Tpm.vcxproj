@@ -718,6 +718,10 @@
     <ClCompile Include="src\command\Asymmetric\RSA_Decrypt.c" />
     <ClCompile Include="src\command\Asymmetric\RSA_Encrypt.c" />
     <ClCompile Include="src\command\Asymmetric\ZGen_2Phase.c" />
+    <ClCompile Include="src\command\AttachedComponent\AC_GetCapability.c" />
+    <ClCompile Include="src\command\AttachedComponent\AC_Send.c" />
+    <ClCompile Include="src\command\AttachedComponent\AC_spt.c" />
+    <ClCompile Include="src\command\AttachedComponent\Policy_AC_SendSelect.c" />
     <ClCompile Include="src\command\Attestation\Attest_spt.c" />
     <ClCompile Include="src\command\Attestation\Certify.c" />
     <ClCompile Include="src\command\Attestation\CertifyCreation.c" />
@@ -769,6 +773,7 @@
     <ClCompile Include="src\command\HashHMAC\EventSequenceComplete.c" />
     <ClCompile Include="src\command\HashHMAC\HashSequenceStart.c" />
     <ClCompile Include="src\command\HashHMAC\HMAC_Start.c" />
+    <ClCompile Include="src\command\HashHMAC\MAC_Start.c" />
     <ClCompile Include="src\command\HashHMAC\SequenceComplete.c" />
     <ClCompile Include="src\command\HashHMAC\SequenceUpdate.c" />
     <ClCompile Include="src\command\Hierarchy\ChangeEPS.c" />
@@ -826,6 +831,8 @@
     <ClCompile Include="src\command\Symmetric\EncryptDecrypt_spt.c" />
     <ClCompile Include="src\command\Symmetric\Hash.c" />
     <ClCompile Include="src\command\Symmetric\HMAC.c" />
+    <ClCompile Include="src\command\Symmetric\MAC.c" />
+    <ClCompile Include="src\command\Symmetric\SMAC.c" />
     <ClCompile Include="src\command\Testing\GetTestResult.c" />
     <ClCompile Include="src\command\Testing\IncrementalSelfTest.c" />
     <ClCompile Include="src\command\Testing\SelfTest.c" />
@@ -835,12 +842,17 @@
     <ClCompile Include="src\crypt\BnEccData.c" />
     <ClCompile Include="src\crypt\BnMath.c" />
     <ClCompile Include="src\crypt\BnMemory.c" />
+    <ClCompile Include="src\crypt\CryptCmac.c" />
     <ClCompile Include="src\crypt\CryptDes.c" />
+    <ClCompile Include="src\crypt\CryptEccData.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\crypt\CryptHashData.c" />
     <ClCompile Include="src\crypt\CryptPrime.c" />
     <ClCompile Include="src\crypt\CryptPrimeSieve.c" />
     <ClCompile Include="src\crypt\CryptRsa.c" />
     <ClCompile Include="src\crypt\CryptSelfTest.c" />
+    <ClCompile Include="src\crypt\CryptSmac.c" />
     <ClCompile Include="src\crypt\CryptSym.c" />
     <ClCompile Include="src\crypt\CryptUtil.c" />
     <ClCompile Include="src\crypt\CryptEccKeyExchange.c" />
@@ -908,6 +920,7 @@
     <ClInclude Include="include\CryptEcc.h" />
     <ClInclude Include="include\CryptRand.h" />
     <ClInclude Include="include\CryptRsa.h" />
+    <ClInclude Include="include\CryptSym.h" />
     <ClInclude Include="include\CryptTest.h" />
     <ClInclude Include="include\EccTestData.h" />
     <ClInclude Include="include\Global.h" />
@@ -925,6 +938,9 @@
     <ClInclude Include="include\ossl\TpmToOsslSym.h" />
     <ClInclude Include="include\PRNG_TestVectors.h" />
     <ClInclude Include="include\prototypes\ActivateCredential_fp.h" />
+    <ClInclude Include="include\prototypes\AC_GetCapability_fp.h" />
+    <ClInclude Include="include\prototypes\AC_Send_fp.h" />
+    <ClInclude Include="include\prototypes\AC_spt_fp.h" />
     <ClInclude Include="include\prototypes\AlgorithmCap_fp.h" />
     <ClInclude Include="include\prototypes\AlgorithmTests_fp.h" />
     <ClInclude Include="include\prototypes\Attest_spt_fp.h" />
@@ -951,6 +967,7 @@
     <ClInclude Include="include\prototypes\CreateLoaded_fp.h" />
     <ClInclude Include="include\prototypes\CreatePrimary_fp.h" />
     <ClInclude Include="include\prototypes\Create_fp.h" />
+    <ClInclude Include="include\prototypes\CryptCmac_fp.h" />
     <ClInclude Include="include\prototypes\CryptDes_fp.h" />
     <ClInclude Include="include\prototypes\CryptEccKeyExchange_fp.h" />
     <ClInclude Include="include\prototypes\CryptEccMain_fp.h" />
@@ -961,6 +978,7 @@
     <ClInclude Include="include\prototypes\CryptRand_fp.h" />
     <ClInclude Include="include\prototypes\CryptRsa_fp.h" />
     <ClInclude Include="include\prototypes\CryptSelfTest_fp.h" />
+    <ClInclude Include="include\prototypes\CryptSmac_fp.h" />
     <ClInclude Include="include\prototypes\CryptSym_fp.h" />
     <ClInclude Include="include\prototypes\CryptUtil_fp.h" />
     <ClInclude Include="include\prototypes\DA_fp.h" />
@@ -1003,6 +1021,8 @@
     <ClInclude Include="include\prototypes\LoadExternal_fp.h" />
     <ClInclude Include="include\prototypes\Load_fp.h" />
     <ClInclude Include="include\prototypes\Locality_fp.h" />
+    <ClInclude Include="include\prototypes\MAC_fp.h" />
+    <ClInclude Include="include\prototypes\MAC_Start_fp.h" />
     <ClInclude Include="include\prototypes\MakeCredential_fp.h" />
     <ClInclude Include="include\prototypes\Manufacture_fp.h" />
     <ClInclude Include="include\prototypes\Marshal_fp.h" />
@@ -1058,6 +1078,7 @@
     <ClInclude Include="include\prototypes\PolicySigned_fp.h" />
     <ClInclude Include="include\prototypes\PolicyTemplate_fp.h" />
     <ClInclude Include="include\prototypes\PolicyTicket_fp.h" />
+    <ClInclude Include="include\prototypes\Policy_AC_SendSelect_fp.h" />
     <ClInclude Include="include\prototypes\Policy_spt_fp.h" />
     <ClInclude Include="include\prototypes\Power_fp.h" />
     <ClInclude Include="include\prototypes\PP_Commands_fp.h" />
@@ -1084,7 +1105,7 @@
     <ClInclude Include="include\prototypes\SetPrimaryPolicy_fp.h" />
     <ClInclude Include="include\prototypes\Shutdown_fp.h" />
     <ClInclude Include="include\prototypes\Sign_fp.h" />
-    <ClInclude Include="include\prototypes\Simulator_fp.h" />
+    <ClInclude Include="include\prototypes\SMAC_fp.h" />
     <ClInclude Include="include\prototypes\StartAuthSession_fp.h" />
     <ClInclude Include="include\prototypes\Startup_fp.h" />
     <ClInclude Include="include\prototypes\StirRandom_fp.h" />

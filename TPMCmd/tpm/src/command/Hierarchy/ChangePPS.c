@@ -53,16 +53,16 @@ TPM2_ChangePPS(
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
     // Input parameter is not reference in command action
-    in = NULL;
+    NOT_REFERENCED(in);
 
 // Internal Data Update
 
     // Reset platform hierarchy seed from RNG
-    CryptRandomGenerate(PRIMARY_SEED_SIZE, gp.PPSeed.t.buffer);
+    CryptRandomGenerate(sizeof(gp.PPSeed.t.buffer), gp.PPSeed.t.buffer);
 
     // Create a new phProof value from RNG to prevent the saved platform
     // hierarchy contexts being loaded
-    CryptRandomGenerate(PROOF_SIZE, gp.phProof.t.buffer);
+    CryptRandomGenerate(sizeof(gp.phProof.t.buffer), gp.phProof.t.buffer);
 
     // Set platform authPolicy to null
     gc.platformAlg = TPM_ALG_NULL;

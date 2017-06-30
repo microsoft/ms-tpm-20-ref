@@ -72,17 +72,6 @@ DAPreInstall_Init(
     return;
 }
 
-//*** DAInit()
-// This function is called during _TPM_INIT in order to make sure that
-// the DA timers are reset when g_time is reset.
-void
-DAInit(
-    void
-    )
-{
-    s_selfHealTimer = g_time;
-    s_lockoutTimer = g_time;
-}
 
 //*** DAStartup()
 // This function is called  by TPM2_Startup() to initialize the DA parameters.
@@ -97,6 +86,32 @@ DAStartup(
     )
 {
     NOT_REFERENCED(type);
+#ifndef ACCUMULATE_SELF_HEAL_TIMER
+    _plat__TimerWasReset();
+    s_selfHealTimer = 0;
+    s_lockoutTimer = 0;
+#else
+    if(_plat__TimerWasReset())
+    {
+        if(!NV_IS_ORDERLY)
+        {
+            // If shutdown was not orderly, then don't really know if go.time has
+            // any useful value so reset the timer to 0. This is what the tick
+            // was reset to
+            s_selfHealTimer = 0;
+            s_lockoutTimer = 0;
+        }
+        else
+        {
+            // If we know how much time was accumulated at the last orderly shutdown
+            // subtract that from the saved timer values so that they effectively 
+            // have the accumulated values
+            s_selfHealTimer -= go.time;
+            s_lockoutTimer -= go.time;
+        }
+    }
+#endif
+
     // For any Startup(), if lockoutRecovery is 0, enable use of lockoutAuth.
     if(gp.lockoutRecovery == 0)
     {
@@ -120,6 +135,9 @@ DAStartup(
         // Record the change to NV
         NV_SYNC_PERSISTENT(failedTries);
     }
+    // Before Startup, the TPM will not do clock updates. At startup, need to
+    // do a time update which will do the DA update.
+    TimeUpdate();
 
     return;
 }
@@ -168,14 +186,18 @@ DASelfHeal(
         else
         {
             UINT64          decreaseCount;
-
+#if 0 // Errata eliminates this code
             // In the unlikely event that failedTries should become larger than
             // maxTries
             if(gp.failedTries > gp.maxTries)
                 gp.failedTries = gp.maxTries;
-
+#endif
             // How much can failedTries be decreased
-            decreaseCount = ((g_time - s_selfHealTimer) / 1000) / gp.recoveryTime;
+
+            // Cast s_selfHealTimer to an int in case it became negative at
+            // startup
+            decreaseCount = ((g_time - (INT64)s_selfHealTimer) / 1000) 
+                / gp.recoveryTime;
 
             if(gp.failedTries <= (UINT32)decreaseCount)
                 // should not set failedTries below zero
@@ -202,7 +224,7 @@ DASelfHeal(
         // apply in this case.
         if(gp.lockoutRecovery != 0)
         {
-            if(((g_time - s_lockoutTimer) / 1000) >= gp.lockoutRecovery)
+            if(((g_time - (INT64)s_lockoutTimer) / 1000) >= gp.lockoutRecovery)
             {
                 gp.lockOutAuthEnabled = TRUE;
                 // Record the changes to NV
@@ -210,6 +232,5 @@ DASelfHeal(
             }
         }
     }
-
     return;
 }

@@ -35,7 +35,7 @@
  */
 /*(Auto)
     Created by TpmDispatch.pl version 03.0 October 4, 2015
-    This file created on Sep 27, 2016, 04:02:56PM 
+    This file created on Apr 10, 2017, 04:58:00PM 
 */
 #if defined CC_Startup && CC_Startup == YES
         case TPM_CC_Startup:
@@ -260,6 +260,14 @@
                 return result + TPM_RC_H + TPM_RC_1;
             break;
 #endif     // CC_HMAC
+#if defined CC_MAC && CC_MAC == YES
+        case TPM_CC_MAC:
+            *handleCount = 1;
+            result = TPMI_DH_OBJECT_Unmarshal(&handles[0],  handleBufferStart, bufferRemainingSize, FALSE);
+            if(result != TPM_RC_SUCCESS) 
+                return result + TPM_RC_H + TPM_RC_1;
+            break;
+#endif     // CC_MAC
 #if defined CC_GetRandom && CC_GetRandom == YES
         case TPM_CC_GetRandom:
             *handleCount = 0;
@@ -278,6 +286,14 @@
                 return result + TPM_RC_H + TPM_RC_1;
             break;
 #endif     // CC_HMAC_Start
+#if defined CC_MAC_Start && CC_MAC_Start == YES
+        case TPM_CC_MAC_Start:
+            *handleCount = 1;
+            result = TPMI_DH_OBJECT_Unmarshal(&handles[0],  handleBufferStart, bufferRemainingSize, FALSE);
+            if(result != TPM_RC_SUCCESS) 
+                return result + TPM_RC_H + TPM_RC_1;
+            break;
+#endif     // CC_MAC_Start
 #if defined CC_HashSequenceStart && CC_HashSequenceStart == YES
         case TPM_CC_HashSequenceStart:
             *handleCount = 0;
@@ -966,6 +982,36 @@
                 return result + TPM_RC_H + TPM_RC_3;
             break;
 #endif     // CC_NV_Certify
+#if defined CC_AC_GetCapability && CC_AC_GetCapability == YES
+        case TPM_CC_AC_GetCapability:
+            *handleCount = 1;
+            result = TPMI_RH_AC_Unmarshal(&handles[0],  handleBufferStart, bufferRemainingSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + TPM_RC_H + TPM_RC_1;
+            break;
+#endif     // CC_AC_GetCapability
+#if defined CC_AC_Send && CC_AC_Send == YES
+        case TPM_CC_AC_Send:
+            *handleCount = 3;
+            result = TPMI_DH_OBJECT_Unmarshal(&handles[0],  handleBufferStart, bufferRemainingSize, FALSE);
+            if(result != TPM_RC_SUCCESS) 
+                return result + TPM_RC_H + TPM_RC_1;
+            result = TPMI_RH_NV_AUTH_Unmarshal(&handles[1],  handleBufferStart, bufferRemainingSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + TPM_RC_H + TPM_RC_2;
+            result = TPMI_RH_AC_Unmarshal(&handles[2],  handleBufferStart, bufferRemainingSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + TPM_RC_H + TPM_RC_3;
+            break;
+#endif     // CC_AC_Send
+#if defined CC_Policy_AC_SendSelect && CC_Policy_AC_SendSelect == YES
+        case TPM_CC_Policy_AC_SendSelect:
+            *handleCount = 1;
+            result = TPMI_SH_POLICY_Unmarshal(&handles[0],  handleBufferStart, bufferRemainingSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + TPM_RC_H + TPM_RC_1;
+            break;
+#endif     // CC_Policy_AC_SendSelect
 #if defined CC_Vendor_TCG_Test && CC_Vendor_TCG_Test == YES
         case TPM_CC_Vendor_TCG_Test:
             *handleCount = 0;

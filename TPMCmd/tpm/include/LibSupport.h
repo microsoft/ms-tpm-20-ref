@@ -33,8 +33,6 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-//** Introduction
-//
 // This header file is used to select the library code that gets included in the
 // TPM built
 

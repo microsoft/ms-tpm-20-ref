@@ -64,6 +64,8 @@ const uint32_t      s_PrimeMarkers[] = {
     8167, 17881, 28183, 38891, 49871, 60961 };
 uint32_t   primeLimit;
 
+//** Functions
+
 //*** RsaAdjustPrimeLimit()
 // This used during the sieve process. The iterator for getting the
 // next prime (RsaNextPrime()) will return primes until it hits the

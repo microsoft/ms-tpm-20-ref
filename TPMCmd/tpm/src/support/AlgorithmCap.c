@@ -140,6 +140,9 @@ static const ALGORITHM    s_algorithms[] =
 #ifdef TPM_ALG_CAMELLIA
     {TPM_ALG_CAMELLIA,      {0, 1, 0, 0, 0, 0, 0, 0, 0}},
 #endif
+#ifdef TPM_ALG_CMAC
+    {TPM_ALG_CMAC,          {0, 1, 0, 0, 0, 1, 0, 0, 0}},
+#endif
 #ifdef TPM_ALG_CTR
     {TPM_ALG_CTR,           {0, 1, 0, 0, 0, 0, 1, 0, 0}},
 #endif

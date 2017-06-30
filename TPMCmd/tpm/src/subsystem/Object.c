@@ -169,7 +169,6 @@ HandleToObject(
     if(HandleGetType(handle) == TPM_HT_PERMANENT)
         return NULL; 
 
-
     // In this implementation, the handle is determined by the slot occupied by the
     // object.
     index = handle - TRANSIENT_FIRST;
@@ -297,7 +296,6 @@ FindEmptyObjectSlot(
 
 //*** ObjectAllocateSlot()
 // This function is used to allocate a slot in internal object array.
-// return type: OBJECT *
 OBJECT *
 ObjectAllocateSlot(
     TPMI_DH_OBJECT  *handle        // OUT: handle of allocated object
@@ -322,38 +320,48 @@ ObjectSetLoadedAttributes(
     TPM_HANDLE       parentHandle   // IN: the parent handle
     )
 {
-    OBJECT              *parent = NULL;
+    OBJECT              *parent = HandleToObject(parentHandle);
 
     // Copy the stClear attribute from the public area. This could be overwritten
     // if the parent has stClear SET
     object->attributes.stClear = object->publicArea.objectAttributes.stClear;
 
-    // If parent handle is a permanent handle, it is a primary or temporary
-    // object
-    if(HandleGetType(parentHandle) == TPM_HT_PERMANENT)
+    // If parent handle is a permanent handle, it is a primary (unless it is NULL
+    if(parent == NULL)
     {
-        // is this a temporary object with TPM_ALG_NULL as a parent?
-        // For an external object with the sensitive area loaded, the hierarchy
-        // is TPM_RH_NULL. If only the public part is loaded, then the
-        // hierarchy can be anything. Since LoadExternal only passes the hierarchy
-        // need to make sure that we don't indicate that the object is permanent
-        // Any key with TPM_RH_NULL as a parent is a temporary object.
-        if(parentHandle == TPM_RH_NULL || object->attributes.external == SET)
-            object->attributes.temporary = SET;
-        else
-            object->attributes.primary = SET;
+        object->attributes.primary = SET;
+        switch(parentHandle)
+        {
+            case TPM_RH_ENDORSEMENT:
+                object->attributes.epsHierarchy = SET;
+                break;
+            case TPM_RH_OWNER:
+                object->attributes.spsHierarchy = SET;
+                break;
+            case TPM_RH_PLATFORM:
+                object->attributes.ppsHierarchy = SET;
+                break;
+            default:
+                // Treat the temporary attribute as a hierarchy
+                object->attributes.temporary = SET;
+                object->attributes.primary = CLEAR;
+                break;
+        }
     }
     else
     {
-        // Check for stClear object
-        parent = HandleToObject(parentHandle);
-        if(object->publicArea.objectAttributes.stClear == SET
-           || ((parent != NULL) && (parent->attributes.stClear == SET)))
-            object->attributes.stClear = SET;
+        // is this a stClear object
+        object->attributes.stClear =
+            (object->publicArea.objectAttributes.stClear == SET
+             || (parent->attributes.stClear == SET));
+        object->attributes.epsHierarchy = parent->attributes.epsHierarchy;
+        object->attributes.spsHierarchy = parent->attributes.spsHierarchy;
+        object->attributes.ppsHierarchy = parent->attributes.ppsHierarchy;
+        // An object is temporary if its parent is temporary or if the object
+        // is external
+        object->attributes.temporary = parent->attributes.temporary 
+            || object->attributes.external;
     }
-    // For a LoadExternal object, the parent will be TPM_ALG_NULL if the sensitive
-    // portion is loaded so no hierarchy will be set here.
-    ObjectSetHierarchy(object, parentHandle, parent);
 
     // If this is an external object, set the QN == name but don't SET other
     // key properties ('parent' or 'derived')
@@ -418,6 +426,13 @@ ObjectLoad(
     }
     else
     {
+        // For any sensitive area, make sure that the seedSize is no larger than the
+        // digest size of nameAlg
+#if 0
+        if(sensitive->seedValue.t.size  
+                > CryptHashGetDigestSize(publicArea->nameAlg))
+            return TPM_RC_SENSITIVE;    // not a 'safe' return code so no add
+#endif
         // Check attributes and schemes for consistency
         result = PublicAttributesValidation(parent, publicArea);
     }
@@ -521,6 +536,8 @@ AllocateSequenceSlot(
     return object;
 }
 
+
+#if defined TPM_CC_HMAC_Start || defined TPM_CC_MAC_Start
 //*** ObjectCreateHMACSequence()
 // This function creates an internal HMAC sequence object.
 // return type: TPM_RC
@@ -544,12 +561,19 @@ ObjectCreateHMACSequence(
     // Set HMAC sequence bit
     hmacObject->attributes.hmacSeq = SET;
 
-    CryptHmacStart(&hmacObject->state.hmacState, hashAlg,
+#ifndef SMAC_IMPLEMENTED
+    if(CryptHmacStart(&hmacObject->state.hmacState, hashAlg,
                    keyObject->sensitive.sensitive.bits.b.size,
-                   keyObject->sensitive.sensitive.bits.b.buffer);
-
+                   keyObject->sensitive.sensitive.bits.b.buffer) == 0)
+#else
+    if(CryptMacStart(&hmacObject->state.hmacState, 
+                     &keyObject->publicArea.parameters, 
+                     hashAlg, &keyObject->sensitive.sensitive.any.b) == 0)
+#endif // SMAC_IMPLEMENTED
+        return TPM_RC_FAILURE;
     return TPM_RC_SUCCESS;
 }
+#endif
 
 //*** ObjectCreateHashSequence()
 // This function creates a hash sequence object.

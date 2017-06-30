@@ -107,7 +107,7 @@ TPM2_NV_DefineSpace(
 #if CC_NV_Extend == YES
         case TPM_NT_EXTEND:
 #endif
-#if CC_PolicySigned == YES && defined TPM_NT_PIN_PASS
+#if CC_PolicySecret == YES && defined TPM_NT_PIN_PASS
         case TPM_NT_PIN_PASS:
         case TPM_NT_PIN_FAIL:
 #endif

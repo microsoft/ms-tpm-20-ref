@@ -41,6 +41,8 @@
 #include "Tpm.h"
 #include "IoBuffers_fp.h"
 
+//** Buffers and Functions
+
 // These buffers are set aside to hold command and response values. In this
 // implementation, it is not guaranteed that the code will stop accessing
 // the s_actionInputBuffer before starting to put values in the

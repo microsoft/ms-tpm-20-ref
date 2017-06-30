@@ -102,7 +102,7 @@ __pragma(warning(pop))
 
 #ifndef _MSC_VER
 #   define WINAPI
-#   define __pragama(x)
+#   define __pragma(x)
 #   define REVERSE_ENDIAN_16(_Number) __builtin_bswap16(_Number)
 #   define REVERSE_ENDIAN_32(_Number) __builtin_bswap32(_Number)
 #   define REVERSE_ENDIAN_64(_Number) __builtin_bswap64(_Number)
@@ -118,7 +118,7 @@ __pragma(warning(pop))
 #  endif
 #   define LIB_EXPORT
 #   define LIB_IMPORT
-#   define _REDUCE_WARNING_LEVEL_
+#   define _REDUCE_WARNING_LEVEL_(n)
 #   define _NORMAL_WARNING_LEVEL_
 #   define  NOT_REFERENCED(x) (x = x)
 #endif

@@ -44,20 +44,16 @@
 // A debug mode is available that allows the random numbers generated for TPM.lib
 // to be repeated during runs of the simulator. The switch for it is in 
 // TpmBuildSwitches.h. It is USE_DEBUG_RNG.
-
-#include "Tpm.h"
-
-//****************************************************************************
-//** Random Number Generation
-//****************************************************************************
-// This is the implementation layer of CTR DRGB mechanism. The structure of the
-// functions attempts to be maximally close to SP 800-90A. It is intended to be
-// compiled as a separate module that is linked with a secure application so that
-// both reside inside the same boundary [SP 800-90A 8.5]. The secure application
-// in particular manages or accesses protected storage for the state of the DRBG
-// instantiations, and supplies the implementation functions here with a valid
-// pointer to the working state of the given instantiations (as a DRBG_STATE
-// structure).
+//
+//
+// This is the implementation layer of CTR DRGB mechanism as defined in SP800-90A 
+// and the functions are organized as closely as practical to the organization in 
+// SP800-90A. It is intended to be compiled as a separate module that is linked 
+// with a secure application so that both reside inside the same boundary 
+// [SP 800-90A 8.5]. The secure application in particular manages the accesses
+// protected storage for the state of the DRBG instantiations, and supplies the
+// implementation functions here with a valid pointer to the working state of the
+// given instantiations (as a DRBG_STATE structure).
 //
 // This DRBG mechanism implementation does not support prediction resistance. Thus
 // 'prediction_resistance_flag' is omitted from Instantiate_function(),
@@ -75,6 +71,8 @@
 // therefore use assertions instead of runtime parameter checks and mostly return
 // void instead of a status value.
 
+#include "Tpm.h"
+
 // Pull in the test vector definitions and define the space
 #include    "PRNG_TestVectors.h"
 
@@ -86,8 +84,8 @@ const BYTE DRBG_NistTestVector_EntropyReseed[] =
                                 {DRBG_TEST_RESEED_ENTROPY};
 const BYTE DRBG_NistTestVector_Generated[] = {DRBG_TEST_GENERATED};
 
-//*** Derivation Functions
-//**** Description
+//** Derivation Functions
+//*** Description
 // The functions in this section are used to reduce the personalization input values 
 // to make them usable as input for reseeding and instantiation. The overall
 // behavior is intended to produce the same results as described in SP800-90A,
@@ -96,7 +94,7 @@ const BYTE DRBG_NistTestVector_Generated[] = {DRBG_TEST_GENERATED};
 // fact that the data used for personalization may come in several separate blocks
 // such as a Template hash and a proof value and a primary seed.
 
-//**** Derivation Function Defines and Structures
+//*** Derivation Function Defines and Structures
 
 #define     DF_COUNT (DRBG_KEY_SIZE_WORDS / DRBG_IV_SIZE_WORDS + 1)
 #if DRBG_KEY_SIZE_BITS != 128 && DRBG_KEY_SIZE_BITS != 256
@@ -112,7 +110,7 @@ typedef struct
     int                 contents;
 } DF_STATE, *PDF_STATE;
 
-//**** DfCompute()
+//*** DfCompute()
 // This function does the incremental update of the derivation function state. It
 // encrypts the 'iv' value and XOR's the results into each of the blocks of the
 // output. This is equivalent to processing all of input data for each output block.
@@ -140,7 +138,7 @@ DfCompute(
     dfState->contents = 0;
 }
 
-//**** DfStart()
+//*** DfStart()
 // This initializes the output blocks with an encrypted counter value and
 // initializes the key schedule.
 static void
@@ -153,10 +151,10 @@ DfStart(
     int             i;
     UINT32          drbgSeedSize = sizeof(DRBG_SEED);
 
-    const BYTE dfKey[] = {
+    const BYTE dfKey[DRBG_KEY_SIZE_BYTES] = {
         0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
         0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
-    #if DRBG_KEY_SIZE_WORDS > 4
+    #if DRBG_KEY_SIZE_BYTES > 16
         ,0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
         0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f
     #endif
@@ -175,7 +173,7 @@ DfStart(
     dfState->contents = 4;
 }
 
-//**** DfUpdate()
+//*** DfUpdate()
 // This updates the state with the input data. A byte at a time is moved into the
 // state buffer until it is full and then that block is encrypted by DfCompute().
 static void
@@ -205,7 +203,7 @@ DfUpdate(
     }
 }
 
-//**** DfEnd()
+//*** DfEnd()
 // This function is called to get the result of the derivation function computation.
 // If the buffer is not full, it is padded with zeros. The output buffer is
 // structured to be the same as a DRBG_SEED value so that the function can return
@@ -226,7 +224,7 @@ DfEnd(
     return (DRBG_SEED *)&dfState->iv;
 }
 
-//**** DfBuffer()
+//*** DfBuffer()
 // Function to take an input buffer and do the derivation function to produce a
 // DRBG_SEED value that can be used in DRBG_Reseed();
 static DRBG_SEED *
@@ -247,7 +245,7 @@ DfBuffer(
     return output;
 }
 
-//**** DRBG_GetEntropy()
+//*** DRBG_GetEntropy()
 // Even though this implementation never fails, it may get blocked
 // indefinitely long in the call to get entropy from the platform
 // (DRBG_GetEntropy32()).
@@ -303,7 +301,7 @@ DRBG_GetEntropy(
     return !IsEntropyBad();
 }
 
-//**** IncrementIv()
+//*** IncrementIv()
 // Used by EncryptDRBG
 void
 IncrementIv(
@@ -314,7 +312,7 @@ IncrementIv(
     while((--ivP >= (BYTE *)iv) && ((*ivP = ((*ivP + 1) & 0xFF)) == 0));
 }
 
-//**** EncryptDRBG()
+//*** EncryptDRBG()
 // This does the encryption operation for the DRBG. It will encrypt
 // the input state counter (IV) using the state key. Into the output
 // buffer for as many times as it takes to generate the required
@@ -384,7 +382,7 @@ EncryptDRBG(
 #endif
 }
 
-//**** DRBG_Update()
+//*** DRBG_Update()
 // This function performs the state update function.
 // According to SP800-90A, a temp value is created by doing CTR mode
 // encryption of 'providedData' and replacing the key and IV with
@@ -434,7 +432,7 @@ DRBG_Update(
     // don't need to copy the resulting 'temp' to drbgState->seed
 }
 
-//**** DRBG_Reseed()
+//*** DRBG_Reseed()
 // This function is used when reseeding of the DRBG is required. If
 // entropy is provided, it is used in lieu of using hardware entropy.
 // Note: the provided entropy must be the required size.
@@ -476,7 +474,7 @@ DRBG_Reseed(
     return TRUE;
 }
 
-//**** DRBG_SelfTest()
+//*** DRBG_SelfTest()
 // This is run when the DRBG is instantiated and at startup
 // return type: BOOL
 // FALSE    test failed
@@ -546,13 +544,13 @@ DRBG_SelfTest(
     return TRUE;
 }
 
-//*** Public Interface
-//**** Description
+//** Public Interface
+//*** Description
 // The functions in this section are the interface to the RNG. These
 // are the functions that are used by TPM.lib. Other functions are only
 // visible to programs in the LtcCryptoEngine.
 
-//**** CryptRandomStir()
+//*** CryptRandomStir()
 // This function is used to cause a reseed. A DRBG_SEED amount of entropy is
 // collected from the hardware and then additional data is added.
 // return type: TPM_RC
@@ -591,7 +589,7 @@ CryptRandomStir(
     return TPM_RC_SUCCESS;
 }
 
-//**** CryptRandomGenerate()
+//*** CryptRandomGenerate()
 // Generate a 'randomSize' number or random bytes.
 LIB_EXPORT UINT16
 CryptRandomGenerate(
@@ -842,7 +840,7 @@ DRBG_Instantiate(
     return TRUE;
 }
 
-//**** DRBG_Uninstantiate()
+//*** DRBG_Uninstantiate()
 // This is Uninstantiate_function() from [SP 800-90A 9.4].
 //
 // return type: TPM_RC

@@ -42,7 +42,7 @@
 #include "LibSupport.h"         // Types from the library. These need to come before
                                 // Global.h because some of the structures in
                                 // that file depend on the structures used by the
-                                // crypto libraries.
+                                // cryptographic libraries.
 #include "GpMacros.h"           // Define additional macros
 #include "Global.h"             // Define other TPM types
 #include "InternalRoutines.h"   // Function prototypes

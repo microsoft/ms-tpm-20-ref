@@ -46,10 +46,10 @@
 #include "swap.h"
 #include "VendorString.h"
 
-#ifdef SELF_TEST
 
 //** For Self-test
 // These macros are used in CryptUtil to invoke the incremental self test.
+#ifdef SELF_TEST
 #   define     TEST(alg) if(TEST_BIT(alg, g_toTest)) CryptTestAlgorithm(alg, NULL)
 
 // Use of TPM_ALG_NULL is reserved for RSAEP/RSADP testing. If someone is wanting
@@ -71,7 +71,7 @@
 #endif
 
 #ifdef NO_FAIL_TRACE
-#   define FAIL(errorCode) (TmpFAIL(errorCode))
+#   define FAIL(errorCode) (TpmFail(errorCode))
 #else
 #   define FAIL(errorCode) (TpmFail(FUNCTION_NAME, __LINE__, errorCode))
 #endif
@@ -90,14 +90,14 @@
 #endif
 
 // This macro tests that a condition is TRUE and puts the TPM into failure mode
-// if it is not. If longjmp is being used, then the FAIL(FATAL_ERROR_) macro makes a call from
-// which there is no return. Otherwise, it returns and the function will exit
-// with the appropriate return code.
+// if it is not. If longjmp is being used, then the FAIL(FATAL_ERROR_) macro makes 
+// a call from which there is no return. Otherwise, it returns and the function 
+// will exit with the appropriate return code.
 #define REQUIRE(condition, errorCode, returnCode)       \
     {                                                   \
         if(!!(condition))                               \
         {                                               \
-            FAIL(FATAL_ERROR_errorCode);                            \
+            FAIL(FATAL_ERROR_errorCode);                \
             FAIL_RETURN(returnCode);                    \
         }                                               \
     }
@@ -105,12 +105,10 @@
 #define PARAMETER_CHECK(condition, returnCode)          \
     REQUIRE((condition), PARAMETER, returnCode)
 
-#if defined(EMPTY_ASSERT)
+#if defined EMPTY_ASSERT
 #   define pAssert(a)  ((void)0)
 #else
-// The additional parameter following FAIL(FATAL_ERROR_) is so that the expression within
-// parenthesis has an lvalue. FAIL has no value so the expression is not complete.
-#   define pAssert(a) (!!(a) ? 1 : (FAIL(FATAL_ERROR_PARAMETER), 0))
+#   define pAssert(a) {if(!(a)) FAIL(FATAL_ERROR_PARAMETER);}
 #endif
 
 //** Derived from Vendor-specific values
@@ -123,7 +121,7 @@
 
 //** Compile-time Checks
 // In some cases, the relationship between two values may be dependent
-// on things that change based on various selections like the chosen crypto
+// on things that change based on various selections like the chosen cryptographic
 // libraries. It is possible that these selections will result in incompatible
 // settings. These are often detectable by the compiler but it isn't always 
 // possible to do the check in the preprocessor code. For example, when the
@@ -188,6 +186,12 @@
 
 #define STD_RESPONSE_HEADER (sizeof(TPM_ST) + sizeof(UINT32) + sizeof(TPM_RC))
 
+#define JOIN(x,y) x##y
+#define CONCAT(x,y) JOIN(x, y)
+
+// If CONTEXT_INTEGRITY_HASH_ALG is defined, then the vendor is using the old style
+// table. Otherwise, pick the "strongest" implemented hash algorithm as the context
+// hash.
 #ifndef CONTEXT_HASH_ALGORITHM
 #   if defined ALG_SHA512 && ALG_SHA512 == YES
 #       define CONTEXT_HASH_ALGORITHM    SHA512
@@ -200,20 +204,76 @@
 #   elif defined ALG_SHA1 && ALG_SHA1 == YES
 #       define CONTEXT_HASH_ALGORITHM    SHA1
 #   endif
+#   define CONTEXT_INTEGRITY_HASH_ALG  CONCAT(TPM_ALG_, CONTEXT_HASH_ALGORITHM)
 #endif
 
-#define JOIN(x,y) x##y
-#define CONCAT(x,y) JOIN(x, y)
-
-// If CONTEXT_INTEGRITY_HASH_ALG is defined, then the vendor is using the old style
-// table
-#ifndef CONTEXT_INTEGRITY_HASH_ALG
-#define CONTEXT_INTEGRITY_HASH_ALG      CONCAT(TPM_ALG_, CONTEXT_HASH_ALGORITHM)
-#define CONTEXT_INTEGRITY_HASH_SIZE     CONCAT(CONTEXT_HASH_ALGORITHM, _DIGEST_SIZE)
+#ifndef CONTEXT_INTEGRITY_HASH_SIZE
+#define CONTEXT_INTEGRITY_HASH_SIZE CONCAT(CONTEXT_HASH_ALGORITHM, _DIGEST_SIZE)
 #endif
 
+#ifdef TPM_ALG_RSA
+#define     RSA_SECURITY_STRENGTH (MAX_RSA_KEY_BITS >= 15360 ? 256 :          \
+                                  (MAX_RSA_KEY_BITS >=  7680 ? 192 :          \
+                                  (MAX_RSA_KEY_BITS >=  3072 ? 128 :          \
+                                  (MAX_RSA_KEY_BITS >=  2048 ? 112 :          \
+                                  (MAX_RSA_KEY_BITS >=  1024 ?  80 :  0)))))
+#else
+#define     RSA_SECURITY_STRENGTH   0
+#endif
 
-#define PROOF_SIZE                      CONTEXT_INTEGRITY_HASH_SIZE
+#ifdef TPM_ALG_ECC
+#define     ECC_SECURITY_STRENGTH (MAX_ECC_KEY_BITS >= 521 ? 256 :              \
+                                  (MAX_ECC_KEY_BITS >= 384 ? 192 :              \
+                                  (MAX_ECC_KEY_BITS >= 256 ? 128 : 0)))
+#else
+#define     ECC_SECURITY_STRENGTH   0
+#endif // TPM_AGL_ECC
+
+#define     MAX_ASYM_SECURITY_STRENGTH                                          \
+                        MAX(RSA_SECURITY_STRENGTH, ECC_SECURITY_STRENGTH)
+
+#define     MAX_HASH_SECURITY_STRENGTH  ((CONTEXT_INTEGRITY_HASH_SIZE * 8) / 2)
+
+// Unless some algorithm is broken...
+#define     MAX_SYM_SECURITY_STRENGTH   MAX_SYM_KEY_BITS
+
+#define MAX_SECURITY_STRENGTH_BITS                                              \
+                        MAX(MAX_ASYM_SECURITY_STRENGTH,                         \
+                        MAX(MAX_SYM_SECURITY_STRENGTH,                          \
+                            MAX_HASH_SECURITY_STRENGTH))
+
+// This is the size that was used before the 1.38 errata requiring that P1.14.4 be
+// followed
+#define PROOF_SIZE      CONTEXT_INTEGRITY_HASH_SIZE
+
+// As required by P1.14.4
+#define COMPLIANT_PROOF_SIZE                                                    \
+            (MAX(CONTEXT_INTEGRITY_HASH_SIZE, (2 * MAX_SYM_KEY_BYTES)))
+      
+// As required by P1.14.3.1
+#define COMPLIANT_PRIMARY_SEED_SIZE                                             \
+    BITS_TO_BYTES(MAX_SECURITY_STRENGTH_BITS * 2)
+
+// This is the pre-errata version
+#ifndef PRIMARY_SEED_SIZE
+#   define PRIMARY_SEED_SIZE    PROOF_SIZE
+#endif
+
+#ifdef USE_SPEC_COMPLIANT_PROOFS
+#   undef PROOF_SIZE
+#   define PROOF_SIZE           COMPLIANT_PROOF_SIZE
+#   undef PRIMARY_SEED_SIZE
+#   define PRIMARY_SEED_SIZE    COMPLIANT_PRIMARY_SEED_SIZE
+#endif  // USE_SPEC_COMPLIANT_PROOFS || !defined PRIMARY_SEED_SIZE
+
+#ifndef SKIP_PROOF_ERRORS 
+#   if PROOF_SIZE < COMPLIANT_PROOF_SIZE
+#       error "PROOF_SIZE is not compliant with TPM specification"
+#   endif
+#   if PRIMARY_SEED_SIZE < COMPLIANT_PRIMARY_SEED_SIZE
+#       error  "Implementation.h specifies a non-compliant PRIMARY_SEED_SIZE"
+#   endif
+#endif
 
 // If CONTEXT_ENCRYP_ALG is defined, then the vendor is using the old style table
 #ifndef CONTEXT_ENCRYPT_ALG
@@ -223,18 +283,20 @@
 #define CONTEXT_ENCRYPT_KEY_BYTES       ((CONTEXT_ENCRYPT_KEY_BITS+7)/8)
 #endif
 
-#ifndef MAX_ECC_KEY_BYTES
-#define MAX_ECC_KEY_BYTES 0
+// This is updated to follow the requirement of P2 that the label not be larger
+// than 32 bytes.
+#ifndef LABEL_MAX_BUFFER
+#define LABEL_MAX_BUFFER MIN(32, MIN(MAX_ECC_KEY_BYTES, MAX_DIGEST_SIZE))
+//??#define LABEL_MAX_BUFFER MIN(MAX_ECC_KEY_BYTES, MAX_DIGEST_SIZE)
 #endif
 
-// Handle case when no ecc is defined
-#ifndef MAX_ECC_KEY_BYTES
-#   define MAX_ECC_KEY_BYTES    MAX_DIGEST_SIZE
-#endif
-#define LABEL_MAX_BUFFER   MIN(MAX_ECC_KEY_BYTES, MAX_DIGEST_SIZE)
-
-#if LABEL_MAX_BUFFER < 32
-#error "The size allowed for the label is not large enough for interoperability."
-#endif
+// This bit is used to indicate that an authorization ticket expires on TPM Reset
+// and TPM Restart.It is added to the timeout value returned by TPM2_PoliySigned()
+// and TPM2_PolicySecret() and used by TPM2_PolicyTicket(). The timeout value is 
+// relative to Time (g_time). Time is reset whenever the TPM loses power and cannot
+// be moved forward by the user (as can Clock). g_time is a 64-bit value expressing
+// time in ms. Sealing the MSb for a flag means that the TPM needs to be reset
+// at least once every 292,471,208 years rather than once every 584,942,417 years.
+#define EXPIRATION_BIT ((UINT64)1 << 63)
 
 #endif // GP_MACROS_H

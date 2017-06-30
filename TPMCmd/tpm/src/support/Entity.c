@@ -151,7 +151,7 @@ EntityGetLoadStatus(
                     result = TPM_RC_REFERENCE_H0;
                 break;
             case TPM_HT_NV_INDEX:
-                // For an NV Index, use the platform-specific routine
+                // For an NV Index, use the TPM-specific routine
                 // to search the IN Index space.
                 result = NvIndexIsAccessible(handle);
                 break;
@@ -159,6 +159,12 @@ EntityGetLoadStatus(
                 // Any PCR handle that is unmarshaled successfully referenced
                 // a PCR that is defined.
                 break;
+#ifdef TPM_CC_AC_Send
+            case TPM_HT_AC:
+                // Use the TPM-specific routine to search for the AC
+                result = AcIsAccessible(handle);
+                break;
+#endif
             default:
                 // Any other handle type is a defect in the unmarshaling code.
                 FAIL(FATAL_ERROR_INTERNAL);
@@ -400,14 +406,12 @@ EntityGetName(
 //      2. An NV index belongs to TPM_RH_PLATFORM if TPMA_NV_PLATFORMCREATE,
 //         is SET, otherwise it belongs to TPM_RH_OWNER
 //      3. An object handle belongs to its hierarchy.
-// All other handles belong to the platform hierarchy.
-// or an NV Index.
 TPMI_RH_HIERARCHY
 EntityGetHierarchy(
     TPMI_DH_ENTITY   handle         // IN :handle of entity
     )
 {
-    TPMI_RH_HIERARCHY       hierarcy = TPM_RH_NULL;
+    TPMI_RH_HIERARCHY       hierarchy = TPM_RH_NULL;
 
     switch(HandleGetType(handle))
     {
@@ -418,12 +422,12 @@ EntityGetHierarchy(
                 case TPM_RH_PLATFORM:
                 case TPM_RH_ENDORSEMENT:
                 case TPM_RH_NULL:
-                    hierarcy = handle;
+                    hierarchy = handle;
                     break;
                 // all other permanent handles are associated with the owner
                 // hierarchy. (should only be TPM_RH_OWNER and TPM_RH_LOCKOUT)
                 default:
-                    hierarcy = TPM_RH_OWNER;
+                    hierarchy = TPM_RH_OWNER;
                     break;
             }
             break;
@@ -437,9 +441,9 @@ EntityGetHierarchy(
             // considered to be in the platform hierarchy, otherwise it
             // is in the owner hierarchy.
             if(IsNv_TPMA_NV_PLATFORMCREATE(nvIndex->publicArea.attributes))
-                hierarcy = TPM_RH_PLATFORM;
+                hierarchy = TPM_RH_PLATFORM;
             else
-                hierarcy = TPM_RH_OWNER;
+                hierarchy = TPM_RH_OWNER;
         }
         break;
         case TPM_HT_TRANSIENT:
@@ -449,20 +453,20 @@ EntityGetHierarchy(
             object = HandleToObject(handle);
             if(object->attributes.ppsHierarchy)
             {
-                hierarcy = TPM_RH_PLATFORM;
+                hierarchy = TPM_RH_PLATFORM;
             }
             else if(object->attributes.epsHierarchy)
             {
-                hierarcy = TPM_RH_ENDORSEMENT;
+                hierarchy = TPM_RH_ENDORSEMENT;
             }
             else if(object->attributes.spsHierarchy)
             {
-                hierarcy = TPM_RH_OWNER;
+                hierarchy = TPM_RH_OWNER;
             }
         }
         break;
         case TPM_HT_PCR:
-            hierarcy = TPM_RH_OWNER;
+            hierarchy = TPM_RH_OWNER;
             break;
         default:
             FAIL(FATAL_ERROR_INTERNAL);
@@ -470,5 +474,5 @@ EntityGetHierarchy(
     }
     // this is unreachable but it provides a return value for the default
     // case which makes the complier happy
-    return hierarcy;
+    return hierarchy;
 }

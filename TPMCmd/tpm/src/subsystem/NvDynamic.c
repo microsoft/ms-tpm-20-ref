@@ -98,21 +98,15 @@ NvNext(
 {
     NV_REF               currentAddr;
     NV_ENTRY_HEADER      header;
-
+//
     // If iterator is at the beginning of list
     if(*iter == NV_REF_INIT)
     {
         // Initialize iterator
         *iter = NV_USER_DYNAMIC;
     }
-    // if we are going to return what the iter is currently pointing to...
+    // Step over the size field and point to the handle
     currentAddr = *iter + sizeof(UINT32);
-
-    // If iterator reaches the end of NV space, then don't advance and return
-    // that we are at the end of the list. The end of the list occurs when
-    // we don't have space for a size and a handle
-//    if(*iter + sizeof(UINT32) > s_evictNvEnd)
-//        return 0;
 
     // read the header of the next entry
     NvRead(&header, *iter, sizeof(NV_ENTRY_HEADER));
@@ -146,7 +140,7 @@ NvNextByType(
 {
     NV_REF           addr;
     TPM_HANDLE       nvHandle;
-
+//
     while((addr = NvNext(iter, &nvHandle)) != 0)
     {
         // addr: the address of the location containing the handle of the value
@@ -183,7 +177,7 @@ NvGetEnd(
 {
     NV_REF          iter = NV_REF_INIT;
     NV_REF          currentAddr;
-
+//
     // Scan until the next address is 0
     while((currentAddr = NvNext(&iter, NULL)) != 0);
     return iter;
@@ -196,6 +190,10 @@ NvGetFreeBytes(
     void
     )
 {
+    // This does not have an overflow issue because NvGetEnd() cannot return a value
+    // that is larger than s_evictNvEnd. This is because there is always a 'stop'
+    // word in the NV memory that terminates the search for the end before the
+    // value can go past s_evictNvEnd.
     return s_evictNvEnd - NvGetEnd();
 }
 
@@ -214,8 +212,8 @@ NvTestSpace(
     UINT32      remainBytes = NvGetFreeBytes();
     UINT32      reserved = sizeof(UINT32)       // size of the forward pointer
         + sizeof(NV_LIST_TERMINATOR);
-
-// Do a compile time sanity check on the setting for NV_MEMORY_SIZE
+//
+    // Do a compile time sanity check on the setting for NV_MEMORY_SIZE
 #if NV_MEMORY_SIZE < 1024
 #error "NV_MEMORY_SIZE probably isn't large enough"
 #endif
@@ -264,7 +262,7 @@ NvWriteNvListEnd(
 {
     BYTE        listEndMarker[sizeof(NV_LIST_TERMINATOR)] = {0};
     UINT64      maxCount = NvReadMaxCount();
-
+//
     // This is a constant check that can be resolved at compile time.
     cAssert(sizeof(UINT64) <= sizeof(NV_LIST_TERMINATOR) - sizeof(UINT32));
     MemoryCopy(&listEndMarker[sizeof(UINT32)], &maxCount, sizeof(UINT64));
@@ -345,7 +343,7 @@ NvDelete(
     NV_REF          entryRef = entityRef - sizeof(UINT32);
     NV_REF          endRef = NvGetEnd();
     NV_REF          nextAddr; // address of the next entry
-
+//
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
     // Get the offset of the next entry. That is, back up and point to the size
@@ -370,7 +368,8 @@ NvDelete(
 
     // Write the end marker, and make the new end equal to the first byte after
     // the just added end value. This will automatically update the NV value for
-    // maxCounte
+    // maxCounter.
+    // NOTE: This is the call that sets flag to cause NV to be updated 
     endRef = NvWriteNvListEnd(endRef);
 
     // Clear the reclaimed memory
@@ -389,8 +388,11 @@ NvDelete(
 //
 // NV storage associated with orderly data is updated when a NV Index is added
 // but NOT when the data or attributes are changed. Orderly data is only updated
-// to NV on an orderly shutdown (TPM2_Shutdown())
+// to NV on an orderly shutdown (TPM2_Shutdown()) 
 
+//*** NvRamNext()
+// This function is used to iterate trough the list of Ram Index values. *iter needs
+// to be initialized by calling 
 static NV_RAM_REF
 NvRamNext(
     NV_RAM_REF      *iter,          // IN/OUT: the list iterator
@@ -399,7 +401,7 @@ NvRamNext(
 {
     NV_RAM_REF           currentAddr;
     NV_RAM_HEADER        header;
-
+//
     // If iterator is at the beginning of list
     if(*iter == NV_RAM_REF_INIT)
     {
@@ -412,24 +414,21 @@ NvRamNext(
     // If iterator reaches the end of NV space, then don't advance and return
     // that we are at the end of the list. The end of the list occurs when
     // we don't have space for a size and a handle
-    if(*iter + sizeof(NV_RAM_HEADER) >= RAM_ORDERLY_END)
+    if(currentAddr + sizeof(NV_RAM_HEADER) > RAM_ORDERLY_END)
         return NULL;
-
     // read the header of the next entry
-    MemoryCopy(&header, *iter, sizeof(NV_RAM_HEADER));
+    MemoryCopy(&header, currentAddr, sizeof(NV_RAM_HEADER));
 
     // if the size field is zero, then we have hit the end of the list
     if(header.size == 0)
         // leave the *iter pointing at the end of the list
-        return 0;
-
+        return NULL;
     // advance the header by the size of the entry
-    *iter += header.size;
+    *iter = currentAddr + header.size;
 
-    pAssert(*iter <= RAM_ORDERLY_END);
+//    pAssert(*iter <= RAM_ORDERLY_END);
     if(handle != NULL)
         *handle = header.handle;
-
     return currentAddr;
 }
 
@@ -442,7 +441,7 @@ NvRamGetEnd(
 {
     NV_RAM_REF           iter = NV_RAM_REF_INIT;
     NV_RAM_REF           currentAddr;
-
+//
     // Scan until the next address is 0
     while((currentAddr = NvRamNext(&iter, NULL)) != 0);
     return iter;
@@ -461,7 +460,7 @@ NvRamTestSpaceIndex(
 {
     UINT32          remaining = RAM_ORDERLY_END - NvRamGetEnd();
     UINT32          needed = sizeof(NV_RAM_HEADER) + size;
-
+//
     // NvRamGetEnd points to the next available byte. 
     return remaining >= needed;
 }
@@ -479,13 +478,12 @@ NvRamGetIndex(
     NV_RAM_REF          iter = NV_RAM_REF_INIT;
     NV_RAM_REF          currentAddr;
     TPM_HANDLE          foundHandle;
-
+//
     while((currentAddr = NvRamNext(&iter, &foundHandle)) != 0)
     {
         if(handle == foundHandle)
             break;
     }
-    pAssert(ORDERLY_RAM_ADDRESS_OK(currentAddr, 0));
     return currentAddr;
 }
 
@@ -534,8 +532,8 @@ NvAddRAM(
     end += header.size;
 
     // If the end marker will fit, add it
-    if(end + sizeof(NV_RAM_HEADER) < RAM_ORDERLY_END)
-        MemorySet(end, 0, sizeof(NV_RAM_HEADER));
+    if(end + sizeof(UINT32) < RAM_ORDERLY_END)
+        MemorySet(end, 0, sizeof(UINT32));
 
     // Write reserved RAM space to NV to reflect the newly added NV Index
     SET_NV_UPDATE(UT_ORDERLY);
@@ -662,9 +660,6 @@ NvConditionallyWrite(
         if(g_NvStatus == TPM_RC_SUCCESS)
         {
             NvWrite(entryAddr, size, data);
-
-            // NV needs an update       //??
-            SET_NV_UPDATE(UT_NV);       //??
         }
         return g_NvStatus;
     }
@@ -1229,7 +1224,8 @@ NvDefineIndex(
     nvIndex.authValue = *authValue;
 
     // Add index to NV memory
-    result = NvAdd(entrySize, sizeof(NV_INDEX), TPM_RH_UNASSIGNED, (BYTE *)&nvIndex);
+    result = NvAdd(entrySize, sizeof(NV_INDEX), TPM_RH_UNASSIGNED,
+                   (BYTE *)&nvIndex);
 
     if(result == TPM_RC_SUCCESS)
     {
@@ -1300,7 +1296,7 @@ NvDeleteIndex(
         if(result != TPM_RC_SUCCESS)
             return result;
 
-        // If the NV Index is RAM back, delete the RAM data as well
+        // If the NV Index is RAM backed, delete the RAM data as well
         if(IsNv_TPMA_NV_ORDERLY(nvIndex->publicArea.attributes))
             NvDeleteRAM(nvIndex->publicArea.nvIndex);
 

@@ -32,20 +32,21 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 /*(Auto)
     Created by: BnEccData Version 1.1 February 4, 2016
-    This file created on Sep 22, 2016, at 05:31:03PM 
+    This file created on Sep 13, 2016, at 12:56:36AM 
 
     Input file:
-        Name: E:\SD\SDBigTop\TPMNextR-drw\TpmCmd\Tpm\src\crypt\CryptEccData.c
-        Date: Sep 22, 2016
-        Time: 05:27:02PM
+        Name: C:\TCG\TPMR_SD\TpmCmd\Tpm\src\crypt\CryptEccData.c
+        Date: Sep 13, 2016
+        Time: 12:56:04AM
 */
 
 #include    "Tpm.h"
-// both the new, refactored code and the old code (this is necessary so that 
+// both the new, re-factored code and the old code (this is necessary so that 
 // errata can be handled). Another script (BnEccData.pl) does the
-// conversion and generates BnEccData.c for use in the refactored code.
+// conversion and generates BnEccData.c for use in the re-factored code.
 #if defined TPM_ALG_ECC && defined USE_BN_ECC_DATA
 
 const struct {

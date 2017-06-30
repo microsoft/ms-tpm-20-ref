@@ -33,9 +33,16 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+//** Introduction
+// This file contains the functions that are used for the two-phase, ECC, 
+// key-exchange protocols
+
+
 #include "Tpm.h"
 
 #if CC_ZGen_2Phase == YES //%
+
+//** Functions
 
 #ifdef TPM_ALG_ECMQV
 

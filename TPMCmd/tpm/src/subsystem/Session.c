@@ -292,9 +292,11 @@ SessionIsSaved(
     return TRUE;
 }
 
-//*** SequenceNumbereForSavedContextIsValid()
+//*** SequenceNumberForSavedContextIsValid()
+// This function validates that the sequence number and handle value within a 
+// saved context are valid.
 BOOL
-SequenceNumbereForSavedContextIsValid(
+SequenceNumberForSavedContextIsValid(
     TPMS_CONTEXT    *context        // IN: pointer to a context structure to be
                                     //     validated
     )

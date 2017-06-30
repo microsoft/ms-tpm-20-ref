@@ -42,104 +42,10 @@
 //** Includes, Defines, and Typedefs
 #include "Tpm.h"
 
-union tpmCryptKeySchedule_t {
-#ifdef TPM_ALG_AES
-    tpmKeyScheduleAES           AES;
-#endif
-#ifdef TPM_ALG_SM4
-    tpmKeyScheduleSM4           SM4;
-#endif
-#ifdef TPM_ALG_CAMELLIA
-    tpmKeyScheduleCAMELLIA      CAMELLIA;
-#endif
- 
-#ifdef TPM_ALG_TDES
-    tpmKeyScheduleTDES          TDES[3];
-#endif
-#if SYMMETRIC_ALIGNMENT == 8
-    uint64_t            alignment;
-#else
-    uint32_t            alignment;
-#endif
-};
+#include "CryptSym.h"
 
 
-// Each block cipher within a library is expected to conform to the same calling 
-// conventions with three parameters ('keySchedule', 'in', and 'out') in the same
-// order. That means that all algorithms would use the same order of the same 
-// parameters. The code is written assuming the ('keySchedule', 'in', and 'out') 
-// order. However, if the library uses a different order, the order can be changed
-// with a SWIZZLE macro that puts the parameters in the correct order.
-// Note that all algorithms have to use the same order and number of parameters
-// because the code to build the calling list is common for each call to encrypt 
-// or decrypt with the algorithm chosen by setting a function pointer to select
-// the algorithm that is used.
-
-#   define ENCRYPT(keySchedule, in, out)                \
-      encrypt(SWIZZLE(keySchedule, in, out))
-
-#   define DECRYPT(keySchedule, in, out)                \
-      decrypt(SWIZZLE(keySchedule, in, out))
-
-
-// Note that the macros rely on 'encrypt' as local values in the
-// functions that use these macros. Those parameters are set by the macro that 
-// set the key schedule to be used for the call.
-
-
-#define ENCRYPT_CASE(ALG)                                                   \
-    case TPM_ALG_##ALG:                                                     \
-        TpmCryptSetEncryptKey##ALG(key, keySizeInBits, &keySchedule.ALG);   \
-        encrypt = (TpmCryptSetSymKeyCall_t)TpmCryptEncrypt##ALG;            \
-        break;
-#define DECRYPT_CASE(ALG)                                                   \
-    case TPM_ALG_##ALG:                                                     \
-        TpmCryptSetDecryptKey##ALG(key, keySizeInBits, &keySchedule.ALG);   \
-        decrypt = (TpmCryptSetSymKeyCall_t)TpmCryptDecrypt##ALG;            \
-        break;
-
-#ifdef TPM_ALG_AES
-#define ENCRYPT_CASE_AES    ENCRYPT_CASE(AES)
-#define DECRYPT_CASE_AES    DECRYPT_CASE(AES)
-#else
-#define ENCRYPT_CASE_AES
-#define DECRYPT_CASE_AES
-#endif
-#ifdef TPM_ALG_SM4
-#define ENCRYPT_CASE_SM4    ENCRYPT_CASE(SM4)
-#define DECRYPT_CASE_SM4    DECRYPT_CASE(SM4)
-#else
-#define ENCRYPT_CASE_SM4
-#define DECRYPT_CASE_SM4
-#endif
-#ifdef TPM_ALG_CAMELLIA
-#define ENCRYPT_CASE_CAMELLIA    ENCRYPT_CASE(CAMELLIA)
-#define DECRYPT_CASE_CAMELLIA    DECRYPT_CASE(CAMELLIA)
-#else
-#define ENCRYPT_CASE_CAMELLIA
-#define DECRYPT_CASE_CAMELLIA
-#endif
-#ifdef TPM_ALG_TDES
-#define ENCRYPT_CASE_TDES    ENCRYPT_CASE(TDES)
-#define DECRYPT_CASE_TDES    DECRYPT_CASE(TDES)
-#else
-#define ENCRYPT_CASE_TDES
-#define DECRYPT_CASE_TDES
-#endif
-
-// For each algorithm the case will either be defined or null.
-#define     SELECT(direction)                               \
-    switch(algorithm)                                       \
-    {                                                       \
-        direction##_CASE_AES                                \
-        direction##_CASE_SM4                                \
-        direction##_CASE_CAMELLIA                           \
-        direction##_CASE_TDES                               \
-        default:                                            \
-            return TPM_RC_FAILURE;                          \
-    }
-
-//** Obligatory Initialization Functions
+//** Initialization and Data Access Functions
 //
 //*** CryptSymInit()
 // This function is called to do _TPM_Init processing
@@ -160,8 +66,6 @@ CryptSymStartup(
 {
     return TRUE;
 }
-
-//** Data Access Functions
 
 //*** CryptGetSymmetricBlockSize()
 // This function returns the block size of the algorithm.
@@ -430,6 +334,8 @@ CryptSymmetricDecrypt(
 
     TEST(algorithm);
     blockSize = CryptGetSymmetricBlockSize(algorithm, keySizeInBits);
+    if(blockSize == 0)
+        return TPM_RC_FAILURE;
     // If the iv is provided, then it is expected to be block sized. In some cases,
     // the caller is providing an array of 0's that is equal to [MAX_SYM_BLOCK_SIZE]
     // with no knowledge of the actual block size. This function will set it.

@@ -164,7 +164,7 @@ TPM2_ContextLoad(
 
             // Check if input handle points to a valid saved session and that the
             // sequence number makes sense
-            if(!SequenceNumbereForSavedContextIsValid(&in->context))
+            if(!SequenceNumberForSavedContextIsValid(&in->context))
                 return TPM_RCS_HANDLE + RC_ContextLoad_context;
 
             // Restore session.  A TPM_RC_SESSION_MEMORY, TPM_RC_CONTEXT_GAP error

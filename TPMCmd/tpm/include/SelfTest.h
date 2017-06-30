@@ -33,13 +33,11 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef                 _SELF_TEST_H_
-#define                 _SELF_TEST_H_
-
-
 //** Introduction
 // This file contains the structure definitions for the self-test. It also contains
 // macros for use when the self-test is implemented.
+#ifndef                 _SELF_TEST_H_
+#define                 _SELF_TEST_H_
 
 
 //** Defines

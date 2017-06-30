@@ -42,17 +42,13 @@
 // Creates a primary or temporary object from a primary seed.
 */
 // return type: TPM_RC
-//   TPM_RC_ATTRIBUTES      'sensitiveDataOrigin' is CLEAR when 'sensitive.data' is
-//                          an Empty Buffer, or is SET when 'sensitive.data' is not
-//                          empty;
-//                          'fixedTPM', 'fixedParent', or 'encryptedDuplication'
-//                          attributes are inconsistent between themselves or with
-//                          those of the parent object;
+//   TPM_RC_ATTRIBUTES      sensitiveDataOrigin is CLEAR when sensitive.data is an 
+//                          Empty Buffer 'fixedTPM', 'fixedParent', or 
+//                          'encryptedDuplication' attributes are inconsistent 
+//                          between themselves or with those of the parent object;
 //                          inconsistent 'restricted', 'decrypt' and 'sign'
-//                          attributes;
+//                          attributes
 //                          attempt to inject sensitive data for an asymmetric key;
-//                          attempt to create a symmetric cipher key that is not
-//                          a decryption key
 //   TPM_RC_KDF             incorrect KDF specified for decrypting keyed hash object
 //   TPM_RC_KEY             a provided symmetric key value is not allowed
 //   TPM_RC_OBJECT_MEMORY   there is no free slot for the object
@@ -94,15 +90,14 @@ TPM2_CreatePrimary(
     // Check attributes in input public area. CreateChecks() checks the things that
     // are unique to creation and then validates the attributes and values that are
     // common to create and load.
-    result = CreateChecks(NULL, publicArea);
+    result = CreateChecks(NULL, publicArea, 
+                          in->inSensitive.sensitive.data.t.size);
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, RC_CreatePrimary_inPublic);
-
     // Validate the sensitive area values
     if(!AdjustAuthSize(&in->inSensitive.sensitive.userAuth,
                        publicArea->nameAlg))
         return TPM_RCS_SIZE + RC_CreatePrimary_inSensitive;
-
 // Command output
     // Compute the name using out->name as a scratch area (this is not the value
     // that ultimately will be returned, then instantiate the state that will be

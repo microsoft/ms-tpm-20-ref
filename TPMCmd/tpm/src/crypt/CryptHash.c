@@ -59,9 +59,21 @@ HASH_DEF_TEMPLATE(SHA384);
 HASH_DEF_TEMPLATE(SHA512);
 #endif
 
+#if 0
+SMAC_METHODS        hashMethods = {(SEQUENCE_DATA_METHOD)CryptDigestUpdate, 
+                                    CryptHashEnd};
+SMAC_METHODS        hmacMethods = {(SEQUENCE_DATA_METHOD)CryptDigestUpdate, 
+                                    CryptHmacEnd};
+#endif
+
+
 HASH_DEF nullDef = {{0}};
 
 //** Obligatory Initialization Functions
+
+//*** CryptHashInit()
+// This function is called by _TPM_Init do perform the initialization operations for
+// the library.
 BOOL
 CryptHashInit(
     void
@@ -71,6 +83,9 @@ CryptHashInit(
     return TRUE;
 }
 
+//*** CryptHashStartup()
+// This function is called by TPM2_Startup() in case there is work to do at startup.
+// Currently, this is a placeholder.
 BOOL
 CryptHashStartup(
     void
@@ -87,7 +102,7 @@ CryptHashStartup(
 // This function accesses the hash descriptor associated with a hash a
 // algorithm. The function returns NULL for TPM_ALG_NULL and fails if
 // hashAlg is not a hash algorithm.
-const PHASH_DEF
+PHASH_DEF
 CryptGetHashDef(
     TPM_ALG_ID       hashAlg
     )
@@ -122,14 +137,14 @@ CryptGetHashDef(
     return retVal;
 }
 
-//*** CryptHashIsImplemented()
+//*** CryptHashIsValidAlg()
 // This function tests to see if an algorithm ID is a valid hash algorithm. If
 // flag is true, then TPM_ALG_NULL is a valid hash.
 // return type: BOOL
 //  TRUE        hashAlg is a valid, implemented hash on this TPM.
 //  FALSE       not valid
 BOOL
-CryptHashIsImplemented(
+CryptHashIsValidAlg(
     TPM_ALG_ID       hashAlg,
     BOOL             flag
     )
@@ -263,7 +278,6 @@ CryptHashGetContextAlg(
 
 //** State Import and Export
 
-#if 1
 //*** CryptHashCopyState
 // This function is used to "clone" a HASH_STATE.
 LIB_EXPORT void
@@ -291,8 +305,6 @@ CryptHashCopyState(
     return;
 }
 
-#endif //0
-
 //*** CryptHashExportState()
 // This function is used to export a hash or HMAC hash state. This function
 // would be called when preparing to context save a sequence object.
@@ -306,11 +318,22 @@ CryptHashExportState(
     BYTE                    *outBuf = (BYTE *)externalFmt;
 //
     cAssert(sizeof(HASH_STATE) <= sizeof(EXPORT_HASH_STATE));
+    // the following #define is used to move data from an aligned internal data
+    // structure to a byte buffer (external format data.
 #define CopyToOffset(value)                                                     \
         memcpy(&outBuf[offsetof(HASH_STATE,value)], &internalFmt->value,        \
                 sizeof(internalFmt->value))
+    // Copy the hashAlg
     CopyToOffset(hashAlg);
     CopyToOffset(type);
+#ifdef HASH_STATE_SMAC
+    if(internalFmt->type == HASH_STATE_SMAC)
+    {
+        memcpy(outBuf, internalFmt, sizeof(HASH_STATE));
+        return;
+
+    }
+#endif
     if(internalFmt->type == HASH_STATE_HMAC)
     {
         HMAC_STATE              *from = (HMAC_STATE *)internalFmt;
@@ -344,6 +367,13 @@ CryptHashImportState(
     CopyFromOffset(type);
     if(internalFmt->hashAlg != TPM_ALG_NULL)
     {
+#ifdef HASH_STATE_SMAC
+        if(internalFmt->type == HASH_STATE_SMAC)
+        {
+            memcpy(internalFmt, inBuf, sizeof(HASH_STATE));
+            return;
+        }
+#endif
         internalFmt->def = CryptGetHashDef(internalFmt->hashAlg);
         HASH_STATE_IMPORT(internalFmt, inBuf);
         if(internalFmt->type == HASH_STATE_HMAC)
@@ -369,7 +399,8 @@ HashEnd(
     )
 {
     BYTE                temp[MAX_DIGEST_SIZE];
-    if(hashState->hashAlg == TPM_ALG_NULL)
+    if((hashState->hashAlg == TPM_ALG_NULL) 
+       || (hashState->type != HASH_STATE_HASH))
         dOutSize = 0;
     if(dOutSize > 0)
     {
@@ -384,7 +415,6 @@ HashEnd(
         memcpy(dOut, &temp, dOutSize);
     }
     hashState->type = HASH_STATE_EMPTY;
-//    hashState->hashAlg = TPM_ALG_ERROR;
     return (UINT16)dOutSize;
 }
 
@@ -430,9 +460,9 @@ CryptHashStart(
 }
 
 //*** CryptDigestUpdate()
-// Add data to a hash or HMAC stack.
+// Add data to a hash or HMAC, SMAC stack.
 //
-LIB_EXPORT void
+void
 CryptDigestUpdate(
     PHASH_STATE      hashState,     // IN: the hash context information
     UINT32           dataSize,      // IN: the size of data to be added
@@ -441,10 +471,21 @@ CryptDigestUpdate(
 {
     if(hashState->hashAlg != TPM_ALG_NULL)
     {
+#ifndef SMAC_IMPLEMENTED
         pAssert((hashState->type == HASH_STATE_HASH)
                 || (hashState->type == HASH_STATE_HMAC));
-        hashState->def = CryptGetHashDef(hashState->hashAlg);
+//??        hashState->def = CryptGetHashDef(hashState->hashAlg);
         HASH_DATA(hashState, dataSize, (BYTE *)data);
+#else
+        if((hashState->type == HASH_STATE_HASH)
+           || (hashState->type == HASH_STATE_HMAC))
+            HASH_DATA(hashState, dataSize, (BYTE *)data);
+        else if(hashState->type == HASH_STATE_SMAC)
+            (hashState->state.smac.smacMethods.data)(&hashState->state.smac.state,
+                                                     dataSize, data);
+        else
+            FAIL(FATAL_ERROR_INTERNAL);
+#endif // SMAC_IMPLEMENTED
     }
     return;
 }
@@ -512,7 +553,7 @@ CryptDigestUpdate2B(
 }
 
 //*** CryptHashEnd2B()
-// This function is the same as CypteCompleteHash() but the digest is
+// This function is the same as CryptCompleteHash() but the digest is
 // placed in a TPM2B. This is the most common use and this is provided
 // for specification clarity. 'digest.size' should be set to indicate the number of
 // bytes to place in the buffer
@@ -610,6 +651,7 @@ CryptHmacStart(
     state->hashState.hashAlg = hashAlg;
     // Set the hash state type
     state->hashState.type = HASH_STATE_HMAC;
+
     return hashDef->digestSize;
 }
 
@@ -630,6 +672,13 @@ CryptHmacEnd(
     BYTE                 temp[MAX_DIGEST_SIZE];
     PHASH_STATE          hState = (PHASH_STATE)&state->hashState;
 
+#ifdef SMAC_IMPLEMENTED
+    if(hState->type == HASH_STATE_SMAC)
+        return (state->hashState.state.smac.smacMethods.end)
+                    (&state->hashState.state.smac.state,
+                     dOutSize,
+                     dOut);
+#endif
     pAssert(hState->type == HASH_STATE_HMAC);
     hState->def = CryptGetHashDef(hState->hashAlg);
     // Change the state type for completion processing
@@ -638,6 +687,7 @@ CryptHmacEnd(
         dOutSize = 0;
     else
     {
+        
     // Complete the current hash
         HashEnd(hState, hState->def->digestSize, temp);
         // Do another hash starting with the oPad

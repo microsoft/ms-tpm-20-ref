@@ -35,7 +35,7 @@
 /*(Auto)
 
     Created by TpmStructures Version 2.7 Sept 13, 2016
-    This file created on Sep 22, 2016, 05:27:02PM 
+    This file created on Mar 31, 2017, 11:14:07AM 
 
 */
 
@@ -45,17 +45,17 @@
 
 // Input structure definition
 typedef struct {
-    TPMI_DH_OBJECT        keyHandle;
-    TPM2B_MAX_BUFFER      inData;
-    TPMI_YES_NO           decrypt;
-    TPMI_ALG_SYM_MODE     mode;
-    TPM2B_IV              ivIn;
+    TPMI_DH_OBJECT           keyHandle;
+    TPM2B_MAX_BUFFER         inData;
+    TPMI_YES_NO              decrypt;
+    TPMI_ALG_CIPHER_MODE     mode;
+    TPM2B_IV                 ivIn;
 } EncryptDecrypt2_In;
 
 // Output structure definition
 typedef struct {
-    TPM2B_MAX_BUFFER      outData;
-    TPM2B_IV              ivOut;
+    TPM2B_MAX_BUFFER         outData;
+    TPM2B_IV                 ivOut;
 } EncryptDecrypt2_Out;
 
 // Response code modifiers

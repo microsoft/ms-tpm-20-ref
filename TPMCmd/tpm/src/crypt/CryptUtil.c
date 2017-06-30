@@ -267,7 +267,7 @@ void
 ParmEncryptSym(
     TPM_ALG_ID       symAlg,        // IN: symmetric algorithm
     TPM_ALG_ID       hash,          // IN: hash algorithm for KDFa
-    UINT16           keySizeInBits, // IN: AES key size in bits
+    UINT16           keySizeInBits, // IN: symmetric key size in bits
     TPM2B           *key,           // IN: KDF HMAC key
     TPM2B           *nonceCaller,   // IN: nonce caller
     TPM2B           *nonceTpm,      // IN: nonce TPM
@@ -756,8 +756,7 @@ CryptSecretDecrypt(
                 //    seed = XOR(secret, hash, key, nonceCaller, nullNonce)
                 //    where:
                 //    secret  the secret parameter from the TPM2_StartAuthHMAC
-                //            command
-                //            which contains the seed value
+                //            command that contains the seed value
                 //    hash    nameAlg  of tpmKey
                 //    key     the key or data value in the object referenced by
                 //            entityHandle in the TPM2_StartAuthHMAC command
@@ -860,7 +859,7 @@ CryptParameterEncryption(
         FAIL(FATAL_ERROR_INTERNAL);
     }
 
-    // Compute encryption key by concatenating sessionAuth with extra key
+    // Compute encryption key by concatenating sessionKey with extra key
     MemoryCopy2B(&key.b, &session->sessionKey.b, sizeof(key.t.buffer));
     MemoryConcat2B(&key.b, &extraKey->b, sizeof(key.t.buffer));
 
@@ -1003,8 +1002,8 @@ CryptComputeSymmetricUnique(
 // the Endorsement hierarchy, it will also populate 'proof' with ehProof.
 //
 // For derived keys, 'seed' will be the secret value from the parent, 'label' and
-// 'context' will be set according to the parameters of TPM2_Derive() and 'hashAlg'
-// will be set which causes the RAND_STATE to be a KDF generator.
+// 'context' will be set according to the parameters of TPM2_CreateLoaded() and 
+// 'hashAlg' will be set which causes the RAND_STATE to be a KDF generator.
 //
 // return type: TPM_RC
 //   TPM_RC_KEY             a provided key is not an allowed value
@@ -1814,7 +1813,13 @@ CryptValidateKeys(
                 if(publicArea->nameAlg != TPM_ALG_NULL)
                 {
                     TPM2B_DIGEST            compare;
+#if 1
                     if(sensitive->seedValue.t.size != digestSize)
+#else
+                    if((sensitive->seedValue.t.size > digestSize)
+                       || (sensitive->seedValue.t.size < digestSize/2))
+
+#endif
                         return TPM_RCS_KEY_SIZE;
                     CryptComputeSymmetricUnique(publicArea, sensitive, &compare);
                     if(!MemoryEqual2B(&unique->sym.b, &compare.b))
@@ -1849,3 +1854,150 @@ CryptAlgsSetImplemented(
 {
     AlgorithmGetImplementedVector(&g_implementedAlgorithms);
 }
+
+
+//*** CryptSelectMac()
+// This function is used to set the MAC scheme based on the key parameters and
+// the input scheme.
+// return type: TPM_RC
+//  TPM_RC_SCHEME       the scheme is not a valid mac scheme
+//  TPM_RC_TYPE         the input key is not a type that supports a mac
+//  TPM_RC_VALUE        the input scheme and the key scheme are not compatible
+TPM_RC
+CryptSelectMac(
+    TPMT_PUBLIC             *publicArea,
+    TPMI_ALG_MAC_SCHEME     *inMac
+)
+{
+    TPM_ALG_ID              macAlg = TPM_ALG_NULL;
+    switch(publicArea->type)
+    {
+        case TPM_ALG_KEYEDHASH:
+        {
+            // Local value to keep lines from getting too long
+            TPMT_KEYEDHASH_SCHEME   *scheme;
+            scheme = &publicArea->parameters.keyedHashDetail.scheme;
+            // Expect that the scheme is either HMAC or NULL
+            if(scheme->scheme != TPM_ALG_NULL)
+                macAlg = scheme->details.hmac.hashAlg;
+            break;
+        }
+        case TPM_ALG_SYMCIPHER:
+        {
+            TPMT_SYM_DEF_OBJECT     *scheme;
+            scheme = &publicArea->parameters.symDetail.sym;
+            // Expect that the scheme is either valid symmetric cipher or NULL
+            if(scheme->algorithm != TPM_ALG_NULL)
+                macAlg = scheme->mode.sym;
+            break;
+        }
+        default:
+            return TPM_RCS_TYPE;
+    }
+    // If the input value is not TPM_ALG_NULL ...
+    if(*inMac != TPM_ALG_NULL) 
+    {
+        // ... then either the scheme in the key must be TPM_ALG_NULL or the input
+        // value must match
+        if((macAlg != TPM_ALG_NULL) && (*inMac != macAlg))
+            return TPM_RCS_VALUE;
+    }
+    else
+    {
+        // Since the input value is TPM_ALG_NULL, then the key value can't be
+        // TPM_ALG_NULL
+        if(macAlg == TPM_ALG_NULL)
+            return TPM_RCS_VALUE;
+        *inMac = macAlg;
+    }
+    if(!CryptMacIsValidForKey(publicArea->type, *inMac, FALSE))
+        return TPM_RCS_SCHEME;
+    return TPM_RC_SUCCESS;
+}
+
+//*** CryptMacIsValidForKey()
+// Check to see if the key type is compatible with the mac type
+BOOL
+CryptMacIsValidForKey(
+    TPM_ALG_ID          keyType,
+    TPM_ALG_ID          macAlg,
+    BOOL                flag
+)
+{
+    switch(keyType)
+    {
+        case TPM_ALG_KEYEDHASH:
+            return CryptHashIsValidAlg(macAlg, flag);
+            break;
+        case TPM_ALG_SYMCIPHER:
+            return CryptSmacIsValidAlg(macAlg, flag);
+            break;
+        default:
+            break;
+    }
+    return FALSE;
+}
+
+//*** CryptSmacIsValidAlg()
+// This function is used to test if an algorithm is a supported SMAC algorithm. It
+// needs to be updated as new algorithms are added.
+BOOL
+CryptSmacIsValidAlg(
+    TPM_ALG_ID      alg,
+    BOOL            FLAG        // IN: Indicates if TPM_ALG_NULL is valid
+)
+{
+    switch (alg)
+    {
+#ifdef TPM_ALG_CMAC
+        case TPM_ALG_CMAC:
+            return TRUE;
+            break;
+#endif
+        case TPM_ALG_NULL:
+            return FLAG;
+            break;
+        default:
+            return FALSE;
+    }
+}
+
+//*** CryptSymModeIsValid()
+// Function checks to see if an algorithm ID is a valid, symmetric block cipher 
+// mode for the TPM. If 'flag' is SET, them TPM_ALG_NULL is a valid mode.
+// not include the modes used for SMAC
+BOOL
+CryptSymModeIsValid(
+    TPM_ALG_ID          mode,
+    BOOL                flag
+)
+{
+    switch(mode)
+    {
+#if         ALG_CTR
+        case TPM_ALG_CTR:
+#endif // ALG_CTR
+#if         ALG_OFB
+        case TPM_ALG_OFB:
+#endif // ALG_OFB
+#if         ALG_CBC
+        case TPM_ALG_CBC:
+#endif // ALG_CBC
+#if         ALG_CFB
+        case TPM_ALG_CFB:
+#endif // ALG_CFB
+#if         ALG_ECB
+        case TPM_ALG_ECB:
+#endif // ALG_ECB
+            return TRUE;
+        case TPM_ALG_NULL:
+            return flag;
+            break;
+        default:
+            break;
+    }
+    return FALSE;
+}
+
+
+

@@ -96,7 +96,7 @@ TPM2_SequenceUpdate(
         }
         else if(object->attributes.hmacSeq == SET)
         {
-            // Update sequence object hash/HMAC stack
+            // Update sequence object HMAC stack
             CryptDigestUpdate2B(&hashObject->state.hmacState.hashState,
                                 &in->buffer.b);
         }

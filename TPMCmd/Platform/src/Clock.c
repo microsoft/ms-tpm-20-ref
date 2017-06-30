@@ -53,7 +53,8 @@
 
 //***_plat__TimerReset()
 // This function sets current system clock time as t0 for counting TPM time.
-// This function is called at a power on event to reset the clock.
+// This function is called at a power on event to reset the clock. When the clock
+// is reset, the indication that the clock was stopped is also set.
 LIB_EXPORT void
 _plat__TimerReset(
     void
@@ -115,9 +116,6 @@ _plat__TimerRead(
     clock_t         timeDiff;
     uint64_t        adjusted;
 
-#   define  TOP     (THOUSAND * CLOCK_NOMINAL)
-#   define  BOTTOM  ((uint64_t)s_adjustRate * CLOCKS_PER_SEC)
-
     // Save the value previously read from the system clock
     timeDiff = s_realTimePrevious;
     // update with the current value of the system clock
@@ -137,14 +135,16 @@ _plat__TimerRead(
     timeDiff = s_realTimePrevious - timeDiff;
 
     // Do the time rate adjustment and conversion from CLOCKS_PER_SEC to mSec
-    adjusted = (((uint64_t)timeDiff * TOP) / BOTTOM);
+    adjusted = (((uint64_t)timeDiff * (THOUSAND * CLOCK_NOMINAL)) 
+                / ((uint64_t)s_adjustRate * CLOCKS_PER_SEC));
 
     s_tpmTime += (clock_t)adjusted;
 
     // Might have some rounding error that would loose CLOCKS. See what is not
     // being used. As mentioned above, this could result in putting back more than
     // is taken out
-    adjusted = (adjusted * BOTTOM) / TOP;
+    adjusted = (adjusted * ((uint64_t)s_adjustRate * CLOCKS_PER_SEC)) 
+        / (THOUSAND * CLOCK_NOMINAL);
 
     // If adjusted is not the same as timeDiff, then there is some rounding
     // error that needs to be pushed back into the previous sample.

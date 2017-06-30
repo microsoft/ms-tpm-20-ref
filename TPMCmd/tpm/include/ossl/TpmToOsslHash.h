@@ -46,8 +46,9 @@
 #include <openssl/sha.h>
 #include <openssl/ossl_typ.h>
 
+
 //***************************************************************
-//******** Linking to the OpenSSL HASH code *********************
+//** Links to the OpenSSL HASH code 
 //***************************************************************
 
 // Redefine the internal name used for each of the hash state structures to the 
@@ -61,12 +62,13 @@
 #define tpmHashStateSHA512_t      SHA512_CTX
 
 #ifdef TPM_ALG_SM3
-#   error "Symcrypt does not support SM3"
+#   error "The version of OpenSSL used by this code does not support SM3"
 #endif
 
-// The defines below are only needed when compiling CryptHash.c. This isolation is
-// primarily to avoid name space collision. However, if there is a real collision, 
-// it will likely show up when the linker tries to put things together.
+// The defines below are only needed when compiling CryptHash.c or CryptSmac.c. 
+// This isolation is primarily to avoid name space collision. However, if there 
+// is a real collision, it will likely show up when the linker tries to put things 
+// together.
 
 #ifdef _CRYPT_HASH_C_
 

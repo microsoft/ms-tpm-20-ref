@@ -70,6 +70,11 @@ TPM2_Shutdown(
     // Save RAM backed NV index data
     NvUpdateIndexOrderlyData();
 
+#ifdef ACCUMULATE_SELF_HEAL_TIMER
+    // Save the current time value
+    go.time = g_time;
+#endif
+
     // Save all orderly data
     NvWrite(NV_ORDERLY_DATA, sizeof(ORDERLY_DATA), &go);
 

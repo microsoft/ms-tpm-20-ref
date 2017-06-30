@@ -403,7 +403,7 @@ BnSignEcSm2(
                                         //     debug)
     )
 {
-    BN_MAX_INITIALIZZED(bnE, digest);   // Don't know how big digest might be 
+    BN_MAX_INITIALIZED(bnE, digest);    // Don't know how big digest might be 
     ECC_NUM(bnN);
     ECC_NUM(bnK);
     ECC_NUM(bnX1);

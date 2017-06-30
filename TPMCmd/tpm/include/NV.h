@@ -33,13 +33,15 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef    _NV_H_
-#define    _NV_H_
-
 //** Index Type Definitions
+
 // These definitions allow the same code to be used pre and post 1.21. The main
 // action is to redefine the index type values from the bit values.
 // Use TPM_NT_ORDINARY to indicate if the TPM_NT type is defined
+
+#ifndef    _NV_H_
+#define    _NV_H_
+
 #ifdef     TPM_NT_ORDINARY
 #   define NV_ATTRIBUTES_TO_TYPE(attributes) (attributes.TPM_NT)
 #else
@@ -119,6 +121,7 @@ typedef struct {
 // value.
 typedef UINT32 NV_LIST_TERMINATOR[3];
 
+//** Orderly RAM Values
 // The following defines are for accessing orderly RAM values.
 
 // This is the initialize for the RAM reference iterator.

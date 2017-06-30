@@ -159,6 +159,11 @@ BnFromHex(
 // normalized value. If  'size' is an input 0, then the receiving buffer is
 // guaranteed to be large enough for the result and the size will be set to the
 // size required for bigNum (leading zeros suppressed).
+//
+// The conversion for a little-endian machine simply requires that all significant
+// bytes of the bigNum be reversed. For a big-endian machine, rather than process
+// unpack each word individually, the bigNum is converted to little-endian words,
+// copied, and then converted back to big-endian.
 LIB_EXPORT BOOL
 BnToBytes(
     bigConst             bn,
@@ -177,27 +182,39 @@ BnToBytes(
     pAssert(bn != NULL && buffer != NULL && size != NULL);
 
     requiredSize = (BnSizeInBits(bn) + 7) / 8;
-    if(*size == 0)
-        *size = (NUMBYTES)requiredSize;
-    pAssert(requiredSize <= *size);
+    if(requiredSize == 0)
+    {
+        // If the input value is 0, return a byte of zero
+        *size = 1;
+        *buffer = 0;
+    }
+    else
+    {
+        if(*size == 0)
+            *size = (NUMBYTES)requiredSize;
+        pAssert(requiredSize <= *size);
 
 #if BIG_ENDIAN_TPM
-    for(count = 0; count < bn->size; count++)
-        bn->d[count] = SWAP_CRYPT_WORD(bn->d[count]);
+        // byte swap the words to make them little-endian
+        for(count = 0; count < bn->size; count++)
+            bn->d[count] = SWAP_CRYPT_WORD(bn->d[count]);
 #endif
-    count = *size;
-    pFrom = (BYTE *)(&bn->d[0]) + requiredSize - 1;
-    pTo = buffer;
+        // Byte swap the number (not words but the whole value)
+        count = *size;
+        pFrom = (BYTE *)(&bn->d[0]) + requiredSize - 1;
+        pTo = buffer;
 
-    for(count = *size; count > requiredSize; count--)
-        *pTo++ = 0;
-    for(; requiredSize > 0; requiredSize--)
-        *pTo++ = *pFrom--;
+        for(count = *size; count > requiredSize; count--)
+            *pTo++ = 0;
+        for(; requiredSize > 0; requiredSize--)
+            *pTo++ = *pFrom--;
 
 #if BIG_ENDIAN_TPM
-    for(count = 0; count < bn->size; count++)
-        bn->d[count] = SWAP_CRYPT_WORD(bn->d[count]);
+        // Put the input back into big-endian format
+        for(count = 0; count < bn->size; count++)
+            bn->d[count] = SWAP_CRYPT_WORD(bn->d[count]);
 #endif
+    }
     return TRUE;
 }
 
@@ -257,7 +274,7 @@ BnPointTo2B(
     )
 {
     UINT16           size = (UINT16)BITS_TO_BYTES(
-        BnMsb(CurveGetOrder(AccessCurveData(E))));
+                                        BnMsb(CurveGetOrder(AccessCurveData(E))));
     pAssert(p && ecP && E);
     pAssert(BnEqualWord(ecP->z, 1));
     BnTo2B(ecP->x, &p->x.b, size);

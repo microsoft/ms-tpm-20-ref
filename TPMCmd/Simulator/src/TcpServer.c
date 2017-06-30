@@ -46,7 +46,7 @@
 #include <windows.h>
 #include <winsock.h>
 #else
-typedef SOCKET  int
+typedef int SOCKET
 #endif
 
 

@@ -240,7 +240,7 @@ TestSymmetric(
 //
     if(!TEST_BIT(alg, *toTest))
         return TPM_RC_SUCCESS;
-    if(alg == ALG_AES_VALUE || alg == ALG_SM4_VALUE)
+    if(alg == ALG_AES_VALUE || alg == ALG_SM4_VALUE || alg == ALG_CAMELLIA_VALUE)
     {
         // Will test the algorithm for all modes and key sizes
         CLEAR_BOTH(alg);
@@ -311,7 +311,7 @@ TestSymmetric(
 // The tests are for public key only operations and for private key operations.
 // Signature verification and encryption are public key operations. They are tested
 // by using a KVT. For signature verification, this means that a known good
-// signature is checked by _cpri_ValidateSignatureRSA. If it fails, then the
+// signature is checked by CryptRsaValidateSignature(). If it fails, then the
 // TPM enters failure mode. For encryption, the TPM encrypts known values using
 // the selected scheme and checks that the returned value matches the expected
 // value.
@@ -740,15 +740,20 @@ TestEcc(
 #endif // TPM_ALG_ECC
 
 //*** TestAlgorithm()
-// Dispatches to the correct test function for the algorithm. If algorithm is not
+// Dispatches to the correct test function for the algorithm or get a list of
+// testable algorithms.
+//
 // If 'toTest' is not NULL, then the test decisions are based on the algorithm
 // selections in 'toTest'. Otherwise, 'g_toTest' is used. When bits are clear in
 // 'g_toTest' they will also be cleared 'toTest'.
-// If there doesn't happen to be a test for the algorithm, its associated bit
+//
+// If there doesn't happen to be a test for the algorithm, its associated bit is
 // quietly cleared.
+//
 // If 'alg' is zero (TPM_ALG_ERROR), then the toTest vector is cleared of any bits
-// for which there is a test (i.e. no tests are actually run but the vector is
-// cleared.
+// for which there is no test (i.e. no tests are actually run but the vector is
+// cleared).
+//
 // Note: 'toTest' will only ever have bits set for implemented algorithms but 'alg'
 // can be anything.
 // return type: TPM_RC
@@ -769,12 +774,21 @@ TestAlgorithm(
     if(toTest == NULL)
         toTest = &g_toTest;
 
+    // This is kind of strange. This function will either run a test of the selected
+    // algorithm or just clear a bit if there is no test for the algorithm. So,
+    // either this loop will be executed once for the selected algorithm or once for
+    // each of the possible algorithms. If it is executed more than once ('alg' ==
+    // TPM_ALG_ERROR), then no test will be run but bits will be cleared for 
+    // unimplemented algorithms. This was done this way so that there is only one
+    // case statement with all of the algorithms. It was easier to have one case
+    // statement than to have multiple ones to manage whenever an algorithm ID is
+    // added.
     for(alg = first; (alg <= last); alg++)
     {
-        // if alg was not TPM_ALG_ERROR, then we will be cycling through
+        // if 'alg' was TPM_ALG_ERROR, then we will be cycling through
         // values, some of which may not be implemented. If the bit in toTest
         // happens to be set, then we could either generated an assert, or just
-        // silently CLEAR it Decided to just clear.
+        // silently CLEAR it. Decided to just clear.
         if(!TEST_BIT(alg, g_implementedAlgorithms))
         {
             CLEAR_BIT(alg, *toTest);
@@ -782,24 +796,43 @@ TestAlgorithm(
         }
         // Process whatever is left.
         // NOTE: since this switch will only be called if the algorithm is
-        // implemented, it i not necessary to modify this list except to comment out
-        // the algorithms for which there is no test
+        // implemented, it is not necessary to modify this list except to comment 
+        // out the algorithms for which there is no test
         switch(alg)
         {
         // Symmetric block ciphers
+#ifdef TPM_ALG_AES
             case ALG_AES_VALUE:
+#endif
+#ifdef TPM_ALG_SM4
             // if SM4 is implemented, its test is like other block ciphers but there
             // aren't any test vectors for it yet
 //            case ALG_SM4_VALUE:
+#endif
+#ifdef TPM_ALG_CAMELLIA
+            // no test vectors for camellia
+//            case ALG_CAMELLIA_VALUE:
+#endif
         // Symmetric modes
+#ifndef TPM_ALG_CFB
+#   error   CFB is required in all TPM implementations
+#endif // !TPM_ALG_CFB
             case ALG_CFB_VALUE:
                 if(doTest)
                     result = TestSymmetric(alg, toTest);
                 break;
+#ifdef TPM_ALG_CTR
             case ALG_CTR_VALUE:
+#endif // TPM_ALG_CRT
+#ifdef TPM_ALG_OFB
             case ALG_OFB_VALUE:
+#endif // TPM_ALG_OFB
+#ifdef TPM_ALG_CBC
             case ALG_CBC_VALUE:
+#endif // TPM_ALG_CBC
+#ifdef TPM_ALG_ECB
             case ALG_ECB_VALUE:
+#endif
                 if(doTest)
                     result = TestSymmetric(alg, toTest);
                 else
@@ -809,12 +842,19 @@ TestAlgorithm(
                     if(toTest == &g_toTest)
                         CLEAR_BIT(alg, *toTest);
                 break;
-
+#ifndef TPM_ALG_HMAC
+#   error   HMAC is required in all TPM implementations
+#endif
             case ALG_HMAC_VALUE:
+                // Clear the bit that indicates that HMAC is required because
+                // HMAC is used as the basic test for all hash algorithms.
                 CLEAR_BOTH(alg);
+                // Testing HMAC means test the default hash
                 if(doTest)
                     TestHash(DEFAULT_TEST_HASH, toTest);
                 else
+                    // If not testing, then indicate that the hash needs to be
+                    // tested because this uses HMAC
                     SET_BOTH(DEFAULT_TEST_HASH);
                 break;
 #ifdef TPM_ALG_SHA1
@@ -831,7 +871,9 @@ TestAlgorithm(
 #endif // TPM_ALG_SHA512
             // if SM3 is implemented its test is like any other hash, but there
             // aren't any test vectors yet.
+#ifdef TPM_ALG_SM3_256
 //            case ALG_SM3_256_VALUE:
+#endif // TPM_ALG_SM3_256
                 if(doTest)
                     result = TestHash(alg, toTest);
                 break;

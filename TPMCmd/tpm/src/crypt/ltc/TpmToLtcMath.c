@@ -114,7 +114,8 @@ BnDiv(
     else
     {
         pAssert((quotient == NULL)
-                || (quotient->allocated >= (unsigned)(dividend->size - divisor->size)));
+                || (quotient->allocated >= 
+                        (unsigned)(dividend->size - divisor->size)));
         pAssert((remainder == NULL)
                 || (remainder->allocated >= divisor->size));
         mpa_div((mpanum)quotient, (mpanum)remainder,
@@ -261,7 +262,7 @@ BnEccModMult2(
     return OK ? TPM_RC_SUCCESS : TPM_RC_NO_RESULT;
 }
 
-//** BnEccAdd()
+//*** BnEccAdd()
 // This function does addition of two points. Since this is not implemented
 // in LibTomCrypt() will try to trick it by doing multiply with scalar of 1.
 // I have no idea if this will work and it's not needed unless MQV or the SM2

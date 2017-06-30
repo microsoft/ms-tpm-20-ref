@@ -33,21 +33,22 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+//** Introduction
+
+// This file contains the structures and data definitions for the symmetric tests.
+// This file references the header file that contains the actual test vectors. This
+// organization was chosen so that the program that is used to generate the test
+// vector values does not have to also re-generate this data.
 #ifndef     SELF_TEST_DATA
 #error  "This file many only be included in AlgorithmTests.c"
 #endif
 
 #ifndef     _SYMMETRIC_TEST_H
 #define     _SYMMETRIC_TEST_H
-
-// This file contains the structures and data definitions for the symmetric tests.
-// This file references the header file that contains the actual test vectors. This
-// organization was chosen so that the program that is used to generate the test
-// vector values does not have to also re-generate this data.
-
 #include    "SymmetricTestData.h"
-//*** Symmetric Test Structures
 
+
+//** Symmetric Test Structures
 
 const SYMMETRIC_TEST_VECTOR   c_symTestValues[NUM_SYMS] = {
 #undef  COMMA

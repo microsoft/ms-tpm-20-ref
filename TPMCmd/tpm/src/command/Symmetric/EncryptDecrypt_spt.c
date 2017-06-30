@@ -35,6 +35,7 @@
 
 #include "Tpm.h"
 #include "EncryptDecrypt_fp.h"
+#include "EncryptDecrypt_spt_fp.h"
 
 #ifdef TPM_CC_EncryptDecrypt2
 
@@ -69,6 +70,7 @@ EncryptDecryptShared(
     BOOL                 OK;
 // Input Validation
     symKey = HandleToObject(keyHandleIn);
+//??    mode = symKey->publicArea.parameters.symDetail.sym.mode.sym;
     mode = symKey->publicArea.parameters.symDetail.sym.mode.sym;
 
     // The input key should be a symmetric key
@@ -82,6 +84,10 @@ EncryptDecryptShared(
         OK = OK && symKey->publicArea.objectAttributes.sign == SET;
     if(!OK)
         return TPM_RCS_ATTRIBUTES + RC_EncryptDecrypt_keyHandle;
+
+    // Make sure that key is an encrypt/decrypt key and not SMAC
+    if(!CryptSymModeIsValid(mode, TRUE))
+       return TPM_RCS_MODE + RC_EncryptDecrypt_keyHandle; 
     
     // If the key mode is not TPM_ALG_NULL...
     // or TPM_ALG_NULL
@@ -98,6 +104,9 @@ EncryptDecryptShared(
             return TPM_RCS_MODE + RC_EncryptDecrypt_mode;
         mode = modeIn;
     }
+
+  
+
     // The input iv for ECB mode should be an Empty Buffer.  All the other modes
     // should have an iv size same as encryption block size
     keySize = symKey->publicArea.parameters.symDetail.sym.keyBits.sym;
@@ -112,13 +121,13 @@ EncryptDecryptShared(
     // If it was not supported the unmarshaling code would have rejected it before
     // this function were called. This means that, depending on the implementation,
     // the check could be redundant but it doesn't hurt.
-    if(((modeIn == ALG_ECB_VALUE) && (ivIn->t.size != 0))
-       || ((modeIn != ALG_ECB_VALUE) && (ivIn->t.size != blockSize)))
+    if(((mode == ALG_ECB_VALUE) && (ivIn->t.size != 0))
+       || ((mode != ALG_ECB_VALUE) && (ivIn->t.size != blockSize)))
         return TPM_RCS_SIZE + RC_EncryptDecrypt_ivIn;
 
     // The input data size of CBC mode or ECB mode must be an even multiple of
     // the symmetric algorithm's block size
-    if(((modeIn == ALG_CBC_VALUE) || (modeIn == ALG_ECB_VALUE))
+    if(((mode == ALG_CBC_VALUE) || (mode == ALG_ECB_VALUE))
        && ((inData->t.size % blockSize) != 0))
         return TPM_RCS_SIZE + RC_EncryptDecrypt_inData;
 

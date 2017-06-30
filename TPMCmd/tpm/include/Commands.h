@@ -32,10 +32,11 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 /*(Auto)
 
     Created by TpmStructures Version 2.7 Sept 13, 2016
-    This file created on Sep 22, 2016, 05:27:02PM 
+    This file created on Mar 22, 2017, 01:51:27PM 
 
 */
 
@@ -144,6 +145,9 @@
 #ifdef TPM_CC_HMAC
     #include "HMAC_fp.h"
 #endif
+#ifdef TPM_CC_MAC
+    #include "MAC_fp.h"
+#endif
 
 // Random Number Generator
 #ifdef TPM_CC_GetRandom
@@ -156,6 +160,9 @@
 // Hash/HMAC/Event Sequences
 #ifdef TPM_CC_HMAC_Start
     #include "HMAC_Start_fp.h"
+#endif
+#ifdef TPM_CC_MAC_Start
+    #include "MAC_Start_fp.h"
 #endif
 #ifdef TPM_CC_HashSequenceStart
     #include "HashSequenceStart_fp.h"
@@ -424,6 +431,17 @@
 #endif
 #ifdef TPM_CC_NV_Certify
     #include "NV_Certify_fp.h"
+#endif
+
+// Attached Components
+#ifdef TPM_CC_AC_GetCapability
+    #include "AC_GetCapability_fp.h"
+#endif
+#ifdef TPM_CC_AC_Send
+    #include "AC_Send_fp.h"
+#endif
+#ifdef TPM_CC_Policy_AC_SendSelect
+    #include "Policy_AC_SendSelect_fp.h"
 #endif
 
 // Vendor Specific

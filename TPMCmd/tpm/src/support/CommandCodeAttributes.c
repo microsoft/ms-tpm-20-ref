@@ -431,9 +431,18 @@ IsWriteOperation(
         switch(s_ccAttr[commandIndex].commandIndex)
         {
             case TPM_CC_NV_Write:
+#if CC_NV_Increment
             case TPM_CC_NV_Increment:
+#endif
+#if CC_NV_SetBits
             case TPM_CC_NV_SetBits:
+#endif
+#if CC_NV_Extend
             case TPM_CC_NV_Extend:
+#endif
+#if CC_AC_Send
+            case TPM_CC_AC_Send:
+#endif
             // NV write lock counts as a write operation for authorization purposes.
             // We check to see if the NV is write locked before we do the
             // authorization. If it is locked, we fail the command early.

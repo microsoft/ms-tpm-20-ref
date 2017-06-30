@@ -77,9 +77,14 @@
 // the 'gp' PERSISTEND_DATA structure in RAM and mapped to locations in NV.
 //
 
-//** Includes, Defines and Data Definitions
+//** Includes, Defines
 #define NV_C
 #include    "Tpm.h"
+
+// ************************************************
+//** Functions
+// ************************************************
+
 
 //*** NvInitStatic()
 // This function initializes the static variables used in the NV subsystem.
@@ -94,10 +99,6 @@ NvInitStatic(
     s_evictNvEnd = (NV_REF)NV_MEMORY_SIZE;
     return;
 }
-
-// ************************************************
-//** Externally Accessible Functions
-// ************************************************
 
 //*** NvCheckState()
 // Function to check the NV state by accessing the platform-specific function
@@ -177,7 +178,7 @@ NvManufacture(
     // Clear the RAM used for Orderly Index data
     MemorySet(s_indexOrderlyRam, 0, RAM_INDEX_SPACE);
     // Write that Orderly Index data to NV
-    NvWrite(NV_ORDERLY_DATA, sizeof(s_indexOrderlyRam), s_indexOrderlyRam);
+    NvUpdateIndexOrderlyData();
     // Initialize the next offset of the first entry in evict/index list to 0 (the
     // end of list marker) and the initial s_maxCounterValue;
     NvSetMaxCount(0);

@@ -65,11 +65,11 @@ TPM2_Clear(
 // Internal Data Update
 
     // Reset storage hierarchy seed from RNG
-    CryptRandomGenerate(PRIMARY_SEED_SIZE, gp.SPSeed.t.buffer);
+    CryptRandomGenerate(sizeof(gp.SPSeed.t.buffer), gp.SPSeed.t.buffer);
 
     // Create new shProof and ehProof value from RNG
-    CryptRandomGenerate(PROOF_SIZE, gp.shProof.t.buffer);
-    CryptRandomGenerate(PROOF_SIZE, gp.ehProof.t.buffer);
+    CryptRandomGenerate(sizeof(gp.shProof.t.buffer), gp.shProof.t.buffer);
+    CryptRandomGenerate(sizeof(gp.ehProof.t.buffer), gp.ehProof.t.buffer);
 
     // Enable storage and endorsement hierarchy
     gc.shEnable = gc.ehEnable = TRUE;

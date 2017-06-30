@@ -93,7 +93,7 @@ TicketComputeVerified(
     TPMT_TK_VERIFIED    *ticket         // OUT: verified ticket
     )
 {
-    TPM2B_AUTH          *proof;
+    TPM2B_PROOF         *proof;
     HMAC_STATE           hmacState;
 //
     // Fill in ticket fields
@@ -147,7 +147,7 @@ TicketComputeAuth(
     TPMT_TK_AUTH        *ticket         // OUT: Created ticket
     )
 {
-    TPM2B_AUTH          *proof;
+    TPM2B_PROOF         *proof;
     HMAC_STATE           hmacState;
 //
     // Get proper proof
@@ -206,7 +206,7 @@ TicketComputeHashCheck(
     TPMT_TK_HASHCHECK   *ticket         // OUT: Created ticket
     )
 {
-    TPM2B_AUTH          *proof;
+    TPM2B_PROOF         *proof;
     HMAC_STATE           hmacState;
 //
     // Get proper proof
@@ -251,7 +251,7 @@ TicketComputeCreation(
     TPMT_TK_CREATION    *ticket         // OUT: created ticket
     )
 {
-    TPM2B_AUTH          *proof;
+    TPM2B_PROOF         *proof;
     HMAC_STATE           hmacState;
 
     // Get proper proof

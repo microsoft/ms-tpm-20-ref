@@ -106,7 +106,6 @@ IsDAExempted(
 // return type: TPM_RC
 //  TPM_RC_AUTH_FAIL    authorization failure that caused DA lockout to increment
 //  TPM_RC_BAD_AUTH     authorization failure did not cause DA lockout to increment
-
 static TPM_RC
 IncrementLockout(
     UINT32           sessionIndex
@@ -664,7 +663,7 @@ GetCpHash(
 // This function computes the template hash and compares it to the session
 // templateHash. It is the hash of the second parameter
 // assuming that the command is TPM2_Create(), TPM2_CreatePrimary(), or
-// TPM2_Derive()
+// TPM2_CreateLoaded()
 static BOOL
 CompareTemplateHash(
     COMMAND         *command,       // IN: parsing structure
@@ -714,7 +713,7 @@ CompareTemplateHash(
     return(MemoryEqual2B(&session->u1.templateHash.b, &tHash.b));
 }
 
-//*** ComparNameHash()
+//*** CompareNameHash()
 // This function computes the name hash and compares it to the nameHash in the
 // session data.
 BOOL
@@ -738,7 +737,6 @@ CompareNameHash(
     // and compare
     return MemoryEqual(session->u1.nameHash.t.buffer, nameHash.t.buffer,
                        nameHash.t.size);
-
 }
 
 //*** CheckPWAuthSession()
@@ -1353,7 +1351,7 @@ CheckLockedOut(
         if(gp.failedTries >= gp.maxTries)
             return TPM_RC_LOCKOUT;
 #ifdef USE_DA_USED
-	    // If the daUsed flag is not SET, then no DA validation until the
+        // If the daUsed flag is not SET, then no DA validation until the
         // daUsed state is written to NV
         if(!g_daUsed)
         {

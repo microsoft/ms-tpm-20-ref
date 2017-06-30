@@ -33,6 +33,9 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+//** Introduction
+// This file contains the code for prime validation.
+
 #include "Tpm.h"
 #include "CryptPrime_fp.h"
 
@@ -46,6 +49,8 @@ extern const uint32_t      s_PrimeTableSize;
 extern const uint32_t      s_PrimesInTable;
 extern const unsigned char s_PrimeTable[];
 extern bigConst            s_CompositeOfSmallPrimes;
+
+//** Functions
 
 //*** Root2()
 // This finds ceil(sqrt(n)) to use as a stopping point for searching the prime
@@ -79,7 +84,7 @@ Root2(
 }
 
 //*** IsPrimeInt()
-// This will do a test of an word up to 32-bits in size.
+// This will do a test of a word of up to 32-bits in size.
 BOOL
 IsPrimeInt(
     uint32_t            n

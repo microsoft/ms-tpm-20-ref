@@ -410,8 +410,10 @@ CryptEccGetParameters(
         BnTo2B(data->prime, &parameters->p.b, 0);
         BnTo2B(data->a, &parameters->a.b, 0);
         BnTo2B(data->b, &parameters->b.b, 0);
-        BnTo2B(data->base.x, &parameters->gX.b, parameters->p.t.size);
-        BnTo2B(data->base.y, &parameters->gY.b, parameters->p.t.size);
+       BnTo2B(data->base.x, &parameters->gX.b, parameters->p.t.size);
+       BnTo2B(data->base.y, &parameters->gY.b, parameters->p.t.size);
+//        BnTo2B(data->base.x, &parameters->gX.b, 0);
+//        BnTo2B(data->base.y, &parameters->gY.b, 0);
         BnTo2B(data->order, &parameters->n.b, 0);
         BnTo2B(data->h, &parameters->h.b, 0);
     }
@@ -512,7 +514,7 @@ CryptEccIsValidPrivateKey(
 // return type: TPM_RC
 //  TPM_RC_NO_RESULTS     result of multiplication is a point at infinity
 //  TPM_RC_ECC_POINT      'S' or 'Q' is not on the curve
-//  TPM_RC_VALUE          'd' or 'u' is not 0 < d < n
+//  TPM_RC_VALUE          'd' or 'u' is not < n
 TPM_RC
 BnPointMult(
     bigPoint             R,         // OUT: computed point

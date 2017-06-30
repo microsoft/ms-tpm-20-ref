@@ -520,17 +520,27 @@ BnShiftRight(
 }
 
 //*** BnGetRandomBits()
+// This function gets random bits for use in various places. To make sure that the
+// number is generated in a portable format, it is created as a TPM2B and then
+// converted to the internal format.
+//
+// One consequence of the generation scheme is that, if the number of bits requested
+// is not a multiple of 8, then the high-order bits are set to zero. This would come
+// into play when generating a 521-bit ECC key. A 66-byte (528-bit) value is 
+// generated an the high order 7 bits are masked off (CLEAR).
 LIB_EXPORT BOOL
 BnGetRandomBits(
     bigNum           n,
     size_t           bits,
     RAND_STATE      *rand
-    )
+)
 {
-    n->size = BITS_TO_CRYPT_WORDS(bits);
-    if(n->size > n->allocated)
-        n->size = n->allocated;
-    DRBG_Generate(rand, (BYTE *)n->d, (UINT16)(n->size * RADIX_BYTES));
+    TPM2B_TYPE(LARGEST, LARGEST_NUMBER);
+    TPM2B_LARGEST   large;
+//
+    large.b.size = (UINT16)BITS_TO_BYTES(bits);
+    DRBG_Generate(rand, large.t.buffer, large.t.size);
+    BnFrom2B(n, &large.b);
     BnMaskBits(n, bits);
     return TRUE;
 }

@@ -34,10 +34,10 @@
  */
 /*(Auto)
  *    Created by TpmMarshal.pl version 2.1 September 17, 2015
- *    This file created on Sep 27, 2016, 04:02:56 PM
+ *    This file created on Apr 10, 2017, 04:58:00 PM
  
     Processed by TpmReferencesAndReturns Version 1.2, July 27, 2015
-    Date: Sep 27, 2016 Time: 04:02:57 PM
+    Date: Apr 10, 2017 Time: 04:58:00 PM
 
 */
 #include "Tpm.h"
@@ -989,7 +989,23 @@ TPMI_RH_NV_INDEX_Unmarshal(TPMI_RH_NV_INDEX *target, BYTE **buffer, INT32 *size)
 //   TPMI_RH_NV_INDEX_Marshal changed to #define
 
 
-// Table 2:60 - Definition of TPMI_ALG_HASH Type  (TypeTable)
+// Table 2:60 - Definition of TPMI_RH_AC Type  (TypeTable)
+TPM_RC
+TPMI_RH_AC_Unmarshal(TPMI_RH_AC *target, BYTE **buffer, INT32 *size)
+{
+    TPM_RC    result;
+    result = TPM_HANDLE_Unmarshal((TPM_HANDLE *)target, buffer, size);
+    if(result != TPM_RC_SUCCESS)
+        return result;
+    if((*target < AC_FIRST) || (*target > AC_LAST))
+    return TPM_RC_VALUE;
+    return TPM_RC_SUCCESS;
+}
+
+//   TPMI_RH_AC_Marshal changed to #define
+
+
+// Table 2:61 - Definition of TPMI_ALG_HASH Type  (TypeTable)
 TPM_RC
 TPMI_ALG_HASH_Unmarshal(TPMI_ALG_HASH *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -1027,7 +1043,7 @@ TPMI_ALG_HASH_Unmarshal(TPMI_ALG_HASH *target, BYTE **buffer, INT32 *size, BOOL 
 //   TPMI_ALG_HASH_Marshal changed to #define
 
 
-// Table 2:61 - Definition of TPMI_ALG_ASYM Type (TypeTable)
+// Table 2:62 - Definition of TPMI_ALG_ASYM Type (TypeTable)
 TPM_RC
 TPMI_ALG_ASYM_Unmarshal(TPMI_ALG_ASYM *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -1056,7 +1072,7 @@ TPMI_ALG_ASYM_Unmarshal(TPMI_ALG_ASYM *target, BYTE **buffer, INT32 *size, BOOL 
 //   TPMI_ALG_ASYM_Marshal changed to #define
 
 
-// Table 2:62 - Definition of TPMI_ALG_SYM Type (TypeTable)
+// Table 2:63 - Definition of TPMI_ALG_SYM Type (TypeTable)
 TPM_RC
 TPMI_ALG_SYM_Unmarshal(TPMI_ALG_SYM *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -1094,7 +1110,7 @@ TPMI_ALG_SYM_Unmarshal(TPMI_ALG_SYM *target, BYTE **buffer, INT32 *size, BOOL fl
 //   TPMI_ALG_SYM_Marshal changed to #define
 
 
-// Table 2:63 - Definition of TPMI_ALG_SYM_OBJECT Type (TypeTable)
+// Table 2:64 - Definition of TPMI_ALG_SYM_OBJECT Type (TypeTable)
 TPM_RC
 TPMI_ALG_SYM_OBJECT_Unmarshal(TPMI_ALG_SYM_OBJECT *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -1129,7 +1145,7 @@ TPMI_ALG_SYM_OBJECT_Unmarshal(TPMI_ALG_SYM_OBJECT *target, BYTE **buffer, INT32 
 //   TPMI_ALG_SYM_OBJECT_Marshal changed to #define
 
 
-// Table 2:64 - Definition of TPMI_ALG_SYM_MODE Type (TypeTable)
+// Table 2:65 - Definition of TPMI_ALG_SYM_MODE Type (TypeTable)
 TPM_RC
 TPMI_ALG_SYM_MODE_Unmarshal(TPMI_ALG_SYM_MODE *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -1153,6 +1169,9 @@ TPMI_ALG_SYM_MODE_Unmarshal(TPMI_ALG_SYM_MODE *target, BYTE **buffer, INT32 *siz
 #if         ALG_ECB
         case TPM_ALG_ECB:
 #endif // ALG_ECB
+#if         ALG_CMAC
+        case TPM_ALG_CMAC:
+#endif // ALG_CMAC
             break;
         case TPM_ALG_NULL:
         if (flag)
@@ -1167,7 +1186,7 @@ TPMI_ALG_SYM_MODE_Unmarshal(TPMI_ALG_SYM_MODE *target, BYTE **buffer, INT32 *siz
 //   TPMI_ALG_SYM_MODE_Marshal changed to #define
 
 
-// Table 2:65 - Definition of TPMI_ALG_KDF Type (TypeTable)
+// Table 2:66 - Definition of TPMI_ALG_KDF Type (TypeTable)
 TPM_RC
 TPMI_ALG_KDF_Unmarshal(TPMI_ALG_KDF *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -1202,7 +1221,7 @@ TPMI_ALG_KDF_Unmarshal(TPMI_ALG_KDF *target, BYTE **buffer, INT32 *size, BOOL fl
 //   TPMI_ALG_KDF_Marshal changed to #define
 
 
-// Table 2:66 - Definition of TPMI_ALG_SIG_SCHEME Type (TypeTable)
+// Table 2:67 - Definition of TPMI_ALG_SIG_SCHEME Type (TypeTable)
 TPM_RC
 TPMI_ALG_SIG_SCHEME_Unmarshal(TPMI_ALG_SIG_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -1246,7 +1265,7 @@ TPMI_ALG_SIG_SCHEME_Unmarshal(TPMI_ALG_SIG_SCHEME *target, BYTE **buffer, INT32 
 //   TPMI_ALG_SIG_SCHEME_Marshal changed to #define
 
 
-// Table 2:67 - Definition of TPMI_ECC_KEY_EXCHANGE Type (TypeTable)
+// Table 2:68 - Definition of TPMI_ECC_KEY_EXCHANGE Type (TypeTable)
 #if         ALG_ECC
 TPM_RC
 TPMI_ECC_KEY_EXCHANGE_Unmarshal(TPMI_ECC_KEY_EXCHANGE *target, BYTE **buffer, INT32 *size, BOOL flag)
@@ -1280,7 +1299,7 @@ TPMI_ECC_KEY_EXCHANGE_Unmarshal(TPMI_ECC_KEY_EXCHANGE *target, BYTE **buffer, IN
 #endif // ALG_ECC
 
 
-// Table 2:68 - Definition of TPMI_ST_COMMAND_TAG Type (TypeTable)
+// Table 2:69 - Definition of TPMI_ST_COMMAND_TAG Type (TypeTable)
 TPM_RC
 TPMI_ST_COMMAND_TAG_Unmarshal(TPMI_ST_COMMAND_TAG *target, BYTE **buffer, INT32 *size)
 {
@@ -1299,6 +1318,85 @@ TPMI_ST_COMMAND_TAG_Unmarshal(TPMI_ST_COMMAND_TAG *target, BYTE **buffer, INT32 
 }
 
 //   TPMI_ST_COMMAND_TAG_Marshal changed to #define
+
+
+// Table 2:70 - Definition of TPMI_ALG_MAC_SCHEME Type (TypeTable)
+TPM_RC
+TPMI_ALG_MAC_SCHEME_Unmarshal(TPMI_ALG_MAC_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
+{
+    TPM_RC    result;
+    result = TPM_ALG_ID_Unmarshal((TPM_ALG_ID *)target, buffer, size);
+    if(result != TPM_RC_SUCCESS)
+        return result;
+    switch (*target) {
+#if         ALG_CMAC
+        case TPM_ALG_CMAC:
+#endif // ALG_CMAC
+#if         ALG_SHA1
+        case TPM_ALG_SHA1:
+#endif // ALG_SHA1
+#if         ALG_SHA256
+        case TPM_ALG_SHA256:
+#endif // ALG_SHA256
+#if         ALG_SHA384
+        case TPM_ALG_SHA384:
+#endif // ALG_SHA384
+#if         ALG_SHA512
+        case TPM_ALG_SHA512:
+#endif // ALG_SHA512
+#if         ALG_SM3_256
+        case TPM_ALG_SM3_256:
+#endif // ALG_SM3_256
+            break;
+        case TPM_ALG_NULL:
+        if (flag)
+            break;
+        return TPM_RC_SYMMETRIC;
+        default:
+            return TPM_RC_SYMMETRIC;
+    }
+    return TPM_RC_SUCCESS;
+}
+
+//   TPMI_ALG_MAC_SCHEME_Marshal changed to #define
+
+
+// Table 2:70 - Definition of TPMI_ALG_CIPHER_MODE Type (TypeTable)
+TPM_RC
+TPMI_ALG_CIPHER_MODE_Unmarshal(TPMI_ALG_CIPHER_MODE *target, BYTE **buffer, INT32 *size, BOOL flag)
+{
+    TPM_RC    result;
+    result = TPM_ALG_ID_Unmarshal((TPM_ALG_ID *)target, buffer, size);
+    if(result != TPM_RC_SUCCESS)
+        return result;
+    switch (*target) {
+#if         ALG_CTR
+        case TPM_ALG_CTR:
+#endif // ALG_CTR
+#if         ALG_OFB
+        case TPM_ALG_OFB:
+#endif // ALG_OFB
+#if         ALG_CBC
+        case TPM_ALG_CBC:
+#endif // ALG_CBC
+#if         ALG_CFB
+        case TPM_ALG_CFB:
+#endif // ALG_CFB
+#if         ALG_ECB
+        case TPM_ALG_ECB:
+#endif // ALG_ECB
+            break;
+        case TPM_ALG_NULL:
+        if (flag)
+            break;
+        return TPM_RC_MODE;
+        default:
+            return TPM_RC_MODE;
+    }
+    return TPM_RC_SUCCESS;
+}
+
+//   TPMI_ALG_CIPHER_MODE_Marshal changed to #define
 TPM_RC
 TPMS_EMPTY_Unmarshal(TPMS_EMPTY *target, BYTE **buffer, INT32 *size)
 {
@@ -1320,7 +1418,7 @@ TPMS_EMPTY_Marshal(TPMS_EMPTY *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:70 - Definition of TPMS_ALGORITHM_DESCRIPTION Structure  (StructureTable)
+// Table 2:71 - Definition of TPMS_ALGORITHM_DESCRIPTION Structure  (StructureTable)
 TPM_RC
 TPMS_ALGORITHM_DESCRIPTION_Unmarshal(TPMS_ALGORITHM_DESCRIPTION *target, BYTE **buffer, INT32 *size)
 {
@@ -1342,7 +1440,7 @@ TPMS_ALGORITHM_DESCRIPTION_Marshal(TPMS_ALGORITHM_DESCRIPTION *source, BYTE **bu
 }
 
 
-// Table 2:71 - Definition of TPMU_HA Union  (UnionTable)
+// Table 2:72 - Definition of TPMU_HA Union  (UnionTable)
 TPM_RC
 TPMU_HA_Unmarshal(TPMU_HA *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -1404,7 +1502,7 @@ TPMU_HA_Marshal(TPMU_HA *source, BYTE **buffer, INT32 *size, UINT32 selector)
 }
 
 
-// Table 2:72 - Definition of TPMT_HA Structure  (StructureTable)
+// Table 2:73 - Definition of TPMT_HA Structure  (StructureTable)
 TPM_RC
 TPMT_HA_Unmarshal(TPMT_HA *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -1426,7 +1524,7 @@ TPMT_HA_Marshal(TPMT_HA *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:73 - Definition of TPM2B_DIGEST Structure (StructureTable)
+// Table 2:74 - Definition of TPM2B_DIGEST Structure (StructureTable)
 TPM_RC
 TPM2B_DIGEST_Unmarshal(TPM2B_DIGEST *target, BYTE **buffer, INT32 *size)
 {
@@ -1453,7 +1551,7 @@ TPM2B_DIGEST_Marshal(TPM2B_DIGEST *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:74 - Definition of TPM2B_DATA Structure (StructureTable)
+// Table 2:75 - Definition of TPM2B_DATA Structure (StructureTable)
 TPM_RC
 TPM2B_DATA_Unmarshal(TPM2B_DATA *target, BYTE **buffer, INT32 *size)
 {
@@ -1480,25 +1578,25 @@ TPM2B_DATA_Marshal(TPM2B_DATA *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:75 - Definition of Types for TPM2B_NONCE (TypesTable)
-//   TPM2B_DIGEST definition from table 2:75
+// Table 2:76 - Definition of Types for TPM2B_NONCE (TypesTable)
+//   TPM2B_DIGEST definition from table 2:76
 //   TPM2B_NONCE_Unmarshal changed to #define
 //   TPM2B_NONCE_Marshal changed to #define
 
 
-// Table 2:76 - Definition of Types for TPM2B_AUTH (TypesTable)
-//   TPM2B_DIGEST definition from table 2:76
+// Table 2:77 - Definition of Types for TPM2B_AUTH (TypesTable)
+//   TPM2B_DIGEST definition from table 2:77
 //   TPM2B_AUTH_Unmarshal changed to #define
 //   TPM2B_AUTH_Marshal changed to #define
 
 
-// Table 2:77 - Definition of Types for TPM2B_OPERAND (TypesTable)
-//   TPM2B_DIGEST definition from table 2:77
+// Table 2:78 - Definition of Types for TPM2B_OPERAND (TypesTable)
+//   TPM2B_DIGEST definition from table 2:78
 //   TPM2B_OPERAND_Unmarshal changed to #define
 //   TPM2B_OPERAND_Marshal changed to #define
 
 
-// Table 2:78 - Definition of TPM2B_EVENT Structure (StructureTable)
+// Table 2:79 - Definition of TPM2B_EVENT Structure (StructureTable)
 TPM_RC
 TPM2B_EVENT_Unmarshal(TPM2B_EVENT *target, BYTE **buffer, INT32 *size)
 {
@@ -1525,7 +1623,7 @@ TPM2B_EVENT_Marshal(TPM2B_EVENT *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:79 - Definition of TPM2B_MAX_BUFFER Structure (StructureTable)
+// Table 2:80 - Definition of TPM2B_MAX_BUFFER Structure (StructureTable)
 TPM_RC
 TPM2B_MAX_BUFFER_Unmarshal(TPM2B_MAX_BUFFER *target, BYTE **buffer, INT32 *size)
 {
@@ -1552,7 +1650,7 @@ TPM2B_MAX_BUFFER_Marshal(TPM2B_MAX_BUFFER *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:80 - Definition of TPM2B_MAX_NV_BUFFER Structure (StructureTable)
+// Table 2:81 - Definition of TPM2B_MAX_NV_BUFFER Structure (StructureTable)
 TPM_RC
 TPM2B_MAX_NV_BUFFER_Unmarshal(TPM2B_MAX_NV_BUFFER *target, BYTE **buffer, INT32 *size)
 {
@@ -1579,13 +1677,34 @@ TPM2B_MAX_NV_BUFFER_Marshal(TPM2B_MAX_NV_BUFFER *source, BYTE **buffer, INT32 *s
 }
 
 
-// Table 2:81 - Definition of Types for TPM2B_TIMEOUT (TypesTable)
-//   TPM2B_DIGEST definition from table 2:81
-//   TPM2B_TIMEOUT_Unmarshal changed to #define
-//   TPM2B_TIMEOUT_Marshal changed to #define
+// Table 2:82 - Definition of TPM2B_TIMEOUT Structure  (StructureTable)
+TPM_RC
+TPM2B_TIMEOUT_Unmarshal(TPM2B_TIMEOUT *target, BYTE **buffer, INT32 *size)
+{
+    TPM_RC    result;
+    result = UINT16_Unmarshal((UINT16 *)&(target->t.size), buffer, size);
+    if(result != TPM_RC_SUCCESS)
+        return result;
+    if((target->t.size) > sizeof(UINT64))
+        return TPM_RC_SIZE;
+    result = BYTE_Array_Unmarshal((BYTE *)(target->t.buffer), buffer, size, (INT32)(target->t.size));
+    return result;
+}
+
+UINT16
+TPM2B_TIMEOUT_Marshal(TPM2B_TIMEOUT *source, BYTE **buffer, INT32 *size)
+{
+    UINT16    result = 0;
+    result = (UINT16)(result + UINT16_Marshal((UINT16 *)&(source->t.size), buffer, size));
+    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
+    if(source->t.size == 0)
+        return result;
+    result = (UINT16)(result + BYTE_Array_Marshal((BYTE *)(source->t.buffer), buffer, size, (INT32)(source->t.size)));
+    return result;
+}
 
 
-// Table 2:82 - Definition of TPM2B_IV Structure  (StructureTable)
+// Table 2:83 - Definition of TPM2B_IV Structure  (StructureTable)
 TPM_RC
 TPM2B_IV_Unmarshal(TPM2B_IV *target, BYTE **buffer, INT32 *size)
 {
@@ -1612,10 +1731,10 @@ TPM2B_IV_Marshal(TPM2B_IV *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:83 - Definition of TPMU_NAME Union  (UnionTable)
+// Table 2:84 - Definition of TPMU_NAME Union  (UnionTable)
 
 
-// Table 2:84 - Definition of TPM2B_NAME Structure (StructureTable)
+// Table 2:85 - Definition of TPM2B_NAME Structure (StructureTable)
 TPM_RC
 TPM2B_NAME_Unmarshal(TPM2B_NAME *target, BYTE **buffer, INT32 *size)
 {
@@ -1642,7 +1761,7 @@ TPM2B_NAME_Marshal(TPM2B_NAME *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:85 - Definition of TPMS_PCR_SELECT Structure (StructureTable)
+// Table 2:86 - Definition of TPMS_PCR_SELECT Structure (StructureTable)
 TPM_RC
 TPMS_PCR_SELECT_Unmarshal(TPMS_PCR_SELECT *target, BYTE **buffer, INT32 *size)
 {
@@ -1668,7 +1787,7 @@ TPMS_PCR_SELECT_Marshal(TPMS_PCR_SELECT *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:86 - Definition of TPMS_PCR_SELECTION Structure (StructureTable)
+// Table 2:87 - Definition of TPMS_PCR_SELECTION Structure (StructureTable)
 TPM_RC
 TPMS_PCR_SELECTION_Unmarshal(TPMS_PCR_SELECTION *target, BYTE **buffer, INT32 *size)
 {
@@ -1698,7 +1817,7 @@ TPMS_PCR_SELECTION_Marshal(TPMS_PCR_SELECTION *source, BYTE **buffer, INT32 *siz
 }
 
 
-// Table 2:89 - Definition of TPMT_TK_CREATION Structure (StructureTable)
+// Table 2:90 - Definition of TPMT_TK_CREATION Structure (StructureTable)
 TPM_RC
 TPMT_TK_CREATION_Unmarshal(TPMT_TK_CREATION *target, BYTE **buffer, INT32 *size)
 {
@@ -1726,7 +1845,7 @@ TPMT_TK_CREATION_Marshal(TPMT_TK_CREATION *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:90 - Definition of TPMT_TK_VERIFIED Structure (StructureTable)
+// Table 2:91 - Definition of TPMT_TK_VERIFIED Structure (StructureTable)
 TPM_RC
 TPMT_TK_VERIFIED_Unmarshal(TPMT_TK_VERIFIED *target, BYTE **buffer, INT32 *size)
 {
@@ -1754,7 +1873,7 @@ TPMT_TK_VERIFIED_Marshal(TPMT_TK_VERIFIED *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:91 - Definition of TPMT_TK_AUTH Structure (StructureTable)
+// Table 2:92 - Definition of TPMT_TK_AUTH Structure (StructureTable)
 TPM_RC
 TPMT_TK_AUTH_Unmarshal(TPMT_TK_AUTH *target, BYTE **buffer, INT32 *size)
 {
@@ -1783,7 +1902,7 @@ TPMT_TK_AUTH_Marshal(TPMT_TK_AUTH *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:92 - Definition of TPMT_TK_HASHCHECK Structure (StructureTable)
+// Table 2:93 - Definition of TPMT_TK_HASHCHECK Structure (StructureTable)
 TPM_RC
 TPMT_TK_HASHCHECK_Unmarshal(TPMT_TK_HASHCHECK *target, BYTE **buffer, INT32 *size)
 {
@@ -1811,7 +1930,7 @@ TPMT_TK_HASHCHECK_Marshal(TPMT_TK_HASHCHECK *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:93 - Definition of TPMS_ALG_PROPERTY Structure  (StructureTable)
+// Table 2:94 - Definition of TPMS_ALG_PROPERTY Structure  (StructureTable)
 TPM_RC
 TPMS_ALG_PROPERTY_Unmarshal(TPMS_ALG_PROPERTY *target, BYTE **buffer, INT32 *size)
 {
@@ -1833,7 +1952,7 @@ TPMS_ALG_PROPERTY_Marshal(TPMS_ALG_PROPERTY *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:94 - Definition of TPMS_TAGGED_PROPERTY Structure  (StructureTable)
+// Table 2:95 - Definition of TPMS_TAGGED_PROPERTY Structure  (StructureTable)
 TPM_RC
 TPMS_TAGGED_PROPERTY_Unmarshal(TPMS_TAGGED_PROPERTY *target, BYTE **buffer, INT32 *size)
 {
@@ -1855,7 +1974,7 @@ TPMS_TAGGED_PROPERTY_Marshal(TPMS_TAGGED_PROPERTY *source, BYTE **buffer, INT32 
 }
 
 
-// Table 2:95 - Definition of TPMS_TAGGED_PCR_SELECT Structure  (StructureTable)
+// Table 2:96 - Definition of TPMS_TAGGED_PCR_SELECT Structure  (StructureTable)
 TPM_RC
 TPMS_TAGGED_PCR_SELECT_Unmarshal(TPMS_TAGGED_PCR_SELECT *target, BYTE **buffer, INT32 *size)
 {
@@ -1885,7 +2004,7 @@ TPMS_TAGGED_PCR_SELECT_Marshal(TPMS_TAGGED_PCR_SELECT *source, BYTE **buffer, IN
 }
 
 
-// Table 2:96 - Definition of TPMS_TAGGED_POLICY Structure  (StructureTable)
+// Table 2:97 - Definition of TPMS_TAGGED_POLICY Structure  (StructureTable)
 TPM_RC
 TPMS_TAGGED_POLICY_Unmarshal(TPMS_TAGGED_POLICY *target, BYTE **buffer, INT32 *size)
 {
@@ -1907,7 +2026,7 @@ TPMS_TAGGED_POLICY_Marshal(TPMS_TAGGED_POLICY *source, BYTE **buffer, INT32 *siz
 }
 
 
-// Table 2:97 - Definition of TPML_CC Structure (StructureTable)
+// Table 2:98 - Definition of TPML_CC Structure (StructureTable)
 TPM_RC
 TPML_CC_Unmarshal(TPML_CC *target, BYTE **buffer, INT32 *size)
 {
@@ -1931,7 +2050,7 @@ TPML_CC_Marshal(TPML_CC *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:98 - Definition of TPML_CCA Structure  (StructureTable)
+// Table 2:99 - Definition of TPML_CCA Structure  (StructureTable)
 TPM_RC
 TPML_CCA_Unmarshal(TPML_CCA *target, BYTE **buffer, INT32 *size)
 {
@@ -1955,7 +2074,7 @@ TPML_CCA_Marshal(TPML_CCA *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:99 - Definition of TPML_ALG Structure (StructureTable)
+// Table 2:100 - Definition of TPML_ALG Structure (StructureTable)
 TPM_RC
 TPML_ALG_Unmarshal(TPML_ALG *target, BYTE **buffer, INT32 *size)
 {
@@ -1979,7 +2098,7 @@ TPML_ALG_Marshal(TPML_ALG *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:100 - Definition of TPML_HANDLE Structure  (StructureTable)
+// Table 2:101 - Definition of TPML_HANDLE Structure  (StructureTable)
 TPM_RC
 TPML_HANDLE_Unmarshal(TPML_HANDLE *target, BYTE **buffer, INT32 *size)
 {
@@ -2003,7 +2122,7 @@ TPML_HANDLE_Marshal(TPML_HANDLE *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:101 - Definition of TPML_DIGEST Structure (StructureTable)
+// Table 2:102 - Definition of TPML_DIGEST Structure (StructureTable)
 TPM_RC
 TPML_DIGEST_Unmarshal(TPML_DIGEST *target, BYTE **buffer, INT32 *size)
 {
@@ -2029,7 +2148,7 @@ TPML_DIGEST_Marshal(TPML_DIGEST *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:102 - Definition of TPML_DIGEST_VALUES Structure (StructureTable)
+// Table 2:103 - Definition of TPML_DIGEST_VALUES Structure (StructureTable)
 TPM_RC
 TPML_DIGEST_VALUES_Unmarshal(TPML_DIGEST_VALUES *target, BYTE **buffer, INT32 *size)
 {
@@ -2053,7 +2172,7 @@ TPML_DIGEST_VALUES_Marshal(TPML_DIGEST_VALUES *source, BYTE **buffer, INT32 *siz
 }
 
 
-// Table 2:103 - Definition of TPML_PCR_SELECTION Structure (StructureTable)
+// Table 2:104 - Definition of TPML_PCR_SELECTION Structure (StructureTable)
 TPM_RC
 TPML_PCR_SELECTION_Unmarshal(TPML_PCR_SELECTION *target, BYTE **buffer, INT32 *size)
 {
@@ -2077,7 +2196,7 @@ TPML_PCR_SELECTION_Marshal(TPML_PCR_SELECTION *source, BYTE **buffer, INT32 *siz
 }
 
 
-// Table 2:104 - Definition of TPML_ALG_PROPERTY Structure  (StructureTable)
+// Table 2:105 - Definition of TPML_ALG_PROPERTY Structure  (StructureTable)
 TPM_RC
 TPML_ALG_PROPERTY_Unmarshal(TPML_ALG_PROPERTY *target, BYTE **buffer, INT32 *size)
 {
@@ -2101,7 +2220,7 @@ TPML_ALG_PROPERTY_Marshal(TPML_ALG_PROPERTY *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:105 - Definition of TPML_TAGGED_TPM_PROPERTY Structure  (StructureTable)
+// Table 2:106 - Definition of TPML_TAGGED_TPM_PROPERTY Structure  (StructureTable)
 TPM_RC
 TPML_TAGGED_TPM_PROPERTY_Unmarshal(TPML_TAGGED_TPM_PROPERTY *target, BYTE **buffer, INT32 *size)
 {
@@ -2125,7 +2244,7 @@ TPML_TAGGED_TPM_PROPERTY_Marshal(TPML_TAGGED_TPM_PROPERTY *source, BYTE **buffer
 }
 
 
-// Table 2:106 - Definition of TPML_TAGGED_PCR_PROPERTY Structure  (StructureTable)
+// Table 2:107 - Definition of TPML_TAGGED_PCR_PROPERTY Structure  (StructureTable)
 TPM_RC
 TPML_TAGGED_PCR_PROPERTY_Unmarshal(TPML_TAGGED_PCR_PROPERTY *target, BYTE **buffer, INT32 *size)
 {
@@ -2149,7 +2268,7 @@ TPML_TAGGED_PCR_PROPERTY_Marshal(TPML_TAGGED_PCR_PROPERTY *source, BYTE **buffer
 }
 
 
-// Table 2:107 - Definition of TPML_ECC_CURVE Structure  (StructureTable)
+// Table 2:108 - Definition of TPML_ECC_CURVE Structure  (StructureTable)
 #if         ALG_ECC
 TPM_RC
 TPML_ECC_CURVE_Unmarshal(TPML_ECC_CURVE *target, BYTE **buffer, INT32 *size)
@@ -2176,7 +2295,7 @@ TPML_ECC_CURVE_Marshal(TPML_ECC_CURVE *source, BYTE **buffer, INT32 *size)
 #endif // ALG_ECC
 
 
-// Table 2:108 - Definition of TPML_TAGGED_POLICY Structure  (StructureTable)
+// Table 2:109 - Definition of TPML_TAGGED_POLICY Structure  (StructureTable)
 TPM_RC
 TPML_TAGGED_POLICY_Unmarshal(TPML_TAGGED_POLICY *target, BYTE **buffer, INT32 *size)
 {
@@ -2200,7 +2319,7 @@ TPML_TAGGED_POLICY_Marshal(TPML_TAGGED_POLICY *source, BYTE **buffer, INT32 *siz
 }
 
 
-// Table 2:109 - Definition of TPMU_CAPABILITIES Union  (UnionTable)
+// Table 2:110 - Definition of TPMU_CAPABILITIES Union  (UnionTable)
 TPM_RC
 TPMU_CAPABILITIES_Unmarshal(TPMU_CAPABILITIES *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -2262,7 +2381,7 @@ TPMU_CAPABILITIES_Marshal(TPMU_CAPABILITIES *source, BYTE **buffer, INT32 *size,
 }
 
 
-// Table 2:110 - Definition of TPMS_CAPABILITY_DATA Structure  (StructureTable)
+// Table 2:111 - Definition of TPMS_CAPABILITY_DATA Structure  (StructureTable)
 TPM_RC
 TPMS_CAPABILITY_DATA_Unmarshal(TPMS_CAPABILITY_DATA *target, BYTE **buffer, INT32 *size)
 {
@@ -2284,7 +2403,7 @@ TPMS_CAPABILITY_DATA_Marshal(TPMS_CAPABILITY_DATA *source, BYTE **buffer, INT32 
 }
 
 
-// Table 2:111 - Definition of TPMS_CLOCK_INFO Structure (StructureTable)
+// Table 2:112 - Definition of TPMS_CLOCK_INFO Structure (StructureTable)
 TPM_RC
 TPMS_CLOCK_INFO_Unmarshal(TPMS_CLOCK_INFO *target, BYTE **buffer, INT32 *size)
 {
@@ -2314,7 +2433,7 @@ TPMS_CLOCK_INFO_Marshal(TPMS_CLOCK_INFO *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:112 - Definition of TPMS_TIME_INFO Structure (StructureTable)
+// Table 2:113 - Definition of TPMS_TIME_INFO Structure (StructureTable)
 TPM_RC
 TPMS_TIME_INFO_Unmarshal(TPMS_TIME_INFO *target, BYTE **buffer, INT32 *size)
 {
@@ -2336,7 +2455,7 @@ TPMS_TIME_INFO_Marshal(TPMS_TIME_INFO *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:113 - Definition of TPMS_TIME_ATTEST_INFO Structure  (StructureTable)
+// Table 2:114 - Definition of TPMS_TIME_ATTEST_INFO Structure  (StructureTable)
 TPM_RC
 TPMS_TIME_ATTEST_INFO_Unmarshal(TPMS_TIME_ATTEST_INFO *target, BYTE **buffer, INT32 *size)
 {
@@ -2358,7 +2477,7 @@ TPMS_TIME_ATTEST_INFO_Marshal(TPMS_TIME_ATTEST_INFO *source, BYTE **buffer, INT3
 }
 
 
-// Table 2:114 - Definition of TPMS_CERTIFY_INFO Structure  (StructureTable)
+// Table 2:115 - Definition of TPMS_CERTIFY_INFO Structure  (StructureTable)
 TPM_RC
 TPMS_CERTIFY_INFO_Unmarshal(TPMS_CERTIFY_INFO *target, BYTE **buffer, INT32 *size)
 {
@@ -2380,7 +2499,7 @@ TPMS_CERTIFY_INFO_Marshal(TPMS_CERTIFY_INFO *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:115 - Definition of TPMS_QUOTE_INFO Structure  (StructureTable)
+// Table 2:116 - Definition of TPMS_QUOTE_INFO Structure  (StructureTable)
 TPM_RC
 TPMS_QUOTE_INFO_Unmarshal(TPMS_QUOTE_INFO *target, BYTE **buffer, INT32 *size)
 {
@@ -2402,7 +2521,7 @@ TPMS_QUOTE_INFO_Marshal(TPMS_QUOTE_INFO *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:116 - Definition of TPMS_COMMAND_AUDIT_INFO Structure  (StructureTable)
+// Table 2:117 - Definition of TPMS_COMMAND_AUDIT_INFO Structure  (StructureTable)
 TPM_RC
 TPMS_COMMAND_AUDIT_INFO_Unmarshal(TPMS_COMMAND_AUDIT_INFO *target, BYTE **buffer, INT32 *size)
 {
@@ -2432,7 +2551,7 @@ TPMS_COMMAND_AUDIT_INFO_Marshal(TPMS_COMMAND_AUDIT_INFO *source, BYTE **buffer, 
 }
 
 
-// Table 2:117 - Definition of TPMS_SESSION_AUDIT_INFO Structure  (StructureTable)
+// Table 2:118 - Definition of TPMS_SESSION_AUDIT_INFO Structure  (StructureTable)
 TPM_RC
 TPMS_SESSION_AUDIT_INFO_Unmarshal(TPMS_SESSION_AUDIT_INFO *target, BYTE **buffer, INT32 *size)
 {
@@ -2454,7 +2573,7 @@ TPMS_SESSION_AUDIT_INFO_Marshal(TPMS_SESSION_AUDIT_INFO *source, BYTE **buffer, 
 }
 
 
-// Table 2:118 - Definition of TPMS_CREATION_INFO Structure  (StructureTable)
+// Table 2:119 - Definition of TPMS_CREATION_INFO Structure  (StructureTable)
 TPM_RC
 TPMS_CREATION_INFO_Unmarshal(TPMS_CREATION_INFO *target, BYTE **buffer, INT32 *size)
 {
@@ -2476,7 +2595,7 @@ TPMS_CREATION_INFO_Marshal(TPMS_CREATION_INFO *source, BYTE **buffer, INT32 *siz
 }
 
 
-// Table 2:119 - Definition of TPMS_NV_CERTIFY_INFO Structure  (StructureTable)
+// Table 2:120 - Definition of TPMS_NV_CERTIFY_INFO Structure  (StructureTable)
 TPM_RC
 TPMS_NV_CERTIFY_INFO_Unmarshal(TPMS_NV_CERTIFY_INFO *target, BYTE **buffer, INT32 *size)
 {
@@ -2502,12 +2621,12 @@ TPMS_NV_CERTIFY_INFO_Marshal(TPMS_NV_CERTIFY_INFO *source, BYTE **buffer, INT32 
 }
 
 
-// Table 2:120 - Definition of TPMI_ST_ATTEST Type  (TypeTable)
+// Table 2:121 - Definition of TPMI_ST_ATTEST Type  (TypeTable)
 //   TPMI_ST_ATTEST_Unmarshal changed to #define
 //   TPMI_ST_ATTEST_Marshal changed to #define
 
 
-// Table 2:121 - Definition of TPMU_ATTEST Union  (UnionTable)
+// Table 2:122 - Definition of TPMU_ATTEST Union  (UnionTable)
 TPM_RC
 TPMU_ATTEST_Unmarshal(TPMU_ATTEST *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -2553,7 +2672,7 @@ TPMU_ATTEST_Marshal(TPMU_ATTEST *source, BYTE **buffer, INT32 *size, UINT32 sele
 }
 
 
-// Table 2:122 - Definition of TPMS_ATTEST Structure  (StructureTable)
+// Table 2:123 - Definition of TPMS_ATTEST Structure  (StructureTable)
 TPM_RC
 TPMS_ATTEST_Unmarshal(TPMS_ATTEST *target, BYTE **buffer, INT32 *size)
 {
@@ -2595,7 +2714,7 @@ TPMS_ATTEST_Marshal(TPMS_ATTEST *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:123 - Definition of TPM2B_ATTEST Structure  (StructureTable)
+// Table 2:124 - Definition of TPM2B_ATTEST Structure  (StructureTable)
 TPM_RC
 TPM2B_ATTEST_Unmarshal(TPM2B_ATTEST *target, BYTE **buffer, INT32 *size)
 {
@@ -2622,7 +2741,7 @@ TPM2B_ATTEST_Marshal(TPM2B_ATTEST *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:124 - Definition of TPMS_AUTH_COMMAND Structure  (StructureTable)
+// Table 2:125 - Definition of TPMS_AUTH_COMMAND Structure  (StructureTable)
 TPM_RC
 TPMS_AUTH_COMMAND_Unmarshal(TPMS_AUTH_COMMAND *target, BYTE **buffer, INT32 *size)
 {
@@ -2652,7 +2771,7 @@ TPMS_AUTH_COMMAND_Marshal(TPMS_AUTH_COMMAND *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:125 - Definition of TPMS_AUTH_RESPONSE Structure  (StructureTable)
+// Table 2:126 - Definition of TPMS_AUTH_RESPONSE Structure  (StructureTable)
 TPM_RC
 TPMS_AUTH_RESPONSE_Unmarshal(TPMS_AUTH_RESPONSE *target, BYTE **buffer, INT32 *size)
 {
@@ -2678,7 +2797,7 @@ TPMS_AUTH_RESPONSE_Marshal(TPMS_AUTH_RESPONSE *source, BYTE **buffer, INT32 *siz
 }
 
 
-// Table 2:126 - Definition of TPMI_TDES_KEY_BITS Type (TypeTable)
+// Table 2:127 - Definition of TPMI_TDES_KEY_BITS Type (TypeTable)
 #if         ALG_TDES
 TPM_RC
 TPMI_TDES_KEY_BITS_Unmarshal(TPMI_TDES_KEY_BITS *target, BYTE **buffer, INT32 *size)
@@ -2701,7 +2820,7 @@ TPMI_TDES_KEY_BITS_Unmarshal(TPMI_TDES_KEY_BITS *target, BYTE **buffer, INT32 *s
 #endif // ALG_TDES
 
 
-// Table 2:126 - Definition of TPMI_AES_KEY_BITS Type (TypeTable)
+// Table 2:127 - Definition of TPMI_AES_KEY_BITS Type (TypeTable)
 #if         ALG_AES
 TPM_RC
 TPMI_AES_KEY_BITS_Unmarshal(TPMI_AES_KEY_BITS *target, BYTE **buffer, INT32 *size)
@@ -2724,7 +2843,7 @@ TPMI_AES_KEY_BITS_Unmarshal(TPMI_AES_KEY_BITS *target, BYTE **buffer, INT32 *siz
 #endif // ALG_AES
 
 
-// Table 2:126 - Definition of TPMI_SM4_KEY_BITS Type (TypeTable)
+// Table 2:127 - Definition of TPMI_SM4_KEY_BITS Type (TypeTable)
 #if         ALG_SM4
 TPM_RC
 TPMI_SM4_KEY_BITS_Unmarshal(TPMI_SM4_KEY_BITS *target, BYTE **buffer, INT32 *size)
@@ -2746,7 +2865,7 @@ TPMI_SM4_KEY_BITS_Unmarshal(TPMI_SM4_KEY_BITS *target, BYTE **buffer, INT32 *siz
 #endif // ALG_SM4
 
 
-// Table 2:126 - Definition of TPMI_CAMELLIA_KEY_BITS Type (TypeTable)
+// Table 2:127 - Definition of TPMI_CAMELLIA_KEY_BITS Type (TypeTable)
 #if         ALG_CAMELLIA
 TPM_RC
 TPMI_CAMELLIA_KEY_BITS_Unmarshal(TPMI_CAMELLIA_KEY_BITS *target, BYTE **buffer, INT32 *size)
@@ -2768,7 +2887,7 @@ TPMI_CAMELLIA_KEY_BITS_Unmarshal(TPMI_CAMELLIA_KEY_BITS *target, BYTE **buffer, 
 #endif // ALG_CAMELLIA
 
 
-// Table 2:127 - Definition of TPMU_SYM_KEY_BITS Union (UnionTable)
+// Table 2:128 - Definition of TPMU_SYM_KEY_BITS Union (UnionTable)
 TPM_RC
 TPMU_SYM_KEY_BITS_Unmarshal(TPMU_SYM_KEY_BITS *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -2830,7 +2949,7 @@ TPMU_SYM_KEY_BITS_Marshal(TPMU_SYM_KEY_BITS *source, BYTE **buffer, INT32 *size,
 }
 
 
-// Table 2:128 - Definition of TPMU_SYM_MODE Union (UnionTable)
+// Table 2:129 - Definition of TPMU_SYM_MODE Union (UnionTable)
 TPM_RC
 TPMU_SYM_MODE_Unmarshal(TPMU_SYM_MODE *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -2892,7 +3011,7 @@ TPMU_SYM_MODE_Marshal(TPMU_SYM_MODE *source, BYTE **buffer, INT32 *size, UINT32 
 }
 
 
-// Table 2:130 - Definition of TPMT_SYM_DEF Structure (StructureTable)
+// Table 2:131 - Definition of TPMT_SYM_DEF Structure (StructureTable)
 TPM_RC
 TPMT_SYM_DEF_Unmarshal(TPMT_SYM_DEF *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -2918,7 +3037,7 @@ TPMT_SYM_DEF_Marshal(TPMT_SYM_DEF *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:131 - Definition of TPMT_SYM_DEF_OBJECT Structure (StructureTable)
+// Table 2:132 - Definition of TPMT_SYM_DEF_OBJECT Structure (StructureTable)
 TPM_RC
 TPMT_SYM_DEF_OBJECT_Unmarshal(TPMT_SYM_DEF_OBJECT *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -2944,7 +3063,7 @@ TPMT_SYM_DEF_OBJECT_Marshal(TPMT_SYM_DEF_OBJECT *source, BYTE **buffer, INT32 *s
 }
 
 
-// Table 2:132 - Definition of TPM2B_SYM_KEY Structure (StructureTable)
+// Table 2:133 - Definition of TPM2B_SYM_KEY Structure (StructureTable)
 TPM_RC
 TPM2B_SYM_KEY_Unmarshal(TPM2B_SYM_KEY *target, BYTE **buffer, INT32 *size)
 {
@@ -2971,12 +3090,12 @@ TPM2B_SYM_KEY_Marshal(TPM2B_SYM_KEY *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:133 - Definition of TPMS_SYMCIPHER_PARMS Structure (StructureTable)
+// Table 2:134 - Definition of TPMS_SYMCIPHER_PARMS Structure (StructureTable)
 //   TPMS_SYMCIPHER_PARMS_Unmarshal changed to #define
 //   TPMS_SYMCIPHER_PARMS_Marshal changed to #define
 
 
-// Table 2:134 - Definition of TPM2B_LABEL Structure (StructureTable)
+// Table 2:135 - Definition of TPM2B_LABEL Structure (StructureTable)
 TPM_RC
 TPM2B_LABEL_Unmarshal(TPM2B_LABEL *target, BYTE **buffer, INT32 *size)
 {
@@ -3003,7 +3122,7 @@ TPM2B_LABEL_Marshal(TPM2B_LABEL *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:135 - Definition of TPMS_DERIVE Structure (StructureTable)
+// Table 2:136 - Definition of TPMS_DERIVE Structure (StructureTable)
 TPM_RC
 TPMS_DERIVE_Unmarshal(TPMS_DERIVE *target, BYTE **buffer, INT32 *size)
 {
@@ -3025,7 +3144,7 @@ TPMS_DERIVE_Marshal(TPMS_DERIVE *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:136 - Definition of TPM2B_DERIVE Structure (StructureTable)
+// Table 2:137 - Definition of TPM2B_DERIVE Structure (StructureTable)
 TPM_RC
 TPM2B_DERIVE_Unmarshal(TPM2B_DERIVE *target, BYTE **buffer, INT32 *size)
 {
@@ -3052,10 +3171,10 @@ TPM2B_DERIVE_Marshal(TPM2B_DERIVE *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:137 - Definition of TPMU_SENSITIVE_CREATE Union  (UnionTable)
+// Table 2:138 - Definition of TPMU_SENSITIVE_CREATE Union  (UnionTable)
 
 
-// Table 2:138 - Definition of TPM2B_SENSITIVE_DATA Structure (StructureTable)
+// Table 2:139 - Definition of TPM2B_SENSITIVE_DATA Structure (StructureTable)
 TPM_RC
 TPM2B_SENSITIVE_DATA_Unmarshal(TPM2B_SENSITIVE_DATA *target, BYTE **buffer, INT32 *size)
 {
@@ -3082,7 +3201,7 @@ TPM2B_SENSITIVE_DATA_Marshal(TPM2B_SENSITIVE_DATA *source, BYTE **buffer, INT32 
 }
 
 
-// Table 2:139 - Definition of TPMS_SENSITIVE_CREATE Structure  (StructureTable)
+// Table 2:140 - Definition of TPMS_SENSITIVE_CREATE Structure  (StructureTable)
 TPM_RC
 TPMS_SENSITIVE_CREATE_Unmarshal(TPMS_SENSITIVE_CREATE *target, BYTE **buffer, INT32 *size)
 {
@@ -3104,37 +3223,7 @@ TPMS_SENSITIVE_CREATE_Marshal(TPMS_SENSITIVE_CREATE *source, BYTE **buffer, INT3
 }
 
 
-// Table 2:140 - Definition of TPM2B_SENSITIVE_CREATE Structure  (StructureTable)
-#ifdef UT_BYTE_TPM2B_SENSITIVE_CREATE
-TPM_RC
-TPM2B_SENSITIVE_CREATE_Unmarshal(TPM2B_SENSITIVE_CREATE *target, BYTE **buffer, INT32 *size)
-{
-    TPM_RC    result;
-    result = UINT16_Unmarshal((UINT16 *)&(target->t.size), buffer, size);
-    if(result != TPM_RC_SUCCESS)
-        return result;
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(target->t.size == 0)
-        return TPM_RC_SUCCESS;
-    if((target->t.size) > sizeof(TPMS_SENSITIVE_CREATE))
-        return TPM_RC_SIZE;
-    result = BYTE_Array_Unmarshal((BYTE *)(target->t.sensitive), buffer, size, (INT32)(target->t.size));
-    return result;
-}
-
-UINT16
-TPM2B_SENSITIVE_CREATE_Marshal(TPM2B_SENSITIVE_CREATE *source, BYTE **buffer, INT32 *size)
-{
-    UINT16    result = 0;
-    result = (UINT16)(result + UINT16_Marshal((UINT16 *)&(source->t.size), buffer, size));
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(source->t.size == 0)
-        return result;
-    result = (UINT16)(result + BYTE_Array_Marshal((BYTE *)(source->t.sensitive), buffer, size, (INT32)(source->t.size)));
-    return result;
-}
-
-#else
+// Table 2:141 - Definition of TPM2B_SENSITIVE_CREATE Structure  (StructureTable)
 TPM_RC
 TPM2B_SENSITIVE_CREATE_Unmarshal(TPM2B_SENSITIVE_CREATE *target, BYTE **buffer, INT32 *size)
 {
@@ -3168,15 +3257,13 @@ TPM2B_SENSITIVE_CREATE_Marshal(TPM2B_SENSITIVE_CREATE *source, BYTE **buffer, IN
     return result;
 }
 
-#endif
 
-
-// Table 2:141 - Definition of TPMS_SCHEME_HASH Structure (StructureTable)
+// Table 2:142 - Definition of TPMS_SCHEME_HASH Structure (StructureTable)
 //   TPMS_SCHEME_HASH_Unmarshal changed to #define
 //   TPMS_SCHEME_HASH_Marshal changed to #define
 
 
-// Table 2:142 - Definition of TPMS_SCHEME_ECDAA Structure (StructureTable)
+// Table 2:143 - Definition of TPMS_SCHEME_ECDAA Structure (StructureTable)
 #if         ALG_ECC
 TPM_RC
 TPMS_SCHEME_ECDAA_Unmarshal(TPMS_SCHEME_ECDAA *target, BYTE **buffer, INT32 *size)
@@ -3201,7 +3288,7 @@ TPMS_SCHEME_ECDAA_Marshal(TPMS_SCHEME_ECDAA *source, BYTE **buffer, INT32 *size)
 #endif // ALG_ECC
 
 
-// Table 2:143 - Definition of TPMI_ALG_KEYEDHASH_SCHEME Type (TypeTable)
+// Table 2:144 - Definition of TPMI_ALG_KEYEDHASH_SCHEME Type (TypeTable)
 TPM_RC
 TPMI_ALG_KEYEDHASH_SCHEME_Unmarshal(TPMI_ALG_KEYEDHASH_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -3230,13 +3317,13 @@ TPMI_ALG_KEYEDHASH_SCHEME_Unmarshal(TPMI_ALG_KEYEDHASH_SCHEME *target, BYTE **bu
 //   TPMI_ALG_KEYEDHASH_SCHEME_Marshal changed to #define
 
 
-// Table 2:144 - Definition of Types for HMAC_SIG_SCHEME (TypesTable)
-//   TPMS_SCHEME_HASH definition from table 2:144
+// Table 2:145 - Definition of Types for HMAC_SIG_SCHEME (TypesTable)
+//   TPMS_SCHEME_HASH definition from table 2:145
 //   TPMS_SCHEME_HMAC_Unmarshal changed to #define
 //   TPMS_SCHEME_HMAC_Marshal changed to #define
 
 
-// Table 2:145 - Definition of TPMS_SCHEME_XOR Structure (StructureTable)
+// Table 2:146 - Definition of TPMS_SCHEME_XOR Structure (StructureTable)
 TPM_RC
 TPMS_SCHEME_XOR_Unmarshal(TPMS_SCHEME_XOR *target, BYTE **buffer, INT32 *size)
 {
@@ -3258,7 +3345,7 @@ TPMS_SCHEME_XOR_Marshal(TPMS_SCHEME_XOR *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:146 - Definition of TPMU_SCHEME_KEYEDHASH Union  (UnionTable)
+// Table 2:147 - Definition of TPMU_SCHEME_KEYEDHASH Union  (UnionTable)
 TPM_RC
 TPMU_SCHEME_KEYEDHASH_Unmarshal(TPMU_SCHEME_KEYEDHASH *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -3296,7 +3383,7 @@ TPMU_SCHEME_KEYEDHASH_Marshal(TPMU_SCHEME_KEYEDHASH *source, BYTE **buffer, INT3
 }
 
 
-// Table 2:147 - Definition of TPMT_KEYEDHASH_SCHEME Structure (StructureTable)
+// Table 2:148 - Definition of TPMT_KEYEDHASH_SCHEME Structure (StructureTable)
 TPM_RC
 TPMT_KEYEDHASH_SCHEME_Unmarshal(TPMT_KEYEDHASH_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -3318,14 +3405,14 @@ TPMT_KEYEDHASH_SCHEME_Marshal(TPMT_KEYEDHASH_SCHEME *source, BYTE **buffer, INT3
 }
 
 
-// Table 2:148 - Definition of Types for RSA Signature Schemes  (TypesTable)
+// Table 2:149 - Definition of Types for RSA Signature Schemes  (TypesTable)
 #if         ALG_RSA
-//   TPMS_SCHEME_HASH definition from table 2:148
+//   TPMS_SCHEME_HASH definition from table 2:149
 #if         ALG_RSA
 //   TPMS_SIG_SCHEME_RSASSA_Unmarshal changed to #define
 //   TPMS_SIG_SCHEME_RSASSA_Marshal changed to #define
 #endif // ALG_RSA
-//   TPMS_SCHEME_HASH definition from table 2:148
+//   TPMS_SCHEME_HASH definition from table 2:149
 #if         ALG_RSA
 //   TPMS_SIG_SCHEME_RSAPSS_Unmarshal changed to #define
 //   TPMS_SIG_SCHEME_RSAPSS_Marshal changed to #define
@@ -3333,24 +3420,24 @@ TPMT_KEYEDHASH_SCHEME_Marshal(TPMT_KEYEDHASH_SCHEME *source, BYTE **buffer, INT3
 #endif // ALG_RSA
 
 
-// Table 2:149 - Definition of Types for ECC Signature Schemes  (TypesTable)
+// Table 2:150 - Definition of Types for ECC Signature Schemes  (TypesTable)
 #if         ALG_ECC
-//   TPMS_SCHEME_HASH definition from table 2:149
+//   TPMS_SCHEME_HASH definition from table 2:150
 #if         ALG_ECC
 //   TPMS_SIG_SCHEME_ECDSA_Unmarshal changed to #define
 //   TPMS_SIG_SCHEME_ECDSA_Marshal changed to #define
 #endif // ALG_ECC
-//   TPMS_SCHEME_HASH definition from table 2:149
+//   TPMS_SCHEME_HASH definition from table 2:150
 #if         ALG_ECC
 //   TPMS_SIG_SCHEME_SM2_Unmarshal changed to #define
 //   TPMS_SIG_SCHEME_SM2_Marshal changed to #define
 #endif // ALG_ECC
-//   TPMS_SCHEME_HASH definition from table 2:149
+//   TPMS_SCHEME_HASH definition from table 2:150
 #if         ALG_ECC
 //   TPMS_SIG_SCHEME_ECSCHNORR_Unmarshal changed to #define
 //   TPMS_SIG_SCHEME_ECSCHNORR_Marshal changed to #define
 #endif // ALG_ECC
-//   TPMS_SCHEME_ECDAA definition from table 2:149
+//   TPMS_SCHEME_ECDAA definition from table 2:150
 #if         ALG_ECC
 //   TPMS_SIG_SCHEME_ECDAA_Unmarshal changed to #define
 //   TPMS_SIG_SCHEME_ECDAA_Marshal changed to #define
@@ -3358,7 +3445,7 @@ TPMT_KEYEDHASH_SCHEME_Marshal(TPMT_KEYEDHASH_SCHEME *source, BYTE **buffer, INT3
 #endif // ALG_ECC
 
 
-// Table 2:150 - Definition of TPMU_SIG_SCHEME Union  (UnionTable)
+// Table 2:151 - Definition of TPMU_SIG_SCHEME Union  (UnionTable)
 TPM_RC
 TPMU_SIG_SCHEME_Unmarshal(TPMU_SIG_SCHEME *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -3436,7 +3523,7 @@ TPMU_SIG_SCHEME_Marshal(TPMU_SIG_SCHEME *source, BYTE **buffer, INT32 *size, UIN
 }
 
 
-// Table 2:151 - Definition of TPMT_SIG_SCHEME Structure (StructureTable)
+// Table 2:152 - Definition of TPMT_SIG_SCHEME Structure (StructureTable)
 TPM_RC
 TPMT_SIG_SCHEME_Unmarshal(TPMT_SIG_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -3458,14 +3545,14 @@ TPMT_SIG_SCHEME_Marshal(TPMT_SIG_SCHEME *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:152 - Definition of Types for Encryption Schemes (TypesTable)
+// Table 2:153 - Definition of Types for Encryption Schemes (TypesTable)
 #if         ALG_RSA
-//   TPMS_SCHEME_HASH definition from table 2:152
+//   TPMS_SCHEME_HASH definition from table 2:153
 #if         ALG_RSA
 //   TPMS_ENC_SCHEME_OAEP_Unmarshal changed to #define
 //   TPMS_ENC_SCHEME_OAEP_Marshal changed to #define
 #endif // ALG_RSA
-//   TPMS_EMPTY definition from table 2:152
+//   TPMS_EMPTY definition from table 2:153
 #if         ALG_RSA
 //   TPMS_ENC_SCHEME_RSAES_Unmarshal changed to #define
 //   TPMS_ENC_SCHEME_RSAES_Marshal changed to #define
@@ -3473,14 +3560,14 @@ TPMT_SIG_SCHEME_Marshal(TPMT_SIG_SCHEME *source, BYTE **buffer, INT32 *size)
 #endif // ALG_RSA
 
 
-// Table 2:153 - Definition of Types for ECC Key Exchange (TypesTable)
+// Table 2:154 - Definition of Types for ECC Key Exchange (TypesTable)
 #if         ALG_ECC
-//   TPMS_SCHEME_HASH definition from table 2:153
+//   TPMS_SCHEME_HASH definition from table 2:154
 #if         ALG_ECC
 //   TPMS_KEY_SCHEME_ECDH_Unmarshal changed to #define
 //   TPMS_KEY_SCHEME_ECDH_Marshal changed to #define
 #endif // ALG_ECC
-//   TPMS_SCHEME_HASH definition from table 2:153
+//   TPMS_SCHEME_HASH definition from table 2:154
 #if         ALG_ECC
 //   TPMS_KEY_SCHEME_ECMQV_Unmarshal changed to #define
 //   TPMS_KEY_SCHEME_ECMQV_Marshal changed to #define
@@ -3488,22 +3575,22 @@ TPMT_SIG_SCHEME_Marshal(TPMT_SIG_SCHEME *source, BYTE **buffer, INT32 *size)
 #endif // ALG_ECC
 
 
-// Table 2:154 - Definition of Types for KDF Schemes (TypesTable)
-//   TPMS_SCHEME_HASH definition from table 2:154
+// Table 2:155 - Definition of Types for KDF Schemes (TypesTable)
+//   TPMS_SCHEME_HASH definition from table 2:155
 //   TPMS_SCHEME_MGF1_Unmarshal changed to #define
 //   TPMS_SCHEME_MGF1_Marshal changed to #define
-//   TPMS_SCHEME_HASH definition from table 2:154
+//   TPMS_SCHEME_HASH definition from table 2:155
 //   TPMS_SCHEME_KDF1_SP800_56A_Unmarshal changed to #define
 //   TPMS_SCHEME_KDF1_SP800_56A_Marshal changed to #define
-//   TPMS_SCHEME_HASH definition from table 2:154
+//   TPMS_SCHEME_HASH definition from table 2:155
 //   TPMS_SCHEME_KDF2_Unmarshal changed to #define
 //   TPMS_SCHEME_KDF2_Marshal changed to #define
-//   TPMS_SCHEME_HASH definition from table 2:154
+//   TPMS_SCHEME_HASH definition from table 2:155
 //   TPMS_SCHEME_KDF1_SP800_108_Unmarshal changed to #define
 //   TPMS_SCHEME_KDF1_SP800_108_Marshal changed to #define
 
 
-// Table 2:155 - Definition of TPMU_KDF_SCHEME Union  (UnionTable)
+// Table 2:156 - Definition of TPMU_KDF_SCHEME Union  (UnionTable)
 TPM_RC
 TPMU_KDF_SCHEME_Unmarshal(TPMU_KDF_SCHEME *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -3557,7 +3644,7 @@ TPMU_KDF_SCHEME_Marshal(TPMU_KDF_SCHEME *source, BYTE **buffer, INT32 *size, UIN
 }
 
 
-// Table 2:156 - Definition of TPMT_KDF_SCHEME Structure (StructureTable)
+// Table 2:157 - Definition of TPMT_KDF_SCHEME Structure (StructureTable)
 TPM_RC
 TPMT_KDF_SCHEME_Unmarshal(TPMT_KDF_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -3579,7 +3666,7 @@ TPMT_KDF_SCHEME_Marshal(TPMT_KDF_SCHEME *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:157 - Definition of TPMI_ALG_ASYM_SCHEME Type  (TypeTable)
+// Table 2:158 - Definition of TPMI_ALG_ASYM_SCHEME Type  (TypeTable)
 TPM_RC
 TPMI_ALG_ASYM_SCHEME_Unmarshal(TPMI_ALG_ASYM_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -3632,7 +3719,7 @@ TPMI_ALG_ASYM_SCHEME_Unmarshal(TPMI_ALG_ASYM_SCHEME *target, BYTE **buffer, INT3
 //   TPMI_ALG_ASYM_SCHEME_Marshal changed to #define
 
 
-// Table 2:158 - Definition of TPMU_ASYM_SCHEME Union (UnionTable)
+// Table 2:159 - Definition of TPMU_ASYM_SCHEME Union (UnionTable)
 TPM_RC
 TPMU_ASYM_SCHEME_Unmarshal(TPMU_ASYM_SCHEME *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -3734,7 +3821,7 @@ TPMU_ASYM_SCHEME_Marshal(TPMU_ASYM_SCHEME *source, BYTE **buffer, INT32 *size, U
 }
 
 
-// Table 2:159 - Definition of TPMT_ASYM_SCHEME Structure  (StructureTable)
+// Table 2:160 - Definition of TPMT_ASYM_SCHEME Structure  (StructureTable)
 TPM_RC
 TPMT_ASYM_SCHEME_Unmarshal(TPMT_ASYM_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -3756,7 +3843,7 @@ TPMT_ASYM_SCHEME_Marshal(TPMT_ASYM_SCHEME *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:160 - Definition of TPMI_ALG_RSA_SCHEME Type (TypeTable)
+// Table 2:161 - Definition of TPMI_ALG_RSA_SCHEME Type (TypeTable)
 #if         ALG_RSA
 TPM_RC
 TPMI_ALG_RSA_SCHEME_Unmarshal(TPMI_ALG_RSA_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
@@ -3793,7 +3880,7 @@ TPMI_ALG_RSA_SCHEME_Unmarshal(TPMI_ALG_RSA_SCHEME *target, BYTE **buffer, INT32 
 #endif // ALG_RSA
 
 
-// Table 2:161 - Definition of TPMT_RSA_SCHEME Structure (StructureTable)
+// Table 2:162 - Definition of TPMT_RSA_SCHEME Structure (StructureTable)
 #if         ALG_RSA
 TPM_RC
 TPMT_RSA_SCHEME_Unmarshal(TPMT_RSA_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
@@ -3818,7 +3905,7 @@ TPMT_RSA_SCHEME_Marshal(TPMT_RSA_SCHEME *source, BYTE **buffer, INT32 *size)
 #endif // ALG_RSA
 
 
-// Table 2:162 - Definition of TPMI_ALG_RSA_DECRYPT Type (TypeTable)
+// Table 2:163 - Definition of TPMI_ALG_RSA_DECRYPT Type (TypeTable)
 #if         ALG_RSA
 TPM_RC
 TPMI_ALG_RSA_DECRYPT_Unmarshal(TPMI_ALG_RSA_DECRYPT *target, BYTE **buffer, INT32 *size, BOOL flag)
@@ -3849,7 +3936,7 @@ TPMI_ALG_RSA_DECRYPT_Unmarshal(TPMI_ALG_RSA_DECRYPT *target, BYTE **buffer, INT3
 #endif // ALG_RSA
 
 
-// Table 2:163 - Definition of TPMT_RSA_DECRYPT Structure (StructureTable)
+// Table 2:164 - Definition of TPMT_RSA_DECRYPT Structure (StructureTable)
 #if         ALG_RSA
 TPM_RC
 TPMT_RSA_DECRYPT_Unmarshal(TPMT_RSA_DECRYPT *target, BYTE **buffer, INT32 *size, BOOL flag)
@@ -3874,7 +3961,7 @@ TPMT_RSA_DECRYPT_Marshal(TPMT_RSA_DECRYPT *source, BYTE **buffer, INT32 *size)
 #endif // ALG_RSA
 
 
-// Table 2:164 - Definition of TPM2B_PUBLIC_KEY_RSA Structure (StructureTable)
+// Table 2:165 - Definition of TPM2B_PUBLIC_KEY_RSA Structure (StructureTable)
 #if         ALG_RSA
 TPM_RC
 TPM2B_PUBLIC_KEY_RSA_Unmarshal(TPM2B_PUBLIC_KEY_RSA *target, BYTE **buffer, INT32 *size)
@@ -3904,7 +3991,7 @@ TPM2B_PUBLIC_KEY_RSA_Marshal(TPM2B_PUBLIC_KEY_RSA *source, BYTE **buffer, INT32 
 #endif // ALG_RSA
 
 
-// Table 2:165 - Definition of TPMI_RSA_KEY_BITS Type (TypeTable)
+// Table 2:166 - Definition of TPMI_RSA_KEY_BITS Type (TypeTable)
 #if         ALG_RSA
 TPM_RC
 TPMI_RSA_KEY_BITS_Unmarshal(TPMI_RSA_KEY_BITS *target, BYTE **buffer, INT32 *size)
@@ -3927,7 +4014,7 @@ TPMI_RSA_KEY_BITS_Unmarshal(TPMI_RSA_KEY_BITS *target, BYTE **buffer, INT32 *siz
 #endif // ALG_RSA
 
 
-// Table 2:166 - Definition of TPM2B_PRIVATE_KEY_RSA Structure (StructureTable)
+// Table 2:167 - Definition of TPM2B_PRIVATE_KEY_RSA Structure (StructureTable)
 #if         ALG_RSA
 TPM_RC
 TPM2B_PRIVATE_KEY_RSA_Unmarshal(TPM2B_PRIVATE_KEY_RSA *target, BYTE **buffer, INT32 *size)
@@ -3957,7 +4044,7 @@ TPM2B_PRIVATE_KEY_RSA_Marshal(TPM2B_PRIVATE_KEY_RSA *source, BYTE **buffer, INT3
 #endif // ALG_RSA
 
 
-// Table 2:167 - Definition of TPM2B_ECC_PARAMETER Structure (StructureTable)
+// Table 2:168 - Definition of TPM2B_ECC_PARAMETER Structure (StructureTable)
 TPM_RC
 TPM2B_ECC_PARAMETER_Unmarshal(TPM2B_ECC_PARAMETER *target, BYTE **buffer, INT32 *size)
 {
@@ -3984,7 +4071,7 @@ TPM2B_ECC_PARAMETER_Marshal(TPM2B_ECC_PARAMETER *source, BYTE **buffer, INT32 *s
 }
 
 
-// Table 2:168 - Definition of TPMS_ECC_POINT Structure (StructureTable)
+// Table 2:169 - Definition of TPMS_ECC_POINT Structure (StructureTable)
 #if         ALG_ECC
 TPM_RC
 TPMS_ECC_POINT_Unmarshal(TPMS_ECC_POINT *target, BYTE **buffer, INT32 *size)
@@ -4009,38 +4096,8 @@ TPMS_ECC_POINT_Marshal(TPMS_ECC_POINT *source, BYTE **buffer, INT32 *size)
 #endif // ALG_ECC
 
 
-// Table 2:169 - Definition of TPM2B_ECC_POINT Structure (StructureTable)
+// Table 2:170 - Definition of TPM2B_ECC_POINT Structure (StructureTable)
 #if         ALG_ECC
-#ifdef UT_BYTE_TPM2B_ECC_POINT
-TPM_RC
-TPM2B_ECC_POINT_Unmarshal(TPM2B_ECC_POINT *target, BYTE **buffer, INT32 *size)
-{
-    TPM_RC    result;
-    result = UINT16_Unmarshal((UINT16 *)&(target->t.size), buffer, size);
-    if(result != TPM_RC_SUCCESS)
-        return result;
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(target->t.size == 0)
-        return TPM_RC_SUCCESS;
-    if((target->t.size) > sizeof(TPMS_ECC_POINT))
-        return TPM_RC_SIZE;
-    result = BYTE_Array_Unmarshal((BYTE *)(target->t.point), buffer, size, (INT32)(target->t.size));
-    return result;
-}
-
-UINT16
-TPM2B_ECC_POINT_Marshal(TPM2B_ECC_POINT *source, BYTE **buffer, INT32 *size)
-{
-    UINT16    result = 0;
-    result = (UINT16)(result + UINT16_Marshal((UINT16 *)&(source->t.size), buffer, size));
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(source->t.size == 0)
-        return result;
-    result = (UINT16)(result + BYTE_Array_Marshal((BYTE *)(source->t.point), buffer, size, (INT32)(source->t.size)));
-    return result;
-}
-
-#else
 TPM_RC
 TPM2B_ECC_POINT_Unmarshal(TPM2B_ECC_POINT *target, BYTE **buffer, INT32 *size)
 {
@@ -4074,11 +4131,10 @@ TPM2B_ECC_POINT_Marshal(TPM2B_ECC_POINT *source, BYTE **buffer, INT32 *size)
     return result;
 }
 
-#endif
 #endif // ALG_ECC
 
 
-// Table 2:170 - Definition of TPMI_ALG_ECC_SCHEME Type (TypeTable)
+// Table 2:171 - Definition of TPMI_ALG_ECC_SCHEME Type (TypeTable)
 #if         ALG_ECC
 TPM_RC
 TPMI_ALG_ECC_SCHEME_Unmarshal(TPMI_ALG_ECC_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
@@ -4121,7 +4177,7 @@ TPMI_ALG_ECC_SCHEME_Unmarshal(TPMI_ALG_ECC_SCHEME *target, BYTE **buffer, INT32 
 #endif // ALG_ECC
 
 
-// Table 2:171 - Definition of TPMI_ECC_CURVE Type (TypeTable)
+// Table 2:172 - Definition of TPMI_ECC_CURVE Type (TypeTable)
 #if         ALG_ECC
 TPM_RC
 TPMI_ECC_CURVE_Unmarshal(TPMI_ECC_CURVE *target, BYTE **buffer, INT32 *size)
@@ -4166,7 +4222,7 @@ TPMI_ECC_CURVE_Unmarshal(TPMI_ECC_CURVE *target, BYTE **buffer, INT32 *size)
 #endif // ALG_ECC
 
 
-// Table 2:172 - Definition of TPMT_ECC_SCHEME Structure (StructureTable)
+// Table 2:173 - Definition of TPMT_ECC_SCHEME Structure (StructureTable)
 #if         ALG_ECC
 TPM_RC
 TPMT_ECC_SCHEME_Unmarshal(TPMT_ECC_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
@@ -4191,7 +4247,7 @@ TPMT_ECC_SCHEME_Marshal(TPMT_ECC_SCHEME *source, BYTE **buffer, INT32 *size)
 #endif // ALG_ECC
 
 
-// Table 2:173 - Definition of TPMS_ALGORITHM_DETAIL_ECC Structure  (StructureTable)
+// Table 2:174 - Definition of TPMS_ALGORITHM_DETAIL_ECC Structure  (StructureTable)
 #if         ALG_ECC
 TPM_RC
 TPMS_ALGORITHM_DETAIL_ECC_Unmarshal(TPMS_ALGORITHM_DETAIL_ECC *target, BYTE **buffer, INT32 *size)
@@ -4252,7 +4308,7 @@ TPMS_ALGORITHM_DETAIL_ECC_Marshal(TPMS_ALGORITHM_DETAIL_ECC *source, BYTE **buff
 #endif // ALG_ECC
 
 
-// Table 2:174 - Definition of TPMS_SIGNATURE_RSA Structure (StructureTable)
+// Table 2:175 - Definition of TPMS_SIGNATURE_RSA Structure (StructureTable)
 #if         ALG_RSA
 TPM_RC
 TPMS_SIGNATURE_RSA_Unmarshal(TPMS_SIGNATURE_RSA *target, BYTE **buffer, INT32 *size)
@@ -4277,14 +4333,14 @@ TPMS_SIGNATURE_RSA_Marshal(TPMS_SIGNATURE_RSA *source, BYTE **buffer, INT32 *siz
 #endif // ALG_RSA
 
 
-// Table 2:175 - Definition of Types for Signature  (TypesTable)
+// Table 2:176 - Definition of Types for Signature  (TypesTable)
 #if         ALG_RSA
-//   TPMS_SIGNATURE_RSA definition from table 2:175
+//   TPMS_SIGNATURE_RSA definition from table 2:176
 #if         ALG_RSA
 //   TPMS_SIGNATURE_RSASSA_Unmarshal changed to #define
 //   TPMS_SIGNATURE_RSASSA_Marshal changed to #define
 #endif // ALG_RSA
-//   TPMS_SIGNATURE_RSA definition from table 2:175
+//   TPMS_SIGNATURE_RSA definition from table 2:176
 #if         ALG_RSA
 //   TPMS_SIGNATURE_RSAPSS_Unmarshal changed to #define
 //   TPMS_SIGNATURE_RSAPSS_Marshal changed to #define
@@ -4292,7 +4348,7 @@ TPMS_SIGNATURE_RSA_Marshal(TPMS_SIGNATURE_RSA *source, BYTE **buffer, INT32 *siz
 #endif // ALG_RSA
 
 
-// Table 2:176 - Definition of TPMS_SIGNATURE_ECC Structure (StructureTable)
+// Table 2:177 - Definition of TPMS_SIGNATURE_ECC Structure (StructureTable)
 #if         ALG_ECC
 TPM_RC
 TPMS_SIGNATURE_ECC_Unmarshal(TPMS_SIGNATURE_ECC *target, BYTE **buffer, INT32 *size)
@@ -4321,24 +4377,24 @@ TPMS_SIGNATURE_ECC_Marshal(TPMS_SIGNATURE_ECC *source, BYTE **buffer, INT32 *siz
 #endif // ALG_ECC
 
 
-// Table 2:177 - Definition of Types for TPMS_SIGNATURE_ECC (TypesTable)
+// Table 2:178 - Definition of Types for TPMS_SIGNATURE_ECC (TypesTable)
 #if         ALG_ECC
-//   TPMS_SIGNATURE_ECC definition from table 2:177
+//   TPMS_SIGNATURE_ECC definition from table 2:178
 #if         ALG_ECC
 //   TPMS_SIGNATURE_ECDAA_Unmarshal changed to #define
 //   TPMS_SIGNATURE_ECDAA_Marshal changed to #define
 #endif // ALG_ECC
-//   TPMS_SIGNATURE_ECC definition from table 2:177
+//   TPMS_SIGNATURE_ECC definition from table 2:178
 #if         ALG_ECC
 //   TPMS_SIGNATURE_ECDSA_Unmarshal changed to #define
 //   TPMS_SIGNATURE_ECDSA_Marshal changed to #define
 #endif // ALG_ECC
-//   TPMS_SIGNATURE_ECC definition from table 2:177
+//   TPMS_SIGNATURE_ECC definition from table 2:178
 #if         ALG_ECC
 //   TPMS_SIGNATURE_SM2_Unmarshal changed to #define
 //   TPMS_SIGNATURE_SM2_Marshal changed to #define
 #endif // ALG_ECC
-//   TPMS_SIGNATURE_ECC definition from table 2:177
+//   TPMS_SIGNATURE_ECC definition from table 2:178
 #if         ALG_ECC
 //   TPMS_SIGNATURE_ECSCHNORR_Unmarshal changed to #define
 //   TPMS_SIGNATURE_ECSCHNORR_Marshal changed to #define
@@ -4346,7 +4402,7 @@ TPMS_SIGNATURE_ECC_Marshal(TPMS_SIGNATURE_ECC *source, BYTE **buffer, INT32 *siz
 #endif // ALG_ECC
 
 
-// Table 2:178 - Definition of TPMU_SIGNATURE Union  (UnionTable)
+// Table 2:179 - Definition of TPMU_SIGNATURE Union  (UnionTable)
 TPM_RC
 TPMU_SIGNATURE_Unmarshal(TPMU_SIGNATURE *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -4424,7 +4480,7 @@ TPMU_SIGNATURE_Marshal(TPMU_SIGNATURE *source, BYTE **buffer, INT32 *size, UINT3
 }
 
 
-// Table 2:179 - Definition of TPMT_SIGNATURE Structure (StructureTable)
+// Table 2:180 - Definition of TPMT_SIGNATURE Structure (StructureTable)
 TPM_RC
 TPMT_SIGNATURE_Unmarshal(TPMT_SIGNATURE *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -4446,7 +4502,7 @@ TPMT_SIGNATURE_Marshal(TPMT_SIGNATURE *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:180 - Definition of TPMU_ENCRYPTED_SECRET Union  (UnionTable)
+// Table 2:181 - Definition of TPMU_ENCRYPTED_SECRET Union  (UnionTable)
 TPM_RC
 TPMU_ENCRYPTED_SECRET_Unmarshal(TPMU_ENCRYPTED_SECRET *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -4496,7 +4552,7 @@ TPMU_ENCRYPTED_SECRET_Marshal(TPMU_ENCRYPTED_SECRET *source, BYTE **buffer, INT3
 }
 
 
-// Table 2:181 - Definition of TPM2B_ENCRYPTED_SECRET Structure (StructureTable)
+// Table 2:182 - Definition of TPM2B_ENCRYPTED_SECRET Structure (StructureTable)
 TPM_RC
 TPM2B_ENCRYPTED_SECRET_Unmarshal(TPM2B_ENCRYPTED_SECRET *target, BYTE **buffer, INT32 *size)
 {
@@ -4523,7 +4579,7 @@ TPM2B_ENCRYPTED_SECRET_Marshal(TPM2B_ENCRYPTED_SECRET *source, BYTE **buffer, IN
 }
 
 
-// Table 2:182 - Definition of TPMI_ALG_PUBLIC Type (TypeTable)
+// Table 2:183 - Definition of TPMI_ALG_PUBLIC Type (TypeTable)
 TPM_RC
 TPMI_ALG_PUBLIC_Unmarshal(TPMI_ALG_PUBLIC *target, BYTE **buffer, INT32 *size)
 {
@@ -4554,7 +4610,7 @@ TPMI_ALG_PUBLIC_Unmarshal(TPMI_ALG_PUBLIC *target, BYTE **buffer, INT32 *size)
 //   TPMI_ALG_PUBLIC_Marshal changed to #define
 
 
-// Table 2:183 - Definition of TPMU_PUBLIC_ID Union  (UnionTable)
+// Table 2:184 - Definition of TPMU_PUBLIC_ID Union  (UnionTable)
 TPM_RC
 TPMU_PUBLIC_ID_Unmarshal(TPMU_PUBLIC_ID *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -4604,12 +4660,12 @@ TPMU_PUBLIC_ID_Marshal(TPMU_PUBLIC_ID *source, BYTE **buffer, INT32 *size, UINT3
 }
 
 
-// Table 2:184 - Definition of TPMS_KEYEDHASH_PARMS Structure (StructureTable)
+// Table 2:185 - Definition of TPMS_KEYEDHASH_PARMS Structure (StructureTable)
 //   TPMS_KEYEDHASH_PARMS_Unmarshal changed to #define
 //   TPMS_KEYEDHASH_PARMS_Marshal changed to #define
 
 
-// Table 2:185 - Definition of TPMS_ASYM_PARMS Structure  (StructureTable)
+// Table 2:186 - Definition of TPMS_ASYM_PARMS Structure  (StructureTable)
 TPM_RC
 TPMS_ASYM_PARMS_Unmarshal(TPMS_ASYM_PARMS *target, BYTE **buffer, INT32 *size)
 {
@@ -4631,7 +4687,7 @@ TPMS_ASYM_PARMS_Marshal(TPMS_ASYM_PARMS *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:186 - Definition of TPMS_RSA_PARMS Structure (StructureTable)
+// Table 2:187 - Definition of TPMS_RSA_PARMS Structure (StructureTable)
 #if         ALG_RSA
 TPM_RC
 TPMS_RSA_PARMS_Unmarshal(TPMS_RSA_PARMS *target, BYTE **buffer, INT32 *size)
@@ -4664,7 +4720,7 @@ TPMS_RSA_PARMS_Marshal(TPMS_RSA_PARMS *source, BYTE **buffer, INT32 *size)
 #endif // ALG_RSA
 
 
-// Table 2:187 - Definition of TPMS_ECC_PARMS Structure (StructureTable)
+// Table 2:188 - Definition of TPMS_ECC_PARMS Structure (StructureTable)
 #if         ALG_ECC
 TPM_RC
 TPMS_ECC_PARMS_Unmarshal(TPMS_ECC_PARMS *target, BYTE **buffer, INT32 *size)
@@ -4697,7 +4753,7 @@ TPMS_ECC_PARMS_Marshal(TPMS_ECC_PARMS *source, BYTE **buffer, INT32 *size)
 #endif // ALG_ECC
 
 
-// Table 2:188 - Definition of TPMU_PUBLIC_PARMS Union  (UnionTable)
+// Table 2:189 - Definition of TPMU_PUBLIC_PARMS Union  (UnionTable)
 TPM_RC
 TPMU_PUBLIC_PARMS_Unmarshal(TPMU_PUBLIC_PARMS *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -4747,7 +4803,7 @@ TPMU_PUBLIC_PARMS_Marshal(TPMU_PUBLIC_PARMS *source, BYTE **buffer, INT32 *size,
 }
 
 
-// Table 2:189 - Definition of TPMT_PUBLIC_PARMS Structure (StructureTable)
+// Table 2:190 - Definition of TPMT_PUBLIC_PARMS Structure (StructureTable)
 TPM_RC
 TPMT_PUBLIC_PARMS_Unmarshal(TPMT_PUBLIC_PARMS *target, BYTE **buffer, INT32 *size)
 {
@@ -4769,7 +4825,7 @@ TPMT_PUBLIC_PARMS_Marshal(TPMT_PUBLIC_PARMS *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:190 - Definition of TPMT_PUBLIC Structure (StructureTable)
+// Table 2:191 - Definition of TPMT_PUBLIC Structure (StructureTable)
 TPM_RC
 TPMT_PUBLIC_Unmarshal(TPMT_PUBLIC *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -4807,37 +4863,7 @@ TPMT_PUBLIC_Marshal(TPMT_PUBLIC *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:191 - Definition of TPM2B_PUBLIC Structure (StructureTable)
-#ifdef UT_BYTE_TPM2B_PUBLIC
-TPM_RC
-TPM2B_PUBLIC_Unmarshal(TPM2B_PUBLIC *target, BYTE **buffer, INT32 *size)
-{
-    TPM_RC    result;
-    result = UINT16_Unmarshal((UINT16 *)&(target->t.size), buffer, size);
-    if(result != TPM_RC_SUCCESS)
-        return result;
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(target->t.size == 0)
-        return TPM_RC_SUCCESS;
-    if((target->t.size) > sizeof(TPMT_PUBLIC))
-        return TPM_RC_SIZE;
-    result = BYTE_Array_Unmarshal((BYTE *)(target->t.publicArea), buffer, size, (INT32)(target->t.size));
-    return result;
-}
-
-UINT16
-TPM2B_PUBLIC_Marshal(TPM2B_PUBLIC *source, BYTE **buffer, INT32 *size)
-{
-    UINT16    result = 0;
-    result = (UINT16)(result + UINT16_Marshal((UINT16 *)&(source->t.size), buffer, size));
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(source->t.size == 0)
-        return result;
-    result = (UINT16)(result + BYTE_Array_Marshal((BYTE *)(source->t.publicArea), buffer, size, (INT32)(source->t.size)));
-    return result;
-}
-
-#else
+// Table 2:192 - Definition of TPM2B_PUBLIC Structure (StructureTable)
 TPM_RC
 TPM2B_PUBLIC_Unmarshal(TPM2B_PUBLIC *target, BYTE **buffer, INT32 *size, BOOL flag)
 {
@@ -4871,10 +4897,8 @@ TPM2B_PUBLIC_Marshal(TPM2B_PUBLIC *source, BYTE **buffer, INT32 *size)
     return result;
 }
 
-#endif
 
-
-// Table 2:192 - Definition of TPM2B_TEMPLATE Structure (StructureTable)
+// Table 2:193 - Definition of TPM2B_TEMPLATE Structure (StructureTable)
 TPM_RC
 TPM2B_TEMPLATE_Unmarshal(TPM2B_TEMPLATE *target, BYTE **buffer, INT32 *size)
 {
@@ -4901,7 +4925,7 @@ TPM2B_TEMPLATE_Marshal(TPM2B_TEMPLATE *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:193 - Definition of TPM2B_PRIVATE_VENDOR_SPECIFIC Structure (StructureTable)
+// Table 2:194 - Definition of TPM2B_PRIVATE_VENDOR_SPECIFIC Structure (StructureTable)
 TPM_RC
 TPM2B_PRIVATE_VENDOR_SPECIFIC_Unmarshal(TPM2B_PRIVATE_VENDOR_SPECIFIC *target, BYTE **buffer, INT32 *size)
 {
@@ -4928,7 +4952,7 @@ TPM2B_PRIVATE_VENDOR_SPECIFIC_Marshal(TPM2B_PRIVATE_VENDOR_SPECIFIC *source, BYT
 }
 
 
-// Table 2:194 - Definition of TPMU_SENSITIVE_COMPOSITE Union  (UnionTable)
+// Table 2:195 - Definition of TPMU_SENSITIVE_COMPOSITE Union  (UnionTable)
 TPM_RC
 TPMU_SENSITIVE_COMPOSITE_Unmarshal(TPMU_SENSITIVE_COMPOSITE *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
@@ -4978,7 +5002,7 @@ TPMU_SENSITIVE_COMPOSITE_Marshal(TPMU_SENSITIVE_COMPOSITE *source, BYTE **buffer
 }
 
 
-// Table 2:195 - Definition of TPMT_SENSITIVE Structure (StructureTable)
+// Table 2:196 - Definition of TPMT_SENSITIVE Structure (StructureTable)
 TPM_RC
 TPMT_SENSITIVE_Unmarshal(TPMT_SENSITIVE *target, BYTE **buffer, INT32 *size)
 {
@@ -5008,37 +5032,7 @@ TPMT_SENSITIVE_Marshal(TPMT_SENSITIVE *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:196 - Definition of TPM2B_SENSITIVE Structure  (StructureTable)
-#ifdef UT_BYTE_TPM2B_SENSITIVE
-TPM_RC
-TPM2B_SENSITIVE_Unmarshal(TPM2B_SENSITIVE *target, BYTE **buffer, INT32 *size)
-{
-    TPM_RC    result;
-    result = UINT16_Unmarshal((UINT16 *)&(target->t.size), buffer, size);
-    if(result != TPM_RC_SUCCESS)
-        return result;
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(target->t.size == 0)
-        return TPM_RC_SUCCESS;
-    if((target->t.size) > sizeof(TPMT_SENSITIVE))
-        return TPM_RC_SIZE;
-    result = BYTE_Array_Unmarshal((BYTE *)(target->t.sensitiveArea), buffer, size, (INT32)(target->t.size));
-    return result;
-}
-
-UINT16
-TPM2B_SENSITIVE_Marshal(TPM2B_SENSITIVE *source, BYTE **buffer, INT32 *size)
-{
-    UINT16    result = 0;
-    result = (UINT16)(result + UINT16_Marshal((UINT16 *)&(source->t.size), buffer, size));
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(source->t.size == 0)
-        return result;
-    result = (UINT16)(result + BYTE_Array_Marshal((BYTE *)(source->t.sensitiveArea), buffer, size, (INT32)(source->t.size)));
-    return result;
-}
-
-#else
+// Table 2:197 - Definition of TPM2B_SENSITIVE Structure  (StructureTable)
 TPM_RC
 TPM2B_SENSITIVE_Unmarshal(TPM2B_SENSITIVE *target, BYTE **buffer, INT32 *size)
 {
@@ -5072,10 +5066,8 @@ TPM2B_SENSITIVE_Marshal(TPM2B_SENSITIVE *source, BYTE **buffer, INT32 *size)
     return result;
 }
 
-#endif
 
-
-// Table 2:197 - Definition of _PRIVATE Structure  (StructureTable)
+// Table 2:198 - Definition of _PRIVATE Structure  (StructureTable)
 TPM_RC
 _PRIVATE_Unmarshal(_PRIVATE *target, BYTE **buffer, INT32 *size)
 {
@@ -5101,7 +5093,7 @@ _PRIVATE_Marshal(_PRIVATE *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:198 - Definition of TPM2B_PRIVATE Structure  (StructureTable)
+// Table 2:199 - Definition of TPM2B_PRIVATE Structure  (StructureTable)
 TPM_RC
 TPM2B_PRIVATE_Unmarshal(TPM2B_PRIVATE *target, BYTE **buffer, INT32 *size)
 {
@@ -5128,7 +5120,7 @@ TPM2B_PRIVATE_Marshal(TPM2B_PRIVATE *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:199 - Definition of TPMS_ID_OBJECT Structure  (StructureTable)
+// Table 2:200 - Definition of TPMS_ID_OBJECT Structure  (StructureTable)
 TPM_RC
 TPMS_ID_OBJECT_Unmarshal(TPMS_ID_OBJECT *target, BYTE **buffer, INT32 *size)
 {
@@ -5150,7 +5142,7 @@ TPMS_ID_OBJECT_Marshal(TPMS_ID_OBJECT *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:200 - Definition of TPM2B_ID_OBJECT Structure  (StructureTable)
+// Table 2:201 - Definition of TPM2B_ID_OBJECT Structure  (StructureTable)
 TPM_RC
 TPM2B_ID_OBJECT_Unmarshal(TPM2B_ID_OBJECT *target, BYTE **buffer, INT32 *size)
 {
@@ -5177,12 +5169,12 @@ TPM2B_ID_OBJECT_Marshal(TPM2B_ID_OBJECT *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:201 - Definition of TPM_NV_INDEX Bits  (BitsTable)
+// Table 2:202 - Definition of TPM_NV_INDEX Bits  (BitsTable)
 //   TPM_NV_INDEX_Unmarshal changed to #define
 //   TPM_NV_INDEX_Marshal changed to #define
 
 
-// Table 2:203 - Definition of TPMS_NV_PIN_COUNTER_PARAMETERS Structure (StructureTable)
+// Table 2:204 - Definition of TPMS_NV_PIN_COUNTER_PARAMETERS Structure (StructureTable)
 TPM_RC
 TPMS_NV_PIN_COUNTER_PARAMETERS_Unmarshal(TPMS_NV_PIN_COUNTER_PARAMETERS *target, BYTE **buffer, INT32 *size)
 {
@@ -5204,7 +5196,7 @@ TPMS_NV_PIN_COUNTER_PARAMETERS_Marshal(TPMS_NV_PIN_COUNTER_PARAMETERS *source, B
 }
 
 
-// Table 2:204 - Definition of TPMA_NV Bits (BitsTable)
+// Table 2:205 - Definition of TPMA_NV Bits (BitsTable)
 TPM_RC
 TPMA_NV_Unmarshal(TPMA_NV *target, BYTE **buffer, INT32 *size)
 {
@@ -5220,7 +5212,7 @@ TPMA_NV_Unmarshal(TPMA_NV *target, BYTE **buffer, INT32 *size)
 //   TPMA_NV_Marshal changed to #define
 
 
-// Table 2:205 - Definition of TPMS_NV_PUBLIC Structure (StructureTable)
+// Table 2:206 - Definition of TPMS_NV_PUBLIC Structure (StructureTable)
 TPM_RC
 TPMS_NV_PUBLIC_Unmarshal(TPMS_NV_PUBLIC *target, BYTE **buffer, INT32 *size)
 {
@@ -5258,37 +5250,7 @@ TPMS_NV_PUBLIC_Marshal(TPMS_NV_PUBLIC *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:206 - Definition of TPM2B_NV_PUBLIC Structure (StructureTable)
-#ifdef UT_BYTE_TPM2B_NV_PUBLIC
-TPM_RC
-TPM2B_NV_PUBLIC_Unmarshal(TPM2B_NV_PUBLIC *target, BYTE **buffer, INT32 *size)
-{
-    TPM_RC    result;
-    result = UINT16_Unmarshal((UINT16 *)&(target->t.size), buffer, size);
-    if(result != TPM_RC_SUCCESS)
-        return result;
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(target->t.size == 0)
-        return TPM_RC_SUCCESS;
-    if((target->t.size) > sizeof(TPMS_NV_PUBLIC))
-        return TPM_RC_SIZE;
-    result = BYTE_Array_Unmarshal((BYTE *)(target->t.nvPublic), buffer, size, (INT32)(target->t.size));
-    return result;
-}
-
-UINT16
-TPM2B_NV_PUBLIC_Marshal(TPM2B_NV_PUBLIC *source, BYTE **buffer, INT32 *size)
-{
-    UINT16    result = 0;
-    result = (UINT16)(result + UINT16_Marshal((UINT16 *)&(source->t.size), buffer, size));
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(source->t.size == 0)
-        return result;
-    result = (UINT16)(result + BYTE_Array_Marshal((BYTE *)(source->t.nvPublic), buffer, size, (INT32)(source->t.size)));
-    return result;
-}
-
-#else
+// Table 2:207 - Definition of TPM2B_NV_PUBLIC Structure (StructureTable)
 TPM_RC
 TPM2B_NV_PUBLIC_Unmarshal(TPM2B_NV_PUBLIC *target, BYTE **buffer, INT32 *size)
 {
@@ -5322,10 +5284,8 @@ TPM2B_NV_PUBLIC_Marshal(TPM2B_NV_PUBLIC *source, BYTE **buffer, INT32 *size)
     return result;
 }
 
-#endif
 
-
-// Table 2:207 - Definition of TPM2B_CONTEXT_SENSITIVE Structure  (StructureTable)
+// Table 2:208 - Definition of TPM2B_CONTEXT_SENSITIVE Structure  (StructureTable)
 TPM_RC
 TPM2B_CONTEXT_SENSITIVE_Unmarshal(TPM2B_CONTEXT_SENSITIVE *target, BYTE **buffer, INT32 *size)
 {
@@ -5352,7 +5312,7 @@ TPM2B_CONTEXT_SENSITIVE_Marshal(TPM2B_CONTEXT_SENSITIVE *source, BYTE **buffer, 
 }
 
 
-// Table 2:208 - Definition of TPMS_CONTEXT_DATA Structure  (StructureTable)
+// Table 2:209 - Definition of TPMS_CONTEXT_DATA Structure  (StructureTable)
 TPM_RC
 TPMS_CONTEXT_DATA_Unmarshal(TPMS_CONTEXT_DATA *target, BYTE **buffer, INT32 *size)
 {
@@ -5374,7 +5334,7 @@ TPMS_CONTEXT_DATA_Marshal(TPMS_CONTEXT_DATA *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:209 - Definition of TPM2B_CONTEXT_DATA Structure  (StructureTable)
+// Table 2:210 - Definition of TPM2B_CONTEXT_DATA Structure  (StructureTable)
 TPM_RC
 TPM2B_CONTEXT_DATA_Unmarshal(TPM2B_CONTEXT_DATA *target, BYTE **buffer, INT32 *size)
 {
@@ -5401,7 +5361,7 @@ TPM2B_CONTEXT_DATA_Marshal(TPM2B_CONTEXT_DATA *source, BYTE **buffer, INT32 *siz
 }
 
 
-// Table 2:210 - Definition of TPMS_CONTEXT Structure (StructureTable)
+// Table 2:211 - Definition of TPMS_CONTEXT Structure (StructureTable)
 TPM_RC
 TPMS_CONTEXT_Unmarshal(TPMS_CONTEXT *target, BYTE **buffer, INT32 *size)
 {
@@ -5431,7 +5391,7 @@ TPMS_CONTEXT_Marshal(TPMS_CONTEXT *source, BYTE **buffer, INT32 *size)
 }
 
 
-// Table 2:212 - Definition of TPMS_CREATION_DATA Structure  (StructureTable)
+// Table 2:213 - Definition of TPMS_CREATION_DATA Structure  (StructureTable)
 TPM_RC
 TPMS_CREATION_DATA_Unmarshal(TPMS_CREATION_DATA *target, BYTE **buffer, INT32 *size)
 {
@@ -5473,37 +5433,7 @@ TPMS_CREATION_DATA_Marshal(TPMS_CREATION_DATA *source, BYTE **buffer, INT32 *siz
 }
 
 
-// Table 2:213 - Definition of TPM2B_CREATION_DATA Structure  (StructureTable)
-#ifdef UT_BYTE_TPM2B_CREATION_DATA
-TPM_RC
-TPM2B_CREATION_DATA_Unmarshal(TPM2B_CREATION_DATA *target, BYTE **buffer, INT32 *size)
-{
-    TPM_RC    result;
-    result = UINT16_Unmarshal((UINT16 *)&(target->t.size), buffer, size);
-    if(result != TPM_RC_SUCCESS)
-        return result;
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(target->t.size == 0)
-        return TPM_RC_SUCCESS;
-    if((target->t.size) > sizeof(TPMS_CREATION_DATA))
-        return TPM_RC_SIZE;
-    result = BYTE_Array_Unmarshal((BYTE *)(target->t.creationData), buffer, size, (INT32)(target->t.size));
-    return result;
-}
-
-UINT16
-TPM2B_CREATION_DATA_Marshal(TPM2B_CREATION_DATA *source, BYTE **buffer, INT32 *size)
-{
-    UINT16    result = 0;
-    result = (UINT16)(result + UINT16_Marshal((UINT16 *)&(source->t.size), buffer, size));
-    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
-    if(source->t.size == 0)
-        return result;
-    result = (UINT16)(result + BYTE_Array_Marshal((BYTE *)(source->t.creationData), buffer, size, (INT32)(source->t.size)));
-    return result;
-}
-
-#else
+// Table 2:214 - Definition of TPM2B_CREATION_DATA Structure  (StructureTable)
 TPM_RC
 TPM2B_CREATION_DATA_Unmarshal(TPM2B_CREATION_DATA *target, BYTE **buffer, INT32 *size)
 {
@@ -5537,7 +5467,81 @@ TPM2B_CREATION_DATA_Marshal(TPM2B_CREATION_DATA *source, BYTE **buffer, INT32 *s
     return result;
 }
 
-#endif
+
+// Table 2:215 - Definition of TPM_AT Constants (ConstantsTable)
+TPM_RC
+TPM_AT_Unmarshal(TPM_AT *target, BYTE **buffer, INT32 *size)
+{
+    TPM_RC    result;
+    result = UINT32_Unmarshal((UINT32 *)target, buffer, size);
+    if(result != TPM_RC_SUCCESS)
+        return result;
+    switch(*target) {
+        case TPM_AT_ANY :
+        case TPM_AT_ERROR :
+        case TPM_AT_PV1 :
+        case TPM_AT_VEND :
+            break;
+       default :
+            return TPM_RC_VALUE;
+            break;
+    }
+    return TPM_RC_SUCCESS;
+}
+
+//   TPM_AT_Marshal changed to #define
+
+
+// Table 2:216 - Definition of TPM_AE Constants  (ConstantsTable)
+//   TPM_AE_Unmarshal changed to #define
+//   TPM_AE_Marshal changed to #define
+
+
+// Table 2:217 - Definition of TPMS_AC_OUTPUT Structure  (StructureTable)
+TPM_RC
+TPMS_AC_OUTPUT_Unmarshal(TPMS_AC_OUTPUT *target, BYTE **buffer, INT32 *size)
+{
+    TPM_RC    result;
+    result = TPM_AT_Unmarshal((TPM_AT *)&(target->tag), buffer, size);
+    if(result != TPM_RC_SUCCESS)
+        return result;
+    result = UINT32_Unmarshal((UINT32 *)&(target->data), buffer, size);
+    return result;
+}
+
+UINT16
+TPMS_AC_OUTPUT_Marshal(TPMS_AC_OUTPUT *source, BYTE **buffer, INT32 *size)
+{
+    UINT16    result = 0;
+    result = (UINT16)(result + TPM_AT_Marshal((TPM_AT *)&(source->tag), buffer, size));
+    result = (UINT16)(result + UINT32_Marshal((UINT32 *)&(source->data), buffer, size));
+    return result;
+}
+
+
+// Table 2:218 - Definition of TPML_AC_CAPABILITIES Structure  (StructureTable)
+TPM_RC
+TPML_AC_CAPABILITIES_Unmarshal(TPML_AC_CAPABILITIES *target, BYTE **buffer, INT32 *size)
+{
+    TPM_RC    result;
+    result = UINT32_Unmarshal((UINT32 *)&(target->count), buffer, size);
+    if(result != TPM_RC_SUCCESS)
+        return result;
+    if((target->count) > MAX_AC_CAPABILITIES)
+        return TPM_RC_VALUE;
+    result = TPMS_AC_OUTPUT_Array_Unmarshal((TPMS_AC_OUTPUT *)(target->acCapabilities), buffer, size, (INT32)(target->count));
+    return result;
+}
+
+UINT16
+TPML_AC_CAPABILITIES_Marshal(TPML_AC_CAPABILITIES *source, BYTE **buffer, INT32 *size)
+{
+    UINT16    result = 0;
+    result = (UINT16)(result + UINT32_Marshal((UINT32 *)&(source->count), buffer, size));
+    result = (UINT16)(result + TPMS_AC_OUTPUT_Array_Marshal((TPMS_AC_OUTPUT *)(source->acCapabilities), buffer, size, (INT32)(source->count)));
+    return result;
+}
+
 // Array Marshal/Unmarshal for BYTE
 TPM_RC
 BYTE_Array_Unmarshal(BYTE *target, BYTE **buffer, INT32 *size, INT32 count)
@@ -5612,6 +5616,31 @@ TPMA_CC_Array_Marshal(TPMA_CC *source, BYTE **buffer, INT32 *size, INT32 count)
     INT32 i;
     for(i = 0; i < count; i++) {
         result = (UINT16)(result + TPMA_CC_Marshal(&source[i], buffer, size));
+    }
+    return result;
+}
+
+// Array Marshal/Unmarshal for TPMS_AC_OUTPUT
+TPM_RC
+TPMS_AC_OUTPUT_Array_Unmarshal(TPMS_AC_OUTPUT *target, BYTE **buffer, INT32 *size, INT32 count)
+{
+    TPM_RC    result;
+    INT32 i;
+    for(i = 0; i < count; i++) {
+        result = TPMS_AC_OUTPUT_Unmarshal(&target[i], buffer, size);
+        if(result != TPM_RC_SUCCESS)
+            return result;
+    }
+    return TPM_RC_SUCCESS;
+}
+
+UINT16
+TPMS_AC_OUTPUT_Array_Marshal(TPMS_AC_OUTPUT *source, BYTE **buffer, INT32 *size, INT32 count)
+{
+    UINT16    result = 0;
+    INT32 i;
+    for(i = 0; i < count; i++) {
+        result = (UINT16)(result + TPMS_AC_OUTPUT_Marshal(&source[i], buffer, size));
     }
     return result;
 }

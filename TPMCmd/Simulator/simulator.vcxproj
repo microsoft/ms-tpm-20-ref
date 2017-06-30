@@ -641,6 +641,7 @@
     <ClCompile Include="src\TPMCmds.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\prototypes\Simulator_fp.h" />
     <ClInclude Include="include\TpmTcpProtocol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

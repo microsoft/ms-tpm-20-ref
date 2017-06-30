@@ -33,10 +33,10 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+// This file contains the RSA-related structures and defines.
+
 #ifndef _CRYPT_RSA_H
 #define _CRYPT_RSA_H
-
-//*** RSA-related Structures and defines
 
 // This structure is a succinct representation of the cryptographic components
 // of an RSA key. It is used in testing

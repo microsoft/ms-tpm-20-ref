@@ -73,6 +73,10 @@
 #include "Response_fp.h"
 #include "CommandDispatcher_fp.h"
 
+#ifdef TPM_CC_AC_Send
+#   include "AC_spt_fp.h"
+#endif // TPM_CC_AC_Send
+
 // Miscellaneous
 #include "Bits_fp.h"
 #include "AlgorithmCap_fp.h"
@@ -81,7 +85,7 @@
 #include "Memory_fp.h"
 #include "ResponseCodeProcessing_fp.h"
 
-// Internal crypto functions
+// Internal cryptographic functions
 #include "BnConvert_fp.h"
 #include "BnMath_fp.h"
 #include "BnMemory_fp.h"
@@ -106,6 +110,13 @@
 #include "CryptEccMain_fp.h"
 #include "CryptEccSignature_fp.h"
 #include "CryptEccKeyExchange_fp.h"
+#endif
+
+#if defined TPM_CC_MAC || defined TPM_CC_MAC_Start
+#   include "CryptSmac_fp.h"
+#   ifdef TPM_ALG_CMAC
+#       include "CryptCmac_fp.h"
+#   endif
 #endif
 
 // Support library

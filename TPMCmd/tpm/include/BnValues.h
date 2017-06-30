@@ -54,6 +54,8 @@
 // in 'n'. When this number is zero, the number is zero. The word at used-1 should
 // never be zero. All words between d[size] and d[allocated-1] should be zero.
 
+//** Defines
+
 #ifndef _BN_NUMBERS_H
 #define _BN_NUMBERS_H
 

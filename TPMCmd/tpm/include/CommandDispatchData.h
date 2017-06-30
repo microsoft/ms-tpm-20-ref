@@ -35,7 +35,7 @@
 /*(Auto)
 
     Created by TpmStructures Version 2.7 Sept 13, 2016
-    This file created on Sep 27, 2016, 04:02:56PM 
+    This file created on Apr  6, 2017, 08:39:16PM 
 
 */
 
@@ -54,7 +54,9 @@
 const UNMARSHAL_t UnmarshalArray[] = {
 #define  TPMI_DH_CONTEXT_H_UNMARSHAL        0
             (UNMARSHAL_t)TPMI_DH_CONTEXT_Unmarshal,
-#define TPMI_RH_CLEAR_H_UNMARSHAL       (TPMI_DH_CONTEXT_H_UNMARSHAL + 1)
+#define TPMI_RH_AC_H_UNMARSHAL          (TPMI_DH_CONTEXT_H_UNMARSHAL + 1)
+            (UNMARSHAL_t)TPMI_RH_AC_Unmarshal,
+#define TPMI_RH_CLEAR_H_UNMARSHAL       (TPMI_RH_AC_H_UNMARSHAL + 1)
             (UNMARSHAL_t)TPMI_RH_CLEAR_Unmarshal,
 #define TPMI_RH_HIERARCHY_AUTH_H_UNMARSHAL  (TPMI_RH_CLEAR_H_UNMARSHAL + 1)
             (UNMARSHAL_t)TPMI_RH_HIERARCHY_AUTH_Unmarshal,
@@ -126,7 +128,9 @@ const UNMARSHAL_t UnmarshalArray[] = {
             (UNMARSHAL_t)TPM2B_SENSITIVE_DATA_Unmarshal,
 #define TPM2B_TEMPLATE_P_UNMARSHAL      (TPM2B_SENSITIVE_DATA_P_UNMARSHAL + 1)
             (UNMARSHAL_t)TPM2B_TEMPLATE_Unmarshal,
-#define UINT8_P_UNMARSHAL               (TPM2B_TEMPLATE_P_UNMARSHAL + 1)
+#define TPM2B_TIMEOUT_P_UNMARSHAL       (TPM2B_TEMPLATE_P_UNMARSHAL + 1)
+            (UNMARSHAL_t)TPM2B_TIMEOUT_Unmarshal,
+#define UINT8_P_UNMARSHAL               (TPM2B_TIMEOUT_P_UNMARSHAL + 1)
             (UNMARSHAL_t)UINT8_Unmarshal,
 #define TPMI_DH_CONTEXT_P_UNMARSHAL     (UINT8_P_UNMARSHAL + 1)
             (UNMARSHAL_t)TPMI_DH_CONTEXT_Unmarshal,
@@ -158,7 +162,9 @@ const UNMARSHAL_t UnmarshalArray[] = {
             (UNMARSHAL_t)TPMT_TK_HASHCHECK_Unmarshal,
 #define TPMT_TK_VERIFIED_P_UNMARSHAL    (TPMT_TK_HASHCHECK_P_UNMARSHAL + 1)
             (UNMARSHAL_t)TPMT_TK_VERIFIED_Unmarshal,
-#define TPM_CAP_P_UNMARSHAL             (TPMT_TK_VERIFIED_P_UNMARSHAL + 1)
+#define TPM_AT_P_UNMARSHAL              (TPMT_TK_VERIFIED_P_UNMARSHAL + 1)
+            (UNMARSHAL_t)TPM_AT_Unmarshal,
+#define TPM_CAP_P_UNMARSHAL             (TPM_AT_P_UNMARSHAL + 1)
             (UNMARSHAL_t)TPM_CAP_Unmarshal,
 #define TPM_CLOCK_ADJUST_P_UNMARSHAL    (TPM_CAP_P_UNMARSHAL + 1)
             (UNMARSHAL_t)TPM_CLOCK_ADJUST_Unmarshal,
@@ -176,11 +182,13 @@ const UNMARSHAL_t UnmarshalArray[] = {
 #define PARAMETER_FIRST_FLAG_TYPE       (UINT64_P_UNMARSHAL + 1)
 #define TPM2B_PUBLIC_P_UNMARSHAL        (UINT64_P_UNMARSHAL + 1)
             (UNMARSHAL_t)TPM2B_PUBLIC_Unmarshal,
-#define TPMI_ALG_HASH_P_UNMARSHAL       (TPM2B_PUBLIC_P_UNMARSHAL + 1)
+#define TPMI_ALG_CIPHER_MODE_P_UNMARSHAL  (TPM2B_PUBLIC_P_UNMARSHAL + 1)
+            (UNMARSHAL_t)TPMI_ALG_CIPHER_MODE_Unmarshal,
+#define TPMI_ALG_HASH_P_UNMARSHAL       (TPMI_ALG_CIPHER_MODE_P_UNMARSHAL + 1)
             (UNMARSHAL_t)TPMI_ALG_HASH_Unmarshal,
-#define TPMI_ALG_SYM_MODE_P_UNMARSHAL   (TPMI_ALG_HASH_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_ALG_SYM_MODE_Unmarshal,
-#define TPMI_DH_PCR_P_UNMARSHAL         (TPMI_ALG_SYM_MODE_P_UNMARSHAL + 1)
+#define TPMI_ALG_MAC_SCHEME_P_UNMARSHAL  (TPMI_ALG_HASH_P_UNMARSHAL + 1)
+            (UNMARSHAL_t)TPMI_ALG_MAC_SCHEME_Unmarshal,
+#define TPMI_DH_PCR_P_UNMARSHAL         (TPMI_ALG_MAC_SCHEME_P_UNMARSHAL + 1)
             (UNMARSHAL_t)TPMI_DH_PCR_Unmarshal,
 #define TPMI_ECC_KEY_EXCHANGE_P_UNMARSHAL  (TPMI_DH_PCR_P_UNMARSHAL + 1)
             (UNMARSHAL_t)TPMI_ECC_KEY_EXCHANGE_Unmarshal,
@@ -241,9 +249,13 @@ const MARSHAL_t MarshalArray[] = {
             (MARSHAL_t)TPM2B_PUBLIC_KEY_RSA_Marshal,
 #define TPM2B_SENSITIVE_DATA_P_MARSHAL  (TPM2B_PUBLIC_KEY_RSA_P_MARSHAL + 1)
             (MARSHAL_t)TPM2B_SENSITIVE_DATA_Marshal,
-#define UINT8_P_MARSHAL                 (TPM2B_SENSITIVE_DATA_P_MARSHAL + 1)
+#define TPM2B_TIMEOUT_P_MARSHAL         (TPM2B_SENSITIVE_DATA_P_MARSHAL + 1)
+            (MARSHAL_t)TPM2B_TIMEOUT_Marshal,
+#define UINT8_P_MARSHAL                 (TPM2B_TIMEOUT_P_MARSHAL + 1)
             (MARSHAL_t)UINT8_Marshal,
-#define TPML_ALG_P_MARSHAL              (UINT8_P_MARSHAL + 1)
+#define TPML_AC_CAPABILITIES_P_MARSHAL  (UINT8_P_MARSHAL + 1)
+            (MARSHAL_t)TPML_AC_CAPABILITIES_Marshal,
+#define TPML_ALG_P_MARSHAL              (TPML_AC_CAPABILITIES_P_MARSHAL + 1)
             (MARSHAL_t)TPML_ALG_Marshal,
 #define TPML_DIGEST_P_MARSHAL           (TPML_ALG_P_MARSHAL + 1)
             (MARSHAL_t)TPML_DIGEST_Marshal,
@@ -251,7 +263,9 @@ const MARSHAL_t MarshalArray[] = {
             (MARSHAL_t)TPML_DIGEST_VALUES_Marshal,
 #define TPML_PCR_SELECTION_P_MARSHAL    (TPML_DIGEST_VALUES_P_MARSHAL + 1)
             (MARSHAL_t)TPML_PCR_SELECTION_Marshal,
-#define TPMS_ALGORITHM_DETAIL_ECC_P_MARSHAL  (TPML_PCR_SELECTION_P_MARSHAL + 1)
+#define TPMS_AC_OUTPUT_P_MARSHAL        (TPML_PCR_SELECTION_P_MARSHAL + 1)
+            (MARSHAL_t)TPMS_AC_OUTPUT_Marshal,
+#define TPMS_ALGORITHM_DETAIL_ECC_P_MARSHAL  (TPMS_AC_OUTPUT_P_MARSHAL + 1)
             (MARSHAL_t)TPMS_ALGORITHM_DETAIL_ECC_Marshal,
 #define TPMS_CAPABILITY_DATA_P_MARSHAL  (TPMS_ALGORITHM_DETAIL_ECC_P_MARSHAL + 1)
             (MARSHAL_t)TPMS_CAPABILITY_DATA_Marshal,
@@ -1278,7 +1292,7 @@ EncryptDecrypt_COMMAND_DESCRIPTOR_t _EncryptDecryptData = {
                        (UINT16)(offsetof(EncryptDecrypt_Out, ivOut))},
 /* types */           {TPMI_DH_OBJECT_H_UNMARSHAL,
                        TPMI_YES_NO_P_UNMARSHAL,
-                       TPMI_ALG_SYM_MODE_P_UNMARSHAL + ADD_FLAG,
+                       TPMI_ALG_CIPHER_MODE_P_UNMARSHAL + ADD_FLAG,
                        TPM2B_IV_P_UNMARSHAL,
                        TPM2B_MAX_BUFFER_P_UNMARSHAL,
                        END_OF_LIST,
@@ -1323,7 +1337,7 @@ EncryptDecrypt2_COMMAND_DESCRIPTOR_t _EncryptDecrypt2Data = {
 /* types */           {TPMI_DH_OBJECT_H_UNMARSHAL,
                        TPM2B_MAX_BUFFER_P_UNMARSHAL,
                        TPMI_YES_NO_P_UNMARSHAL,
-                       TPMI_ALG_SYM_MODE_P_UNMARSHAL + ADD_FLAG,
+                       TPMI_ALG_CIPHER_MODE_P_UNMARSHAL + ADD_FLAG,
                        TPM2B_IV_P_UNMARSHAL,
                        END_OF_LIST,
                        TPM2B_MAX_BUFFER_P_MARSHAL,
@@ -1412,6 +1426,44 @@ HMAC_COMMAND_DESCRIPTOR_t _HMACData = {
 #define _HMACDataAddress (&_HMACData)
 #else
 #define _HMACDataAddress 0
+#endif
+
+#if CC_MAC == YES
+
+#include "MAC_fp.h"
+
+typedef TPM_RC  (MAC_Entry)(
+    MAC_In *in,
+    MAC_Out *out
+); 
+
+typedef const struct {
+    MAC_Entry    *entry;
+    UINT16       inSize;
+    UINT16       outSize;
+    UINT16       offsetOfTypes;
+    UINT16       paramOffsets[2];
+    BYTE         types[6];
+} MAC_COMMAND_DESCRIPTOR_t;
+
+MAC_COMMAND_DESCRIPTOR_t _MACData = {
+/* entry  */          &TPM2_MAC, 
+/* inSize */          (UINT16)(sizeof(MAC_In)),
+/* outSize */         (UINT16)(sizeof(MAC_Out)),
+/* offsetOfTypes */   offsetof(MAC_COMMAND_DESCRIPTOR_t, types),
+/* offsets */         {(UINT16)(offsetof(MAC_In, buffer)),
+                       (UINT16)(offsetof(MAC_In, inScheme))},
+/* types */           {TPMI_DH_OBJECT_H_UNMARSHAL,
+                       TPM2B_MAX_BUFFER_P_UNMARSHAL,
+                       TPMI_ALG_MAC_SCHEME_P_UNMARSHAL + ADD_FLAG,
+                       END_OF_LIST,
+                       TPM2B_DIGEST_P_MARSHAL,
+                       END_OF_LIST}
+};
+
+#define _MACDataAddress (&_MACData)
+#else
+#define _MACDataAddress 0
 #endif
 
 #if CC_GetRandom == YES
@@ -1516,6 +1568,44 @@ HMAC_Start_COMMAND_DESCRIPTOR_t _HMAC_StartData = {
 #define _HMAC_StartDataAddress (&_HMAC_StartData)
 #else
 #define _HMAC_StartDataAddress 0
+#endif
+
+#if CC_MAC_Start == YES
+
+#include "MAC_Start_fp.h"
+
+typedef TPM_RC  (MAC_Start_Entry)(
+    MAC_Start_In *in,
+    MAC_Start_Out *out
+); 
+
+typedef const struct {
+    MAC_Start_Entry    *entry;
+    UINT16             inSize;
+    UINT16             outSize;
+    UINT16             offsetOfTypes;
+    UINT16             paramOffsets[2];
+    BYTE               types[6];
+} MAC_Start_COMMAND_DESCRIPTOR_t;
+
+MAC_Start_COMMAND_DESCRIPTOR_t _MAC_StartData = {
+/* entry  */          &TPM2_MAC_Start, 
+/* inSize */          (UINT16)(sizeof(MAC_Start_In)),
+/* outSize */         (UINT16)(sizeof(MAC_Start_Out)),
+/* offsetOfTypes */   offsetof(MAC_Start_COMMAND_DESCRIPTOR_t, types),
+/* offsets */         {(UINT16)(offsetof(MAC_Start_In, auth)),
+                       (UINT16)(offsetof(MAC_Start_In, inScheme))},
+/* types */           {TPMI_DH_OBJECT_H_UNMARSHAL,
+                       TPM2B_DIGEST_P_UNMARSHAL,
+                       TPMI_ALG_MAC_SCHEME_P_UNMARSHAL + ADD_FLAG,
+                       END_OF_LIST,
+                       UINT32_H_MARSHAL,
+                       END_OF_LIST}
+};
+
+#define _MAC_StartDataAddress (&_MAC_StartData)
+#else
+#define _MAC_StartDataAddress 0
 #endif
 
 #if CC_HashSequenceStart == YES
@@ -2414,7 +2504,7 @@ PolicySigned_COMMAND_DESCRIPTOR_t _PolicySignedData = {
                        UINT32_P_UNMARSHAL,
                        TPMT_SIGNATURE_P_UNMARSHAL,
                        END_OF_LIST,
-                       TPM2B_DIGEST_P_MARSHAL,
+                       TPM2B_TIMEOUT_P_MARSHAL,
                        TPMT_TK_AUTH_P_MARSHAL,
                        END_OF_LIST}
 };
@@ -2460,7 +2550,7 @@ PolicySecret_COMMAND_DESCRIPTOR_t _PolicySecretData = {
                        TPM2B_DIGEST_P_UNMARSHAL,
                        UINT32_P_UNMARSHAL,
                        END_OF_LIST,
-                       TPM2B_DIGEST_P_MARSHAL,
+                       TPM2B_TIMEOUT_P_MARSHAL,
                        TPMT_TK_AUTH_P_MARSHAL,
                        END_OF_LIST}
 };
@@ -2498,7 +2588,7 @@ PolicyTicket_COMMAND_DESCRIPTOR_t _PolicyTicketData = {
                        (UINT16)(offsetof(PolicyTicket_In, authName)),
                        (UINT16)(offsetof(PolicyTicket_In, ticket))},
 /* types */           {TPMI_SH_POLICY_H_UNMARSHAL,
-                       TPM2B_DIGEST_P_UNMARSHAL,
+                       TPM2B_TIMEOUT_P_UNMARSHAL,
                        TPM2B_DIGEST_P_UNMARSHAL,
                        TPM2B_DIGEST_P_UNMARSHAL,
                        TPM2B_NAME_P_UNMARSHAL,
@@ -4460,6 +4550,126 @@ NV_Certify_COMMAND_DESCRIPTOR_t _NV_CertifyData = {
 #define _NV_CertifyDataAddress 0
 #endif
 
+#if CC_AC_GetCapability == YES
+
+#include "AC_GetCapability_fp.h"
+
+typedef TPM_RC  (AC_GetCapability_Entry)(
+    AC_GetCapability_In *in,
+    AC_GetCapability_Out *out
+); 
+
+typedef const struct {
+    AC_GetCapability_Entry    *entry;
+    UINT16                    inSize;
+    UINT16                    outSize;
+    UINT16                    offsetOfTypes;
+    UINT16                    paramOffsets[3];
+    BYTE                      types[7];
+} AC_GetCapability_COMMAND_DESCRIPTOR_t;
+
+AC_GetCapability_COMMAND_DESCRIPTOR_t _AC_GetCapabilityData = {
+/* entry  */          &TPM2_AC_GetCapability, 
+/* inSize */          (UINT16)(sizeof(AC_GetCapability_In)),
+/* outSize */         (UINT16)(sizeof(AC_GetCapability_Out)),
+/* offsetOfTypes */   offsetof(AC_GetCapability_COMMAND_DESCRIPTOR_t, types),
+/* offsets */         {(UINT16)(offsetof(AC_GetCapability_In, capability)),
+                       (UINT16)(offsetof(AC_GetCapability_In, count)),
+                       (UINT16)(offsetof(AC_GetCapability_Out, capabilitiesData))},
+/* types */           {TPMI_RH_AC_H_UNMARSHAL,
+                       TPM_AT_P_UNMARSHAL,
+                       UINT32_P_UNMARSHAL,
+                       END_OF_LIST,
+                       UINT8_P_MARSHAL,
+                       TPML_AC_CAPABILITIES_P_MARSHAL,
+                       END_OF_LIST}
+};
+
+#define _AC_GetCapabilityDataAddress (&_AC_GetCapabilityData)
+#else
+#define _AC_GetCapabilityDataAddress 0
+#endif
+
+#if CC_AC_Send == YES
+
+#include "AC_Send_fp.h"
+
+typedef TPM_RC  (AC_Send_Entry)(
+    AC_Send_In *in,
+    AC_Send_Out *out
+); 
+
+typedef const struct {
+    AC_Send_Entry    *entry;
+    UINT16           inSize;
+    UINT16           outSize;
+    UINT16           offsetOfTypes;
+    UINT16           paramOffsets[3];
+    BYTE             types[7];
+} AC_Send_COMMAND_DESCRIPTOR_t;
+
+AC_Send_COMMAND_DESCRIPTOR_t _AC_SendData = {
+/* entry  */          &TPM2_AC_Send, 
+/* inSize */          (UINT16)(sizeof(AC_Send_In)),
+/* outSize */         (UINT16)(sizeof(AC_Send_Out)),
+/* offsetOfTypes */   offsetof(AC_Send_COMMAND_DESCRIPTOR_t, types),
+/* offsets */         {(UINT16)(offsetof(AC_Send_In, authHandle)),
+                       (UINT16)(offsetof(AC_Send_In, ac)),
+                       (UINT16)(offsetof(AC_Send_In, acDataIn))},
+/* types */           {TPMI_DH_OBJECT_H_UNMARSHAL,
+                       TPMI_RH_NV_AUTH_H_UNMARSHAL,
+                       TPMI_RH_AC_H_UNMARSHAL,
+                       TPM2B_MAX_BUFFER_P_UNMARSHAL,
+                       END_OF_LIST,
+                       TPMS_AC_OUTPUT_P_MARSHAL,
+                       END_OF_LIST}
+};
+
+#define _AC_SendDataAddress (&_AC_SendData)
+#else
+#define _AC_SendDataAddress 0
+#endif
+
+#if CC_Policy_AC_SendSelect == YES
+
+#include "Policy_AC_SendSelect_fp.h"
+
+typedef TPM_RC  (Policy_AC_SendSelect_Entry)(
+    Policy_AC_SendSelect_In *in
+); 
+
+typedef const struct {
+    Policy_AC_SendSelect_Entry    *entry;
+    UINT16                        inSize;
+    UINT16                        outSize;
+    UINT16                        offsetOfTypes;
+    UINT16                        paramOffsets[4];
+    BYTE                          types[7];
+} Policy_AC_SendSelect_COMMAND_DESCRIPTOR_t;
+
+Policy_AC_SendSelect_COMMAND_DESCRIPTOR_t _Policy_AC_SendSelectData = {
+/* entry  */          &TPM2_Policy_AC_SendSelect, 
+/* inSize */          (UINT16)(sizeof(Policy_AC_SendSelect_In)),
+/* outSize */         0,
+/* offsetOfTypes */   offsetof(Policy_AC_SendSelect_COMMAND_DESCRIPTOR_t, types),
+/* offsets */         {(UINT16)(offsetof(Policy_AC_SendSelect_In, objectName)),
+                       (UINT16)(offsetof(Policy_AC_SendSelect_In, authHandleName)),
+                       (UINT16)(offsetof(Policy_AC_SendSelect_In, acName)),
+                       (UINT16)(offsetof(Policy_AC_SendSelect_In, includeObject))},
+/* types */           {TPMI_SH_POLICY_H_UNMARSHAL,
+                       TPM2B_NAME_P_UNMARSHAL,
+                       TPM2B_NAME_P_UNMARSHAL,
+                       TPM2B_NAME_P_UNMARSHAL,
+                       TPMI_YES_NO_P_UNMARSHAL,
+                       END_OF_LIST,
+                       END_OF_LIST}
+};
+
+#define _Policy_AC_SendSelectDataAddress (&_Policy_AC_SendSelectData)
+#else
+#define _Policy_AC_SendSelectDataAddress 0
+#endif
+
 #if CC_Vendor_TCG_Test == YES
 
 #include "Vendor_TCG_Test_fp.h"
@@ -4497,358 +4707,383 @@ Vendor_TCG_Test_COMMAND_DESCRIPTOR_t _Vendor_TCG_TestData = {
 COMMAND_DESCRIPTOR_t *s_CommandDataArray[] = {
 #if (PAD_LIST || CC_NV_UndefineSpaceSpecial)
         (COMMAND_DESCRIPTOR_t *)_NV_UndefineSpaceSpecialDataAddress,
-#endif
+#endif // CC_NV_UndefineSpaceSpecial
 #if (PAD_LIST || CC_EvictControl)
         (COMMAND_DESCRIPTOR_t *)_EvictControlDataAddress,
-#endif
+#endif // CC_EvictControl
 #if (PAD_LIST || CC_HierarchyControl)
         (COMMAND_DESCRIPTOR_t *)_HierarchyControlDataAddress,
-#endif
+#endif // CC_HierarchyControl
 #if (PAD_LIST || CC_NV_UndefineSpace)
         (COMMAND_DESCRIPTOR_t *)_NV_UndefineSpaceDataAddress,
-#endif
+#endif // CC_NV_UndefineSpace
 #if (PAD_LIST)
         (COMMAND_DESCRIPTOR_t *)0,
-#endif
+#endif // 
 #if (PAD_LIST || CC_ChangeEPS)
         (COMMAND_DESCRIPTOR_t *)_ChangeEPSDataAddress,
-#endif
+#endif // CC_ChangeEPS
 #if (PAD_LIST || CC_ChangePPS)
         (COMMAND_DESCRIPTOR_t *)_ChangePPSDataAddress,
-#endif
+#endif // CC_ChangePPS
 #if (PAD_LIST || CC_Clear)
         (COMMAND_DESCRIPTOR_t *)_ClearDataAddress,
-#endif
+#endif // CC_Clear
 #if (PAD_LIST || CC_ClearControl)
         (COMMAND_DESCRIPTOR_t *)_ClearControlDataAddress,
-#endif
+#endif // CC_ClearControl
 #if (PAD_LIST || CC_ClockSet)
         (COMMAND_DESCRIPTOR_t *)_ClockSetDataAddress,
-#endif
+#endif // CC_ClockSet
 #if (PAD_LIST || CC_HierarchyChangeAuth)
         (COMMAND_DESCRIPTOR_t *)_HierarchyChangeAuthDataAddress,
-#endif
+#endif // CC_HierarchyChangeAuth
 #if (PAD_LIST || CC_NV_DefineSpace)
         (COMMAND_DESCRIPTOR_t *)_NV_DefineSpaceDataAddress,
-#endif
+#endif // CC_NV_DefineSpace
 #if (PAD_LIST || CC_PCR_Allocate)
         (COMMAND_DESCRIPTOR_t *)_PCR_AllocateDataAddress,
-#endif
+#endif // CC_PCR_Allocate
 #if (PAD_LIST || CC_PCR_SetAuthPolicy)
         (COMMAND_DESCRIPTOR_t *)_PCR_SetAuthPolicyDataAddress,
-#endif
+#endif // CC_PCR_SetAuthPolicy
 #if (PAD_LIST || CC_PP_Commands)
         (COMMAND_DESCRIPTOR_t *)_PP_CommandsDataAddress,
-#endif
+#endif // CC_PP_Commands
 #if (PAD_LIST || CC_SetPrimaryPolicy)
         (COMMAND_DESCRIPTOR_t *)_SetPrimaryPolicyDataAddress,
-#endif
+#endif // CC_SetPrimaryPolicy
 #if (PAD_LIST || CC_FieldUpgradeStart)
         (COMMAND_DESCRIPTOR_t *)_FieldUpgradeStartDataAddress,
-#endif
+#endif // CC_FieldUpgradeStart
 #if (PAD_LIST || CC_ClockRateAdjust)
         (COMMAND_DESCRIPTOR_t *)_ClockRateAdjustDataAddress,
-#endif
+#endif // CC_ClockRateAdjust
 #if (PAD_LIST || CC_CreatePrimary)
         (COMMAND_DESCRIPTOR_t *)_CreatePrimaryDataAddress,
-#endif
+#endif // CC_CreatePrimary
 #if (PAD_LIST || CC_NV_GlobalWriteLock)
         (COMMAND_DESCRIPTOR_t *)_NV_GlobalWriteLockDataAddress,
-#endif
+#endif // CC_NV_GlobalWriteLock
 #if (PAD_LIST || CC_GetCommandAuditDigest)
         (COMMAND_DESCRIPTOR_t *)_GetCommandAuditDigestDataAddress,
-#endif
+#endif // CC_GetCommandAuditDigest
 #if (PAD_LIST || CC_NV_Increment)
         (COMMAND_DESCRIPTOR_t *)_NV_IncrementDataAddress,
-#endif
+#endif // CC_NV_Increment
 #if (PAD_LIST || CC_NV_SetBits)
         (COMMAND_DESCRIPTOR_t *)_NV_SetBitsDataAddress,
-#endif
+#endif // CC_NV_SetBits
 #if (PAD_LIST || CC_NV_Extend)
         (COMMAND_DESCRIPTOR_t *)_NV_ExtendDataAddress,
-#endif
+#endif // CC_NV_Extend
 #if (PAD_LIST || CC_NV_Write)
         (COMMAND_DESCRIPTOR_t *)_NV_WriteDataAddress,
-#endif
+#endif // CC_NV_Write
 #if (PAD_LIST || CC_NV_WriteLock)
         (COMMAND_DESCRIPTOR_t *)_NV_WriteLockDataAddress,
-#endif
+#endif // CC_NV_WriteLock
 #if (PAD_LIST || CC_DictionaryAttackLockReset)
         (COMMAND_DESCRIPTOR_t *)_DictionaryAttackLockResetDataAddress,
-#endif
+#endif // CC_DictionaryAttackLockReset
 #if (PAD_LIST || CC_DictionaryAttackParameters)
         (COMMAND_DESCRIPTOR_t *)_DictionaryAttackParametersDataAddress,
-#endif
+#endif // CC_DictionaryAttackParameters
 #if (PAD_LIST || CC_NV_ChangeAuth)
         (COMMAND_DESCRIPTOR_t *)_NV_ChangeAuthDataAddress,
-#endif
+#endif // CC_NV_ChangeAuth
 #if (PAD_LIST || CC_PCR_Event)
         (COMMAND_DESCRIPTOR_t *)_PCR_EventDataAddress,
-#endif
+#endif // CC_PCR_Event
 #if (PAD_LIST || CC_PCR_Reset)
         (COMMAND_DESCRIPTOR_t *)_PCR_ResetDataAddress,
-#endif
+#endif // CC_PCR_Reset
 #if (PAD_LIST || CC_SequenceComplete)
         (COMMAND_DESCRIPTOR_t *)_SequenceCompleteDataAddress,
-#endif
+#endif // CC_SequenceComplete
 #if (PAD_LIST || CC_SetAlgorithmSet)
         (COMMAND_DESCRIPTOR_t *)_SetAlgorithmSetDataAddress,
-#endif
+#endif // CC_SetAlgorithmSet
 #if (PAD_LIST || CC_SetCommandCodeAuditStatus)
         (COMMAND_DESCRIPTOR_t *)_SetCommandCodeAuditStatusDataAddress,
-#endif
+#endif // CC_SetCommandCodeAuditStatus
 #if (PAD_LIST || CC_FieldUpgradeData)
         (COMMAND_DESCRIPTOR_t *)_FieldUpgradeDataDataAddress,
-#endif
+#endif // CC_FieldUpgradeData
 #if (PAD_LIST || CC_IncrementalSelfTest)
         (COMMAND_DESCRIPTOR_t *)_IncrementalSelfTestDataAddress,
-#endif
+#endif // CC_IncrementalSelfTest
 #if (PAD_LIST || CC_SelfTest)
         (COMMAND_DESCRIPTOR_t *)_SelfTestDataAddress,
-#endif
+#endif // CC_SelfTest
 #if (PAD_LIST || CC_Startup)
         (COMMAND_DESCRIPTOR_t *)_StartupDataAddress,
-#endif
+#endif // CC_Startup
 #if (PAD_LIST || CC_Shutdown)
         (COMMAND_DESCRIPTOR_t *)_ShutdownDataAddress,
-#endif
+#endif // CC_Shutdown
 #if (PAD_LIST || CC_StirRandom)
         (COMMAND_DESCRIPTOR_t *)_StirRandomDataAddress,
-#endif
+#endif // CC_StirRandom
 #if (PAD_LIST || CC_ActivateCredential)
         (COMMAND_DESCRIPTOR_t *)_ActivateCredentialDataAddress,
-#endif
+#endif // CC_ActivateCredential
 #if (PAD_LIST || CC_Certify)
         (COMMAND_DESCRIPTOR_t *)_CertifyDataAddress,
-#endif
+#endif // CC_Certify
 #if (PAD_LIST || CC_PolicyNV)
         (COMMAND_DESCRIPTOR_t *)_PolicyNVDataAddress,
-#endif
+#endif // CC_PolicyNV
 #if (PAD_LIST || CC_CertifyCreation)
         (COMMAND_DESCRIPTOR_t *)_CertifyCreationDataAddress,
-#endif
+#endif // CC_CertifyCreation
 #if (PAD_LIST || CC_Duplicate)
         (COMMAND_DESCRIPTOR_t *)_DuplicateDataAddress,
-#endif
+#endif // CC_Duplicate
 #if (PAD_LIST || CC_GetTime)
         (COMMAND_DESCRIPTOR_t *)_GetTimeDataAddress,
-#endif
+#endif // CC_GetTime
 #if (PAD_LIST || CC_GetSessionAuditDigest)
         (COMMAND_DESCRIPTOR_t *)_GetSessionAuditDigestDataAddress,
-#endif
+#endif // CC_GetSessionAuditDigest
 #if (PAD_LIST || CC_NV_Read)
         (COMMAND_DESCRIPTOR_t *)_NV_ReadDataAddress,
-#endif
+#endif // CC_NV_Read
 #if (PAD_LIST || CC_NV_ReadLock)
         (COMMAND_DESCRIPTOR_t *)_NV_ReadLockDataAddress,
-#endif
+#endif // CC_NV_ReadLock
 #if (PAD_LIST || CC_ObjectChangeAuth)
         (COMMAND_DESCRIPTOR_t *)_ObjectChangeAuthDataAddress,
-#endif
+#endif // CC_ObjectChangeAuth
 #if (PAD_LIST || CC_PolicySecret)
         (COMMAND_DESCRIPTOR_t *)_PolicySecretDataAddress,
-#endif
+#endif // CC_PolicySecret
 #if (PAD_LIST || CC_Rewrap)
         (COMMAND_DESCRIPTOR_t *)_RewrapDataAddress,
-#endif
+#endif // CC_Rewrap
 #if (PAD_LIST || CC_Create)
         (COMMAND_DESCRIPTOR_t *)_CreateDataAddress,
-#endif
+#endif // CC_Create
 #if (PAD_LIST || CC_ECDH_ZGen)
         (COMMAND_DESCRIPTOR_t *)_ECDH_ZGenDataAddress,
-#endif
-#if (PAD_LIST || CC_HMAC)
+#endif // CC_ECDH_ZGen
+#if (PAD_LIST || (CC_HMAC || CC_MAC))
+#    if CC_HMAC
         (COMMAND_DESCRIPTOR_t *)_HMACDataAddress,
-#endif
+#    endif
+#    if CC_MAC
+        (COMMAND_DESCRIPTOR_t *)_MACDataAddress,
+#    endif
+#    if (CC_HMAC || CC_MAC) > 1
+#        error "More than one aliased command defined"
+#    endif
+#endif // CC_HMAC CC_MAC
 #if (PAD_LIST || CC_Import)
         (COMMAND_DESCRIPTOR_t *)_ImportDataAddress,
-#endif
+#endif // CC_Import
 #if (PAD_LIST || CC_Load)
         (COMMAND_DESCRIPTOR_t *)_LoadDataAddress,
-#endif
+#endif // CC_Load
 #if (PAD_LIST || CC_Quote)
         (COMMAND_DESCRIPTOR_t *)_QuoteDataAddress,
-#endif
+#endif // CC_Quote
 #if (PAD_LIST || CC_RSA_Decrypt)
         (COMMAND_DESCRIPTOR_t *)_RSA_DecryptDataAddress,
-#endif
+#endif // CC_RSA_Decrypt
 #if (PAD_LIST)
         (COMMAND_DESCRIPTOR_t *)0,
-#endif
-#if (PAD_LIST || CC_HMAC_Start)
+#endif // 
+#if (PAD_LIST || (CC_HMAC_Start || CC_MAC_Start))
+#    if CC_HMAC_Start
         (COMMAND_DESCRIPTOR_t *)_HMAC_StartDataAddress,
-#endif
+#    endif
+#    if CC_MAC_Start
+        (COMMAND_DESCRIPTOR_t *)_MAC_StartDataAddress,
+#    endif
+#    if (CC_HMAC_Start || CC_MAC_Start) > 1
+#        error "More than one aliased command defined"
+#    endif
+#endif // CC_HMAC_Start CC_MAC_Start
 #if (PAD_LIST || CC_SequenceUpdate)
         (COMMAND_DESCRIPTOR_t *)_SequenceUpdateDataAddress,
-#endif
+#endif // CC_SequenceUpdate
 #if (PAD_LIST || CC_Sign)
         (COMMAND_DESCRIPTOR_t *)_SignDataAddress,
-#endif
+#endif // CC_Sign
 #if (PAD_LIST || CC_Unseal)
         (COMMAND_DESCRIPTOR_t *)_UnsealDataAddress,
-#endif
+#endif // CC_Unseal
 #if (PAD_LIST)
         (COMMAND_DESCRIPTOR_t *)0,
-#endif
+#endif // 
 #if (PAD_LIST || CC_PolicySigned)
         (COMMAND_DESCRIPTOR_t *)_PolicySignedDataAddress,
-#endif
+#endif // CC_PolicySigned
 #if (PAD_LIST || CC_ContextLoad)
         (COMMAND_DESCRIPTOR_t *)_ContextLoadDataAddress,
-#endif
+#endif // CC_ContextLoad
 #if (PAD_LIST || CC_ContextSave)
         (COMMAND_DESCRIPTOR_t *)_ContextSaveDataAddress,
-#endif
+#endif // CC_ContextSave
 #if (PAD_LIST || CC_ECDH_KeyGen)
         (COMMAND_DESCRIPTOR_t *)_ECDH_KeyGenDataAddress,
-#endif
+#endif // CC_ECDH_KeyGen
 #if (PAD_LIST || CC_EncryptDecrypt)
         (COMMAND_DESCRIPTOR_t *)_EncryptDecryptDataAddress,
-#endif
+#endif // CC_EncryptDecrypt
 #if (PAD_LIST || CC_FlushContext)
         (COMMAND_DESCRIPTOR_t *)_FlushContextDataAddress,
-#endif
+#endif // CC_FlushContext
 #if (PAD_LIST)
         (COMMAND_DESCRIPTOR_t *)0,
-#endif
+#endif // 
 #if (PAD_LIST || CC_LoadExternal)
         (COMMAND_DESCRIPTOR_t *)_LoadExternalDataAddress,
-#endif
+#endif // CC_LoadExternal
 #if (PAD_LIST || CC_MakeCredential)
         (COMMAND_DESCRIPTOR_t *)_MakeCredentialDataAddress,
-#endif
+#endif // CC_MakeCredential
 #if (PAD_LIST || CC_NV_ReadPublic)
         (COMMAND_DESCRIPTOR_t *)_NV_ReadPublicDataAddress,
-#endif
+#endif // CC_NV_ReadPublic
 #if (PAD_LIST || CC_PolicyAuthorize)
         (COMMAND_DESCRIPTOR_t *)_PolicyAuthorizeDataAddress,
-#endif
+#endif // CC_PolicyAuthorize
 #if (PAD_LIST || CC_PolicyAuthValue)
         (COMMAND_DESCRIPTOR_t *)_PolicyAuthValueDataAddress,
-#endif
+#endif // CC_PolicyAuthValue
 #if (PAD_LIST || CC_PolicyCommandCode)
         (COMMAND_DESCRIPTOR_t *)_PolicyCommandCodeDataAddress,
-#endif
+#endif // CC_PolicyCommandCode
 #if (PAD_LIST || CC_PolicyCounterTimer)
         (COMMAND_DESCRIPTOR_t *)_PolicyCounterTimerDataAddress,
-#endif
+#endif // CC_PolicyCounterTimer
 #if (PAD_LIST || CC_PolicyCpHash)
         (COMMAND_DESCRIPTOR_t *)_PolicyCpHashDataAddress,
-#endif
+#endif // CC_PolicyCpHash
 #if (PAD_LIST || CC_PolicyLocality)
         (COMMAND_DESCRIPTOR_t *)_PolicyLocalityDataAddress,
-#endif
+#endif // CC_PolicyLocality
 #if (PAD_LIST || CC_PolicyNameHash)
         (COMMAND_DESCRIPTOR_t *)_PolicyNameHashDataAddress,
-#endif
+#endif // CC_PolicyNameHash
 #if (PAD_LIST || CC_PolicyOR)
         (COMMAND_DESCRIPTOR_t *)_PolicyORDataAddress,
-#endif
+#endif // CC_PolicyOR
 #if (PAD_LIST || CC_PolicyTicket)
         (COMMAND_DESCRIPTOR_t *)_PolicyTicketDataAddress,
-#endif
+#endif // CC_PolicyTicket
 #if (PAD_LIST || CC_ReadPublic)
         (COMMAND_DESCRIPTOR_t *)_ReadPublicDataAddress,
-#endif
+#endif // CC_ReadPublic
 #if (PAD_LIST || CC_RSA_Encrypt)
         (COMMAND_DESCRIPTOR_t *)_RSA_EncryptDataAddress,
-#endif
+#endif // CC_RSA_Encrypt
 #if (PAD_LIST)
         (COMMAND_DESCRIPTOR_t *)0,
-#endif
+#endif // 
 #if (PAD_LIST || CC_StartAuthSession)
         (COMMAND_DESCRIPTOR_t *)_StartAuthSessionDataAddress,
-#endif
+#endif // CC_StartAuthSession
 #if (PAD_LIST || CC_VerifySignature)
         (COMMAND_DESCRIPTOR_t *)_VerifySignatureDataAddress,
-#endif
+#endif // CC_VerifySignature
 #if (PAD_LIST || CC_ECC_Parameters)
         (COMMAND_DESCRIPTOR_t *)_ECC_ParametersDataAddress,
-#endif
+#endif // CC_ECC_Parameters
 #if (PAD_LIST || CC_FirmwareRead)
         (COMMAND_DESCRIPTOR_t *)_FirmwareReadDataAddress,
-#endif
+#endif // CC_FirmwareRead
 #if (PAD_LIST || CC_GetCapability)
         (COMMAND_DESCRIPTOR_t *)_GetCapabilityDataAddress,
-#endif
+#endif // CC_GetCapability
 #if (PAD_LIST || CC_GetRandom)
         (COMMAND_DESCRIPTOR_t *)_GetRandomDataAddress,
-#endif
+#endif // CC_GetRandom
 #if (PAD_LIST || CC_GetTestResult)
         (COMMAND_DESCRIPTOR_t *)_GetTestResultDataAddress,
-#endif
+#endif // CC_GetTestResult
 #if (PAD_LIST || CC_Hash)
         (COMMAND_DESCRIPTOR_t *)_HashDataAddress,
-#endif
+#endif // CC_Hash
 #if (PAD_LIST || CC_PCR_Read)
         (COMMAND_DESCRIPTOR_t *)_PCR_ReadDataAddress,
-#endif
+#endif // CC_PCR_Read
 #if (PAD_LIST || CC_PolicyPCR)
         (COMMAND_DESCRIPTOR_t *)_PolicyPCRDataAddress,
-#endif
+#endif // CC_PolicyPCR
 #if (PAD_LIST || CC_PolicyRestart)
         (COMMAND_DESCRIPTOR_t *)_PolicyRestartDataAddress,
-#endif
+#endif // CC_PolicyRestart
 #if (PAD_LIST || CC_ReadClock)
         (COMMAND_DESCRIPTOR_t *)_ReadClockDataAddress,
-#endif
+#endif // CC_ReadClock
 #if (PAD_LIST || CC_PCR_Extend)
         (COMMAND_DESCRIPTOR_t *)_PCR_ExtendDataAddress,
-#endif
+#endif // CC_PCR_Extend
 #if (PAD_LIST || CC_PCR_SetAuthValue)
         (COMMAND_DESCRIPTOR_t *)_PCR_SetAuthValueDataAddress,
-#endif
+#endif // CC_PCR_SetAuthValue
 #if (PAD_LIST || CC_NV_Certify)
         (COMMAND_DESCRIPTOR_t *)_NV_CertifyDataAddress,
-#endif
+#endif // CC_NV_Certify
 #if (PAD_LIST || CC_EventSequenceComplete)
         (COMMAND_DESCRIPTOR_t *)_EventSequenceCompleteDataAddress,
-#endif
+#endif // CC_EventSequenceComplete
 #if (PAD_LIST || CC_HashSequenceStart)
         (COMMAND_DESCRIPTOR_t *)_HashSequenceStartDataAddress,
-#endif
+#endif // CC_HashSequenceStart
 #if (PAD_LIST || CC_PolicyPhysicalPresence)
         (COMMAND_DESCRIPTOR_t *)_PolicyPhysicalPresenceDataAddress,
-#endif
+#endif // CC_PolicyPhysicalPresence
 #if (PAD_LIST || CC_PolicyDuplicationSelect)
         (COMMAND_DESCRIPTOR_t *)_PolicyDuplicationSelectDataAddress,
-#endif
+#endif // CC_PolicyDuplicationSelect
 #if (PAD_LIST || CC_PolicyGetDigest)
         (COMMAND_DESCRIPTOR_t *)_PolicyGetDigestDataAddress,
-#endif
+#endif // CC_PolicyGetDigest
 #if (PAD_LIST || CC_TestParms)
         (COMMAND_DESCRIPTOR_t *)_TestParmsDataAddress,
-#endif
+#endif // CC_TestParms
 #if (PAD_LIST || CC_Commit)
         (COMMAND_DESCRIPTOR_t *)_CommitDataAddress,
-#endif
+#endif // CC_Commit
 #if (PAD_LIST || CC_PolicyPassword)
         (COMMAND_DESCRIPTOR_t *)_PolicyPasswordDataAddress,
-#endif
+#endif // CC_PolicyPassword
 #if (PAD_LIST || CC_ZGen_2Phase)
         (COMMAND_DESCRIPTOR_t *)_ZGen_2PhaseDataAddress,
-#endif
+#endif // CC_ZGen_2Phase
 #if (PAD_LIST || CC_EC_Ephemeral)
         (COMMAND_DESCRIPTOR_t *)_EC_EphemeralDataAddress,
-#endif
+#endif // CC_EC_Ephemeral
 #if (PAD_LIST || CC_PolicyNvWritten)
         (COMMAND_DESCRIPTOR_t *)_PolicyNvWrittenDataAddress,
-#endif
+#endif // CC_PolicyNvWritten
 #if (PAD_LIST || CC_PolicyTemplate)
         (COMMAND_DESCRIPTOR_t *)_PolicyTemplateDataAddress,
-#endif
+#endif // CC_PolicyTemplate
 #if (PAD_LIST || CC_CreateLoaded)
         (COMMAND_DESCRIPTOR_t *)_CreateLoadedDataAddress,
-#endif
+#endif // CC_CreateLoaded
 #if (PAD_LIST || CC_PolicyAuthorizeNV)
         (COMMAND_DESCRIPTOR_t *)_PolicyAuthorizeNVDataAddress,
-#endif
+#endif // CC_PolicyAuthorizeNV
 #if (PAD_LIST || CC_EncryptDecrypt2)
         (COMMAND_DESCRIPTOR_t *)_EncryptDecrypt2DataAddress,
-#endif
+#endif // CC_EncryptDecrypt2
+#if (PAD_LIST || CC_AC_GetCapability)
+        (COMMAND_DESCRIPTOR_t *)_AC_GetCapabilityDataAddress,
+#endif // CC_AC_GetCapability
+#if (PAD_LIST || CC_AC_Send)
+        (COMMAND_DESCRIPTOR_t *)_AC_SendDataAddress,
+#endif // CC_AC_Send
+#if (PAD_LIST || CC_Policy_AC_SendSelect)
+        (COMMAND_DESCRIPTOR_t *)_Policy_AC_SendSelectDataAddress,
+#endif // CC_Policy_AC_SendSelect
 #if (PAD_LIST || CC_Vendor_TCG_Test)
         (COMMAND_DESCRIPTOR_t *)_Vendor_TCG_TestDataAddress,
-#endif
+#endif // CC_Vendor_TCG_Test
         0
 };
 

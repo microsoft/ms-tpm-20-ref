@@ -33,8 +33,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-//** Includes
+//* Includes
 #include "Tpm.h"
 
 #ifdef  TABLE_DRIVEN_DISPATCH  //%

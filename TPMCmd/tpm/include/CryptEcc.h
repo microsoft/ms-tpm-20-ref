@@ -42,7 +42,7 @@
 #ifndef _CRYPT_ECC_H
 #define _CRYPT_ECC_H
 
-//*** ECC-related Structures
+//** Structures
 
 // This is used to define the macro that may or may not be in the data set for the
 // curve (BnEccData.c). If there is a mismatch, the compiler will warn that there is

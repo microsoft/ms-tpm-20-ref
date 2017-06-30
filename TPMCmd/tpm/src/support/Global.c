@@ -35,16 +35,21 @@
 
 //** Description
 // This file will instance the TPM variables that are not stack allocated. The
-// descriptions for these variables is in Global.h.
+// descriptions for these variables are in Global.h.
 
 //** Includes and Defines
 #define GLOBAL_C
 #include "Tpm.h"
 
+//** __IGNORE_STATE__
+// This macro value is used to delimit values that are only used within the scope of
+// a single TPM command. For a virtualized TPM, this would be state that does not
+// need to be preserved between commands. This is not a lot of data and it may not
+// be necessary to exclude this data.
+
 //** Global Data Values
 
 // These values are visible across multiple modules.
-
 BOOL                 g_phEnable;
 
 const UINT16         g_rcIndex[15] = {TPM_RC_1, TPM_RC_2, TPM_RC_3, TPM_RC_4,
@@ -60,7 +65,6 @@ UINT64               g_time;
 #ifdef CLOCK_STOPS
 CLOCK_NONCE          g_timeEpoch;
 #endif
-BOOL                 g_timeNewEpochNeeded;
 
 BOOL                 g_pcrReConfig;
 
@@ -71,7 +75,7 @@ BOOL                 g_DrtmPreStartup;
 BOOL                 g_StartupLocality3;
 
 #ifdef USE_DA_USED
-BOOL			g_daUsed;
+BOOL			     g_daUsed;
 #endif
 
 BOOL                 g_powerWasLost;
@@ -88,6 +92,24 @@ TPM_RC               g_NvStatus;
 
 TPM2B_AUTH           g_platformUniqueDetails;
 
+ALGORITHM_VECTOR     g_implementedAlgorithms;
+ALGORITHM_VECTOR     g_toTest;
+
+CRYPTO_SELF_TEST_STATE    g_cryptoSelfTestState;    // This structure contains the 
+                                                    // cryptographic self-test 
+
+#if 0
+#ifdef TPM_ALG_ECC
+//*** ECC Curves
+ECC_CURVE   c_curves[ECC_CURVE_COUNT];
+#endif
+#endif // 0
+
+#ifdef SIMULATION
+BOOL                 g_forceFailureMode;
+#endif
+BOOL                 g_inFailureMode;
+
 STATE_CLEAR_DATA     gc;
 
 STATE_RESET_DATA     gr;
@@ -97,7 +119,7 @@ PERSISTENT_DATA      gp;
 ORDERLY_DATA         go;
 
 //** Private Values
-//*** SessionProcess.c
+//*** Used in SessionProcess.c
 #ifndef __IGNORE_STATE__        // DO NOT DEFINE THIS VALUE
 // These values do not need to be retained between commands.
 TPM_HANDLE           s_sessionHandles[MAX_SESSION_NUM];
@@ -109,7 +131,6 @@ SESSION             *s_usedSessions[MAX_SESSION_NUM];
 UINT32               s_encryptSessionIndex;
 UINT32               s_decryptSessionIndex;
 UINT32               s_auditSessionIndex;
-//UINT32               s_sessionNum;
 #endif  // __IGNORE_STATE__
 
 BOOL                 s_DAPendingOnNV;
@@ -118,31 +139,34 @@ BOOL                 s_DAPendingOnNV;
 TPM2B_DIGEST         s_cpHashForCommandAudit;
 #endif
 
-//*** DA.c
+//*** Used in DA.c
+#ifndef ACCUMULATE_SELF_HEAL_TIMER
 UINT64               s_selfHealTimer;
 UINT64               s_lockoutTimer;
+#endif // !ACCUMULATE_SELF_HEAL_TIMER
 
-//*** NV.c
+//*** Used in NV.c
 UINT64               s_maxCounter;
 NV_REF               s_evictNvEnd;
-TPM_RC               g_NvStatus;
 BYTE                 s_indexOrderlyRam[RAM_INDEX_SPACE];
+#ifndef __IGNORE_STATE__        // DO NOT DEFINE THIS VALUE
 NV_INDEX             s_cachedNvIndex;
 NV_REF               s_cachedNvRef;
 BYTE                *s_cachedNvRamRef;
+#endif // __IGNORE_STATE__
 
-//*** Object.c
+//*** Used in Object.c
 OBJECT              s_objects[MAX_LOADED_OBJECTS];
 
-//*** PCR.c
+//*** Used in PCR.c
 PCR                  s_pcrs[IMPLEMENTATION_PCR];
 
-//*** Session.c
+//*** Used in Session.c
 SESSION_SLOT         s_sessions[MAX_LOADED_SESSIONS];
 UINT32               s_oldestSavedSession;
 int                  s_freeSessionSlots;
 
-//*** MemoryLib.c
+//*** Used in MemoryLib.c
 // The s_actionOutputBuffer should not be modifiable by the host system until
 // the TPM has returned a response code. The s_actionOutputBuffer should not
 // be accessible until response parameter encryption, if any, is complete.
@@ -152,31 +176,12 @@ UINT32   s_actionInputBuffer[1024];          // action input buffer
 UINT32   s_actionOutputBuffer[1024];         // action output buffer
 #endif
 
-//*** SelfTest.c
-ALGORITHM_VECTOR         g_implementedAlgorithms;
-ALGORITHM_VECTOR         g_toTest;
-
-//*** g_cryptoSelfTestState
-// This structure contains the cryptographic self-test state values.
-CRYPTO_SELF_TEST_STATE    g_cryptoSelfTestState;
-ALGORITHM_VECTOR          AlgToTest;
-
-//*** TpmFail.c
-#ifdef SIMULATION
-BOOL                 g_forceFailureMode;
-#endif
-BOOL                 g_inFailureMode;
+//*** used in TpmFail.c
 UINT32               s_failFunction;
 UINT32               s_failLine;
 UINT32               s_failCode;
 
-#if 0
-#ifdef TPM_ALG_ECC
-//*** ECC Curves
-ECC_CURVE   c_curves[ECC_CURVE_COUNT];
-#endif
-#endif // 0
-
+//*** Used in CryptRand.c
 // This is the state used when the library uses a random number generator.
 // A special function is installed for the library to call. That function
 // picks up the state from this location and uses it for the generation
@@ -184,20 +189,20 @@ ECC_CURVE   c_curves[ECC_CURVE_COUNT];
 RAND_STATE           *s_random;
 
 
-//*** Manufacture.c
+//*** Used in Manufacture.c
 // The values is here rather than in the simulator or platform files in order
 // to make it easier to find the TPM state. This is significant when trying to do
 // TPM virtualization when the TPM state has to be moved along with virtual machine
 // with which it is associated.
 BOOL                 g_manufactured = FALSE;
 
-//*** Power.c
+//*** Used in Power.c
 // This is here for the same reason that g_manufactured is here. Both of these
 // values can be provided by the actual platform-specific code or by hardware
 // indications.
 BOOL                 g_initialized;
 
-//*** Purpose String Constants
+//*** Purpose-specific String Constants
 // These string constants are shared across functions to make sure that they 
 // are all using consistent sting values.
 TPM2B_STRING(PRIMARY_OBJECT_CREATION, "Primary Object Creation");

@@ -60,8 +60,7 @@ TPM2_PolicyCommandCode(
     session = SessionGet(in->policySession);
 
     if(session->commandCode != 0 && session->commandCode != in->code)
-        return TPM_RCS_VALUE + RC_PolicyCommandCode_code;
-
+            return TPM_RCS_VALUE + RC_PolicyCommandCode_code;
     if(CommandCodeToCommandIndex(in->code) == UNIMPLEMENTED_COMMAND_INDEX)
         return TPM_RCS_POLICY_CC + RC_PolicyCommandCode_code;
 

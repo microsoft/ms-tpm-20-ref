@@ -33,9 +33,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-//
-//*** ECC Test Parameters
-//
+// This file contains the parameter data for ECC testing.
 
 #ifdef  SELF_TEST_DATA
 

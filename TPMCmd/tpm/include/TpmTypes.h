@@ -35,7 +35,7 @@
 /*(Auto)
 
     Created by TpmStructures Version 2.7 Sept 13, 2016
-    This file created on Sep 27, 2016, 03:54:52PM 
+    This file created on Apr  6, 2017, 08:39:16PM 
 
 */
 
@@ -56,11 +56,11 @@ typedef  UINT32             TPM_SPEC;
 #define  TPM_SPEC_FAMILY         (TPM_SPEC)(SPEC_FAMILY)
 #define  SPEC_LEVEL              00
 #define  TPM_SPEC_LEVEL          (TPM_SPEC)(SPEC_LEVEL)
-#define  SPEC_VERSION            138
+#define  SPEC_VERSION            144
 #define  TPM_SPEC_VERSION        (TPM_SPEC)(SPEC_VERSION)
-#define  SPEC_YEAR               2016
+#define  SPEC_YEAR               2017
 #define  TPM_SPEC_YEAR           (TPM_SPEC)(SPEC_YEAR)
-#define  SPEC_DAY_OF_YEAR        273
+#define  SPEC_DAY_OF_YEAR        97
 #define  TPM_SPEC_DAY_OF_YEAR    (TPM_SPEC)(SPEC_DAY_OF_YEAR)
 
 // Table 2:7 - Definition of TPM_GENERATED Constants  (EnumTable)
@@ -423,6 +423,7 @@ typedef  UINT8              TPM_HT;
 #define  TPM_HT_PERMANENT         (TPM_HT)(0x40)
 #define  TPM_HT_TRANSIENT         (TPM_HT)(0x80)
 #define  TPM_HT_PERSISTENT        (TPM_HT)(0x81)
+#define  TPM_HT_AC                (TPM_HT)(0x90)
 
 // Table 2:28 - Definition of TPM_RH Constants  (EnumTable)
 typedef  TPM_HANDLE         TPM_RH;
@@ -478,6 +479,12 @@ typedef  TPM_HANDLE         TPM_HC;
 #define  NV_INDEX_LAST           (TPM_HC)((NV_INDEX_FIRST+0x00FFFFFF))
 #define  PERMANENT_FIRST         (TPM_HC)(TPM_RH_FIRST)
 #define  PERMANENT_LAST          (TPM_HC)(TPM_RH_LAST)
+#define  HR_NV_AC                (TPM_HC)(((TPM_HT_NV_INDEX<<HR_SHIFT)+0xD00000))
+#define  NV_AC_FIRST             (TPM_HC)((HR_NV_AC+0))
+#define  NV_AC_LAST              (TPM_HC)((HR_NV_AC+0x0000FFFF))
+#define  HR_AC                   (TPM_HC)((TPM_HT_AC<<HR_SHIFT))
+#define  AC_FIRST                (TPM_HC)((HR_AC+0))
+#define  AC_LAST                 (TPM_HC)((HR_AC+0x0000FFFF))
 
 // Table 2:30 - Definition of TPMA_ALGORITHM Bits (BitsTable)
 typedef struct {
@@ -754,43 +761,52 @@ typedef  TPM_HANDLE         TPMI_RH_LOCKOUT;
 // Table 2:59 - Definition of TPMI_RH_NV_INDEX Type  (InterfaceTable)
 typedef  TPM_HANDLE         TPMI_RH_NV_INDEX;
 
-// Table 2:60 - Definition of TPMI_ALG_HASH Type  (InterfaceTable)
+// Table 2:60 - Definition of TPMI_RH_AC Type  (InterfaceTable)
+typedef  TPM_HANDLE         TPMI_RH_AC;
+
+// Table 2:61 - Definition of TPMI_ALG_HASH Type  (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_HASH;
 
-// Table 2:61 - Definition of TPMI_ALG_ASYM Type (InterfaceTable)
+// Table 2:62 - Definition of TPMI_ALG_ASYM Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_ASYM;
 
-// Table 2:62 - Definition of TPMI_ALG_SYM Type (InterfaceTable)
+// Table 2:63 - Definition of TPMI_ALG_SYM Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_SYM;
 
-// Table 2:63 - Definition of TPMI_ALG_SYM_OBJECT Type (InterfaceTable)
+// Table 2:64 - Definition of TPMI_ALG_SYM_OBJECT Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_SYM_OBJECT;
 
-// Table 2:64 - Definition of TPMI_ALG_SYM_MODE Type (InterfaceTable)
+// Table 2:65 - Definition of TPMI_ALG_SYM_MODE Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_SYM_MODE;
 
-// Table 2:65 - Definition of TPMI_ALG_KDF Type (InterfaceTable)
+// Table 2:66 - Definition of TPMI_ALG_KDF Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_KDF;
 
-// Table 2:66 - Definition of TPMI_ALG_SIG_SCHEME Type (InterfaceTable)
+// Table 2:67 - Definition of TPMI_ALG_SIG_SCHEME Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_SIG_SCHEME;
 
-// Table 2:67 - Definition of TPMI_ECC_KEY_EXCHANGE Type (InterfaceTable)
+// Table 2:68 - Definition of TPMI_ECC_KEY_EXCHANGE Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ECC_KEY_EXCHANGE;
 
-// Table 2:68 - Definition of TPMI_ST_COMMAND_TAG Type (InterfaceTable)
+// Table 2:69 - Definition of TPMI_ST_COMMAND_TAG Type (InterfaceTable)
 typedef  TPM_ST             TPMI_ST_COMMAND_TAG;
 
-// Table 2:69 - Definition of TPMS_EMPTY Structure  (StructuresTable)
+// Table 2:70 - Definition of TPMI_ALG_MAC_SCHEME Type (InterfaceTable)
+typedef  TPM_ALG_ID         TPMI_ALG_MAC_SCHEME;
+
+// Table 2:70 - Definition of TPMI_ALG_CIPHER_MODE Type (InterfaceTable)
+typedef  TPM_ALG_ID         TPMI_ALG_CIPHER_MODE;
+
+// Table 2:70 - Definition of TPMS_EMPTY Structure  (StructuresTable)
 typedef BYTE TPMS_EMPTY;
 
-// Table 2:70 - Definition of TPMS_ALGORITHM_DESCRIPTION Structure  (StructuresTable)
+// Table 2:71 - Definition of TPMS_ALGORITHM_DESCRIPTION Structure  (StructuresTable)
 typedef struct {
     TPM_ALG_ID              alg;
     TPMA_ALGORITHM          attributes;
 } TPMS_ALGORITHM_DESCRIPTION;
 
-// Table 2:71 - Definition of TPMU_HA Union  (StructuresTable)
+// Table 2:72 - Definition of TPMU_HA Union  (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_SHA1
     BYTE                    sha1[SHA1_DIGEST_SIZE];
@@ -809,13 +825,13 @@ typedef union {
 #endif   // TPM_ALG_SM3_256
 } TPMU_HA;
 
-// Table 2:72 - Definition of TPMT_HA Structure  (StructuresTable)
+// Table 2:73 - Definition of TPMT_HA Structure  (StructuresTable)
 typedef struct {
     TPMI_ALG_HASH           hashAlg;
     TPMU_HA                 digest;
 } TPMT_HA;
 
-// Table 2:73 - Definition of TPM2B_DIGEST Structure (StructuresTable)
+// Table 2:74 - Definition of TPM2B_DIGEST Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -824,7 +840,7 @@ typedef union {
     TPM2B        b;
 } TPM2B_DIGEST;
 
-// Table 2:74 - Definition of TPM2B_DATA Structure (StructuresTable)
+// Table 2:75 - Definition of TPM2B_DATA Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -833,16 +849,16 @@ typedef union {
     TPM2B        b;
 } TPM2B_DATA;
 
-// Table 2:75 - Definition of Types for TPM2B_NONCE (TypedefTable)
+// Table 2:76 - Definition of Types for TPM2B_NONCE (TypedefTable)
 typedef  TPM2B_DIGEST       TPM2B_NONCE;
 
-// Table 2:76 - Definition of Types for TPM2B_AUTH (TypedefTable)
+// Table 2:77 - Definition of Types for TPM2B_AUTH (TypedefTable)
 typedef  TPM2B_DIGEST       TPM2B_AUTH;
 
-// Table 2:77 - Definition of Types for TPM2B_OPERAND (TypedefTable)
+// Table 2:78 - Definition of Types for TPM2B_OPERAND (TypedefTable)
 typedef  TPM2B_DIGEST       TPM2B_OPERAND;
 
-// Table 2:78 - Definition of TPM2B_EVENT Structure (StructuresTable)
+// Table 2:79 - Definition of TPM2B_EVENT Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -851,7 +867,7 @@ typedef union {
     TPM2B        b;
 } TPM2B_EVENT;
 
-// Table 2:79 - Definition of TPM2B_MAX_BUFFER Structure (StructuresTable)
+// Table 2:80 - Definition of TPM2B_MAX_BUFFER Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -860,7 +876,7 @@ typedef union {
     TPM2B        b;
 } TPM2B_MAX_BUFFER;
 
-// Table 2:80 - Definition of TPM2B_MAX_NV_BUFFER Structure (StructuresTable)
+// Table 2:81 - Definition of TPM2B_MAX_NV_BUFFER Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -869,10 +885,16 @@ typedef union {
     TPM2B        b;
 } TPM2B_MAX_NV_BUFFER;
 
-// Table 2:81 - Definition of Types for TPM2B_TIMEOUT (TypedefTable)
-typedef  TPM2B_DIGEST       TPM2B_TIMEOUT;
+// Table 2:82 - Definition of TPM2B_TIMEOUT Structure  (StructuresTable)
+typedef union {
+    struct {
+        UINT16                  size;
+        BYTE                    buffer[sizeof(UINT64)];
+    }            t;
+    TPM2B        b;
+} TPM2B_TIMEOUT;
 
-// Table 2:82 - Definition of TPM2B_IV Structure  (StructuresTable)
+// Table 2:83 - Definition of TPM2B_IV Structure  (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -881,13 +903,13 @@ typedef union {
     TPM2B        b;
 } TPM2B_IV;
 
-// Table 2:83 - Definition of TPMU_NAME Union  (StructuresTable)
+// Table 2:84 - Definition of TPMU_NAME Union  (StructuresTable)
 typedef union {
     TPMT_HA                 digest;
     TPM_HANDLE              handle;
 } TPMU_NAME;
 
-// Table 2:84 - Definition of TPM2B_NAME Structure (StructuresTable)
+// Table 2:85 - Definition of TPM2B_NAME Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -896,145 +918,145 @@ typedef union {
     TPM2B        b;
 } TPM2B_NAME;
 
-// Table 2:85 - Definition of TPMS_PCR_SELECT Structure (StructuresTable)
+// Table 2:86 - Definition of TPMS_PCR_SELECT Structure (StructuresTable)
 typedef struct {
     UINT8                   sizeofSelect;
     BYTE                    pcrSelect[PCR_SELECT_MAX];
 } TPMS_PCR_SELECT;
 
-// Table 2:86 - Definition of TPMS_PCR_SELECTION Structure (StructuresTable)
+// Table 2:87 - Definition of TPMS_PCR_SELECTION Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_HASH           hash;
     UINT8                   sizeofSelect;
     BYTE                    pcrSelect[PCR_SELECT_MAX];
 } TPMS_PCR_SELECTION;
 
-// Table 2:89 - Definition of TPMT_TK_CREATION Structure (StructuresTable)
+// Table 2:90 - Definition of TPMT_TK_CREATION Structure (StructuresTable)
 typedef struct {
     TPM_ST                  tag;
     TPMI_RH_HIERARCHY       hierarchy;
     TPM2B_DIGEST            digest;
 } TPMT_TK_CREATION;
 
-// Table 2:90 - Definition of TPMT_TK_VERIFIED Structure (StructuresTable)
+// Table 2:91 - Definition of TPMT_TK_VERIFIED Structure (StructuresTable)
 typedef struct {
     TPM_ST                  tag;
     TPMI_RH_HIERARCHY       hierarchy;
     TPM2B_DIGEST            digest;
 } TPMT_TK_VERIFIED;
 
-// Table 2:91 - Definition of TPMT_TK_AUTH Structure (StructuresTable)
+// Table 2:92 - Definition of TPMT_TK_AUTH Structure (StructuresTable)
 typedef struct {
     TPM_ST                  tag;
     TPMI_RH_HIERARCHY       hierarchy;
     TPM2B_DIGEST            digest;
 } TPMT_TK_AUTH;
 
-// Table 2:92 - Definition of TPMT_TK_HASHCHECK Structure (StructuresTable)
+// Table 2:93 - Definition of TPMT_TK_HASHCHECK Structure (StructuresTable)
 typedef struct {
     TPM_ST                  tag;
     TPMI_RH_HIERARCHY       hierarchy;
     TPM2B_DIGEST            digest;
 } TPMT_TK_HASHCHECK;
 
-// Table 2:93 - Definition of TPMS_ALG_PROPERTY Structure  (StructuresTable)
+// Table 2:94 - Definition of TPMS_ALG_PROPERTY Structure  (StructuresTable)
 typedef struct {
     TPM_ALG_ID              alg;
     TPMA_ALGORITHM          algProperties;
 } TPMS_ALG_PROPERTY;
 
-// Table 2:94 - Definition of TPMS_TAGGED_PROPERTY Structure  (StructuresTable)
+// Table 2:95 - Definition of TPMS_TAGGED_PROPERTY Structure  (StructuresTable)
 typedef struct {
     TPM_PT                  property;
     UINT32                  value;
 } TPMS_TAGGED_PROPERTY;
 
-// Table 2:95 - Definition of TPMS_TAGGED_PCR_SELECT Structure  (StructuresTable)
+// Table 2:96 - Definition of TPMS_TAGGED_PCR_SELECT Structure  (StructuresTable)
 typedef struct {
     TPM_PT_PCR              tag;
     UINT8                   sizeofSelect;
     BYTE                    pcrSelect[PCR_SELECT_MAX];
 } TPMS_TAGGED_PCR_SELECT;
 
-// Table 2:96 - Definition of TPMS_TAGGED_POLICY Structure  (StructuresTable)
+// Table 2:97 - Definition of TPMS_TAGGED_POLICY Structure  (StructuresTable)
 typedef struct {
     TPM_HANDLE              handle;
     TPMT_HA                 policyHash;
 } TPMS_TAGGED_POLICY;
 
-// Table 2:97 - Definition of TPML_CC Structure (StructuresTable)
+// Table 2:98 - Definition of TPML_CC Structure (StructuresTable)
 typedef struct {
     UINT32                  count;
     TPM_CC                  commandCodes[MAX_CAP_CC];
 } TPML_CC;
 
-// Table 2:98 - Definition of TPML_CCA Structure  (StructuresTable)
+// Table 2:99 - Definition of TPML_CCA Structure  (StructuresTable)
 typedef struct {
     UINT32                  count;
     TPMA_CC                 commandAttributes[MAX_CAP_CC];
 } TPML_CCA;
 
-// Table 2:99 - Definition of TPML_ALG Structure (StructuresTable)
+// Table 2:100 - Definition of TPML_ALG Structure (StructuresTable)
 typedef struct {
     UINT32                  count;
     TPM_ALG_ID              algorithms[MAX_ALG_LIST_SIZE];
 } TPML_ALG;
 
-// Table 2:100 - Definition of TPML_HANDLE Structure  (StructuresTable)
+// Table 2:101 - Definition of TPML_HANDLE Structure  (StructuresTable)
 typedef struct {
     UINT32                  count;
     TPM_HANDLE              handle[MAX_CAP_HANDLES];
 } TPML_HANDLE;
 
-// Table 2:101 - Definition of TPML_DIGEST Structure (StructuresTable)
+// Table 2:102 - Definition of TPML_DIGEST Structure (StructuresTable)
 typedef struct {
     UINT32                  count;
     TPM2B_DIGEST            digests[8];
 } TPML_DIGEST;
 
-// Table 2:102 - Definition of TPML_DIGEST_VALUES Structure (StructuresTable)
+// Table 2:103 - Definition of TPML_DIGEST_VALUES Structure (StructuresTable)
 typedef struct {
     UINT32                  count;
     TPMT_HA                 digests[HASH_COUNT];
 } TPML_DIGEST_VALUES;
 
-// Table 2:103 - Definition of TPML_PCR_SELECTION Structure (StructuresTable)
+// Table 2:104 - Definition of TPML_PCR_SELECTION Structure (StructuresTable)
 typedef struct {
     UINT32                  count;
     TPMS_PCR_SELECTION      pcrSelections[HASH_COUNT];
 } TPML_PCR_SELECTION;
 
-// Table 2:104 - Definition of TPML_ALG_PROPERTY Structure  (StructuresTable)
+// Table 2:105 - Definition of TPML_ALG_PROPERTY Structure  (StructuresTable)
 typedef struct {
     UINT32                  count;
     TPMS_ALG_PROPERTY       algProperties[MAX_CAP_ALGS];
 } TPML_ALG_PROPERTY;
 
-// Table 2:105 - Definition of TPML_TAGGED_TPM_PROPERTY Structure  (StructuresTable)
+// Table 2:106 - Definition of TPML_TAGGED_TPM_PROPERTY Structure  (StructuresTable)
 typedef struct {
     UINT32                  count;
     TPMS_TAGGED_PROPERTY    tpmProperty[MAX_TPM_PROPERTIES];
 } TPML_TAGGED_TPM_PROPERTY;
 
-// Table 2:106 - Definition of TPML_TAGGED_PCR_PROPERTY Structure  (StructuresTable)
+// Table 2:107 - Definition of TPML_TAGGED_PCR_PROPERTY Structure  (StructuresTable)
 typedef struct {
     UINT32                    count;
     TPMS_TAGGED_PCR_SELECT    pcrProperty[MAX_PCR_PROPERTIES];
 } TPML_TAGGED_PCR_PROPERTY;
 
-// Table 2:107 - Definition of TPML_ECC_CURVE Structure  (StructuresTable)
+// Table 2:108 - Definition of TPML_ECC_CURVE Structure  (StructuresTable)
 typedef struct {
     UINT32                  count;
     TPM_ECC_CURVE           eccCurves[MAX_ECC_CURVES];
 } TPML_ECC_CURVE;
 
-// Table 2:108 - Definition of TPML_TAGGED_POLICY Structure  (StructuresTable)
+// Table 2:109 - Definition of TPML_TAGGED_POLICY Structure  (StructuresTable)
 typedef struct {
     UINT32                  count;
     TPMS_TAGGED_POLICY      policies[MAX_TAGGED_POLICIES];
 } TPML_TAGGED_POLICY;
 
-// Table 2:109 - Definition of TPMU_CAPABILITIES Union  (StructuresTable)
+// Table 2:110 - Definition of TPMU_CAPABILITIES Union  (StructuresTable)
 typedef union {
     TPML_ALG_PROPERTY           algorithms;
     TPML_HANDLE                 handles;
@@ -1050,13 +1072,13 @@ typedef union {
     TPML_TAGGED_POLICY          authPolicies;
 } TPMU_CAPABILITIES;
 
-// Table 2:110 - Definition of TPMS_CAPABILITY_DATA Structure  (StructuresTable)
+// Table 2:111 - Definition of TPMS_CAPABILITY_DATA Structure  (StructuresTable)
 typedef struct {
     TPM_CAP                 capability;
     TPMU_CAPABILITIES       data;
 } TPMS_CAPABILITY_DATA;
 
-// Table 2:111 - Definition of TPMS_CLOCK_INFO Structure (StructuresTable)
+// Table 2:112 - Definition of TPMS_CLOCK_INFO Structure (StructuresTable)
 typedef struct {
     UINT64                  clock;
     UINT32                  resetCount;
@@ -1064,31 +1086,31 @@ typedef struct {
     TPMI_YES_NO             safe;
 } TPMS_CLOCK_INFO;
 
-// Table 2:112 - Definition of TPMS_TIME_INFO Structure (StructuresTable)
+// Table 2:113 - Definition of TPMS_TIME_INFO Structure (StructuresTable)
 typedef struct {
     UINT64                  time;
     TPMS_CLOCK_INFO         clockInfo;
 } TPMS_TIME_INFO;
 
-// Table 2:113 - Definition of TPMS_TIME_ATTEST_INFO Structure  (StructuresTable)
+// Table 2:114 - Definition of TPMS_TIME_ATTEST_INFO Structure  (StructuresTable)
 typedef struct {
     TPMS_TIME_INFO          time;
     UINT64                  firmwareVersion;
 } TPMS_TIME_ATTEST_INFO;
 
-// Table 2:114 - Definition of TPMS_CERTIFY_INFO Structure  (StructuresTable)
+// Table 2:115 - Definition of TPMS_CERTIFY_INFO Structure  (StructuresTable)
 typedef struct {
     TPM2B_NAME              name;
     TPM2B_NAME              qualifiedName;
 } TPMS_CERTIFY_INFO;
 
-// Table 2:115 - Definition of TPMS_QUOTE_INFO Structure  (StructuresTable)
+// Table 2:116 - Definition of TPMS_QUOTE_INFO Structure  (StructuresTable)
 typedef struct {
     TPML_PCR_SELECTION      pcrSelect;
     TPM2B_DIGEST            pcrDigest;
 } TPMS_QUOTE_INFO;
 
-// Table 2:116 - Definition of TPMS_COMMAND_AUDIT_INFO Structure  (StructuresTable)
+// Table 2:117 - Definition of TPMS_COMMAND_AUDIT_INFO Structure  (StructuresTable)
 typedef struct {
     UINT64                  auditCounter;
     TPM_ALG_ID              digestAlg;
@@ -1096,29 +1118,29 @@ typedef struct {
     TPM2B_DIGEST            commandDigest;
 } TPMS_COMMAND_AUDIT_INFO;
 
-// Table 2:117 - Definition of TPMS_SESSION_AUDIT_INFO Structure  (StructuresTable)
+// Table 2:118 - Definition of TPMS_SESSION_AUDIT_INFO Structure  (StructuresTable)
 typedef struct {
     TPMI_YES_NO             exclusiveSession;
     TPM2B_DIGEST            sessionDigest;
 } TPMS_SESSION_AUDIT_INFO;
 
-// Table 2:118 - Definition of TPMS_CREATION_INFO Structure  (StructuresTable)
+// Table 2:119 - Definition of TPMS_CREATION_INFO Structure  (StructuresTable)
 typedef struct {
     TPM2B_NAME              objectName;
     TPM2B_DIGEST            creationHash;
 } TPMS_CREATION_INFO;
 
-// Table 2:119 - Definition of TPMS_NV_CERTIFY_INFO Structure  (StructuresTable)
+// Table 2:120 - Definition of TPMS_NV_CERTIFY_INFO Structure  (StructuresTable)
 typedef struct {
     TPM2B_NAME              indexName;
     UINT16                  offset;
     TPM2B_MAX_NV_BUFFER     nvContents;
 } TPMS_NV_CERTIFY_INFO;
 
-// Table 2:120 - Definition of TPMI_ST_ATTEST Type  (InterfaceTable)
+// Table 2:121 - Definition of TPMI_ST_ATTEST Type  (InterfaceTable)
 typedef  TPM_ST             TPMI_ST_ATTEST;
 
-// Table 2:121 - Definition of TPMU_ATTEST Union  (StructuresTable)
+// Table 2:122 - Definition of TPMU_ATTEST Union  (StructuresTable)
 typedef union {
     TPMS_CERTIFY_INFO          certify;
     TPMS_CREATION_INFO         creation;
@@ -1129,7 +1151,7 @@ typedef union {
     TPMS_NV_CERTIFY_INFO       nv;
 } TPMU_ATTEST;
 
-// Table 2:122 - Definition of TPMS_ATTEST Structure  (StructuresTable)
+// Table 2:123 - Definition of TPMS_ATTEST Structure  (StructuresTable)
 typedef struct {
     TPM_GENERATED           magic;
     TPMI_ST_ATTEST          type;
@@ -1140,7 +1162,7 @@ typedef struct {
     TPMU_ATTEST             attested;
 } TPMS_ATTEST;
 
-// Table 2:123 - Definition of TPM2B_ATTEST Structure  (StructuresTable)
+// Table 2:124 - Definition of TPM2B_ATTEST Structure  (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1149,7 +1171,7 @@ typedef union {
     TPM2B        b;
 } TPM2B_ATTEST;
 
-// Table 2:124 - Definition of TPMS_AUTH_COMMAND Structure  (StructuresTable)
+// Table 2:125 - Definition of TPMS_AUTH_COMMAND Structure  (StructuresTable)
 typedef struct {
     TPMI_SH_AUTH_SESSION     sessionHandle;
     TPM2B_NONCE              nonce;
@@ -1157,26 +1179,26 @@ typedef struct {
     TPM2B_AUTH               hmac;
 } TPMS_AUTH_COMMAND;
 
-// Table 2:125 - Definition of TPMS_AUTH_RESPONSE Structure  (StructuresTable)
+// Table 2:126 - Definition of TPMS_AUTH_RESPONSE Structure  (StructuresTable)
 typedef struct {
     TPM2B_NONCE             nonce;
     TPMA_SESSION            sessionAttributes;
     TPM2B_AUTH              hmac;
 } TPMS_AUTH_RESPONSE;
 
-// Table 2:126 - Definition of TPMI_TDES_KEY_BITS Type (InterfaceTable)
+// Table 2:127 - Definition of TPMI_TDES_KEY_BITS Type (InterfaceTable)
 typedef  TPM_KEY_BITS       TPMI_TDES_KEY_BITS;
 
-// Table 2:126 - Definition of TPMI_AES_KEY_BITS Type (InterfaceTable)
+// Table 2:127 - Definition of TPMI_AES_KEY_BITS Type (InterfaceTable)
 typedef  TPM_KEY_BITS       TPMI_AES_KEY_BITS;
 
-// Table 2:126 - Definition of TPMI_SM4_KEY_BITS Type (InterfaceTable)
+// Table 2:127 - Definition of TPMI_SM4_KEY_BITS Type (InterfaceTable)
 typedef  TPM_KEY_BITS       TPMI_SM4_KEY_BITS;
 
-// Table 2:126 - Definition of TPMI_CAMELLIA_KEY_BITS Type (InterfaceTable)
+// Table 2:127 - Definition of TPMI_CAMELLIA_KEY_BITS Type (InterfaceTable)
 typedef  TPM_KEY_BITS       TPMI_CAMELLIA_KEY_BITS;
 
-// Table 2:127 - Definition of TPMU_SYM_KEY_BITS Union (StructuresTable)
+// Table 2:128 - Definition of TPMU_SYM_KEY_BITS Union (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_TDES
     TPMI_TDES_KEY_BITS        tdes;
@@ -1196,7 +1218,7 @@ typedef union {
 #endif   // TPM_ALG_XOR
 } TPMU_SYM_KEY_BITS;
 
-// Table 2:128 - Definition of TPMU_SYM_MODE Union (StructuresTable)
+// Table 2:129 - Definition of TPMU_SYM_MODE Union (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_TDES
     TPMI_ALG_SYM_MODE       tdes;
@@ -1213,21 +1235,21 @@ typedef union {
     TPMI_ALG_SYM_MODE       sym;
 } TPMU_SYM_MODE;
 
-// Table 2:130 - Definition of TPMT_SYM_DEF Structure (StructuresTable)
+// Table 2:131 - Definition of TPMT_SYM_DEF Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_SYM            algorithm;
     TPMU_SYM_KEY_BITS       keyBits;
     TPMU_SYM_MODE           mode;
 } TPMT_SYM_DEF;
 
-// Table 2:131 - Definition of TPMT_SYM_DEF_OBJECT Structure (StructuresTable)
+// Table 2:132 - Definition of TPMT_SYM_DEF_OBJECT Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_SYM_OBJECT     algorithm;
     TPMU_SYM_KEY_BITS       keyBits;
     TPMU_SYM_MODE           mode;
 } TPMT_SYM_DEF_OBJECT;
 
-// Table 2:132 - Definition of TPM2B_SYM_KEY Structure (StructuresTable)
+// Table 2:133 - Definition of TPM2B_SYM_KEY Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1236,12 +1258,12 @@ typedef union {
     TPM2B        b;
 } TPM2B_SYM_KEY;
 
-// Table 2:133 - Definition of TPMS_SYMCIPHER_PARMS Structure (StructuresTable)
+// Table 2:134 - Definition of TPMS_SYMCIPHER_PARMS Structure (StructuresTable)
 typedef struct {
     TPMT_SYM_DEF_OBJECT     sym;
 } TPMS_SYMCIPHER_PARMS;
 
-// Table 2:134 - Definition of TPM2B_LABEL Structure (StructuresTable)
+// Table 2:135 - Definition of TPM2B_LABEL Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1250,13 +1272,13 @@ typedef union {
     TPM2B        b;
 } TPM2B_LABEL;
 
-// Table 2:135 - Definition of TPMS_DERIVE Structure (StructuresTable)
+// Table 2:136 - Definition of TPMS_DERIVE Structure (StructuresTable)
 typedef struct {
     TPM2B_LABEL             label;
     TPM2B_LABEL             context;
 } TPMS_DERIVE;
 
-// Table 2:136 - Definition of TPM2B_DERIVE Structure (StructuresTable)
+// Table 2:137 - Definition of TPM2B_DERIVE Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1265,13 +1287,13 @@ typedef union {
     TPM2B        b;
 } TPM2B_DERIVE;
 
-// Table 2:137 - Definition of TPMU_SENSITIVE_CREATE Union  (StructuresTable)
+// Table 2:138 - Definition of TPMU_SENSITIVE_CREATE Union  (StructuresTable)
 typedef union {
     BYTE                    create[MAX_SYM_DATA];
     TPMS_DERIVE             derive;
 } TPMU_SENSITIVE_CREATE;
 
-// Table 2:138 - Definition of TPM2B_SENSITIVE_DATA Structure (StructuresTable)
+// Table 2:139 - Definition of TPM2B_SENSITIVE_DATA Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1280,52 +1302,42 @@ typedef union {
     TPM2B        b;
 } TPM2B_SENSITIVE_DATA;
 
-// Table 2:139 - Definition of TPMS_SENSITIVE_CREATE Structure  (StructuresTable)
+// Table 2:140 - Definition of TPMS_SENSITIVE_CREATE Structure  (StructuresTable)
 typedef struct {
     TPM2B_AUTH              userAuth;
     TPM2B_SENSITIVE_DATA    data;
 } TPMS_SENSITIVE_CREATE;
 
-// Table 2:140 - Definition of TPM2B_SENSITIVE_CREATE Structure  (StructuresTable)
-#ifdef UT_BYTE_TPM2B_SENSITIVE_CREATE
-typedef union {
-    struct {
-        UINT16                  size;
-        BYTE                    buffer[sizeof(TPMS_SENSITIVE_CREATE)];
-    }            t;
-    TPM2B        b;
-} TPM2B_SENSITIVE_CREATE;
-#else
+// Table 2:141 - Definition of TPM2B_SENSITIVE_CREATE Structure  (StructuresTable)
 typedef struct {
     UINT16                   size;
     TPMS_SENSITIVE_CREATE    sensitive;
 } TPM2B_SENSITIVE_CREATE;
-#endif
 
-// Table 2:141 - Definition of TPMS_SCHEME_HASH Structure (StructuresTable)
+// Table 2:142 - Definition of TPMS_SCHEME_HASH Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_HASH           hashAlg;
 } TPMS_SCHEME_HASH;
 
-// Table 2:142 - Definition of TPMS_SCHEME_ECDAA Structure (StructuresTable)
+// Table 2:143 - Definition of TPMS_SCHEME_ECDAA Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_HASH           hashAlg;
     UINT16                  count;
 } TPMS_SCHEME_ECDAA;
 
-// Table 2:143 - Definition of TPMI_ALG_KEYEDHASH_SCHEME Type (InterfaceTable)
+// Table 2:144 - Definition of TPMI_ALG_KEYEDHASH_SCHEME Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_KEYEDHASH_SCHEME;
 
-// Table 2:144 - Definition of Types for HMAC_SIG_SCHEME (TypedefTable)
+// Table 2:145 - Definition of Types for HMAC_SIG_SCHEME (TypedefTable)
 typedef  TPMS_SCHEME_HASH    TPMS_SCHEME_HMAC;
 
-// Table 2:145 - Definition of TPMS_SCHEME_XOR Structure (StructuresTable)
+// Table 2:146 - Definition of TPMS_SCHEME_XOR Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_HASH           hashAlg;
     TPMI_ALG_KDF            kdf;
 } TPMS_SCHEME_XOR;
 
-// Table 2:146 - Definition of TPMU_SCHEME_KEYEDHASH Union  (StructuresTable)
+// Table 2:147 - Definition of TPMU_SCHEME_KEYEDHASH Union  (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_HMAC
     TPMS_SCHEME_HMAC        hmac;
@@ -1335,23 +1347,23 @@ typedef union {
 #endif   // TPM_ALG_XOR
 } TPMU_SCHEME_KEYEDHASH;
 
-// Table 2:147 - Definition of TPMT_KEYEDHASH_SCHEME Structure (StructuresTable)
+// Table 2:148 - Definition of TPMT_KEYEDHASH_SCHEME Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_KEYEDHASH_SCHEME     scheme;
     TPMU_SCHEME_KEYEDHASH         details;
 } TPMT_KEYEDHASH_SCHEME;
 
-// Table 2:148 - Definition of Types for RSA Signature Schemes  (TypedefTable)
+// Table 2:149 - Definition of Types for RSA Signature Schemes  (TypedefTable)
 typedef  TPMS_SCHEME_HASH    TPMS_SIG_SCHEME_RSASSA;
 typedef  TPMS_SCHEME_HASH    TPMS_SIG_SCHEME_RSAPSS;
 
-// Table 2:149 - Definition of Types for ECC Signature Schemes  (TypedefTable)
+// Table 2:150 - Definition of Types for ECC Signature Schemes  (TypedefTable)
 typedef  TPMS_SCHEME_HASH     TPMS_SIG_SCHEME_ECDSA;
 typedef  TPMS_SCHEME_HASH     TPMS_SIG_SCHEME_SM2;
 typedef  TPMS_SCHEME_HASH     TPMS_SIG_SCHEME_ECSCHNORR;
 typedef  TPMS_SCHEME_ECDAA    TPMS_SIG_SCHEME_ECDAA;
 
-// Table 2:150 - Definition of TPMU_SIG_SCHEME Union  (StructuresTable)
+// Table 2:151 - Definition of TPMU_SIG_SCHEME Union  (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_ECC
     TPMS_SIG_SCHEME_ECDAA        ecdaa;
@@ -1377,27 +1389,27 @@ typedef union {
     TPMS_SCHEME_HASH             any;
 } TPMU_SIG_SCHEME;
 
-// Table 2:151 - Definition of TPMT_SIG_SCHEME Structure (StructuresTable)
+// Table 2:152 - Definition of TPMT_SIG_SCHEME Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_SIG_SCHEME     scheme;
     TPMU_SIG_SCHEME         details;
 } TPMT_SIG_SCHEME;
 
-// Table 2:152 - Definition of Types for Encryption Schemes (TypedefTable)
+// Table 2:153 - Definition of Types for Encryption Schemes (TypedefTable)
 typedef  TPMS_SCHEME_HASH    TPMS_ENC_SCHEME_OAEP;
 typedef  TPMS_EMPTY          TPMS_ENC_SCHEME_RSAES;
 
-// Table 2:153 - Definition of Types for ECC Key Exchange (TypedefTable)
+// Table 2:154 - Definition of Types for ECC Key Exchange (TypedefTable)
 typedef  TPMS_SCHEME_HASH    TPMS_KEY_SCHEME_ECDH;
 typedef  TPMS_SCHEME_HASH    TPMS_KEY_SCHEME_ECMQV;
 
-// Table 2:154 - Definition of Types for KDF Schemes (TypedefTable)
+// Table 2:155 - Definition of Types for KDF Schemes (TypedefTable)
 typedef  TPMS_SCHEME_HASH    TPMS_SCHEME_MGF1;
 typedef  TPMS_SCHEME_HASH    TPMS_SCHEME_KDF1_SP800_56A;
 typedef  TPMS_SCHEME_HASH    TPMS_SCHEME_KDF2;
 typedef  TPMS_SCHEME_HASH    TPMS_SCHEME_KDF1_SP800_108;
 
-// Table 2:155 - Definition of TPMU_KDF_SCHEME Union  (StructuresTable)
+// Table 2:156 - Definition of TPMU_KDF_SCHEME Union  (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_MGF1
     TPMS_SCHEME_MGF1              mgf1;
@@ -1413,16 +1425,16 @@ typedef union {
 #endif   // TPM_ALG_KDF1_SP800_108
 } TPMU_KDF_SCHEME;
 
-// Table 2:156 - Definition of TPMT_KDF_SCHEME Structure (StructuresTable)
+// Table 2:157 - Definition of TPMT_KDF_SCHEME Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_KDF            scheme;
     TPMU_KDF_SCHEME         details;
 } TPMT_KDF_SCHEME;
 
-// Table 2:157 - Definition of TPMI_ALG_ASYM_SCHEME Type  (InterfaceTable)
+// Table 2:158 - Definition of TPMI_ALG_ASYM_SCHEME Type  (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_ASYM_SCHEME;
 
-// Table 2:158 - Definition of TPMU_ASYM_SCHEME Union (StructuresTable)
+// Table 2:159 - Definition of TPMU_ASYM_SCHEME Union (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_ECDH
     TPMS_KEY_SCHEME_ECDH         ecdh;
@@ -1457,31 +1469,31 @@ typedef union {
     TPMS_SCHEME_HASH             anySig;
 } TPMU_ASYM_SCHEME;
 
-// Table 2:159 - Definition of TPMT_ASYM_SCHEME Structure  (StructuresTable)
+// Table 2:160 - Definition of TPMT_ASYM_SCHEME Structure  (StructuresTable)
 typedef struct {
     TPMI_ALG_ASYM_SCHEME     scheme;
     TPMU_ASYM_SCHEME         details;
 } TPMT_ASYM_SCHEME;
 
-// Table 2:160 - Definition of TPMI_ALG_RSA_SCHEME Type (InterfaceTable)
+// Table 2:161 - Definition of TPMI_ALG_RSA_SCHEME Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_RSA_SCHEME;
 
-// Table 2:161 - Definition of TPMT_RSA_SCHEME Structure (StructuresTable)
+// Table 2:162 - Definition of TPMT_RSA_SCHEME Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_RSA_SCHEME     scheme;
     TPMU_ASYM_SCHEME        details;
 } TPMT_RSA_SCHEME;
 
-// Table 2:162 - Definition of TPMI_ALG_RSA_DECRYPT Type (InterfaceTable)
+// Table 2:163 - Definition of TPMI_ALG_RSA_DECRYPT Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_RSA_DECRYPT;
 
-// Table 2:163 - Definition of TPMT_RSA_DECRYPT Structure (StructuresTable)
+// Table 2:164 - Definition of TPMT_RSA_DECRYPT Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_RSA_DECRYPT     scheme;
     TPMU_ASYM_SCHEME         details;
 } TPMT_RSA_DECRYPT;
 
-// Table 2:164 - Definition of TPM2B_PUBLIC_KEY_RSA Structure (StructuresTable)
+// Table 2:165 - Definition of TPM2B_PUBLIC_KEY_RSA Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1490,10 +1502,10 @@ typedef union {
     TPM2B        b;
 } TPM2B_PUBLIC_KEY_RSA;
 
-// Table 2:165 - Definition of TPMI_RSA_KEY_BITS Type (InterfaceTable)
+// Table 2:166 - Definition of TPMI_RSA_KEY_BITS Type (InterfaceTable)
 typedef  TPM_KEY_BITS       TPMI_RSA_KEY_BITS;
 
-// Table 2:166 - Definition of TPM2B_PRIVATE_KEY_RSA Structure (StructuresTable)
+// Table 2:167 - Definition of TPM2B_PRIVATE_KEY_RSA Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1502,7 +1514,7 @@ typedef union {
     TPM2B        b;
 } TPM2B_PRIVATE_KEY_RSA;
 
-// Table 2:167 - Definition of TPM2B_ECC_PARAMETER Structure (StructuresTable)
+// Table 2:168 - Definition of TPM2B_ECC_PARAMETER Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1511,41 +1523,31 @@ typedef union {
     TPM2B        b;
 } TPM2B_ECC_PARAMETER;
 
-// Table 2:168 - Definition of TPMS_ECC_POINT Structure (StructuresTable)
+// Table 2:169 - Definition of TPMS_ECC_POINT Structure (StructuresTable)
 typedef struct {
     TPM2B_ECC_PARAMETER     x;
     TPM2B_ECC_PARAMETER     y;
 } TPMS_ECC_POINT;
 
-// Table 2:169 - Definition of TPM2B_ECC_POINT Structure (StructuresTable)
-#ifdef UT_BYTE_TPM2B_ECC_POINT
-typedef union {
-    struct {
-        UINT16                  size;
-        BYTE                    buffer[sizeof(TPMS_ECC_POINT)];
-    }            t;
-    TPM2B        b;
-} TPM2B_ECC_POINT;
-#else
+// Table 2:170 - Definition of TPM2B_ECC_POINT Structure (StructuresTable)
 typedef struct {
     UINT16                  size;
     TPMS_ECC_POINT          point;
 } TPM2B_ECC_POINT;
-#endif
 
-// Table 2:170 - Definition of TPMI_ALG_ECC_SCHEME Type (InterfaceTable)
+// Table 2:171 - Definition of TPMI_ALG_ECC_SCHEME Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_ECC_SCHEME;
 
-// Table 2:171 - Definition of TPMI_ECC_CURVE Type (InterfaceTable)
+// Table 2:172 - Definition of TPMI_ECC_CURVE Type (InterfaceTable)
 typedef  TPM_ECC_CURVE      TPMI_ECC_CURVE;
 
-// Table 2:172 - Definition of TPMT_ECC_SCHEME Structure (StructuresTable)
+// Table 2:173 - Definition of TPMT_ECC_SCHEME Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_ECC_SCHEME     scheme;
     TPMU_ASYM_SCHEME        details;
 } TPMT_ECC_SCHEME;
 
-// Table 2:173 - Definition of TPMS_ALGORITHM_DETAIL_ECC Structure  (StructuresTable)
+// Table 2:174 - Definition of TPMS_ALGORITHM_DETAIL_ECC Structure  (StructuresTable)
 typedef struct {
     TPM_ECC_CURVE           curveID;
     UINT16                  keySize;
@@ -1560,30 +1562,30 @@ typedef struct {
     TPM2B_ECC_PARAMETER     h;
 } TPMS_ALGORITHM_DETAIL_ECC;
 
-// Table 2:174 - Definition of TPMS_SIGNATURE_RSA Structure (StructuresTable)
+// Table 2:175 - Definition of TPMS_SIGNATURE_RSA Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_HASH           hash;
     TPM2B_PUBLIC_KEY_RSA    sig;
 } TPMS_SIGNATURE_RSA;
 
-// Table 2:175 - Definition of Types for Signature  (TypedefTable)
+// Table 2:176 - Definition of Types for Signature  (TypedefTable)
 typedef  TPMS_SIGNATURE_RSA    TPMS_SIGNATURE_RSASSA;
 typedef  TPMS_SIGNATURE_RSA    TPMS_SIGNATURE_RSAPSS;
 
-// Table 2:176 - Definition of TPMS_SIGNATURE_ECC Structure (StructuresTable)
+// Table 2:177 - Definition of TPMS_SIGNATURE_ECC Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_HASH           hash;
     TPM2B_ECC_PARAMETER     signatureR;
     TPM2B_ECC_PARAMETER     signatureS;
 } TPMS_SIGNATURE_ECC;
 
-// Table 2:177 - Definition of Types for TPMS_SIGNATURE_ECC (TypedefTable)
+// Table 2:178 - Definition of Types for TPMS_SIGNATURE_ECC (TypedefTable)
 typedef  TPMS_SIGNATURE_ECC    TPMS_SIGNATURE_ECDAA;
 typedef  TPMS_SIGNATURE_ECC    TPMS_SIGNATURE_ECDSA;
 typedef  TPMS_SIGNATURE_ECC    TPMS_SIGNATURE_SM2;
 typedef  TPMS_SIGNATURE_ECC    TPMS_SIGNATURE_ECSCHNORR;
 
-// Table 2:178 - Definition of TPMU_SIGNATURE Union  (StructuresTable)
+// Table 2:179 - Definition of TPMU_SIGNATURE Union  (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_ECC
     TPMS_SIGNATURE_ECDAA        ecdaa;
@@ -1609,13 +1611,13 @@ typedef union {
     TPMS_SCHEME_HASH            any;
 } TPMU_SIGNATURE;
 
-// Table 2:179 - Definition of TPMT_SIGNATURE Structure (StructuresTable)
+// Table 2:180 - Definition of TPMT_SIGNATURE Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_SIG_SCHEME     sigAlg;
     TPMU_SIGNATURE          signature;
 } TPMT_SIGNATURE;
 
-// Table 2:180 - Definition of TPMU_ENCRYPTED_SECRET Union  (StructuresTable)
+// Table 2:181 - Definition of TPMU_ENCRYPTED_SECRET Union  (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_ECC
     BYTE                    ecc[sizeof(TPMS_ECC_POINT)];
@@ -1631,7 +1633,7 @@ typedef union {
 #endif   // TPM_ALG_KEYEDHASH
 } TPMU_ENCRYPTED_SECRET;
 
-// Table 2:181 - Definition of TPM2B_ENCRYPTED_SECRET Structure (StructuresTable)
+// Table 2:182 - Definition of TPM2B_ENCRYPTED_SECRET Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1640,10 +1642,10 @@ typedef union {
     TPM2B        b;
 } TPM2B_ENCRYPTED_SECRET;
 
-// Table 2:182 - Definition of TPMI_ALG_PUBLIC Type (InterfaceTable)
+// Table 2:183 - Definition of TPMI_ALG_PUBLIC Type (InterfaceTable)
 typedef  TPM_ALG_ID         TPMI_ALG_PUBLIC;
 
-// Table 2:183 - Definition of TPMU_PUBLIC_ID Union  (StructuresTable)
+// Table 2:184 - Definition of TPMU_PUBLIC_ID Union  (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_KEYEDHASH
     TPM2B_DIGEST            keyedHash;
@@ -1660,18 +1662,18 @@ typedef union {
     TPMS_DERIVE             derive;
 } TPMU_PUBLIC_ID;
 
-// Table 2:184 - Definition of TPMS_KEYEDHASH_PARMS Structure (StructuresTable)
+// Table 2:185 - Definition of TPMS_KEYEDHASH_PARMS Structure (StructuresTable)
 typedef struct {
     TPMT_KEYEDHASH_SCHEME     scheme;
 } TPMS_KEYEDHASH_PARMS;
 
-// Table 2:185 - Definition of TPMS_ASYM_PARMS Structure  (StructuresTable)
+// Table 2:186 - Definition of TPMS_ASYM_PARMS Structure  (StructuresTable)
 typedef struct {
     TPMT_SYM_DEF_OBJECT     symmetric;
     TPMT_ASYM_SCHEME        scheme;
 } TPMS_ASYM_PARMS;
 
-// Table 2:186 - Definition of TPMS_RSA_PARMS Structure (StructuresTable)
+// Table 2:187 - Definition of TPMS_RSA_PARMS Structure (StructuresTable)
 typedef struct {
     TPMT_SYM_DEF_OBJECT     symmetric;
     TPMT_RSA_SCHEME         scheme;
@@ -1679,7 +1681,7 @@ typedef struct {
     UINT32                  exponent;
 } TPMS_RSA_PARMS;
 
-// Table 2:187 - Definition of TPMS_ECC_PARMS Structure (StructuresTable)
+// Table 2:188 - Definition of TPMS_ECC_PARMS Structure (StructuresTable)
 typedef struct {
     TPMT_SYM_DEF_OBJECT     symmetric;
     TPMT_ECC_SCHEME         scheme;
@@ -1687,7 +1689,7 @@ typedef struct {
     TPMT_KDF_SCHEME         kdf;
 } TPMS_ECC_PARMS;
 
-// Table 2:188 - Definition of TPMU_PUBLIC_PARMS Union  (StructuresTable)
+// Table 2:189 - Definition of TPMU_PUBLIC_PARMS Union  (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_KEYEDHASH
     TPMS_KEYEDHASH_PARMS    keyedHashDetail;
@@ -1704,13 +1706,13 @@ typedef union {
     TPMS_ASYM_PARMS         asymDetail;
 } TPMU_PUBLIC_PARMS;
 
-// Table 2:189 - Definition of TPMT_PUBLIC_PARMS Structure (StructuresTable)
+// Table 2:190 - Definition of TPMT_PUBLIC_PARMS Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_PUBLIC         type;
     TPMU_PUBLIC_PARMS       parameters;
 } TPMT_PUBLIC_PARMS;
 
-// Table 2:190 - Definition of TPMT_PUBLIC Structure (StructuresTable)
+// Table 2:191 - Definition of TPMT_PUBLIC Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_PUBLIC         type;
     TPMI_ALG_HASH           nameAlg;
@@ -1720,23 +1722,13 @@ typedef struct {
     TPMU_PUBLIC_ID          unique;
 } TPMT_PUBLIC;
 
-// Table 2:191 - Definition of TPM2B_PUBLIC Structure (StructuresTable)
-#ifdef UT_BYTE_TPM2B_PUBLIC
-typedef union {
-    struct {
-        UINT16                  size;
-        BYTE                    buffer[sizeof(TPMT_PUBLIC)];
-    }            t;
-    TPM2B        b;
-} TPM2B_PUBLIC;
-#else
+// Table 2:192 - Definition of TPM2B_PUBLIC Structure (StructuresTable)
 typedef struct {
     UINT16                  size;
     TPMT_PUBLIC             publicArea;
 } TPM2B_PUBLIC;
-#endif
 
-// Table 2:192 - Definition of TPM2B_TEMPLATE Structure (StructuresTable)
+// Table 2:193 - Definition of TPM2B_TEMPLATE Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1745,7 +1737,7 @@ typedef union {
     TPM2B        b;
 } TPM2B_TEMPLATE;
 
-// Table 2:193 - Definition of TPM2B_PRIVATE_VENDOR_SPECIFIC Structure (StructuresTable)
+// Table 2:194 - Definition of TPM2B_PRIVATE_VENDOR_SPECIFIC Structure (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1754,7 +1746,7 @@ typedef union {
     TPM2B        b;
 } TPM2B_PRIVATE_VENDOR_SPECIFIC;
 
-// Table 2:194 - Definition of TPMU_SENSITIVE_COMPOSITE Union  (StructuresTable)
+// Table 2:195 - Definition of TPMU_SENSITIVE_COMPOSITE Union  (StructuresTable)
 typedef union {
 #ifdef      TPM_ALG_RSA
     TPM2B_PRIVATE_KEY_RSA            rsa;
@@ -1771,7 +1763,7 @@ typedef union {
     TPM2B_PRIVATE_VENDOR_SPECIFIC    any;
 } TPMU_SENSITIVE_COMPOSITE;
 
-// Table 2:195 - Definition of TPMT_SENSITIVE Structure (StructuresTable)
+// Table 2:196 - Definition of TPMT_SENSITIVE Structure (StructuresTable)
 typedef struct {
     TPMI_ALG_PUBLIC             sensitiveType;
     TPM2B_AUTH                  authValue;
@@ -1779,30 +1771,20 @@ typedef struct {
     TPMU_SENSITIVE_COMPOSITE    sensitive;
 } TPMT_SENSITIVE;
 
-// Table 2:196 - Definition of TPM2B_SENSITIVE Structure  (StructuresTable)
-#ifdef UT_BYTE_TPM2B_SENSITIVE
-typedef union {
-    struct {
-        UINT16                  size;
-        BYTE                    buffer[sizeof(TPMT_SENSITIVE)];
-    }            t;
-    TPM2B        b;
-} TPM2B_SENSITIVE;
-#else
+// Table 2:197 - Definition of TPM2B_SENSITIVE Structure  (StructuresTable)
 typedef struct {
     UINT16                  size;
     TPMT_SENSITIVE          sensitiveArea;
 } TPM2B_SENSITIVE;
-#endif
 
-// Table 2:197 - Definition of _PRIVATE Structure  (StructuresTable)
+// Table 2:198 - Definition of _PRIVATE Structure  (StructuresTable)
 typedef struct {
     TPM2B_DIGEST            integrityOuter;
     TPM2B_DIGEST            integrityInner;
     TPM2B_SENSITIVE         sensitive;
 } _PRIVATE;
 
-// Table 2:198 - Definition of TPM2B_PRIVATE Structure  (StructuresTable)
+// Table 2:199 - Definition of TPM2B_PRIVATE Structure  (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1811,13 +1793,13 @@ typedef union {
     TPM2B        b;
 } TPM2B_PRIVATE;
 
-// Table 2:199 - Definition of TPMS_ID_OBJECT Structure  (StructuresTable)
+// Table 2:200 - Definition of TPMS_ID_OBJECT Structure  (StructuresTable)
 typedef struct {
     TPM2B_DIGEST            integrityHMAC;
     TPM2B_DIGEST            encIdentity;
 } TPMS_ID_OBJECT;
 
-// Table 2:200 - Definition of TPM2B_ID_OBJECT Structure  (StructuresTable)
+// Table 2:201 - Definition of TPM2B_ID_OBJECT Structure  (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1826,14 +1808,14 @@ typedef union {
     TPM2B        b;
 } TPM2B_ID_OBJECT;
 
-// Table 2:201 - Definition of TPM_NV_INDEX Bits  (BitsTable)
+// Table 2:202 - Definition of TPM_NV_INDEX Bits  (BitsTable)
 typedef struct {
     unsigned    index   : 24;
     unsigned    RH_NV   : 8 ;
 } TPM_NV_INDEX;
 
 
-// Table 2:202 - Definition of TPM_NT Constants (EnumTable)
+// Table 2:203 - Definition of TPM_NT Constants (EnumTable)
 typedef  UINT32             TPM_NT;
 #define  TPM_NT_ORDINARY    (TPM_NT)(0x0)
 #define  TPM_NT_COUNTER     (TPM_NT)(0x1)
@@ -1842,13 +1824,13 @@ typedef  UINT32             TPM_NT;
 #define  TPM_NT_PIN_FAIL    (TPM_NT)(0x8)
 #define  TPM_NT_PIN_PASS    (TPM_NT)(0x9)
 
-// Table 2:203 - Definition of TPMS_NV_PIN_COUNTER_PARAMETERS Structure (StructuresTable)
+// Table 2:204 - Definition of TPMS_NV_PIN_COUNTER_PARAMETERS Structure (StructuresTable)
 typedef struct {
     UINT32                  pinCount;
     UINT32                  pinLimit;
 } TPMS_NV_PIN_COUNTER_PARAMETERS;
 
-// Table 2:204 - Definition of TPMA_NV Bits (BitsTable)
+// Table 2:205 - Definition of TPMA_NV Bits (BitsTable)
 typedef struct {
     unsigned    TPMA_NV_PPWRITE          : 1 ;
     unsigned    TPMA_NV_OWNERWRITE       : 1 ;
@@ -1919,7 +1901,7 @@ typedef struct {
 #define IsNv_TPMA_NV_READ_STCLEAR(attribute)               \
         ((attribute.TPMA_NV_READ_STCLEAR) != 0)
 
-// Table 2:205 - Definition of TPMS_NV_PUBLIC Structure (StructuresTable)
+// Table 2:206 - Definition of TPMS_NV_PUBLIC Structure (StructuresTable)
 typedef struct {
     TPMI_RH_NV_INDEX        nvIndex;
     TPMI_ALG_HASH           nameAlg;
@@ -1928,23 +1910,13 @@ typedef struct {
     UINT16                  dataSize;
 } TPMS_NV_PUBLIC;
 
-// Table 2:206 - Definition of TPM2B_NV_PUBLIC Structure (StructuresTable)
-#ifdef UT_BYTE_TPM2B_NV_PUBLIC
-typedef union {
-    struct {
-        UINT16                  size;
-        BYTE                    buffer[sizeof(TPMS_NV_PUBLIC)];
-    }            t;
-    TPM2B        b;
-} TPM2B_NV_PUBLIC;
-#else
+// Table 2:207 - Definition of TPM2B_NV_PUBLIC Structure (StructuresTable)
 typedef struct {
     UINT16                  size;
     TPMS_NV_PUBLIC          nvPublic;
 } TPM2B_NV_PUBLIC;
-#endif
 
-// Table 2:207 - Definition of TPM2B_CONTEXT_SENSITIVE Structure  (StructuresTable)
+// Table 2:208 - Definition of TPM2B_CONTEXT_SENSITIVE Structure  (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1953,13 +1925,13 @@ typedef union {
     TPM2B        b;
 } TPM2B_CONTEXT_SENSITIVE;
 
-// Table 2:208 - Definition of TPMS_CONTEXT_DATA Structure  (StructuresTable)
+// Table 2:209 - Definition of TPMS_CONTEXT_DATA Structure  (StructuresTable)
 typedef struct {
     TPM2B_DIGEST               integrity;
     TPM2B_CONTEXT_SENSITIVE    encrypted;
 } TPMS_CONTEXT_DATA;
 
-// Table 2:209 - Definition of TPM2B_CONTEXT_DATA Structure  (StructuresTable)
+// Table 2:210 - Definition of TPM2B_CONTEXT_DATA Structure  (StructuresTable)
 typedef union {
     struct {
         UINT16                  size;
@@ -1968,7 +1940,7 @@ typedef union {
     TPM2B        b;
 } TPM2B_CONTEXT_DATA;
 
-// Table 2:210 - Definition of TPMS_CONTEXT Structure (StructuresTable)
+// Table 2:211 - Definition of TPMS_CONTEXT Structure (StructuresTable)
 typedef struct {
     UINT64                  sequence;
     TPMI_DH_CONTEXT         savedHandle;
@@ -1976,7 +1948,7 @@ typedef struct {
     TPM2B_CONTEXT_DATA      contextBlob;
 } TPMS_CONTEXT;
 
-// Table 2:212 - Definition of TPMS_CREATION_DATA Structure  (StructuresTable)
+// Table 2:213 - Definition of TPMS_CREATION_DATA Structure  (StructuresTable)
 typedef struct {
     TPML_PCR_SELECTION      pcrSelect;
     TPM2B_DIGEST            pcrDigest;
@@ -1987,21 +1959,34 @@ typedef struct {
     TPM2B_DATA              outsideInfo;
 } TPMS_CREATION_DATA;
 
-// Table 2:213 - Definition of TPM2B_CREATION_DATA Structure  (StructuresTable)
-#ifdef UT_BYTE_TPM2B_CREATION_DATA
-typedef union {
-    struct {
-        UINT16                  size;
-        BYTE                    buffer[sizeof(TPMS_CREATION_DATA)];
-    }            t;
-    TPM2B        b;
-} TPM2B_CREATION_DATA;
-#else
+// Table 2:214 - Definition of TPM2B_CREATION_DATA Structure  (StructuresTable)
 typedef struct {
     UINT16                  size;
     TPMS_CREATION_DATA      creationData;
 } TPM2B_CREATION_DATA;
-#endif
+
+// Table 2:215 - Definition of TPM_AT Constants (EnumTable)
+typedef  UINT32             TPM_AT;
+#define  TPM_AT_ANY      (TPM_AT)(0x00000000)
+#define  TPM_AT_ERROR    (TPM_AT)(0x00000001)
+#define  TPM_AT_PV1      (TPM_AT)(0x00000002)
+#define  TPM_AT_VEND     (TPM_AT)(0x80000000)
+
+// Table 2:216 - Definition of TPM_AE Constants  (EnumTable)
+typedef  UINT32             TPM_AE;
+#define  TPM_AE_NONE    (TPM_AE)(0x00000000)
+
+// Table 2:217 - Definition of TPMS_AC_OUTPUT Structure  (StructuresTable)
+typedef struct {
+    TPM_AT                  tag;
+    UINT32                  data;
+} TPMS_AC_OUTPUT;
+
+// Table 2:218 - Definition of TPML_AC_CAPABILITIES Structure  (StructuresTable)
+typedef struct {
+    UINT32                  count;
+    TPMS_AC_OUTPUT          acCapabilities[MAX_AC_CAPABILITIES];
+} TPML_AC_CAPABILITIES;
 
 
 #endif    //  _TPM_TYPES_H_

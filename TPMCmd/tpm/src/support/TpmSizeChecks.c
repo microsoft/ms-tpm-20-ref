@@ -49,6 +49,32 @@ TpmSizeChecks(
     void
     )
 {
+#if DEBUG
+    UINT32      maxAsymSecurityStrength = MAX_ASYM_SECURITY_STRENGTH;
+    UINT32      maxHashSecurityStrength = MAX_HASH_SECURITY_STRENGTH;
+    UINT32      maxSymSecurityStrength = MAX_SYM_SECURITY_STRENGTH;
+    UINT32      maxSecurityStrengthBits = MAX_SECURITY_STRENGTH_BITS;
+    UINT32      proofSize = PROOF_SIZE;
+    UINT32      compliantProofSize = COMPLIANT_PROOF_SIZE;
+    UINT32      compliantPrimarySeedSize = COMPLIANT_PRIMARY_SEED_SIZE;
+    UINT32      primarySeedSize = PRIMARY_SEED_SIZE;
+
+    UINT32      cmacState = sizeof(tpmCmacState_t);
+    UINT32      hashState = sizeof(HASH_STATE);
+    UINT32      keyScheduleSize = sizeof(tpmCryptKeySchedule_t);
+//
+    NOT_REFERENCED(cmacState);
+    NOT_REFERENCED(hashState);
+    NOT_REFERENCED(keyScheduleSize);
+    NOT_REFERENCED(maxAsymSecurityStrength);
+    NOT_REFERENCED(maxHashSecurityStrength);
+    NOT_REFERENCED(maxSymSecurityStrength);
+    NOT_REFERENCED(maxSecurityStrengthBits);
+    NOT_REFERENCED(proofSize);
+    NOT_REFERENCED(compliantProofSize);
+    NOT_REFERENCED(compliantPrimarySeedSize);
+    NOT_REFERENCED(primarySeedSize);
+#endif //
     // Make sure that the size of the context blob is large enough for the largest
     // context
 // TBD
@@ -58,6 +84,7 @@ TpmSizeChecks(
     // algorithms implemented on the TPM. A requirement of this implementation is 
     // that a list of all allowed TPMS_PCR_SELECTIONS fits in MAX_CAP_DATA.
 // TBD
+
 }
 
 #endif // RUNTIME_SIZE_CHECKS

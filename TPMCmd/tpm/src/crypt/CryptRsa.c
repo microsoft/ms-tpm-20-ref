@@ -410,7 +410,7 @@ OaepDecode(
     // Make sure that the recovered data has the hash of the label
     // Put trial value in the seed mask
     if((CryptHashBlock(hashAlg, label->size, (BYTE *)label->buffer,
-                       hLen, seedMask)) < 0)
+                       hLen, seedMask)) != hLen)
         FAIL(FATAL_ERROR_INTERNAL);
     if(memcmp(seedMask, mask, hLen) != 0)
         ERROR_RETURN(TPM_RC_VALUE);
@@ -440,14 +440,14 @@ Exit:
     return retVal;
 }
 
-//*** PKSC1v1_5Encode()
+//*** PKCS1v1_5Encode()
 // This function performs the encoding for RSAES-PKCS1-V1_5-ENCRYPT as defined in
 // PKCS#1V2.1
 //  return type:    TPM_RC
 //  TPM_RC_VALUE     message size is too large
 //
 static TPM_RC
-RSAES_PKSC1v1_5Encode(
+RSAES_PKCS1v1_5Encode(
     TPM2B       *padded,        // OUT: the pad data
     TPM2B       *message,       // IN: the message being padded
     RAND_STATE  *rand
@@ -718,7 +718,7 @@ static TPM_RC
 RSASSA_Encode(
     TPM2B               *pOut,      // IN:OUT on in, the size of the public key
                                     //        on out, the encoded area
-    TPM_ALG_ID           hashAlg,   // IN: hash algorithm for PKSC1v1_5
+    TPM_ALG_ID           hashAlg,   // IN: hash algorithm for PKCS1v1_5
     TPM2B               *hIn        // IN: digest value to encode
     )
 {
@@ -814,6 +814,8 @@ Exit:
     return retVal;
 }
 
+//** Externally Accessible Functions
+
 //*** CryptRsaSelectScheme()
 // This function is used by TPM2_RSA_Decrypt and TPM2_RSA_Encrypt.  It sets up
 // the rules to select a scheme between input and object default.
@@ -889,10 +891,6 @@ CryptRsaLoadPrivateExponent(
 
         // Make sure that the bigNum used for the exponent is properly initialized
         RsaInitializeExponent(&rsaKey->privateExponent);
-
-//??        // Make sure that the prime is not plain wrong
-//??        if(BnEqualZero(bnP))
-//??            ERROR_RETURN(TPM_RC_BINDING);
 
         // Find the second prime by division
         BnDiv(bnQ, bnQr, bnN, bnP);
@@ -978,7 +976,7 @@ CryptRsaEncrypt(
         }
         break;
         case TPM_ALG_RSAES:
-            retVal = RSAES_PKSC1v1_5Encode(&cOut->b, dIn, rand);
+            retVal = RSAES_PKCS1v1_5Encode(&cOut->b, dIn, rand);
             break;
         case TPM_ALG_OAEP:
             retVal = OaepEncode(&cOut->b, scheme->details.oaep.hashAlg, label, dIn,
@@ -1238,8 +1236,6 @@ CryptRsaGenerateKey(
         e = RSA_DEFAULT_PUBLIC_EXPONENT;
     if(e < 65537)
         ERROR_RETURN(TPM_RC_RANGE);
-//    if(e == 197499) //???
-//        e = e;      //???
     if(e != RSA_DEFAULT_PUBLIC_EXPONENT && !IsPrimeInt(e))
         ERROR_RETURN(TPM_RC_RANGE);
     BnSetWord(bnE, e);

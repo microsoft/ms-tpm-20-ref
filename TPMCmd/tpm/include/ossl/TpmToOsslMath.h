@@ -49,6 +49,8 @@
 #include <openssl/ec.h>
 #include <openssl/bn.h>
 
+//** Macros and Defines
+
 // Make sure that the library is using the correct size for a crypt word
 #if    defined THIRTY_TWO_BIT && (RADIX_BITS != 32)  \
     || defined SIXTY_FOUR_BIT && (RADIX_BITS != 64)
@@ -83,9 +85,9 @@ typedef OSSL_CURVE_DATA      *bigCurve;
 
 #define AccessCurveData(E)  ((E)->C)
 
-#define CURVE_INITIALIZED(E, initializer)                        \
+#define CURVE_INITIALIZED(name, initializer)                        \
     OSSL_CURVE_DATA     _##name;                                 \
-    bigCurve            E =  BnCurveInitialize(&_##name, initializer)
+    bigCurve            name =  BnCurveInitialize(&_##name, initializer)
 
 #include "TpmToOsslSupport_fp.h"
 

@@ -33,10 +33,6 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#if !defined _TPM_H_
-#error "Should not be called"
-#endif
-
 //** Description
 
 // This file contains internal global type definitions and data declarations that
@@ -52,6 +48,10 @@
 // data is private to the module but is collected here to simplify the management
 // of the instance data.
 // All the data is instanced in Global.c.
+#if !defined _TPM_H_
+#error "Should not be called"
+#endif
+
 
 //** Includes
 
@@ -75,6 +75,7 @@ _NORMAL_WARNING_LEVEL_
 #include "CryptTest.h"
 #include "BnValues.h"
 #include "CryptHash.h"
+#include "CryptSym.h"
 #include "CryptRand.h"
 #include "CryptEcc.h"
 #include "CryptRsa.h"
@@ -103,6 +104,13 @@ typedef BYTE    TIME_INFO[sizeof(TPMS_TIME_INFO)];
 
 // A NAME is a BYTE array that can contain a TPMU_NAME
 typedef BYTE    NAME[sizeof(TPMU_NAME)];
+
+// Definition for a PROOF value
+TPM2B_TYPE(PROOF, PROOF_SIZE);
+
+// Definition for a Primary Seed value
+TPM2B_TYPE(SEED, PRIMARY_SEED_SIZE);
+
 
 // A CLOCK_NONCE is used to tag the time value in the authorization session and
 // in the ticket computation so that the ticket expires when there is a time
@@ -151,7 +159,8 @@ typedef struct
     unsigned            primary : 1;        //5) SET for a primary object
     unsigned            temporary : 1;      //6) SET for a temporary object
     unsigned            stClear : 1;        //7) SET for an stClear object
-    unsigned            hmacSeq : 1;        //8) SET for an HMAC sequence object
+    unsigned            hmacSeq : 1;        //8) SET for an HMAC or MAC sequence 
+                                            //   object
     unsigned            hashSeq : 1;        //9) SET for a hash sequence object
     unsigned            eventSeq : 1;       //10) SET for an event sequence object
     unsigned            ticketSafe : 1;     //11) SET if a ticket is safe to create
@@ -518,7 +527,9 @@ extern TPM_HANDLE       g_exclusiveAuditSession;
 
 //*** g_time
 // This is the value in which we keep the current command time. This is initialized
-// at the start of each command. The time is in mS.
+// at the start of each command. The time is the accumulated time since the last
+// time that the TPM's timer was last powered up. Clock is the accumulated time
+// since the last time that the TPM was cleared. g_time is in mS.
 extern  UINT64          g_time;
 
 //*** g_timeEpoch
@@ -532,12 +543,7 @@ extern CLOCK_NONCE       g_timeEpoch;
 #else
 #define g_timeEpoch      gp.timeEpoch
 #endif
-
-//*** g_timeNewEpochNeeded
-// This flag is SET at startup if a new timer nonce is needed. This flag will cause
-// a new g_timeEpoch to be generated if it is needed by any of the ticket functions.
-extern BOOL             g_timeNewEpochNeeded;
-
+ 
 
 //*** g_phEnable
 // This is the platform hierarchy control and determines if the platform hierarchy
@@ -720,9 +726,9 @@ typedef struct
     // Note there is a nullSeed in the state_reset memory.
 
     // Hierarchy proofs
-    TPM2B_AUTH          phProof;
-    TPM2B_AUTH          shProof;
-    TPM2B_AUTH          ehProof;
+    TPM2B_PROOF          phProof;
+    TPM2B_PROOF          shProof;
+    TPM2B_PROOF          ehProof;
     // Note there is a nullProof in the state_reset memory.
 
 //*********************************************************************************
@@ -872,7 +878,20 @@ typedef struct orderly_data
     // accumulate.
     DRBG_STATE          drbgState;
 
+// These values allow the accumulation of self-healing time across orderly shutdown
+// of the TPM.
+#ifdef ACCUMULATE_SELF_HEAL_TIMER 
+    UINT64              selfHealTimer;  // current value of s_selfHealTimer
+    UINT64              lockoutTimer;   // current value of s_lockoutTimer
+    UINT64              time;           // current value of g_time at shutdown
+#endif // ACCUMULATE_SELF_HEAL_TIMER
+
 } ORDERLY_DATA;
+
+#ifdef ACCUMULATE_SELF_HEAL_TIMER
+#define     s_selfHealTimer     go.selfHealTimer
+#define     s_lockoutTimer      go.lockoutTimer
+#endif  // ACCUMULATE_SELF_HEAL_TIMER
 
 #  define drbgDefault go.drbgState
 
@@ -936,7 +955,7 @@ typedef struct state_reset_data
 //*****************************************************************************
 //          Hierarchy Control
 //*****************************************************************************
-    TPM2B_AUTH          nullProof;          // The proof value associated with
+    TPM2B_PROOF         nullProof;          // The proof value associated with
                                             // the TPM_RH_NULL hierarchy. The
                                             // default reset value is from the RNG.
 
@@ -1212,11 +1231,13 @@ extern BOOL             s_DAPendingOnNV;
 //*****************************************************************************
 // This variable holds the accumulated time since the last time
 // that 'failedTries' was decremented. This value is in millisecond.
+#ifndef ACCUMULATE_SELF_HEAL_TIMER
 extern UINT64       s_selfHealTimer;
 
 // This variable holds the accumulated time that the lockoutAuth has been
 // blocked.
 extern UINT64       s_lockoutTimer;
+#endif // ACCUMULATE_SELF_HEAL_TIMER
 
 #endif // DA_C
 

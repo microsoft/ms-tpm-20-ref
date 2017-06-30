@@ -41,6 +41,8 @@
 //
 #include "Tpm.h"
 
+//** Functions
+
 //*** UnsignedCmpB
 // This function compare two unsigned values. The values are byte-aligned,
 // big-endian numbers (e.g, a hash).
@@ -238,5 +240,26 @@ AdjustNumberB(
         num->size = requestedSize;
     }
     return num->size;
+}
+
+//*** ShiftLeft()
+// This function shifts a byte buffer (a TPM2B) one byte to the left. That is, 
+// the most significant bit of the most significant byte is lost.
+TPM2B *
+ShiftLeft(
+    TPM2B       *value          // IN/OUT: value to shift and shifted value out
+)
+{
+    UINT16       count = value->size;
+    BYTE        *buffer = value->buffer;
+    if(count > 0)
+    {
+        for(count -= 1; count > 0; buffer++, count--)
+        {
+            buffer[0] = (buffer[0] << 1) + ((buffer[1] & 0x80) ? 1 : 0);
+        }
+        *buffer <<= 1;
+    }
+    return value;
 }
 

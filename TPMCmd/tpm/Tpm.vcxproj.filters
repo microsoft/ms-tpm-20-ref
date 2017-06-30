@@ -547,6 +547,36 @@
     <ClCompile Include="src\crypt\Ticket.c">
       <Filter>Source Files\Crypt</Filter>
     </ClCompile>
+    <ClCompile Include="src\command\AttachedComponent\AC_GetCapability.c">
+      <Filter>Source Files\AttachedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\AttachedComponent\AC_Send.c">
+      <Filter>Source Files\AttachedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\AttachedComponent\Policy_AC_SendSelect.c">
+      <Filter>Source Files\AttachedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\AttachedComponent\AC_spt.c">
+      <Filter>Source Files\AttachedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Symmetric\MAC.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptSmac.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\HashHMAC\MAC_Start.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptCmac.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Symmetric\SMAC.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptEccData.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BaseTypes.h">
@@ -1098,9 +1128,6 @@
     <ClInclude Include="include\prototypes\Sign_fp.h">
       <Filter>Headers\prototypes</Filter>
     </ClInclude>
-    <ClInclude Include="include\prototypes\Simulator_fp.h">
-      <Filter>Headers\prototypes</Filter>
-    </ClInclude>
     <ClInclude Include="include\prototypes\StartAuthSession_fp.h">
       <Filter>Headers\prototypes</Filter>
     </ClInclude>
@@ -1155,27 +1182,6 @@
     <ClInclude Include="include\prototypes\ZGen_2Phase_fp.h">
       <Filter>Headers\prototypes</Filter>
     </ClInclude>
-    <ClInclude Include="include\ossl\TpmToOsslSym.h">
-      <Filter>Headers\ossl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ossl\TpmToOsslHash.h">
-      <Filter>Headers\ossl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ossl\TpmToOsslMath.h">
-      <Filter>Headers\ossl</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ltc\LtcSettings.h">
-      <Filter>Headers\ltc</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ltc\TpmToLtcHash.h">
-      <Filter>Headers\ltc</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ltc\TpmToLtcMath.h">
-      <Filter>Headers\ltc</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ltc\TpmToLtcSym.h">
-      <Filter>Headers\ltc</Filter>
-    </ClInclude>
     <ClInclude Include="include\CryptEcc.h">
       <Filter>Headers\Crypt</Filter>
     </ClInclude>
@@ -1186,6 +1192,9 @@
       <Filter>Headers\Crypt</Filter>
     </ClInclude>
     <ClInclude Include="include\CryptRsa.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CryptSym.h">
       <Filter>Headers\Crypt</Filter>
     </ClInclude>
     <ClInclude Include="include\EccTestData.h">
@@ -1227,6 +1236,54 @@
     <ClInclude Include="include\BnValues.h">
       <Filter>Headers\Crypt</Filter>
     </ClInclude>
+    <ClInclude Include="include\prototypes\AC_GetCapability_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\AC_Send_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\AC_spt_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptCmac_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptSmac_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\MAC_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\MAC_Start_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Policy_AC_SendSelect_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\SMAC_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ltc\TpmToLtcSym.h">
+      <Filter>Headers\Crypt\ltc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ltc\TpmToLtcMath.h">
+      <Filter>Headers\Crypt\ltc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ltc\TpmToLtcHash.h">
+      <Filter>Headers\Crypt\ltc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ltc\LtcSettings.h">
+      <Filter>Headers\Crypt\ltc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ossl\TpmToOsslHash.h">
+      <Filter>Headers\Crypt\ossl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ossl\TpmToOsslMath.h">
+      <Filter>Headers\Crypt\ossl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ossl\TpmToOsslSym.h">
+      <Filter>Headers\Crypt\ossl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -1247,14 +1304,17 @@
     <Filter Include="Headers\prototypes">
       <UniqueIdentifier>{46a498d0-be4d-4034-b163-014a2ebcf2e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headers\ltc">
-      <UniqueIdentifier>{eb07d621-fe5c-415a-84f0-d0e4c68039ed}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\ossl">
-      <UniqueIdentifier>{1a979e04-0e58-4286-b6b0-52cb2b86d037}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headers\Crypt">
       <UniqueIdentifier>{6170bedc-9916-44b4-a24b-340b04313b20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AttachedComponent">
+      <UniqueIdentifier>{c1608ff8-dc12-4101-8859-6d763377b840}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Crypt\ltc">
+      <UniqueIdentifier>{eb07d621-fe5c-415a-84f0-d0e4c68039ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Crypt\ossl">
+      <UniqueIdentifier>{1a979e04-0e58-4286-b6b0-52cb2b86d037}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

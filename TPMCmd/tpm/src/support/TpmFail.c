@@ -174,16 +174,23 @@ SetForceFailureMode(
 // failure values to be returned on TPM2_GetTestResult().
 NORETURN void
 TpmFail(
+#ifndef NO_FAIL_TRACE
     const char      *function,
     int              line,
+#endif
     int              code
     )
 {
     // Save the values that indicate where the error occurred.
     // On a 64-bit machine, this may truncate the address of the string
     // of the function name where the error occurred.
-    s_failFunction = *(UINT32*)&function;
+#ifndef NO_FAIL_TRACE
+    s_failFunction = (UINT32)function;
     s_failLine = line;
+#else
+    s_failFunction = (UINT32)NULL;
+    s_failLine = 0;
+#endif
     s_failCode = code;
 
     // We are in failure mode
@@ -203,7 +210,7 @@ TpmFail(
     _plat__Fail();
 }
 
-//** TpmFailureMode(
+//*** TpmFailureMode(
 // This function is called by the interface code when the platform is in failure
 // mode.
 void
@@ -389,7 +396,7 @@ FailureModeReturn:
     return;
 }
 
-//** UnmarshalFail()
+//*** UnmarshalFail()
 // This is a stub that is used to catch an attempt to unmarshal an entry
 // that is not defined. Don't ever expect this to be called but...
 void

@@ -35,7 +35,7 @@
  */
 /*(Auto)
     Created by TpmDispatch.pl version 03.0 October 4, 2015
-    This file created on Sep 27, 2016, 04:02:56PM 
+    This file created on Apr 10, 2017, 04:58:00PM 
 */
 #if defined CC_Startup && CC_Startup == YES
         case TPM_CC_Startup:
@@ -757,7 +757,7 @@
             result = TPMI_YES_NO_Unmarshal(&in->decrypt, &parm_buffer, paramBufferSize);
             if(result != TPM_RC_SUCCESS) 
                 return result + RC_EncryptDecrypt_decrypt;
-            result = TPMI_ALG_SYM_MODE_Unmarshal(&in->mode, &parm_buffer, paramBufferSize, TRUE);
+            result = TPMI_ALG_CIPHER_MODE_Unmarshal(&in->mode, &parm_buffer, paramBufferSize, TRUE);
             if(result != TPM_RC_SUCCESS) 
                 return result + RC_EncryptDecrypt_mode;
             result = TPM2B_IV_Unmarshal(&in->ivIn, &parm_buffer, paramBufferSize);
@@ -796,7 +796,7 @@
             result = TPMI_YES_NO_Unmarshal(&in->decrypt, &parm_buffer, paramBufferSize);
             if(result != TPM_RC_SUCCESS) 
                 return result + RC_EncryptDecrypt2_decrypt;
-            result = TPMI_ALG_SYM_MODE_Unmarshal(&in->mode, &parm_buffer, paramBufferSize, TRUE);
+            result = TPMI_ALG_CIPHER_MODE_Unmarshal(&in->mode, &parm_buffer, paramBufferSize, TRUE);
             if(result != TPM_RC_SUCCESS) 
                 return result + RC_EncryptDecrypt2_mode;
             result = TPM2B_IV_Unmarshal(&in->ivIn, &parm_buffer, paramBufferSize);
@@ -876,6 +876,35 @@
         }
         break;
 #endif     // CC_HMAC == YES
+#if defined CC_MAC && CC_MAC == YES
+        case TPM_CC_MAC:
+        {
+            // Buffer for input parameters
+            MAC_In *in = 
+                (MAC_In *) MemoryGetActionInputBuffer(sizeof(MAC_In));
+            // Buffer for output parameters
+            MAC_Out *out = 
+                (MAC_Out *) MemoryGetActionOutputBuffer(sizeof(MAC_Out));
+
+            in->handle = handles[0];
+            result = TPM2B_MAX_BUFFER_Unmarshal(&in->buffer, &parm_buffer, paramBufferSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + RC_MAC_buffer;
+            result = TPMI_ALG_MAC_SCHEME_Unmarshal(&in->inScheme, &parm_buffer, paramBufferSize, TRUE);
+            if(result != TPM_RC_SUCCESS) 
+                return result + RC_MAC_inScheme;
+            if(*paramBufferSize != 0) 
+                return TPM_RC_SIZE;
+
+            // TPM2_MAC action routine
+            result = TPM2_MAC(in, out);
+            if(result != TPM_RC_SUCCESS) 
+                return result;
+            rSize = sizeof(MAC_Out);
+            *respParmSize += TPM2B_DIGEST_Marshal(&out->outMAC, &responseBuffer, &rSize);
+        }
+        break;
+#endif     // CC_MAC == YES
 #if defined CC_GetRandom && CC_GetRandom == YES
         case TPM_CC_GetRandom:
         {
@@ -949,6 +978,35 @@
         }
         break;
 #endif     // CC_HMAC_Start == YES
+#if defined CC_MAC_Start && CC_MAC_Start == YES
+        case TPM_CC_MAC_Start:
+        {
+            // Buffer for input parameters
+            MAC_Start_In *in = 
+                (MAC_Start_In *) MemoryGetActionInputBuffer(sizeof(MAC_Start_In));
+            // Buffer for output parameters
+            MAC_Start_Out *out = 
+                (MAC_Start_Out *) MemoryGetActionOutputBuffer(sizeof(MAC_Start_Out));
+
+            in->handle = handles[0];
+            result = TPM2B_AUTH_Unmarshal(&in->auth, &parm_buffer, paramBufferSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + RC_MAC_Start_auth;
+            result = TPMI_ALG_MAC_SCHEME_Unmarshal(&in->inScheme, &parm_buffer, paramBufferSize, TRUE);
+            if(result != TPM_RC_SUCCESS) 
+                return result + RC_MAC_Start_inScheme;
+            if(*paramBufferSize != 0) 
+                return TPM_RC_SIZE;
+
+            // TPM2_MAC_Start action routine
+            result = TPM2_MAC_Start(in, out);
+            if(result != TPM_RC_SUCCESS) 
+                return result;
+            rSize = sizeof(MAC_Start_Out);
+            *responseHandleSize += TPMI_DH_OBJECT_Marshal(&out->sequenceHandle, &responseHandle, &rSize);
+        }
+        break;
+#endif     // CC_MAC_Start == YES
 #if defined CC_HashSequenceStart && CC_HashSequenceStart == YES
         case TPM_CC_HashSequenceStart:
         {
@@ -2880,6 +2938,93 @@
         }
         break;
 #endif     // CC_NV_Certify == YES
+#if defined CC_AC_GetCapability && CC_AC_GetCapability == YES
+        case TPM_CC_AC_GetCapability:
+        {
+            // Buffer for input parameters
+            AC_GetCapability_In *in = 
+                (AC_GetCapability_In *) MemoryGetActionInputBuffer(sizeof(AC_GetCapability_In));
+            // Buffer for output parameters
+            AC_GetCapability_Out *out = 
+                (AC_GetCapability_Out *) MemoryGetActionOutputBuffer(sizeof(AC_GetCapability_Out));
+
+            in->ac = handles[0];
+            result = TPM_AT_Unmarshal(&in->capability, &parm_buffer, paramBufferSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + RC_AC_GetCapability_capability;
+            result = UINT32_Unmarshal(&in->count, &parm_buffer, paramBufferSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + RC_AC_GetCapability_count;
+            if(*paramBufferSize != 0) 
+                return TPM_RC_SIZE;
+
+            // TPM2_AC_GetCapability action routine
+            result = TPM2_AC_GetCapability(in, out);
+            if(result != TPM_RC_SUCCESS) 
+                return result;
+            rSize = sizeof(AC_GetCapability_Out);
+            *respParmSize += TPMI_YES_NO_Marshal(&out->moreData, &responseBuffer, &rSize);
+            *respParmSize += TPML_AC_CAPABILITIES_Marshal(&out->capabilitiesData, &responseBuffer, &rSize);
+        }
+        break;
+#endif     // CC_AC_GetCapability == YES
+#if defined CC_AC_Send && CC_AC_Send == YES
+        case TPM_CC_AC_Send:
+        {
+            // Buffer for input parameters
+            AC_Send_In *in = 
+                (AC_Send_In *) MemoryGetActionInputBuffer(sizeof(AC_Send_In));
+            // Buffer for output parameters
+            AC_Send_Out *out = 
+                (AC_Send_Out *) MemoryGetActionOutputBuffer(sizeof(AC_Send_Out));
+
+            in->sendObject = handles[0];
+            in->authHandle = handles[1];
+            in->ac = handles[2];
+            result = TPM2B_MAX_BUFFER_Unmarshal(&in->acDataIn, &parm_buffer, paramBufferSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + RC_AC_Send_acDataIn;
+            if(*paramBufferSize != 0) 
+                return TPM_RC_SIZE;
+
+            // TPM2_AC_Send action routine
+            result = TPM2_AC_Send(in, out);
+            if(result != TPM_RC_SUCCESS) 
+                return result;
+            rSize = sizeof(AC_Send_Out);
+            *respParmSize += TPMS_AC_OUTPUT_Marshal(&out->acDataOut, &responseBuffer, &rSize);
+        }
+        break;
+#endif     // CC_AC_Send == YES
+#if defined CC_Policy_AC_SendSelect && CC_Policy_AC_SendSelect == YES
+        case TPM_CC_Policy_AC_SendSelect:
+        {
+            // Buffer for input parameters
+            Policy_AC_SendSelect_In *in = 
+                (Policy_AC_SendSelect_In *) MemoryGetActionInputBuffer(sizeof(Policy_AC_SendSelect_In));
+            in->policySession = handles[0];
+            result = TPM2B_NAME_Unmarshal(&in->objectName, &parm_buffer, paramBufferSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + RC_Policy_AC_SendSelect_objectName;
+            result = TPM2B_NAME_Unmarshal(&in->authHandleName, &parm_buffer, paramBufferSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + RC_Policy_AC_SendSelect_authHandleName;
+            result = TPM2B_NAME_Unmarshal(&in->acName, &parm_buffer, paramBufferSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + RC_Policy_AC_SendSelect_acName;
+            result = TPMI_YES_NO_Unmarshal(&in->includeObject, &parm_buffer, paramBufferSize);
+            if(result != TPM_RC_SUCCESS) 
+                return result + RC_Policy_AC_SendSelect_includeObject;
+            if(*paramBufferSize != 0) 
+                return TPM_RC_SIZE;
+
+            // TPM2_Policy_AC_SendSelect action routine
+            result = TPM2_Policy_AC_SendSelect(in);
+            if(result != TPM_RC_SUCCESS) 
+                return result;
+        }
+        break;
+#endif     // CC_Policy_AC_SendSelect == YES
 #if defined CC_Vendor_TCG_Test && CC_Vendor_TCG_Test == YES
         case TPM_CC_Vendor_TCG_Test:
         {

@@ -51,7 +51,7 @@
 #include <openssl/ossl_typ.h>
 
 //***************************************************************
-//******** Linking to the OpenSSL AES code *********************
+//** Links to the OpenSSL AES code
 //***************************************************************
 
 #ifdef TPM_ALG_SM4

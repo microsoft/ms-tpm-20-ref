@@ -127,7 +127,6 @@ NvWriteAccessChecks(
     // provided by this index.
     else if(authHandle != nvHandle)
         return TPM_RC_NV_AUTHORIZATION;
-
     return TPM_RC_SUCCESS;
 }
 

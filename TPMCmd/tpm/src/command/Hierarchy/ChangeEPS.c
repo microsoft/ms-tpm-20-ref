@@ -57,10 +57,10 @@ TPM2_ChangeEPS(
 // Internal Data Update
 
     // Reset endorsement hierarchy seed from RNG
-    CryptRandomGenerate(PRIMARY_SEED_SIZE, gp.EPSeed.t.buffer);
+    CryptRandomGenerate(sizeof(gp.EPSeed.t.buffer), gp.EPSeed.t.buffer);
 
     // Create new ehProof value from RNG
-    CryptRandomGenerate(PROOF_SIZE, gp.ehProof.t.buffer);
+    CryptRandomGenerate(sizeof(gp.ehProof.t.buffer), gp.ehProof.t.buffer);
 
     // Enable endorsement hierarchy
     gc.ehEnable = TRUE;

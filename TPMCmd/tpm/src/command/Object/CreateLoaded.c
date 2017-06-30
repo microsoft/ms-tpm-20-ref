@@ -40,15 +40,14 @@
 
 /*(See part 3 of specification)
  * Create and load any type of key, including a temporary key.
- * The input template is an marshaled public area rather than an unmarshaled one as
+ * The input template is an marshaled public area rather than an unmarshaled one as 
  * used in Create and CreatePrimary. This is so that the label and context that
  * could be in the template can be processed without changing the formats for the
  * calls to Create and CreatePrimary.
 */
 // return type: TPM_RC
 //   TPM_RC_ATTRIBUTES      'sensitiveDataOrigin' is CLEAR when 'sensitive.data' is
-//                          an Empty Buffer, or is SET when 'sensitive.data' is not
-//                          empty;
+//                          an Empty Buffer;
 //                          'fixedTPM', 'fixedParent', or 'encryptedDuplication'
 //                          attributes are inconsistent between themselves or with
 //                          those of the parent object;
@@ -87,6 +86,7 @@ TPM2_CreateLoaded(
     TPMT_PUBLIC                 *publicArea;
     RAND_STATE                   randState;
     RAND_STATE                  *rand = &randState;
+    TPMS_DERIVE                  labelContext;
 
 // Input Validation
 
@@ -115,7 +115,8 @@ TPM2_CreateLoaded(
     // unmarshaled like other public areas. Since it is not, this command needs its
     // on template that is a TPM2B that is unmarshaled as a BYTE array with a
     // its own unmarshal function.
-    result = UnmarshalToPublic(publicArea, &in->inPublic, derivation);
+    result = UnmarshalToPublic(publicArea, &in->inPublic, derivation, 
+                               &labelContext);
     if(result != TPM_RC_SUCCESS)
         return result + RC_CreateLoaded_inPublic;
 
@@ -146,16 +147,16 @@ TPM2_CreateLoaded(
             return RcSafeAddToResult(result, RC_CreateLoaded_inPublic);
         // Process the template and sensitive areas to get the actual 'label' and
         // 'context' values to be used for this derivation.
-        result = SetLabelAndContext(publicArea, &in->inSensitive.sensitive.data);
+        result = SetLabelAndContext(&labelContext, &in->inSensitive.sensitive.data);
         if(result != TPM_RC_SUCCESS)
             return result;
         // Set up the KDF for object generation
         DRBG_InstantiateSeededKdf((KDF_STATE *)rand, 
                                   scheme->details.xor.hashAlg, 
                                   scheme->details.xor.kdf,
-                                  &parent->sensitive.seedValue.b, 
-                                  &publicArea->unique.derive.label.b,
-                                  &publicArea->unique.derive.context.b);
+                                  &parent->sensitive.sensitive.bits.b, 
+                                  &labelContext.label.b,
+                                  &labelContext.context.b);
         // Clear the sensitive size so that the creation functions will not try 
         // to use this value.
         in->inSensitive.sensitive.data.t.size = 0;
@@ -165,7 +166,8 @@ TPM2_CreateLoaded(
         // Check attributes in input public area. CreateChecks() checks the things 
         // that are unique to creation and then validates the attributes and values 
         // that are common to create and load.
-        result = CreateChecks(parent, publicArea);
+        result = CreateChecks(parent, publicArea, 
+                              in->inSensitive.sensitive.data.t.size);
         if(result != TPM_RC_SUCCESS)
             return RcSafeAddToResult(result, RC_CreateLoaded_inPublic);
         // Creating a primary object
@@ -183,11 +185,12 @@ TPM2_CreateLoaded(
                                    (TPM2B *)PublicMarshalAndComputeName(publicArea, 
                                                                         &name),
                                    &in->inSensitive.sensitive.data.b);
-
         }
         else
-            // This is an ordinary object so use the normal random number generator
+        {
+           // This is an ordinary object so use the normal random number generator
             rand = NULL;
+        }
     }
 // Internal data update
     // Create the object

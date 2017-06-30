@@ -41,7 +41,8 @@
 #ifndef _CRYPT_RAND_H
 #define _CRYPT_RAND_H
 
-// DRBG Structures and Defines
+
+//** DRBG Structures and Defines
 
 // Values and structures for the random number generator. These values are defined
 // in this header file so that the size of the RNG state can be known to TPM.lib.
@@ -92,19 +93,19 @@ typedef tpmKeyScheduleAES     DRBG_KEY_SCHEDULE;
 typedef union
 {
     BYTE            bytes[DRBG_KEY_SIZE_BYTES];
-    crypt_uword_t   words[1];
+    crypt_uword_t   words[DRBG_KEY_SIZE_WORDS];
 } DRBG_KEY;
 
 typedef union
 {
     BYTE        bytes[DRBG_IV_SIZE_BYTES];
-    crypt_uword_t   words[1];
+    crypt_uword_t   words[DRBG_IV_SIZE_WORDS];
 } DRBG_IV;
 
 typedef union
 {
     BYTE        bytes[DRBG_SEED_SIZE_BYTES];
-    crypt_uword_t   words[1];
+    crypt_uword_t   words[DRBG_SEED_SIZE_WORDS];
 } DRBG_SEED;
 
 #define CTR_DRBG_MAX_REQUESTS_PER_RESEED        ((UINT64)1 << 20)

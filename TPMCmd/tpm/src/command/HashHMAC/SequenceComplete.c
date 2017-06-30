@@ -50,36 +50,32 @@ TPM2_SequenceComplete(
     SequenceComplete_Out    *out            // OUT: output parameter list
     )
 {
-    OBJECT                      *object;
+    HASH_OBJECT                      *hashObject;
 
 // Input validation
 
     // Get hash object pointer
-    object = HandleToObject(in->sequenceHandle);
+    hashObject = (HASH_OBJECT *)HandleToObject(in->sequenceHandle);
 
     // input handle must be a hash or HMAC sequence object.
-    if(object->attributes.hashSeq == CLEAR
-       && object->attributes.hmacSeq == CLEAR)
+    if(hashObject->attributes.hashSeq == CLEAR
+       && hashObject->attributes.hmacSeq == CLEAR)
         return TPM_RCS_MODE + RC_SequenceComplete_sequenceHandle;
 
 // Command Output
-
-    if(object->attributes.hashSeq == SET)           // sequence object for hash
+    if(hashObject->attributes.hashSeq == SET)           // sequence object for hash
     {
-        // Update last piece of data
-        HASH_OBJECT     *hashObject = (HASH_OBJECT *)object;
-
        // Get the hash algorithm before the algorithm is lost in CryptHashEnd
         TPM_ALG_ID       hashAlg = hashObject->state.hashState[0].hashAlg;
 
+        // Update last piece of the data
         CryptDigestUpdate2B(&hashObject->state.hashState[0], &in->buffer.b);
 
         // Complete hash
-        out->result.t.size
-            = CryptHashGetDigestSize(
-                CryptHashGetContextAlg(&hashObject->state.hashState[0]));
+        out->result.t.size = CryptHashEnd(&hashObject->state.hashState[0], 
+                                         sizeof(out->result.t.buffer),
+                                         out->result.t.buffer);
 
-        CryptHashEnd2B(&hashObject->state.hashState[0], &out->result.b);
 
         // Check if the first block of the sequence has been received
         if(hashObject->attributes.firstBlock == CLEAR)
@@ -99,7 +95,7 @@ TPM2_SequenceComplete(
             // Ticket is not required
             out->validation.digest.t.size = 0;
         }
-        else if(object->attributes.ticketSafe == CLEAR)
+        else if(hashObject->attributes.ticketSafe == CLEAR)
         {
             // Ticket is not safe to generate
             out->validation.hierarchy = TPM_RH_NULL;
@@ -114,16 +110,19 @@ TPM2_SequenceComplete(
     }
     else
     {
-        HASH_OBJECT     *hashObject = (HASH_OBJECT *)object;
-
         //   Update last piece of data
         CryptDigestUpdate2B(&hashObject->state.hmacState.hashState, &in->buffer.b);
-        // Complete hash/HMAC
-        out->result.t.size =
-            CryptHashGetDigestSize(
-                CryptHashGetContextAlg(&hashObject->state.hmacState.hashState));
-        CryptHmacEnd2B(&(hashObject->state.hmacState), &out->result.b);
-
+#ifndef SMAC_IMPLEMENTED
+        // Complete HMAC
+        out->result.t.size = CryptHmacEnd(&(hashObject->state.hmacState),
+                                          sizeof(out->result.t.buffer),
+                                          out->result.t.buffer);
+#else
+        // Complete the MAC
+        out->result.t.size = CryptMacEnd(&hashObject->state.hmacState, 
+                                         sizeof(out->result.t.buffer),
+                                         out->result.t.buffer);
+#endif
         // No ticket is generated for HMAC sequence
         out->validation.tag = TPM_ST_HASHCHECK;
         out->validation.hierarchy = TPM_RH_NULL;
@@ -133,7 +132,7 @@ TPM2_SequenceComplete(
 // Internal Data Update
 
     // mark sequence object as evict so it will be flushed on the way out
-    object->attributes.evict = SET;
+    hashObject->attributes.evict = SET;
 
     return TPM_RC_SUCCESS;
 }

@@ -49,7 +49,6 @@
 //    TPM_RC_VALUE          the current policyDigest of 'policySession' does not
 //                          match 'approvedPolicy'; or 'checkTicket' doesn't match
 //                          the provided values
-
 TPM_RC
 TPM2_PolicyAuthorize(
     PolicyAuthorize_In  *in             // IN: input parameter list
@@ -72,7 +71,7 @@ TPM2_PolicyAuthorize(
 
     // 'keySign' parameter needs to use a supported hash algorithm, otherwise
     // can't tell how large the digest should be
-    if(!CryptHashIsImplemented(hashAlg, 0))
+    if(!CryptHashIsValidAlg(hashAlg, FALSE))
         return TPM_RCS_HASH + RC_PolicyAuthorize_keySign;
 
     digestSize = CryptHashGetDigestSize(hashAlg);
