@@ -1,4 +1,6 @@
-/* Microsoft Reference Implementation for TPM 2.0
+/*(Copyright)
+ *      Microsoft Copyright 2009 - 2017
+ * /* Microsoft Reference Implementation for TPM 2.0
  *
  *  The copyright in this software is being made available under the BSD License,
  *  included below. This software may be subject to other third party and
@@ -18,8 +20,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -212,6 +214,7 @@ ParseHandleBuffer(
     INT32           *bufferRemainingSize = &command->parameterSize;
     TPM_HANDLE      *handles = &command->handles[0];
     UINT32          *handleCount = &command->handleNum;
+    *handleCount = 0;
     switch(command->code)
     {
 #include "HandleProcess.h"
@@ -231,19 +234,17 @@ CommandDispatcher(
 {
 #if !defined TABLE_DRIVEN_DISPATCH
     TPM_RC       result;
-    BYTE        *parm_buffer = command->parameterBuffer;
+    BYTE        **paramBuffer = &command->parameterBuffer;
     INT32       *paramBufferSize = &command->parameterSize;
-    BYTE        *responseBuffer = command->responseBuffer;
-    INT32        resHandleSize = 0;
-    INT32       *responseHandleSize = &resHandleSize;
+    BYTE        **responseBuffer = &command->responseBuffer;
     INT32       *respParmSize = &command->parameterSize;
-    BYTE         rHandle[4];
-    BYTE        *responseHandle = &rHandle[0];
-    INT32        rSize = MAX_RESPONSE_SIZE; // used to make sure that the marshaling
-                                            // operation does not run away due to
-                                            // bad parameter in the function
-                                            // output.
+    INT32        rSize;
     TPM_HANDLE  *handles = &command->handles[0];
+
+    command->handleNum = 0;                 // The command-specific code knows how
+                                            // many handles there are. This is for
+                                            // cataloging the number of response
+                                            // handles
 
     switch(GetCommandCode(command->index))
     {
@@ -253,15 +254,6 @@ CommandDispatcher(
             FAIL(FATAL_ERROR_INTERNAL);
             break;
     }
-    command->responseBuffer = responseBuffer;
-    command->handleNum = 0;
-    // The response handle was marshaled into rHandle. 'Unmarshal' it into
-    // handles.
-    if(*responseHandleSize > 0)
-    {
-        command->handles[command->handleNum++] = BYTE_ARRAY_TO_UINT32(rHandle);
-    }
-
     return TPM_RC_SUCCESS;
 #else
     COMMAND_DESCRIPTOR_t    *desc;
