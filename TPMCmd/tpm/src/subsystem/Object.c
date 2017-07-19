@@ -510,8 +510,11 @@ AllocateSequenceSlot(
 
     if(object != NULL)
     {
-    // Set the common values that a sequence object shares with an ordinary object
-    // The type is TPM_ALG_NULL
+        // Set the common values that a sequence object shares with an ordinary object
+        // First, clear all attributes
+        MemorySet(&object->objectAttributes, 0, sizeof(TPMA_OBJECT));
+    
+        // The type is TPM_ALG_NULL
         object->type = TPM_ALG_NULL;
 
         // This has no name algorithm and the name is the Empty Buffer
