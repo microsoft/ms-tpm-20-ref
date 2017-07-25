@@ -47,6 +47,9 @@
 
 #include <openssl/evp.h>
 #include <openssl/ec.h>
+#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+#include <openssl/bn_lcl.h>
+#endif
 #include <openssl/bn.h>
 
 //** Macros and Defines
