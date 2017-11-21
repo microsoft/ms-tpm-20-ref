@@ -298,3 +298,32 @@ TPMCmd/OsslInclude/*
 # Wolf Build results 
 TPMCmd/WolfDebug/*
 TPMCmd/WolfRelease/*
+
+# Linux build files
+.deps/
+.dirstamp
+.libs/
+*.la
+*.lo
+*.log
+*.o
+*.pp
+*.swp
+*.trs
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+compile
+config.guess
+config.log
+config.status
+config.sub
+configure
+depcomp
+install-sh
+libtool
+ltmain.sh
+missing
+src.mk
+TPMCmd/tpm/src/libtpm.a
