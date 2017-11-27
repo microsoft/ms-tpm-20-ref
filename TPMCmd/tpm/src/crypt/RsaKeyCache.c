@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file contains the functions to implement the RSA key cache that can be used
 // to speed up simulation.
@@ -99,6 +98,12 @@ typedef struct _RSA_KEY_CACHE_
 #else
 #define RSA_3072    NO
 #endif
+#ifdef RSA_KEY_SIZE_BITS_4096
+#define RSA_4096    YES
+#else
+#define RSA_4096    NO
+#endif
+
 
 #define comma
 TPMI_RSA_KEY_BITS       SupportedRsaKeySizes[] = {
@@ -114,10 +119,15 @@ TPMI_RSA_KEY_BITS       SupportedRsaKeySizes[] = {
 #endif
 #if RSA_3072
     comma 3072
+#   undef comma
+#   define comma ,
+#endif
+#if RSA_4096
+    comma 4096
 #endif
 };
 
-#define RSA_KEY_CACHE_ENTRIES (RSA_1024 + RSA_2048 + RSA_3072)
+#define RSA_KEY_CACHE_ENTRIES (RSA_1024 + RSA_2048 + RSA_3072 + RSA_4096)
 
 // The key cache holds one entry for each of the supported key sizes
 RSA_KEY_CACHE        s_rsaKeyCache[RSA_KEY_CACHE_ENTRIES];

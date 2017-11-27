@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 //
 // This file contains the entry function ExecuteCommand() which provides the main
@@ -276,7 +275,7 @@ Cleanup:
     if(g_clearOrderly == TRUE 
         && NV_IS_ORDERLY)
     {
-#ifdef USE_DA_USED
+#if USE_DA_USED
         gp.orderlyState = g_daUsed ? SU_DA_USED_VALUE : SU_NONE_VALUE;
 #else
         gp.orderlyState = SU_NONE_VALUE;

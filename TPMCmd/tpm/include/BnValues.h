@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 
 // This file contains the definitions needed for defining the internal BIGNUM
@@ -77,14 +76,17 @@
 
 #if RADIX_BITS == 64
 #define SWAP_CRYPT_WORD(x)  REVERSE_ENDIAN_64(x)
-#define CRYPT_TO_BYTE_ARRAY UINT64_TO_BYTE_ARRAY
-typedef uint64_t    crypt_uword_t;
-typedef int64_t     crypt_word_t;
+    typedef uint64_t    crypt_uword_t;
+    typedef int64_t     crypt_word_t;
+#   define TO_CRYPT_WORD_64             BIG_ENDIAN_BYTES_TO_UINT64 
+#   define TO_CRYPT_WORD_32(a, b, c, d) TO_CRYPT_WORD_64(0, 0, 0, 0, a, b, c, d)
 #elif RADIX_BITS == 32
-#define SWAP_CRYPT_WORD(x)  REVERSE_ENDIAN_32((x))
-#define CRYPT_TO_BYTE_ARRAY UINT32_TO_BYTE_ARRAY
-typedef uint32_t    crypt_uword_t;
-typedef int32_t     crypt_word_t;
+#   define SWAP_CRYPT_WORD(x)  REVERSE_ENDIAN_32((x))
+    typedef uint32_t    crypt_uword_t;
+    typedef int32_t     crypt_word_t;
+#   define TO_CRYPT_WORD_64(a, b, c, d, e, f, g, h)                                \
+        BIG_ENDIAN_BYTES_TO_UINT32(e, f, g, h),                                    \
+        BIG_ENDIAN_BYTES_TO_UINT32(a, b, c, d)
 #endif
 
 #define MAX_CRYPT_UWORD (~((crypt_uword_t)0))
@@ -281,10 +283,8 @@ typedef struct
 #define CurveGetGy(C)       ((C)->base.y)
 
 
-// Convert bytes in initializers according to the endianess of the system
-// This is used for BnEccData.c.
-// NOTE: There is no reason to try to optimize this by doing byte at a time
-// shifts because this is handled at compile time.
+// Convert bytes in initializers according to the endianess of the system.
+// This is used for CryptEccData.c.
 #define     BIG_ENDIAN_BYTES_TO_UINT32(a, b, c, d)                      \
             (    ((UINT32)(a) << 24)                                    \
             +    ((UINT32)(b) << 16)                                    \
@@ -303,16 +303,8 @@ typedef struct
             +    ((UINT64)(h))                                          \
             )
 
-#if RADIX_BITS > 32
-#  define TO_CRYPT_WORD_64(a, b, c, d, e, f, g, h)                      \
-           BIG_ENDIAN_BYTES_TO_UINT64(a, b, c, d, e, f, g, h)
-#  define TO_CRYPT_WORD_32(a, b, c, d) TO_CRYPT_WORD_64(0, 0, 0, 0, a, b, c, d)
-#else
-#  define TO_CRYPT_WORD_64(a, b, c, d, e, f, g, h)                      \
-        BIG_ENDIAN_BYTES_TO_UINT32(e, f, g, h),                         \
-        BIG_ENDIAN_BYTES_TO_UINT32(a, b, c, d)
-#  define TO_CRYPT_WORD_32 BIG_ENDIAN_BYTES_TO_UINT32
-#endif
+
+
 
 // Add implementation dependent definitions for other ECC Values and for linkages. 
 // MATH_LIB_H is defined in LibSupport.h

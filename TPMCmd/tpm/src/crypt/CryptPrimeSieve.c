@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,14 +32,11 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Includes and defines
 
 #include "Tpm.h"
 
-#define RSA_KEY_SIEVE
-
-#if defined RSA_KEY_SIEVE   //%
+#if RSA_KEY_SIEVE
 
 #include "CryptPrimeSieve_fp.h"
 
@@ -466,7 +463,7 @@ PrimeSelectWithSieve(
     return TPM_RC_NO_RESULT;
 }
 
-#ifdef RSA_INSTRUMENT
+#if RSA_INSTRUMENT
 static char            a[256];
 
 char *
@@ -541,9 +538,9 @@ GetSieveStats(
 }
 #endif
 
-#endif //% RSA_KEY_SIEVE
+#endif // RSA_KEY_SIEVE
 
-#ifndef RSA_INSTRUMENT
+#if !RSA_INSTRUMENT
 void
 RsaSimulationEnd(
     void

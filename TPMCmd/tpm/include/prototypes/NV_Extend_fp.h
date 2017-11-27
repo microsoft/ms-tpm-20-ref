@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,35 +32,31 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/*(Auto)
-
-    Created by TpmStructures Version 2.7 Sept 13, 2016
-    This file created on Jun 15, 2017, 04:14:45PM 
-
-*/
-
+/*(Auto-generated)
+ *  Created by TpmStructures; Version 3.0 June 16, 2017
+ *  Date: Oct 16, 2017  Time: 12:56:59AM
+ */
 #ifdef TPM_CC_NV_Extend // Command must be defined
-#ifndef _NV_Extend_H
-#define _NV_Extend_H
+#ifndef _NV_EXTEND_FP_H_
+#define _NV_EXTEND_FP_H_
 
 // Input structure definition
 typedef struct {
-    TPMI_RH_NV_AUTH        authHandle;
-    TPMI_RH_NV_INDEX       nvIndex;
-    TPM2B_MAX_NV_BUFFER    data;
+    TPMI_RH_NV_AUTH             authHandle;
+    TPMI_RH_NV_INDEX            nvIndex;
+    TPM2B_MAX_NV_BUFFER         data;
 } NV_Extend_In;
 
 // Response code modifiers
-#define    RC_NV_Extend_authHandle     (TPM_RC_H + TPM_RC_1)
-#define    RC_NV_Extend_nvIndex        (TPM_RC_H + TPM_RC_2)
-#define    RC_NV_Extend_data           (TPM_RC_P + TPM_RC_1)
+#define RC_NV_Extend_authHandle (TPM_RC_H + TPM_RC_1)
+#define RC_NV_Extend_nvIndex    (TPM_RC_H + TPM_RC_2)
+#define RC_NV_Extend_data       (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
 TPM2_NV_Extend(
-    NV_Extend_In *in
+    NV_Extend_In                *in
 );
 
-
-#endif  // _NV_Extend_H
+#endif  // _NV_EXTEND_FP_H_
 #endif  // TPM_CC_NV_Extend

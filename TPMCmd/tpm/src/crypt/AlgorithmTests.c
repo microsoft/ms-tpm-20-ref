@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,16 +32,18 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file contains the code to perform the various self-test functions.
+//
+// IMPLEMENTATION NOTE: Large local variables are made static to minimize stack
+// usage, which is critical for resource constrained platforms.
 
 //** Includes and Defines
 #include    "Tpm.h"
 
 #define     SELF_TEST_DATA
 
-#ifdef SELF_TEST
+#if SELF_TEST
 
 // These includes pull in the data structures. They contain data definitions for the
 // various tests.
@@ -50,6 +52,7 @@
 #include    "RsaTestData.h"
 #include    "EccTestData.h"
 #include    "HashTestData.h"
+#include    "KdfTestData.h"
 
 #define TEST_DEFAULT_TEST_HASH(vector)                                          \
             if(TEST_BIT(DEFAULT_TEST_HASH, g_toTest))                           \
@@ -86,10 +89,10 @@ TestHash(
     ALGORITHM_VECTOR    *toTest
     )
 {
-    TPM2B_DIGEST             computed;  // value computed
+    static TPM2B_DIGEST      computed;  // value computed
+    static HMAC_STATE        state;
     UINT16                   digestSize;
     const TPM2B             *testDigest = NULL;
-    HMAC_STATE               state;
 //    TPM2B_TYPE(HMAC_BLOCK, DEFAULT_TEST_HASH_BLOCK_SIZE);
 
     pAssert(hashAlg != TPM_ALG_NULL);
@@ -177,9 +180,9 @@ TestSymmetricAlgorithm(
     TPM_ALG_ID                       mode           //
     )
 {
-    BYTE                            encrypted[MAX_SYM_BLOCK_SIZE * 2];
-    BYTE                            decrypted[MAX_SYM_BLOCK_SIZE * 2];
-    TPM2B_IV                        iv;
+    static BYTE                 encrypted[MAX_SYM_BLOCK_SIZE * 2];
+    static BYTE                 decrypted[MAX_SYM_BLOCK_SIZE * 2];
+    static TPM2B_IV             iv;
 //
     // Get the appropriate IV
     iv.t.size = (UINT16)MakeIv(mode, test->ivSize, iv.t.buffer);
@@ -353,12 +356,12 @@ TestRsaEncryptDecrypt(
     ALGORITHM_VECTOR    *toTest             //
     )
 {
-    TPM2B_PUBLIC_KEY_RSA             testInput;
-    TPM2B_PUBLIC_KEY_RSA             testOutput;
-    const TPM2B_RSA_TEST_KEY        *kvtValue = &c_RsaesKvt;
+    static TPM2B_PUBLIC_KEY_RSA      testInput;
+    static TPM2B_PUBLIC_KEY_RSA      testOutput;
+    static OBJECT                    testObject;
+    const TPM2B_RSA_TEST_KEY        *kvtValue = NULL;
     TPM_RC                           result = TPM_RC_SUCCESS;
     const TPM2B                     *testLabel = NULL;
-    OBJECT                           testObject;
     TPMT_RSA_DECRYPT                 rsaScheme;
 //
     // Don't need to initialize much of the test object but do need to initialize
@@ -457,9 +460,9 @@ TestRsaSignAndVerify(
     )
 {
     TPM_RC                      result = TPM_RC_SUCCESS;
-    OBJECT                      testObject;
-    TPM2B_DIGEST                testDigest;
-    TPMT_SIGNATURE              testSig;
+    static OBJECT               testObject;
+    static TPM2B_DIGEST         testDigest;
+    static TPMT_SIGNATURE       testSig;
 
     // Do a sign and signature verification.
     // RSASSA:
@@ -589,9 +592,9 @@ LoadEccParameter(
 //*** LoadEccPoint()
 static void
 LoadEccPoint(
-    TPMS_ECC_POINT               *point,       // target
-    const TPM2B_EC_TEST          *x,             // source
-    const TPM2B_EC_TEST           *y
+    TPMS_ECC_POINT               *point,    // target
+    const TPM2B_EC_TEST          *x,        // source
+    const TPM2B_EC_TEST          *y
     )
 {
     MemoryCopy2B(&point->x.b, (TPM2B *)x, sizeof(point->x.t.buffer));
@@ -606,10 +609,10 @@ TestECDH(
     ALGORITHM_VECTOR    *toTest         // IN/OUT: modified after test is run
     )
 {
-    TPMS_ECC_POINT          Z;
-    TPMS_ECC_POINT          Qe;
-    TPM2B_ECC_PARAMETER     ds;
-    TPM_RC                  result = TPM_RC_SUCCESS;
+    static TPMS_ECC_POINT       Z;
+    static TPMS_ECC_POINT       Qe;
+    static TPM2B_ECC_PARAMETER  ds;
+    TPM_RC                      result = TPM_RC_SUCCESS;
 //
     NOT_REFERENCED(scheme);
     CLEAR_BOTH(ALG_ECDH_VALUE);
@@ -630,9 +633,9 @@ TestEccSignAndVerify(
     ALGORITHM_VECTOR            *toTest
     )
 {
-    OBJECT                       testObject;
-    TPMT_SIGNATURE               testSig;
-    TPMT_ECC_SCHEME              eccScheme;
+    static OBJECT                testObject;
+    static TPMT_SIGNATURE        testSig;
+    static TPMT_ECC_SCHEME       eccScheme;
 
     testSig.sigAlg = scheme;
     testSig.signature.ecdsa.hash = DEFAULT_TEST_HASH;
@@ -647,13 +650,13 @@ TestEccSignAndVerify(
     switch(scheme)
     {
         case ALG_ECDSA_VALUE:
-            LoadEccParameter(&testSig.signature.ecdaa.signatureR, &c_TestEcDsa_r);
-            LoadEccParameter(&testSig.signature.ecdaa.signatureS, &c_TestEcDsa_s);
+            LoadEccParameter(&testSig.signature.ecdsa.signatureR, &c_TestEcDsa_r);
+            LoadEccParameter(&testSig.signature.ecdsa.signatureS, &c_TestEcDsa_s);
             break;
         case ALG_ECSCHNORR_VALUE:
-            LoadEccParameter(&testSig.signature.ecdaa.signatureR,
+            LoadEccParameter(&testSig.signature.ecschnorr.signatureR,
                              &c_TestEcSchnorr_r);
-            LoadEccParameter(&testSig.signature.ecdaa.signatureS,
+            LoadEccParameter(&testSig.signature.ecschnorr.signatureS,
                              &c_TestEcSchnorr_s);
             break;
         case ALG_SM2_VALUE:
@@ -677,10 +680,7 @@ TestEccSignAndVerify(
     if(TPM_RC_SUCCESS != CryptEccValidateSignature(&testSig, &testObject,
                                                    (TPM2B_DIGEST *)&c_ecTestValue.b))
     {
-//??? Don't have a valid test for ECSCORR right now because the algorithm has
-//??? changed and the KVT has not been updated.
-        if(scheme != ALG_ECSCHNORR_VALUE)
-            SELF_TEST_FAILURE;
+        SELF_TEST_FAILURE;
     }
     CHECK_CANCELED;
 
@@ -697,6 +697,28 @@ TestEccSignAndVerify(
         SELF_TEST_FAILURE;
 
     CHECK_CANCELED;
+
+    return TPM_RC_SUCCESS;
+}
+
+static TPM_RC
+TestKDFa(
+    ALGORITHM_VECTOR        *toTest
+    )
+{
+    CLEAR_BOTH(TPM_ALG_KDF1_SP800_108);
+
+    static TPM2B_KDF_TEST_KEY   keyOut;
+    UINT32                      counter = 0;
+
+    keyOut.t.size = CryptKDFa(KDF_TEST_ALG, &c_kdfTestKeyIn.b, &c_kdfTestLabel.b,
+                              &c_kdfTestContextU.b, &c_kdfTestContextV.b,
+                              TEST_KDF_KEY_SIZE * 8, keyOut.t.buffer,
+                              &counter, FALSE);
+    if (   keyOut.t.size != TEST_KDF_KEY_SIZE
+        || !MemoryEqual(keyOut.t.buffer, c_kdfTestKeyOut.t.buffer,
+                        TEST_KDF_KEY_SIZE))
+        SELF_TEST_FAILURE;
 
     return TPM_RC_SUCCESS;
 }
@@ -740,7 +762,7 @@ TestEcc(
 #endif // TPM_ALG_ECC
 
 //*** TestAlgorithm()
-// Dispatches to the correct test function for the algorithm or get a list of
+// Dispatches to the correct test function for the algorithm or gets a list of
 // testable algorithms.
 //
 // If 'toTest' is not NULL, then the test decisions are based on the algorithm
@@ -895,13 +917,18 @@ TestAlgorithm(
                     result = TestRsa(alg, toTest);
                 break;
 #endif // TPM_ALG_RSA
+#ifdef TPM_ALG_KDF1_SP800_108
+            case ALG_KDF1_SP800_108_VALUE:
+                if(doTest)
+                    result = TestKDFa(toTest);
+                break;
+#endif // TPM_ALG_KDF1_SP800_108
 #ifdef TPM_ALG_ECC
     // ECC dependent but no tests
     //        case ALG_ECDAA_VALUE:
     //        case ALG_ECMQV_VALUE:
     //        case ALG_KDF1_SP800_56a_VALUE:
     //        case ALG_KDF2_VALUE:
-    //        case ALG_KDF1_SP800_108_VALUE:
     //        case ALG_MGF1_VALUE:
             case ALG_ECC_VALUE:
                 CLEAR_BOTH(alg);

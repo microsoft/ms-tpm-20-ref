@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,8 +32,15 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Includes and Function Prototypes
+
+#include    <stdlib.h>
+#include    <time.h>
+#ifdef _MSC_VER
+#include <process.h>
+#else
+#include <unistd.h>
+#endif
 
 #include    "PlatformData.h"
 #include    "Platform_fp.h"
@@ -48,10 +55,33 @@ _plat__Signal_PowerOn(
     void
     )
 {
+    time_t  t;
+    time_t  pid;    // time_t is normally larger than pid_t 
+
     // Reset the timer
     _plat__TimerReset();
 
-   // Need to indicate that we lost power
+    // Seed the platform RNG
+    //
+    // NOTE 1: The following command does not provide proper cryptographic entropy.
+    // Its primary purpose to make sure that different instances of the simulator,
+    // possibly started by a script on the same machine, are seeded differently.
+    // But vendors of the actual TPMs need to ensure availability of proper entropy
+    // using their platform specific means.
+    //
+    // NOTE 2: In debug builds by default the reference implementation will seed
+    // its RNG deterministically (without using any platform provided randomness).
+    // See the USE_DEBUG_RNG macro and DRBG_GetEntropy() function.
+#ifdef _MSC_VER
+    pid = (time_t)_getpid();
+#else
+    pid = (time_t)getpid();
+#endif
+    srand((unsigned)(  time(&t) * CLOCKS_PER_SEC
+                     ^ clock()
+                     ^ pid * (pid + 1)));
+
+    // Need to indicate that we lost power
     s_powerLost = TRUE;
 
     return 0;

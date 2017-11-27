@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 // This file contains the build switches. This contains switches for multiple
 // versions of the crypto-library so some may not apply to your environment.
 //
@@ -60,7 +59,7 @@
 #   define REVERSE_ENDIAN_64(_Number) _byteswap_uint64(_Number)
 // Handling of INLINE macro
 #   ifdef INLINE_FUNCTIONS
-#    define INLINE   static __inline 
+#       define INLINE   static __inline 
 #   endif
 
 // Avoid compiler warning for in line of stdio (or not)
@@ -107,19 +106,32 @@ __pragma(warning(pop))
 #   define REVERSE_ENDIAN_32(_Number) __builtin_bswap32(_Number)
 #   define REVERSE_ENDIAN_64(_Number) __builtin_bswap64(_Number)
 #   ifdef INLINE_FUNCTIONS
-#   define INLINE static inline
+#       define INLINE static inline
+#   endif // INLINE_FUNCTIONS
 #endif
 
 #if defined(__GNUC__)
 #   define NORETURN                     __attribute__((noreturn))
 #   include <stdint.h>
-#  else
+#endif
+
+// Things that are not defined should be defined as NULL
+#ifndef NORETURN
 #   define NORETURN
-#  endif
+#endif
+#ifndef LIB_EXPORT
 #   define LIB_EXPORT
+#endif
+#ifndef LIB_IMPORT
 #   define LIB_IMPORT
+#endif
+#ifndef _REDUCE_WARNING_LEVEL_
 #   define _REDUCE_WARNING_LEVEL_(n)
+#endif
+#ifndef _NORMAL_WARNING_LEVEL_
 #   define _NORMAL_WARNING_LEVEL_
+#endif
+#ifndef NOT_REFERENCED
 #   define  NOT_REFERENCED(x) (x = x)
 #endif
 

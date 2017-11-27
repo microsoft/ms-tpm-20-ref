@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file contains the code for prime validation.
 
@@ -250,7 +249,7 @@ end:
     return ret;
 }
 
-#ifdef TPM_ALG_RSA  //%
+#ifdef TPM_ALG_RSA
 
 //*** RsaCheckPrime()
 // This will check to see if a number is prime and appropriate for an
@@ -271,7 +270,7 @@ RsaCheckPrime(
     RAND_STATE      *rand
     )
 {
-#ifndef RSA_KEY_SIEVE
+#if !RSA_KEY_SIEVE
     TPM_RC          retVal = TPM_RC_SUCCESS;
     UINT32          modE = BnModWord(prime, exponent);
 
@@ -352,4 +351,4 @@ BnGeneratePrimeForRSA(
     }
 }
 
-#endif //% TPM_ALG_RSA
+#endif // TPM_ALG_RSA

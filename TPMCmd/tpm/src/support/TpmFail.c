@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Includes, Defines, and Types
 #define     TPM_FAIL_C
 #include    "Tpm.h"
@@ -156,7 +155,7 @@ UnmarshalHeader(
 
 //** Public Functions
 
-#ifdef SIMULATION
+#if SIMULATION
 //*** SetForceFailureMode()
 // This function is called by the simulator to enable failure mode testing.
 LIB_EXPORT void
@@ -174,7 +173,7 @@ SetForceFailureMode(
 // failure values to be returned on TPM2_GetTestResult().
 NORETURN void
 TpmFail(
-#ifndef NO_FAIL_TRACE
+#if FAIL_TRACE
     const char      *function,
     int              line,
 #endif
@@ -184,7 +183,7 @@ TpmFail(
     // Save the values that indicate where the error occurred.
     // On a 64-bit machine, this may truncate the address of the string
     // of the function name where the error occurred.
-#ifndef NO_FAIL_TRACE
+#if FAIL_TRACE
     s_failFunction = (UINT32)function;
     s_failLine = line;
 #else
@@ -198,7 +197,7 @@ TpmFail(
 
     // if asserts are enabled, then do an assert unless the failure mode code
     // is being tested.
-#ifdef SIMULATION
+#if SIMULATION
 #   ifndef NDEBUG
     assert(g_forceFailureMode);
 #   endif

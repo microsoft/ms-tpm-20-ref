@@ -89,7 +89,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='GCC Debug|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
@@ -277,8 +277,8 @@
     <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='GCC Debug|x64'">
     <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
@@ -293,8 +293,8 @@
     <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Coverage|x64'">
     <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
@@ -317,7 +317,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes;$(SolutionDir)tpm\include\;$(SolutionDir)tpm\include\prototypes;$(SolutionDir)platform\include\;$(SolutionDir)platform\include\prototypes</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;DEBUG;_CONSOLE;%(PreprocessorDefinitions);_DIAGNOSTICS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USE_RSA_KEY_CACHE;WIN32;DEBUG;_CONSOLE;%(PreprocessorDefinitions);_DIAGNOSTICS</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -626,7 +626,7 @@
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='GccCompile|Win32'">

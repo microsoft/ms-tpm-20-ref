@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 // This file contains the instance data for the Platform module. It is collected
 // in this file so that the state of the module is easier to manage.
 
@@ -47,15 +46,28 @@
 // being canceled
 extern int     s_isCanceled;
 
-#include    <time.h>
+#ifdef _MSC_VER
+#include <sys/types.h>
+#include <sys/timeb.h>
+#else
+#include <sys/time.h>
+#include <time.h>
+#endif
+
 
 #ifndef HARDWARE_CLOCK
+typedef uint64_t     clock64_t;
 // This is the value returned the last time that the system clock was read. This
 // is only relevant for a simulator or virtual TPM.
-extern clock_t        s_realTimePrevious;
+extern clock64_t       s_realTimePrevious;
+
+// These values are use to try to synthesize a long lived version of clock().
+extern clock64_t        s_lastSystemTime;
+extern clock64_t        s_lastReportedTime;
+
 // This is the rate adjusted value that is the equivalent of what would be read from
 // a hardware register that produced rate adjusted time.
-extern clock_t        s_tpmTime;
+extern clock64_t        s_tpmTime;
 #endif // HARDWARE_CLOCK
 
 // This value indicates that the timer was reset

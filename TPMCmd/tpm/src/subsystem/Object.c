@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file contains the functions that manage the object store of the TPM.
 
@@ -428,11 +427,9 @@ ObjectLoad(
     {
         // For any sensitive area, make sure that the seedSize is no larger than the
         // digest size of nameAlg
-#if 1 //??
         if(sensitive->seedValue.t.size  
                 > CryptHashGetDigestSize(publicArea->nameAlg))
             return TPM_RC_SENSITIVE;    // not a 'safe' return code so no add
-#endif
         // Check attributes and schemes for consistency
         result = PublicAttributesValidation(parent, publicArea);
     }
@@ -510,10 +507,11 @@ AllocateSequenceSlot(
 
     if(object != NULL)
     {
-        // Set the common values that a sequence object shares with an ordinary object
+
+    // Set the common values that a sequence object shares with an ordinary object
         // First, clear all attributes
         MemorySet(&object->objectAttributes, 0, sizeof(TPMA_OBJECT));
-    
+
         // The type is TPM_ALG_NULL
         object->type = TPM_ALG_NULL;
 
@@ -560,7 +558,7 @@ ObjectCreateHMACSequence(
     // Set HMAC sequence bit
     hmacObject->attributes.hmacSeq = SET;
 
-#ifndef SMAC_IMPLEMENTED
+#if !SMAC_IMPLEMENTED
     if(CryptHmacStart(&hmacObject->state.hmacState, hashAlg,
                    keyObject->sensitive.sensitive.bits.b.size,
                    keyObject->sensitive.sensitive.bits.b.buffer) == 0)
@@ -894,10 +892,10 @@ ComputeQualifiedName(
     return;
 }
 
-//*** ObjectIsAsymParent()
+//*** ObjectIsStorage()
 // This function determines if an object has the attributes associated
-// with an asymmetric parent. An asymmetric parent is an asymmetric key that has its
-// 'restricted' and 'decrypt' attributes SET, and 'sign' CLEAR.
+// with an parent. A parent is an asymmetric or symmetric block cipher key 
+// that has its 'restricted' and 'decrypt' attributes SET, and 'sign' CLEAR.
 // return type: BOOL
 //        TRUE          if the object is a storage key
 //        FALSE         if the object is not a storage key

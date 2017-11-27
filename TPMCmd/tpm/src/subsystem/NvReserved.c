@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 
 // The NV memory is divided into two areas: dynamic space for user defined NV
@@ -169,7 +168,7 @@ NvManufacture(
     void
     )
 {
-#ifdef SIMULATION
+#if SIMULATION
     // Simulate the NV memory being in the erased state.
     _plat__NvMemoryClear(0, NV_MEMORY_SIZE);
 #endif
@@ -245,6 +244,7 @@ NvClearPersistent(
     UINT32           size           // IN: number of bytes to clear
     )
 {
+    pAssert(offset + size <= sizeof(gp));
     MemorySet((&gp) + offset, 0, size);
     NvWrite(offset, size, (&gp) + offset);
 }

@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file implements a DRBG with a behavior according to SP800-90A using
 // a block cypher. This is also compliant to ISO/IEC 18031:2011(E) C.3.2.
@@ -326,7 +325,7 @@ EncryptDRBG(
     UINT32              *lastValue      // Points to the last output value
     )
 {
-#ifdef FIPS_COMPLIANT
+#if FIPS_COMPLIANT
 // For FIPS compliance, the DRBG has to do a continuous self-test to make sure that
 // no two consecutive values are the same. This overhead is not incurred if the TPM
 // is not required to be FIPS compliant
@@ -497,7 +496,7 @@ DRBG_SelfTest(
     // Do an instantiate
     if(!DRBG_Instantiate(&testState, 0, NULL))
         return FALSE;
-#if defined DRBG_DEBUG_PRINT && defined DEBUG
+#if DRBG_DEBUG_PRINT
     dbgDumpMemBlock(pDRBG_KEY(&testState), DRBG_KEY_SIZE_BYTES,
                     "Key after Instantiate");
     dbgDumpMemBlock(pDRBG_IV(&testState), DRBG_IV_SIZE_BYTES,
@@ -505,7 +504,7 @@ DRBG_SelfTest(
 #endif
     if(DRBG_Generate((RAND_STATE *)&testState, buf, sizeof(buf)) == 0)
         return FALSE;
-#if defined DRBG_DEBUG_PRINT && defined DEBUG
+#if DRBG_DEBUG_PRINT
     dbgDumpMemBlock(pDRBG_KEY(&testState.seed), DRBG_KEY_SIZE_BYTES,
                     "Key after 1st Generate");
     dbgDumpMemBlock(pDRBG_IV(&testState.seed), DRBG_IV_SIZE_BYTES,
@@ -515,7 +514,7 @@ DRBG_SelfTest(
         return FALSE;
     memcpy(seed.bytes, DRBG_NistTestVector_EntropyReseed, sizeof(seed));
     DRBG_Reseed(&testState, &seed, NULL);
-#if defined DRBG_DEBUG_PRINT && defined DEBUG
+#if DRBG_DEBUG_PRINT
     dbgDumpMemBlock((BYTE *)pDRBG_KEY(&testState.seed), DRBG_KEY_SIZE_BYTES,
                     "Key after 2nd Generate");
     dbgDumpMemBlock((BYTE *)pDRBG_IV(&testState.seed), DRBG_IV_SIZE_BYTES,
@@ -554,39 +553,47 @@ DRBG_SelfTest(
 // This function is used to cause a reseed. A DRBG_SEED amount of entropy is
 // collected from the hardware and then additional data is added.
 // return type: TPM_RC
-// TPM_RC_NO_RESULT    S     failure of the entropy generator
+// TPM_RC_NO_RESULT    failure of the entropy generator
 LIB_EXPORT TPM_RC
 CryptRandomStir(
     INT32            additionalDataSize,
     BYTE            *additionalData
     )
 {
+#ifndef USE_DEBUG_RNG 
     DRBG_SEED        tmpBuf;
     DRBG_SEED        dfResult;
 //
-#if defined USE_DEBUG_RNG && 1
-    // If doing debug, use the input data as the initial setting for the RNG state
-    // so that the test can be reset at any time.
-    NOT_REFERENCED(dfResult);
-    if(additionalDataSize < 0)
-        additionalDataSize = 0;
-    else if(additionalDataSize > sizeof(tmpBuf))
-        additionalDataSize = sizeof(tmpBuf);
-    else
-        memset(&tmpBuf.bytes[additionalDataSize], 0, sizeof(tmpBuf) - additionalDataSize);
-    memcpy(tmpBuf.bytes, additionalData, additionalDataSize);
-    memcpy(drbgDefault.seed.bytes, tmpBuf.bytes, sizeof(drbgDefault.seed.bytes));
-#else
     // All reseed with outside data starts with a buffer full of entropy
     if(!DRBG_GetEntropy(sizeof(tmpBuf), (BYTE *)&tmpBuf))
         return TPM_RC_NO_RESULT;
 
     DRBG_Reseed(&drbgDefault, &tmpBuf,
                 DfBuffer(&dfResult, additionalDataSize, additionalData));
-#endif
     drbgDefault.reseedCounter = 1;
 
     return TPM_RC_SUCCESS;
+
+#else 
+    // If doing debug, use the input data as the initial setting for the RNG state
+    // so that the test can be reset at any time.
+    // Note: If this is called with a data size of 0 or less, nothing happens. The
+    // presumption is that, in a debug environment, the caller will have specific
+    // values for initialization, so this check is just a simple way to prevent
+    // inadvertent programming errors from screwing things up. This doesn't use an
+    // pAssert() because the non-debug version of this function will accept these
+    // parameters as meaning that there is no additionalData and only hardware
+    // entropy is used. 
+    if((additionalDataSize > 0) && (additionalData != NULL))
+    {
+        memset(drbgDefault.seed.bytes, 0, sizeof(drbgDefault.seed.bytes));
+        memcpy(drbgDefault.seed.bytes, additionalData, 
+               MIN(additionalDataSize, sizeof(drbgDefault.seed.bytes)));
+    }
+    drbgDefault.reseedCounter = 1;
+
+    return TPM_RC_SUCCESS;
+#endif
 }
 
 //*** CryptRandomGenerate()
@@ -608,7 +615,7 @@ CryptRandomGenerate(
 // Function used to instantiate a KDF-based RNG. This is used for derivations
 LIB_EXPORT BOOL
 DRBG_InstantiateSeededKdf(
-    KDF_STATE       *state,         // IN: buffer to hold the state
+    KDF_STATE       *state,         // OUT: buffer to hold the state
     TPM_ALG_ID       hashAlg,       // IN: hash algorithm
     TPM_ALG_ID       kdf,           // IN: the KDF to use
     TPM2B           *seed,          // IN: the seed to use
@@ -705,7 +712,7 @@ CryptRandStartup(
     void
     )
 {
-#ifndef _DRBG_STATE_SAVE
+#if _DRBG_STATE_SAVE
     // If not saved in NV, re-instantiate on each startup
     DRBG_Instantiate(&drbgDefault, 0, NULL);
 #else

@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file contains constant definition shared by CryptUtil and the parts
 // of the Crypto Engine.
@@ -98,13 +97,13 @@ typedef union
 
 typedef union
 {
-    BYTE        bytes[DRBG_IV_SIZE_BYTES];
+    BYTE            bytes[DRBG_IV_SIZE_BYTES];
     crypt_uword_t   words[DRBG_IV_SIZE_WORDS];
 } DRBG_IV;
 
 typedef union
 {
-    BYTE        bytes[DRBG_SEED_SIZE_BYTES];
+    BYTE            bytes[DRBG_SEED_SIZE_BYTES];
     crypt_uword_t   words[DRBG_SEED_SIZE_WORDS];
 } DRBG_SEED;
 
@@ -175,7 +174,7 @@ typedef union
 extern RAND_STATE           *s_random;
 
 // When instrumenting RSA key sieve
-#ifdef  RSA_INSTRUMENT
+#if  RSA_INSTRUMENT
 #define PRIME_INDEX(x)  ((x) == 512 ? 0 : (x) == 1024 ? 1 : 2)
 #   define INSTRUMENT_SET(a, b) ((a) = (b))
 #   define INSTRUMENT_ADD(a, b) (a) = (a) + (b)

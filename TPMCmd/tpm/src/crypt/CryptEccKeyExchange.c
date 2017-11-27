@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file contains the functions that are used for the two-phase, ECC, 
 // key-exchange protocols
@@ -40,7 +39,7 @@
 
 #include "Tpm.h"
 
-#if CC_ZGen_2Phase == YES //%
+#if CC_ZGen_2Phase == YES
 
 //** Functions
 
@@ -94,7 +93,7 @@ C_2_2_MQV(
     )
 {
     CURVE_INITIALIZED(E, curveId);
-    ECC_CURVE_DATA          *C = AccessCurveData(E);
+    ECC_CURVE_DATA          *C;
     POINT(pQeA);
     POINT_INITIALIZED(pQeB, QeB);
     POINT_INITIALIZED(pQsB, QsB);
@@ -110,6 +109,7 @@ C_2_2_MQV(
         ERROR_RETURN(TPM_RC_VALUE);
     pAssert(outZ != NULL && pQeB != NULL && pQsB != NULL && deA != NULL 
             && dsA != NULL);
+    *C = AccessCurveData(E);
 // Process:
 //  1. implicitsigA = (de,A + avf(Qe,A)ds,A ) mod n.
 //  2. P = h(implicitsigA)(Qe,B + avf(Qe,B)Qs,B).
@@ -322,7 +322,7 @@ SM2KeyExchange(
     )
 {
     CURVE_INITIALIZED(E, curveId);
-    const ECC_CURVE_DATA      *C = (E != NULL) ? AccessCurveData(E) : NULL;
+    const ECC_CURVE_DATA      *C;
     ECC_INITIALIZED(dsA, dsAIn);
     ECC_INITIALIZED(deA, deAIn);
     POINT_INITIALIZED(QsB, QsBIn);
@@ -338,6 +338,7 @@ SM2KeyExchange(
     // Parameter checks
     if(E == NULL)
         ERROR_RETURN(TPM_RC_CURVE);
+    C = AccessCurveData(E);
     pAssert(outZ != NULL && dsA != NULL && deA != NULL &&  QsB != NULL 
             && QeB != NULL);
 
@@ -380,4 +381,4 @@ Exit:
 }
 #endif
 
-#endif //% CC_ZGen_2Phase
+#endif // CC_ZGen_2Phase

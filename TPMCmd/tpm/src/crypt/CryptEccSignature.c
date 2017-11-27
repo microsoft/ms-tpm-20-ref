@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Includes and Defines
 #include "Tpm.h"
 #include "CryptEccSignature_fp.h"
@@ -125,7 +124,7 @@ BnSignEcdsa(
 {
     ECC_NUM(bnK);
     ECC_NUM(bnIk);
-    BN_VAR(bnE, MAX_DIGEST_SIZE * 8);
+    BN_VAR(bnE, MAX(MAX_ECC_KEY_BYTES, MAX_DIGEST_SIZE) * 8);
     POINT(ecR);
     bigConst                order = CurveGetOrder(AccessCurveData(E));
     TPM_RC                  retVal = TPM_RC_SUCCESS;
@@ -276,7 +275,7 @@ BnSignEcdaa(
 }
 #endif // ALG_ECDAA
 
-#if ALG_ECSCHNORR //%
+#if ALG_ECSCHNORR
 
 //*** SchnorrReduce()
 // Function to reduce a hash result if it's magnitude is to large. The size of
@@ -319,25 +318,17 @@ BnSignEcSchnorr(
     )
 {
     HASH_STATE               hashState;
-    UINT16                   digestSize
-        = CryptHashGetDigestSize(hashAlg);
+    UINT16                   digestSize = CryptHashGetDigestSize(hashAlg);
     TPM2B_TYPE(T, MAX(MAX_DIGEST_SIZE, MAX_ECC_KEY_BYTES));
     TPM2B_T                  T2b;
     TPM2B                   *e = &T2b.b;
     TPM_RC                   retVal = TPM_RC_NO_RESULT;
-    const ECC_CURVE_DATA    *C;
-    bigConst                 order;
-    bigConst                 prime;
+    const ECC_CURVE_DATA    *C = AccessCurveData(E);
+    bigConst                 order = CurveGetOrder(C);
+    bigConst                 prime = CurveGetPrime(C);
     ECC_NUM(bnK);
     POINT(ecR);
 //
-    // Parameter checks
-    if(E == NULL)
-        ERROR_RETURN(TPM_RC_VALUE);
-    C = AccessCurveData(E);
-    order = CurveGetOrder(C);
-    prime = CurveGetOrder(C);
-
     // If the digest does not produce a hash, then null the signature and return
     // a failure.
     if(digestSize == 0)
@@ -409,16 +400,15 @@ BnSignEcSm2(
     ECC_NUM(bnN);
     ECC_NUM(bnK);
     ECC_NUM(bnX1);
-    ECC_NUM(bnT);   // temp
+    ECC_NUM(bnT);                       // temp
     POINT(Q1);
-    bigConst                  order = (E != NULL)
-        ? CurveGetOrder(AccessCurveData(E)) : NULL;
+    bigConst                  order = CurveGetOrder(AccessCurveData(E));
 //
 #ifdef _SM2_SIGN_DEBUG
-    BnFromHex(bnE,
-              "B524F552CD82B8B028476E005C377FB19A87E6FC682D48BB5D42E3D9B9EFFE76");
-    BnFromHex(bnD,
-              "128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263");
+    BnFromHex(bnE, "B524F552CD82B8B028476E005C377FB1"
+                   "9A87E6FC682D48BB5D42E3D9B9EFFE76");
+    BnFromHex(bnD, "128B2FA8BD433C6C068C8D803DFF7979"
+                   "2A519A55171B1B650C23661D15897263");
 #endif
     // A3: Use random number generator to generate random number 1 <= k <= n-1;
     // NOTE: Ax: numbers are from the SM2 standard
@@ -427,8 +417,8 @@ loop:
         // Get a random number 0 < k < n
         BnGenerateRandomInRange(bnK, order, rand);
 #ifdef _SM2_SIGN_DEBUG
-        BnFromHex(bnK,
-                  "6CB28D99385C175C94F94E934817663FC176D925DD72B727260DBAAE1FB2F96F");
+        BnFromHex(bnK, "6CB28D99385C175C94F94E934817663F"
+                       "C176D925DD72B727260DBAAE1FB2F96F");
 #endif
         // A4: Figure out the point of elliptic curve (x1, y1)=[k]G, and according
         // to details specified in 4.2.7 in Part 1 of this document, transform the
@@ -439,8 +429,8 @@ loop:
         BnAdd(bnR, bnE, bnX1);
         BnMod(bnR, order);
 #ifdef _SM2_SIGN_DEBUG
-        pAssert(BnHexEqual(bnR,
-                           "40F1EC59F793D9F49E09DCEF49130D4194F79FB1EED2CAA55BACDB49C4E755D1"));
+        pAssert(BnHexEqual(bnR, "40F1EC59F793D9F49E09DCEF49130D41"
+                                "94F79FB1EED2CAA55BACDB49C4E755D1"));
 #endif
         // if r=0 or r+k=n, return to A3;
         if(BnEqualZero(bnR))
@@ -454,8 +444,8 @@ loop:
         BnAddWord(bnT, bnD, 1);
         BnModInverse(bnT, bnT, order);
 #ifdef _SM2_SIGN_DEBUG
-        pAssert(BnHexEqual(bnT,
-                           "79BFCF3052C80DA7B939E0C6914A18CBB2D96D8555256E83122743A7D4F5F956"));
+        pAssert(BnHexEqual(bnT, "79BFCF3052C80DA7B939E0C6914A18CB"
+                                "B2D96D8555256E83122743A7D4F5F956"));
 #endif
         // compute s = t * (k - r * dA) mod n
         BnModMult(bnS, bnR, bnD, order);
@@ -464,8 +454,8 @@ loop:
         BnAdd(bnS, bnK, bnS);
         BnModMult(bnS, bnS, bnT, order);
 #ifdef _SM2_SIGN_DEBUG
-        pAssert(BnHexEqual(bnS,
-                           "6FC6DAC32C5D5CF10C77DFB20F7C2EB667A457872FB09EC56327A67EC7DEEBE7"));
+        pAssert(BnHexEqual(bnS, "6FC6DAC32C5D5CF10C77DFB20F7C2EB6"
+                                "67A457872FB09EC56327A67EC7DEEBE7"));
 #endif
         if(BnEqualZero(bnS))
             goto loop;
@@ -475,10 +465,10 @@ loop:
     // is (r, s).
     // This is handled by the common return code
 #ifdef _SM2_SIGN_DEBUG
-    pAssert(BnHexEqual(bnR,
-                       "40F1EC59F793D9F49E09DCEF49130D4194F79FB1EED2CAA55BACDB49C4E755D1"));
-    pAssert(BnHexEqual(bnS,
-                       "6FC6DAC32C5D5CF10C77DFB20F7C2EB667A457872FB09EC56327A67EC7DEEBE7"));
+    pAssert(BnHexEqual(bnR, "40F1EC59F793D9F49E09DCEF49130D41"
+                            "94F79FB1EED2CAA55BACDB49C4E755D1"));
+    pAssert(BnHexEqual(bnS, "6FC6DAC32C5D5CF10C77DFB20F7C2EB6"
+                            "67A457872FB09EC56327A67EC7DEEBE7"));
 #endif
     return TPM_RC_SUCCESS;
 }
@@ -510,12 +500,13 @@ CryptEccSign(
     ECC_INITIALIZED(bnD, &signKey->sensitive.sensitive.ecc.b);
     ECC_NUM(bnR);
     ECC_NUM(bnS);
-    const ECC_CURVE_DATA   *C = AccessCurveData(E);
+    const ECC_CURVE_DATA   *C;
     TPM_RC                  retVal;
 //
     NOT_REFERENCED(scheme);
     if(E == NULL)
         ERROR_RETURN(TPM_RC_VALUE);
+     C = AccessCurveData(E);
     signature->signature.ecdaa.signatureR.t.size
         = sizeof(signature->signature.ecdaa.signatureR.t.buffer);
     signature->signature.ecdaa.signatureS.t.size
@@ -569,7 +560,7 @@ Exit:
 
 //********************* Signature Validation   ********************
 
-#if ALG_ECDSA    //%
+#if ALG_ECDSA 
 
 //*** BnValidateSignatureEcdsa()
 // This function validates an ECDSA signature. rIn and sIn should have been checked
@@ -588,14 +579,14 @@ BnValidateSignatureEcdsa(
 {
     // Make sure that the allocation for the digest is big enough for a maximum
     // digest
-    BN_VAR(bnE, MAX_DIGEST_SIZE * 8);
+    BN_VAR(bnE, MAX(MAX_ECC_KEY_BYTES, MAX_DIGEST_SIZE) * 8);
     POINT(ecR);
     ECC_NUM(bnU1);
     ECC_NUM(bnU2);
     ECC_NUM(bnW);
     bigConst                 order = CurveGetOrder(AccessCurveData(E));
     TPM_RC                   retVal = TPM_RC_SIGNATURE;
-
+//
     // Get adjusted digest
     EcdsaDigest(bnE, digest, order);
     // 1. If r and s are not both integers in the interval [1, n - 1], output
@@ -628,7 +619,7 @@ Exit:
     return retVal;
 }
 
-#endif      //% ALG_ECDSA
+#endif      // ALG_ECDSA
 
 #if ALG_SM2
 
@@ -696,7 +687,7 @@ BnValidateSignatureEcSm2(
         return TPM_RC_SUCCESS;
 }
 
-#endif  //% ALG_SM2
+#endif  // ALG_SM2
 
 #if ALG_ECSCHNORR
 
@@ -860,7 +851,8 @@ CryptEccCommitCompute(
     TPM2B_ECC_PARAMETER     *r              // IN: the computed r value (required)
     )
 {
-    CURVE_INITIALIZED(curve, curveId);
+    CURVE_INITIALIZED(curve, curveId);  // Normally initialize E as the curve, but 
+                                        // E means something else in this function
     ECC_INITIALIZED(bnR, r);
     TPM_RC               retVal = TPM_RC_SUCCESS;
 //

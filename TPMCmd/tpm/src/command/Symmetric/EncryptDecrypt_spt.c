@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 #include "Tpm.h"
 #include "EncryptDecrypt_fp.h"
 #include "EncryptDecrypt_spt_fp.h"
@@ -106,14 +105,15 @@ EncryptDecryptShared(
             return TPM_RCS_MODE + RC_EncryptDecrypt_mode;
         mode = modeIn;
     }
-
-  
-
     // The input iv for ECB mode should be an Empty Buffer.  All the other modes
     // should have an iv size same as encryption block size
     keySize = symKey->publicArea.parameters.symDetail.sym.keyBits.sym;
     alg = symKey->publicArea.parameters.symDetail.sym.algorithm;
     blockSize = CryptGetSymmetricBlockSize(alg, keySize);
+
+    // reverify the algorithm. This is mainly to keep static analysis tools happy
+    if(blockSize == 0)
+        return TPM_RCS_KEY + RC_EncryptDecrypt_keyHandle;
 
     // Note: When an algorithm is not supported by a TPM, the TPM_ALG_xxx for that
     // algorithm is not defined. However, it is assumed that the ALG_xxx_VALUE for

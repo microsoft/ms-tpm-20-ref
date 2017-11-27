@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 //
 // This file contains the math functions that are not implemented in the BnMath
@@ -428,6 +427,7 @@ BnCurveInitialize(
     EC_POINT                *P = NULL;
     const ECC_CURVE_DATA    *C = GetCurveData(curveId);
     BN_CTX                  *CTX = NULL;
+
     BIG_INITIALIZED(bnP, C != NULL ? C->prime : NULL);
     BIG_INITIALIZED(bnA, C != NULL ? C->a : NULL);
     BIG_INITIALIZED(bnB, C != NULL ? C->b : NULL);

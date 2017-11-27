@@ -1203,6 +1203,9 @@
     <ClInclude Include="include\HashTestData.h">
       <Filter>Headers\Crypt</Filter>
     </ClInclude>
+    <ClInclude Include="include\KdfTestData.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
     <ClInclude Include="include\RsaTestData.h">
       <Filter>Headers\Crypt</Filter>
     </ClInclude>

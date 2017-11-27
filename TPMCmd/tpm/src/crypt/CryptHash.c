@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Description
 //
 // This file contains implementation of cryptographic functions for hashing.
@@ -463,21 +462,17 @@ CryptDigestUpdate(
 {
     if(hashState->hashAlg != TPM_ALG_NULL)
     {
-#ifndef SMAC_IMPLEMENTED
-        pAssert((hashState->type == HASH_STATE_HASH)
-                || (hashState->type == HASH_STATE_HMAC));
-//??        hashState->def = CryptGetHashDef(hashState->hashAlg);
-        HASH_DATA(hashState, dataSize, (BYTE *)data);
-#else
+        
         if((hashState->type == HASH_STATE_HASH)
            || (hashState->type == HASH_STATE_HMAC))
             HASH_DATA(hashState, dataSize, (BYTE *)data);
+#if SMAC_IMPLEMENTED
         else if(hashState->type == HASH_STATE_SMAC)
-            (hashState->state.smac.smacMethods.data)(&hashState->state.smac.state,
+            (hashState->state.smac.smacMethods.data)(&hashState->state.smac.state, 
                                                      dataSize, data);
+#endif // SMAC_IMPLEMENTED
         else
             FAIL(FATAL_ERROR_INTERNAL);
-#endif // SMAC_IMPLEMENTED
     }
     return;
 }
@@ -664,7 +659,7 @@ CryptHmacEnd(
     BYTE                 temp[MAX_DIGEST_SIZE];
     PHASH_STATE          hState = (PHASH_STATE)&state->hashState;
 
-#ifdef SMAC_IMPLEMENTED
+#if SMAC_IMPLEMENTED
     if(hState->type == HASH_STATE_SMAC)
         return (state->hashState.state.smac.smacMethods.end)
                     (&state->hashState.state.smac.state,
@@ -816,7 +811,7 @@ CryptKDFa(
                                     //     avoid large intermediate buffers.
     UINT16           blocks         // IN: If non-zero, this is the maximum number
                                     //     of blocks to be returned, regardless
-                                    //     of sizeInBit
+                                    //     of sizeInBits
     )
 {
     UINT32                   counter = 0;       // counter value
@@ -828,6 +823,8 @@ CryptKDFa(
 
     pAssert(key != NULL && keyStream != NULL);
     
+    TEST(TPM_ALG_KDF1_SP800_108);
+
     if(digestSize == 0)
         return 0;
 
@@ -880,15 +877,10 @@ CryptKDFa(
         CryptHmacEnd(&hState, bytes, stream);
         stream = &stream[digestSize];
     }
-    // Mask off bits if the required bits is not a multiple of byte size. Only do
-    // this if this is a call that is returning all the blocks indicated in
-    // sizeInBits
-#if 0 //?? Masking in the KDF is disabled. If the calling function wants something
-      //?? less than even number of bytes, then the caller should do the masking 
-      //?? because there is no universal way to do it here
-    if((blocks == 0) && (sizeInBits % 8) != 0)
-        keyStream[0] &= ((1 << (sizeInBits % 8)) - 1);
-#endif
+
+    // Masking in the KDF is disabled. If the calling function wants something
+    // less than even number of bytes, then the caller should do the masking 
+    // because there is no universal way to do it here
     if(counterInOut != NULL)
         *counterInOut = counter;
     return generated;

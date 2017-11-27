@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,42 +32,38 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/*(Auto)
-
-    Created by TpmStructures Version 2.7 Sept 13, 2016
-    This file created on Jun 15, 2017, 04:14:45PM 
-
-*/
-
+/*(Auto-generated)
+ *  Created by TpmStructures; Version 3.0 June 16, 2017
+ *  Date: Oct 16, 2017  Time: 12:56:59AM
+ */
 #ifdef TPM_CC_Hash // Command must be defined
-#ifndef _Hash_H
-#define _Hash_H
+#ifndef _HASH_FP_H_
+#define _HASH_FP_H_
 
 // Input structure definition
 typedef struct {
-    TPM2B_MAX_BUFFER      data;
-    TPMI_ALG_HASH         hashAlg;
-    TPMI_RH_HIERARCHY     hierarchy;
+    TPM2B_MAX_BUFFER            data;
+    TPMI_ALG_HASH               hashAlg;
+    TPMI_RH_HIERARCHY           hierarchy;
 } Hash_In;
 
 // Output structure definition
 typedef struct {
-    TPM2B_DIGEST          outHash;
-    TPMT_TK_HASHCHECK     validation;
+    TPM2B_DIGEST                outHash;
+    TPMT_TK_HASHCHECK           validation;
 } Hash_Out;
 
 // Response code modifiers
-#define    RC_Hash_data         (TPM_RC_P + TPM_RC_1)
-#define    RC_Hash_hashAlg      (TPM_RC_P + TPM_RC_2)
-#define    RC_Hash_hierarchy    (TPM_RC_P + TPM_RC_3)
+#define RC_Hash_data            (TPM_RC_P + TPM_RC_1)
+#define RC_Hash_hashAlg         (TPM_RC_P + TPM_RC_2)
+#define RC_Hash_hierarchy       (TPM_RC_P + TPM_RC_3)
 
 // Function prototype
 TPM_RC
 TPM2_Hash(
-    Hash_In *in,
-    Hash_Out *out
+    Hash_In                     *in,
+    Hash_Out                    *out
 );
 
-
-#endif  // _Hash_H
+#endif  // _HASH_FP_H_
 #endif  // TPM_CC_Hash

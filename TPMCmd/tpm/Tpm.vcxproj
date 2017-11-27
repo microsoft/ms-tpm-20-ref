@@ -75,7 +75,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -202,12 +202,12 @@
     <ReferencePath Condition="'$(Configuration)|$(Platform)'=='SelfTest|x64'">.\Debug;$(ReferencePath)</ReferencePath>
     <ReferencePath Condition="'$(Configuration)|$(Platform)'=='Coverage|x64'">.\Debug;$(ReferencePath)</ReferencePath>
     <ReferencePath Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">.\Debug;$(ReferencePath)</ReferencePath>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Static|x64'">bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='SelfTest|x64'">bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Coverage|x64'">bin\$(PlatformTarget)\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Static|x64'">bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='SelfTest|x64'">bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Coverage|x64'">bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
@@ -222,8 +222,8 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <ReferencePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\Debug;$(ReferencePath)</ReferencePath>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Static|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
@@ -281,7 +281,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CRYPTO_ALIGN_4;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -530,7 +530,7 @@
       <DisableSpecificWarnings>4668</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>cryptoengine.lib;platform.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>platform.lib;libeay32.lib%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
@@ -665,7 +665,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -678,7 +678,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CRYPTO_ALIGN_16;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CRYPTO_ALIGN_16;NDEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -694,20 +694,26 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX64</TargetMachine>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>cryptoengine.lib;platform.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>platform.lib;libeay32.lib;;Advapi32.lib;User32.lib;Gdi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
     </Link>
     <ProjectReference>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='GccCompile|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>GCC</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='GccCompile|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -839,14 +845,16 @@
     <ClCompile Include="src\command\Vendor\Vendor_TCG_Test.c" />
     <ClCompile Include="src\crypt\AlgorithmTests.c" />
     <ClCompile Include="src\crypt\BnConvert.c" />
-    <ClCompile Include="src\crypt\BnEccData.c" />
+    <ClCompile Include="src\crypt\BnEccData.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\crypt\BnMath.c" />
     <ClCompile Include="src\crypt\BnMemory.c" />
     <ClCompile Include="src\crypt\CryptCmac.c" />
     <ClCompile Include="src\crypt\CryptDes.c" />
-    <ClCompile Include="src\crypt\CryptEccData.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="src\crypt\CryptEccData.c" />
     <ClCompile Include="src\crypt\CryptHashData.c" />
     <ClCompile Include="src\crypt\CryptPrime.c" />
     <ClCompile Include="src\crypt\CryptPrimeSieve.c" />
@@ -927,6 +935,7 @@
     <ClInclude Include="include\GpMacros.h" />
     <ClInclude Include="include\HandleProcess.h" />
     <ClInclude Include="include\HashTestData.h" />
+    <ClInclude Include="include\KdfTestData.h" />
     <ClInclude Include="include\LibSupport.h" />
     <ClInclude Include="include\ltc\LtcSettings.h" />
     <ClInclude Include="include\ltc\TpmToLtcHash.h" />
