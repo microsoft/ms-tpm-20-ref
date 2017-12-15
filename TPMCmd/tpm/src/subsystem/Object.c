@@ -429,7 +429,7 @@ ObjectLoad(
         // digest size of nameAlg
         if(sensitive->seedValue.t.size  
                 > CryptHashGetDigestSize(publicArea->nameAlg))
-            return TPM_RC_SENSITIVE;    // not a 'safe' return code so no add
+            return TPM_RCS_KEY_SIZE + blameSensitive;
         // Check attributes and schemes for consistency
         result = PublicAttributesValidation(parent, publicArea);
     }

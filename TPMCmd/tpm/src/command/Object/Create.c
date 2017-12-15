@@ -42,8 +42,6 @@
 // Create a regular object
 */
 // return type: TPM_RC
-//   TPM_RC_ASYMMETRIC      non-duplicable storage key and its parent have different
-//                          public parameters
 //   TPM_RC_ATTRIBUTES      'sensitiveDataOrigin' is CLEAR when 'sensitive.data' is
 //                          an Empty Buffer, or is SET when 'sensitive.data' is not
 //                          empty;

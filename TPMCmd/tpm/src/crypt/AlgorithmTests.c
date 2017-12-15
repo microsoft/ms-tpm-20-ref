@@ -706,10 +706,10 @@ TestKDFa(
     ALGORITHM_VECTOR        *toTest
     )
 {
-    CLEAR_BOTH(TPM_ALG_KDF1_SP800_108);
-
     static TPM2B_KDF_TEST_KEY   keyOut;
     UINT32                      counter = 0;
+//
+    CLEAR_BOTH(TPM_ALG_KDF1_SP800_108);
 
     keyOut.t.size = CryptKDFa(KDF_TEST_ALG, &c_kdfTestKeyIn.b, &c_kdfTestLabel.b,
                               &c_kdfTestContextU.b, &c_kdfTestContextV.b,

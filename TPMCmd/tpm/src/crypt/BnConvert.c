@@ -286,7 +286,8 @@ BnPointTo2B(
 //
     pAssert(p && ecP && E);
     pAssert(BnEqualWord(ecP->z, 1));
-    size = (UINT16)BITS_TO_BYTES(1 + BnMsb(CurveGetOrder(AccessCurveData(E))));
+    // BnMsb is the bit number of the MSB. This is one less than the number of bits
+    size = (UINT16)BITS_TO_BYTES(BnSizeInBits(CurveGetOrder(AccessCurveData(E))));
     BnTo2B(ecP->x, &p->x.b, size);
     BnTo2B(ecP->y, &p->y.b, size);
     return TRUE;

@@ -260,7 +260,7 @@ DRBG_GetEntropy(
     BYTE            *entropy            // OUT: buffer to return collected entropy
     )
 {
-#ifndef USE_DEBUG_RNG
+#if !USE_DEBUG_RNG
 
     UINT32       obtainedEntropy;
     INT32        returnedEntropy;
@@ -279,7 +279,7 @@ DRBG_GetEntropy(
             memcpy(entropy, DRBG_NistTestVector_Entropy,
                    sizeof(DRBG_NistTestVector_Entropy));
         }
-#ifndef USE_DEBUG_RNG
+#if !USE_DEBUG_RNG
     }
     else if(!IsEntropyBad())
     {
@@ -287,7 +287,7 @@ DRBG_GetEntropy(
         // Note: In debug mode, the only "entropy" value ever returned
         // is the value of the self-test vector.
         for(returnedEntropy = 1, obtainedEntropy = 0;
-        obtainedEntropy < requiredEntropy && !IsEntropyBad();
+            obtainedEntropy < requiredEntropy && !IsEntropyBad();
             obtainedEntropy += returnedEntropy)
         {
             returnedEntropy = _plat__GetEntropy(&entropy[obtainedEntropy],
@@ -446,25 +446,22 @@ DRBG_Reseed(
     )
 {
     DRBG_SEED            seed;
-    BYTE                *pSeed = (BYTE *)&seed;
 
     pAssert((drbgState != NULL) && (drbgState->magic == DRBG_MAGIC));
 
     if(providedEntropy == NULL)
     {
-        if(!DRBG_GetEntropy(sizeof(DRBG_SEED), pSeed))
-            return FALSE;
         providedEntropy = &seed;
+        if(!DRBG_GetEntropy(sizeof(DRBG_SEED), (BYTE *)providedEntropy))
+            return FALSE;
     }
     if(additionalData != NULL)
     {
-        BYTE        *in1 = (BYTE *)providedEntropy; // This might be seed
-        BYTE        *in2 = (BYTE *)additionalData;
         int          i;
 
-        // XOR the provided data with the seed
-        for(i = sizeof(DRBG_SEED); i > 0; i--)
-            *pSeed++ = *in1++ ^ *in2++;
+        // XOR the provided data into the provided entropy
+        for(i = 0; i < sizeof(DRBG_SEED); i++)
+            ((BYTE *)providedEntropy)[i] ^= ((BYTE *)additionalData)[i];
     }
     DRBG_Update(drbgState, NULL, providedEntropy);
 
@@ -560,7 +557,7 @@ CryptRandomStir(
     BYTE            *additionalData
     )
 {
-#ifndef USE_DEBUG_RNG 
+#if !USE_DEBUG_RNG 
     DRBG_SEED        tmpBuf;
     DRBG_SEED        dfResult;
 //
@@ -733,6 +730,9 @@ CryptRandInit(
     void
     )
 {
+#if !USE_DEBUG_RNG
+    _plat__GetEntropy(NULL, 0);
+#endif
     return DRBG_SelfTest();
 }
 
@@ -926,30 +926,3 @@ DRBG_Uninstantiate(
     memset(drbgState, 0, sizeof(DRBG_STATE));
     return TPM_RC_SUCCESS;
 }
-
-#if 0
-//*** CryptRandMinMax()
-// This function generates a value that as not larger than (2^'max') - 1 
-// and no smaller than 2^('min' - 1). For example, if 'max' == 4 and 'min' == 2, then 
-// the number will be between 0x0010 and 0x1111 inclusively. If 'max' == 4 and
-// 'min' == 4 then the number will be between 0x1000 and 0x1111.
-LIB_EXPORT NUMBYTES
-CryptRandMinMax(
-    BYTE            *out,
-    UINT32           max,
-    UINT32           min,
-    RAND_STATE      *rand
-    )
-{
-    BN_VAR(bn, LARGEST_NUMBER_BITS);
-    NUMBYTES            size = (NUMBYTES)BITS_TO_BYTES(max);
-
-    pAssert(max <= LARGEST_NUMBER_BITS);
-    do
-    {
-        BnGetRandomBits(bn, max, rand);
-    } while(BnSizeInBits(bn) < min);
-    BnToBytes(bn, out, &size);
-    return size;
-}
-#endif

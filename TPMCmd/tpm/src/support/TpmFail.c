@@ -155,7 +155,6 @@ UnmarshalHeader(
 
 //** Public Functions
 
-#if SIMULATION
 //*** SetForceFailureMode()
 // This function is called by the simulator to enable failure mode testing.
 LIB_EXPORT void
@@ -163,10 +162,11 @@ SetForceFailureMode(
     void
     )
 {
+#if SIMULATION
     g_forceFailureMode = TRUE;
+#endif
     return;
 }
-#endif
 
 //*** TpmFail()
 // This function is called by TPM.lib when a failure occurs. It will set up the

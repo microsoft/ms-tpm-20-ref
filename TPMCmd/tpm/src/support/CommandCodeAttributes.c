@@ -199,15 +199,14 @@ GetClosestCommandIndex(
         COMMAND_INDEX       min = 0;
         COMMAND_INDEX       max = LIBRARY_COMMAND_ARRAY_SIZE - 1;
         int                 diff = 1;
-        int expectedMax = (sizeof(s_ccAttr) / sizeof(TPMA_CC)
-            - VENDOR_COMMAND_ARRAY_SIZE - 2);
 #if LIBRARY_COMMAND_ARRAY_SIZE == 0
 #error  "Something is terribly wrong"
 #endif
         // The s_ccAttr array contains an extra entry at the end (a zero value).
         // Don't count this as an array entry. This means that max should start
         // out pointing to the last valid entry in the array which is - 2
-        pAssert(max == expectedMax);
+        pAssert(max == (sizeof(s_ccAttr) / sizeof(TPMA_CC)
+                        - VENDOR_COMMAND_ARRAY_SIZE - 2));
         while(min <= max)
         {
             commandIndex = (min + max + 1) / 2;

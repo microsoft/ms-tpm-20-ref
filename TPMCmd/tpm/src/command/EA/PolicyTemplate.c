@@ -46,8 +46,6 @@
 //      TPM_RC_SIZE             'templateHash' is not the size of a digest produced
 //                              by the hash algorithm associated with
 //                              'policySession'
-//      TPM_RC_VALUE            repeated call to TPM2_PolicyTemplate() with a
-//                              different template digest
 TPM_RC
 TPM2_PolicyTemplate(
     PolicyTemplate_In     *in             // IN: input parameter list
@@ -70,10 +68,10 @@ TPM2_PolicyTemplate(
     }
     // error if cpHash contains something that is not a template
     else if(session->u1.templateHash.t.size != 0)
-        return TPM_RCS_VALUE + RC_PolicyTemplate_templateHash;
+        return TPM_RC_CPHASH;
 
     // A valid templateHash must have the same size as session hash digest
-    if(in->templateHash.t.size != CryptHashGetDigestSize(session->authHashAlg))
+    if(in->templateHash.t.size != CryptHashGetDigestSize(session->authHashAlg))              
         return TPM_RCS_SIZE + RC_PolicyTemplate_templateHash;
 
 // Internal Data Update

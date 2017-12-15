@@ -389,7 +389,9 @@ BnSizeInBits(
     bigConst                 n
     )
 {
-    return BnMsb(n) + 1;
+    int     bits = BnMsb(n) + 1;
+//
+    return bits < 0? 0 : (unsigned)bits;
 }
 
 //*** BnSetWord()

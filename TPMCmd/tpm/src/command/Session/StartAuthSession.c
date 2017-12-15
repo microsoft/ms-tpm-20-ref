@@ -57,7 +57,7 @@
 //                              recovered secret is larger than the digest size of
 //                              the nameAlg of 'tpmKey'; or, for an RSA decrypt key,
 //                              if 'encryptedSecret' is greater than the
-//                              public exponent of 'tpmKey'.
+//                              public modulus of 'tpmKey'.
 TPM_RC
 TPM2_StartAuthSession(
     StartAuthSession_In     *in,            // IN: input parameter buffer

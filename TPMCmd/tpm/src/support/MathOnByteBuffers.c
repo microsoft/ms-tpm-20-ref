@@ -216,15 +216,17 @@ AdjustNumberB(
 {
     BYTE            *from;
     UINT16           i;
-    // This is a request to shift the number to the left (remove leading zeros)
+    // See if number is already the requested size
     if(num->size == requestedSize)
         return requestedSize;
     from = num->buffer;
     if (num->size > requestedSize)
     {
+    // This is a request to shift the number to the left (remove leading zeros)
         // Find the first non-zero byte. Don't look past the point where removing
-        // more zeros would make the number smaller than requested.
-        for(i = num->size; *from == 0 && i > requestedSize; from++, i++);
+        // more zeros would make the number smaller than requested, and don't throw
+        // away any significant digits.
+        for(i = num->size; *from == 0 && i > requestedSize; from++, i--);
         if(i < num->size)
         {
             num->size = i;
@@ -260,5 +262,21 @@ ShiftLeft(
         *buffer <<= 1;
     }
     return value;
+}
+
+//*** IsNumeric()
+// Verifies that all the characters are simple numeric (0-9)
+BOOL
+IsNumeric(
+    TPM2B       *value
+)
+{
+    UINT16      i;
+    for(i = 0; i < value->size; i++)
+    {
+        if(value->buffer[i] < '0' || value->buffer[i] > '9')
+            return FALSE;
+    }
+    return TRUE;
 }
 

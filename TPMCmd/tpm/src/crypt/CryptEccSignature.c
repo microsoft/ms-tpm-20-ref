@@ -323,12 +323,19 @@ BnSignEcSchnorr(
     TPM2B_T                  T2b;
     TPM2B                   *e = &T2b.b;
     TPM_RC                   retVal = TPM_RC_NO_RESULT;
-    const ECC_CURVE_DATA    *C = AccessCurveData(E);
-    bigConst                 order = CurveGetOrder(C);
-    bigConst                 prime = CurveGetPrime(C);
+    const ECC_CURVE_DATA    *C;
+    bigConst                 order;
+    bigConst                 prime;
     ECC_NUM(bnK);
     POINT(ecR);
 //
+    // Parameter checks
+    if(E == NULL)
+        ERROR_RETURN(TPM_RC_VALUE);
+    C = AccessCurveData(E);
+    order = CurveGetOrder(C);
+    prime = CurveGetOrder(C);
+
     // If the digest does not produce a hash, then null the signature and return
     // a failure.
     if(digestSize == 0)
@@ -402,7 +409,8 @@ BnSignEcSm2(
     ECC_NUM(bnX1);
     ECC_NUM(bnT);                       // temp
     POINT(Q1);
-    bigConst                  order = CurveGetOrder(AccessCurveData(E));
+    bigConst                  order = (E != NULL)
+        ? CurveGetOrder(AccessCurveData(E)) : NULL;
 //
 #ifdef _SM2_SIGN_DEBUG
     BnFromHex(bnE, "B524F552CD82B8B028476E005C377FB1"
@@ -511,10 +519,6 @@ CryptEccSign(
         = sizeof(signature->signature.ecdaa.signatureR.t.buffer);
     signature->signature.ecdaa.signatureS.t.size
         = sizeof(signature->signature.ecdaa.signatureS.t.buffer);
-    // Prime order for this implementation needs to be a multiple of a byte
-    // so, no P521 for now.
-    pAssert((BnSizeInBits(CurveGetPrime(C)) & 7) == 0);
-    pAssert((BnSizeInBits(CurveGetOrder(C)) & 7) == 0);
     TEST(signature->sigAlg);
     switch(signature->sigAlg)
     {

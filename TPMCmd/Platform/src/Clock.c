@@ -88,6 +88,33 @@ _plat__TimerRestart(
 #include <time.h>
 clock_t     debugTime;
 
+//*** _plat__Time()
+// This is another, probably futile, attempt to define a portable function 
+// that will return a 64-bit clock value that has mSec resolution.
+uint64_t
+_plat__RealTime(
+    void
+)
+{
+    clock64_t           time;
+#ifdef _MSC_VER
+    struct _timeb       sysTime;
+//
+    _ftime_s(&sysTime);
+    time = (clock64_t)(sysTime.time) * 1000 + sysTime.millitm;
+    // set the time back by one hour if daylight savings
+    if(sysTime.dstflag)
+        time -= 1000 * 60 * 60;  // mSec/sec * sec/min * min/hour = ms/hour
+#else
+    // hopefully, this will work with most UNIX systems
+    struct timespec     systime;
+//
+    clock_gettime(CLOCK_MONOTONIC, &systimets);
+    time = (clock64_t)systime.tv_sec * 1000 + (systime.tv_nsec / 1000000);
+#endif
+    return time;
+}
+
 //***_plat__TimerRead()
 // This function provides access to the tick timer of the platform. The TPM code 
 // uses this value to drive the TPM Clock.
@@ -101,8 +128,6 @@ clock_t     debugTime;
 // allowed to go backwards. If the time provided by the system can go backwards
 // during a power discontinuity, then the _plat__Signal_PowerOn should call
 // _plat__TimerReset().
-//
-// The code in this function should be replaced by a read of a hardware tick timer.
 LIB_EXPORT uint64_t
 _plat__TimerRead(
     void
@@ -117,26 +142,9 @@ _plat__TimerRead(
     clock64_t         timeNow;
     clock64_t         readjustedTimeDiff;
 
-    // This is another, probably futile, attempt to define a portable function 
-    // that will return a 64-bit clock value that has mSec resolution.
-    //
     // This produces a timeNow that is basically locked to the system clock.
-    // This value starts at zero when the system initializes.
-#ifdef _MSC_VER
-    struct _timeb       sysTime;
-//
-    _ftime_s(&sysTime);
-    timeNow = (clock64_t)(sysTime.time) * 1000 + sysTime.millitm;
-    // set the time back by one hour if daylight savings
-    if(sysTime.dstflag)
-        timeNow -= 1000  * 60 * 60;  // mSec/sec * sec/min * min/hour = ms/hour
-#else
-    // hopefully, this will work with most UNIX systems
-    struct timespec     systime;
-//
-    clock_gettime(CLOCK_MONOTONIC, &systimets);
-    timeNow = (clock64_t)systime.tv_sec * 1000 + (systime.tv_nsec / 1000000);
-#endif
+    timeNow = _plat__RealTime();
+
     // if this hasn't been initialized, initialize it
     if(s_lastSystemTime == 0)
     {

@@ -39,6 +39,13 @@
 #include <memory.h>
 #include "PlatformData.h"
 #include "Platform_fp.h"
+#include <time.h>
+
+#ifdef _MSC_VER
+#include <process.h>
+#else
+#include <unistd.h>
+#endif
 
 
 //** Local values
@@ -54,15 +61,35 @@
 // blocks are equal.
 extern uint32_t        lastEntropy;
 
-extern int             firstValue;
+//*** rand64
+// Local function to get a 32-bit random number
+static uint32_t
+rand32(
+    void
+)
+{
+    uint32_t    rndNum = rand();
+#if RAND_MAX < UINT16_MAX
+    // If the maximum value of the random number is a 15-bit number, then shift it up
+    // 15 bits, get 15 more bits, shift that up 2 and then XOR in another value to get
+    // a full 32 bits.
+    rndNum = (rndNum << 15) ^ rand();
+    rndNum = (rndNum << 2) ^ rand();
+#elif RAND_MAX == UINT16_MAX
+    // If the maximum size is 16-bits, shift it and add another 16 bits
+    rndNum = (rndNum << 16) ^ rand();
+#elif RAND_MAX < UINT32_MAX
+    // If 31 bits, then shift 1 and include another random value to get the extra bit
+    rndNum = (rndNum << 1) ^ rand();
+#endif
+    return rndNum;
+}
+
 
 //** _plat__GetEntropy()
 // This function is used to get available hardware entropy. In a hardware
 // implementation of this function, there would be no call to the system
 // to get entropy.
-// If the caller does not ask for any entropy, then this is a startup indication
-// and 'firstValue' should be reset.
-
 // return type: int32_t
 //  < 0        hardware failure of the entropy generator, this is sticky
 // >= 0        the returned amount of entropy (bytes)
@@ -71,30 +98,59 @@ LIB_EXPORT int32_t
 _plat__GetEntropy(
     unsigned char       *entropy,           // output buffer
     uint32_t             amount             // amount requested
-    )
+)
 {
     uint32_t            rndNum;
-    int                 OK = 1;
-
+    int32_t             ret;
+//
     if(amount == 0)
     {
-        firstValue = 1;
-        return 0;
+        // Seed the platform entropy source if the entropy source is software. There is 
+        // no reason to put a guard macro (#if or #ifdef) around this code because this
+        // code would not be here if someone was changing it for a system with actual
+        // hardware.
+        //
+        // NOTE 1: The following command does not provide proper cryptographic entropy.
+        // Its primary purpose to make sure that different instances of the simulator,
+        // possibly started by a script on the same machine, are seeded differently.
+        // But vendors of the actual TPMs need to ensure availability of proper entropy
+        // using their platform specific means.
+        //
+        // NOTE 2: In debug builds by default the reference implementation will seed
+        // its RNG deterministically (without using any platform provided randomness).
+        // See the USE_DEBUG_RNG macro and DRBG_GetEntropy() function.
+#ifdef _MSC_VER
+        srand((unsigned)_plat__RealTime() ^ _getpid());
+#else
+        srand((unsigned)_plat__RealTime() ^ getpid());
+#endif
+        lastEntropy = rand32();
+        ret = 0;
     }
-
-    // Only provide entropy 32 bits at a time to test the ability
-    // of the caller to deal with partial results.
-    rndNum = rand();
-    if(firstValue)
-        firstValue = 0;
     else
-        OK = (rndNum != lastEntropy);
-    if(OK)
     {
-        lastEntropy = rndNum;
-        if(amount > sizeof(rndNum))
-            amount = sizeof(rndNum);
-        memcpy(entropy, &rndNum, amount);
+        rndNum = rand32();
+        if(rndNum == lastEntropy)
+        {
+            ret = -1;
+        }
+        else
+        {
+            lastEntropy = rndNum;
+            // Each process will have its random number generator initialized according
+            // to the process id and the initialization time. This is not a lot of 
+            // entropy so, to add a bit more, XOR the current time value into the 
+            // returned entropy value.
+            // NOTE: the reason for including the time here rather than have it in
+            // in the value assigned to lastEntropy is that rand() could be broken and
+            // using the time would in the lastEntropy value would hide this.
+            rndNum ^= (uint32_t)_plat__RealTime();
+
+            // Only provide entropy 32 bits at a time to test the ability
+            // of the caller to deal with partial results.
+            ret = MIN(amount, sizeof(rndNum));
+            memcpy(entropy, &rndNum, ret);
+        }
     }
-    return (OK) ? (int32_t)amount : -1;
+    return ret;
 }

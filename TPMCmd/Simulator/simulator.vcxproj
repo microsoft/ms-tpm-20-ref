@@ -626,7 +626,7 @@
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='GccCompile|Win32'">
@@ -641,7 +641,6 @@
     <ClCompile Include="src\TPMCmds.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\prototypes\Simulator_fp.h" />
     <ClInclude Include="include\TpmTcpProtocol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -85,6 +85,12 @@ _plat__TimerRestart(
     void
     );
 
+uint64_t
+_plat__RealTime(
+    void
+);
+
+
 //***_plat__TimerRead()
 // This function provides access to the tick timer of the platform. The TPM code
 // uses this value to drive the TPM Clock.

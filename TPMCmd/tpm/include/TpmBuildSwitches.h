@@ -68,8 +68,8 @@
 
 // Modify these as needed
 #if !defined SIMULATION || SIMULATION != NO
-#  undef SIMULATION
-#  define SIMULATION    YES
+#   undef SIMULATION
+#   define SIMULATION   YES
 #endif
 
 // Define this to run the function that checks the format compatibility for the
@@ -177,9 +177,10 @@
 // should allow consistent results on test runs as long as the input parameters
 // to the functions remains the same.
 #       undef USE_DEBUG_RNG
-#       define USE_DEBUG_RNG YES
+#       define USE_DEBUG_RNG YES // Either YES or NO
 #   endif
 #else
+// Don't change these. They are the settings needed when not doing a simulation
 # define USE_RSA_KEY_CACHE NO
 # define USE_RSA_KEY_CACHE_FILE NO
 # define USE_DEBUG_RNG NO

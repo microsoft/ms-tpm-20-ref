@@ -66,8 +66,11 @@ unsigned char        s_locality;
 BOOL                 s_powerLost;
 
 // From Entropy.c
+// This values is used to determine if the entropy generator is broken. If two 
+// consecutive values are the same, then the entropy generator is considered to be
+// broken.
 uint32_t             lastEntropy;
-int                  firstValue;
+
 
 // From NVMem.c
 #ifdef  VTPM

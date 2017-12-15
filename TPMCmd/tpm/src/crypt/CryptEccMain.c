@@ -785,12 +785,10 @@ CryptEccGenerateKey(
     {
         ECC_NUM(bnT);
         ECC_NUM(bnS);
-        TPM2B_DIGEST    digest;
+        TPM2B_DIGEST            digest;
 //
         TEST(TPM_ALG_ECDSA);
-        digest.t.size =
-            (UINT16)BITS_TO_BYTES(BnSizeInBits(CurveGetPrime(
-                AccessCurveData(E))));
+        digest.t.size = MIN(sensitive->sensitive.ecc.t.size, sizeof(digest.t.buffer));
         // Get a random value to sign using the built in DRBG state
         DRBG_Generate(NULL, digest.t.buffer, digest.t.size);
         BnSignEcdsa(bnT, bnS, E, bnD, &digest, NULL);
