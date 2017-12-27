@@ -44,8 +44,10 @@
 #include <ctype.h>
 #include <string.h>
 
+#ifdef _MSC_VER
 #include <windows.h>
 #include <winsock.h>
+#endif
 
 #include "TpmTcpProtocol.h"
 #include "Manufacture_fp.h"
