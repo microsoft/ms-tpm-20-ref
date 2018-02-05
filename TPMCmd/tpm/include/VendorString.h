@@ -40,7 +40,7 @@
 // for TPM_PT_MANUFACTURER in TPM2_GetCapability.
 // The following line should be un-commented and a vendor specific string
 // should be provided here.
-//#define    MANUFACTURER    "MSFT"
+#define    MANUFACTURER    "MSFT"
 
 // The following #if macro may be deleted after a proper MANUFACTURER is provided.
 #ifndef MANUFACTURER
@@ -57,8 +57,8 @@ manufacturer name.
 // The following line should be un-commented and a vendor specific string
 //
 // A vendor-specific string should be provided here.
-//#define       VENDOR_STRING_1       "DPA "
-//#define       VENDOR_STRING_2       "fTPM"
+#define       VENDOR_STRING_1       "DPA "
+#define       VENDOR_STRING_2       "fTPM"
 
 // The vendor strings 2-4 may also be defined as needed.
 //#define       VENDOR_STRING_3
@@ -75,11 +75,11 @@ string.
 // A vendor-specific FIRMWARE_V1 is required here. It is
 // the more significant 32-bits of a vendor-specific value
 // indicating the version of the firmware
-//#define   FIRMWARE_V1         (0x20170615)
+#define   FIRMWARE_V1         (0x20170615)
 
 // A vendor-specific FIRMWARE_V2 may be provided here. If present, it is the less 
 // significant 32-bits of the version of the firmware. 
-//#define   FIRMWARE_V2         (0x00000000)
+#define   FIRMWARE_V2         (0x00000000)
 
 // The following macro is just to insure that a FIRMWARE_V1 value is provided.
 #ifndef FIRMWARE_V1

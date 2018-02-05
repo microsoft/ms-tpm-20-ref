@@ -314,7 +314,7 @@
 #define  RADIX_BITS                     32
 #define  HASH_ALIGNMENT                 4
 #define  SYMMETRIC_ALIGNMENT            4
-#define  HASH_LIB                       OSSL
+#define  HASH_LIB                       WOLF
 #define  SYM_LIB                        OSSL
 #define  MATH_LIB                       OSSL
 #define  BSIZE                          UINT16
