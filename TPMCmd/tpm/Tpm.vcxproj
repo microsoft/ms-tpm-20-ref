@@ -530,11 +530,11 @@
       <DisableSpecificWarnings>4668</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>platform.lib;libeay32.lib%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>platform.lib;libeay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\lib\x64;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>
       </ModuleDefinitionFile>
     </Link>
@@ -845,11 +845,6 @@
     <ClCompile Include="src\command\Vendor\Vendor_TCG_Test.c" />
     <ClCompile Include="src\crypt\AlgorithmTests.c" />
     <ClCompile Include="src\crypt\BnConvert.c" />
-    <ClCompile Include="src\crypt\BnEccData.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="src\crypt\BnMath.c" />
     <ClCompile Include="src\crypt\BnMemory.c" />
     <ClCompile Include="src\crypt\CryptCmac.c" />

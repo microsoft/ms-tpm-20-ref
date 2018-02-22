@@ -445,9 +445,6 @@
     <ClCompile Include="src\crypt\BnConvert.c">
       <Filter>Source Files\Crypt</Filter>
     </ClCompile>
-    <ClCompile Include="src\crypt\BnEccData.c">
-      <Filter>Source Files\Crypt</Filter>
-    </ClCompile>
     <ClCompile Include="src\crypt\BnMath.c">
       <Filter>Source Files\Crypt</Filter>
     </ClCompile>
