@@ -45,66 +45,41 @@
 
 #if MATH_LIB == WOLF
 
-#include <openssl/evp.h>
-#include <openssl/ec.h>
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-#include <openssl/bn_lcl.h>
-#endif
-#include <openssl/bn.h>
+#include <wolfssl/wolfcrypt/tfm.h>
+#include <wolfssl/wolfcrypt/ecc.h>
 
-//** Macros and Defines
+#define MP_VAR(name)                      \
+    mp_int          _##name;                                   \
+    mp_int          *name = MpInitialize(&_##name);
 
-// Make sure that the library is using the correct size for a crypt word
-#if    defined THIRTY_TWO_BIT && (RADIX_BITS != 32)  \
-    || defined SIXTY_FOUR_BIT && (RADIX_BITS != 64)
-#  error "Ossl library is using different radix"
-#endif
+// Allocate a mp_int and initialize with the values in a mp_int* initializer
+#define MP_INITIALIZED(name, initializer)                      \
+    MP_VAR(name);                                              \
+    BnToWolf(name, initializer);
 
-// Allocate a local BIGNUM value. For the allocation, a bigNum structure is created
-// as is a local BIGNUM. The bigNum is initialized and then the BIGNUM is
-// set to reference the local value.
-#define BIG_VAR(name, bits)                                         \
-    BN_VAR(name##Bn, (bits));                                       \
-    BIGNUM          _##name;                                        \
-    BIGNUM          *name = BigInitialized(&_##name,                \
-                                BnInit(name##Bn,                    \
-                                BYTES_TO_CRYPT_WORDS(sizeof(_##name##Bn.d))))
+#define POINT_CREATE(name, initializer)                   \
+    ecc_point       *name = EcPointInitialized(initializer);
 
-// Allocate a BIGNUM and initialize with the values in a bigNum initializer
-#define BIG_INITIALIZED(name, initializer)                      \
-    BIGNUM           _##name;                                   \
-    BIGNUM          *name = BigInitialized(&_##name, initializer)
+#define POINT_DELETE(name)                                \
+    wc_ecc_del_point(name);                               \
+    name = NULL;
 
+typedef ECC_CURVE_DATA bnCurve_t;
 
-typedef struct
-{
-    const ECC_CURVE_DATA    *C;     // the TPM curve values
-    EC_GROUP                *G;     // group parameters
-    BN_CTX                  *CTX;   // the context for the math (this might not be
-                                    // the context in which the curve was created>;
-} OSSL_CURVE_DATA;
+typedef bnCurve_t  *bigCurve;
 
-typedef OSSL_CURVE_DATA      *bigCurve;
-
-#define AccessCurveData(E)  ((E)->C)
+#define AccessCurveData(E)  (E)
 
 #define CURVE_INITIALIZED(name, initializer)                        \
-    OSSL_CURVE_DATA     _##name;                                 \
-    bigCurve            name =  BnCurveInitialize(&_##name, initializer)
+    bnCurve_t      *name = (ECC_CURVE_DATA *)GetCurveData(initializer)
 
-#include "TpmToOsslSupport_fp.h"
+#define CURVE_FREE(E)
 
-#define CURVE_FREE(E)                   \
-    if(E != NULL)                       \
-    {                                   \
-        if(E->G != NULL)                \
-            EC_GROUP_free(E->G);        \
-        OsslContextLeave(E->CTX);       \
-    }
+#include "TpmToWolfSupport_fp.h"
 
-#define OSSL_ENTER()     BN_CTX      *CTX = OsslContextEnter()
+#define WOLF_ENTER()
 
-#define OSSL_LEAVE()     OsslContextLeave(CTX)
+#define WOLF_LEAVE()
 
 // This definition would change if there were something to report
 #define MathLibSimulationEnd()

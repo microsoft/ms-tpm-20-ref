@@ -36,7 +36,7 @@
 //** Introduction
 //
 // The functions in this file are used for initialization of the interface to the
-// OpenSSL library.
+// wolfcrypt library.
 
 //** Defines and Includes
 
@@ -45,57 +45,73 @@
 #if SYM_LIB == WOLF && defined TPM_ALG_TDES
 
 //**Functions
-//*** TDES_set_encyrpt_key()
-// This function makes creation of a TDES key look like the creation of a key for
-// any of the other OpenSSL block ciphers. It will create three key schedules,
-// one for each of the DES keys. If there are only two keys, then the third schedule
-// is a copy of the first.
-void
-TDES_set_encrypt_key(
-    const BYTE                  *key,
-    UINT16                       keySizeInBits,
-    tpmKeyScheduleTDES          *keySchedule
+//** TDES_setup
+// This function calls the wolfcrypt function to generate a TDES key schedule. If the
+// If the key is two key (16 bytes), then the first DES key is replicated to the third
+// key position.
+int TDES_setup(
+    const BYTE          *key, 
+    UINT32               keyBits, 
+    tpmKeyScheduleTDES       *skey,
+    int dir
     )
 {
-    DES_set_key_unchecked((const_DES_cblock *)key, &keySchedule[0]);
-    DES_set_key_unchecked((const_DES_cblock *)&key[8], &keySchedule[1]);
-    // If is two-key, copy the schedule for K1 into K3, otherwise, compute the 
-    // the schedule for K3
-    if(keySizeInBits == 128)
-        keySchedule[2] = keySchedule[0];
+    BYTE                 k[24];
+    BYTE                *kp;
+
+    // If this is two-key, make it three key by replicating K1
+    if(keyBits == 128)
+    {
+        memcpy(k, key, 16);
+        memcpy(&k[16], key, 8);
+        kp = k;
+    }
     else
-        DES_set_key_unchecked((const_DES_cblock *)&key[16],
-                              &keySchedule[2]);
+        kp = (BYTE *)key;
+
+    return wc_Des3_SetKey( skey, kp, 0, dir );
 }
 
+//** TDES_setup_encrypt_key
+// This function calls into TDES_setup(), specifically for an encryption key.
+int TDES_setup_encrypt_key(
+    const BYTE          *key,
+    UINT32               keyBits,
+    tpmKeyScheduleTDES       *skey
+)
+{
+    return TDES_setup( key, keyBits, skey, DES_ENCRYPTION );
+}
+
+//** TDES_setup_decrypt_key
+// This function calls into TDES_setup(), specifically for an decryption key.
+int TDES_setup_decrypt_key(
+    const BYTE          *key,
+    UINT32               keyBits,
+    tpmKeyScheduleTDES       *skey
+)
+{
+    return TDES_setup( key, keyBits, skey, DES_DECRYPTION );
+}
 
 //*** TDES_encyrpt()
-// The TPM code uses one key schedule. For TDES, the schedule contains three
-// schedules. OpenSSL wants the schedules referenced separately. This function
-// does that.
 void TDES_encrypt(
     const BYTE              *in, 
     BYTE                    *out,
     tpmKeyScheduleTDES      *ks
     )
 {
-    DES_ecb3_encrypt((const_DES_cblock *)in, (DES_cblock *)out,
-                     &ks[0], &ks[1], &ks[2], 
-                     DES_ENCRYPT);
+    wc_Des3_EcbEncrypt( ks, out, in, DES_BLOCK_SIZE );
 }
 
 //*** TDES_decrypt()
-// As with TDES_encypt() this function bridges between the TPM single schedule
-// model and the OpenSSL three schedule model.
 void TDES_decrypt(
     const BYTE          *in,
     BYTE                *out,
     tpmKeyScheduleTDES   *ks
     )
 {
-    DES_ecb3_encrypt((const_DES_cblock *)in, (DES_cblock *)out,
-                     &ks[0], &ks[1], &ks[2], 
-                     DES_DECRYPT);
+    wc_Des3_EcbDecrypt( ks, out, in, DES_BLOCK_SIZE );
 }
 
 #endif // SYM_LIB == WOLF

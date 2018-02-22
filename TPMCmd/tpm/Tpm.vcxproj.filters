@@ -1302,8 +1302,17 @@
     <ClInclude Include="include\wolf\TpmToWolfSym.h">
       <Filter>Headers\Crypt\wolf</Filter>
     </ClInclude>
-    <ClInclude Include="include\wolf\user_settings.h">
+    <ClInclude Include="$(SolutionDir)\wolfcrypt\include\user_settings.h">
       <Filter>Headers\Crypt\wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToWolfDesSupport_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToWolfSupport_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToWolfMath_fp.h">
+      <Filter>Headers\prototypes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

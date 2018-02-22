@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simulator", "simulator\simulator.vcxproj", "{AAB9FA21-8671-4792-B000-B40A526058AD}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -11,10 +11,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simulator", "simulator\simu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Platform", "Platform\platform.vcxproj", "{A9249F05-0DF5-4D06-9873-FBBE61B6768B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tpm", "Tpm\TPM.vcxproj", "{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tpm", "tpm\TPM.vcxproj", "{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B} = {A9249F05-0DF5-4D06-9873-FBBE61B6768B}
+		{73973223-5EE8-41CA-8E88-1D60E89A237B} = {73973223-5EE8-41CA-8E88-1D60E89A237B}
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crypt", "Crypt", "{26AD7978-27E2-46E7-9F8C-36CDB1B5AB01}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wolfssl", "wolfcrypt\wolfssl.vcxproj", "{73973223-5EE8-41CA-8E88-1D60E89A237B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +44,12 @@ Global
 		Static|Win32 = Static|Win32
 		Static|x64 = Static|x64
 		Static|Xbox 360 = Static|Xbox 360
+		WolfDebug|Win32 = WolfDebug|Win32
+		WolfDebug|x64 = WolfDebug|x64
+		WolfDebug|Xbox 360 = WolfDebug|Xbox 360
+		WolfRelease|Win32 = WolfRelease|Win32
+		WolfRelease|x64 = WolfRelease|x64
+		WolfRelease|Xbox 360 = WolfRelease|Xbox 360
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{AAB9FA21-8671-4792-B000-B40A526058AD}.Coverage|Win32.ActiveCfg = Coverage|Win32
@@ -62,8 +73,8 @@ Global
 		{AAB9FA21-8671-4792-B000-B40A526058AD}.Profile|Xbox 360.ActiveCfg = Profile|Win32
 		{AAB9FA21-8671-4792-B000-B40A526058AD}.Release|Win32.ActiveCfg = Release|Win32
 		{AAB9FA21-8671-4792-B000-B40A526058AD}.Release|Win32.Build.0 = Release|Win32
-		{AAB9FA21-8671-4792-B000-B40A526058AD}.Release|x64.ActiveCfg = Release|x64
-		{AAB9FA21-8671-4792-B000-B40A526058AD}.Release|x64.Build.0 = Release|x64
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.Release|x64.ActiveCfg = WolfRelease|x64
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.Release|x64.Build.0 = WolfRelease|x64
 		{AAB9FA21-8671-4792-B000-B40A526058AD}.Release|Xbox 360.ActiveCfg = Release|Win32
 		{AAB9FA21-8671-4792-B000-B40A526058AD}.SelfTest|Win32.ActiveCfg = SelfTest|Win32
 		{AAB9FA21-8671-4792-B000-B40A526058AD}.SelfTest|Win32.Build.0 = SelfTest|Win32
@@ -75,6 +86,16 @@ Global
 		{AAB9FA21-8671-4792-B000-B40A526058AD}.Static|x64.ActiveCfg = Static|x64
 		{AAB9FA21-8671-4792-B000-B40A526058AD}.Static|x64.Build.0 = Static|x64
 		{AAB9FA21-8671-4792-B000-B40A526058AD}.Static|Xbox 360.ActiveCfg = Static|Win32
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.WolfDebug|Win32.ActiveCfg = WolfDebug|Win32
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.WolfDebug|Win32.Build.0 = WolfDebug|Win32
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.WolfDebug|x64.ActiveCfg = WolfDebug|x64
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.WolfDebug|x64.Build.0 = WolfDebug|x64
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.WolfDebug|Xbox 360.ActiveCfg = WolfDebug|Win32
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.WolfRelease|Win32.ActiveCfg = WolfRelease|Win32
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.WolfRelease|Win32.Build.0 = WolfRelease|Win32
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.WolfRelease|x64.ActiveCfg = WolfRelease|x64
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.WolfRelease|x64.Build.0 = WolfRelease|x64
+		{AAB9FA21-8671-4792-B000-B40A526058AD}.WolfRelease|Xbox 360.ActiveCfg = WolfDebug|Win32
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Coverage|Win32.ActiveCfg = Coverage|Win32
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Coverage|Win32.Build.0 = Coverage|Win32
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Coverage|x64.ActiveCfg = Coverage|x64
@@ -96,8 +117,8 @@ Global
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Profile|Xbox 360.ActiveCfg = Profile|Win32
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Release|Win32.ActiveCfg = Release|Win32
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Release|Win32.Build.0 = Release|Win32
-		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Release|x64.ActiveCfg = Release|x64
-		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Release|x64.Build.0 = Release|x64
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Release|x64.ActiveCfg = WolfRelease|x64
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Release|x64.Build.0 = WolfRelease|x64
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Release|Xbox 360.ActiveCfg = Release|Win32
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.SelfTest|Win32.ActiveCfg = SelfTest|Win32
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.SelfTest|Win32.Build.0 = SelfTest|Win32
@@ -109,6 +130,20 @@ Global
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Static|x64.ActiveCfg = Static|x64
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Static|x64.Build.0 = Static|x64
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.Static|Xbox 360.ActiveCfg = Static|Win32
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfDebug|Win32.ActiveCfg = WolfDebug|Win32
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfDebug|Win32.Build.0 = WolfDebug|Win32
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfDebug|x64.ActiveCfg = WolfDebug|x64
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfDebug|x64.Build.0 = WolfDebug|x64
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfDebug|x64.Deploy.0 = WolfDebug|x64
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfDebug|Xbox 360.ActiveCfg = GCC Debug|Win32
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfDebug|Xbox 360.Deploy.0 = GCC Debug|Win32
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfRelease|Win32.ActiveCfg = WolfRelease|Win32
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfRelease|Win32.Build.0 = WolfRelease|Win32
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfRelease|x64.ActiveCfg = WolfRelease|x64
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfRelease|x64.Build.0 = WolfRelease|x64
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfRelease|x64.Deploy.0 = WolfRelease|x64
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfRelease|Xbox 360.ActiveCfg = GCC Debug|Win32
+		{A9249F05-0DF5-4D06-9873-FBBE61B6768B}.WolfRelease|Xbox 360.Deploy.0 = GCC Debug|Win32
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Coverage|Win32.ActiveCfg = Coverage|Win32
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Coverage|Win32.Build.0 = Coverage|Win32
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Coverage|x64.ActiveCfg = Coverage|x64
@@ -130,8 +165,8 @@ Global
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Profile|Xbox 360.ActiveCfg = Profile|Win32
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Release|Win32.ActiveCfg = Release|Win32
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Release|Win32.Build.0 = Release|Win32
-		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Release|x64.ActiveCfg = Release|x64
-		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Release|x64.Build.0 = Release|x64
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Release|x64.ActiveCfg = WolfRelease|x64
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Release|x64.Build.0 = WolfRelease|x64
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Release|Xbox 360.ActiveCfg = Release|Win32
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.SelfTest|Win32.ActiveCfg = SelfTest|Win32
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.SelfTest|Win32.Build.0 = SelfTest|Win32
@@ -143,8 +178,75 @@ Global
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Static|x64.ActiveCfg = Static|x64
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Static|x64.Build.0 = Static|x64
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.Static|Xbox 360.ActiveCfg = Static|Win32
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfDebug|Win32.ActiveCfg = WolfDebug|Win32
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfDebug|Win32.Build.0 = WolfDebug|Win32
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfDebug|x64.ActiveCfg = WolfDebug|x64
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfDebug|x64.Build.0 = WolfDebug|x64
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfDebug|Xbox 360.ActiveCfg = WolfDebug|Win32
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfRelease|Win32.ActiveCfg = WolfRelease|Win32
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfRelease|Win32.Build.0 = WolfRelease|Win32
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfRelease|x64.ActiveCfg = WolfRelease|x64
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfRelease|x64.Build.0 = WolfRelease|x64
+		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfRelease|Xbox 360.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Coverage|Win32.ActiveCfg = Coverage|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Coverage|x64.ActiveCfg = Coverage|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Coverage|x64.Deploy.0 = Coverage|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Coverage|Xbox 360.ActiveCfg = Coverage|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Debug|Win32.ActiveCfg = WolfDebug|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Debug|x64.ActiveCfg = WolfDebug|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Debug|Xbox 360.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Debug|Xbox 360.Deploy.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.GccCompile|Win32.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.GccCompile|Win32.Deploy.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.GccCompile|x64.ActiveCfg = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.GccCompile|x64.Deploy.0 = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.GccCompile|Xbox 360.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.GccCompile|Xbox 360.Deploy.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Profile|Win32.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Profile|Win32.Deploy.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Profile|x64.ActiveCfg = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Profile|x64.Deploy.0 = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Profile|Xbox 360.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Profile|Xbox 360.Deploy.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Release|Win32.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Release|x64.ActiveCfg = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Release|x64.Build.0 = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Release|Xbox 360.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Release|Xbox 360.Deploy.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.SelfTest|Win32.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.SelfTest|Win32.Deploy.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.SelfTest|x64.ActiveCfg = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.SelfTest|x64.Deploy.0 = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.SelfTest|Xbox 360.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.SelfTest|Xbox 360.Deploy.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Static|Win32.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Static|Win32.Deploy.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Static|x64.ActiveCfg = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Static|x64.Deploy.0 = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Static|Xbox 360.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Static|Xbox 360.Deploy.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfDebug|Win32.ActiveCfg = WolfDebug|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfDebug|Win32.Build.0 = WolfDebug|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfDebug|x64.ActiveCfg = WolfDebug|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfDebug|x64.Build.0 = WolfDebug|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfDebug|Xbox 360.ActiveCfg = Coverage|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfDebug|Xbox 360.Deploy.0 = Coverage|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|Win32.ActiveCfg = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|Win32.Build.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|Win32.Deploy.0 = WolfRelease|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|x64.ActiveCfg = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|x64.Build.0 = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|x64.Deploy.0 = WolfRelease|x64
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|Xbox 360.ActiveCfg = Coverage|Win32
+		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|Xbox 360.Deploy.0 = Coverage|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{73973223-5EE8-41CA-8E88-1D60E89A237B} = {26AD7978-27E2-46E7-9F8C-36CDB1B5AB01}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C15EF5ED-F2C1-4785-A9C2-A2D213A367F7}
 	EndGlobalSection
 EndGlobal

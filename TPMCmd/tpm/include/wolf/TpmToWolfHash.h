@@ -35,7 +35,7 @@
 
 //** Introduction
 //
-// This header file is used to 'splice' the OpenSSL hash code into the TPM code.
+// This header file is used to 'splice' the wolfcrypt hash code into the TPM code.
 //
 #ifndef _TPM_TO_WOLF_HASH_H_
 #define _TPM_TO_WOLF_HASH_H_
@@ -49,7 +49,7 @@
 
 
 //***************************************************************
-//** Links to the OpenSSL HASH code 
+//** Links to the wolfcrypt HASH code 
 //***************************************************************
 
 // Redefine the internal name used for each of the hash state structures to the 

@@ -290,5 +290,11 @@ __pycache__/
 # TPM simulator run-time/state files
 NVChip
 RsaKeyCacheCrt.data
+
+# Ossl support
 TPMCmd/OsslInclude/*
 TPMCmd/Lib/*
+
+# Wolf Build results 
+TPMCmd/WolfDebug/*
+TPMCmd/WolfRelease/*

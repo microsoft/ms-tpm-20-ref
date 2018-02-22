@@ -36,124 +36,91 @@
 //** Introduction
 //
 // This file contains the math functions that are not implemented in the BnMath
-// library (yet). These math functions will call the OpenSSL library to execute
+// library (yet). These math functions will call the wolfcrypt library to execute
 // the operations. There is a difference between the internal format and the
-// OpenSSL format. To call the OpenSSL function, a BIGNUM structure is created
-// for each passed variable. The sizes in the bignum_t are copied and the 'd'
-// pointer in the BIGNUM is set to point to the 'd' parameter of the bignum_t.
-// On return, SetSizeOsslToTpm is used for each returned variable to make sure that
-// the pointers are not changed. The size of the returned BIGGNUM is copied to
-// bignum_t.
+// wolfcrypt format. To call the wolfcrypt function, a mp_int structure is created
+// for each passed variable. We define USE_FAST_MATH wolfcrypt option, which allocates
+// mp_int on the stack. We must copy each word to the new structure, and set the used
+// size. 
+//
+// Not using USE_FAST_MATH would allow for a simple pointer swap for the big integer
+// buffer 'd', however wolfcrypt expects to manage this memory, and will swap out
+// the pointer to and from temporary variables and free the reference underneath us.
+// Using USE_FAST_MATH also instructs wolfcrypt to use the stack for all these 
+// intermediate variables
+
 
 //** Includes and Defines
 #include "Tpm.h"
 
 #if MATH_LIB == WOLF
 
-#include "TpmToOsslMath_fp.h"
+#include "BnConvert_fp.h"
+#include "TpmToWolfMath_fp.h"
 
 //** Functions
 
-//*** OsslToTpmBn()
-// This function converts an OpenSSL BIGNUM to a TPM bignum. In this implementation
-// it is assumed that OpenSSL used the same format for a big number as does the
+//*** BnFromWolf()
+// This function converts a wolfcrypt mp_int to a TPM bignum. In this implementation
+// it is assumed that wolfcrypt used the same format for a big number as does the
 // TPM -- an array of native-endian words in little-endian order.
-//
-// If the array allocated for the OpenSSL BIGNUM is not the space within the TPM
-// bignum, then the data is copied. Otherwise, just the size field of the BIGNUM
-// is copied.
 void
-OsslToTpmBn(
+BnFromWolf(
     bigNum          bn,
-    BIGNUM          *osslBn
+    mp_int          *wolfBn
     )
 {
     if(bn != NULL)
     {
-        if((crypt_uword_t *)osslBn->d != bn->d)
-        {
-            int         i;
-            pAssert((unsigned)osslBn->top <= BnGetAllocated(bn));
-            for(i = 0; i < osslBn->top; i++)
-                bn->d[i] = osslBn->d[i];
-        }
-        BnSetTop(bn, osslBn->top);
+        int         i;
+        pAssert((unsigned)wolfBn->used <= BnGetAllocated(bn));
+        for(i = 0; i < wolfBn->used; i++)
+            bn->d[i] = wolfBn->dp[i];
+
+        BnSetTop(bn, wolfBn->used);
     }
 }
 
-//*** BigInitialized()
-// This function initializes an OSSL BIGNUM from a TPM bignum.
-BIGNUM *
-BigInitialized(
-    BIGNUM             *toInit,
+//*** BnToWolf()
+// This function converts a TPM bignum to a wolfcrypt mp_init, and has the same
+// assumptions as made by BnFromWolf()
+void
+BnToWolf(
+    mp_int              *toInit,
     bigConst            initializer
     )
 {
-    if(toInit == NULL || initializer == NULL)
-        return NULL;
-    toInit->d = (BN_ULONG *)&initializer->d[0];
-    toInit->dmax = initializer->allocated;
-    toInit->top = initializer->size;
-    toInit->neg = 0;
-    toInit->flags = 0;
+    uint32_t         i;
+    if (toInit != NULL && initializer != NULL)
+    {
+        for (i = 0; i < initializer->size; i++)
+            toInit->dp[i] = initializer->d[i];
+
+        toInit->used = initializer->size;
+        toInit->sign = 0;
+    }
+}
+
+//*** MpInitialize()
+// This function initializes an wolfcrypt mp_int.
+mp_int *
+MpInitialize(
+    mp_int              *toInit
+)
+{
+    mp_init( toInit );
     return toInit;
 }
 
-#ifndef OSSL_DEBUG
-#   define BIGNUM_PRINT(label, bn, eol)
-#   define DEBUG_PRINT(x)
-#else
-#   define DEBUG_PRINT(x)   printf("%s", x)
-#   define BIGNUM_PRINT(label, bn, eol) BIGNUM_print((label), (bn), (eol))
-static
-void BIGNUM_print(
-    const char      *label,
-    const BIGNUM    *a,
-    BOOL             eol
-    )
-{
-    BN_ULONG        *d;
-    int              i;
-    int              notZero = FALSE;
-
-    if(label != NULL)
-        printf("%s", label);
-    if(a == NULL)
-    {
-        printf("NULL");
-        goto done;
-    }
-    if (a->neg)
-        printf("-");
-    for(i = a->top, d = &a->d[i - 1]; i > 0; i--)
-    {
-        int         j;
-        BN_ULONG    l = *d--;                
-        for(j = BN_BITS2 - 8; j >= 0; j -= 8)
-        {
-            BYTE    b = (BYTE)((l >> j) & 0xFF);
-            notZero = notZero || (b != 0);
-            if(notZero)
-                printf("%02x", b);
-        }
-        if(!notZero)
-            printf("0");
-    }
-done:
-    if(eol)
-        printf("\n");
-    return;
-}
-#endif
-
 #ifdef LIBRARY_COMPATIBILITY_CHECK
+//** MathLibraryCompatibililtyCheck()
+// This function is only used during development to make sure that the library
+// that is being referenced is using the same size of data structures as the TPM.
 void
 MathLibraryCompatibilityCheck(
     void 
     )
 {
-    OSSL_ENTER();
-    BIGNUM          *osslTemp = BN_CTX_get(CTX);
     BN_VAR(tpmTemp, 64 * 8); // allocate some space for a test value
     crypt_uword_t           i;
     TPM2B_TYPE(TEST, 16);
@@ -163,13 +130,12 @@ MathLibraryCompatibilityCheck(
                                           0x03, 0x02, 0x01, 0x00}}};
     // Convert the test TPM2B to a bigNum
     BnFrom2B(tpmTemp, &test.b);
-    // Convert the test TPM2B to an OpenSSL BIGNUM
-    BN_bin2bn(test.t.buffer, test.t.size, osslTemp);
+    MP_INITIALIZED(wolfTemp, tpmTemp);
+    (wolfTemp); // compiler warning
     // Make sure the values are consistent
-    cAssert(osslTemp->top == (int)tpmTemp->size);
+    cAssert(wolfTemp->used == (int)tpmTemp->size);
     for(i = 0; i < tpmTemp->size; i++)
-        cAssert(osslTemp->d[0] == tpmTemp->d[0]);
-    OSSL_LEAVE();
+        cAssert(wolfTemp->d[i] == tpmTemp->d[i]);
 }
 #endif
 
@@ -183,22 +149,23 @@ BnModMult(
     bigConst            modulus
     )
 {
-    OSSL_ENTER();
-    BIG_INITIALIZED(bnResult, result);
-    BIG_INITIALIZED(bnOp1, op1);
-    BIG_INITIALIZED(bnOp2, op2);
-    BIG_INITIALIZED(bnMod, modulus);
-    BIG_VAR(bnTemp, (LARGEST_NUMBER_BITS * 4));
+    WOLF_ENTER();
     BOOL                OK;
+    MP_INITIALIZED(bnOp1, op1);
+    MP_INITIALIZED(bnOp2, op2);
+    MP_INITIALIZED(bnTemp, NULL);
+    BN_VAR(temp, LARGEST_NUMBER_BITS * 2);
+
     pAssert(BnGetAllocated(result) >= BnGetSize(modulus));
-    OK = BN_mul(bnTemp, bnOp1, bnOp2, CTX);
-    OK = OK && BN_div(NULL, bnResult, bnTemp, bnMod, CTX);
+
+    OK = (mp_mul( bnOp1, bnOp2, bnTemp ) == MP_OKAY);
     if(OK)
     {
-        result->size = bnResult->top;
-        OsslToTpmBn(result, bnResult);
+        BnFromWolf(temp, bnTemp);
+        OK = BnDiv(NULL, result, temp, modulus);
     }
-    OSSL_LEAVE();
+
+    WOLF_LEAVE();
     return OK;
 }
 
@@ -211,22 +178,23 @@ BnMult(
     bigConst             multiplier
     )
 {
-    OSSL_ENTER();
-    BN_VAR(temp, (LARGEST_NUMBER_BITS * 2));
-    BIG_INITIALIZED(bnTemp, temp);
-    BIG_INITIALIZED(bnA, multiplicand);
-    BIG_INITIALIZED(bnB, multiplier);
+    WOLF_ENTER();
     BOOL                OK;
+    MP_INITIALIZED(bnTemp, NULL);
+    MP_INITIALIZED(bnA, multiplicand);
+    MP_INITIALIZED(bnB, multiplier);
+
     pAssert(result->allocated >=
             (BITS_TO_CRYPT_WORDS(BnSizeInBits(multiplicand)
                                  + BnSizeInBits(multiplier))));
-    OK = BN_mul(bnTemp, bnA, bnB, CTX);
+
+    OK = (mp_mul( bnA, bnB, bnTemp ) == MP_OKAY);
     if(OK)
     {
-        OsslToTpmBn(temp, bnTemp);
-        BnCopy(result, temp);
+        BnFromWolf(result, bnTemp);
     }
-    OSSL_LEAVE();
+
+    WOLF_LEAVE();
     return OK;
 }
 
@@ -241,12 +209,12 @@ BnDiv(
     bigConst             divisor
     )
 {
-    OSSL_ENTER();
-    BIG_INITIALIZED(bnQ, quotient);
-    BIG_INITIALIZED(bnR, remainder);
-    BIG_INITIALIZED(bnDend, dividend);
-    BIG_INITIALIZED(bnSor, divisor);
+    WOLF_ENTER();
     BOOL        OK;
+    MP_INITIALIZED(bnQ, quotient);
+    MP_INITIALIZED(bnR, remainder);
+    MP_INITIALIZED(bnDend, dividend);
+    MP_INITIALIZED(bnSor, divisor);
     pAssert(!BnEqualZero(divisor));
     if(BnGetSize(dividend) < BnGetSize(divisor))
     {
@@ -263,19 +231,15 @@ BnDiv(
                                                       - divisor->size)));
         pAssert((remainder == NULL)
                 || (remainder->allocated >= divisor->size));
-        OK = BN_div(bnQ, bnR, bnDend, bnSor, CTX);
+        OK = (mp_div(bnDend , bnSor, bnQ, bnR) == MP_OKAY);
         if(OK)
         {
-            OsslToTpmBn(quotient, bnQ);
-            OsslToTpmBn(remainder, bnR);
+            BnFromWolf(quotient, bnQ);
+            BnFromWolf(remainder, bnR);
         }
     }
-    DEBUG_PRINT("In BnDiv:\n");
-    BIGNUM_PRINT("   bnDividend: ", bnDend, TRUE);
-    BIGNUM_PRINT("    bnDivisor: ", bnSor, TRUE);
-    BIGNUM_PRINT("   bnQuotient: ", bnQ, TRUE);
-    BIGNUM_PRINT("  bnRemainder: ", bnR, TRUE);
-    OSSL_LEAVE();
+
+    WOLF_LEAVE();
     return OK;
 }
 
@@ -289,24 +253,23 @@ BnGcd(
     bigConst    number2         // IN:
     )
 {
-    OSSL_ENTER();
-    BIG_INITIALIZED(bnGcd, gcd);
-    BIG_INITIALIZED(bn1, number1);
-    BIG_INITIALIZED(bn2, number2);
+    WOLF_ENTER();
     BOOL            OK;
+    MP_INITIALIZED(bnGcd, gcd);
+    MP_INITIALIZED(bn1, number1);
+    MP_INITIALIZED(bn2, number2);
     pAssert(gcd != NULL);
-    OK = BN_gcd(bnGcd, bn1, bn2, CTX);
+    OK = (mp_gcd( bn1, bn2, bnGcd ) == MP_OKAY);
     if(OK)
     {
-        OsslToTpmBn(gcd, bnGcd);
-        gcd->size = bnGcd->top;
+        BnFromWolf(gcd, bnGcd);
     }
-    OSSL_LEAVE();
+    WOLF_LEAVE();
     return OK;
 }
 
 //***BnModExp()
-// Do modular exponentiation using bigNum values. The conversion from a bignum_t to
+// Do modular exponentiation using bigNum values. The conversion from a mp_int to
 // a bigNum is trivial as they are based on the same structure
 LIB_EXPORT BOOL
 BnModExp(
@@ -316,19 +279,19 @@ BnModExp(
     bigConst             modulus         // IN:
     )
 {
-    OSSL_ENTER();
-    BIG_INITIALIZED(bnResult, result);
-    BIG_INITIALIZED(bnN, number);
-    BIG_INITIALIZED(bnE, exponent);
-    BIG_INITIALIZED(bnM, modulus);
+    WOLF_ENTER();
     BOOL            OK;
-//
-    OK = BN_mod_exp(bnResult, bnN, bnE, bnM, CTX);
+    MP_INITIALIZED(bnResult, result);
+    MP_INITIALIZED(bnN, number);
+    MP_INITIALIZED(bnE, exponent);
+    MP_INITIALIZED(bnM, modulus);
+    OK = (mp_exptmod( bnN, bnE, bnM, bnResult ) == MP_OKAY);
     if(OK)
     {
-        OsslToTpmBn(result, bnResult);
+        BnFromWolf(result, bnResult);
     }
-    OSSL_LEAVE();
+
+    WOLF_LEAVE();
     return OK;
 }
 
@@ -341,137 +304,70 @@ BnModInverse(
     bigConst             modulus
     )
 {
-    OSSL_ENTER();
-    BIG_INITIALIZED(bnResult, result);
-    BIG_INITIALIZED(bnN, number);
-    BIG_INITIALIZED(bnM, modulus);
-    BOOL                OK;
+    WOLF_ENTER();
+    BOOL            OK;
+    MP_INITIALIZED(bnResult, result);
+    MP_INITIALIZED(bnN, number);
+    MP_INITIALIZED(bnM, modulus);
 
-    OK = (BN_mod_inverse(bnResult, bnN, bnM, CTX) != NULL);
+    OK = (mp_invmod(bnN, bnM, bnResult) == MP_OKAY);
     if(OK)
     {
-        OsslToTpmBn(result, bnResult);
+        BnFromWolf(result, bnResult);
     }
-    OSSL_LEAVE();
+
+    WOLF_LEAVE();
     return OK;
 }
 #endif // TPM_ALG_RSA
 
 #ifdef TPM_ALG_ECC
 
-//*** PointFromOssl()
-// Function to copy the point result from an OSSL function to a bigNum
-static BOOL
-PointFromOssl(
+//*** PointFromWolf()
+// Function to copy the point result from a wolf ecc_point to a bigNum
+void
+PointFromWolf(
     bigPoint         pOut,      // OUT: resulting point
-    EC_POINT        *pIn,       // IN: the point to return
-    bigCurve         E          // IN: the curve
+    ecc_point       *pIn       // IN: the point to return
     )
 {
-    BIGNUM         *x = NULL;
-    BIGNUM         *y = NULL;
-    BOOL            OK;
-    BN_CTX_start(E->CTX);
-//
-    x = BN_CTX_get(E->CTX);
-    y = BN_CTX_get(E->CTX);
+    BnFromWolf(pOut->x, pIn->x);
+    BnFromWolf(pOut->y, pIn->y);
+    BnFromWolf(pOut->z, pIn->z);
+}
 
-    if(y == NULL)
-        FAIL(FATAL_ERROR_ALLOCATION);
-    // If this returns false, then the point is at infinity
-    OK = EC_POINT_get_affine_coordinates_GFp(E->G, pIn, x, y, E->CTX);
-    if(OK)
-    {
-        OsslToTpmBn(pOut->x, x);
-        OsslToTpmBn(pOut->y, y);
-        BnSetWord(pOut->z, 1);
-    }
-    else
-        BnSetWord(pOut->z, 0);
-    BN_CTX_end(E->CTX);
-    return OK;
+//*** PointToWolf()
+// Function to copy the point result from a bigNum to a wolf ecc_point
+void
+PointToWolf(
+    ecc_point      *pOut,      // OUT: resulting point
+    pointConst      pIn       // IN: the point to return
+    )
+{
+    BnToWolf(pOut->x, pIn->x);
+    BnToWolf(pOut->y, pIn->y);
+    BnToWolf(pOut->z, pIn->z);
 }
 
 //*** EcPointInitialized()
 // Allocate and initialize a point.
-static EC_POINT *
+static ecc_point *
 EcPointInitialized(
-    pointConst          initializer,
-    bigCurve            E
+    pointConst          initializer
     )
 {
-    BIG_INITIALIZED(bnX, (initializer != NULL) ? initializer->x : NULL);
-    BIG_INITIALIZED(bnY, (initializer != NULL) ? initializer->y : NULL);
+    ecc_point           *P;
 
-    EC_POINT            *P = (initializer != NULL && E != NULL) 
-                                ? EC_POINT_new(E->G) : NULL;
-    pAssert(E != NULL);
-    if(P != NULL)
-        EC_POINT_set_affine_coordinates_GFp(E->G, P, bnX, bnY, E->CTX);
+    P = wc_ecc_new_point();
+    pAssert(P != NULL);
+    // mp_int x,y,z are stack allocated.
+    // initializer is not required
+    if (P != NULL && initializer != NULL)
+    {
+        PointToWolf( P, initializer );
+    }
+
     return P;
-}
-
-//*** BnCurveInitialize()
-// This function initializes the OpenSSL group definition
-//
-// It is a fatal error if 'groupContext' is not provided.
-// return type: bigCurve *
-//      NULL        the TPM_ECC_CURVE is not valid
-//      non-NULL    points to a structure in 'groupContext'
-bigCurve
-BnCurveInitialize(
-    bigCurve          E,           // IN: curve structure to initialize
-    TPM_ECC_CURVE     curveId      // IN: curve identifier
-    )
-{
-    EC_GROUP                *group = NULL;
-    EC_POINT                *P = NULL;
-    const ECC_CURVE_DATA    *C = GetCurveData(curveId);
-    BN_CTX                  *CTX = NULL;
-    BIG_INITIALIZED(bnP, C != NULL ? C->prime : NULL);
-    BIG_INITIALIZED(bnA, C != NULL ? C->a : NULL);
-    BIG_INITIALIZED(bnB, C != NULL ? C->b : NULL);
-    BIG_INITIALIZED(bnX, C != NULL ? C->base.x : NULL);
-    BIG_INITIALIZED(bnY, C != NULL ? C->base.y : NULL);
-    BIG_INITIALIZED(bnN, C != NULL ? C->order : NULL);
-    BIG_INITIALIZED(bnH, C != NULL ? C->h : NULL);
-    int                      OK = (C != NULL);
-//
-    OK = OK && ((CTX = OsslContextEnter()) != NULL);
-
-    // initialize EC group, associate a generator point and initialize the point
-    // from the parameter data
-    // Create a group structure
-    OK = OK && (group = EC_GROUP_new_curve_GFp(bnP, bnA, bnB, CTX)) != NULL;
-
-    // Allocate a point in the group that will be used in setting the
-    // generator. This is not needed after the generator is set.
-    OK = OK && ((P = EC_POINT_new(group)) != NULL);
-    // Need to use this in case Montgomery method is being used
-    OK = OK
-        && EC_POINT_set_affine_coordinates_GFp(group, P, bnX, bnY, CTX);
-    // Now set the generator
-    OK = OK && EC_GROUP_set_generator(group, P, bnN, bnH);
-
-    if(P != NULL)
-        EC_POINT_free(P);
-
-    if(!OK && group != NULL)
-    {
-        EC_GROUP_free(group);
-        group = NULL;
-    }
-    if(!OK && CTX != NULL)
-    {
-        OsslContextLeave(CTX);
-        CTX = NULL;
-    }
-
-    E->G = group;
-    E->CTX = CTX;
-    E->C = C;
-
-    return OK ? E : NULL;
 }
 
 //*** BnEccModMult()
@@ -486,17 +382,28 @@ BnEccModMult(
     bigCurve             E
     )
 {
-    EC_POINT            *pR = EC_POINT_new(E->G);
-    EC_POINT            *pS = EcPointInitialized(S, E);
-    BIG_INITIALIZED(bnD, d);
+    WOLF_ENTER();
+    BOOL                 OK;
+    MP_INITIALIZED(bnD, d);
+    MP_INITIALIZED(bnPrime, CurveGetPrime(E));
+    POINT_CREATE(pS, NULL);
+    POINT_CREATE(pR, NULL);
 
     if(S == NULL)
-        EC_POINT_mul(E->G, pR, bnD, NULL, NULL, E->CTX);
-    else
-        EC_POINT_mul(E->G, pR, NULL, pS, bnD, E->CTX);
-    PointFromOssl(R, pR, E);
-    EC_POINT_free(pR);
-    EC_POINT_free(pS);
+        S = CurveGetG(AccessCurveData(E));
+
+    PointToWolf(pS, S);
+
+    OK = (wc_ecc_mulmod(bnD, pS, pR, NULL, bnPrime, 1 ) == MP_OKAY);
+    if(OK)
+    {
+        PointFromWolf(R, pR);
+    }
+
+    POINT_DELETE(pR);
+    POINT_DELETE(pS);
+
+    WOLF_LEAVE();
     return !BnEqualZero(R->z);
 }
 
@@ -514,28 +421,31 @@ BnEccModMult2(
     bigCurve             E          // IN: curve
     )
 {
-    EC_POINT            *pR = EC_POINT_new(E->G);
-    EC_POINT            *pS = EcPointInitialized(S, E);
-    BIG_INITIALIZED(bnD, d);
-    EC_POINT            *pQ = EcPointInitialized(Q, E);
-    BIG_INITIALIZED(bnU, u);
+    WOLF_ENTER();
+    BOOL                 OK;
+    POINT_CREATE(pR, NULL);
+    POINT_CREATE(pS, NULL);
+    POINT_CREATE(pQ, Q);
+    MP_INITIALIZED(bnD, d);
+    MP_INITIALIZED(bnU, u);
+    MP_INITIALIZED(bnPrime, CurveGetPrime(E));
+    MP_INITIALIZED(bnA, CurveGet_a(E));
 
-    if(S == NULL || S == (pointConst)&E->C->base)
-        EC_POINT_mul(E->G, pR, bnD, pQ, bnU, E->CTX);
-    else
+    if(S == NULL)
+        S = CurveGetG(AccessCurveData(E));
+    PointToWolf( pS, S );
+
+    OK = (ecc_mul2add(pS, bnD, pQ, bnU, pR, bnA, bnPrime, NULL) == MP_OKAY);
+    if(OK)
     {
-        const EC_POINT        *points[2];
-        const BIGNUM          *scalars[2];
-        points[0] = pS;
-        points[1] = pQ;
-        scalars[0] = bnD;
-        scalars[1] = bnU;
-        EC_POINTs_mul(E->G, pR, NULL, 2, points, scalars, E->CTX);
+        PointFromWolf(R, pR);
     }
-    PointFromOssl(R, pR, E);
-    EC_POINT_free(pR);
-    EC_POINT_free(pS);
-    EC_POINT_free(pQ);
+
+    POINT_DELETE(pS);
+    POINT_DELETE(pQ);
+    POINT_DELETE(pR);
+
+    WOLF_LEAVE();
     return !BnEqualZero(R->z);
 }
 
@@ -551,16 +461,27 @@ BnEccAdd(
     bigCurve             E          // IN: curve
     )
 {
-    EC_POINT            *pR = EC_POINT_new(E->G);
-    EC_POINT            *pS = EcPointInitialized(S, E);
-    EC_POINT            *pQ = EcPointInitialized(Q, E);
+    WOLF_ENTER();
+    BOOL                 OK;
+    mp_digit             mp;
+    POINT_CREATE(pR, NULL);
+    POINT_CREATE(pS, S);
+    POINT_CREATE(pQ, Q);
+    MP_INITIALIZED(bnA, CurveGet_a(E));
+    MP_INITIALIZED(bnMod, CurveGetPrime(E));
 //
-    EC_POINT_add(E->G, pR, pS, pQ, E->CTX);
+    OK = (mp_montgomery_setup(bnMod, &mp) == MP_OKAY);
+    OK = OK && (ecc_projective_add_point(pS, pQ, pR, bnA, bnMod, mp ) == MP_OKAY);
+    if(OK)
+    {
+        PointFromWolf(R, pR);
+    }
 
-    PointFromOssl(R, pR, E);
-    EC_POINT_free(pR);
-    EC_POINT_free(pS);
-    EC_POINT_free(pQ);
+    POINT_DELETE(pS);
+    POINT_DELETE(pQ);
+    POINT_DELETE(pR);
+
+    WOLF_LEAVE();
     return !BnEqualZero(R->z);
 }
 

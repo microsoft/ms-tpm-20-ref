@@ -314,9 +314,15 @@
 #define  RADIX_BITS                     32
 #define  HASH_ALIGNMENT                 4
 #define  SYMMETRIC_ALIGNMENT            4
-#define  HASH_LIB                       WOLF
+#ifndef USE_WOLFCRYPT
+#define  HASH_LIB                       OSSL
 #define  SYM_LIB                        OSSL
 #define  MATH_LIB                       OSSL
+#else
+#define  HASH_LIB                       WOLF
+#define  SYM_LIB                        WOLF
+#define  MATH_LIB                       WOLF
+#endif
 #define  BSIZE                          UINT16
 #define  IMPLEMENTATION_PCR             24
 #define  PLATFORM_PCR                   24
