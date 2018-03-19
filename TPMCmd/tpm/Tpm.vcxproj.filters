@@ -577,6 +577,15 @@
     <ClCompile Include="src\crypt\CryptEccData.c">
       <Filter>Source Files\Crypt</Filter>
     </ClCompile>
+    <ClCompile Include="src\crypt\wolf\TpmToWolfDesSupport.c">
+      <Filter>Source Files\Crypt\wolf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\wolf\TpmToWolfMath.c">
+      <Filter>Source Files\Crypt\wolf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\wolf\TpmToWolfSupport.c">
+      <Filter>Source Files\Crypt\wolf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BaseTypes.h">
@@ -1284,6 +1293,27 @@
     <ClInclude Include="include\ossl\TpmToOsslSym.h">
       <Filter>Headers\Crypt\ossl</Filter>
     </ClInclude>
+    <ClInclude Include="include\wolf\TpmToWolfHash.h">
+      <Filter>Headers\Crypt\wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wolf\TpmToWolfMath.h">
+      <Filter>Headers\Crypt\wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wolf\TpmToWolfSym.h">
+      <Filter>Headers\Crypt\wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="$(SolutionDir)\wolfcrypt\include\user_settings.h">
+      <Filter>Headers\Crypt\wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToWolfDesSupport_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToWolfSupport_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToWolfMath_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -1315,6 +1345,12 @@
     </Filter>
     <Filter Include="Headers\Crypt\ossl">
       <UniqueIdentifier>{1a979e04-0e58-4286-b6b0-52cb2b86d037}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Crypt\wolf">
+      <UniqueIdentifier>{17d101a1-3063-43f5-960b-b0df7b0950cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Crypt\wolf">
+      <UniqueIdentifier>{19c87ebb-c1f3-4521-a442-d9120957d238}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
