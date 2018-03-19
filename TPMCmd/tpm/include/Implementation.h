@@ -103,7 +103,7 @@
 #define  ALG_ECDAA             (ALG_YES*ALG_ECC)
 #define  ALG_SM2               (ALG_NO*ALG_ECC)
 #define  ALG_ECSCHNORR         (ALG_YES*ALG_ECC)
-#define  ALG_ECMQV             (ALG_NO*ALG_ECC)
+#define  ALG_ECMQV             (ALG_YES*ALG_ECC)
 #define  ALG_SYMCIPHER         ALG_YES
 #define  ALG_KDF1_SP800_56A    (ALG_YES*ALG_ECC)
 #define  ALG_KDF2              ALG_NO
@@ -314,9 +314,15 @@
 #define  RADIX_BITS                     32
 #define  HASH_ALIGNMENT                 4
 #define  SYMMETRIC_ALIGNMENT            4
+#ifndef USE_WOLFCRYPT
 #define  HASH_LIB                       OSSL
 #define  SYM_LIB                        OSSL
 #define  MATH_LIB                       OSSL
+#else
+#define  HASH_LIB                       WOLF
+#define  SYM_LIB                        WOLF
+#define  MATH_LIB                       WOLF
+#endif
 #define  BSIZE                          UINT16
 #define  IMPLEMENTATION_PCR             24
 #define  PLATFORM_PCR                   24
