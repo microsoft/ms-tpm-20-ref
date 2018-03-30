@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 //
 //  This module contains the interfaces to the CryptoEngine and provides
@@ -47,8 +46,7 @@
 //****************************************************************************/
 
 //*** CryptHmacSign()
-// Sign a digest using an HMAC key. This an HMAC of a digest, not an HMAC of a
-// message.
+// Sign a digest using an HMAC key. This an HMAC of a digest, not an HMAC of a message.
 // return type: TPM_RC
 //      TPM_RC_HASH         not a valid hash
 static TPM_RC
@@ -98,7 +96,8 @@ CryptHMACVerifySignature(
     // a matching scheme.
     if((keyScheme->scheme != TPM_ALG_NULL)
        && ((keyScheme->scheme != signature->sigAlg)
-           || (keyScheme->details.hmac.hashAlg != signature->signature.any.hashAlg)))
+           || (keyScheme->details.hmac.hashAlg 
+               != signature->signature.any.hashAlg)))
         return TPM_RC_SIGNATURE;
     test.sigAlg = signature->sigAlg;
     test.signature.hmac.hashAlg = signature->signature.hmac.hashAlg;
@@ -575,9 +574,9 @@ CryptSecretEncrypt(
                 // Otherwise, TPM should go to failure mode.
 
                 CryptEccNewKeyPair(&eccPublic, &eccPrivate,
-                                   encryptKey->publicArea.parameters.eccDetail.curveID);
-                    // Marshal ECC public to secret structure. This will be used by the
-                    // recipient to decrypt the secret with their private key.
+                               encryptKey->publicArea.parameters.eccDetail.curveID);
+                // Marshal ECC public to secret structure. This will be used by the
+                // recipient to decrypt the secret with their private key.
                 secret->t.size = TPMS_ECC_POINT_Marshal(&eccPublic, &buffer, NULL);
 
                 // Compute ECDH shared secret which is R = [d]Q where d is the
@@ -586,9 +585,10 @@ CryptSecretEncrypt(
                 // because the auxiliary ECC key is just created according to the
                 // parameters of input ECC encrypt key.
                 if(CryptEccPointMultiply(&eccSecret,
-                                         encryptKey->publicArea.parameters.eccDetail.curveID,
-                                         &encryptKey->publicArea.unique.ecc, &eccPrivate,
-                                         NULL, NULL) != TPM_RC_SUCCESS)
+                             encryptKey->publicArea.parameters.eccDetail.curveID,
+                             &encryptKey->publicArea.unique.ecc, &eccPrivate,
+                             NULL, NULL) 
+                   != TPM_RC_SUCCESS)
                     result = TPM_RC_KEY;
                 else
                 {
@@ -1609,22 +1609,21 @@ CryptIsSensitiveSizeValid(
         case TPM_ALG_RSA:
             // sensitive prime value has to be half the size of the public modulus
             keySizeInBytes = BITS_TO_BYTES(publicArea->parameters.rsaDetail.keyBits);
-            consistent = ((sensitiveArea->sensitive.rsa.t.size * 2) 
-                          == keySizeInBytes);
+            consistent = ((sensitiveArea->sensitive.rsa.t.size * 2) == keySizeInBytes);
             break;
 #endif
 #ifdef TPM_ALG_ECC
         case TPM_ALG_ECC:
             keySizeInBytes = BITS_TO_BYTES(CryptEccGetKeySizeForCurve(
                 publicArea->parameters.eccDetail.curveID));
-            consistent = keySizeInBytes > 0
-                && sensitiveArea->sensitive.ecc.t.size == keySizeInBytes;
+            consistent = (keySizeInBytes > 0)
+                && (sensitiveArea->sensitive.ecc.t.size == keySizeInBytes);
             break;
 
 #endif
         case TPM_ALG_SYMCIPHER:
-            keySizeInBytes = BITS_TO_BYTES(
-                                publicArea->parameters.symDetail.sym.keyBits.sym);
+            keySizeInBytes = 
+                BITS_TO_BYTES(publicArea->parameters.symDetail.sym.keyBits.sym);
             consistent = keySizeInBytes == sensitiveArea->sensitive.sym.t.size;
             break;
         case TPM_ALG_KEYEDHASH:
@@ -1817,14 +1816,9 @@ CryptValidateKeys(
                 if(publicArea->nameAlg != TPM_ALG_NULL)
                 {
                     TPM2B_DIGEST            compare;
-#if 1
                     if(sensitive->seedValue.t.size != digestSize)
-#else
-                    if((sensitive->seedValue.t.size > digestSize)
-                       || (sensitive->seedValue.t.size < digestSize/2))
+                        return TPM_RCS_KEY_SIZE + blameSensitive;
 
-#endif
-                        return TPM_RCS_KEY_SIZE;
                     CryptComputeSymmetricUnique(publicArea, sensitive, &compare);
                     if(!MemoryEqual2B(&unique->sym.b, &compare.b))
                         return TPM_RC_BINDING;

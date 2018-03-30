@@ -1,6 +1,4 @@
-/*(Copyright)
- *      Microsoft Copyright 2009 - 2017
- * /* Microsoft Reference Implementation for TPM 2.0
+/* Microsoft Reference Implementation for TPM 2.0
  *
  *  The copyright in this software is being made available under the BSD License,
  *  included below. This software may be subject to other third party and
@@ -34,11 +32,10 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //* Includes
 #include "Tpm.h"
 
-#ifdef  TABLE_DRIVEN_DISPATCH  //%
+#if TABLE_DRIVEN_DISPATCH
 
 typedef TPM_RC(NoFlagFunction)(void *target, BYTE **buffer, INT32 *size);
 typedef TPM_RC(FlagFunction)(void *target, BYTE **buffer, INT32 *size, BOOL flag);
@@ -124,7 +121,7 @@ typedef struct
 // The types list is constructed with a byte of 0xff at the end of the command
 // parameters and with an 0xff at the end of the response parameters.
 
-#ifdef COMPRESSED_LISTS
+#if COMPRESSED_LISTS
 #   define PAD_LIST 0
 #else
 #   define PAD_LIST 1
@@ -151,7 +148,7 @@ ParseHandleBuffer(
     )
 {
     TPM_RC                   result;
-#if defined TABLE_DRIVEN_DISPATCH
+#if TABLE_DRIVEN_DISPATCH
     COMMAND_DESCRIPTOR_t    *desc;
     BYTE                    *types;
     BYTE                     type;
@@ -232,7 +229,7 @@ CommandDispatcher(
     COMMAND                 *command
     )
 {
-#if !defined TABLE_DRIVEN_DISPATCH
+#if !TABLE_DRIVEN_DISPATCH
     TPM_RC       result;
     BYTE        **paramBuffer = &command->parameterBuffer;
     INT32       *paramBufferSize = &command->parameterSize;
@@ -245,7 +242,8 @@ CommandDispatcher(
                                             // many handles there are. This is for
                                             // cataloging the number of response
                                             // handles
-
+    MemoryIoBufferAllocationReset();        // Initialize so that allocation will
+                                            // work properly
     switch(GetCommandCode(command->index))
     {
 #include "CommandDispatcher.h"
@@ -254,14 +252,15 @@ CommandDispatcher(
             FAIL(FATAL_ERROR_INTERNAL);
             break;
     }
-    return TPM_RC_SUCCESS;
+Exit:
+    MemoryIoBufferZero();
+    return result;
 #else
     COMMAND_DESCRIPTOR_t    *desc;
     BYTE                    *types;
     BYTE                     type;
     UINT16                  *offsets;
     UINT16                   offset = 0;
-
     UINT32                   maxInSize;
     BYTE                    *commandIn;
     INT32                    maxOutSize;
@@ -273,7 +272,7 @@ CommandDispatcher(
     UINT32                   pNum = 0;
     BYTE                     dType;     // dispatch type
     TPM_RC                   result;
-
+//
     // Get the address of the descriptor for this command
     pAssert(command->index
             < sizeof(s_CommandDataArray) / sizeof(COMMAND_DESCRIPTOR_t *));
@@ -293,10 +292,11 @@ CommandDispatcher(
     // and the size of the output parameter structure returned by this command
     maxOutSize = desc->outSize;
 
+    MemoryIoBufferAllocationReset();
     // Get a buffer for the input parameters
-    commandIn = MemoryGetActionInputBuffer(maxInSize);
+    commandIn = MemoryGetInBuffer(maxInSize);
     // And the output parameters
-    commandOut = (BYTE *)MemoryGetActionOutputBuffer((UINT32)maxOutSize);
+    commandOut = (BYTE *)MemoryGetOutBuffer((UINT32)maxOutSize);
 
     // Get the address of the action code dispatch
     cmd = desc->command;
@@ -312,7 +312,7 @@ CommandDispatcher(
         // command parameter list.
         if(*types != 0xFF)
             offset = *offsets++;
-        maxInSize -= sizeof(TPM_HANDLE);
+//        maxInSize -= sizeof(TPM_HANDLE);
         hasInParameters++;
     }
     // Exit loop with type containing the last value read from types
@@ -339,7 +339,10 @@ CommandDispatcher(
                        (type & 0x80) != 0);
         }
         if(result != TPM_RC_SUCCESS)
-            return result + TPM_RC_P + (TPM_RC_1 * pNum);
+        {
+            result += TPM_RC_P + (TPM_RC_1 * pNum);
+            goto Exit;
+        }
 
         // This check is used so that we don't have to add an additional offset
         // value to the offsets list to correspond to the stop value in the
@@ -350,7 +353,10 @@ CommandDispatcher(
     }
     // Should have used all the bytes in the input
     if(command->parameterSize != 0)
-        return TPM_RC_SIZE;
+    {
+        result = TPM_RC_SIZE;
+        goto Exit;
+    }
 
     // The command parameter unmarshaling stopped when it hit a value that was out
     // of range for unmarshaling values and left *types pointing to the first
@@ -376,7 +382,7 @@ CommandDispatcher(
             result = cmd.noArgs();
     }
     if(result != TPM_RC_SUCCESS)
-        return result;
+       goto Exit;
 
     // Offset in the marshaled output structure
     offset = 0;
@@ -411,6 +417,9 @@ CommandDispatcher(
                                     &maxOutSize);
         offset = *offsets++;
     }
-    return (maxOutSize < 0) ? TPM_RC_FAILURE : TPM_RC_SUCCESS;
+    result = (maxOutSize < 0) ? TPM_RC_FAILURE : TPM_RC_SUCCESS;
+Exit:
+    MemoryIoBufferZero();
+    return result;
 #endif
 }

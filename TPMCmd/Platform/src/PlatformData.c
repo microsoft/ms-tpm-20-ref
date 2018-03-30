@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Description
 // This file will instance the TPM variables that are not stack allocated. The
 // descriptions for these variables are in Global.h for this project.
@@ -50,9 +49,13 @@ BOOL                 s_timerReset;
 BOOL                 s_timerStopped;
 
 #ifndef HARDWARE_CLOCK
-#include    <time.h>
-clock_t             s_realTimePrevious;
-clock_t             s_tpmTime;
+clock64_t            s_realTimePrevious;
+clock64_t            s_tpmTime;
+
+clock64_t            s_lastSystemTime;
+clock64_t            s_lastReportedTime;
+
+
 #endif
 
 
@@ -63,8 +66,11 @@ unsigned char        s_locality;
 BOOL                 s_powerLost;
 
 // From Entropy.c
+// This values is used to determine if the entropy generator is broken. If two 
+// consecutive values are the same, then the entropy generator is considered to be
+// broken.
 uint32_t             lastEntropy;
-int                  firstValue;
+
 
 // From NVMem.c
 #ifdef  VTPM

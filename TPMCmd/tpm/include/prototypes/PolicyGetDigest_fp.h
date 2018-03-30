@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,37 +32,33 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/*(Auto)
-
-    Created by TpmStructures Version 2.7 Sept 13, 2016
-    This file created on Jun 15, 2017, 04:14:45PM 
-
-*/
-
+/*(Auto-generated)
+ *  Created by TpmStructures; Version 3.0 June 16, 2017
+ *  Date: Oct 16, 2017  Time: 12:56:59AM
+ */
 #ifdef TPM_CC_PolicyGetDigest // Command must be defined
-#ifndef _PolicyGetDigest_H
-#define _PolicyGetDigest_H
+#ifndef _POLICYGETDIGEST_FP_H_
+#define _POLICYGETDIGEST_FP_H_
 
 // Input structure definition
 typedef struct {
-    TPMI_SH_POLICY    policySession;
+    TPMI_SH_POLICY              policySession;
 } PolicyGetDigest_In;
 
 // Output structure definition
 typedef struct {
-    TPM2B_DIGEST      policyDigest;
+    TPM2B_DIGEST                policyDigest;
 } PolicyGetDigest_Out;
 
 // Response code modifiers
-#define    RC_PolicyGetDigest_policySession    (TPM_RC_H + TPM_RC_1)
+#define RC_PolicyGetDigest_policySession    (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
 TPM2_PolicyGetDigest(
-    PolicyGetDigest_In *in,
-    PolicyGetDigest_Out *out
+    PolicyGetDigest_In          *in,
+    PolicyGetDigest_Out         *out
 );
 
-
-#endif  // _PolicyGetDigest_H
+#endif  // _POLICYGETDIGEST_FP_H_
 #endif  // TPM_CC_PolicyGetDigest

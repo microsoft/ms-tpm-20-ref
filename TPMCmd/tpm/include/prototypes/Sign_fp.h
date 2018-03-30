@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,43 +32,39 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/*(Auto)
-
-    Created by TpmStructures Version 2.7 Sept 13, 2016
-    This file created on Jun 15, 2017, 04:14:45PM 
-
-*/
-
+/*(Auto-generated)
+ *  Created by TpmStructures; Version 3.0 June 16, 2017
+ *  Date: Oct 16, 2017  Time: 12:56:59AM
+ */
 #ifdef TPM_CC_Sign // Command must be defined
-#ifndef _Sign_H
-#define _Sign_H
+#ifndef _SIGN_FP_H_
+#define _SIGN_FP_H_
 
 // Input structure definition
 typedef struct {
-    TPMI_DH_OBJECT       keyHandle;
-    TPM2B_DIGEST         digest;
-    TPMT_SIG_SCHEME      inScheme;
-    TPMT_TK_HASHCHECK    validation;
+    TPMI_DH_OBJECT              keyHandle;
+    TPM2B_DIGEST                digest;
+    TPMT_SIG_SCHEME             inScheme;
+    TPMT_TK_HASHCHECK           validation;
 } Sign_In;
 
 // Output structure definition
 typedef struct {
-    TPMT_SIGNATURE       signature;
+    TPMT_SIGNATURE              signature;
 } Sign_Out;
 
 // Response code modifiers
-#define    RC_Sign_keyHandle     (TPM_RC_H + TPM_RC_1)
-#define    RC_Sign_digest        (TPM_RC_P + TPM_RC_1)
-#define    RC_Sign_inScheme      (TPM_RC_P + TPM_RC_2)
-#define    RC_Sign_validation    (TPM_RC_P + TPM_RC_3)
+#define RC_Sign_keyHandle       (TPM_RC_H + TPM_RC_1)
+#define RC_Sign_digest          (TPM_RC_P + TPM_RC_1)
+#define RC_Sign_inScheme        (TPM_RC_P + TPM_RC_2)
+#define RC_Sign_validation      (TPM_RC_P + TPM_RC_3)
 
 // Function prototype
 TPM_RC
 TPM2_Sign(
-    Sign_In *in,
-    Sign_Out *out
+    Sign_In                     *in,
+    Sign_Out                    *out
 );
 
-
-#endif  // _Sign_H
+#endif  // _SIGN_FP_H_
 #endif  // TPM_CC_Sign

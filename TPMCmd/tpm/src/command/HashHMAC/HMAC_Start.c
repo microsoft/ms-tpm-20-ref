@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 #include "Tpm.h"
 #include "HMAC_Start_fp.h"
 
@@ -69,11 +68,11 @@ TPM2_HMAC_Start(
         return TPM_RCS_TYPE + RC_HMAC_Start_handle;
 
     // and that it is unrestricted
-    if(publicArea->objectAttributes.restricted == SET)
+    if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, restricted))
         return TPM_RCS_ATTRIBUTES + RC_HMAC_Start_handle;
 
     // and that it is a signing key
-    if(publicArea->objectAttributes.sign != SET)
+    if(!IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign))
         return TPM_RCS_KEY + RC_HMAC_Start_handle;
 
     // See if the key has a default

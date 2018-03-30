@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 #include "Tpm.h"
 #include "EncryptDecrypt_fp.h"
 #ifdef TPM_CC_EncryptDecrypt2
@@ -70,20 +69,22 @@ TPM2_EncryptDecrypt(
     TPM_ALG_ID           mode;
     TPM_RC               result;
     BOOL                 OK;
+    TPMA_OBJECT          attributes;
 
 // Input Validation
     symKey = HandleToObject(in->keyHandle);
     mode = symKey->publicArea.parameters.symDetail.sym.mode.sym;
+    attributes = symKey->publicArea.objectAttributes);
 
     // The input key should be a symmetric key
     if(symKey->publicArea.type != TPM_ALG_SYMCIPHER)
         return TPM_RCS_KEY + RC_EncryptDecrypt_keyHandle;
     // The key must be unrestricted and allow the selected operation
-    OK = symKey->publicArea.objectAttributes.restricted != SET;
+    OK = IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted)
     if(YES == in->decrypt)
-        OK = OK && symKey->publicArea.objectAttributes.decrypt == SET;
+        OK = OK && IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt);
     else
-        OK = OK && symKey->publicArea.objectAttributes.sign == SET;
+        OK = OK && IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign);
     if(!OK)
         return TPM_RCS_ATTRIBUTES + RC_EncryptDecrypt_keyHandle;
     
@@ -107,6 +108,10 @@ TPM2_EncryptDecrypt(
     keySize = symKey->publicArea.parameters.symDetail.sym.keyBits.sym;
     alg = symKey->publicArea.parameters.symDetail.sym.algorithm;
     blockSize = CryptGetSymmetricBlockSize(alg, keySize);
+    
+    // reverify the algorithm. This is mainly to keep static analysis tools happy
+    if(blockSize == 0)
+        return TPM_RCS_KEY + RC_EncryptDecrypt_keyHandle;
 
     // Note: When an algorithm is not supported by a TPM, the TPM_ALG_xxx for that
     // algorithm is not defined. However, it is assumed that the ALG_xxx_VALUE for

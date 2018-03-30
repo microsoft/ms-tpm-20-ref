@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This header contains the hash structure definitions used in the TPM code
 // to define the amount of space to be reserved for the hash state. This allows
@@ -76,9 +75,7 @@ typedef struct sequenceMethods {
     SMAC_END_METHOD           end;
 } SMAC_METHODS;
 
-#if defined TPM_CC_MAC || defined TPM_CC_MAC_Start
-#   define      SMAC_IMPLEMENTED
-#endif
+#define SMAC_IMPLEMENTED (defined TPM_CC_MAC || defined TPM_CC_MAC_Start)
 
 // These definitions are here because the SMAC state is in the union of hash states.
 typedef struct tpmCmacState {
@@ -118,7 +115,7 @@ typedef union
 #endif
 
 // Additions for symmetric block cipher MAC
-#ifdef SMAC_IMPLEMENTED
+#if SMAC_IMPLEMENTED
     SMAC_STATE                 smac;
 #endif
     // to force structure alignment to be no worse than HASH_ALIGNMENT

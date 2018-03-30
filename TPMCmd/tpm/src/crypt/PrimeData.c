@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 #include "Tpm.h"
 
 // This table is the product of all of the primes up to 1000.
@@ -409,9 +408,7 @@ const unsigned char s_PrimeTable[] = {
     0x48, 0x40, 0xa0, 0x00, 0x50, 0x20, 0x04, 0x81, 0xa4, 0x40, 0x18, 0x00,
     0x08, 0x10, 0x80, 0x01, 0x01};
 
-#if defined RSA_KEY_SIEVE && defined SIMULATION
-
-
+#if RSA_KEY_SIEVE && SIMULATION && RSA_INSTRUMENT
 UINT32  PrimeIndex = 0;
 UINT32  failedAtIteration[10] = {0};
 UINT32  PrimeCounts[3] = {0};

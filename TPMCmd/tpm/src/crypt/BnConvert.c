@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file contains the basic conversion functions that will convert TPM2B
 // to/from the internal format. The internal format is a bigNum,
@@ -59,14 +58,15 @@ BnFromBytes(
     BYTE            *pTo;   // points to least significant bytes of destination
     crypt_uword_t    size;
 //
+
     size = (bytes != NULL) ? BYTES_TO_CRYPT_WORDS(nBytes) : 0;
-    
-    // make sure things fit
-    pAssert(BnGetAllocated(bn) >= size);
 
     // If nothing in, nothing out
     if(bn == NULL)
         return NULL;
+
+    // make sure things fit
+    pAssert(BnGetAllocated(bn) >= size);
 
     if(size > 0)
     {
@@ -107,7 +107,7 @@ BnFrom2B(
         return BnFromBytes(bn, a2B->buffer, a2B->size);
     // Make sure that the number has an initialized value rather than whatever
     // was there before
-    BnSetTop(bn, 0);
+    BnSetTop(bn, 0);    // Function accepts NULL
     return NULL;
 }
 
@@ -119,12 +119,14 @@ BnFromHex(
     const char      *hex        // IN:
     )
 {
-#define FromHex(a)  ((a) - (((a) > 'a') ? ('a' + 10)                     \
+#define FromHex(a)  ((a) - (((a) > 'a') ? ('a' + 10)                               \
                                        : ((a) > 'A') ? ('A' - 10) : '0'))
     unsigned             i;
     unsigned             wordCount;
     const char          *p;
     BYTE                *d = (BYTE *)&(bn->d[0]);
+//
+    pAssert(bn && hex);
     i = strlen(hex);
     wordCount = BYTES_TO_CRYPT_WORDS((i + 1) / 2);
     if((i == 0) || (wordCount >= BnGetAllocated(bn)))
@@ -179,7 +181,7 @@ BnToBytes(
     crypt_uword_t        count;
 //
     // validate inputs
-    pAssert(bn != NULL && buffer != NULL && size != NULL);
+    pAssert(bn && buffer && size);
 
     requiredSize = (BnSizeInBits(bn) + 7) / 8;
     if(requiredSize == 0)
@@ -235,8 +237,12 @@ BnTo2B(
     )
 {
     // Set the output size
-    a2B->size = size;
-    return BnToBytes(bn, a2B->buffer, &a2B->size);
+    if(bn && a2B)
+    {
+        a2B->size = size;
+        return BnToBytes(bn, a2B->buffer, &a2B->size);
+    }
+    return FALSE;
 }
 
 #ifdef TPM_ALG_ECC
@@ -276,10 +282,12 @@ BnPointTo2B(
     bigCurve         E              // IN: curve descriptor for the point
     )
 {
-    UINT16           size = (UINT16)BITS_TO_BYTES(
-                                        BnMsb(CurveGetOrder(AccessCurveData(E))));
+    UINT16           size;
+//
     pAssert(p && ecP && E);
     pAssert(BnEqualWord(ecP->z, 1));
+    // BnMsb is the bit number of the MSB. This is one less than the number of bits
+    size = (UINT16)BITS_TO_BYTES(BnSizeInBits(CurveGetOrder(AccessCurveData(E))));
     BnTo2B(ecP->x, &p->x.b, size);
     BnTo2B(ecP->y, &p->y.b, size);
     return TRUE;

@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 #include "Tpm.h"
 #include "PolicyTemplate_fp.h"
 
@@ -69,10 +68,10 @@ TPM2_PolicyTemplate(
     }
     // error if cpHash contains something that is not a template
     else if(session->u1.templateHash.t.size != 0)
-        return TPM_RCS_VALUE + RC_PolicyTemplate_templateHash;
+        return TPM_RC_CPHASH;
 
     // A valid templateHash must have the same size as session hash digest
-    if(in->templateHash.t.size != CryptHashGetDigestSize(session->authHashAlg))
+    if(in->templateHash.t.size != CryptHashGetDigestSize(session->authHashAlg))              
         return TPM_RCS_SIZE + RC_PolicyTemplate_templateHash;
 
 // Internal Data Update

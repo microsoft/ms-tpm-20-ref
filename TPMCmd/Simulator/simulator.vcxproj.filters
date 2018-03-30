@@ -18,16 +18,10 @@
     <Filter Include="Headers">
       <UniqueIdentifier>{2786f12f-9161-45a4-ad11-8ef2615451be}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Headers\prototypes">
-      <UniqueIdentifier>{2e6f3ab8-82ae-4532-897c-1fd8a6f0c006}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\TpmTcpProtocol.h">
       <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="include\prototypes\Simulator_fp.h">
-      <Filter>Headers\prototypes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file contains the functions and data definitions relating to the
 // dictionary attack logic.
@@ -86,7 +85,7 @@ DAStartup(
     )
 {
     NOT_REFERENCED(type);
-#ifndef ACCUMULATE_SELF_HEAL_TIMER
+#if !ACCUMULATE_SELF_HEAL_TIMER
     _plat__TimerWasReset();
     s_selfHealTimer = 0;
     s_lockoutTimer = 0;
@@ -126,7 +125,7 @@ DAStartup(
        && gp.failedTries < gp.maxTries
        && !IS_ORDERLY(g_prevOrderlyState))
     {
-#ifdef USE_DA_USED
+#if USE_DA_USED
         gp.failedTries += g_daUsed;
         g_daUsed = FALSE;
 #else

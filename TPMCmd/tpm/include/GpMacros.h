@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file is a collection of miscellaneous macros.
 
@@ -49,7 +48,7 @@
 
 //** For Self-test
 // These macros are used in CryptUtil to invoke the incremental self test.
-#ifdef SELF_TEST
+#if SELF_TEST
 #   define     TEST(alg) if(TEST_BIT(alg, g_toTest)) CryptTestAlgorithm(alg, NULL)
 
 // Use of TPM_ALG_NULL is reserved for RSAEP/RSADP testing. If someone is wanting
@@ -70,7 +69,7 @@
 #   define FUNCTION_NAME        __FUNCTION__
 #endif
 
-#ifdef NO_FAIL_TRACE
+#if !FAIL_TRACE
 #   define FAIL(errorCode) (TpmFail(errorCode))
 #else
 #   define FAIL(errorCode) (TpmFail(FUNCTION_NAME, __LINE__, errorCode))
@@ -130,7 +129,7 @@
 // will generate a warning to indicate if the check always passes or always fails
 // because it involves fixed constants. To run these checks, define COMPILER_CHECKS
 // in TpmBuildSwitches.h
-#ifdef COMPILER_CHECKS
+#if COMPILER_CHECKS
 #   define  cAssert     pAssert
 #else
 #   define cAssert(value)
@@ -177,11 +176,6 @@
 #endif
 #ifndef NOT_REFERENCED
 #   define NOT_REFERENCED(x = x)   ((void) (x))
-#endif
-
-// Need an unambiguous definition for DEBUG. Don't change this
-#if !defined NDEBUG && !defined DEBUG
-#  define DEBUG YES
 #endif
 
 #define STD_RESPONSE_HEADER (sizeof(TPM_ST) + sizeof(UINT32) + sizeof(TPM_RC))
@@ -259,21 +253,21 @@
 #   define PRIMARY_SEED_SIZE    PROOF_SIZE
 #endif
 
-#ifdef USE_SPEC_COMPLIANT_PROOFS
+#if USE_SPEC_COMPLIANT_PROOFS
 #   undef PROOF_SIZE
 #   define PROOF_SIZE           COMPLIANT_PROOF_SIZE
 #   undef PRIMARY_SEED_SIZE
 #   define PRIMARY_SEED_SIZE    COMPLIANT_PRIMARY_SEED_SIZE
-#endif  // USE_SPEC_COMPLIANT_PROOFS || !defined PRIMARY_SEED_SIZE
+#endif  // USE_SPEC_COMPLIANT_PROOFS
 
-#ifndef SKIP_PROOF_ERRORS 
+#if !SKIP_PROOF_ERRORS 
 #   if PROOF_SIZE < COMPLIANT_PROOF_SIZE
 #       error "PROOF_SIZE is not compliant with TPM specification"
 #   endif
 #   if PRIMARY_SEED_SIZE < COMPLIANT_PRIMARY_SEED_SIZE
 #       error  "Implementation.h specifies a non-compliant PRIMARY_SEED_SIZE"
 #   endif
-#endif
+#endif // !SKIP_PROOF_ERRORS
 
 // If CONTEXT_ENCRYP_ALG is defined, then the vendor is using the old style table
 #ifndef CONTEXT_ENCRYPT_ALG
@@ -286,7 +280,7 @@
 // This is updated to follow the requirement of P2 that the label not be larger
 // than 32 bytes.
 #ifndef LABEL_MAX_BUFFER
-#define LABEL_MAX_BUFFER MIN(32, MIN(MAX_ECC_KEY_BYTES, MAX_DIGEST_SIZE))
+#define LABEL_MAX_BUFFER MIN(32, MAX(MAX_ECC_KEY_BYTES, MAX_DIGEST_SIZE))
 #endif
 
 // This bit is used to indicate that an authorization ticket expires on TPM Reset
@@ -299,12 +293,12 @@
 #define EXPIRATION_BIT ((UINT64)1 << 63)
 
 // Check for consistency of the bit ordering an bit fields
-#if BIG_ENDIAN_TPM && MOST_SIGNIFICANT_BIT_0 && !defined NO_BIT_FIELD_STRUCTURES
+#if BIG_ENDIAN_TPM && MOST_SIGNIFICANT_BIT_0 && !NO_BIT_FIELD_STRUCTURES
 #   error "Settings not consistent"
 #endif
 
 // These macros are used to handle the variation in handling of bit fields. If 
-#ifndef NO_BIT_FIELD_STRUCTURES // The default, old version, with bit fields
+#if USE_BIT_FIELD_STRUCTURES // The default, old version, with bit fields
 #   define IS_ATTRIBUTE(a, type, b)    ((a.b != 0))
 #   define SET_ATTRIBUTE(a, type, b)       (a.b = SET)
 #   define CLEAR_ATTRIBUTE(a, type, b)     (a.b = CLEAR)

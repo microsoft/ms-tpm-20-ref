@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Includes
 #include "Tpm.h"
 #include "Object_spt_fp.h"
@@ -1509,7 +1508,7 @@ SetLabelAndContext(
 //*** UnmarshalToPublic()
 // Support function to unmarshal the template. This is used because the
 // Input may be a TPMT_TEMPLATE and that structure does not have the same
-// size as a TPMT_PUBlIC because of the difference between the 'unique' and
+// size as a TPMT_PUBLIC because of the difference between the 'unique' and
 // 'seed' fields.
 // If 'derive' is not NULL, then the 'seed' field is assumed to contain
 // a 'label' and 'context' that are unmarshaled into 'derive'.
@@ -1545,7 +1544,7 @@ UnmarshalToPublic(
                                          tOut->type);
     if(result != TPM_RC_SUCCESS)
         return result;
-    // No unmarshal a TPMS_DERIVE if this is for derivation
+    // Now unmarshal a TPMS_DERIVE if this is for derivation
     if(derivation)
         result = TPMS_DERIVE_Unmarshal(labelContext, &buffer, &size);
     else

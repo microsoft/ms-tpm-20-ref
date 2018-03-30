@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Description
 // This file contains the entry point for the simulator.
 
@@ -54,13 +53,50 @@
 #include "Simulator_fp.h"
 
 #define PURPOSE \
-"TPM Reference Simulator.\nCopyright Microsoft 2010, 2011.\n"
+"TPM Reference Simulator.\nCopyright Microsoft Corp.\n"
 
 #define DEFAULT_TPM_PORT 2321
 
-void* MainPointer;
-
 //** Functions
+
+// Information about command line arguments (does not include program name)
+static uint32_t     s_ArgsMask = 0;     // Bit mask of unmatched command line args
+static int          s_Argc = 0;
+static const char **s_Argv = NULL;
+
+void SetArgs(int argc, const char **argv)
+{
+    s_Argc = argc - 1;
+    s_Argv = argv + 1;
+    s_ArgsMask = (1 << s_Argc) - 1;
+}
+
+BOOL IsOpt(const char* cmdLinelParam, const char* optFull, const char* optShort)
+{
+    return 0 == _strcmpi(cmdLinelParam, optFull)
+        || (optShort && optShort[0] && cmdLinelParam[1] == 0
+            && tolower(cmdLinelParam[0]) == tolower(optShort[0]));
+}
+
+BOOL IsCmdLineOptPresent(const char* optFull, const char* optShort)
+{
+    if (!s_ArgsMask || !optFull || !optFull[0])
+        return FALSE;
+
+    for (int i = 0, curArgBit = 1; i < s_Argc; ++i, curArgBit <<= 1)
+    {
+        if (s_ArgsMask & curArgBit && s_Argv[i]
+            && (IsOpt(s_Argv[i], optFull, optShort)
+                || (s_Argv[i][0] == '/' || s_Argv[i][0] == '-')
+                && IsOpt(s_Argv[i] + 1, optFull, optShort)))
+        {
+            s_ArgsMask ^= curArgBit;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 
 //*** Usage()
 // This function prints the proper calling sequence for the simulator.
