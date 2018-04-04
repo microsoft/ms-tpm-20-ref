@@ -290,5 +290,5 @@ __pycache__/
 # TPM simulator run-time/state files
 NVChip
 RsaKeyCacheCrt.data
-/TPMCmd/OsslInclude
 /TPMCmd/lib
+/TPMCmd/OsslInclude

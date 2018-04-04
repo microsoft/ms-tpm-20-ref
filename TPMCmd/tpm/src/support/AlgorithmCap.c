@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Description
 // This file contains the algorithm property definitions for the algorithms and the
 // code for the TPM2_GetCapability() to return the algorithm properties.
@@ -52,110 +51,110 @@ static const ALGORITHM    s_algorithms[] =
 // The entries in this table need to be in ascending order but the table doesn't
 // need to be full (gaps are allowed). One day, a tool might exist to fill in the
 // table from the TPM_ALG description
-#ifdef TPM_ALG_RSA
+#if ALG_RSA
     {TPM_ALG_RSA,           TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 1, 0, 0, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_TDES
+#if ALG_TDES
     {TPM_ALG_TDES,          TPMA_ALGORITHM_INITIALIZER(0, 1, 0, 0, 0, 0, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_SHA1
+#if ALG_SHA1
     {TPM_ALG_SHA1,          TPMA_ALGORITHM_INITIALIZER(0, 0, 1, 0, 0, 0, 0, 0, 0)},
 #endif
 
     {TPM_ALG_HMAC,          TPMA_ALGORITHM_INITIALIZER(0, 0, 1, 0, 0, 1, 0, 0, 0)},
 
-#ifdef TPM_ALG_AES
+#if ALG_AES
     {TPM_ALG_AES,           TPMA_ALGORITHM_INITIALIZER(0, 1, 0, 0, 0, 0, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_MGF1
+#if ALG_MGF1
     {TPM_ALG_MGF1,          TPMA_ALGORITHM_INITIALIZER(0, 0, 1, 0, 0, 0, 0, 1, 0)},
 #endif
 
     {TPM_ALG_KEYEDHASH,     TPMA_ALGORITHM_INITIALIZER(0, 0, 1, 1, 0, 1, 1, 0, 0)},
 
-#ifdef TPM_ALG_XOR
+#if ALG_XOR
     {TPM_ALG_XOR,           TPMA_ALGORITHM_INITIALIZER(0, 1, 1, 0, 0, 0, 0, 0, 0)},
 #endif
 
-#ifdef TPM_ALG_SHA256
+#if ALG_SHA256
     {TPM_ALG_SHA256,        TPMA_ALGORITHM_INITIALIZER(0, 0, 1, 0, 0, 0, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_SHA384
+#if ALG_SHA384
     {TPM_ALG_SHA384,        TPMA_ALGORITHM_INITIALIZER(0, 0, 1, 0, 0, 0, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_SHA512
+#if ALG_SHA512
     {TPM_ALG_SHA512,        TPMA_ALGORITHM_INITIALIZER(0, 0, 1, 0, 0, 0, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_SM3_256
+#if ALG_SM3_256
     {TPM_ALG_SM3_256,       TPMA_ALGORITHM_INITIALIZER(0, 0, 1, 0, 0, 0, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_SM4
+#if ALG_SM4
     {TPM_ALG_SM4,           TPMA_ALGORITHM_INITIALIZER(0, 1, 0, 0, 0, 0, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_RSASSA
+#if ALG_RSASSA
     {TPM_ALG_RSASSA,        TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 0, 0, 1, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_RSAES
+#if ALG_RSAES
     {TPM_ALG_RSAES,         TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 0, 0, 0, 1, 0, 0)},
 #endif
-#ifdef TPM_ALG_RSAPSS
+#if ALG_RSAPSS
     {TPM_ALG_RSAPSS,        TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 0, 0, 1, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_OAEP
+#if ALG_OAEP
     {TPM_ALG_OAEP,          TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 0, 0, 0, 1, 0, 0)},
 #endif
-#ifdef TPM_ALG_ECDSA
+#if ALG_ECDSA
     {TPM_ALG_ECDSA,         TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 0, 0, 1, 0, 1, 0)},
 #endif
-#ifdef TPM_ALG_ECDH
+#if ALG_ECDH
     {TPM_ALG_ECDH,          TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 0, 0, 0, 0, 1, 0)},
 #endif
-#ifdef TPM_ALG_ECDAA
+#if ALG_ECDAA
     {TPM_ALG_ECDAA,         TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 0, 0, 1, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_SM2
+#if ALG_SM2
     {TPM_ALG_SM2,           TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 0, 0, 1, 0, 1, 0)},
 #endif
-#ifdef TPM_ALG_ECSCHNORR
+#if ALG_ECSCHNORR
     {TPM_ALG_ECSCHNORR,      TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 0, 0, 1, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_ECMQV
+#if ALG_ECMQV
     {TPM_ALG_ECMQV,          TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 0, 0, 0, 0, 1, 0)},
 #endif
-#ifdef TPM_ALG_KDF1_SP800_56A
+#if ALG_KDF1_SP800_56A
     {TPM_ALG_KDF1_SP800_56A, TPMA_ALGORITHM_INITIALIZER(0, 0, 1, 0, 0, 0, 0, 1, 0)},
 #endif
-#ifdef TPM_ALG_KDF2
+#if ALG_KDF2
     {TPM_ALG_KDF2,           TPMA_ALGORITHM_INITIALIZER(0, 0, 1, 0, 0, 0, 0, 1, 0)},
 #endif
-#ifdef TPM_ALG_KDF1_SP800_108
+#if ALG_KDF1_SP800_108
     {TPM_ALG_KDF1_SP800_108, TPMA_ALGORITHM_INITIALIZER(0, 0, 1, 0, 0, 0, 0, 1, 0)},
 #endif
-#ifdef TPM_ALG_ECC
+#if ALG_ECC
     {TPM_ALG_ECC,            TPMA_ALGORITHM_INITIALIZER(1, 0, 0, 1, 0, 0, 0, 0, 0)},
 #endif
 
     {TPM_ALG_SYMCIPHER,      TPMA_ALGORITHM_INITIALIZER(0, 0, 0, 1, 0, 0, 0, 0, 0)},
 
-#ifdef TPM_ALG_CAMELLIA
+#if ALG_CAMELLIA
     {TPM_ALG_CAMELLIA,       TPMA_ALGORITHM_INITIALIZER(0, 1, 0, 0, 0, 0, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_CMAC
+#if ALG_CMAC
     {TPM_ALG_CMAC,           TPMA_ALGORITHM_INITIALIZER(0, 1, 0, 0, 0, 1, 0, 0, 0)},
 #endif
-#ifdef TPM_ALG_CTR
+#if ALG_CTR
     {TPM_ALG_CTR,            TPMA_ALGORITHM_INITIALIZER(0, 1, 0, 0, 0, 0, 1, 0, 0)},
 #endif
-#ifdef TPM_ALG_OFB
+#if ALG_OFB
     {TPM_ALG_OFB,            TPMA_ALGORITHM_INITIALIZER(0, 1, 0, 0, 0, 0, 1, 0, 0)},
 #endif
-#ifdef TPM_ALG_CBC
+#if ALG_CBC
     {TPM_ALG_CBC,            TPMA_ALGORITHM_INITIALIZER(0, 1, 0, 0, 0, 0, 1, 0, 0)},
 #endif
-#ifdef TPM_ALG_CFB
+#if ALG_CFB
     {TPM_ALG_CFB,            TPMA_ALGORITHM_INITIALIZER(0, 1, 0, 0, 0, 0, 1, 0, 0)},
 #endif
-#ifdef TPM_ALG_ECB
+#if ALG_ECB
     {TPM_ALG_ECB,            TPMA_ALGORITHM_INITIALIZER(0, 1, 0, 0, 0, 0, 1, 0, 0)},
 #endif
 };

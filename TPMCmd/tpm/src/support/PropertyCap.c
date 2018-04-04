@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Description
 // This file contains the functions that are used for accessing the
 // TPM_CAP_TPM_PROPERTY values.
@@ -320,7 +319,7 @@ TPMPropertyIsDefined(
             // vendor-defined commands, this will be the same as the
             // number of library commands.
         {
-#ifdef COMPRESSED_LISTS
+#if COMPRESSED_LISTS
             (*value) = COMMAND_COUNT;
 #else
             COMMAND_INDEX       commandIndex;
@@ -339,7 +338,7 @@ TPMPropertyIsDefined(
         case TPM_PT_LIBRARY_COMMANDS:
             // number of commands from the TPM library that are implemented
         {
-#ifdef  COMPRESSED_LISTS
+#if COMPRESSED_LISTS
             *value = LIBRARY_COMMAND_ARRAY_SIZE;
 #else
             COMMAND_INDEX       commandIndex;
@@ -364,7 +363,7 @@ TPMPropertyIsDefined(
             *value = MAX_NV_BUFFER_SIZE;
             break;
         case TPM_PT_MODES:
-#ifdef FIPS_COMPLIANT
+#if FIPS_COMPLIANT
             *value = 1;
 #else
             *value = 0;

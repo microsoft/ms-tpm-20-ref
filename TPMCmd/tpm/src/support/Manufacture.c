@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Description
 // This file contains the function that performs the "manufacturing" of the TPM
 // in a simulated environment. These functions should not be used outside of
@@ -60,7 +59,7 @@ TPM_Manufacture(
 {
     TPM_SU          orderlyShutdown;
 
-#ifdef RUNTIME_SIZE_CHECKS 
+#if RUNTIME_SIZE_CHECKS 
     // Call the function to verify the sizes of values that result from different
     // compile options.
     TpmSizeChecks();
@@ -69,6 +68,9 @@ TPM_Manufacture(
     // If TPM has been manufactured, return indication.
     if(!firstTime && g_manufactured)
         return 1;
+
+    // Do power on initializations of the cryptographic libraries.
+    CryptInit();
 
     s_DAPendingOnNV = FALSE;
 
@@ -161,7 +163,7 @@ TpmEndSimulation(
     void
     )
 {
-#ifdef SIMULATION
+#if SIMULATION
     HashLibSimulationEnd();
     SymLibSimulationEnd();
     MathLibSimulationEnd();

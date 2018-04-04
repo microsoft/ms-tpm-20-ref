@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file contains the functions used for managing and accessing the
 // hierarchy-related values.
@@ -137,8 +136,8 @@ HierarchyStartup(
     {
         gr.nullProof.t.size = sizeof(gr.nullProof.t.buffer);
         CryptRandomGenerate(gr.nullProof.t.size, gr.nullProof.t.buffer);
-        gr.nullSeed.t.size = sizeof(gr.nullProof.t.buffer);
-        CryptRandomGenerate(gr.nullProof.t.size, gr.nullSeed.t.buffer);
+        gr.nullSeed.t.size = sizeof(gr.nullSeed.t.buffer);
+        CryptRandomGenerate(gr.nullSeed.t.size, gr.nullSeed.t.buffer);
     }
 
     return;

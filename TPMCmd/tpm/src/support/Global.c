@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Description
 // This file will instance the TPM variables that are not stack allocated. The
 // descriptions for these variables are in Global.h.
@@ -62,7 +61,7 @@ TPM_HANDLE           g_exclusiveAuditSession;
 
 UINT64               g_time;
 
-#ifdef CLOCK_STOPS
+#if CLOCK_STOPS
 CLOCK_NONCE          g_timeEpoch;
 #endif
 
@@ -74,7 +73,7 @@ BOOL                 g_DrtmPreStartup;
 
 BOOL                 g_StartupLocality3;
 
-#ifdef USE_DA_USED
+#if USE_DA_USED
 BOOL			     g_daUsed;
 #endif
 
@@ -97,7 +96,7 @@ ALGORITHM_VECTOR     g_toTest;
 
 CRYPTO_SELF_TEST_STATE    g_cryptoSelfTestState;    // This structure contains the 
                                                     // cryptographic self-test 
-#ifdef SIMULATION
+#if SIMULATION
 BOOL                 g_forceFailureMode;
 #endif
 BOOL                 g_inFailureMode;
@@ -132,7 +131,7 @@ TPM2B_DIGEST         s_cpHashForCommandAudit;
 #endif
 
 //*** Used in DA.c
-#ifndef ACCUMULATE_SELF_HEAL_TIMER
+#if !ACCUMULATE_SELF_HEAL_TIMER
 UINT64               s_selfHealTimer;
 UINT64               s_lockoutTimer;
 #endif // !ACCUMULATE_SELF_HEAL_TIMER
@@ -164,8 +163,10 @@ int                  s_freeSessionSlots;
 // be accessible until response parameter encryption, if any, is complete.
 // This memory is not used between commands
 #ifndef __IGNORE_STATE__        // DO NOT DEFINE THIS VALUE
-UINT32   s_actionInputBuffer[1024];          // action input buffer
-UINT32   s_actionOutputBuffer[1024];         // action output buffer
+//UINT64   s_actionInputBuffer[512];   // action input buffer
+//UINT64   s_actionOutputBuffer[512];  // action output buffer
+UINT64   s_actionIoBuffer[768];      // action I/O buffer
+UINT32   s_actionIoAllocation;       // number of UIN64 allocated for in
 #endif
 
 //*** used in TpmFail.c
@@ -209,7 +210,7 @@ TPM2B_STRING(COMMIT_STRING, "ECDAA Commit");
 TPM2B_STRING(DUPLICATE_STRING, "DUPLICATE");
 TPM2B_STRING(IDENTITY_STRING, "IDENTITY");
 TPM2B_STRING(OBFUSCATE_STRING, "OBFUSCATE");
-#ifdef SELF_TEST
+#if SELF_TEST
 TPM2B_STRING(OAEP_TEST_STRING, "OAEP Test Value");
 #endif // SELF_TEST
 

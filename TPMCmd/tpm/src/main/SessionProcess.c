@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //**  Introduction
 // This file contains the subsystem that process the authorization sessions
 // including implementation of the Dictionary Attack logic. ExecCommand() uses
@@ -329,8 +328,8 @@ IsAuthValueAvailable(
             attributes = object->publicArea.objectAttributes;
 
             // authValue is always available for a sequence object.
-            // An alternative for this is to SET
-            // object->publicArea.objectAttributes.userWithAuth when the
+            // An alternative for this is to 
+            // SET_ATTRIBUTE(object->publicArea, TPMA_OBJECT, userWithAuth) when the
             // sequence is started.
             if(ObjectIsSequence(object))
             {
@@ -465,7 +464,7 @@ IsAuthPolicyAvailable(
             // An NV Index.
         {
             NV_INDEX         *nvIndex = NvGetIndexInfo(handle, NULL);
-            TPMA_NV           attributes = nvIndex->publicArea.attributes;
+            TPMA_NV           nvAttributes = nvIndex->publicArea.attributes;
 //
             // If the policy size is not zero, check if policy can be used.
             if(nvIndex->publicArea.authPolicy.t.size != 0)
@@ -478,12 +477,12 @@ IsAuthPolicyAvailable(
                 // attributes.
                 else if(IsWriteOperation(commandIndex))
                 {
-                    if(IS_ATTRIBUTE(attributes, TPMA_NV, POLICYWRITE))
+                    if(IS_ATTRIBUTE(nvAttributes, TPMA_NV, POLICYWRITE))
                         result = TRUE;
                 }
                 else
                 {
-                    if(IS_ATTRIBUTE(attributes, TPMA_NV, POLICYREAD))
+                    if(IS_ATTRIBUTE(nvAttributes, TPMA_NV, POLICYREAD))
                         result = TRUE;
                 }
             }
@@ -1321,7 +1320,7 @@ CheckLockedOut(
         // ... or if the number of failed tries has been maxed out.
         if(gp.failedTries >= gp.maxTries)
             return TPM_RC_LOCKOUT;
-#ifdef USE_DA_USED
+#if USE_DA_USED
         // If the daUsed flag is not SET, then no DA validation until the
         // daUsed state is written to NV
         if(!g_daUsed)
@@ -1432,7 +1431,7 @@ CheckAuthSession(
     else
     {
         // ... see if the entity has a policy, ...
-        // Note: IsAutPolciyAvalable will return FALSE if the sensitive area of the
+        // Note: IsAuthPolciyAvalable will return FALSE if the sensitive area of the
         // object is not loaded
         if(!IsAuthPolicyAvailable(associatedHandle, command->index, sessionIndex))
             return TPM_RC_AUTH_UNAVAILABLE;

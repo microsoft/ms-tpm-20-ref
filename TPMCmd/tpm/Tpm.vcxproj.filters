@@ -445,9 +445,6 @@
     <ClCompile Include="src\crypt\BnConvert.c">
       <Filter>Source Files\Crypt</Filter>
     </ClCompile>
-    <ClCompile Include="src\crypt\BnEccData.c">
-      <Filter>Source Files\Crypt</Filter>
-    </ClCompile>
     <ClCompile Include="src\crypt\BnMath.c">
       <Filter>Source Files\Crypt</Filter>
     </ClCompile>
@@ -1201,6 +1198,9 @@
       <Filter>Headers\Crypt</Filter>
     </ClInclude>
     <ClInclude Include="include\HashTestData.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\KdfTestData.h">
       <Filter>Headers\Crypt</Filter>
     </ClInclude>
     <ClInclude Include="include\RsaTestData.h">

@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -58,13 +58,12 @@
 #ifndef         GLOBAL_H
 #define         GLOBAL_H
 
-//#define SELF_TEST
 _REDUCE_WARNING_LEVEL_(2)
 #include <string.h>
 #include <stddef.h>
 _NORMAL_WARNING_LEVEL_
 
-#ifdef SIMULATION
+#if SIMULATION
 #undef CONTEXT_SLOT
 #  define CONTEXT_SLOT    UINT8
 #endif
@@ -116,7 +115,7 @@ TPM2B_TYPE(SEED, PRIMARY_SEED_SIZE);
 // discontinuity. When the clock stops during normal operation, the nonce is
 // 64-bit value kept in RAM but it is a 32-bit counter when the clock only stops
 // during power events.
-#ifdef CLOCK_STOPS
+#if CLOCK_STOPS
 typedef UINT64          CLOCK_NONCE;
 #else
 typedef UINT32          CLOCK_NONCE;
@@ -537,7 +536,7 @@ extern  UINT64          g_time;
 // to run across a power down of the TPM but not in all cases (e.g. dead battery).
 // If the nonce is placed in NV, it should go in gp because it should be changing
 // slowly.
-#ifdef CLOCK_STOPS
+#if CLOCK_STOPS
 extern CLOCK_NONCE       g_timeEpoch;
 #else
 #define g_timeEpoch      gp.timeEpoch
@@ -603,7 +602,7 @@ extern  BOOL            g_StartupLocality3;
 #define PRE_STARTUP_FLAG	 0x8000
 #define STARTUP_LOCALITY_3   0x4000
 
-#ifdef USE_DA_USED
+#if USE_DA_USED
 //*** g_daUsed
 // This location indicates if a DA-protected value is accessed during a boot
 // cycle. If none has, then there is no need to increment 'failedTries' on the
@@ -838,7 +837,7 @@ typedef struct
 // timeEpoch contains a nonce that has a vendor=specific size (should not be
 // less than 8 bytes. This nonce changes when the clock epoch changes. The clock
 // epoch changes when there is a discontinuity in the timing of the TPM.
-#ifndef CLOCK_STOPS
+#if !CLOCK_STOPS
     CLOCK_NONCE         timeEpoch;
 #endif
 
@@ -879,7 +878,7 @@ typedef struct orderly_data
 
 // These values allow the accumulation of self-healing time across orderly shutdown
 // of the TPM.
-#ifdef ACCUMULATE_SELF_HEAL_TIMER 
+#if ACCUMULATE_SELF_HEAL_TIMER 
     UINT64              selfHealTimer;  // current value of s_selfHealTimer
     UINT64              lockoutTimer;   // current value of s_lockoutTimer
     UINT64              time;           // current value of g_time at shutdown
@@ -887,7 +886,7 @@ typedef struct orderly_data
 
 } ORDERLY_DATA;
 
-#ifdef ACCUMULATE_SELF_HEAL_TIMER
+#if ACCUMULATE_SELF_HEAL_TIMER
 #define     s_selfHealTimer     go.selfHealTimer
 #define     s_lockoutTimer      go.lockoutTimer
 #endif  // ACCUMULATE_SELF_HEAL_TIMER
@@ -1151,7 +1150,7 @@ extern const TPM2B      *DUPLICATE_STRING;
 extern const TPM2B      *OBFUSCATE_STRING;
 extern const TPM2B      *IDENTITY_STRING;
 extern const TPM2B      *COMMIT_STRING;
-#ifdef SELF_TEST
+#if SELF_TEST
 extern const TPM2B      *OAEP_TEST_STRING;
 #endif // SELF_TEST
 
@@ -1230,7 +1229,7 @@ extern BOOL             s_DAPendingOnNV;
 //*****************************************************************************
 // This variable holds the accumulated time since the last time
 // that 'failedTries' was decremented. This value is in millisecond.
-#ifndef ACCUMULATE_SELF_HEAL_TIMER
+#if !ACCUMULATE_SELF_HEAL_TIMER
 extern UINT64       s_selfHealTimer;
 
 // This variable holds the accumulated time that the lockoutAuth has been
@@ -1362,8 +1361,10 @@ extern int               s_freeSessionSlots;
 // The s_actionOutputBuffer should not be modifiable by the host system until
 // the TPM has returned a response code. The s_actionOutputBuffer should not
 // be accessible until response parameter encryption, if any, is complete.
-extern UINT32   s_actionInputBuffer[1024];          // action input buffer
-extern UINT32   s_actionOutputBuffer[1024];         // action output buffer
+//extern UINT64   s_actionInputBuffer[512];   // action input buffer
+//extern UINT64   s_actionOutputBuffer[512];  // action output buffer
+extern UINT64   s_actionIoBuffer[768];      // action I/O buffer
+extern UINT32   s_actionIoAllocation;       // number of UIN64 allocated for in
 #endif // MEMORY_LIB_C
 
 //*****************************************************************************
@@ -1373,7 +1374,7 @@ extern UINT32   s_actionOutputBuffer[1024];         // action output buffer
 // in which the failure occurred. This address value isn't useful for anything
 // other than helping the vendor to know in which file the failure  occurred.
 extern BOOL      g_inFailureMode;       // Indicates that the TPM is in failure mode
-#ifdef SIMULATION
+#if SIMULATION
 extern BOOL      g_forceFailureMode;    // flag to force failure mode during test
 #endif
 

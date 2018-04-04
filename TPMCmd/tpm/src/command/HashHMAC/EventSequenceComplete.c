@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,14 +32,13 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 #include "Tpm.h"
 #include "EventSequenceComplete_fp.h"
 
 #ifdef TPM_CC_EventSequenceComplete  // Conditional expansion of this file
 
 /*(See part 3 specification)
-// Complete an event sequence and flush the object.
+  Complete an event sequence and flush the object.
 */
 // return type: TPM_RC
 //   TPM_RC_LOCALITY        PCR extension is not allowed at the current locality
@@ -53,9 +52,7 @@ TPM2_EventSequenceComplete(
     HASH_OBJECT         *hashObject;
     UINT32               i;
     TPM_ALG_ID           hashAlg;
-
 // Input validation
-
     // get the event sequence object pointer
     hashObject = (HASH_OBJECT *)HandleToObject(in->sequenceHandle);
 
@@ -82,9 +79,7 @@ TPM2_EventSequenceComplete(
         if(PCRIsStateSaved(in->pcrHandle))
             RETURN_IF_ORDERLY;
     }
-
 // Command Output
-
     out->results.count = 0;
 
     for(i = 0; i < HASH_COUNT; i++)
@@ -97,7 +92,6 @@ TPM2_EventSequenceComplete(
         CryptHashEnd(&hashObject->state.hashState[i],
                      CryptHashGetDigestSize(hashAlg),
                      (BYTE *)&out->results.digests[out->results.count].digest);
-
      // Extend PCR
         if(in->pcrHandle != TPM_RH_NULL)
             PCRExtend(in->pcrHandle, hashAlg,
@@ -105,9 +99,7 @@ TPM2_EventSequenceComplete(
                       (BYTE *)&out->results.digests[out->results.count].digest);
         out->results.count++;
     }
-
 // Internal Data Update
-
     // mark sequence object as evict so it will be flushed on the way out
     hashObject->attributes.evict = SET;
 

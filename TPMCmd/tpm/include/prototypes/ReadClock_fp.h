@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,29 +32,25 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/*(Auto)
-
-    Created by TpmStructures Version 3.0 June 7, 2017
-    This file created on Jun 15, 2017, 02:54:58PM 
-
-*/
-
+/*(Auto-generated)
+ *  Created by TpmStructures; Version 3.0 June 16, 2017
+ *  Date: Aug 14, 2017  Time: 02:53:08PM
+ */
 #ifdef TPM_CC_ReadClock // Command must be defined
-#ifndef _ReadClock_H
-#define _ReadClock_H
+#ifndef _READCLOCK_FP_H_
+#define _READCLOCK_FP_H_
 
 // Output structure definition
 typedef struct {
-    TPMS_TIME_INFO    currentTime;
+    TPMS_TIME_INFO              currentTime;
 } ReadClock_Out;
 
 
 // Function prototype
 TPM_RC
 TPM2_ReadClock(
-    ReadClock_Out *out
+    ReadClock_Out               *out
 );
 
-
-#endif  // _ReadClock_H
+#endif  // _READCLOCK_FP_H_
 #endif  // TPM_CC_ReadClock

@@ -18,8 +18,8 @@
  *  of conditions and the following disclaimer.
  *
  *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or other
- *  materials provided with the distribution.
+ *  list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
  *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
  *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -32,7 +32,6 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 //** Introduction
 // This file contains the functions for testing various command properties.
 
@@ -66,7 +65,7 @@ typedef UINT16          ATTRIBUTE_TYPE;
 // commandIndex points to an implemented command and, if not, it searches upwards
 // until it finds one. When the list is compressed, this function gets defined
 // as a no-op.
-#ifndef COMPRESSED_LISTS
+#if !COMPRESSED_LISTS
 static COMMAND_INDEX
 NextImplementedIndex(
     COMMAND_INDEX       commandIndex
@@ -195,7 +194,7 @@ GetClosestCommandIndex(
     }
     else
     {
-#ifdef COMPRESSED_LISTS
+#if COMPRESSED_LISTS
         COMMAND_INDEX       commandIndex = UNIMPLEMENTED_COMMAND_INDEX;
         COMMAND_INDEX       min = 0;
         COMMAND_INDEX       max = LIBRARY_COMMAND_ARRAY_SIZE - 1;
@@ -252,10 +251,11 @@ CommandCodeToCommandIndex(
     TPM_CC           commandCode    // IN: the command code to look up
     )
 {
+    // Extract the low 16-bits of the command code to get the starting search index
     COMMAND_INDEX       searchIndex = (COMMAND_INDEX)commandCode;
     BOOL                vendor = (commandCode & CC_VEND) != 0;
     COMMAND_INDEX       commandIndex;
-#if !defined COMPRESSED_LISTS
+#if !COMPRESSED_LISTS
     if(!vendor)
     {
         commandIndex = searchIndex - (COMMAND_INDEX)s_ccAttr[0].commandIndex;
@@ -297,7 +297,7 @@ GetNextCommandIndex(
 {
     while(++commandIndex < COMMAND_COUNT)
     {
-#if !defined COMPRESSED_LISTS
+#if !COMPRESSED_LISTS
         if(s_commandAttributes[commandIndex] & IS_IMPLEMENTED)
 #endif
             return commandIndex;
@@ -518,7 +518,7 @@ CommandCapGetCCList(
     commandIndex != UNIMPLEMENTED_COMMAND_INDEX;
         commandIndex = GetNextCommandIndex(commandIndex))
     {
-#ifndef COMPRESSED_LISTS
+#if !COMPRESSED_LISTS
         // this check isn't needed for compressed lists.
         if(!(s_commandAttributes[commandIndex] & IS_IMPLEMENTED))
             continue;
