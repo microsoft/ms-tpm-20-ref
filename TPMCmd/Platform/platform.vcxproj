@@ -110,101 +110,102 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WolfRelease|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WolfRelease|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WolfDebug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='GCC Debug|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SelfTest|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Coverage|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WolfDebug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='GCC Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SelfTest|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Coverage|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='GccCompile|x64'">
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
+    <ConfigurationType>Makefile</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='GccCompile|Win32'">
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <ConfigurationType>Makefile</ConfigurationType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -346,13 +347,13 @@
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='SelfTest|Win32'">.dll</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Coverage|Win32'">.dll</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">.dll</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.dll</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='WolfDebug|x64'">.dll</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='GCC Debug|x64'">.dll</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Static|x64'">.dll</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='SelfTest|x64'">.dll</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Coverage|x64'">.dll</TargetExt>
-    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">.dll</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='WolfDebug|x64'">.lib</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='GCC Debug|x64'">.lib</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Static|x64'">.lib</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='SelfTest|x64'">.lib</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Coverage|x64'">.lib</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">.lib</TargetExt>
     <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">BuildLink</CustomBuildAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -386,40 +387,40 @@
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
-    <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WolfDebug|x64'">
-    <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='GCC Debug|x64'">
-    <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Static|x64'">
-    <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SelfTest|x64'">
-    <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='WolfRelease|x64'">
-    <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Coverage|x64'">
-    <OutDir>bin\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>bin\obj\$(PlatformTarget)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\bin\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='GccCompile|Win32'">
     <NMakeBuildCommandLine>$(SolutionDir)GccCompile\GccCompile.pl $(ProjectDir)$(ProjectFileName) $(SolutionDir)$(SolutionFileName)</NMakeBuildCommandLine>
@@ -428,12 +429,6 @@
     <NMakePreprocessorDefinitions>GCC; _WIN32;  __MINGW32__</NMakePreprocessorDefinitions>
     <NMakeIncludeSearchPath>$(ProjectDir)include;$(ProjectDir)include\prototypes;$(SolutionDir)tpm\include;$(SolutionDir)tpm\include\prototypes;c:\cygwin64\usr\include\;c:\cygwin64\usr\include\sys\</NMakeIncludeSearchPath>
     <IncludePath>C:\cygwin64\usr\include;c:\cygwin64\user\include\sys</IncludePath>
-    <ExecutablePath />
-    <ReferencePath />
-    <LibraryPath />
-    <LibraryWPath />
-    <SourcePath />
-    <ExcludePath />
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -463,13 +458,6 @@
     </Link>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
     </Lib>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -506,13 +494,6 @@
     </Link>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
     </Lib>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -551,12 +532,6 @@
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>$(ProjectDir)\platform\platform.def</ModuleDefinitionFile>
-    </Lib>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
@@ -586,14 +561,6 @@
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SelfTest|Win32'">
     <ClCompile>
@@ -620,12 +587,6 @@
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>$(ProjectDir)\platform\platform.def</ModuleDefinitionFile>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Coverage|Win32'">
     <ClCompile>
@@ -650,12 +611,6 @@
     </Link>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>$(ProjectDir)\platform\platform.def</ModuleDefinitionFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
@@ -686,12 +641,6 @@
     </Link>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>$(ProjectDir)\platform\platform.def</ModuleDefinitionFile>
     </Lib>
     <PostBuildEvent>
       <Command>echo "$(VSInstallDir)\Team Tools\Performance Tools\vsinstr.exe" $(OutDir)$(TargetName)$(TargetExt) /COVERAGE</Command>
@@ -726,12 +675,6 @@
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>$(ProjectDir)\platform\platform.def</ModuleDefinitionFile>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='WolfDebug|x64'">
     <ClCompile>
@@ -749,18 +692,10 @@
       <StructMemberAlignment>Default</StructMemberAlignment>
     </ClCompile>
     <Link>
-      <ModuleDefinitionFile>
-      </ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>$(ProjectDir)\platform\platform.def</ModuleDefinitionFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='GCC Debug|x64'">
@@ -786,12 +721,6 @@
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>$(ProjectDir)\platform\platform.def</ModuleDefinitionFile>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static|x64'">
     <ClCompile>
@@ -815,12 +744,6 @@
     </Link>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>$(ProjectDir)\platform\platform.def</ModuleDefinitionFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SelfTest|x64'">
@@ -846,12 +769,6 @@
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>$(ProjectDir)\platform\platform.def</ModuleDefinitionFile>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Coverage|x64'">
     <ClCompile>
@@ -876,12 +793,6 @@
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>$(ProjectDir)\platform\platform.def</ModuleDefinitionFile>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">
     <ClCompile>
@@ -905,12 +816,6 @@
     </Link>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
-    </Lib>
-    <Lib>
-      <ModuleDefinitionFile>$(ProjectDir)\platform\platform.def</ModuleDefinitionFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
