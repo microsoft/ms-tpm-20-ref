@@ -541,8 +541,8 @@ BnPointMult(
     if(!OK)
         return TPM_RC_VALUE;
 
-    OK = (S == NULL) || BnIsOnCurve(S, E->C);
-    OK = OK && ((Q == NULL) || BnIsOnCurve(Q, E->C));
+    OK = (S == NULL) || BnIsOnCurve(S, AccessCurveData(E));
+    OK = OK && ((Q == NULL) || BnIsOnCurve(Q, AccessCurveData(E)));
     if(!OK)
         return TPM_RC_ECC_POINT;
 
@@ -606,7 +606,7 @@ BnEccGenerateKeyPair(
 {
     BOOL                 OK = FALSE;
     // Get a private scalar
-    OK = BnEccGetPrivate(bnD, E->C, rand);
+    OK = BnEccGetPrivate(bnD, AccessCurveData(E), rand);
 
     // Do a point multiply
     OK = OK && BnEccModMult(ecQ, NULL, bnD, E);

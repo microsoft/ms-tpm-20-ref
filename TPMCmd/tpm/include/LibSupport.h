@@ -49,6 +49,9 @@
 // SYMCRYPT only provides symmetric cryptography so would need to be combined with
 // another library that has math support
 #define     SYMCRYPT    4
+// WolfCrypt from the statically linkable GPL WolfSLL, other commercial licenses
+// also available
+#define     WOLF        5
 
 //*********************
 #if RADIX_BITS == 32
@@ -68,6 +71,8 @@
 #  include "ltc/TpmToLtcHash.h"
 #elif HASH_LIB == SYMCRYPT
 #include "symcrypt/TpmToSymcryptHash.h"
+#elif HASH_LIB == WOLF
+#  include "wolf/TpmToWolfHash.h"
 #else
 #  error "No hash library selected"
 #endif
@@ -80,6 +85,8 @@
 #  include "ltc/TpmToLtcSym.h"
 #elif SYM_LIB == SYMCRYPT
 #include "symcrypt/TpmToSymcryptSym.h"
+#elif SYM_LIB == WOLF
+#  include "wolf/TpmToWolfSym.h"
 #else
 #  error "No symmetric library selected"
 #endif
@@ -97,6 +104,8 @@
 #  define MATHLIB_H  "ltc/TpmToLtcMath.h"
 #elif MATH_LIB == MSBN
 #define MATHLIB_H  "msbn/TpmToMsBnMath.h"
+#elif MATH_LIB == WOLF
+#  define MATHLIB_H  "wolf/TpmToWolfMath.h"
 #else
 #  error "No math library selected"
 #endif
