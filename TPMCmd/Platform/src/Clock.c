@@ -109,7 +109,7 @@ _plat__RealTime(
     // hopefully, this will work with most UNIX systems
     struct timespec     systime;
 //
-    clock_gettime(CLOCK_MONOTONIC, &systimets);
+    clock_gettime(CLOCK_MONOTONIC, &systime);
     time = (clock64_t)systime.tv_sec * 1000 + (systime.tv_nsec / 1000000);
 #endif
     return time;
