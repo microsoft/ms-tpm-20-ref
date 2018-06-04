@@ -406,7 +406,6 @@ BnSignEcSm2(
     BN_MAX_INITIALIZED(bnE, digest);    // Don't know how big digest might be 
     ECC_NUM(bnN);
     ECC_NUM(bnK);
-    ECC_NUM(bnX1);
     ECC_NUM(bnT);                       // temp
     POINT(Q1);
     bigConst                  order = (E != NULL)
@@ -431,10 +430,10 @@ loop:
         // A4: Figure out the point of elliptic curve (x1, y1)=[k]G, and according
         // to details specified in 4.2.7 in Part 1 of this document, transform the
         // data type of x1 into an integer;
-        if(BnEccModMult(Q1, NULL, bnK, E) != TPM_RC_SUCCESS)
+        if(!BnEccModMult(Q1, NULL, bnK, E))
             goto loop;
         // A5: Figure out r = (e + x1) mod n,
-        BnAdd(bnR, bnE, bnX1);
+        BnAdd(bnR, bnE, Q1->x);
         BnMod(bnR, order);
 #ifdef _SM2_SIGN_DEBUG
         pAssert(BnHexEqual(bnR, "40F1EC59F793D9F49E09DCEF49130D41"
@@ -658,7 +657,7 @@ BnValidateSignatureEcSm2(
                        "67A457872FB09EC56327A67EC7DEEBE7"));
 #endif
     // b)   compute t  := (r + s) mod n
-    BnAdd(bnT, bnT, bnS);
+    BnAdd(bnT, bnR, bnS);
     BnMod(bnT, order);
 #ifdef _SM2_SIGN_DEBUG
     pAssert(BnHexEqual(bnT,
@@ -683,7 +682,7 @@ BnValidateSignatureEcSm2(
     BnMod(bnRp, order);
 
     // f)   verify that r' = r
-    OK = (BnUnsignedCmp(bnR, bnRp) != 0) & OK;
+    OK = (BnUnsignedCmp(bnR, bnRp) == 0);
 
     if(!OK)
         return TPM_RC_SIGNATURE;
