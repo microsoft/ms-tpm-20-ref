@@ -55,7 +55,8 @@
 
 // Make sure that the library is using the correct size for a crypt word
 #if    defined THIRTY_TWO_BIT && (RADIX_BITS != 32)  \
-    || defined SIXTY_FOUR_BIT && (RADIX_BITS != 64)
+    || ((defined SIXTY_FOUR_BIT_LONG || defined SIXTY_FOUR_BIT) \
+        && (RADIX_BITS != 64))
 #  error "Ossl library is using different radix"
 #endif
 
