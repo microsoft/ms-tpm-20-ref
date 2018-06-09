@@ -55,6 +55,7 @@ ADD_COMPILER_FLAG([-Wno-error=empty-body])
 ADD_COMPILER_FLAG([-Wno-error=expansion-to-defined])
 ADD_COMPILER_FLAG([-Wno-error=pointer-to-int-cast])
 ADD_COMPILER_FLAG([-Wno-error=missing-braces])
+ADD_COMPILER_FLAG([-Wno-error=unused-result])
 
 ADD_LINK_FLAG([-Wl,--no-undefined])
 ADD_LINK_FLAG([-Wl,-z,noexecstack])
