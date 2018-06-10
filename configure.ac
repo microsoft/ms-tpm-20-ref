@@ -44,6 +44,7 @@ AC_CONFIG_FILES([Makefile])
 AC_SUBST([DISTCHECK_CONFIGURE_FLAGS],[$ac_configure_args])
 
 PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto < 1.1 ])
+AX_PTHREAD([], [AC_MSG_ERROR([requires pthread])])
 
 ADD_COMPILER_FLAG([-std=gnu11])
 ADD_COMPILER_FLAG([-Werror])
