@@ -42,7 +42,10 @@
 
 #if HASH_LIB == WOLF
 
+#ifndef WOLFSSL_USER_SETTINGS
 #define WOLFSSL_USER_SETTINGS
+#endif
+
 #include <wolfSSL/wolfCrypt/sha.h>
 #include <wolfSSL/wolfCrypt/sha256.h>
 #include <wolfSSL/wolfCrypt/sha512.h>

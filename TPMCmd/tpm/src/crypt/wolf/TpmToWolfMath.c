@@ -135,7 +135,7 @@ MathLibraryCompatibilityCheck(
     // Make sure the values are consistent
     cAssert(wolfTemp->used == (int)tpmTemp->size);
     for(i = 0; i < tpmTemp->size; i++)
-        cAssert(wolfTemp->d[i] == tpmTemp->d[i]);
+        cAssert(wolfTemp->dp[i] == tpmTemp->d[i]);
 }
 #endif
 
