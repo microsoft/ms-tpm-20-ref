@@ -83,7 +83,7 @@
         } NAME = {BN_MIN_ALLOC(bytes), BYTES_TO_CRYPT_WORDS(bytes),{initializer}}
 // define how to transform a curve parameter address into an entry into an 
 // ECC_CURVE_DATA structure. 
-# define ECC_ENTRY(val, x)    (bigNum)&##val##_##x
+# define ECC_ENTRY(val, x)    (bigNum)&val##_##x
 
 ECC_CONST(ECC_ZERO, 0, 0);
 
