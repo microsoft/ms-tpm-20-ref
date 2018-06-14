@@ -40,14 +40,12 @@
 #ifndef    _TPMFAIL_FP_H_
 #define    _TPMFAIL_FP_H_
 
-#if SIMULATION
 //*** SetForceFailureMode()
 // This function is called by the simulator to enable failure mode testing.
 LIB_EXPORT void
 SetForceFailureMode(
     void
     );
-#endif
 
 //*** TpmFail()
 // This function is called by TPM.lib when a failure occurs. It will set up the

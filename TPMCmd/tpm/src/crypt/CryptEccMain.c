@@ -38,7 +38,7 @@
 #ifdef TPM_ALG_ECC
 
 // This version requires that the new format for ECC data be used
-#ifndef USE_BN_ECC_DATA
+#if !USE_BN_ECC_DATA
 #error "Need to define USE_BN_ECC_DATA in Implementaion.h"
 #endif
 

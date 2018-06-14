@@ -312,7 +312,7 @@ _rpc__RsaKeyCacheControl(
     int              state
     )
 {
-#ifdef USE_RSA_KEY_CACHE
+#if USE_RSA_KEY_CACHE
     RsaKeyCacheControl(state);
 #else
     NOT_REFERENCED(state);

@@ -43,7 +43,7 @@ _TPM_Init(
 {
     g_powerWasLost = g_powerWasLost | _plat__WasPowerLost();
 
-#if defined SIMULATION && !defined NDEBUG
+#if SIMULATION && !defined NDEBUG
     // If power was lost and this was a simulation, put canary in RAM used by NV
     // so that uninitialized memory can be detected more easily
     if(g_powerWasLost)

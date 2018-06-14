@@ -63,7 +63,7 @@
 
 #include "Tpm.h"
 
-#if defined SIMULATION && defined USE_RSA_KEY_CACHE
+#if SIMULATION && USE_RSA_KEY_CACHE
 #include  <stdio.h>
 
 #include "Platform_fp.h"
@@ -178,7 +178,7 @@ InitializeKeyCache(
     }
     rsaKey->publicArea.parameters.rsaDetail.keyBits = keySave;
     s_keyCacheLoaded = OK;
-#if defined SIMULATION && defined USE_RSA_KEY_CACHE && defined USE_KEY_CACHE_FILE
+#if SIMULATION && USE_RSA_KEY_CACHE && USE_KEY_CACHE_FILE
     if(OK)
     {
         FILE                *cacheFile;
@@ -215,7 +215,7 @@ KeyCacheLoaded(
                                             //     RNG state
     )
 {
-#if defined SIMULATION && defined USE_RSA_KEY_CACHE && defined USE_KEY_CACHE_FILE
+#if SIMULATION && USE_RSA_KEY_CACHE && USE_KEY_CACHE_FILE
     if(!s_keyCacheLoaded)
     {
         FILE            *cacheFile;
@@ -271,4 +271,4 @@ GetCachedRsaKey(
     }
     return s_keyCacheLoaded;
 }
-#endif  // defined SIMULATION && defined USE_RSA_KEY_CACHE
+#endif  // SIMULATION && USE_RSA_KEY_CACHE

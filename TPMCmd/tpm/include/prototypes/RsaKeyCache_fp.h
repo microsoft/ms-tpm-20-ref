@@ -40,7 +40,7 @@
 #ifndef    _RSAKEYCACHE_FP_H_
 #define    _RSAKEYCACHE_FP_H_
 
-#if defined SIMULATION && defined USE_RSA_KEY_CACHE
+#if SIMULATION && USE_RSA_KEY_CACHE
 
 //*** RsaKeyCacheControl()
 // Used to enable and disable the RSA key cache.
@@ -55,6 +55,6 @@ GetCachedRsaKey(
     RAND_STATE          *rand               // IN: if not NULL, the deterministic
                                             //     RNG state
     );
-#endif  // defined SIMULATION && defined USE_RSA_KEY_CACHE
+#endif  // SIMULATION && USE_RSA_KEY_CACHE
 
 #endif  // _RSAKEYCACHE_FP_H_

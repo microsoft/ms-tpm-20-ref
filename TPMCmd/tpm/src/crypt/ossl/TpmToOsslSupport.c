@@ -53,7 +53,7 @@ SupportLibInit(
     void
     )
 {
-#ifdef LIBRARY_COMPATIBILITY_CHECK
+#if LIBRARY_COMPATIBILITY_CHECK
     MathLibraryCompatibilityCheck();
 #endif
     return TRUE;
