@@ -112,7 +112,7 @@ MpInitialize(
     return toInit;
 }
 
-#ifdef LIBRARY_COMPATIBILITY_CHECK
+#if LIBRARY_COMPATIBILITY_CHECK
 //** MathLibraryCompatibililtyCheck()
 // This function is only used during development to make sure that the library
 // that is being referenced is using the same size of data structures as the TPM.

@@ -76,8 +76,8 @@
 // chosen big number math library. Not all ports use this.
 #if !defined LIBRARY_COMPATIBILITY_CHECK                                           \
         || LIBRARY_COMPATIBILITY_CHECK != YES
-#   undef LIBRARY_COMPATABILITY_CHECK
-#   define LIBRARY_COMPATABILITY_CHECK NO
+#   undef LIBRARY_COMPATIBILITY_CHECK
+#   define LIBRARY_COMPATIBILITY_CHECK NO
 #endif
 
 
@@ -168,7 +168,7 @@
 #       undef USE_RSA_KEY_CACHE
 #       define USE_RSA_KEY_CACHE YES
 #   endif
-#   if !defined USE_KEY_CACHE_FILE || USE_RSA_KEY_CACHE_FILE != NO
+#   if !defined USE_KEY_CACHE_FILE || USE_KEY_CACHE_FILE != NO
 #       undef USE_KEY_CACHE_FILE
 #       define USE_KEY_CACHE_FILE YES
 #   endif
@@ -182,7 +182,7 @@
 #else
 // Don't change these. They are the settings needed when not doing a simulation
 # define USE_RSA_KEY_CACHE NO
-# define USE_RSA_KEY_CACHE_FILE NO
+# define USE_KEY_CACHE_FILE NO
 # define USE_DEBUG_RNG NO
 #endif  // SIMULATION
 

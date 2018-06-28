@@ -138,4 +138,11 @@ ShiftLeft(
     TPM2B       *value          // IN/OUT: value to shift and shifted value out
 );
 
+//*** IsNumeric()
+// Verifies that all the characters are simple numeric (0-9)
+BOOL
+IsNumeric(
+    TPM2B       *value          // IN: value to verify is a simple number
+);
+
 #endif  // _MATHONBYTEBUFFERS_FP_H_
