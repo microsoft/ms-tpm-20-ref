@@ -1,0 +1,63 @@
+Configuration	Nucleo-L4A6RG
+STM32CubeMX 	4.25.0
+Date	03/19/2018
+MCU	STM32L4A6RGTx
+
+
+
+PERIPHERALS	MODES	FUNCTIONS	PINS
+RCC	Crystal/Ceramic Resonator	RCC_OSC32_IN	PC14-OSC32_IN (PC14)
+RCC	Crystal/Ceramic Resonator	RCC_OSC32_OUT	PC15-OSC32_OUT (PC15)
+RTC	Activate RTC Clock Source	RTC_VS_RTC_Activate	VP_RTC_VS_RTC_Activate
+RTC	RTC Enabled	RTC_VS_RTC_Calendar	VP_RTC_VS_RTC_Calendar
+SYS	Trace Asynchronous Sw	SYS_JTMS-SWDIO	PA13 (JTMS/SWDIO)
+SYS	Trace Asynchronous Sw	SYS_JTCK-SWCLK	PA14 (JTCK/SWCLK)
+SYS	Trace Asynchronous Sw	SYS_JTDO-SWO	PB3 (JTDO/TRACESWO)
+SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
+USART2	Asynchronous	USART2_RX	PA3
+USART2	Asynchronous	USART2_TX	PA2
+USB_OTG_FS	Device_Only	USB_OTG_FS_DM	PA11
+USB_OTG_FS	Device_Only	USB_OTG_FS_DP	PA12
+
+
+
+Pin Nb	PINs	FUNCTIONs	LABELs
+2	PC13	GPIO_EXTI13	B1 [Blue PushButton]
+3	PC14-OSC32_IN (PC14)	RCC_OSC32_IN	
+4	PC15-OSC32_OUT (PC15)	RCC_OSC32_OUT	
+16	PA2	USART2_TX	
+17	PA3	USART2_RX	
+21	PA5	GPIO_Output	LD2 [green Led]
+44	PA11	USB_OTG_FS_DM	
+45	PA12	USB_OTG_FS_DP	
+46	PA13 (JTMS/SWDIO)	SYS_JTMS-SWDIO	
+49	PA14 (JTCK/SWCLK)	SYS_JTCK-SWCLK	
+55	PB3 (JTDO/TRACESWO)	SYS_JTDO-SWO	
+
+
+
+SOFTWARE PROJECT
+
+Project Settings : 
+Project Name : Nucleo-L4A6RG
+Project Folder : D:\VS\brianTPM\Samples\Nucleo-TPM\L4A6RG
+Toolchain / IDE : TrueSTUDIO
+Firmware Package Name and Version : STM32Cube FW_L4 V1.11.0
+
+
+Code Generation Settings : 
+STM32Cube Firmware Library Package : Copy only the necessary library files
+Generate peripheral initialization as a pair of '.c/.h' files per peripheral : No
+Backup previously generated files when re-generating : No
+Delete previously generated files when not re-generated : Yes
+Set all free pins as analog (to optimize the power consumption) : No
+
+
+Toolchains Settings : 
+Compiler Optimizations : Balanced Size/Speed
+
+
+
+
+
+
