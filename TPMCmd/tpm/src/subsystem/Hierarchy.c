@@ -55,16 +55,16 @@ HierarchyPreInstall_Init(
     // Allow lockout clear command
     gp.disableClear = FALSE;
 
-	// Initialize Primary Seeds
-	gp.EPSeed.t.size = sizeof(gp.EPSeed.t.buffer);
-	gp.SPSeed.t.size = sizeof(gp.SPSeed.t.buffer);
-	gp.PPSeed.t.size = sizeof(gp.PPSeed.t.buffer);
-	CryptRandomGenerate(gp.SPSeed.t.size, gp.SPSeed.t.buffer);
-	CryptRandomGenerate(gp.PPSeed.t.size, gp.PPSeed.t.buffer);
+    // Initialize Primary Seeds
+    gp.EPSeed.t.size = sizeof(gp.EPSeed.t.buffer);
+    gp.SPSeed.t.size = sizeof(gp.SPSeed.t.buffer);
+    gp.PPSeed.t.size = sizeof(gp.PPSeed.t.buffer);
+    CryptRandomGenerate(gp.SPSeed.t.size, gp.SPSeed.t.buffer);
+    CryptRandomGenerate(gp.PPSeed.t.size, gp.PPSeed.t.buffer);
 #ifdef USE_PLATFORM_EPS
-	_plat__GetEPS(gp.EPSeed.t.size, gp.EPSeed.t.buffer);
+    _plat__GetEPS(gp.EPSeed.t.size, gp.EPSeed.t.buffer);
 #else
-	CryptRandomGenerate(gp.EPSeed.t.size, gp.EPSeed.t.buffer);
+    CryptRandomGenerate(gp.EPSeed.t.size, gp.EPSeed.t.buffer);
 #endif
 
     // Initialize owner, endorsement and lockout auth
