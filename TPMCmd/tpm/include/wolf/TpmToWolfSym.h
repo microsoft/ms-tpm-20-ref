@@ -42,8 +42,8 @@
 
 #if SYM_LIB == WOLF
 
-#include <wolfSSL/wolfCrypt/aes.h>
-#include <wolfSSL/wolfCrypt/des3.h>
+#include <wolfssl/wolfcrypt/aes.h>
+#include <wolfssl/wolfcrypt/des3.h>
 
 //***************************************************************
 //** Links to the wolfCrypt AES code
