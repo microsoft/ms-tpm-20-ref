@@ -32,10 +32,10 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-//**Introduction
-/*
-    This module simulates the cancel pins on the TPM.
-*/
+//** Description
+//
+//  This module simulates the cancel pins on the TPM.
+//
 //** Includes, Typedefs, Structures, and Defines
 #include "PlatformData.h"
 #include "Platform_fp.h"

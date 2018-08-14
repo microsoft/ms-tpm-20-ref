@@ -35,9 +35,9 @@
 #include "Tpm.h"
 #include "Commit_fp.h"
 
-#ifdef TPM_CC_Commit  // Conditional expansion of this file
+#if CC_Commit  // Conditional expansion of this file
 
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 
 /*(See part 3 specification)
 // This command performs the point multiply operations for anonymous signing

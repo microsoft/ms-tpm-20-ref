@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyCommandCode_fp.h"
 
-#ifdef TPM_CC_PolicyCommandCode  // Conditional expansion of this file
+#if CC_PolicyCommandCode  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Add a Command Code restriction to the policyDigest

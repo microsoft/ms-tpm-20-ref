@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "GetCapability_fp.h"
 
-#ifdef TPM_CC_GetCapability  // Conditional expansion of this file
+#if CC_GetCapability  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This command returns various information regarding the TPM and its current
@@ -152,13 +152,13 @@ TPM2_GetCapability(
                                                 in->propertyCount,
                                                 &data->tpmProperties);
             break;
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
         case TPM_CAP_ECC_CURVES:
             out->moreData = CryptCapGetECCCurve((TPM_ECC_CURVE)in->property,
                                                 in->propertyCount,
                                                 &data->eccCurves);
             break;
-#endif // TPM_ALG_ECC
+#endif // ALG_ECC
         case TPM_CAP_AUTH_POLICIES:
             if(HandleGetType((TPM_HANDLE)in->property) != TPM_HT_PERMANENT)
                return TPM_RCS_VALUE + RC_GetCapability_property;

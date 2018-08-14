@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "ContextLoad_fp.h"
 
-#ifdef TPM_CC_ContextLoad  // Conditional expansion of this file
+#if CC_ContextLoad  // Conditional expansion of this file
 
 #include "Context_spt_fp.h"
 
@@ -111,7 +111,7 @@ TPM2_ContextLoad(
 
     // Decrypt context data in place
     CryptSymmetricDecrypt(buffer, CONTEXT_ENCRYPT_ALG, CONTEXT_ENCRYPT_KEY_BITS,
-                          symKey.t.buffer, &iv, TPM_ALG_CFB, size, buffer);
+                          symKey.t.buffer, &iv, ALG_CFB_VALUE, size, buffer);
     // See if the fingerprint value matches. If not, it is symptomatic of either
     // a broken TPM or that the TPM is under attack so go into failure mode.
     if(!MemoryEqual(buffer, &in->context.sequence, sizeof(in->context.sequence)))

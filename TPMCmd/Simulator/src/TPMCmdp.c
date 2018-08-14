@@ -212,7 +212,7 @@ _rpc__Signal_HashEnd(
     return;
 }
 
-// _rpc__Send_Command()
+//*** _rpc__Send_Command()
 // This is the interface to the TPM code.
 // return type: void
 void

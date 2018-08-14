@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "LoadExternal_fp.h"
 
-#ifdef TPM_CC_LoadExternal  // Conditional expansion of this file
+#if CC_LoadExternal  // Conditional expansion of this file
 
 #include "Object_spt_fp.h"
 

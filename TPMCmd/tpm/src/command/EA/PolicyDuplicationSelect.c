@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyDuplicationSelect_fp.h"
 
-#ifdef TPM_CC_PolicyDuplicationSelect  // Conditional expansion of this file
+#if CC_PolicyDuplicationSelect  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // allows qualification of duplication so that it a specific new parent may be

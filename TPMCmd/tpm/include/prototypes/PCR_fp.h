@@ -251,7 +251,7 @@ PcrWrite(
 // This function is used to change the PCR allocation.
 //  return type: TPM_RC
 //      TPM_RC_SUCCESS          allocate success
-//      TPM_RC_NO_RESULTS       allocate failed
+//      TPM_RC_NO_RESULT       allocate failed
 //      TPM_RC_PCR              improper allocation
 TPM_RC
 PCRAllocate(

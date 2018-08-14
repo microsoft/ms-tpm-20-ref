@@ -195,7 +195,7 @@ typedef struct OBJECT
     TPMT_PUBLIC         publicArea;         // public area of an object
     TPMT_SENSITIVE      sensitive;          // sensitive area of an object
 
-#ifdef  TPM_ALG_RSA
+#if     ALG_RSA
     privateExponent_t   privateExponent;    // Additional field for the private
 #endif
     TPM2B_NAME          qualifiedName;      // object qualified name
@@ -385,19 +385,19 @@ typedef BYTE        SESSION_BUF[sizeof(SESSION)];
 
 typedef struct PCR_SAVE
 {
-#ifdef TPM_ALG_SHA1
+#if     ALG_SHA1
     BYTE                sha1[NUM_STATIC_PCR][SHA1_DIGEST_SIZE];
 #endif
-#ifdef TPM_ALG_SHA256
+#if     ALG_SHA256
     BYTE                sha256[NUM_STATIC_PCR][SHA256_DIGEST_SIZE];
 #endif
-#ifdef TPM_ALG_SHA384
+#if     ALG_SHA384
     BYTE                sha384[NUM_STATIC_PCR][SHA384_DIGEST_SIZE];
 #endif
-#ifdef TPM_ALG_SHA512
+#if     ALG_SHA512
     BYTE                sha512[NUM_STATIC_PCR][SHA512_DIGEST_SIZE];
 #endif
-#ifdef TPM_ALG_SM3_256
+#if     ALG_SM3_256
     BYTE                sm3_256[NUM_STATIC_PCR][SM3_256_DIGEST_SIZE];
 #endif
 
@@ -495,7 +495,7 @@ typedef union
 // value and the low order bits are used to index the commitArray.
 // This mask value is applied to the commit counter to extract the
 // bit number in the array.
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 
 #define COMMIT_INDEX_MASK ((UINT16)((sizeof(gr.commitArray)*8)-1))
 
@@ -599,7 +599,7 @@ extern  BOOL            g_StartupLocality3;
 // before TPM2_StartUp(). STARTUP_LOCALITY_3 indicates that the last TPM2_Startup()
 // was received at locality 3. These flags are only  relevant if after a 
 // TPM2_Shutdown(STATE).
-#define PRE_STARTUP_FLAG	 0x8000
+#define PRE_STARTUP_FLAG     0x8000
 #define STARTUP_LOCALITY_3   0x4000
 
 #if USE_DA_USED
@@ -608,7 +608,7 @@ extern  BOOL            g_StartupLocality3;
 // cycle. If none has, then there is no need to increment 'failedTries' on the
 // next non-orderly startup. This bit is merged with gp.orderlyState when that
 // gp.orderly is set to SU_NONE_VALUE
-extern	BOOL			g_daUsed;
+extern  BOOL                 g_daUsed;
 #endif
 
 //*** g_updateNV
@@ -1023,7 +1023,7 @@ typedef struct state_reset_data
 //       do not increment this counter to increment.
     UINT32              pcrCounter;         // The default reset value is 0.
 
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 
 //*****************************************************************************
 //         ECDAA
@@ -1041,7 +1041,7 @@ typedef struct state_reset_data
 // power of 2 (8, 16, 32, 64, etc.) and no greater than 64K.
     BYTE                 commitArray[16];   // The default reset value is {0}.
 
-#endif //TPM_ALG_ECC
+#endif // ALG_ECC
 } STATE_RESET_DATA;
 
 extern STATE_RESET_DATA gr;
@@ -1214,9 +1214,6 @@ extern UINT32           s_auditSessionIndex;
 extern TPM2B_DIGEST    s_cpHashForCommandAudit;
 #endif
 
-// Number of authorization sessions present in the command
-//extern UINT32           s_sessionNum;
-
 // Flag indicating if NV update is pending for the lockOutAuthEnabled or
 // failedTries DA parameter
 extern BOOL             s_DAPendingOnNV;
@@ -1293,23 +1290,23 @@ extern OBJECT           s_objects[MAX_LOADED_OBJECTS];
 //*****************************************************************************
 typedef struct
 {
-#ifdef TPM_ALG_SHA1
+#if     ALG_SHA1
     // SHA1 PCR
     BYTE    sha1Pcr[SHA1_DIGEST_SIZE];
 #endif
-#ifdef TPM_ALG_SHA256
+#if     ALG_SHA256
     // SHA256 PCR
     BYTE    sha256Pcr[SHA256_DIGEST_SIZE];
 #endif
-#ifdef TPM_ALG_SHA384
+#if     ALG_SHA384
     // SHA384 PCR
     BYTE    sha384Pcr[SHA384_DIGEST_SIZE];
 #endif
-#ifdef TPM_ALG_SHA512
+#if     ALG_SHA512
     // SHA512 PCR
     BYTE    sha512Pcr[SHA512_DIGEST_SIZE];
 #endif
-#ifdef TPM_ALG_SM3_256
+#if     ALG_SM3_256
     // SHA256 PCR
     BYTE    sm3_256Pcr[SM3_256_DIGEST_SIZE];
 #endif
@@ -1358,13 +1355,15 @@ extern int               s_freeSessionSlots;
 #endif // SESSION_C
 
 #if defined IO_BUFFER_C || defined GLOBAL_C
-// The s_actionOutputBuffer should not be modifiable by the host system until
-// the TPM has returned a response code. The s_actionOutputBuffer should not
-// be accessible until response parameter encryption, if any, is complete.
-//extern UINT64   s_actionInputBuffer[512];   // action input buffer
-//extern UINT64   s_actionOutputBuffer[512];  // action output buffer
+// Each command function is allowed a structure for the inputs to the function and
+// a structure for the outputs. The command dispatch code unmarshals the input butter 
+// to the command action input structure starting at the first byte of s_actionIoBuffer. 
+// The value of s_actionIoAllocation is the number of UINT64 values allocated. It is 
+// used to set the pointer for the response structure. The command dispatch code will 
+// marshal the response values into the final output buffer.
 extern UINT64   s_actionIoBuffer[768];      // action I/O buffer
-extern UINT32   s_actionIoAllocation;       // number of UIN64 allocated for in
+extern UINT32   s_actionIoAllocation;       // number of UIN64 allocated for the
+                                            // action input structure
 #endif // MEMORY_LIB_C
 
 //*****************************************************************************

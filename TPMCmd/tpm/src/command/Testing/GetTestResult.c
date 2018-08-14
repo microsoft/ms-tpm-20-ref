@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "GetTestResult_fp.h"
 
-#ifdef TPM_CC_GetTestResult  // Conditional expansion of this file
+#if CC_GetTestResult  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // returns manufacturer-specific information regarding the results of a self-

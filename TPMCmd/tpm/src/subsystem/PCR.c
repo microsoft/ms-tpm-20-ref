@@ -279,29 +279,29 @@ GetSavedPcrPointer(
 {
     switch(alg)
     {
-#ifdef TPM_ALG_SHA1
-        case TPM_ALG_SHA1:
+#if     ALG_SHA1
+        case ALG_SHA1_VALUE:
             return gc.pcrSave.sha1[pcrIndex];
             break;
 #endif
-#ifdef TPM_ALG_SHA256
-        case TPM_ALG_SHA256:
+#if     ALG_SHA256
+        case ALG_SHA256_VALUE:
             return gc.pcrSave.sha256[pcrIndex];
             break;
 #endif
-#ifdef TPM_ALG_SHA384
-        case TPM_ALG_SHA384:
+#if     ALG_SHA384
+        case ALG_SHA384_VALUE:
             return gc.pcrSave.sha384[pcrIndex];
             break;
 #endif
 
-#ifdef TPM_ALG_SHA512
-        case TPM_ALG_SHA512:
+#if     ALG_SHA512
+        case ALG_SHA512_VALUE:
             return gc.pcrSave.sha512[pcrIndex];
             break;
 #endif
-#ifdef TPM_ALG_SM3_256
-        case TPM_ALG_SM3_256:
+#if     ALG_SM3_256
+        case ALG_SM3_256_VALUE:
             return gc.pcrSave.sm3_256[pcrIndex];
             break;
 #endif
@@ -363,28 +363,28 @@ GetPcrPointer(
 
     switch(alg)
     {
-#ifdef TPM_ALG_SHA1
-        case TPM_ALG_SHA1:
+#if     ALG_SHA1
+        case ALG_SHA1_VALUE:
             pcr = s_pcrs[pcrNumber].sha1Pcr;
             break;
 #endif
-#ifdef TPM_ALG_SHA256
-        case TPM_ALG_SHA256:
+#if     ALG_SHA256
+        case ALG_SHA256_VALUE:
             pcr = s_pcrs[pcrNumber].sha256Pcr;
             break;
 #endif
-#ifdef TPM_ALG_SHA384
-        case TPM_ALG_SHA384:
+#if     ALG_SHA384
+        case ALG_SHA384_VALUE:
             pcr = s_pcrs[pcrNumber].sha384Pcr;
             break;
 #endif
-#ifdef TPM_ALG_SHA512
-        case TPM_ALG_SHA512:
+#if     ALG_SHA512
+        case ALG_SHA512_VALUE:
             pcr = s_pcrs[pcrNumber].sha512Pcr;
             break;
 #endif
-#ifdef TPM_ALG_SM3_256
-        case TPM_ALG_SM3_256:
+#if     ALG_SM3_256
+        case ALG_SM3_256_VALUE:
             pcr = s_pcrs[pcrNumber].sm3_256Pcr;
             break;
 #endif
@@ -920,7 +920,7 @@ PcrWrite(
 // This function is used to change the PCR allocation.
 //  return type: TPM_RC
 //      TPM_RC_SUCCESS          allocate success
-//      TPM_RC_NO_RESULTS       allocate failed
+//      TPM_RC_NO_RESULT       allocate failed
 //      TPM_RC_PCR              improper allocation
 TPM_RC
 PCRAllocate(

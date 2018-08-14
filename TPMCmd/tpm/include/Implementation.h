@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 3.0 June 16, 2017
- *  Date: Aug 14, 2017  Time: 02:53:08PM
+ *  Date: Jul 14, 2018  Time: 03:17:51PM
  */
 
 #ifndef _IMPLEMENTATION_H_
@@ -119,15 +119,16 @@
 #define ECC_NIST_P224                   NO
 #define ECC_NIST_P256                   YES
 #define ECC_NIST_P384                   YES
-#define ECC_NIST_P521                   YES
+#define ECC_NIST_P521                   NO
 #ifdef USE_WOLFCRYPT
 #define ECC_BN_P256                     NO
 #define ECC_SM2_P256                    NO
+#define ECC_BN_P638                     NO
 #else
 #define ECC_BN_P256                     YES
-#define ECC_SM2_P256                    YES
-#endif
 #define ECC_BN_P638                     NO
+#define ECC_SM2_P256                    NO
+#endif
 #define ECC_CURVES                      \
             {TPM_ECC_BN_P256,   TPM_ECC_BN_P638,   TPM_ECC_NIST_P192,              \
              TPM_ECC_NIST_P224, TPM_ECC_NIST_P256, TPM_ECC_NIST_P384,              \
@@ -236,8 +237,8 @@
 #define ALG_SHA1                        ALG_YES
 #define ALG_SHA256                      ALG_YES
 #define ALG_SHA384                      ALG_YES
-#define ALG_SHA512                      ALG_YES
-#define ALG_SM2                         (ALG_YES && ALG_ECC)
+#define ALG_SHA512                      ALG_NO
+#define ALG_SM2                         (ALG_NO && ALG_ECC)
 #define ALG_SM3_256                     ALG_NO
 #define ALG_SM4                         ALG_NO
 #define ALG_SYMCIPHER                   ALG_YES
@@ -1131,7 +1132,7 @@ TPM2B_TYPE(MAX_HASH_BLOCK, MAX_HASH_BLOCK_SIZE);
 // Following typedef is for some old code
 typedef TPM2B_MAX_HASH_BLOCK    TPM2B_HASH_BLOCK;
 
-/* AddSymmetricConstants */
+/* Additional symmetric constants */
 #ifndef ALG_AES
 #define ALG_AES                         NO
 #endif

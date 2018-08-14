@@ -41,7 +41,7 @@
 // length of the array containing the number decreases but the starting address
 // doesn't change.
 //
-// This functions in this file perform simple operations on these big numbers. Only
+// The functions in this file perform simple operations on these big numbers. Only
 // the more complex operations are passed to the underlying support library.
 // Although the support library would have most of these functions, the interface
 // code to convert the format for the values is greater than the size of the

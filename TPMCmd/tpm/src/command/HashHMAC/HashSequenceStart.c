@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "HashSequenceStart_fp.h"
 
-#ifdef TPM_CC_HashSequenceStart  // Conditional expansion of this file
+#if CC_HashSequenceStart  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Start a hash or an event sequence

@@ -40,7 +40,7 @@
 #ifndef    _CRYPTDES_FP_H_
 #define    _CRYPTDES_FP_H_
 
-#ifdef TPM_ALG_TDES
+#if     ALG_TDES
 
 //*** CryptSetOddByteParity()
 // This function sets the per byte parity of a 64-bit value. The least-significant

@@ -76,7 +76,37 @@ TpmSizeChecks(
 #endif //
     // Make sure that the size of the context blob is large enough for the largest
     // context
-// TBD
+// TPMS_CONTEXT_DATA contains two TPM2B values. That is not how this is 
+// implemented. Rather, the size field of the TPM2B_CONTEXT_DATA is used to 
+// determine the amount of data in the encrypted data. That part is not 
+// independently sized. This makes the actual size 2 bytes smaller than 
+// calculated using Part 2. Since this is opaque to the caller, it is not 
+// necessary to fix. The actual size is returned by TPM2_GetCapabilties().
+
+    // Initialize output handle.  At the end of command action, the output
+    // handle of an object will be replaced, while the output handle
+    // for a session will be the same as input
+
+    // Get the size of fingerprint in context blob.  The sequence value in
+    // TPMS_CONTEXT structure is used as the fingerprint
+    {
+        UINT32  fingerprintSize = sizeof(UINT64);
+        UINT32  integritySize = sizeof(UINT16)
+            + CryptHashGetDigestSize(CONTEXT_INTEGRITY_HASH_ALG);
+        UINT32  biggestObject = MAX(MAX(sizeof(HASH_OBJECT), sizeof(OBJECT)),
+                                    sizeof(SESSION));
+        UINT32  biggestContext = fingerprintSize + integritySize + biggestObject;
+
+        // round required size up to nearest 8 byte boundary.
+        biggestContext = 8 * ((biggestContext + 7) / 8);
+
+        if(MAX_CONTEXT_SIZE != biggestContext)
+        {
+            printf("MAX_CONTEXT_SIZE should be changed to %d\n", biggestContext);
+            pAssert(0);
+        }
+    }
+
 
     // Make sure that the size of the Capability buffer can hold the largest
     // TPML_PCR_SELECTION. The list length is nominally set by the number of hash

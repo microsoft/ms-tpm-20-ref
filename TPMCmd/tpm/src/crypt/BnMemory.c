@@ -151,7 +151,7 @@ BnCopy(
     return TRUE;
 }
 
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 
 //*** BnPointCopy()
 // Function to copy a bn point.
@@ -184,4 +184,4 @@ BnInitializePoint(
     return p;
 }
 
-#endif // TPM_ALG_ECC
+#endif // ALG_ECC

@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PCR_SetAuthPolicy_fp.h"
 
-#ifdef TPM_CC_PCR_SetAuthPolicy  // Conditional expansion of this file
+#if CC_PCR_SetAuthPolicy  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Set authPolicy to a group of PCR

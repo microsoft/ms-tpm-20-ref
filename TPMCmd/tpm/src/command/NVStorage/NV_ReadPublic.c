@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "NV_ReadPublic_fp.h"
 
-#ifdef TPM_CC_NV_ReadPublic  // Conditional expansion of this file
+#if CC_NV_ReadPublic  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Read the public information of a NV index

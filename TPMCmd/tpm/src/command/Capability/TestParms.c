@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "TestParms_fp.h"
 
-#ifdef TPM_CC_TestParms  // Conditional expansion of this file
+#if CC_TestParms  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // TestParms

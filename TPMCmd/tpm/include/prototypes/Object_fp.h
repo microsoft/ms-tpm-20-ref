@@ -200,7 +200,7 @@ ObjectLoad(
     TPM2B_NAME      *name           // IN: (optional)
     );
 
-#if defined TPM_CC_HMAC_Start || defined TPM_CC_MAC_Start
+#if CC_HMAC_Start || CC_MAC_Start
 //*** ObjectCreateHMACSequence()
 // This function creates an internal HMAC sequence object.
 // return type: TPM_RC
@@ -317,7 +317,7 @@ ComputeQualifiedName(
 
 //*** ObjectIsStorage()
 // This function determines if an object has the attributes associated
-// with an parent. A parent is an asymmetric or symmetric block cipher key
+// with a parent. A parent is an asymmetric or symmetric block cipher key
 // that has its 'restricted' and 'decrypt' attributes SET, and 'sign' CLEAR.
 // return type: BOOL
 //        TRUE          if the object is a storage key

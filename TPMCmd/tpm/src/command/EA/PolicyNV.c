@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyNV_fp.h"
 
-#ifdef TPM_CC_PolicyNV  // Conditional expansion of this file
+#if CC_PolicyNV  // Conditional expansion of this file
 
 #include "Policy_spt_fp.h"
 

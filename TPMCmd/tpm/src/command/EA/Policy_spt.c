@@ -32,13 +32,15 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+//** Includes
 #include "Tpm.h"
 #include "Policy_spt_fp.h"
 #include "PolicySigned_fp.h"
 #include "PolicySecret_fp.h"
 #include "PolicyTicket_fp.h"
 
-//** PolicyParameterChecks()
+//** Functions
+//*** PolicyParameterChecks()
 // This function validates the common parameters of TPM2_PolicySiged()
 // and TPM2_PolicySecret(). The common parameters are 'nonceTPM',
 // 'expiration', and 'cpHashA'.
@@ -89,7 +91,7 @@ PolicyParameterChecks(
     return TPM_RC_SUCCESS;
 }
 
-//** PolicyContextUpdate()
+//*** PolicyContextUpdate()
 // Update policy hash
 //      Update the policyDigest in policy session by extending policyRef and
 //      objectName to it. This will also update the cpHash if it is present.

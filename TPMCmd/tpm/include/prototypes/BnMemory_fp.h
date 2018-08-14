@@ -85,7 +85,7 @@ BnCopy(
     bigNum           out,
     bigConst         in
     );
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 
 //*** BnPointCopy()
 // Function to copy a bn point.
@@ -105,6 +105,6 @@ BnInitializePoint(
     bigNum               y,     // IN: y coordinate
     bigNum               z      // IN: x coordinate
     );
-#endif // TPM_ALG_ECC
+#endif // ALG_ECC
 
 #endif  // _BNMEMORY_FP_H_

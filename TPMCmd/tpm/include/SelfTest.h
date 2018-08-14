@@ -107,7 +107,7 @@ typedef struct {
 } SYMMETRIC_TEST_VECTOR;
 
 
-#ifdef  TPM_ALG_RSA
+#if     ALG_RSA
 extern const RSA_KEY        c_rsaTestKey; // This is a constant structure
 #endif
 

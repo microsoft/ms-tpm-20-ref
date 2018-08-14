@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "SequenceComplete_fp.h"
 
-#ifdef TPM_CC_SequenceComplete  // Conditional expansion of this file
+#if CC_SequenceComplete  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Complete a sequence and flush the object.

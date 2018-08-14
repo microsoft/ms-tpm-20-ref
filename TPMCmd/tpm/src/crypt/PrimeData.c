@@ -35,7 +35,7 @@
 #include "Tpm.h"
 
 // This table is the product of all of the primes up to 1000.
-// Checking to see if there is a GCD between the a prime candidate
+// Checking to see if there is a GCD between a prime candidate
 // and this number will eliminate many prime candidates from
 // consideration before running Miller-Rabin on the result.
 

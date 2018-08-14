@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "ChangeEPS_fp.h"
 
-#ifdef TPM_CC_ChangeEPS  // Conditional expansion of this file
+#if CC_ChangeEPS  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Reset current EPS value

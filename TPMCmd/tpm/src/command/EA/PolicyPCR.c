@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyPCR_fp.h"
 
-#ifdef TPM_CC_PolicyPCR  // Conditional expansion of this file
+#if CC_PolicyPCR  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Add a PCR gate for a policy session

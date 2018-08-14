@@ -213,6 +213,8 @@ AlgorithmCapGetImplemented(
     return more;
 }
 
+//** AlgorithmGetImplementedVector()
+// This function returns the bit vector of the implemented algorithms. 
 LIB_EXPORT
 void
 AlgorithmGetImplementedVector(

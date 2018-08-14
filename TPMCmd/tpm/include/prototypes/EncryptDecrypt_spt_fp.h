@@ -40,7 +40,7 @@
 #ifndef    _ENCRYPTDECRYPT_SPT_FP_H_
 #define    _ENCRYPTDECRYPT_SPT_FP_H_
 
-#ifdef TPM_CC_EncryptDecrypt2
+#if CC_EncryptDecrypt2
 
 // return type: TPM_RC
 //   TPM_RC_KEY             is not a symmetric decryption key with both

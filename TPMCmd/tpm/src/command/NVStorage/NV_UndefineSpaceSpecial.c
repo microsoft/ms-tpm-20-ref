@@ -36,7 +36,7 @@
 #include "NV_UndefineSpaceSpecial_fp.h"
 #include "SessionProcess_fp.h"
 
-#ifdef TPM_CC_NV_UndefineSpaceSpecial  // Conditional expansion of this file
+#if CC_NV_UndefineSpaceSpecial  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Delete a NV index that requires policy to delete.

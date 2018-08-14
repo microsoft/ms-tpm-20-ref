@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PP_Commands_fp.h"
 
-#ifdef TPM_CC_PP_Commands  // Conditional expansion of this file
+#if CC_PP_Commands  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This command is used to determine which commands require assertion of

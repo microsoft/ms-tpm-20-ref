@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyPhysicalPresence_fp.h"
 
-#ifdef TPM_CC_PolicyPhysicalPresence  // Conditional expansion of this file
+#if CC_PolicyPhysicalPresence  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // indicate that physical presence will need to be asserted at the time the

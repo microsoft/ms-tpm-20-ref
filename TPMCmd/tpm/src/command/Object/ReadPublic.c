@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "ReadPublic_fp.h"
 
-#ifdef TPM_CC_ReadPublic  // Conditional expansion of this file
+#if CC_ReadPublic  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // read public area of a loaded object

@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "DictionaryAttackLockReset_fp.h"
 
-#ifdef TPM_CC_DictionaryAttackLockReset  // Conditional expansion of this file
+#if CC_DictionaryAttackLockReset  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This command cancels the effect of a TPM lockout due to a number of

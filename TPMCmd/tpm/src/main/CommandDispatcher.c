@@ -32,7 +32,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-//* Includes
+//** Includes and Typedefs
 #include "Tpm.h"
 
 #if TABLE_DRIVEN_DISPATCH
@@ -140,6 +140,7 @@ typedef struct
 #endif
 
 //** Marshal/Unmarshal Functions
+
 //*** ParseHandleBuffer()
 // This is the table-driven version of the handle buffer unmarshaling code
 TPM_RC
@@ -224,6 +225,9 @@ ParseHandleBuffer(
     return TPM_RC_SUCCESS;
 }
 
+//*** CommandDispatcher()
+// Function to unmarshal the command parameters, call the selected action code, and
+// marshal the response parameters.
 TPM_RC
 CommandDispatcher(
     COMMAND                 *command
@@ -237,7 +241,7 @@ CommandDispatcher(
     INT32       *respParmSize = &command->parameterSize;
     INT32        rSize;
     TPM_HANDLE  *handles = &command->handles[0];
-
+//
     command->handleNum = 0;                 // The command-specific code knows how
                                             // many handles there are. This is for
                                             // cataloging the number of response

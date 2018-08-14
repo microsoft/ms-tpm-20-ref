@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "SequenceUpdate_fp.h"
 
-#ifdef TPM_CC_SequenceUpdate  // Conditional expansion of this file
+#if CC_SequenceUpdate  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This function is used to add data to a sequence object.

@@ -36,7 +36,7 @@
 #include "Vendor_TCG_Test_fp.h"
 #include "Marshal_fp.h"
 
-#if defined TPM_CC_Vendor_TCG_Test      // Conditional expansion of this file
+#if CC_Vendor_TCG_Test      // Conditional expansion of this file
 
 TPM_RC
 TPM2_Vendor_TCG_Test(

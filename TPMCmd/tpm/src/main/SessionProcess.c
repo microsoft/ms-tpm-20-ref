@@ -541,23 +541,23 @@ GetCpHashPointer(
     switch(hashAlg)
     {
 #if ALG_SHA1
-        case TPM_ALG_SHA1:
+        case ALG_SHA1_VALUE:
             return (TPM2B_DIGEST *)&command->sha1CpHash;
 #endif
 #if ALG_SHA256
-        case TPM_ALG_SHA256:
+        case ALG_SHA256_VALUE:
             return (TPM2B_DIGEST *)&command->sha256CpHash;
 #endif
 #if ALG_SHA384
-        case TPM_ALG_SHA384:
+        case ALG_SHA384_VALUE:
             return (TPM2B_DIGEST *)&command->sha384CpHash;
 #endif
 #if ALG_SHA512
-        case TPM_ALG_SHA512:
+        case ALG_SHA512_VALUE:
             return (TPM2B_DIGEST *)&command->sha512CpHash;
 #endif
 #if ALG_SM3_256
-        case TPM_ALG_SM3_256:
+        case ALG_SM3_256_VALUE:
             return (TPM2B_DIGEST *)&command->sm3_256CpHash;
 #endif
         default:
@@ -577,23 +577,23 @@ GetRpHashPointer(
     switch(hashAlg)
     {
 #if ALG_SHA1
-        case TPM_ALG_SHA1:
+        case ALG_SHA1_VALUE:
             return (TPM2B_DIGEST *)&command->sha1RpHash;
 #endif
 #if ALG_SHA256
-        case TPM_ALG_SHA256:
+        case ALG_SHA256_VALUE:
             return (TPM2B_DIGEST *)&command->sha256RpHash;
 #endif
 #if ALG_SHA384
-        case TPM_ALG_SHA384:
+        case ALG_SHA384_VALUE:
             return (TPM2B_DIGEST *)&command->sha384RpHash;
 #endif
 #if ALG_SHA512
-        case TPM_ALG_SHA512:
+        case ALG_SHA512_VALUE:
             return (TPM2B_DIGEST *)&command->sha512RpHash;
 #endif
 #if ALG_SM3_256
-        case TPM_ALG_SM3_256:
+        case ALG_SM3_256_VALUE:
             return (TPM2B_DIGEST *)&command->sm3_256RpHash;
 #endif
         default:
@@ -675,7 +675,7 @@ CompareTemplateHash(
     // Only try this for the three commands for which it is intended
     if(command->code != TPM_CC_Create
        && command->code != TPM_CC_CreatePrimary
-#ifdef TPM_CC_CreateLoaded
+#if CC_CreateLoaded
        && command->code != TPM_CC_CreateLoaded
 #endif
        )
@@ -1431,7 +1431,7 @@ CheckAuthSession(
     else
     {
         // ... see if the entity has a policy, ...
-        // Note: IsAuthPolciyAvalable will return FALSE if the sensitive area of the
+        // Note: IsAuthPolicyAvalable will return FALSE if the sensitive area of the
         // object is not loaded
         if(!IsAuthPolicyAvailable(associatedHandle, command->index, sessionIndex))
             return TPM_RC_AUTH_UNAVAILABLE;
@@ -2155,7 +2155,7 @@ BuildResponseSession(
     // Audit sessions should be processed regardless of the tag because
     // a command with no session may cause a change of the exclusivity state.
     UpdateAuditSessionStatus(command);
-#ifdef TPM_CC_GetCommandAuditDigest
+#if CC_GetCommandAuditDigest
     // Command Audit
     if(CommandAuditIsRequired(command->index))
         CommandAudit(command);

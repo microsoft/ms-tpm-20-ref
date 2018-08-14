@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "ReadClock_fp.h"
 
-#ifdef TPM_CC_ReadClock  // Conditional expansion of this file
+#if CC_ReadClock  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // read the current TPMS_TIMER_INFO structure settings

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 3.0 June 16, 2017
- *  Date: Aug 14, 2017  Time: 02:53:08PM
+ *  Date: Jun 16, 2018  Time: 12:44:12AM
  */
 #ifdef TPM_CC_GetTestResult // Command must be defined
 #ifndef _GETTESTRESULT_FP_H_

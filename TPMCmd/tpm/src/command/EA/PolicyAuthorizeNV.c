@@ -35,7 +35,7 @@
 #include "Tpm.h"
 //#include "PolicyAuthorizeNV_fp.h"
 
-#ifdef TPM_CC_PolicyAuthorizeNV  // Conditional expansion of this file
+#if CC_PolicyAuthorizeNV  // Conditional expansion of this file
 #include "PolicyAuthorizeNV_fp.h"
 #include "Policy_spt_fp.h"
 

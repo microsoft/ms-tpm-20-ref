@@ -93,7 +93,7 @@ CryptInitializeToTest(
 // test is run, the corresponding bit in 'toTest' and in 'g_toTest' is CLEAR. If
 // 'toTest' is NULL, then only the bit in 'g_toTest' is CLEAR.
 // There is a special case for the call to TestAlgorithm(). When 'alg' is
-// TPM_ALG_ERROR, TestAlgorithm() will CLEAR any bit in 'toTest' for which it has
+// ALG_ERROR, TestAlgorithm() will CLEAR any bit in 'toTest' for which it has
 // no test. This allows the knowledge about which algorithms have test to be
 // accessed through the interface that provides the test.
 // return type: TPM_RC

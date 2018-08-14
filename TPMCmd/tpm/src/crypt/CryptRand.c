@@ -457,7 +457,7 @@ DRBG_Reseed(
     }
     if(additionalData != NULL)
     {
-        int          i;
+        unsigned int          i;
 
         // XOR the provided data into the provided entropy
         for(i = 0; i < sizeof(DRBG_SEED); i++)
@@ -553,7 +553,7 @@ DRBG_SelfTest(
 // TPM_RC_NO_RESULT    failure of the entropy generator
 LIB_EXPORT TPM_RC
 CryptRandomStir(
-    INT32            additionalDataSize,
+    UINT16           additionalDataSize,
     BYTE            *additionalData
     )
 {
@@ -659,7 +659,7 @@ DRBG_AdditionalData(
 // numbers from a seed value.
 LIB_EXPORT BOOL
 DRBG_InstantiateSeeded(
-    DRBG_STATE      *drbgState,     // IN: buffer to hold the state
+    DRBG_STATE      *drbgState,     // IN/OUT: buffer to hold the state
     const TPM2B     *seed,          // IN: the seed to use
     const TPM2B     *purpose,       // IN: a label for the generation process.
     const TPM2B     *name,          // IN: name of the object
@@ -709,7 +709,7 @@ CryptRandStartup(
     void
     )
 {
-#if _DRBG_STATE_SAVE
+#if ! _DRBG_STATE_SAVE
     // If not saved in NV, re-instantiate on each startup
     DRBG_Instantiate(&drbgDefault, 0, NULL);
 #else

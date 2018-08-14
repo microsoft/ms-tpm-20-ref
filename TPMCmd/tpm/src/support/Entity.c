@@ -158,7 +158,7 @@ EntityGetLoadStatus(
                 // Any PCR handle that is unmarshaled successfully referenced
                 // a PCR that is defined.
                 break;
-#ifdef TPM_CC_AC_Send
+#if CC_AC_Send
             case TPM_HT_AC:
                 // Use the TPM-specific routine to search for the AC
                 result = AcIsAccessible(handle);

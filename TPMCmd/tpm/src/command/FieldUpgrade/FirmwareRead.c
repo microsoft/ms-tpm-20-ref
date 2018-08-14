@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "FirmwareRead_fp.h"
 
-#ifdef TPM_CC_FirmwareRead  // Conditional expansion of this file
+#if CC_FirmwareRead  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // FirmwareRead

@@ -47,7 +47,7 @@
 //      TPM_RC_KEY                      key referenced by 'keyA' is not an ECC key
 //      TPM_RC_SCHEME                   the scheme of the key referenced by 'keyA'
 //                                      is not TPM_ALG_NULL, TPM_ALG_ECDH,
-//                                      TPM_ALG_ECMQV or TPM_ALG_SM2
+// ALG_ECMQV or TPM_ALG_SM2
 TPM_RC
 TPM2_ZGen_2Phase(
     ZGen_2Phase_In      *in,            // IN: input parameter list

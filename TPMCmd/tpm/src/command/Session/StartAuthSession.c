@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "StartAuthSession_fp.h"
 
-#ifdef TPM_CC_StartAuthSession  // Conditional expansion of this file
+#if CC_StartAuthSession  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Start an authorization session

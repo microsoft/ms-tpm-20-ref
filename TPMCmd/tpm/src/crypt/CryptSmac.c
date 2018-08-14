@@ -62,8 +62,8 @@ CryptSmacStart(
     {
         switch(macAlg)
         {
-#ifdef TPM_ALG_CMAC
-            case TPM_ALG_CMAC:
+#if     ALG_CMAC
+            case ALG_CMAC_VALUE:
                 retVal = CryptCmacStart(&state->state.smac, keyParameters, 
                                         macAlg, key);
                 break;

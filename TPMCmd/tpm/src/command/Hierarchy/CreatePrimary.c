@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "CreatePrimary_fp.h"
 
-#ifdef TPM_CC_CreatePrimary  // Conditional expansion of this file
+#if CC_CreatePrimary  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Creates a primary or temporary object from a primary seed.

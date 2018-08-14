@@ -37,7 +37,7 @@
 #include "EncryptDecrypt_fp.h"
 #include "EncryptDecrypt_spt_fp.h"
 
-#ifdef TPM_CC_EncryptDecrypt2  // Conditional expansion of this file
+#if CC_EncryptDecrypt2  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // symmetric encryption or decryption using modified parameter list

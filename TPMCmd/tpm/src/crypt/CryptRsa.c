@@ -43,7 +43,7 @@
 #define CRYPT_RSA_C
 #include "Tpm.h"
 
-#ifdef  TPM_ALG_RSA
+#if     ALG_RSA
 
 //**  Obligatory Initialization Functions
 
@@ -847,7 +847,7 @@ CryptRsaSelectScheme(
         retVal = scheme;
     }
     // if the object scheme is not TPM_ALG_NULL and the input scheme is
-    // TPM_ALG_NULL, then select the default scheme of the object.
+    // ALG_NULL, then select the default scheme of the object.
     else if(scheme->scheme == TPM_ALG_NULL)
     {
         // if input scheme is NULL
@@ -954,7 +954,7 @@ CryptRsaEncrypt(
 
     switch(scheme->scheme)
     {
-        case TPM_ALG_NULL:  // 'raw' encryption
+        case ALG_NULL_VALUE:  // 'raw' encryption
         {
             INT32            i;
             INT32            dSize = dIn->size;
@@ -974,10 +974,10 @@ CryptRsaEncrypt(
             // the modulus. If it is, then RSAEP() will catch it.
         }
         break;
-        case TPM_ALG_RSAES:
+        case ALG_RSAES_VALUE:
             retVal = RSAES_PKCS1v1_5Encode(&cOut->b, dIn, rand);
             break;
-        case TPM_ALG_OAEP:
+        case ALG_OAEP_VALUE:
             retVal = OaepEncode(&cOut->b, scheme->details.oaep.hashAlg, label, dIn,
                                 rand);
             break;
@@ -1034,15 +1034,15 @@ CryptRsaDecrypt(
         // Remove padding
         switch(scheme->scheme)
         {
-            case TPM_ALG_NULL:
+            case ALG_NULL_VALUE:
                 if(dOut->size < cIn->size)
                     return TPM_RC_VALUE;
                 MemoryCopy2B(dOut, cIn, dOut->size);
                 break;
-            case TPM_ALG_RSAES:
+            case ALG_RSAES_VALUE:
                 retVal = RSAES_Decode(dOut, cIn);
                 break;
-            case TPM_ALG_OAEP:
+            case ALG_OAEP_VALUE:
                 retVal = OaepDecode(dOut, scheme->details.oaep.hashAlg, label, cIn);
                 break;
             default:
@@ -1086,14 +1086,14 @@ CryptRsaSign(
 
     switch(sigOut->sigAlg)
     {
-        case TPM_ALG_NULL:
+        case ALG_NULL_VALUE:
             sigOut->signature.rsapss.sig.t.size = 0;
             return TPM_RC_SUCCESS;
-        case TPM_ALG_RSAPSS:
+        case ALG_RSAPSS_VALUE:
             retVal = PssEncode(&sigOut->signature.rsapss.sig.b,
                                sigOut->signature.rsapss.hash, &hIn->b, rand);
             break;
-        case TPM_ALG_RSASSA:
+        case ALG_RSASSA_VALUE:
             retVal = RSASSA_Encode(&sigOut->signature.rsassa.sig.b,
                                    sigOut->signature.rsassa.hash, &hIn->b);
             break;
@@ -1130,8 +1130,8 @@ CryptRsaValidateSignature(
     pAssert(key != NULL && sig != NULL && digest != NULL);
     switch(sig->sigAlg)
     {
-        case TPM_ALG_RSAPSS:
-        case TPM_ALG_RSASSA:
+        case ALG_RSAPSS_VALUE:
+        case ALG_RSASSA_VALUE:
             break;
         default:
             return TPM_RC_SCHEME;
@@ -1149,11 +1149,11 @@ CryptRsaValidateSignature(
     {
         switch(sig->sigAlg)
         {
-            case TPM_ALG_RSAPSS:
+            case ALG_RSAPSS_VALUE:
                 retVal = PssDecode(sig->signature.any.hashAlg, &digest->b,
                                    &sig->signature.rsassa.sig.b);
                 break;
-            case TPM_ALG_RSASSA:
+            case ALG_RSASSA_VALUE:
                 retVal = RSASSA_Decode(sig->signature.any.hashAlg, &digest->b,
                                        &sig->signature.rsassa.sig.b);
                 break;
@@ -1165,7 +1165,7 @@ Exit:
     return (retVal != TPM_RC_SUCCESS) ? TPM_RC_SIGNATURE : TPM_RC_SUCCESS;
 }
 
-#if SIMULATION && USE_RSA_KEY_CACHE
+#if defined SIMULATION && defined USE_RSA_KEY_CACHE
 extern int s_rsaKeyCacheEnabled;
 int GetCachedRsaKey(OBJECT *key, RAND_STATE *rand);
 #define GET_CACHED_KEY(key, rand)                       \
@@ -1249,7 +1249,7 @@ CryptRsaGenerateKey(
     // Set the prime size for instrumentation purposes
     INSTRUMENT_SET(PrimeIndex, PRIME_INDEX(keySizeInBits / 2));
 
-#if SIMULATION && USE_RSA_KEY_CACHE
+#if defined SIMULATION && defined USE_RSA_KEY_CACHE
     if(GET_CACHED_KEY(rsaKey, rand))
         return TPM_RC_SUCCESS;
 #endif
@@ -1347,4 +1347,4 @@ Exit:
     return retVal;
 }
 
-#endif // TPM_ALG_RSA
+#endif // ALG_RSA

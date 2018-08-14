@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "GetRandom_fp.h"
 
-#ifdef TPM_CC_GetRandom  // Conditional expansion of this file
+#if CC_GetRandom  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // random number generator

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jun 16, 2018  Time: 08:35:57PM
  */
 
 #ifndef    _OBJECT_SPT_FP_H_
@@ -77,10 +77,8 @@ CreateChecks(
 
 //*** SchemeChecks
 // This function is called by TPM2_LoadExternal() and PublicAttributesValidation().
-// return type: validates the schemes in the public area of an object.
-// This function TPM_RC
-//   TPM_RC_ASYMMETRIC      non-duplicable storage key and its parent have different
-//                          public parameters
+// This function validates the schemes in the public area of an object.
+// return type: TPM_RC
 //   TPM_RC_HASH            non-duplicable storage key and its parent have different
 //                          name algorithm
 //   TPM_RC_KDF             incorrect KDF specified for decrypting keyed hash object
@@ -90,7 +88,7 @@ CreateChecks(
 //                          with the scheme ID for keyed hash object
 //   TPM_RC_SYMMETRIC       a storage key with no symmetric algorithm specified; or
 //                          non-storage key with symmetric algorithm different from
-//                          TPM_ALG_NULL
+// ALG_NULL
 TPM_RC
 SchemeChecks(
     OBJECT          *parentObject,  // IN: parent (null if primary seed)

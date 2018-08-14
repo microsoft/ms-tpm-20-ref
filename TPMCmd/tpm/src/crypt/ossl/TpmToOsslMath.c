@@ -145,7 +145,7 @@ done:
 }
 #endif
 
-#if LIBRARY_COMPATIBILITY_CHECK
+#ifdef LIBRARY_COMPATIBILITY_CHECK
 void
 MathLibraryCompatibilityCheck(
     void 
@@ -278,7 +278,7 @@ BnDiv(
     return OK;
 }
 
-#ifdef TPM_ALG_RSA
+#if     ALG_RSA
 //*** BnGcd()
 // Get the greatest common divisor of two numbers
 LIB_EXPORT BOOL
@@ -354,9 +354,9 @@ BnModInverse(
     OSSL_LEAVE();
     return OK;
 }
-#endif // TPM_ALG_RSA
+#endif // ALG_RSA
 
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 
 //*** PointFromOssl()
 // Function to copy the point result from an OSSL function to a bigNum
@@ -520,7 +520,7 @@ BnEccModMult2(
     EC_POINT            *pQ = EcPointInitialized(Q, E);
     BIG_INITIALIZED(bnU, u);
 
-    if(S == NULL || S == (pointConst)&E->C->base)
+    if(S == NULL || S == (pointConst)&(AccessCurveData(E)->base))
         EC_POINT_mul(E->G, pR, bnD, pQ, bnU, E->CTX);
     else
     {
@@ -564,6 +564,6 @@ BnEccAdd(
     return !BnEqualZero(R->z);
 }
 
-#endif // TPM_ALG_ECC
+#endif // ALG_ECC
 
 #endif // MATHLIB OSSL

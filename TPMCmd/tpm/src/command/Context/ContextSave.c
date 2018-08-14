@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "ContextSave_fp.h"
 
-#ifdef TPM_CC_ContextSave  // Conditional expansion of this file
+#if CC_ContextSave  // Conditional expansion of this file
 
 #include "Context_spt_fp.h"
 
@@ -111,10 +111,9 @@ TPM2_ContextSave(
             // plus fingerprint plus the whole internal OBJECT structure
             out->context.contextBlob.t.size = integritySize +
                 fingerprintSize + objectSize;
-// Make sure things fit
+            // Make sure things fit
             pAssert(out->context.contextBlob.t.size
                     <= sizeof(out->context.contextBlob.t.buffer));
-
             // Copy the whole internal OBJECT structure to context blob
             MemoryCopy(outObject, object, objectSize);
 
@@ -155,7 +154,7 @@ TPM2_ContextSave(
             out->context.contextBlob.t.size = integritySize +
                 fingerprintSize + sizeof(*session);
 
-// Make sure things fit
+            // Make sure things fit
             pAssert(out->context.contextBlob.t.size
                     < sizeof(out->context.contextBlob.t.buffer));
 
@@ -167,16 +166,14 @@ TPM2_ContextSave(
                     - integritySize - fingerprintSize);
             MemoryCopy(out->context.contextBlob.t.buffer + integritySize 
                        + fingerprintSize, session, sizeof(*session));
-
-   // Fill in the other return parameters for a session
-   // Get a context ID and set the session tracking values appropriately
-   // TPM_RC_CONTEXT_GAP is a possible error.
-   // SessionContextSave() will flush the in-memory context
-   // so no additional errors may occur after this call.
+           // Fill in the other return parameters for a session
+           // Get a context ID and set the session tracking values appropriately
+           // TPM_RC_CONTEXT_GAP is a possible error.
+           // SessionContextSave() will flush the in-memory context
+           // so no additional errors may occur after this call.
             result = SessionContextSave(out->context.savedHandle, &contextID);
             if(result != TPM_RC_SUCCESS)
                 return result;
-
             // sequence number is the current session contextID
             out->context.sequence = contextID;
 
@@ -205,7 +202,7 @@ TPM2_ContextSave(
     // Encrypt context blob
     CryptSymmetricEncrypt(out->context.contextBlob.t.buffer + integritySize,
                           CONTEXT_ENCRYPT_ALG, CONTEXT_ENCRYPT_KEY_BITS,
-                          symKey.t.buffer, &iv, TPM_ALG_CFB,
+                          symKey.t.buffer, &iv, ALG_CFB_VALUE,
                           out->context.contextBlob.t.size - integritySize,
                           out->context.contextBlob.t.buffer + integritySize);
 

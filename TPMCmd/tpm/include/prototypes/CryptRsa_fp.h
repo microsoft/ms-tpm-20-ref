@@ -40,7 +40,7 @@
 #ifndef    _CRYPTRSA_FP_H_
 #define    _CRYPTRSA_FP_H_
 
-#ifdef  TPM_ALG_RSA
+#if     ALG_RSA
 
 //*** CryptRsaInit()
 // Function called at _TPM_Init().
@@ -187,6 +187,6 @@ CryptRsaGenerateKey(
     RAND_STATE          *rand               // IN: if not NULL, the deterministic
                                             //     RNG state
     );
-#endif // TPM_ALG_RSA
+#endif // ALG_RSA
 
 #endif  // _CRYPTRSA_FP_H_

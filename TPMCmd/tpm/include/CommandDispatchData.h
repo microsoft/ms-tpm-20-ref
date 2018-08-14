@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 3.0 June 16, 2017
- *  Date: Aug 14, 2017  Time: 02:53:08PM
+ *  Date: Jul 16, 2018  Time: 02:57:15PM
  */
 // This file should only be included by CommandCodeAttibutes.c
 #ifdef _COMMAND_TABLE_DISPATCH_

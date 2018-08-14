@@ -318,7 +318,7 @@ CryptIsAsymDecryptScheme(
 // algorithm, if the schemes are compatible, the input scheme will be chosen.
 //
 // This function should not be called if 'signObject->publicArea.type' ==
-// TPM_ALG_SYMCIPHER.
+// ALG_SYMCIPHER.
 //
 // return type: BOOL
 //   FALSE          both 'scheme' and key's default scheme are empty; or

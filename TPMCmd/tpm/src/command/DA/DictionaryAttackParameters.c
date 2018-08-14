@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "DictionaryAttackParameters_fp.h"
 
-#ifdef TPM_CC_DictionaryAttackParameters  // Conditional expansion of this file
+#if CC_DictionaryAttackParameters  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // change the lockout parameters

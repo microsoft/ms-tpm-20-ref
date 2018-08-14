@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "ChangePPS_fp.h"
 
-#ifdef TPM_CC_ChangePPS  // Conditional expansion of this file
+#if CC_ChangePPS  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Reset current PPS value

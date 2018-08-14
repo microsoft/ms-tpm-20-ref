@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PCR_Event_fp.h"
 
-#ifdef TPM_CC_PCR_Event  // Conditional expansion of this file
+#if CC_PCR_Event  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Update PCR

@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "Startup_fp.h"
 
-#ifdef TPM_CC_Startup  // Conditional expansion of this file
+#if CC_Startup  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Initialize TPM because a system-wide reset
@@ -88,16 +88,16 @@ TPM2_Startup(
     if(g_daUsed)
         gp.orderlyState = SU_NONE_VALUE;
 #endif
+
     g_prevOrderlyState = gp.orderlyState;
 
+    // If there was a proper shutdown, then the startup modifiers are in the 
+    // orderlyState. Turn them off in the copy.
+    if(IS_ORDERLY(g_prevOrderlyState))
+        g_prevOrderlyState &=  ~(PRE_STARTUP_FLAG | STARTUP_LOCALITY_3);
     // If this is a Resume, 
     if(in->startupType == TPM_SU_STATE)
     {
-        // Turn of the startup modifiers in the recovered state. This will modify 
-        // the SU_NONE_VALUE but not make it anything that would be recognized as 
-        // a valid shutdown
-        g_prevOrderlyState &= ~(PRE_STARTUP_FLAG | STARTUP_LOCALITY_3);
-
         // then there must have been a prior TPM2_ShutdownState(STATE) 
         if(g_prevOrderlyState != TPM_SU_STATE)
             return TPM_RCS_VALUE + RC_Startup_startupType;
@@ -108,14 +108,14 @@ TPM2_Startup(
         // because that would prevent the TPM from ever getting unstuck.
         if(g_nvOk == FALSE)
             return TPM_RC_NV_UNINITIALIZED;
-
         // For Resume, the H-CRTM has to be the same as the previous boot
         if(g_DrtmPreStartup != ((gp.orderlyState & PRE_STARTUP_FLAG) != 0))
             return TPM_RCS_VALUE + RC_Startup_startupType;
         if(g_StartupLocality3 != ((gp.orderlyState & STARTUP_LOCALITY_3) != 0))
             return TPM_RC_LOCALITY;
-        gp.orderlyState = g_prevOrderlyState;
     }
+    // Clean up the gp state
+    gp.orderlyState = g_prevOrderlyState;
     
 // Internal Date Update
     if((gp.orderlyState == TPM_SU_STATE) && (g_nvOk == TRUE))
@@ -138,7 +138,6 @@ TPM2_Startup(
         // Will do a TPM reset if Shutdown(CLEAR) and Startup(CLEAR) or no shutdown
         // or there was a failure reading the NV data. 
         startup = SU_RESET;
-
     // Startup for cryptographic library. Don't do this until after the orderly
     // state has been read in from NV.
     CryptStartup(startup);
@@ -213,8 +212,6 @@ TPM2_Startup(
             
             break;
     }
-////
-
     // Initialize session table
     SessionStartup(startup);
 

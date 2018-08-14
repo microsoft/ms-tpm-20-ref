@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "NV_Increment_fp.h"
 
-#ifdef TPM_CC_NV_Increment  // Conditional expansion of this file
+#if CC_NV_Increment  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Increment a NV counter

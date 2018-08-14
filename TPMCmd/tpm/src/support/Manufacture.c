@@ -167,10 +167,10 @@ TpmEndSimulation(
     HashLibSimulationEnd();
     SymLibSimulationEnd();
     MathLibSimulationEnd();
-#ifdef TPM_ALG_RSA
+#if     ALG_RSA
     RsaSimulationEnd();
 #endif
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
     EccSimulationEnd();
 #endif
 #endif // SIMULATION

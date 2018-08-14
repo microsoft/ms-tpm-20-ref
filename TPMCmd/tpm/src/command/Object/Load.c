@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "Load_fp.h"
 
-#ifdef TPM_CC_Load  // Conditional expansion of this file
+#if CC_Load  // Conditional expansion of this file
 
 #include "Object_spt_fp.h"
 
@@ -43,8 +43,6 @@
 // Load an ordinary or temporary object
 */
 // return type: TPM_RC
-//      TPM_RC_ASYMMETRIC       storage key with different asymmetric type
-//                              than parent
 //      TPM_RC_ATTRIBUTES       'inPulblic' attributes are not allowed with selected
 //                              parent
 //      TPM_RC_BINDING          'inPrivate' and 'inPublic' are not

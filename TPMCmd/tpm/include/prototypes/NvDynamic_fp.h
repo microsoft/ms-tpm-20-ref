@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jun 16, 2018  Time: 12:44:14AM
  */
 
 #ifndef    _NVDYNAMIC_FP_H_
@@ -313,7 +313,7 @@ NvDeleteEvict(
     );
 
 //*** NvFlushHierarchy()
-// This function will delete persistent objects belonging to the indicated
+// This function will delete persistent objects belonging to the indicated hierarchy.
 // If the storage hierarchy is selected, the function will also delete any
 // NV Index defined using ownerAuth.
 // return type: TPM_RC

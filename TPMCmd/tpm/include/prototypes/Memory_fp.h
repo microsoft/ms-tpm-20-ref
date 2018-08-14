@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Aug  8, 2018  Time: 12:19:58AM
  */
 
 #ifndef    _MEMORY_FP_H_
@@ -46,24 +46,12 @@
 // memmove is used when necessary, it is always used.
 // The #if 0 is used to prevent instantiation of the MemoryCopy function so that
 // the #define is always used
-#ifndef INLINE_FUNCTIONS
 void
 MemoryCopy(
     void        *dest,
     const void  *src,
     int          sSize
     );
-#else
-INLINE void
-MemoryCopy(
-    void        *dest,
-    const void  *src,
-    int          sSize
-    )
-{
-    memmove(dest, src, sSize);
-}
-#endif // INLINE_FUNCTIONS
 
 //*** MemoryEqual()
 // This function indicates if two buffers have the same values in the indicated
@@ -122,179 +110,64 @@ MemoryEqual2B(
 // intended to make sure that the destination would not be overrun. The
 // problem is that, in use, all that was happening was that the value of
 // size was used for dSize so there was no benefit in the extra parameter.
-#ifndef INLINE_FUNCTIONS
 void
 MemorySet(
     void            *dest,
     int              value,
     size_t           size
     );
-#else
-INLINE void
-MemorySet(
-    void            *dest,
-    int              value,
-    size_t           size
-    )
-{
-    memset(dest, value, size);
-}
-#endif // INLINE_FUNCTIONS
 
 //*** MemoryPad2B()
 // Function to pad a TPM2B with zeros and adjust the size.
-#ifndef INLINE_FUNCTIONS
 void
 MemoryPad2B(
     TPM2B           *b,
     UINT16           newSize
     );
-#else
-INLINE void
-MemoryPad2B(
-    TPM2B           *b,
-    UINT16           newSize
-    )
-{
-    MemorySet(&b->buffer[b->size], 0, newSize - b->size);
-    b->size = newSize;
-}
-#endif // INLINE_FUNCTIONS
 
 //*** Uint16ToByteArray()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 void
 Uint16ToByteArray(
     UINT16              i,
     BYTE                *a
     );
-#else
-INLINE void
-Uint16ToByteArray(
-    UINT16              i,
-    BYTE                *a
-    )
-{
-    a[1] = (BYTE)(i); i >>= 8;
-    a[0] = (BYTE)(i);
-}
-#endif // INLINE_FUNCTIONS
 
 //*** Uint32ToByteArray()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 void
 Uint32ToByteArray(
     UINT32              i,
     BYTE                *a
     );
-#else
-INLINE void
-Uint32ToByteArray(
-    UINT32              i,
-    BYTE                *a
-    )
-{
-    a[3] = (BYTE)(i); i >>= 8;
-    a[2] = (BYTE)(i); i >>= 8;
-    a[1] = (BYTE)(i); i >>= 8;
-    a[0] = (BYTE)(i);
-}
-#endif // INLINE_FUNCTIONS
 
 //*** Uint64ToByteArray()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 void
 Uint64ToByteArray(
     UINT64               i,
     BYTE                *a
     );
-#else
-INLINE void
-Uint64ToByteArray(
-    UINT64               i,
-    BYTE                *a
-    )
-{
-    a[7] = (BYTE)(i); i >>= 8;
-    a[6] = (BYTE)(i); i >>= 8;
-    a[5] = (BYTE)(i); i >>= 8;
-    a[4] = (BYTE)(i); i >>= 8;
-    a[3] = (BYTE)(i); i >>= 8;
-    a[2] = (BYTE)(i); i >>= 8;
-    a[1] = (BYTE)(i); i >>= 8;
-    a[0] = (BYTE)(i);
-}
-#endif // INLINE_FUNCTIONS
 
 //*** ByteArrayToUint16()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 UINT16
 ByteArrayToUint16(
     BYTE                *a
     );
-#else
-INLINE UINT16
-ByteArrayToUint16(
-    BYTE                *a
-    )
-{
-    UINT16      retVal;
-    retVal  = a[0]; retVal <<= 8;
-    retVal += a[1];
-    return retVal;
-}
-#endif // INLINE_FUNCTIONS
 
 //*** ByteArrayToUint32()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 UINT32
 ByteArrayToUint32(
     BYTE                *a
     );
-#else
-INLINE UINT32
-ByteArrayToUint32(
-    BYTE                *a
-    )
-{
-    UINT32      retVal;
-    retVal  = a[0]; retVal <<= 8;
-    retVal += a[1]; retVal <<= 8;
-    retVal += a[2]; retVal <<= 8;
-    retVal += a[3];
-    return retVal;
-}
-#endif // INLINE_FUNCTIONS
 
 //*** ByteArrayToUint64()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 UINT64
 ByteArrayToUint64(
     BYTE                *a
     );
-#else
-INLINE UINT64
-ByteArrayToUint64(
-    BYTE                *a
-    )
-{
-    UINT64      retVal;
-    retVal  = a[0]; retVal <<= 8;
-    retVal += a[1]; retVal <<= 8;
-    retVal += a[2]; retVal <<= 8;
-    retVal += a[3]; retVal <<= 8;
-    retVal += a[4]; retVal <<= 8;
-    retVal += a[5]; retVal <<= 8;
-    retVal += a[6]; retVal <<= 8;
-    retVal += a[7];
-    return retVal;
-}
-#endif // INLINE_FUNCTIONS
 
 #endif  // _MEMORY_FP_H_

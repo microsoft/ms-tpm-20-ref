@@ -38,7 +38,7 @@
 // command protocol is enveloped with the interface protocol described in this
 // file. The command is indicated by a UINT32 with one of the values below.  Most
 // commands take no parameters return no TPM errors.  In these cases the TPM
-// interface protocol acknowledges that command processing is complete by returning
+// interface protocol acknowledges that command processing is completed by returning
 // a UINT32=0. The command TPM_SIGNAL_HASH_DATA takes a UINT32-prepended variable
 // length BYTE array and the interface protocol acknowledges command completion
 // with a UINT32=0. Most TPM commands are enveloped using the TPM_SEND_COMMAND
@@ -50,7 +50,7 @@
 #ifndef     TCP_TPM_PROTOCOL_H
 #define     TCP_TPM_PROTOCOL_H
 
-// TPM Commands.
+//** TPM Commands.
 // All commands acknowledge processing by returning a UINT32 == 0 except where noted
 #define TPM_SIGNAL_POWER_ON         1
 #define TPM_SIGNAL_POWER_OFF        2
@@ -84,6 +84,7 @@
 
 #define TPM_TEST_FAILURE_MODE       30
 
+//** Enumerations and Structures
 enum TpmEndPointInfo
 {
     tpmPlatformAvailable = 0x01,

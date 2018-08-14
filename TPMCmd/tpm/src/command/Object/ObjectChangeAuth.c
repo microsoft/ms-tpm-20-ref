@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "ObjectChangeAuth_fp.h"
 
-#ifdef TPM_CC_ObjectChangeAuth  // Conditional expansion of this file
+#if CC_ObjectChangeAuth  // Conditional expansion of this file
 
 #include "Object_spt_fp.h"
 

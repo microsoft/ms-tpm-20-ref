@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jun 16, 2018  Time: 08:35:57PM
  */
 
 #ifndef    _TPMTOOSSLMATH_FP_H_
@@ -64,7 +64,7 @@ BigInitialized(
     bigConst            initializer
     );
 
-#if LIBRARY_COMPATIBILITY_CHECK
+#ifdef LIBRARY_COMPATIBILITY_CHECK
 void
 MathLibraryCompatibilityCheck(
     void
@@ -101,7 +101,7 @@ BnDiv(
     bigConst             divisor
     );
 
-#ifdef TPM_ALG_RSA
+#if     ALG_RSA
 //*** BnGcd()
 // Get the greatest common divisor of two numbers
 LIB_EXPORT BOOL
@@ -130,8 +130,8 @@ BnModInverse(
     bigConst             number,
     bigConst             modulus
     );
-#endif // TPM_ALG_RSA
-#ifdef TPM_ALG_ECC
+#endif // ALG_RSA
+#if     ALG_ECC
 
 //*** BnCurveInitialize()
 // This function initializes the OpenSSL group definition
@@ -183,7 +183,7 @@ BnEccAdd(
     pointConst           Q,         // IN: second point
     bigCurve             E          // IN: curve
     );
-#endif // TPM_ALG_ECC
+#endif // ALG_ECC
 #endif // MATHLIB OSSL
 
 #endif  // _TPMTOOSSLMATH_FP_H_

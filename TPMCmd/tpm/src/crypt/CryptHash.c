@@ -45,16 +45,16 @@
 extern const HASH_INFO   g_hashData[HASH_COUNT + 1];
 
 
-#ifdef  TPM_ALG_SHA1
+#if     ALG_SHA1
 HASH_DEF_TEMPLATE(SHA1);
 #endif
-#ifdef      TPM_ALG_SHA256
+#if     ALG_SHA256
 HASH_DEF_TEMPLATE(SHA256);
 #endif
-#ifdef      TPM_ALG_SHA384
+#if     ALG_SHA384
 HASH_DEF_TEMPLATE(SHA384);
 #endif
-#ifdef      TPM_ALG_SHA512
+#if     ALG_SHA512
 HASH_DEF_TEMPLATE(SHA512);
 #endif
 
@@ -101,23 +101,23 @@ CryptGetHashDef(
     PHASH_DEF       retVal;
     switch(hashAlg)
     {
-#ifdef TPM_ALG_SHA1
-        case TPM_ALG_SHA1:
+#if     ALG_SHA1
+        case ALG_SHA1_VALUE:
             return &SHA1_Def;
             break;
 #endif
-#ifdef TPM_ALG_SHA256
-        case TPM_ALG_SHA256:
+#if     ALG_SHA256
+        case ALG_SHA256_VALUE:
             retVal = &SHA256_Def;
             break;
 #endif
-#ifdef  TPM_ALG_SHA384
-        case TPM_ALG_SHA384:
+#if     ALG_SHA384
+        case ALG_SHA384_VALUE:
             retVal = &SHA384_Def;
             break;
 #endif
-#ifdef  TPM_ALG_SHA512
-        case TPM_ALG_SHA512:
+#if     ALG_SHA512
+        case ALG_SHA512_VALUE:
             retVal = &SHA512_Def;
             break;
 #endif
@@ -142,24 +142,24 @@ CryptHashIsValidAlg(
 {
     switch(hashAlg)
     {
-#ifdef TPM_ALG_SHA1
-        case TPM_ALG_SHA1:
+#if     ALG_SHA1
+        case ALG_SHA1_VALUE:
 #endif
-#ifdef TPM_ALG_SHA256
-        case TPM_ALG_SHA256:
+#if     ALG_SHA256
+        case ALG_SHA256_VALUE:
 #endif
-#ifdef  TPM_ALG_SHA384
-        case TPM_ALG_SHA384:
+#if     ALG_SHA384
+        case ALG_SHA384_VALUE:
 #endif
-#ifdef  TPM_ALG_SHA512
-        case TPM_ALG_SHA512:
+#if     ALG_SHA512
+        case ALG_SHA512_VALUE:
 #endif
-#ifdef TPM_ALG_SM3_256
-        case TPM_ALG_SHA256:
+#if     ALG_SM3_256
+        case ALG_SHA256_VALUE:
 #endif
             return TRUE;
             break;
-        case TPM_ALG_NULL:
+        case ALG_NULL_VALUE:
             return flag;
             break;
         default:
@@ -181,7 +181,7 @@ GetHashInfoPointer(
 {
     UINT32              i;
 //
-    // TPM_ALG_NULL is the stop value so search up to it
+    // ALG_NULL is the stop value so search up to it
     for(i = 0; i < HASH_COUNT; i++)
     {
         if(g_hashData[i].alg == hashAlg)
@@ -200,8 +200,8 @@ GetHashInfoPointer(
 // last. All other index values will return TPM_ALG_NULL.
 //
 // return type: TPM_ALG_ID
-//  TPM_ALG_xxx         a hash algorithm
-//  TPM_ALG_NULL        this can be used as a stop value
+// ALG_xxx         a hash algorithm
+// ALG_NULL        this can be used as a stop value
 LIB_EXPORT TPM_ALG_ID
 CryptHashGetAlgByIndex(
     UINT32           index          // IN: the index

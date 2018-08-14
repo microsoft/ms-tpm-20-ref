@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "Unseal_fp.h"
 
-#ifdef TPM_CC_Unseal  // Conditional expansion of this file
+#if CC_Unseal  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // return data in a sealed data blob

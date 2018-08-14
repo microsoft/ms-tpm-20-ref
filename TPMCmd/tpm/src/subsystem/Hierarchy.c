@@ -59,15 +59,15 @@ HierarchyPreInstall_Init(
     gp.EPSeed.t.size = sizeof(gp.EPSeed.t.buffer);
     gp.SPSeed.t.size = sizeof(gp.SPSeed.t.buffer);
     gp.PPSeed.t.size = sizeof(gp.PPSeed.t.buffer);
-    CryptRandomGenerate(gp.SPSeed.t.size, gp.SPSeed.t.buffer);
-    CryptRandomGenerate(gp.PPSeed.t.size, gp.PPSeed.t.buffer);
-#ifdef USE_PLATFORM_EPS
+#if (defined USE_PLATFORM_EPS) && (USE_PLATFORM_EPS != NO)
     _plat__GetEPS(gp.EPSeed.t.size, gp.EPSeed.t.buffer);
 #else
     CryptRandomGenerate(gp.EPSeed.t.size, gp.EPSeed.t.buffer);
 #endif
+    CryptRandomGenerate(gp.SPSeed.t.size, gp.SPSeed.t.buffer);
+    CryptRandomGenerate(gp.PPSeed.t.size, gp.PPSeed.t.buffer);
 
-    // Initialize owner, endorsement and lockout auth
+    // Initialize owner, endorsement and lockout authorization
     gp.ownerAuth.t.size = 0;
     gp.endorsementAuth.t.size = 0;
     gp.lockoutAuth.t.size = 0;

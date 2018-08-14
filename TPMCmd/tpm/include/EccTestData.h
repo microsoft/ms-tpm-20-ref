@@ -155,4 +155,4 @@ const TPM2B_EC_TEST    c_TestEcSchnorr_s = {{32,{
 
 #endif // SHA512
 
-#endif // ELF_TEST_DATA
+#endif // SELF_TEST_DATA

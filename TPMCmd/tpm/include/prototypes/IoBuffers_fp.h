@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Aug  8, 2018  Time: 12:16:33AM
  */
 
 #ifndef    _IOBUFFERS_FP_H_
@@ -79,19 +79,9 @@ MemoryGetOutBuffer(
 // return type: BOOL
 //  FALSE   string is not null terminated
 //  TRUE    string is null terminated
-#ifndef INLINE_FUNCTIONS
 BOOL
 IsLabelProperlyFormatted(
     TPM2B           *x
     );
-#else
-INLINE BOOL
-IsLabelProperlyFormatted(
-    TPM2B           *x
-    )
-{
-    return (((x)->size == 0) || ((x)->buffer[(x)->size - 1] == 0));
-}
-#endif // INLINE_FUNCTIONS
 
 #endif  // _IOBUFFERS_FP_H_

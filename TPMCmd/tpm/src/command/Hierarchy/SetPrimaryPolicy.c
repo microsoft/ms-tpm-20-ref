@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "SetPrimaryPolicy_fp.h"
 
-#ifdef TPM_CC_SetPrimaryPolicy  // Conditional expansion of this file
+#if CC_SetPrimaryPolicy  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Set a hierarchy policy

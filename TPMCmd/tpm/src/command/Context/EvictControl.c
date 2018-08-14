@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "EvictControl_fp.h"
 
-#ifdef TPM_CC_EvictControl  // Conditional expansion of this file
+#if CC_EvictControl  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Make a transient object persistent or evict a persistent object

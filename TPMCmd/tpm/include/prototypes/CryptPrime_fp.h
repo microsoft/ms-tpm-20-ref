@@ -79,7 +79,7 @@ MillerRabin(
     bigNum           bnW,
     RAND_STATE      *rand
     );
-#ifdef TPM_ALG_RSA
+#if     ALG_RSA
 
 //*** RsaCheckPrime()
 // This will check to see if a number is prime and appropriate for an
@@ -126,6 +126,6 @@ BnGeneratePrimeForRSA(
     UINT32          exponent,
     RAND_STATE      *rand
     );
-#endif // TPM_ALG_RSA
+#endif // ALG_RSA
 
 #endif  // _CRYPTPRIME_FP_H_

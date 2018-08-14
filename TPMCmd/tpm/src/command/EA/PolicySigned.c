@@ -36,7 +36,7 @@
 #include "Policy_spt_fp.h"
 #include "PolicySigned_fp.h"
 
-#ifdef TPM_CC_PolicySigned  // Conditional expansion of this file
+#if CC_PolicySigned  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Include an asymmetrically signed authorization to the policy evaluation

@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "NV_ChangeAuth_fp.h"
 
-#ifdef TPM_CC_NV_ChangeAuth  // Conditional expansion of this file
+#if CC_NV_ChangeAuth  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // change authorization value of a NV index

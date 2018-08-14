@@ -36,7 +36,7 @@
 #include "Tpm.h"
 #include "CryptEccSignature_fp.h"
 
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 
 //** Utility Functions
 
@@ -508,7 +508,7 @@ CryptEccSign(
     ECC_NUM(bnR);
     ECC_NUM(bnS);
     const ECC_CURVE_DATA   *C;
-    TPM_RC                  retVal;
+    TPM_RC                  retVal = TPM_RC_SCHEME;
 //
     NOT_REFERENCED(scheme);
     if(E == NULL)
@@ -544,7 +544,7 @@ CryptEccSign(
             break;
 #endif
         default:
-            return TPM_RC_SCHEME;
+            break;
     }
     // If signature generation worked, convert the results.
     if(retVal == TPM_RC_SUCCESS)
@@ -678,11 +678,11 @@ BnValidateSignatureEcSm2(
                              "23E6D9188B2AE47759514657CE25D112"));
 #endif
     // e)   compute r' := (e + x) mod n (the x coordinate is in bnT)
-    BnAdd(bnRp, bnE, P->x);
-    BnMod(bnRp, order);
+    OK = OK && BnAdd(bnRp, bnE, P->x);
+    OK = OK && BnMod(bnRp, order);
 
     // f)   verify that r' = r
-    OK = (BnUnsignedCmp(bnR, bnRp) == 0);
+    OK = OK && (BnUnsignedCmp(bnR, bnRp) == 0);
 
     if(!OK)
         return TPM_RC_SIGNATURE;
@@ -925,4 +925,4 @@ Exit:
     return retVal;
 }
 
-#endif  // TPM_ALG_ECC
+#endif  // ALG_ECC

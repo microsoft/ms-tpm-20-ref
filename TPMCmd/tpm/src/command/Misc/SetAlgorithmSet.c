@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "SetAlgorithmSet_fp.h"
 
-#ifdef TPM_CC_SetAlgorithmSet  // Conditional expansion of this file
+#if CC_SetAlgorithmSet  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This command allows the platform to change the algorithm set setting of the TPM

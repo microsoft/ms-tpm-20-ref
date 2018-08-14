@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "HMAC_fp.h"
 
-#ifdef TPM_CC_HMAC  // Conditional expansion of this file
+#if CC_HMAC  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Compute HMAC on a data buffer

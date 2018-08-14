@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "MakeCredential_fp.h"
 
-#ifdef TPM_CC_MakeCredential  // Conditional expansion of this file
+#if CC_MakeCredential  // Conditional expansion of this file
 
 #include "Object_spt_fp.h"
 

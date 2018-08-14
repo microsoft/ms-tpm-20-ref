@@ -63,7 +63,8 @@
 
 #include "Tpm.h"
 
-#if SIMULATION && USE_RSA_KEY_CACHE
+#if USE_RSA_KEY_CACHE
+
 #include  <stdio.h>
 
 #include "Platform_fp.h"
@@ -160,7 +161,6 @@ InitializeKeyCache(
 {
     int                  index;
     TPM_KEY_BITS         keySave = rsaKey->publicArea.parameters.rsaDetail.keyBits;
-    const char          *fn = CACHE_FILE_NAME;
     BOOL                 OK = TRUE;
 //
     s_rsaKeyCacheEnabled = FALSE;
@@ -178,10 +178,12 @@ InitializeKeyCache(
     }
     rsaKey->publicArea.parameters.rsaDetail.keyBits = keySave;
     s_keyCacheLoaded = OK;
-#if SIMULATION && USE_RSA_KEY_CACHE && USE_KEY_CACHE_FILE
+#if defined SIMULATION && defined USE_RSA_KEY_CACHE && defined USE_KEY_CACHE_FILE
     if(OK)
     {
         FILE                *cacheFile;
+        const char          *fn = CACHE_FILE_NAME;
+
 #if defined _MSC_VER && 1
         if(fopen_s(&cacheFile, fn, "w+b") != 0)
 #else
@@ -215,7 +217,7 @@ KeyCacheLoaded(
                                             //     RNG state
     )
 {
-#if SIMULATION && USE_RSA_KEY_CACHE && USE_KEY_CACHE_FILE
+#if defined SIMULATION && defined USE_RSA_KEY_CACHE && defined USE_KEY_CACHE_FILE
     if(!s_keyCacheLoaded)
     {
         FILE            *cacheFile;
@@ -271,4 +273,4 @@ GetCachedRsaKey(
     }
     return s_keyCacheLoaded;
 }
-#endif  // SIMULATION && USE_RSA_KEY_CACHE
+#endif  // defined SIMULATION && defined USE_RSA_KEY_CACHE

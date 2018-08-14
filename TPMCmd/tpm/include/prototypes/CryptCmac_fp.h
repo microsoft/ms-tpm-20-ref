@@ -34,13 +34,14 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jun 16, 2018  Time: 08:35:57PM
  */
 
 #ifndef    _CRYPTCMAC_FP_H_
 #define    _CRYPTCMAC_FP_H_
 
-#ifdef TPM_ALG_CMAC
+#if     ALG_CMAC
+//** Functions
 //*** CryptCmacStart()
 // This is the function to start the CMAC sequence operation. It initializes the
 // dispatch functions for the data and end operations for CMAC and initializes the

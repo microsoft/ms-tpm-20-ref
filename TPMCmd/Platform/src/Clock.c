@@ -32,10 +32,11 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-//** Introduction
+//** Description
+//
 // This file contains the routines that are used by the simulator to mimic
 // a hardware clock on a TPM.
-
+//
 // In this implementation, all the time values are measured in millisecond.
 // However, the precision of the clock functions may be implementation dependent.
 
@@ -88,7 +89,7 @@ _plat__TimerRestart(
 #include <time.h>
 clock_t     debugTime;
 
-//*** _plat__Time()
+//*** _plat__RealTime()
 // This is another, probably futile, attempt to define a portable function 
 // that will return a 64-bit clock value that has mSec resolution.
 uint64_t

@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyLocality_fp.h"
 
-#ifdef TPM_CC_PolicyLocality  // Conditional expansion of this file
+#if CC_PolicyLocality  // Conditional expansion of this file
 
 // return type: TPM_RC
 //      TPM_RC_RANGE          all the locality values selected by

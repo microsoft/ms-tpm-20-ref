@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyGetDigest_fp.h"
 
-#ifdef TPM_CC_PolicyGetDigest  // Conditional expansion of this file
+#if CC_PolicyGetDigest  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // returns the current policyDigest of the session

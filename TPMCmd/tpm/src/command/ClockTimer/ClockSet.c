@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "ClockSet_fp.h"
 
-#ifdef TPM_CC_ClockSet  // Conditional expansion of this file
+#if CC_ClockSet  // Conditional expansion of this file
 
 // Read the current TPMS_TIMER_INFO structure settings
 // return type: TPM_RC

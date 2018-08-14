@@ -162,9 +162,7 @@ SetForceFailureMode(
     void
     )
 {
-#if SIMULATION
     g_forceFailureMode = TRUE;
-#endif
     return;
 }
 

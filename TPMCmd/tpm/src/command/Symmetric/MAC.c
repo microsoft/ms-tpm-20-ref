@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "MAC_fp.h"
 
-#if defined TPM_CC_MAC  // Conditional expansion of this file
+#if CC_MAC  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Compute MAC on a data buffer

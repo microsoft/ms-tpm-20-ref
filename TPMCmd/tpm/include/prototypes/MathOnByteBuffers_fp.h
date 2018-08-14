@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jun 16, 2018  Time: 12:44:14AM
  */
 
 #ifndef    _MATHONBYTEBUFFERS_FP_H_
@@ -142,7 +142,7 @@ ShiftLeft(
 // Verifies that all the characters are simple numeric (0-9)
 BOOL
 IsNumeric(
-    TPM2B       *value          // IN: value to verify is a simple number
+    TPM2B       *value
 );
 
 #endif  // _MATHONBYTEBUFFERS_FP_H_

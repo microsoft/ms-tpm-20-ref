@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyNameHash_fp.h"
 
-#ifdef TPM_CC_PolicyNameHash  // Conditional expansion of this file
+#if CC_PolicyNameHash  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Add a nameHash restriction to the policyDigest

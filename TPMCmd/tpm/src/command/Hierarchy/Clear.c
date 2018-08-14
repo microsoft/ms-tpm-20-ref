@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "Clear_fp.h"
 
-#ifdef TPM_CC_Clear  // Conditional expansion of this file
+#if CC_Clear  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Clear owner

@@ -58,10 +58,10 @@ typedef struct
     UINT32      rng;
     UINT32      hash;
     UINT32      sym;
-#ifdef TPM_ALG_RSA
+#if     ALG_RSA
     UINT32      rsa;
 #endif
-#ifdef  TPM_ALG_ECC
+#if     ALG_ECC
     UINT32      ecc;
 #endif
 } CRYPTO_SELF_TEST_STATE;

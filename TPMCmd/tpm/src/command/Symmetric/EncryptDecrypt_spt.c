@@ -36,7 +36,7 @@
 #include "EncryptDecrypt_fp.h"
 #include "EncryptDecrypt_spt_fp.h"
 
-#ifdef TPM_CC_EncryptDecrypt2
+#if CC_EncryptDecrypt2
 
 /*(See part 3 specification)
 // symmetric encryption or decryption

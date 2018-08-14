@@ -87,7 +87,7 @@ typedef struct tpmCmacState {
 } tpmCmacState_t;
 
 typedef union SMAC_STATES {
-#ifdef TPM_ALG_CMAC
+#if     ALG_CMAC
     tpmCmacState_t          cmac;
 #endif
     UINT64                  pad;
@@ -101,16 +101,16 @@ typedef struct SMAC_STATE {
 
 typedef union
 {
-#ifdef TPM_ALG_SHA1
+#if     ALG_SHA1
     tpmHashStateSHA1_t         Sha1;
 #endif
-#ifdef TPM_ALG_SHA256
+#if     ALG_SHA256
     tpmHashStateSHA256_t       Sha256;
 #endif
-#ifdef TPM_ALG_SHA384
+#if     ALG_SHA384
     tpmHashStateSHA384_t       Sha384;
 #endif
-#ifdef TPM_ALG_SHA512
+#if     ALG_SHA512
     tpmHashStateSHA512_t       Sha512;
 #endif
 
@@ -236,7 +236,7 @@ typedef BYTE    HASH_STATE_TYPE;
 #define HASH_STATE_EMPTY        ((HASH_STATE_TYPE) 0)
 #define HASH_STATE_HASH         ((HASH_STATE_TYPE) 1)
 #define HASH_STATE_HMAC         ((HASH_STATE_TYPE) 2)
-#if defined TPM_CC_MAC || defined TPM_CC_MAC_Start
+#if CC_MAC || CC_MAC_Start
 #define HASH_STATE_SMAC         ((HASH_STATE_TYPE) 3)
 #endif
 

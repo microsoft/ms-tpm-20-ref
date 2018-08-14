@@ -32,7 +32,7 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-//** Includes
+//** Includes and Local Values
 
 #define _CRT_RAND_S
 #include <stdlib.h>
@@ -47,8 +47,6 @@
 #include <unistd.h>
 #endif
 
-
-//** Local values
 // This is the last 32-bits of hardware entropy produced. We have to check to
 // see that two consecutive 32-bit values are not the same because
 // (according to FIPS 140-2, annex C
@@ -61,7 +59,9 @@
 // blocks are equal.
 extern uint32_t        lastEntropy;
 
-//*** rand64
+//** Functions
+
+//*** rand32()
 // Local function to get a 32-bit random number
 static uint32_t
 rand32(

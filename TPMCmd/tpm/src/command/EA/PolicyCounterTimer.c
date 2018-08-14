@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyCounterTimer_fp.h"
 
-#ifdef TPM_CC_PolicyCounterTimer  // Conditional expansion of this file
+#if CC_PolicyCounterTimer  // Conditional expansion of this file
 
 #include "Policy_spt_fp.h"
 

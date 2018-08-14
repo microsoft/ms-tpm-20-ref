@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jul 16, 2018  Time: 02:57:16PM
  */
 
 #ifndef    _SIMULATOR_FP_H_
@@ -212,7 +212,7 @@ _rpc__Signal_HashEnd(
     void
     );
 
-// _rpc__Send_Command()
+//*** _rpc__Send_Command()
 // This is the interface to the TPM code.
 // return type: void
 void

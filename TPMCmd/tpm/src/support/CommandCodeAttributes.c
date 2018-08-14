@@ -65,6 +65,9 @@ typedef UINT16          ATTRIBUTE_TYPE;
 // commandIndex points to an implemented command and, if not, it searches upwards
 // until it finds one. When the list is compressed, this function gets defined
 // as a no-op.
+// return type: COMMAND_INDEX
+//  UNIMPLEMENTED_COMMAND_INDEX     command is not implemented
+//  other                           index of the command
 #if !COMPRESSED_LISTS
 static COMMAND_INDEX
 NextImplementedIndex(
@@ -85,6 +88,9 @@ NextImplementedIndex(
 //*** GetClosestCommandIndex()
 // This function returns the command index for the command with a value that is
 // equal to or greater than the input value
+// return type: COMMAND_INDEX
+//  UNIMPLEMENTED_COMMAND_INDEX     command is not implemented
+//  other                           index of a command
 COMMAND_INDEX
 GetClosestCommandIndex(
     TPM_CC           commandCode    // IN: the command code to start at
@@ -150,12 +156,12 @@ GetClosestCommandIndex(
                 min = commandIndex + 1;
         }
         // didn't find and exact match. commandIndex will be pointing at the last
-        // item tested. If diff is positive, then the last item tested was
+        // item tested. If 'diff' is positive, then the last item tested was
         // larger index of the command code so it is the smallest value
         // larger than the requested value.
         if(diff > 0)
             return commandIndex;
-        // if diff is negative, then the value tested was smaller than
+        // if 'diff' is negative, then the value tested was smaller than
         // the commandCode index and the next higher value is the correct one.
         // Note: this will necessarily be in range because of the earlier check
         // that the index was within range.
@@ -244,7 +250,7 @@ GetClosestCommandIndex(
 // This function returns the index in the various attributes arrays of the
 // command.
 // return type: COMMAND_INDEX
-//  UNIMPLEMNED_COMMAND_INDEX       command is not implemented
+//  UNIMPLEMENTED_COMMAND_INDEX     command is not implemented
 //  other                           index of the command
 COMMAND_INDEX
 CommandCodeToCommandIndex(
@@ -361,7 +367,6 @@ CommandAuthRole(
 //  0       encryption not allowed
 //  2       size field is two bytes
 //  4       size field is four bytes
-#ifndef INLINE_FUNCTIONS
 int
 EncryptSize(
     COMMAND_INDEX    commandIndex   // IN: command index
@@ -370,7 +375,6 @@ EncryptSize(
     return ((s_commandAttributes[commandIndex] & ENCRYPT_2) ? 2 : 
             (s_commandAttributes[commandIndex] & ENCRYPT_4) ? 4 : 0);
 }
-#endif // INLINE_FUNCTIONS
 
 //*** DecryptSize()
 // This function returns the size of the decrypt size field. This function returns
@@ -379,7 +383,6 @@ EncryptSize(
 //  0       encryption not allowed
 //  2       size field is two bytes
 //  4       size field is four bytes
-#ifndef INLINE_FUNCTIONS
 int
 DecryptSize(
     COMMAND_INDEX    commandIndex   // IN: command index
@@ -388,7 +391,6 @@ DecryptSize(
     return ((s_commandAttributes[commandIndex] & DECRYPT_2) ? 2 : 
             (s_commandAttributes[commandIndex] & DECRYPT_4) ? 4 : 0);
 }
-#endif // INLINE_FUNCTIONS
 
 //*** IsSessionAllowed()
 //
@@ -399,7 +401,6 @@ DecryptSize(
 //  return type:        BOOL
 //  TRUE                session is allowed with this command
 //  FALSE               session is not allowed with this command
-#ifndef INLINE_FUNCTIONS
 BOOL
 IsSessionAllowed(
     COMMAND_INDEX    commandIndex   // IN: the command to be checked
@@ -407,11 +408,9 @@ IsSessionAllowed(
 {
     return ((s_commandAttributes[commandIndex] & NO_SESSIONS) == 0);
 }
-#endif // INLINE_FUNCTIONS
 
 //*** IsHandleInResponse()
 // This function determines if a command has a handle in the response
-#ifndef INLINE_FUNCTIONS
 BOOL
 IsHandleInResponse(
     COMMAND_INDEX    commandIndex
@@ -419,7 +418,6 @@ IsHandleInResponse(
 {
     return ((s_commandAttributes[commandIndex] & R_HANDLE) != 0);
 }
-#endif // INLINE_FUNCTIONS
 
 //*** IsWriteOperation()
 // Checks to see if an operation will write to an NV Index and is subject to being
@@ -546,7 +544,6 @@ CommandCapGetCCList(
 // return type: BOOL
 //  TRUE        command is a vendor command
 //  FALSE       command is not a vendor command
-#ifndef INLINE_FUNCTIONS
 BOOL
 IsVendorCommand(
     COMMAND_INDEX    commandIndex   // IN: command index to check
@@ -554,4 +551,3 @@ IsVendorCommand(
 {
     return (IS_ATTRIBUTE(s_ccAttr[commandIndex], TPMA_CC, V));
 }
-#endif // INLINE_FUNCTIONS

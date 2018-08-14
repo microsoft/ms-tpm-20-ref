@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Aug  8, 2018  Time: 12:15:53AM
  */
 
 #ifndef    _BITS_FP_H_
@@ -45,68 +45,29 @@
 // return type: BOOL
 //  TRUE    bit is set
 //  FALSE   bit is not set
-#ifndef INLINE_FUNCTIONS
 BOOL
 TestBit(
     unsigned int     bitNum,        // IN: number of the bit in 'bArray'
     BYTE            *bArray,        // IN: array containing the bits
     unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
     );
-#else
-INLINE BOOL
-TestBit(
-    unsigned int     bitNum,        // IN: number of the bit in 'bArray'
-    BYTE            *bArray,        // IN: array containing the bits
-    unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
-    )
-{
-    pAssert(bytesInArray > (bitNum >> 3));
-    return((bArray[bitNum >> 3] & (1 << (bitNum & 7))) != 0);
-}
-#endif // INLINE_FUNCTIONS
 
 //*** SetBit()
 // This function will set the indicated bit in 'bArray'.
-#ifndef INLINE_FUNCTIONS
 void
 SetBit(
     unsigned int     bitNum,        // IN: number of the bit in 'bArray'
     BYTE            *bArray,        // IN: array containing the bits
     unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
     );
-#else
-INLINE void
-SetBit(
-    unsigned int     bitNum,        // IN: number of the bit in 'bArray'
-    BYTE            *bArray,        // IN: array containing the bits
-    unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
-    )
-{
-    pAssert(bytesInArray > (bitNum >> 3));
-    bArray[bitNum >> 3] |= (1 << (bitNum & 7));
-}
-#endif // INLINE_FUNCTIONS
 
 //*** ClearBit()
 // This function will clear the indicated bit in 'bArray'.
-#ifndef INLINE_FUNCTIONS
 void
 ClearBit(
     unsigned int     bitNum,        // IN: number of the bit in 'bArray'.
     BYTE            *bArray,        // IN: array containing the bits
     unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
     );
-#else
-INLINE void
-ClearBit(
-    unsigned int     bitNum,        // IN: number of the bit in 'bArray'.
-    BYTE            *bArray,        // IN: array containing the bits
-    unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
-    )
-{
-    pAssert(bytesInArray > (bitNum >> 3));
-    bArray[bitNum >> 3] &= ~(1 << (bitNum & 7));
-}
-#endif // INLINE_FUNCTIONS
 
 #endif  // _BITS_FP_H_

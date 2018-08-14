@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "Duplicate_fp.h"
 
-#ifdef TPM_CC_Duplicate  // Conditional expansion of this file
+#if CC_Duplicate  // Conditional expansion of this file
 
 #include "Object_spt_fp.h"
 

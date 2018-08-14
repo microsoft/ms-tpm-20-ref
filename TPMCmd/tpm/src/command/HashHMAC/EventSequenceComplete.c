@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "EventSequenceComplete_fp.h"
 
-#ifdef TPM_CC_EventSequenceComplete  // Conditional expansion of this file
+#if CC_EventSequenceComplete  // Conditional expansion of this file
 
 /*(See part 3 specification)
   Complete an event sequence and flush the object.

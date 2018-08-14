@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "Import_fp.h"
 
-#ifdef TPM_CC_Import  // Conditional expansion of this file
+#if CC_Import  // Conditional expansion of this file
 
 #include "Object_spt_fp.h"
 
@@ -45,9 +45,6 @@
 // parent.
 */
 // return type: TPM_RC
-//   TPM_RC_ASYMMETRIC      non-duplicable storage key represented by 'objectPublic'
-//                          and its parent referenced by 'parentHandle' have
-//                          different public parameters
 //   TPM_RC_ATTRIBUTES      'FixedTPM' and 'fixedParent' of 'objectPublic' are not
 //                          both CLEAR; or 'inSymSeed' is nonempty and 
 //                          'parentHandle' does not reference a decryption key; or
@@ -91,9 +88,6 @@
 //                          algorithm or a non-storage key with
 //                          symmetric algorithm different from TPM_ALG_NULL
 //   TPM_RC_TYPE            unsupported type of 'objectPublic'; or
-//                          non-duplicable storage key represented by 'objectPublic'
-//                          and its parent referenced by 'parentHandle' are of
-//                          different types; or
 //                          'parentHandle' is not a storage key; or
 //                          only the public portion of 'parentHandle' is loaded; or
 //                          'objectPublic' and 'duplicate' are of different types

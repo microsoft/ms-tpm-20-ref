@@ -39,7 +39,7 @@
 //** Includes, Defines, and Typedefs
 #include "Tpm.h"
 
-#ifdef TPM_ALG_TDES
+#if     ALG_TDES
 
 
 #define DES_NUM_WEAK 64

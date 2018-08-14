@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyOR_fp.h"
 
-#ifdef TPM_CC_PolicyOR  // Conditional expansion of this file
+#if CC_PolicyOR  // Conditional expansion of this file
 
 #include "Policy_spt_fp.h"
 

@@ -477,7 +477,7 @@ ObjectLoad(
     else
     {
         object->sensitive = *sensitive;
-#ifdef TPM_ALG_RSA
+#if     ALG_RSA
         // If this is an RSA key that is not a parent, complete the load by 
         // computing the private exponent.
         if(publicArea->type == ALG_RSA_VALUE)
@@ -535,7 +535,7 @@ AllocateSequenceSlot(
 }
 
 
-#if defined TPM_CC_HMAC_Start || defined TPM_CC_MAC_Start
+#if CC_HMAC_Start || CC_MAC_Start
 //*** ObjectCreateHMACSequence()
 // This function creates an internal HMAC sequence object.
 // return type: TPM_RC
@@ -894,7 +894,7 @@ ComputeQualifiedName(
 
 //*** ObjectIsStorage()
 // This function determines if an object has the attributes associated
-// with an parent. A parent is an asymmetric or symmetric block cipher key 
+// with a parent. A parent is an asymmetric or symmetric block cipher key 
 // that has its 'restricted' and 'decrypt' attributes SET, and 'sign' CLEAR.
 // return type: BOOL
 //        TRUE          if the object is a storage key

@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "NV_UndefineSpace_fp.h"
 
-#ifdef TPM_CC_NV_UndefineSpace  // Conditional expansion of this file
+#if CC_NV_UndefineSpace  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Delete an NV Index

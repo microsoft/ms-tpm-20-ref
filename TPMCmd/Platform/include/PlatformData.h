@@ -61,7 +61,7 @@ typedef uint64_t     clock64_t;
 // is only relevant for a simulator or virtual TPM.
 extern clock64_t       s_realTimePrevious;
 
-// These values are use to try to synthesize a long lived version of clock().
+// These values are used to try to synthesize a long lived version of clock().
 extern clock64_t        s_lastSystemTime;
 extern clock64_t        s_lastReportedTime;
 
@@ -102,34 +102,45 @@ extern uint64_t        s_initClock;
 // This variable records the timer adjustment factor.
 extern unsigned int         s_adjustRate;
 
-// From LocalityPlat.c
+// For LocalityPlat.c
 // Locality of current command
 extern unsigned char s_locality;
 
-// From NVMem.c
+// For NVMem.c
 // Choose if the NV memory should be backed by RAM or by file.
 // If this macro is defined, then a file is used as NV.  If it is not defined,
 // then RAM is used to back NV memory. Comment out to use RAM.
-#define FILE_BACKED_NV
-#if defined FILE_BACKED_NV
-#include <stdio.h>
-// A file to emulate NV storage
-extern FILE*             s_NVFile;
+
+#if (!defined VTPM) || ((VTPM != NO) && (VTPM != YES))
+#   undef VTPM
+#   define      VTPM            YES                 // Default: Either YES or NO
 #endif
+
+// For a simulation, use a file to back up the NV
+#if (!defined FILE_BACKED_NV) || ((FILE_BACKED_NV != NO) && (FILE_BACKED_NV != YES))
+#   undef   FILE_BACKED_NV
+#   define  FILE_BACKED_NV          (VTPM && YES)     // Default: Either YES or NO
+#endif
+
+#if !SIMULATION
+#   undef       FILE_BACKED_NV
+#   define      FILE_BACKED_NV          NO
+#endif // SIMULATION
+
 extern unsigned char     s_NV[NV_MEMORY_SIZE];
 extern BOOL              s_NvIsAvailable;
 extern BOOL              s_NV_unrecoverable;
 extern BOOL              s_NV_recoverable;
 
 
-// From PPPlat.c
+// For PPPlat.c
 // Physical presence.  It is initialized to FALSE
 extern BOOL     s_physicalPresence;
 
 // From Power
 extern BOOL        s_powerLost;
 
-// From Entropy.c
+// For Entropy.c
 extern uint32_t        lastEntropy;
 
 #endif // _PLATFORM_DATA_H_

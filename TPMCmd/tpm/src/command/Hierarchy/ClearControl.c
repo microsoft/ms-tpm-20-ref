@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "ClearControl_fp.h"
 
-#ifdef TPM_CC_ClearControl  // Conditional expansion of this file
+#if CC_ClearControl  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Enable or disable the execution of TPM2_Clear command

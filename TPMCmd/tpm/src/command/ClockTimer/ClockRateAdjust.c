@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "ClockRateAdjust_fp.h"
 
-#ifdef TPM_CC_ClockRateAdjust  // Conditional expansion of this file
+#if CC_ClockRateAdjust  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // adjusts the rate of advance of Clock and Timer to provide a better

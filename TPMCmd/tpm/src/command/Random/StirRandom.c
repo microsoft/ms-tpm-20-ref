@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "StirRandom_fp.h"
 
-#ifdef TPM_CC_StirRandom  // Conditional expansion of this file
+#if CC_StirRandom  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // add entropy to the RNG state

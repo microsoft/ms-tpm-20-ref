@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "CreateLoaded_fp.h"
 
-#ifdef TPM_CC_CreateLoaded  // Conditional expansion of this file
+#if CC_CreateLoaded  // Conditional expansion of this file
 
 /*(See part 3 of specification)
  * Create and load any type of key, including a temporary key.
@@ -67,7 +67,7 @@
 //                          object is larger than is allowed for the scheme
 //   TPM_RC_SYMMETRIC       a storage key with no symmetric algorithm specified; or
 //                          non-storage key with symmetric algorithm different from
-//                          TPM_ALG_NULL
+// ALG_NULL
 //   TPM_RC_TYPE            cannot create the object of the indicated type (usually
 //                          only occurs if trying to derive an RSA key).
 TPM_RC
@@ -214,4 +214,4 @@ TPM2_CreateLoaded(
     return result;
 }
 
-#endif // CC_CreatePrimary
+#endif // CC_CreateLoaded

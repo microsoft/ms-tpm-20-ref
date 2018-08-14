@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyRestart_fp.h"
 
-#ifdef TPM_CC_PolicyRestart  // Conditional expansion of this file
+#if CC_PolicyRestart  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Restore a policy session to its initial state

@@ -36,7 +36,7 @@
 #include "Object_spt_fp.h"
 #include "Create_fp.h"
 
-#ifdef TPM_CC_Create  // Conditional expansion of this file
+#if CC_Create  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Create a regular object
@@ -73,10 +73,8 @@
 //                          than is allowed for the scheme
 //   TPM_RC_SYMMETRIC       a storage key with no symmetric algorithm specified; or
 //                          non-storage key with symmetric algorithm different from
-//                          TPM_ALG_NULL
+//                          ALG_NULL
 //   TPM_RC_TYPE            unknown object type;
-//                          non-duplicable storage key and its parent have different
-//                          types;
 //                          'parentHandle' does not reference a restricted
 //                          decryption key in the storage hierarchy with both
 //                          public and sensitive portion loaded

@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "VerifySignature_fp.h"
 
-#ifdef TPM_CC_VerifySignature  // Conditional expansion of this file
+#if CC_VerifySignature  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This command uses loaded key to validate an asymmetric signature on a message

@@ -53,7 +53,6 @@
 // return type: BOOL
 //  TRUE    bit is set
 //  FALSE   bit is not set
-#ifndef INLINE_FUNCTIONS
 BOOL
 TestBit(
     unsigned int     bitNum,        // IN: number of the bit in 'bArray'
@@ -64,11 +63,9 @@ TestBit(
     pAssert(bytesInArray > (bitNum >> 3));
     return((bArray[bitNum >> 3] & (1 << (bitNum & 7))) != 0);
 }
-#endif // INLINE_FUNCTIONS
 
 //*** SetBit()
 // This function will set the indicated bit in 'bArray'.
-#ifndef INLINE_FUNCTIONS
 void
 SetBit(
     unsigned int     bitNum,        // IN: number of the bit in 'bArray'
@@ -79,11 +76,9 @@ SetBit(
     pAssert(bytesInArray > (bitNum >> 3));
     bArray[bitNum >> 3] |= (1 << (bitNum & 7));
 }
-#endif // INLINE_FUNCTIONS
 
 //*** ClearBit()
 // This function will clear the indicated bit in 'bArray'.
-#ifndef INLINE_FUNCTIONS
 void
 ClearBit(
     unsigned int     bitNum,        // IN: number of the bit in 'bArray'.
@@ -94,5 +89,4 @@ ClearBit(
     pAssert(bytesInArray > (bitNum >> 3));
     bArray[bitNum >> 3] &= ~(1 << (bitNum & 7));
 }
-#endif // INLINE_FUNCTIONS
 

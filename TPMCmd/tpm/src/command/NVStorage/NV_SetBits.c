@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "NV_SetBits_fp.h"
 
-#ifdef TPM_CC_NV_SetBits  // Conditional expansion of this file
+#if CC_NV_SetBits  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Set bits in a NV index

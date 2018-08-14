@@ -104,7 +104,7 @@
 #define PARAMETER_CHECK(condition, returnCode)          \
     REQUIRE((condition), PARAMETER, returnCode)
 
-#if defined EMPTY_ASSERT
+#if (defined EMPTY_ASSERT) && (EMPTY_ASSERT != NO)
 #   define pAssert(a)  ((void)0)
 #else
 #   define pAssert(a) {if(!(a)) FAIL(FATAL_ERROR_PARAMETER);}
@@ -115,7 +115,7 @@
 #define PCR_SELECT_MIN          ((PLATFORM_PCR+7)/8)
 #define PCR_SELECT_MAX          ((IMPLEMENTATION_PCR+7)/8)
 #define MAX_ORDERLY_COUNT       ((1 << ORDERLY_BITS) - 1)
-#define PRIVATE_VENDOR_SPECIFIC_BYTES	                        \
+#define PRIVATE_VENDOR_SPECIFIC_BYTES                                                   \
                 ((MAX_RSA_KEY_BYTES/2) * (3 + CRT_FORMAT_RSA * 2))
 
 //** Compile-time Checks
@@ -204,8 +204,7 @@
 #ifndef CONTEXT_INTEGRITY_HASH_SIZE
 #define CONTEXT_INTEGRITY_HASH_SIZE CONCAT(CONTEXT_HASH_ALGORITHM, _DIGEST_SIZE)
 #endif
-
-#ifdef TPM_ALG_RSA
+#if     ALG_RSA
 #define     RSA_SECURITY_STRENGTH (MAX_RSA_KEY_BITS >= 15360 ? 256 :          \
                                   (MAX_RSA_KEY_BITS >=  7680 ? 192 :          \
                                   (MAX_RSA_KEY_BITS >=  3072 ? 128 :          \
@@ -213,15 +212,15 @@
                                   (MAX_RSA_KEY_BITS >=  1024 ?  80 :  0)))))
 #else
 #define     RSA_SECURITY_STRENGTH   0
-#endif
+#endif // ALG_RSA
 
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 #define     ECC_SECURITY_STRENGTH (MAX_ECC_KEY_BITS >= 521 ? 256 :              \
                                   (MAX_ECC_KEY_BITS >= 384 ? 192 :              \
                                   (MAX_ECC_KEY_BITS >= 256 ? 128 : 0)))
 #else
 #define     ECC_SECURITY_STRENGTH   0
-#endif // TPM_AGL_ECC
+#endif // ALG_ECC
 
 #define     MAX_ASYM_SECURITY_STRENGTH                                          \
                         MAX(RSA_SECURITY_STRENGTH, ECC_SECURITY_STRENGTH)
@@ -292,8 +291,8 @@
 // at least once every 292,471,208 years rather than once every 584,942,417 years.
 #define EXPIRATION_BIT ((UINT64)1 << 63)
 
-// Check for consistency of the bit ordering an bit fields
-#if BIG_ENDIAN_TPM && MOST_SIGNIFICANT_BIT_0 && !NO_BIT_FIELD_STRUCTURES
+// Check for consistency of the bit ordering of bit fields
+#if BIG_ENDIAN_TPM && MOST_SIGNIFICANT_BIT_0 && USE_BIT_FIELD_STRUCTURES
 #   error "Settings not consistent"
 #endif
 

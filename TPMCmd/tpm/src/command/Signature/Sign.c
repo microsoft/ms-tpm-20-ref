@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "Sign_fp.h"
 
-#ifdef TPM_CC_Sign  // Conditional expansion of this file
+#if CC_Sign  // Conditional expansion of this file
 
 #include "Attest_spt_fp.h"
 

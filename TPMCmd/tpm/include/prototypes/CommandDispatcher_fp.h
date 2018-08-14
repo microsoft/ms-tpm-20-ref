@@ -34,13 +34,12 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Aug  8, 2018  Time: 12:15:53AM
  */
 
 #ifndef    _COMMANDDISPATCHER_FP_H_
 #define    _COMMANDDISPATCHER_FP_H_
 
-//** Marshal/Unmarshal Functions
 //*** ParseHandleBuffer()
 // This is the table-driven version of the handle buffer unmarshaling code
 TPM_RC
@@ -48,6 +47,9 @@ ParseHandleBuffer(
     COMMAND                 *command
     );
 
+//*** CommandDispatcher()
+// Function to unmarshal the command parameters, call the selected action code, and
+// marshal the response parameters.
 TPM_RC
 CommandDispatcher(
     COMMAND                 *command

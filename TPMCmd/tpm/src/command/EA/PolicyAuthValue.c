@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyAuthValue_fp.h"
 
-#ifdef TPM_CC_PolicyAuthValue  // Conditional expansion of this file
+#if CC_PolicyAuthValue  // Conditional expansion of this file
 
 #include "Policy_spt_fp.h"
 

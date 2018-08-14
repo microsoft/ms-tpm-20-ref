@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PolicyPassword_fp.h"
 
-#ifdef TPM_CC_PolicyPassword  // Conditional expansion of this file
+#if CC_PolicyPassword  // Conditional expansion of this file
 
 #include "Policy_spt_fp.h"
 

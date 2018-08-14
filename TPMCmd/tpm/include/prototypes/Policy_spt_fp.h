@@ -34,13 +34,14 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jun 16, 2018  Time: 08:35:57PM
  */
 
 #ifndef    _POLICY_SPT_FP_H_
 #define    _POLICY_SPT_FP_H_
 
-//** PolicyParameterChecks()
+//** Functions
+//*** PolicyParameterChecks()
 // This function validates the common parameters of TPM2_PolicySiged()
 // and TPM2_PolicySecret(). The common parameters are 'nonceTPM',
 // 'expiration', and 'cpHashA'.
@@ -55,7 +56,7 @@ PolicyParameterChecks(
     TPM_RC           blameExpiration
     );
 
-//** PolicyContextUpdate()
+//*** PolicyContextUpdate()
 // Update policy hash
 //      Update the policyDigest in policy session by extending policyRef and
 //      objectName to it. This will also update the cpHash if it is present.

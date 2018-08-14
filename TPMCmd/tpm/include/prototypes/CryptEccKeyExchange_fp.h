@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Aug  4, 2018  Time: 07:27:08PM
  */
 
 #ifndef    _CRYPTECCKEYEXCHANGE_FP_H_
@@ -58,7 +58,7 @@ CryptEcc2PhaseKeyExchange(
     TPMS_ECC_POINT          *QsB,           // IN: static public party B key
     TPMS_ECC_POINT          *QeB            // IN: ephemeral public party B key
     );
-#ifdef TPM_ALG_SM2
+#if     ALG_SM2
 
 // SM2KeyExchange()
 // This function performs the key exchange defined in SM2.
@@ -72,7 +72,7 @@ CryptEcc2PhaseKeyExchange(
 // catastrophically if this is not the case
 // return type: TPM_RC
 //      TPM_RC_SUCCESS           results is valid
-//      TPM_RC_NO_RESULTS       the value for dsA does not give a valid point on the
+//      TPM_RC_NO_RESULT       the value for dsA does not give a valid point on the
 //                              curve
 LIB_EXPORT TPM_RC
 SM2KeyExchange(

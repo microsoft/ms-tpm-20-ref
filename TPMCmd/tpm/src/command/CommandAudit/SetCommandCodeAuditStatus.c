@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "SetCommandCodeAuditStatus_fp.h"
 
-#ifdef TPM_CC_SetCommandCodeAuditStatus  // Conditional expansion of this file
+#if CC_SetCommandCodeAuditStatus  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // change the audit status of a command or to set the hash algorithm used for

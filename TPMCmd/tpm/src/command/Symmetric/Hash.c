@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "Hash_fp.h"
 
-#ifdef TPM_CC_Hash  // Conditional expansion of this file
+#if CC_Hash  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Hash a data buffer

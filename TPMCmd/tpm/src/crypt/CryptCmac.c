@@ -43,7 +43,8 @@
 #include "Tpm.h"
 #include "CryptSym.h"
 
-#ifdef TPM_ALG_CMAC
+#if     ALG_CMAC
+//** Functions
 //*** CryptCmacStart()
 // This is the function to start the CMAC sequence operation. It initializes the
 // dispatch functions for the data and end operations for CMAC and initializes the
@@ -132,7 +133,7 @@ CryptCmacEnd(
     UINT16                   keySizeInBits = cState->keySizeBits;
     tpmCryptKeySchedule_t    keySchedule;
     TpmCryptSetSymKeyCall_t  encrypt;
-    TPM2B_IV                 subkey = {0, {0}};
+    TPM2B_IV                 subkey = {{0, {0}}};
     BOOL                     xorVal;
     UINT16                   i;
 

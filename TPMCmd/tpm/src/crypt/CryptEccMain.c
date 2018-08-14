@@ -35,11 +35,11 @@
 //** Includes and Defines
 #include "Tpm.h"
 
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 
 // This version requires that the new format for ECC data be used
 #if !USE_BN_ECC_DATA
-#error "Need to define USE_BN_ECC_DATA in Implementaion.h"
+#error "Need to SET USE_BN_ECC_DATA to YES in Implementaion.h"
 #endif
 
 //** Functions
@@ -507,9 +507,9 @@ CryptEccIsValidPrivateKey(
 // R = [d]G + [u]Q  or just R = [d]G if u and Q are NULL. If 'skipChecks' is TRUE,
 // then the function will not verify that the inputs are correct for the domain.
 // This would be the case when the values were created by the CryptoEngine code.
-// It will return TPM_RC_NO_RESULTS if the resulting point is the point at infinity.
+// It will return TPM_RC_NO_RESULT if the resulting point is the point at infinity.
 // return type: TPM_RC
-//  TPM_RC_NO_RESULTS     result of multiplication is a point at infinity
+//  TPM_RC_NO_RESULT     result of multiplication is a point at infinity
 //  TPM_RC_ECC_POINT      'S' or 'Q' is not on the curve
 //  TPM_RC_VALUE          'd' or 'u' is not < n
 TPM_RC
@@ -540,6 +540,7 @@ BnPointMult(
     OK = OK && (E != NULL);
     if(!OK)
         return TPM_RC_VALUE;
+
 
     OK = (S == NULL) || BnIsOnCurve(S, AccessCurveData(E));
     OK = OK && ((Q == NULL) || BnIsOnCurve(Q, AccessCurveData(E)));
@@ -662,7 +663,7 @@ CryptEccNewKeyPair(
 // 'dIn' must be provided. If 'dIn' and 'QIn' are specified but 'uIn' is not
 // provided, then 'R' = ['dIn']'QIn'.
 //
-// If the multiply produces the point at infinity, the TPM_RC_NO_RESULTS is returned.
+// If the multiply produces the point at infinity, the TPM_RC_NO_RESULT is returned.
 //
 // The sizes of 'xOut' and yOut' will be set to be the size of the degree of
 // the curve
@@ -802,4 +803,4 @@ Exit:
     return retVal;
 }
 
-#endif  // TPM_ALG_ECC
+#endif  // ALG_ECC

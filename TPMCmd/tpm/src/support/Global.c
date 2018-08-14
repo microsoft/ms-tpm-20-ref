@@ -74,7 +74,7 @@ BOOL                 g_DrtmPreStartup;
 BOOL                 g_StartupLocality3;
 
 #if USE_DA_USED
-BOOL			     g_daUsed;
+BOOL                 g_daUsed;
 #endif
 
 BOOL                 g_powerWasLost;
@@ -126,7 +126,7 @@ UINT32               s_auditSessionIndex;
 
 BOOL                 s_DAPendingOnNV;
 
-#ifdef TPM_CC_GetCommandAuditDigest
+#if CC_GetCommandAuditDigest
 TPM2B_DIGEST         s_cpHashForCommandAudit;
 #endif
 
@@ -158,13 +158,7 @@ UINT32               s_oldestSavedSession;
 int                  s_freeSessionSlots;
 
 //*** Used in MemoryLib.c
-// The s_actionOutputBuffer should not be modifiable by the host system until
-// the TPM has returned a response code. The s_actionOutputBuffer should not
-// be accessible until response parameter encryption, if any, is complete.
-// This memory is not used between commands
 #ifndef __IGNORE_STATE__        // DO NOT DEFINE THIS VALUE
-//UINT64   s_actionInputBuffer[512];   // action input buffer
-//UINT64   s_actionOutputBuffer[512];  // action output buffer
 UINT64   s_actionIoBuffer[768];      // action I/O buffer
 UINT32   s_actionIoAllocation;       // number of UIN64 allocated for in
 #endif
@@ -213,11 +207,3 @@ TPM2B_STRING(OBFUSCATE_STRING, "OBFUSCATE");
 #if SELF_TEST
 TPM2B_STRING(OAEP_TEST_STRING, "OAEP Test Value");
 #endif // SELF_TEST
-
-
-
-
-
-
-
-

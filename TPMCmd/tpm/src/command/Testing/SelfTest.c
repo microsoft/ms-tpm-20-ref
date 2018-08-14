@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "SelfTest_fp.h"
 
-#ifdef TPM_CC_SelfTest  // Conditional expansion of this file
+#if CC_SelfTest  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // perform a test of TPM capabilities

@@ -53,7 +53,6 @@
 // memmove is used when necessary, it is always used.
 // The #if 0 is used to prevent instantiation of the MemoryCopy function so that
 // the #define is always used
-#ifndef INLINE_FUNCTIONS
 void
 MemoryCopy(
     void        *dest,
@@ -63,7 +62,6 @@ MemoryCopy(
 {
     memmove(dest, src, sSize);
 }
-#endif // INLINE_FUNCTIONS
 
 
 //*** MemoryEqual()
@@ -157,7 +155,6 @@ MemoryEqual2B(
 // intended to make sure that the destination would not be overrun. The
 // problem is that, in use, all that was happening was that the value of
 // size was used for dSize so there was no benefit in the extra parameter.
-#ifndef INLINE_FUNCTIONS
 void
 MemorySet(
     void            *dest,
@@ -167,11 +164,9 @@ MemorySet(
 { 
     memset(dest, value, size);
 }
-#endif // INLINE_FUNCTIONS
 
 //*** MemoryPad2B()
 // Function to pad a TPM2B with zeros and adjust the size.
-#ifndef INLINE_FUNCTIONS
 void
 MemoryPad2B(
     TPM2B           *b,
@@ -181,12 +176,10 @@ MemoryPad2B(
     MemorySet(&b->buffer[b->size], 0, newSize - b->size);
     b->size = newSize;
 }
-#endif // INLINE_FUNCTIONS
 
 
 //*** Uint16ToByteArray()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 void
 Uint16ToByteArray(
     UINT16              i,
@@ -196,12 +189,10 @@ Uint16ToByteArray(
     a[1] = (BYTE)(i); i >>= 8;
     a[0] = (BYTE)(i);
 }
-#endif // INLINE_FUNCTIONS
 
 
 //*** Uint32ToByteArray()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 void
 Uint32ToByteArray(
     UINT32              i,
@@ -213,11 +204,9 @@ Uint32ToByteArray(
     a[1] = (BYTE)(i); i >>= 8;
     a[0] = (BYTE)(i);
 }
-#endif // INLINE_FUNCTIONS
 
 //*** Uint64ToByteArray()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 void
 Uint64ToByteArray(
     UINT64               i,
@@ -233,12 +222,10 @@ Uint64ToByteArray(
     a[1] = (BYTE)(i); i >>= 8;
     a[0] = (BYTE)(i);
 }
-#endif // INLINE_FUNCTIONS
 
 
 //*** ByteArrayToUint16()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 UINT16
 ByteArrayToUint16(
     BYTE                *a
@@ -249,12 +236,10 @@ ByteArrayToUint16(
     retVal += a[1];
     return retVal;
 }
-#endif // INLINE_FUNCTIONS
 
 
 //*** ByteArrayToUint32()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 UINT32
 ByteArrayToUint32(
     BYTE                *a
@@ -267,11 +252,9 @@ ByteArrayToUint32(
     retVal += a[3];
     return retVal;
 }
-#endif // INLINE_FUNCTIONS
 
 //*** ByteArrayToUint64()
 // Function to write an integer to a byte array
-#ifndef INLINE_FUNCTIONS
 UINT64
 ByteArrayToUint64(
     BYTE                *a
@@ -288,7 +271,6 @@ ByteArrayToUint64(
     retVal += a[7];
     return retVal;
 }
-#endif // INLINE_FUNCTIONS
 
 
 

@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "IncrementalSelfTest_fp.h"
 
-#ifdef TPM_CC_IncrementalSelfTest  // Conditional expansion of this file
+#if CC_IncrementalSelfTest  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // perform a test of selected algorithms

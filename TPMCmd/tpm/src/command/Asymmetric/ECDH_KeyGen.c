@@ -37,7 +37,7 @@
 
 #ifdef TPM_CC_ECDH_KeyGen  // Conditional expansion of this file
 
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 
 /*(See part 3 specification)
 // This command uses the TPM to generate an ephemeral public key and the product

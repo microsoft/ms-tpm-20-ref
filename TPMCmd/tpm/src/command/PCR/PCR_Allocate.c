@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PCR_Allocate_fp.h"
 
-#ifdef TPM_CC_PCR_Allocate  // Conditional expansion of this file
+#if CC_PCR_Allocate  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Allocate PCR banks

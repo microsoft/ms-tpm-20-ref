@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "MAC_Start_fp.h"
 
-#ifdef TPM_CC_MAC_Start  // Conditional expansion of this file
+#if CC_MAC_Start  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Initialize a HMAC sequence and create a sequence object

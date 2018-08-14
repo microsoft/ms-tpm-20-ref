@@ -60,7 +60,7 @@
 #define tpmHashStateSHA384_t      SHA512_CTX
 #define tpmHashStateSHA512_t      SHA512_CTX
 
-#ifdef TPM_ALG_SM3
+#if     ALG_SM3_256
 #   error "The version of OpenSSL used by this code does not support SM3"
 #endif
 

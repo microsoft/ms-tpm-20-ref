@@ -85,8 +85,8 @@ CryptHashIsValidAlg(
 // last. All other index values will return TPM_ALG_NULL.
 //
 // return type: TPM_ALG_ID
-//  TPM_ALG_xxx         a hash algorithm
-//  TPM_ALG_NULL        this can be used as a stop value
+// ALG_xxx         a hash algorithm
+// ALG_NULL        this can be used as a stop value
 LIB_EXPORT TPM_ALG_ID
 CryptHashGetAlgByIndex(
     UINT32           index          // IN: the index

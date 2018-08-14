@@ -43,7 +43,7 @@
 
 //** Functions
 
-#ifdef TPM_ALG_ECMQV
+#if ALG_ECMQV
 
 //*** avf1()
 // This function does the associated value computation required by MQV key
@@ -80,20 +80,20 @@ avf1(
 // fail, possibly catastrophically, if this is not the case.
 // return type: TPM_RC
 //      TPM_RC_SUCCESS           results is valid
-//      TPM_RC_NO_RESULTS       the value for dsA does not give a valid point on the
+//      TPM_RC_NO_RESULT       the value for dsA does not give a valid point on the
 //                          curve
 static TPM_RC
 C_2_2_MQV(
-    TPMS_ECC_POINT        *outZ,         // OUT: the computed point
-    TPM_ECC_CURVE          curveId,      // IN: the curve for the computations
-    TPM2B_ECC_PARAMETER   *dsA,          // IN: static private TPM key
-    TPM2B_ECC_PARAMETER   *deA,          // IN: ephemeral private TPM key
-    TPMS_ECC_POINT        *QsB,          // IN: static public party B key
-    TPMS_ECC_POINT        *QeB           // IN: ephemeral public party B key
+    TPMS_ECC_POINT          *outZ,         // OUT: the computed point
+    TPM_ECC_CURVE            curveId,      // IN: the curve for the computations
+    TPM2B_ECC_PARAMETER     *dsA,          // IN: static private TPM key
+    TPM2B_ECC_PARAMETER     *deA,          // IN: ephemeral private TPM key
+    TPMS_ECC_POINT          *QsB,          // IN: static public party B key
+    TPMS_ECC_POINT          *QeB           // IN: ephemeral public party B key
     )
 {
     CURVE_INITIALIZED(E, curveId);
-    ECC_CURVE_DATA          *C;
+    const ECC_CURVE_DATA    *C;
     POINT(pQeA);
     POINT_INITIALIZED(pQeB, QeB);
     POINT_INITIALIZED(pQsB, QsB);
@@ -109,7 +109,7 @@ C_2_2_MQV(
         ERROR_RETURN(TPM_RC_VALUE);
     pAssert(outZ != NULL && pQeB != NULL && pQsB != NULL && deA != NULL 
             && dsA != NULL);
-    *C = AccessCurveData(E);
+    C = AccessCurveData(E);
 // Process:
 //  1. implicitsigA = (de,A + avf(Qe,A)ds,A ) mod n.
 //  2. P = h(implicitsigA)(Qe,B + avf(Qe,B)Qs,B).
@@ -163,7 +163,7 @@ Exit:
     return retVal;
 }
 
-#endif // TPM_ALG_ECMQV
+#endif // ALG_ECMQV
 
 //*** C_2_2_ECDH()
 // This function performs the two phase key exchange defined in SP800-56A,
@@ -242,16 +242,16 @@ CryptEcc2PhaseKeyExchange(
     }
     switch(scheme)
     {
-        case TPM_ALG_ECDH:
+        case ALG_ECDH_VALUE:
             return C_2_2_ECDH(outZ1, outZ2, curveId, dsA, deA, QsB, QeB);
             break;
-#ifdef  TPM_ALG_ECMQV
-        case TPM_ALG_ECMQV:
+#if     ALG_ECMQV
+        case ALG_ECMQV_VALUE:
             return C_2_2_MQV(outZ1, curveId, dsA, deA, QsB, QeB);
             break;
 #endif
-#ifdef  TPM_ALG_SM2
-        case TPM_ALG_SM2:
+#if     ALG_SM2
+        case ALG_SM2_VALUE:
             return SM2KeyExchange(outZ1, curveId, dsA, deA, QsB, QeB);
             break;
 #endif
@@ -260,7 +260,7 @@ CryptEcc2PhaseKeyExchange(
     }
 }
 
-#ifdef TPM_ALG_SM2
+#if     ALG_SM2
 
 //*** ComputeWForSM2()
 // Compute the value for w used by SM2
@@ -309,7 +309,7 @@ avfSm2(
 // catastrophically if this is not the case
 // return type: TPM_RC
 //      TPM_RC_SUCCESS           results is valid
-//      TPM_RC_NO_RESULTS       the value for dsA does not give a valid point on the
+//      TPM_RC_NO_RESULT       the value for dsA does not give a valid point on the
 //                              curve
 LIB_EXPORT TPM_RC
 SM2KeyExchange(

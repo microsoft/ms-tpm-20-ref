@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 3.0 June 16, 2017
- *  Date: Oct 16, 2017  Time: 12:56:59AM
+ *  Date: Jun 16, 2018  Time: 12:44:12AM
  */
 #ifdef TPM_CC_EC_Ephemeral // Command must be defined
 #ifndef _EC_EPHEMERAL_FP_H_

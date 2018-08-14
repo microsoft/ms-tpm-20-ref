@@ -33,9 +33,9 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 //** Description
-
+//
 // This file contains the socket interface to a TPM simulator.
-
+//
 //** Includes, Locals, Defines and Function Prototypes
 #include "TpmBuildSwitches.h"
 
@@ -93,9 +93,8 @@ CreateSocket(
 {
     WSADATA              wsaData;
     struct               sockaddr_in MyAddress;
-
     int res;
-  
+//  
     // Initialize Winsock
     res = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if(res != 0)
@@ -103,7 +102,6 @@ CreateSocket(
         printf("WSAStartup failed with error: %d\n", res);
         return -1;
     }
-
     // create listening socket
     *listenSocket = socket(PF_INET, SOCK_STREAM, 0);
     if(INVALID_SOCKET == *listenSocket)
@@ -112,7 +110,6 @@ CreateSocket(
                WSAGetLastError());
         return -1;
     }
-
     // bind the listening socket to the specified port
     ZeroMemory(&MyAddress, sizeof(MyAddress));
     MyAddress.sin_port = htons((short)PortNumber);
@@ -123,16 +120,14 @@ CreateSocket(
     {
         printf("Bind error.  Error is 0x%x\n", WSAGetLastError());
         return -1;
-    };
-
+    }
     // listen/wait for server connections
     res = listen(*listenSocket, 3);
     if(res == SOCKET_ERROR)
     {
         printf("Listen error.  Error is 0x%x\n", WSAGetLastError());
         return -1;
-    };
-
+    }
     return 0;
 }
 
@@ -145,7 +140,7 @@ PlatformServer(
 {
     BOOL                 OK = TRUE;
     uint32_t             Command;
-
+//
     for(;;)
     {
         OK = ReadBytes(s, (char*)&Command, 4);
@@ -159,43 +154,33 @@ PlatformServer(
             case TPM_SIGNAL_POWER_ON:
                 _rpc__Signal_PowerOn(FALSE);
                 break;
-
             case TPM_SIGNAL_POWER_OFF:
                 _rpc__Signal_PowerOff();
                 break;
-
             case TPM_SIGNAL_RESET:
                 _rpc__Signal_PowerOn(TRUE);
                 break;
-
             case TPM_SIGNAL_RESTART:
                 _rpc__Signal_Restart();
                 break;
-
             case TPM_SIGNAL_PHYS_PRES_ON:
                 _rpc__Signal_PhysicalPresenceOn();
                 break;
-
             case TPM_SIGNAL_PHYS_PRES_OFF:
                 _rpc__Signal_PhysicalPresenceOff();
                 break;
-
             case TPM_SIGNAL_CANCEL_ON:
                 _rpc__Signal_CancelOn();
                 break;
-
             case TPM_SIGNAL_CANCEL_OFF:
                 _rpc__Signal_CancelOff();
                 break;
-
             case TPM_SIGNAL_NV_ON:
                 _rpc__Signal_NvOn();
                 break;
-
             case TPM_SIGNAL_NV_OFF:
                 _rpc__Signal_NvOff();
                 break;
-
             case TPM_SIGNAL_KEY_CACHE_ON:
                 _rpc__RsaKeyCacheControl(TRUE);
                 break;
@@ -206,15 +191,12 @@ PlatformServer(
                 // Client signaled end-of-session
                 TpmEndSimulation();
                 return TRUE;
-
             case TPM_STOP:
                 // Client requested the simulator to exit
                 return FALSE;
-
             case TPM_TEST_FAILURE_MODE:
                 _rpc__ForceFailureMode();
                 break;
-
             case TPM_GET_COMMAND_RESPONSE_SIZES:
                 OK = WriteVarBytes(s, (char *)&CommandResponseSizes,
                                    sizeof(CommandResponseSizes));
@@ -247,14 +229,13 @@ PlatformSvcRoutine(
     int                  res;
     int                  length;
     BOOL                 continueServing;
-
+//
     res = CreateSocket(PortNumber, &listenSocket);
     if(res != 0)
     {
         printf("Create platform service socket fail\n");
         return res;
     }
-
     // Loop accepting connections one-by-one until we are killed or asked to stop
     // Note the platform service is single-threaded so we don't listen for a new
     // connection until the prior connection drops.
@@ -271,7 +252,7 @@ PlatformSvcRoutine(
         {
             printf("Accept error.  Error is 0x%x\n", WSAGetLastError());
             return -1;
-        };
+        }
         printf("Client accepted\n");
 
         // normal behavior on client disconnection is to wait for a new client
@@ -295,7 +276,7 @@ PlatformSignalService(
     HANDLE               hPlatformSvc;
     int                  ThreadId;
     int                  port = PortNumber;
-
+//
     // Create service thread for platform signals
     hPlatformSvc = CreateThread(NULL, 0,
                                 (LPTHREAD_START_ROUTINE)PlatformSvcRoutine,
@@ -305,7 +286,6 @@ PlatformSignalService(
         printf("Thread Creation failed\n");
         return -1;
     }
-
     return 0;
 }
 
@@ -319,17 +299,15 @@ RegularCommandService(
     SOCKET               listenSocket;
     SOCKET               serverSocket;
     struct               sockaddr_in HerAddress;
-
-    int res, length;
-    BOOL continueServing;
-
+    int                  res, length;
+    BOOL                 continueServing;
+//
     res = CreateSocket(PortNumber, &listenSocket);
     if(res != 0)
     {
         printf("Create platform service socket fail\n");
         return res;
     }
-
     // Loop accepting connections one-by-one until we are killed or asked to stop
     // Note the TPM command service is single-threaded so we don't listen for
     // a new connection until the prior connection drops.
@@ -346,7 +324,7 @@ RegularCommandService(
         {
             printf("Accept error.  Error is 0x%x\n", WSAGetLastError());
             return -1;
-        };
+        }
         printf("Client accepted\n");
 
         // normal behavior on client disconnection is to wait for a new client
@@ -354,21 +332,20 @@ RegularCommandService(
         continueServing = TpmServer(serverSocket);
         closesocket(serverSocket);
     } while(continueServing);
-
     return 0;
 }
 
 //*** StartTcpServer()
-// Main entry-point to the TCP server.  The server listens on port specified.
-// Note that there is no way to specify the network interface
-// in this implementation.
+// This is the main entry-point to the TCP server.  The server listens on port specified.
+//
+// Note that there is no way to specify the network interface in this implementation.
 int
 StartTcpServer(
     int              PortNumber
     )
 {
     int                  res;
-
+//
     // Start Platform Signal Processing Service
     res = PlatformSignalService(PortNumber + 1);
     if(res != 0)
@@ -376,7 +353,6 @@ StartTcpServer(
         printf("PlatformSignalService failed\n");
         return res;
     }
-
     // Start Regular/DRTM TPM command service
     res = RegularCommandService(PortNumber);
     if(res != 0)
@@ -384,7 +360,6 @@ StartTcpServer(
         printf("RegularCommandService failed\n");
         return res;
     }
-
     return 0;
 }
 
@@ -400,7 +375,7 @@ ReadBytes(
 {
     int                  res;
     int                  numGot = 0;
-
+//
     while(numGot < NumBytes)
     {
         res = recv(s, buffer + numGot, NumBytes - numGot, 0);
@@ -430,6 +405,7 @@ WriteBytes(
 {
     int                  res;
     int                  numSent = 0;
+//
     while(numSent < NumBytes)
     {
         res = send(s, buffer + numSent, NumBytes - numSent, 0);
@@ -459,6 +435,7 @@ WriteUINT32(
     )
 {
     UINT32 netVal = htonl(val);
+//
     return WriteBytes(s, (char*)&netVal, 4);
 }
 
@@ -475,7 +452,7 @@ ReadVarBytes(
 {
     int                  length;
     BOOL                 res;
-
+//
     res = ReadBytes(s, (char*)&length, 4);
     if(!res) return res;
     length = ntohl(length);
@@ -503,11 +480,13 @@ WriteVarBytes(
 {
     uint32_t             netLength = htonl(BytesToSend);
     BOOL res;
-
+//
     res = WriteBytes(s, (char*)&netLength, 4);
-    if(!res) return res;
+    if(!res) 
+        return res;
     res = WriteBytes(s, buffer, BytesToSend);
-    if(!res) return res;
+    if(!res) 
+        return res;
     return TRUE;
 }
 
@@ -527,7 +506,7 @@ TpmServer(
     int                  clientVersion;
     _IN_BUFFER           InBuffer;
     _OUT_BUFFER          OutBuffer;
-
+//
     for(;;)
     {
         OK = ReadBytes(s, (char*)&Command, 4);
@@ -542,11 +521,9 @@ TpmServer(
             case TPM_SIGNAL_HASH_START:
                 _rpc__Signal_Hash_Start();
                 break;
-
             case TPM_SIGNAL_HASH_END:
                 _rpc__Signal_HashEnd();
                 break;
-
             case TPM_SIGNAL_HASH_DATA:
                 OK = ReadVarBytes(s, InputBuffer, &length, MAX_BUFFER);
                 if(!OK) return TRUE;
@@ -554,12 +531,10 @@ TpmServer(
                 InBuffer.BufferSize = length;
                 _rpc__Signal_Hash_Data(InBuffer);
                 break;
-
             case TPM_SEND_COMMAND:
                 OK = ReadBytes(s, (char*)&locality, 1);
                 if(!OK)
                     return TRUE;
-
                 OK = ReadVarBytes(s, InputBuffer, &length, MAX_BUFFER);
                 if(!OK)
                     return TRUE;
@@ -575,7 +550,6 @@ TpmServer(
                     memcpy(&CommandResponseSizes.largestCommand,
                            &InputBuffer[6], sizeof(UINT32));
                 }
-
                 _rpc__Send_Command(locality, InBuffer, &OutBuffer);
                 // record the number of bytes in the response if it is the largest
                 // we have seen so far.
@@ -592,7 +566,6 @@ TpmServer(
                 if(!OK)
                     return TRUE;
                 break;
-
             case TPM_REMOTE_HANDSHAKE:
                 OK = ReadBytes(s, (char*)&clientVersion, 4);
                 if(!OK)
@@ -606,18 +579,15 @@ TpmServer(
                 OK &= WriteUINT32(s, tpmInRawMode 
                                   | tpmPlatformAvailable | tpmSupportsPP);
                 break;
-
             case TPM_SET_ALTERNATIVE_RESULT:
                 OK = ReadBytes(s, (char*)&result, 4);
                 if(!OK)
                     return TRUE;
                 // Alternative result is not applicable to the simulator.
                 break;
-
             case TPM_SESSION_END:
                 // Client signaled end-of-session
                 return TRUE;
-
             case TPM_STOP:
                 // Client requested the simulator to exit
                 return FALSE;

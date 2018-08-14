@@ -40,7 +40,7 @@
 #ifndef    _CRYPTECCSIGNATURE_FP_H_
 #define    _CRYPTECCSIGNATURE_FP_H_
 
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 
 //*** BnSignEcdsa()
 // This function implements the ECDSA signing algorithm. The method is described
@@ -136,6 +136,6 @@ CryptEccCommitCompute(
     TPM2B_ECC_PARAMETER     *d,             // IN: d (optional)
     TPM2B_ECC_PARAMETER     *r              // IN: the computed r value (required)
     );
-#endif  // TPM_ALG_ECC
+#endif  // ALG_ECC
 
 #endif  // _CRYPTECCSIGNATURE_FP_H_

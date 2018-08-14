@@ -34,7 +34,7 @@
  */
 #include "Tpm.h"
 #include "FieldUpgradeData_fp.h"
-#ifdef TPM_CC_FieldUpgradeData  // Conditional expansion of this file
+#if CC_FieldUpgradeData  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // FieldUpgradeData

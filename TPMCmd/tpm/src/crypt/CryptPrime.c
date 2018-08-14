@@ -249,7 +249,7 @@ end:
     return ret;
 }
 
-#ifdef TPM_ALG_RSA
+#if     ALG_RSA
 
 //*** RsaCheckPrime()
 // This will check to see if a number is prime and appropriate for an
@@ -351,4 +351,4 @@ BnGeneratePrimeForRSA(
     }
 }
 
-#endif // TPM_ALG_RSA
+#endif // ALG_RSA

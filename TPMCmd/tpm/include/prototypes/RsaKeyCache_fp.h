@@ -34,13 +34,13 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jun 16, 2018  Time: 12:44:14AM
  */
 
 #ifndef    _RSAKEYCACHE_FP_H_
 #define    _RSAKEYCACHE_FP_H_
 
-#if SIMULATION && USE_RSA_KEY_CACHE
+#if USE_RSA_KEY_CACHE
 
 //*** RsaKeyCacheControl()
 // Used to enable and disable the RSA key cache.
@@ -55,6 +55,6 @@ GetCachedRsaKey(
     RAND_STATE          *rand               // IN: if not NULL, the deterministic
                                             //     RNG state
     );
-#endif  // SIMULATION && USE_RSA_KEY_CACHE
+#endif  // defined SIMULATION && defined USE_RSA_KEY_CACHE
 
 #endif  // _RSAKEYCACHE_FP_H_

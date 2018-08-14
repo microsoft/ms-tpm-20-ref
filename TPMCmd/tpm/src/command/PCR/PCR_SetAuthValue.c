@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "PCR_SetAuthValue_fp.h"
 
-#ifdef TPM_CC_PCR_SetAuthValue  // Conditional expansion of this file
+#if CC_PCR_SetAuthValue  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Set authValue to a group of PCR

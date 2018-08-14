@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "FlushContext_fp.h"
 
-#ifdef TPM_CC_FlushContext  // Conditional expansion of this file
+#if CC_FlushContext  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Flush a specific object or session

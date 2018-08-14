@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jul 16, 2018  Time: 02:57:16PM
  */
 
 #ifndef    _CRYPTRAND_FP_H_
@@ -128,7 +128,7 @@ DRBG_SelfTest(
 // TPM_RC_NO_RESULT    failure of the entropy generator
 LIB_EXPORT TPM_RC
 CryptRandomStir(
-    INT32            additionalDataSize,
+    UINT16           additionalDataSize,
     BYTE            *additionalData
     );
 
@@ -169,7 +169,7 @@ DRBG_AdditionalData(
 // numbers from a seed value.
 LIB_EXPORT BOOL
 DRBG_InstantiateSeeded(
-    DRBG_STATE      *drbgState,     // IN: buffer to hold the state
+    DRBG_STATE      *drbgState,     // IN/OUT: buffer to hold the state
     const TPM2B     *seed,          // IN: the seed to use
     const TPM2B     *purpose,       // IN: a label for the generation process.
     const TPM2B     *name,          // IN: name of the object
@@ -229,20 +229,5 @@ LIB_EXPORT TPM_RC
 DRBG_Uninstantiate(
     DRBG_STATE      *drbgState      // IN/OUT: working state to erase
     );
-
-#if 0
-//*** CryptRandMinMax()
-// This function generates a value that as not larger than (2^'max') - 1
-// and no smaller than 2^('min' - 1). For example, if 'max' == 4 and 'min' == 2, then
-// the number will be between 0x0010 and 0x1111 inclusively. If 'max' == 4 and
-// 'min' == 4 then the number will be between 0x1000 and 0x1111.
-LIB_EXPORT NUMBYTES
-CryptRandMinMax(
-    BYTE            *out,
-    UINT32           max,
-    UINT32           min,
-    RAND_STATE      *rand
-    );
-#endif
 
 #endif  // _CRYPTRAND_FP_H_

@@ -1324,7 +1324,7 @@ NvDeleteEvict(
 }
 
 //*** NvFlushHierarchy()
-// This function will delete persistent objects belonging to the indicated
+// This function will delete persistent objects belonging to the indicated hierarchy.
 // If the storage hierarchy is selected, the function will also delete any
 // NV Index defined using ownerAuth.
 // return type: TPM_RC

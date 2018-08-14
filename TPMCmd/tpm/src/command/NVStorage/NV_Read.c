@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "NV_Read_fp.h"
 
-#ifdef TPM_CC_NV_Read  // Conditional expansion of this file
+#if CC_NV_Read  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Read of an NV index

@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "NV_GlobalWriteLock_fp.h"
 
-#ifdef TPM_CC_NV_GlobalWriteLock  // Conditional expansion of this file
+#if CC_NV_GlobalWriteLock  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Set global write lock for NV index

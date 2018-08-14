@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jul 16, 2018  Time: 02:57:16PM
  */
 
 #ifndef    _BNCONVERT_FP_H_
@@ -70,15 +70,13 @@ BnFromHex(
     );
 
 //*** BnToBytes()
-// This function converts a BIG_NUM to a byte array. If size is not large enough
-// to hold the bigNum value, then the function return FALSE. Otherwise, it
-// converts the bigNum to a big-endian byte string and sets 'size' to the
-// normalized value. If  'size' is an input 0, then the receiving buffer is
-// guaranteed to be large enough for the result and the size will be set to the
-// size required for bigNum (leading zeros suppressed).
+// This function converts a BIG_NUM to a byte array. It converts the bigNum to a
+// big-endian byte string and sets 'size' to the normalized value. If  'size' is an
+// input 0, then the receiving buffer is guaranteed to be large enough for the result
+// and the size will be set to the size required for bigNum (leading zeros suppressed).
 //
 // The conversion for a little-endian machine simply requires that all significant
-// bytes of the bigNum be reversed. For a big-endian machine, rather than process
+// bytes of the bigNum be reversed. For a big-endian machine, rather than
 // unpack each word individually, the bigNum is converted to little-endian words,
 // copied, and then converted back to big-endian.
 LIB_EXPORT BOOL
@@ -102,7 +100,7 @@ BnTo2B(
     TPM2B           *a2B,               // OUT:
     NUMBYTES         size               // IN: the desired size
     );
-#ifdef TPM_ALG_ECC
+#if     ALG_ECC
 
 //*** BnPointFrom2B()
 // Function to create a BIG_POINT structure from a 2B point.
@@ -126,6 +124,6 @@ BnPointTo2B(
     bigPoint         ecP,           // IN: the values to be converted
     bigCurve         E              // IN: curve descriptor for the point
     );
-#endif // TPM_ALG_ECC
+#endif // ALG_ECC
 
 #endif  // _BNCONVERT_FP_H_
