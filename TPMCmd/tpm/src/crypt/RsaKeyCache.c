@@ -178,7 +178,7 @@ InitializeKeyCache(
     }
     rsaKey->publicArea.parameters.rsaDetail.keyBits = keySave;
     s_keyCacheLoaded = OK;
-#if defined SIMULATION && defined USE_RSA_KEY_CACHE && defined USE_KEY_CACHE_FILE
+#if SIMULATION && USE_RSA_KEY_CACHE && USE_KEY_CACHE_FILE
     if(OK)
     {
         FILE                *cacheFile;
@@ -217,7 +217,7 @@ KeyCacheLoaded(
                                             //     RNG state
     )
 {
-#if defined SIMULATION && defined USE_RSA_KEY_CACHE && defined USE_KEY_CACHE_FILE
+#if SIMULATION && USE_RSA_KEY_CACHE && USE_KEY_CACHE_FILE
     if(!s_keyCacheLoaded)
     {
         FILE            *cacheFile;
