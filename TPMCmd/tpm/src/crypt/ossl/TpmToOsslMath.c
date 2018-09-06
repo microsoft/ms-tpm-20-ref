@@ -145,7 +145,7 @@ done:
 }
 #endif
 
-#ifdef LIBRARY_COMPATIBILITY_CHECK
+#if LIBRARY_COMPATIBILITY_CHECK
 void
 MathLibraryCompatibilityCheck(
     void 
