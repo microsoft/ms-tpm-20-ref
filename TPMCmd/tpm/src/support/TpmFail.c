@@ -162,7 +162,12 @@ SetForceFailureMode(
     void
     )
 {
+#if SIMULATION
     g_forceFailureMode = TRUE;
+#else
+    _plat__Fail();
+#endif
+
     return;
 }
 
