@@ -172,7 +172,7 @@ _plat__NVEnable(
     _plat__NvMemoryClear(0, NV_MEMORY_SIZE);
 
     // If the file exists
-    if(0 <= result)
+    if(0 <= NvFileOpen("r+b"))
     {
         long    fileSize = NvFileSize(SEEK_SET);    // get the file size and leave the
                                                     // file pointer at the start
