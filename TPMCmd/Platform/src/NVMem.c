@@ -204,7 +204,7 @@ _plat__NVDisable(
     )
 {
 #ifdef  FILE_BACKED_NV
-    if(NULL != s_NvFile);
+    if(NULL != s_NvFile)
         fclose(s_NvFile);    // Close NV file
     s_NvFile = NULL;        // Set file handle to NULL
 #endif
