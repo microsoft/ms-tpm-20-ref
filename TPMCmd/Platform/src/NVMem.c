@@ -172,7 +172,7 @@ _plat__NVEnable(
     _plat__NvMemoryClear(0, NV_MEMORY_SIZE);
 
     // If the file exists
-    if(0 >= NvFileOpen("r+b"))
+    if(0 <= NvFileOpen("r+b"))
     {
         long    fileSize = NvFileSize(SEEK_SET);    // get the file size and leave the
                                                     // file pointer at the start
@@ -184,7 +184,7 @@ _plat__NVEnable(
             NvFileCommit();     // for any other size, initialize it
     }
     // If NVChip file does not exist, try to create it for read/write. 
-    else if(0 >= NvFileOpen("w+b"))
+    else if(0 <= NvFileOpen("w+b"))
         NvFileCommit();             // Initialize the file
     assert(NULL != s_NvFile);       // Just in case we are broken for some reason.
 #endif
@@ -204,7 +204,7 @@ _plat__NVDisable(
     )
 {
 #ifdef  FILE_BACKED_NV
-    if(NULL != s_NvFile);
+    if(NULL != s_NvFile)
         fclose(s_NvFile);    // Close NV file
     s_NvFile = NULL;        // Set file handle to NULL
 #endif
