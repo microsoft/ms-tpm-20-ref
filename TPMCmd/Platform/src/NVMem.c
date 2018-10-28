@@ -53,11 +53,11 @@ FILE                *s_NvFile = NULL;
 //**Functions
 
 //*** NvFileOpen()
-// Function to open the NV file
+// This function opens the file used to hold the NV image.
 #if FILE_BACKED_NV
-// return type: int
-//  0       success
-//  -1      error
+//  Return Type: int
+//  >= 0        success
+//  -1          error
 static int
 NvFileOpen(
     const char      *mode
@@ -65,7 +65,7 @@ NvFileOpen(
 {
     // Try to open an exist NVChip file for read/write
 #   if defined _MSC_VER && 1
-    if(0 != fopen_s(&s_NvFile, "NVChip", mode))
+    if(fopen_s(&s_NvFile, "NVChip", mode) != 0)
         s_NvFile = NULL;
 #   else
     s_NvFile = fopen("NVChip", mode);
@@ -75,9 +75,9 @@ NvFileOpen(
 
 //*** NvFileCommit()
 // Write all of the contents of the NV image to a file.
-// return type: int
-//  0       failure
-//  1       success
+//  Return Type: int
+//      TRUE(1)         success
+//      FALSE(0)        failure
 static int
 NvFileCommit(
     void
@@ -97,8 +97,8 @@ NvFileCommit(
 
 //*** NvFileSize()
 // This function gets the size of the NV file and puts the file pointer were desired
-// using the seek method values. SEEK_SET => beginning; SEEK_CUr => current position and
-// SEEK_END => to the end of the file.
+// using the seek method values. SEEK_SET => beginning; SEEK_CUr => current position 
+// and SEEK_END => to the end of the file.
 static long
 NvFileSize(
     int         leaveAt
@@ -152,7 +152,7 @@ _plat__NvErrors(
 // The recovery from an integrity failure depends on where the error occurred. It
 // it was in the state that is discarded by TPM Reset, then the error is
 // recoverable if the TPM is reset. Otherwise, the TPM must go into failure mode.
-// return type: int
+//  Return Type: int
 //      0           if success
 //      > 0         if receive recoverable error
 //      <0          if unrecoverable error
@@ -173,7 +173,7 @@ _plat__NVEnable(
     _plat__NvMemoryClear(0, NV_MEMORY_SIZE);
 
     // If the file exists
-    if(0 == NvFileOpen("r+b"))
+    if(NvFileOpen("r+b") >= 0)
     {
         long    fileSize = NvFileSize(SEEK_SET);    // get the file size and leave the
                                                     // file pointer at the start
@@ -185,7 +185,7 @@ _plat__NVEnable(
             NvFileCommit();     // for any other size, initialize it
     }
     // If NVChip file does not exist, try to create it for read/write. 
-    else if(0 == NvFileOpen("w+b"))
+    else if(NvFileOpen("w+b") >= 0)
         NvFileCommit();             // Initialize the file
     assert(NULL != s_NvFile);       // Just in case we are broken for some reason.
 #endif
@@ -204,7 +204,7 @@ _plat__NVDisable(
     void
     )
 {
-#ifdef  FILE_BACKED_NV
+#if  FILE_BACKED_NV
     if(NULL != s_NvFile)
         fclose(s_NvFile);    // Close NV file
     s_NvFile = NULL;        // Set file handle to NULL
@@ -214,7 +214,7 @@ _plat__NVDisable(
 
 //***_plat__IsNvAvailable()
 // Check if NV is available
-// return type: int
+//  Return Type: int
 //      0               NV is available
 //      1               NV is not available due to write failure
 //      2               NV is not available due to rate limit
@@ -251,9 +251,9 @@ _plat__NvMemoryRead(
 //*** _plat__NvIsDifferent()
 // This function checks to see if the NV is different from the test value. This is
 // so that NV will not be written if it has not changed.
-// return value: int
-//  TRUE(1)    the NV location is different from the test value
-//  FALSE(0)   the NV location is the same as the test value
+//  Return Type: int
+//      TRUE(1)         the NV location is different from the test value
+//      FALSE(0)        the NV location is the same as the test value
 LIB_EXPORT int
 _plat__NvIsDifferent(
     unsigned int     startOffset,   // IN: read start
@@ -316,7 +316,7 @@ _plat__NvMemoryMove(
 //***_plat__NvCommit()
 // This function writes the local copy of NV to NV for permanent store. It will write
 // NV_MEMORY_SIZE bytes to NV. If a file is use, the entire file is written.
-// return type: int
+//  Return Type: int
 //  0       NV write success
 //  non-0   NV write fail
 LIB_EXPORT int

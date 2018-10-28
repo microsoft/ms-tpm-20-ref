@@ -444,24 +444,8 @@ ObjectLoad(
     // If the parent is not NULL, then this is an ordinary load and we only check
     // if the parent is not fixedTPM
     else if(parent != NULL)
-    {
-        if(!IS_ATTRIBUTE(parent->publicArea.objectAttributes, TPMA_OBJECT, fixedTPM))
-            doCheck = TRUE;
-#if ALG_RSA
-        else
-        {
-            if(sensitive->sensitiveType == TPM_ALG_RSA)
-            {
-                INT16           primeSize = publicArea->unique.rsa.t.size / 2;
-                if(sensitive->sensitive.rsa.t.size == (primeSize * 5))
-                    sensitive->sensitive.rsa.t.size |= RSA_prime_flag;
-                else if(sensitive->sensitive.rsa.t.size != primeSize)
-                    return TPM_RC_SENSITIVE;
-            }
-        }
-#endif // ALG_RSA
-    }
-
+        doCheck = !IS_ATTRIBUTE(parent->publicArea.objectAttributes, 
+                                TPMA_OBJECT, fixedTPM);
     else
         // This is a loadExternal. Check everything.
         // Note: the check functions will filter things based on the name algorithm
@@ -499,8 +483,7 @@ ObjectLoad(
         // If this is an RSA key, complete the load by 
         // computing the private exponent.
         if(publicArea->type == ALG_RSA_VALUE)
-            result = CryptRsaLoadPrivateExponent(&object->publicArea, 
-                                                 &object->sensitive);
+            result = CryptRsaLoadPrivateExponent(object);
 #endif
     }
     return result;

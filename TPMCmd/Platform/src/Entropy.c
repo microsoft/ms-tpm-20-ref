@@ -51,12 +51,12 @@
 // see that two consecutive 32-bit values are not the same because
 // (according to FIPS 140-2, annex C
 //
-// 1. If each call to a RNG produces blocks of n bits (where n > 15), the first
+// "If each call to a RNG produces blocks of n bits (where n > 15), the first
 // n-bit block generated after power-up, initialization, or reset shall not be
 // used, but shall be saved for comparison with the next n-bit block to be
 // generated. Each subsequent generation of an n-bit block shall be compared with
 // the previously generated block. The test shall fail if any two compared n-bit
-// blocks are equal.
+// blocks are equal."
 extern uint32_t        lastEntropy;
 
 //** Functions
@@ -86,11 +86,11 @@ rand32(
 }
 
 
-//** _plat__GetEntropy()
+//*** _plat__GetEntropy()
 // This function is used to get available hardware entropy. In a hardware
 // implementation of this function, there would be no call to the system
 // to get entropy.
-// return type: int32_t
+//  Return Type: int32_t
 //  < 0        hardware failure of the entropy generator, this is sticky
 // >= 0        the returned amount of entropy (bytes)
 //
@@ -105,16 +105,16 @@ _plat__GetEntropy(
 //
     if(amount == 0)
     {
-        // Seed the platform entropy source if the entropy source is software. There is 
-        // no reason to put a guard macro (#if or #ifdef) around this code because this
-        // code would not be here if someone was changing it for a system with actual
-        // hardware.
+        // Seed the platform entropy source if the entropy source is software. There 
+        // is no reason to put a guard macro (#if or #ifdef) around this code because 
+        // this code would not be here if someone was changing it for a system with 
+        // actual hardware.
         //
-        // NOTE 1: The following command does not provide proper cryptographic entropy.
-        // Its primary purpose to make sure that different instances of the simulator,
-        // possibly started by a script on the same machine, are seeded differently.
-        // But vendors of the actual TPMs need to ensure availability of proper entropy
-        // using their platform specific means.
+        // NOTE 1: The following command does not provide proper cryptographic 
+        // entropy. Its primary purpose to make sure that different instances of the 
+        // simulator, possibly started by a script on the same machine, are seeded 
+        // differently. Vendors of the actual TPMs need to ensure availability of 
+        // proper entropy using their platform-specific means.
         //
         // NOTE 2: In debug builds by default the reference implementation will seed
         // its RNG deterministically (without using any platform provided randomness).
@@ -137,10 +137,10 @@ _plat__GetEntropy(
         else
         {
             lastEntropy = rndNum;
-            // Each process will have its random number generator initialized according
-            // to the process id and the initialization time. This is not a lot of 
-            // entropy so, to add a bit more, XOR the current time value into the 
-            // returned entropy value.
+            // Each process will have its random number generator initialized 
+            // according to the process id and the initialization time. This is not a 
+            // lot of entropy so, to add a bit more, XOR the current time value into 
+            // the returned entropy value.
             // NOTE: the reason for including the time here rather than have it in
             // in the value assigned to lastEntropy is that rand() could be broken and
             // using the time would in the lastEntropy value would hide this.

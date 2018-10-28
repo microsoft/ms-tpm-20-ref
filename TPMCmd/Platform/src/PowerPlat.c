@@ -65,9 +65,9 @@ _plat__Signal_PowerOn(
 // TPM code and, if the hardware actually works this way, it is hard to make it
 // look like anything else. So, the burden is placed on the TPM code rather than the
 // platform code
-// return type: int
-//  TRUE(1)     power was lost
-//  FALSE(0)    power was not lost
+//  Return Type: int
+//      TRUE(1)         power was lost
+//      FALSE(0)        power was not lost
 LIB_EXPORT int
 _plat__WasPowerLost(
     void

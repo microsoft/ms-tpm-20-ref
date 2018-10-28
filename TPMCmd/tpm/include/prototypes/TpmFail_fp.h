@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jun 16, 2018  Time: 12:44:14AM
+ *  Date: Sep 25, 2018  Time: 04:08:04PM
  */
 
 #ifndef    _TPMFAIL_FP_H_
@@ -42,10 +42,12 @@
 
 //*** SetForceFailureMode()
 // This function is called by the simulator to enable failure mode testing.
+#if SIMULATION
 LIB_EXPORT void
 SetForceFailureMode(
     void
     );
+#endif
 
 //*** TpmFail()
 // This function is called by TPM.lib when a failure occurs. It will set up the

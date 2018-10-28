@@ -248,7 +248,7 @@
 #   if !(defined RUNTIME_SIZE_CHECKS)                                               \
     || ((RUNTIME_SIZE_CHECKS != NO) && (RUNTIME_SIZE_CHECKS != YES))
 #       undef RUNTIME_SIZE_CHECKS
-#       define RUNTIME_SIZE_CHECKS      YES      // Default: Either YES or NO
+#       define RUNTIME_SIZE_CHECKS      NO      // Default: Either YES or NO
 #   endif
 
 // If doing debug, can set the DRBG to print out the intermediate test values. 

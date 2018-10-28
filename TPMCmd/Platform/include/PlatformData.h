@@ -122,9 +122,9 @@ extern unsigned char s_locality;
 #   define  FILE_BACKED_NV          (VTPM && YES)     // Default: Either YES or NO
 #endif
 
-#if !SIMULATION
+#if SIMULATION
 #   undef       FILE_BACKED_NV
-#   define      FILE_BACKED_NV          NO
+#   define      FILE_BACKED_NV          YES
 #endif // SIMULATION
 
 extern unsigned char     s_NV[NV_MEMORY_SIZE];

@@ -44,9 +44,9 @@
 
 //***_plat__PhysicalPresenceAsserted()
 // Check if physical presence is signaled
-// return type: int
-//      TRUE(1)          if physical presence is signaled
-//      FALSE(0)         if physical presence is not signaled
+//  Return Type: int
+//      TRUE(1)         if physical presence is signaled
+//      FALSE(0)        if physical presence is not signaled
 LIB_EXPORT int
 _plat__PhysicalPresenceAsserted(
     void

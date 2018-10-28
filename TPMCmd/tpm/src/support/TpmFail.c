@@ -135,6 +135,9 @@ MarshalUint32(
 
 //*** UnmarshalHeader()
 // function to unmarshal the 10-byte command header.
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure
 static BOOL
 UnmarshalHeader(
     HEADER          *header,
@@ -157,19 +160,16 @@ UnmarshalHeader(
 
 //*** SetForceFailureMode()
 // This function is called by the simulator to enable failure mode testing.
+#if SIMULATION
 LIB_EXPORT void
 SetForceFailureMode(
     void
     )
 {
-#if SIMULATION
     g_forceFailureMode = TRUE;
-#else
-    _plat__Fail();
-#endif
-
     return;
 }
+#endif
 
 //*** TpmFail()
 // This function is called by TPM.lib when a failure occurs. It will set up the

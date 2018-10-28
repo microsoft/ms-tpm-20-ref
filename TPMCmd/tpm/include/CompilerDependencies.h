@@ -44,12 +44,6 @@
 #   undef WIN32
 #endif
 
-// If in-line functions are not being used, define INLINE as null. If 
-// INLINE_FUNCTIONS is defined, then need to define INLINE for each compiler.
-#ifndef INLINE_FUNCTIONS
-#   define INLINE
-#endif
-
 #ifdef _MSC_VER
 // These definitions are for the Microsoft compiler
 
@@ -57,10 +51,6 @@
 #   define REVERSE_ENDIAN_16(_Number) _byteswap_ushort(_Number)
 #   define REVERSE_ENDIAN_32(_Number) _byteswap_ulong(_Number)
 #   define REVERSE_ENDIAN_64(_Number) _byteswap_uint64(_Number)
-// Handling of INLINE macro
-#   ifdef INLINE_FUNCTIONS
-#       define INLINE   static __inline 
-#   endif
 
 // Avoid compiler warning for in line of stdio (or not)
 //#define _NO_CRT_STDIO_INLINE
@@ -100,14 +90,13 @@ __pragma(warning(pop))
 #endif
 
 #ifndef _MSC_VER
+#ifndef WINAPI
 #   define WINAPI
+#endif
 #   define __pragma(x)
 #   define REVERSE_ENDIAN_16(_Number) __builtin_bswap16(_Number)
 #   define REVERSE_ENDIAN_32(_Number) __builtin_bswap32(_Number)
 #   define REVERSE_ENDIAN_64(_Number) __builtin_bswap64(_Number)
-#   ifdef INLINE_FUNCTIONS
-#       define INLINE static inline
-#   endif // INLINE_FUNCTIONS
 #endif
 
 #if defined(__GNUC__)

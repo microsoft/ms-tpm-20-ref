@@ -44,9 +44,9 @@
 
 //***_plat__IsCanceled()
 // Check if the cancel flag is set
-// return type: BOOL
-//      TRUE(1)      if cancel flag is set
-//      FALSE(0)     if cancel flag is not set
+//  Return Type: int
+//      TRUE(1)         if cancel flag is set
+//      FALSE(0)        if cancel flag is not set
 LIB_EXPORT int
 _plat__IsCanceled(
     void
