@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Set authValue to a group of PCR
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_VALUE                PCR referenced by 'pcrHandle' is not a member
 //                                  of a PCR authorization group
 TPM_RC

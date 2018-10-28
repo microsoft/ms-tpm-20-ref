@@ -40,10 +40,10 @@
 /*(See part 3 specification)
 // Allocate PCR banks
 */
-// return type: TPM_RC
-//  TPM_RC_PCR                  the allocation did not have required PCR
-//  TPM_RC_NV_UNAVAILABLE       NV is not accessible
-//  TPM_RC_NV_RATE              NV is in a rate-limiting mode
+//  Return Type: TPM_RC
+//      TPM_RC_PCR              the allocation did not have required PCR
+//      TPM_RC_NV_UNAVAILABLE   NV is not accessible
+//      TPM_RC_NV_RATE          NV is in a rate-limiting mode
 TPM_RC
 TPM2_PCR_Allocate(
     PCR_Allocate_In     *in,            // IN: input parameter list

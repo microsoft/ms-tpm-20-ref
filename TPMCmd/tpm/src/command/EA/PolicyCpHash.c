@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Add a cpHash restriction to the policyDigest
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_CPHASH           cpHash of 'policySession' has previously been set
 //                              to a different value
 //      TPM_RC_SIZE             'cpHashA' is not the size of a digest produced

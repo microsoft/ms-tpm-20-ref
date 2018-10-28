@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Set a hierarchy policy
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_SIZE           size of input authPolicy is not consistent with
 //                            input hash algorithm
 TPM_RC

@@ -43,7 +43,7 @@
 // This command returns the parameters of an ECC curve identified by its TCG
 // assigned curveID
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_VALUE                    Unsupported ECC curve ID
 TPM_RC
 TPM2_ECC_Parameters(

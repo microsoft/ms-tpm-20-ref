@@ -43,7 +43,7 @@
 //*** NvReadAccessChecks()
 // Common routine for validating a read
 // Used by TPM2_NV_Read, TPM2_NV_ReadLock and TPM2_PolicyNV
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_NV_AUTHORIZATION     autHandle is not allowed to authorize read
 //                                  of the index
 //      TPM_RC_NV_LOCKED            Read locked
@@ -60,7 +60,7 @@ NvReadAccessChecks(
 //*** NvWriteAccessChecks()
 // Common routine for validating a write
 // Used by TPM2_NV_Write, TPM2_NV_Increment, TPM2_SetBits, and TPM2_NV_WriteLock
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_NV_AUTHORIZATION     Authorization fails
 //      TPM_RC_NV_LOCKED            Write locked
 //
@@ -82,9 +82,9 @@ NvClearOrderly(
 
 //*** NvIsPinPassIndex()
 // Function to check to see if an NV index is a PIN Pass Index
-// return type: BOOL
-//  TRUE    is pin pass
-//  FALSE   is not pin pass
+//  Return Type: BOOL
+//      TRUE(1)         is pin pass
+//      FALSE(0)        is not pin pass
 BOOL
 NvIsPinPassIndex(
     TPM_HANDLE          index       // IN: Handle to check

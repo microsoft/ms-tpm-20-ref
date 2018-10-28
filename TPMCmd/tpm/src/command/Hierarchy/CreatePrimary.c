@@ -40,28 +40,30 @@
 /*(See part 3 specification)
 // Creates a primary or temporary object from a primary seed.
 */
-// return type: TPM_RC
-//   TPM_RC_ATTRIBUTES      sensitiveDataOrigin is CLEAR when sensitive.data is an 
-//                          Empty Buffer 'fixedTPM', 'fixedParent', or 
-//                          'encryptedDuplication' attributes are inconsistent 
-//                          between themselves or with those of the parent object;
-//                          inconsistent 'restricted', 'decrypt' and 'sign'
-//                          attributes
-//                          attempt to inject sensitive data for an asymmetric key;
-//   TPM_RC_KDF             incorrect KDF specified for decrypting keyed hash object
-//   TPM_RC_KEY             a provided symmetric key value is not allowed
-//   TPM_RC_OBJECT_MEMORY   there is no free slot for the object
-//   TPM_RC_SCHEME          inconsistent attributes 'decrypt', 'sign', 'restricted'
-//                          and key's scheme ID; or hash algorithm is inconsistent
-//                          with the scheme ID for keyed hash object
-//   TPM_RC_SIZE            size of public authorization policy or sensitive
-//                          authorization value does not match digest size of the
-//                          name algorithm; or sensitive data size for the keyed
-//                          hash object is larger than is allowed for the scheme
-//   TPM_RC_SYMMETRIC       a storage key with no symmetric algorithm specified; or
-//                          non-storage key with symmetric algorithm different from
-//                          TPM_ALG_NULL
-//   TPM_RC_TYPE            unknown object type
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES       sensitiveDataOrigin is CLEAR when sensitive.data is an 
+//                              Empty Buffer 'fixedTPM', 'fixedParent', or 
+//                              'encryptedDuplication' attributes are inconsistent 
+//                              between themselves or with those of the parent object;
+//                              inconsistent 'restricted', 'decrypt' and 'sign'
+//                              attributes
+//                              attempt to inject sensitive data for an asymmetric 
+//                              key;
+//      TPM_RC_KDF              incorrect KDF specified for decrypting keyed hash 
+//                              object
+//      TPM_RC_KEY              a provided symmetric key value is not allowed
+//      TPM_RC_OBJECT_MEMORY    there is no free slot for the object
+//      TPM_RC_SCHEME           inconsistent attributes 'decrypt', 'sign', 
+//                              'restricted' and key's scheme ID; or hash algorithm is
+//                              inconsistent with the scheme ID for keyed hash object
+//      TPM_RC_SIZE             size of public authorization policy or sensitive
+//                              authorization value does not match digest size of the
+//                              name algorithm; or sensitive data size for the keyed
+//                              hash object is larger than is allowed for the scheme
+//      TPM_RC_SYMMETRIC        a storage key with no symmetric algorithm specified; 
+//                              or non-storage key with symmetric algorithm different 
+//                              from ALG_NULL
+//      TPM_RC_TYPE             unknown object type
 TPM_RC
 TPM2_CreatePrimary(
     CreatePrimary_In    *in,            // IN: input parameter list

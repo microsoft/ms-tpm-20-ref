@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Sep 27, 2018  Time: 09:28:59PM
  */
 
 #ifndef    _CRYPTSELFTEST_FP_H_
@@ -51,7 +51,7 @@
 // will check after each test to see if the command is canceled. If so, then the
 // TPM will returned TPM_RC_CANCELLED. To continue with the self-tests, call
 // TPM2_SelfTest(fullTest == No) and the TPM will complete the testing.
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_CANCELED        if the command is canceled
 LIB_EXPORT
 TPM_RC
@@ -67,7 +67,7 @@ CryptSelfTest(
 // This command may be canceled. If it is, then there is no return result.
 // However, this command can be run again and the incremental progress will not
 // be lost.
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_CANCELED         processing of this command was canceled
 //      TPM_RC_TESTING          if toTest list is not empty
 //      TPM_RC_VALUE            an algorithm in the toTest list is not implemented
@@ -96,9 +96,8 @@ CryptInitializeToTest(
 // ALG_ERROR, TestAlgorithm() will CLEAR any bit in 'toTest' for which it has
 // no test. This allows the knowledge about which algorithms have test to be
 // accessed through the interface that provides the test.
-// return type: TPM_RC
-//  TPM_RC_SUCCESS      test complete
-//  TPM_RC_CANCELED     test was canceled
+//  Return Type: TPM_RC
+//      TPM_RC_CANCELED     test was canceled
 LIB_EXPORT
 TPM_RC
 CryptTestAlgorithm(

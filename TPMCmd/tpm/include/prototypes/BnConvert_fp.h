@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jul 16, 2018  Time: 02:57:16PM
+ *  Date: Sep 26, 2018  Time: 03:48:06PM
  */
 
 #ifndef    _BNCONVERT_FP_H_
@@ -73,7 +73,8 @@ BnFromHex(
 // This function converts a BIG_NUM to a byte array. It converts the bigNum to a
 // big-endian byte string and sets 'size' to the normalized value. If  'size' is an
 // input 0, then the receiving buffer is guaranteed to be large enough for the result
-// and the size will be set to the size required for bigNum (leading zeros suppressed).
+// and the size will be set to the size required for bigNum (leading zeros
+// suppressed).
 //
 // The conversion for a little-endian machine simply requires that all significant
 // bytes of the bigNum be reversed. For a big-endian machine, rather than

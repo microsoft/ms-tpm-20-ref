@@ -251,7 +251,7 @@ ExecuteCommand(
     }
     // Set up the response buffer pointers. CommandDispatch will marshal the
     // response parameters starting at the address in command.responseBuffer.
-//    *response = MemoryGetResponseBuffer(command.index);
+//*response = MemoryGetResponseBuffer(command.index);
     // leave space for the command header
     command.responseBuffer = *response + STD_RESPONSE_HEADER;
 

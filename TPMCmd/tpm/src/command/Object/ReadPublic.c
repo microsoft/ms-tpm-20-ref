@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // read public area of a loaded object
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_SEQUENCE             can not read the public area of a sequence
 //                                  object
 TPM_RC

@@ -35,22 +35,22 @@
  */
 // This file contains the build switches. This contains switches for multiple
 // versions of the crypto-library so some may not apply to your environment.
-//
+// 
 // The switches are guarded so that they can either be set on the command line or
-// set here. If the switch is listed on the command line (-DSOME_SWITCH) with no setting,
-// then the switch will be set to YES. If the switch setting is not on the command line
-// or if the setting is other than YES or NO, then the switch will be set to the default
-// value. The default can either be YES or NO as indicated on each line where the 
-// default is selected.
-//
+// set here. If the switch is listed on the command line (-DSOME_SWITCH) with no 
+// setting, then the switch will be set to YES. If the switch setting is not on the 
+// command line or if the setting is other than YES or NO, then the switch will be set
+// to the default value. The default can either be YES or NO as indicated on each line
+// where the default is selected.
+// 
 // A caution. Do not try to test these macros by inserting #defines in this file. For
-// some curious reason, a variable set on the command line with no setting will have a 
+// some curious reason, a variable set on the command line with no setting will have a
 // value of 1. An #if SOME_VARIABLE will work if the variable is not defined or is 
-// defined on the command line with no initial setting. However, a #define SOME_VARIABLE
-// is a null string and when used in #if SOME_VARIABLE will not be a proper expression
-// If you want to test various switches, either use the command line or change the 
-// default. 
-
+// defined on the command line with no initial setting. However, a 
+// "#define SOME_VARIABLE" is a null string and when used in "#if SOME_VARIABLE" will
+// not be a proper expression If you want to test various switches, either use the 
+// command line or change the default. 
+// 
 #ifndef _TPM_BUILD_SWITCHES_H_
 #define _TPM_BUILD_SWITCHES_H_
 
@@ -74,19 +74,22 @@
 #include "CompilerDependencies.h"
 
 // This definition is required for the re-factored code
-#if (!defined USE_BN_ECC_DATA) || ((USE_BN_ECC_DATA != NO) && (USE_BN_ECC_DATA != YES))
+#if (!defined USE_BN_ECC_DATA)                                                      \
+                || ((USE_BN_ECC_DATA != NO) && (USE_BN_ECC_DATA != YES))
 #   undef   USE_BN_ECC_DATA
 #   define  USE_BN_ECC_DATA     YES     // Default: Either YES or NO
 #endif
 
-// The SIMULATION switch allows certain other macros to be enabled. The things that can 
-// be enabled in a simulation include key caching, reproducible "random" sequences, 
-// instrumentation of the RSA key generation process, and certain other debug code.
-// SIMULATION Needs to be defined as either YES or NO. This grouping of macros will make
-// sure that it is set correctly.
-// A simulated TPM would include a Virtual TPM. The interfaces for a Virtual TPM should
-// be modified from the standard ones in the Simulator project.
-// If SIMULATION is in the compile parameters without modifiers,  make SIMULATION == YES
+// The SIMULATION switch allows certain other macros to be enabled. The things that 
+// can be enabled in a simulation include key caching, reproducible "random" 
+// sequences, instrumentation of the RSA key generation process, and certain other 
+// debug code. SIMULATION Needs to be defined as either YES or NO. This grouping of 
+// macros will make sure that it is set correctly. A simulated TPM would include a 
+// Virtual TPM. The interfaces for a Virtual TPM should be modified from the standard 
+// ones in the Simulator project. 
+//
+// If SIMULATION is in the compile parameters without modifiers,
+// make SIMULATION == YES
 #if !(defined SIMULATION) || ((SIMULATION != NO) && (SIMULATION != YES))
 #   undef   SIMULATION
 #   define  SIMULATION      YES     // Default: Either YES or NO
@@ -94,8 +97,9 @@
 
 // Define this to run the function that checks the compatibility between the 
 // chosen big number math library and the TPM code. Not all ports use this.
-#if !(defined LIBRARY_COMPATABILITY_CHECK)                                              \
-        || ((LIBRARY_COMPATABILITY_CHECK != NO) && (LIBRARY_COMPATABILITY_CHECK != YES))
+#if !(defined LIBRARY_COMPATABILITY_CHECK)                                          \
+        || ((LIBRARY_COMPATABILITY_CHECK != NO)                                     \
+            && (LIBRARY_COMPATABILITY_CHECK != YES))
 #   undef   LIBRARY_COMPATABILITY_CHECK
 #   define  LIBRARY_COMPATABILITY_CHECK     YES     // Default: Either YES or NO
 #endif
@@ -114,7 +118,7 @@
 
 // Define TABLE_DRIVEN_DISPATCH to use tables rather than case statements
 // for command dispatch and handle unmarshaling
-#if !(defined TABLE_DRIVEN_DISPATCH)                                                    \
+#if !(defined TABLE_DRIVEN_DISPATCH)                                                \
         || ((TABLE_DRIVEN_DISPATCH != NO) && (TABLE_DRIVEN_DISPATCH != YES))
 #   undef   TABLE_DRIVEN_DISPATCH
 #   define  TABLE_DRIVEN_DISPATCH   YES     // Default: Either YES or NO
@@ -135,14 +139,15 @@
 // Enable the instrumentation of the sieve process. This is used to tune the sieve
 // variables. 
 #if RSA_KEY_SIEVE && SIMULATION
-#   if !(defined RSA_INSTRUMENT) || ((RSA_INSTRUMENT != NO) && (RSA_INSTRUMENT != YES))
+#   if !(defined RSA_INSTRUMENT)                                                    \
+            || ((RSA_INSTRUMENT != NO) && (RSA_INSTRUMENT != YES))
 #       undef   RSA_INSTRUMENT
 #       define  RSA_INSTRUMENT      NO         // Default: Either YES or NO
 #   endif
 #endif
 
 // This switch enables the RNG state save and restore
-#if !(defined _DRBG_STATE_SAVE)                                                         \
+#if !(defined _DRBG_STATE_SAVE)                                                     \
     || ((_DRBG_STATE_SAVE != NO) && (_DRBG_STATE_SAVE != YES))
 #   undef   _DRBG_STATE_SAVE
 #   define  _DRBG_STATE_SAVE        YES     // Default: Either YES or NO
@@ -152,7 +157,7 @@
 // unimplemented commands. Comment this out to use linear lists.
 // Note: if vendor specific commands are present, the associated list is always
 // in compressed form.
-#if !(defined COMPRESSED_LISTS)                                                         \
+#if !(defined COMPRESSED_LISTS)                                                     \
     || ((COMPRESSED_LISTS != NO) && (COMPRESSED_LISTS != YES))
 #   undef   COMPRESSED_LISTS
 #   define  COMPRESSED_LISTS        YES     // Default: Either YES or NO
@@ -183,16 +188,16 @@
 // The switches in this group can only be enabled when doing debug during simulation
 #if SIMULATION && DEBUG
 // Enables use of the key cache. Default is YES
-#   if !(defined USE_RSA_KEY_CACHE)                                                     \
+#   if !(defined USE_RSA_KEY_CACHE)                                                 \
     || ((USE_RSA_KEY_CACHE != NO) && (USE_RSA_KEY_CACHE != YES))
 #       undef   USE_RSA_KEY_CACHE
 #       define  USE_RSA_KEY_CACHE   YES   // Default: Either YES or NO
 #   endif
 
-// Enables use of a file to store the key cache values so that the TPM will start faster
-// during debug. Default for this is YES
+// Enables use of a file to store the key cache values so that the TPM will start 
+// faster during debug. Default for this is YES
 #   if USE_RSA_KEY_CACHE
-#       if !(defined USE_KEY_CACHE_FILE)                                                \
+#       if !(defined USE_KEY_CACHE_FILE)                                            \
             || ((USE_KEY_CACHE_FILE != NO) && (USE_KEY_CACHE_FILE != YES))
 #           undef   USE_KEY_CACHE_FILE
 #           define  USE_KEY_CACHE_FILE  YES     // Default: Either YES or NO
@@ -210,8 +215,8 @@
 #       define  USE_DEBUG_RNG           YES      // Default: Either YES or NO
 #   endif
 
-// Don't change these. They are the settings needed when not doing a simulation and not
-// doing debug. Can't use the key cache except during debug. Otherwise, all of the
+// Don't change these. They are the settings needed when not doing a simulation and 
+// not doing debug. Can't use the key cache except during debug. Otherwise, all of the
 // key values end up being the same 
 #else
 #   define USE_RSA_KEY_CACHE        NO
@@ -230,7 +235,7 @@
 // For these cases, we include a special macro that, depending on the compiler
 // will generate a warning to indicate if the check always passes or always fails
 // because it involves fixed constants. To run these checks, define COMPILER_CHECKS.
-#   if !(defined COMPILER_CHECKS)                                                       \
+#   if !(defined COMPILER_CHECKS)                                                   \
         || ((COMPILER_CHECKS != NO) && (COMPILER_CHECKS != YES))
 #       undef   COMPILER_CHECKS
 #       define  COMPILER_CHECKS     NO      // Default: Either YES or NO
@@ -240,16 +245,16 @@
 // Implementation.h. The combination might not be consistent. A function is defined
 // (TpmSizeChecks()) that is used to verify the sizes at run time. To enable the 
 // function, define this parameter.
-#   if !(defined RUNTIME_SIZE_CHECKS)                                                   \
+#   if !(defined RUNTIME_SIZE_CHECKS)                                               \
     || ((RUNTIME_SIZE_CHECKS != NO) && (RUNTIME_SIZE_CHECKS != YES))
 #       undef RUNTIME_SIZE_CHECKS
-#       define RUNTIME_SIZE_CHECKS      NO      // Default: Either YES or NO
+#       define RUNTIME_SIZE_CHECKS      YES      // Default: Either YES or NO
 #   endif
 
 // If doing debug, can set the DRBG to print out the intermediate test values. 
 // Before enabling this, make sure that the dbgDumpMemBlock() function
 // has been added someplace (preferably, somewhere in CryptRand.c)
-#   if !(defined DRBG_DEBUG_PRINT)                                                      \
+#   if !(defined DRBG_DEBUG_PRINT)                                                  \
     || ((DRBG_DEBUG_PRINT != NO) && (DRBG_DEBUG_PRINT != YES))
 #       undef   DRBG_DEBUG_PRINT
 #       define  DRBG_DEBUG_PRINT    NO      // Default: Either YES or NO
@@ -264,9 +269,9 @@
 
 #endif // DEBUG
 
-// Indicate if the implementation is going to give lockout time credit for time up to the
-// last orderly shutdown.
-#if !(defined ACCUMULATE_SELF_HEAL_TIMER)                                               \
+// Indicate if the implementation is going to give lockout time credit for time up to 
+// the last orderly shutdown.
+#if !(defined ACCUMULATE_SELF_HEAL_TIMER)                                           \
     || ((ACCUMULATE_SELF_HEAL_TIMER != NO) && (ACCUMULATE_SELF_HEAL_TIMER != YES))
 #   undef   ACCUMULATE_SELF_HEAL_TIMER
 #   define  ACCUMULATE_SELF_HEAL_TIMER      YES       // Default: Either YES or NO
@@ -274,7 +279,7 @@
 
 // Indicates if the implementation is to compute the sizes of the proof and primary 
 // seed size values based on the implemented algorithms.
-#if !(defined USE_SPEC_COMPLIANT_PROOFS)                                                \
+#if !(defined USE_SPEC_COMPLIANT_PROOFS)                                            \
     || ((USE_SPEC_COMPLIANT_PROOFS != NO) && (USE_SPEC_COMPLIANT_PROOFS != YES))
 #   undef   USE_SPEC_COMPLIANT_PROOFS
 #   define  USE_SPEC_COMPLIANT_PROOFS       YES       // Default: Either YES or NO
@@ -283,23 +288,24 @@
 // Comment this out to allow compile to continue even though the chosen proof values
 // do not match the compliant values. This is written so that someone would
 // have to proactively ignore errors.
-#if !(defined SKIP_PROOF_ERRORS)                                                        \
+#if !(defined SKIP_PROOF_ERRORS)                                                    \
     || ((SKIP_PROOF_ERRORS != NO) && (SKIP_PROOF_ERRORS != YES))
 #   undef   SKIP_PROOF_ERRORS
 #   define  SKIP_PROOF_ERRORS           NO       // Default: Either YES or NO
 #endif
 
-// This define is used to eliminate the use of bit-fields. It can be enabled for big- or
-// little-endian machines. For big-endian architectures that numbers bits in registers 
-// from left to right (MSb0) this must be enabled. Little-endian machines number from 
-// right to left with the least significant bit having assigned a bit number of 0. These
-// are LSb0 machines (they are also little-endian so they are also least-significant
-// byte 0 (LSB0) machines. Big-endian (MSB0) machines may number in either direction
-// (MSb0 or LSb0). For an MSB0+MSb0 machine this value is required to be 'NO'
-#if !(defined USE_BIT_FIELD_STRUCTURES)                                                 \
+// This define is used to eliminate the use of bit-fields. It can be enabled for big- 
+// or little-endian machines. For big-endian architectures that numbers bits in 
+// registers from left to right (MSb0) this must be enabled. Little-endian machines 
+// number from right to left with the least significant bit having assigned a bit 
+// number of 0. These are LSb0 machines (they are also little-endian so they are also 
+// least-significant byte 0 (LSB0) machines. Big-endian (MSB0) machines may number in 
+// either direction (MSb0 or LSb0). For an MSB0+MSb0 machine this value is required to
+// be 'NO'
+#if !(defined USE_BIT_FIELD_STRUCTURES)                                             \
     || ((USE_BIT_FIELD_STRUCTURES != NO) && (USE_BIT_FIELD_STRUCTURES != YES))
 #   undef   USE_BIT_FIELD_STRUCTURES
-#   define  USE_BIT_FIELD_STRUCTURES    YES        // Default: Either YES or NO
+#   define  USE_BIT_FIELD_STRUCTURES    DEBUG        // Default: Either YES or NO
 #endif
 
 // Change these definitions to turn all algorithms or commands ON or OFF. That is,

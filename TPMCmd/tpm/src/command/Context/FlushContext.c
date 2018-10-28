@@ -40,8 +40,8 @@
 /*(See part 3 specification)
 // Flush a specific object or session
 */
-// return type: TPM_RC
-//   TPM_RC_HANDLE      'flushHandle' does not reference a loaded object or session
+//  Return Type: TPM_RC
+//      TPM_RC_HANDLE      'flushHandle' does not reference a loaded object or session
 TPM_RC
 TPM2_FlushContext(
     FlushContext_In     *in             // IN: input parameter list

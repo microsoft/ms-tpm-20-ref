@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Read of an NV index
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_NV_AUTHORIZATION         the authorization was valid but the
 //                                      authorizing entity ('authHandle')
 //                                      is not allowed to read from the Index

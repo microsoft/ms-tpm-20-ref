@@ -115,7 +115,7 @@
 #define PCR_SELECT_MIN          ((PLATFORM_PCR+7)/8)
 #define PCR_SELECT_MAX          ((IMPLEMENTATION_PCR+7)/8)
 #define MAX_ORDERLY_COUNT       ((1 << ORDERLY_BITS) - 1)
-#define PRIVATE_VENDOR_SPECIFIC_BYTES                                                   \
+#define PRIVATE_VENDOR_SPECIFIC_BYTES                                               \
                 ((MAX_RSA_KEY_BYTES/2) * (3 + CRT_FORMAT_RSA * 2))
 
 //** Compile-time Checks
@@ -283,10 +283,10 @@
 #endif
 
 // This bit is used to indicate that an authorization ticket expires on TPM Reset
-// and TPM Restart.It is added to the timeout value returned by TPM2_PoliySigned()
+// and TPM Restart. It is added to the timeout value returned by TPM2_PoliySigned()
 // and TPM2_PolicySecret() and used by TPM2_PolicyTicket(). The timeout value is 
 // relative to Time (g_time). Time is reset whenever the TPM loses power and cannot
-// be moved forward by the user (as can Clock). g_time is a 64-bit value expressing
+// be moved forward by the user (as can Clock). 'g_time' is a 64-bit value expressing
 // time in ms. Sealing the MSb for a flag means that the TPM needs to be reset
 // at least once every 292,471,208 years rather than once every 584,942,417 years.
 #define EXPIRATION_BIT ((UINT64)1 << 63)

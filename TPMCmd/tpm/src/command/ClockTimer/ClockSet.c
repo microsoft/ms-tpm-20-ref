@@ -38,10 +38,10 @@
 #if CC_ClockSet  // Conditional expansion of this file
 
 // Read the current TPMS_TIMER_INFO structure settings
-// return type: TPM_RC
-//   TPM_RC_NV_RATE              NV is unavailable because of rate limit
-//   TPM_RC_NV_UNAVAILABLE       NV is inaccessible
-//   TPM_RC_VALUE                invalid new clock
+//  Return Type: TPM_RC
+//      TPM_RC_NV_RATE              NV is unavailable because of rate limit
+//      TPM_RC_NV_UNAVAILABLE       NV is inaccessible
+//      TPM_RC_VALUE                invalid new clock
 
 TPM_RC
 TPM2_ClockSet(

@@ -41,11 +41,11 @@
 // This command uses loaded key to validate an asymmetric signature on a message
 // with the message digest passed to the TPM.
 */
-// return type: TPM_RC
-//    TPM_RC_ATTRIBUTES           'keyHandle' does not reference a signing key
-//    TPM_RC_SIGNATURE            signature is not genuine
-//    TPM_RC_SCHEME               CryptValidateSignature()
-//    TPM_RC_HANDLE               the input handle is references an HMAC key but
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES         'keyHandle' does not reference a signing key
+//      TPM_RC_SIGNATURE          signature is not genuine
+//      TPM_RC_SCHEME             CryptValidateSignature()
+//      TPM_RC_HANDLE             the input handle is references an HMAC key but
 //                                the private portion is not loaded
 TPM_RC
 TPM2_VerifySignature(
@@ -75,7 +75,7 @@ TPM2_VerifySignature(
        || signObject->publicArea.nameAlg == TPM_ALG_NULL)
     {
         // produce empty ticket if hierarchy is TPM_RH_NULL or nameAlg is
-        // TPM_ALG_NULL
+        // ALG_NULL
         out->validation.tag = TPM_ST_VERIFIED;
         out->validation.hierarchy = TPM_RH_NULL;
         out->validation.digest.t.size = 0;

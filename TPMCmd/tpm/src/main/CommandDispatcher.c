@@ -58,28 +58,28 @@ typedef union
     COMMAND_INOUT_ARG       *inOutArg;
 } COMMAND_t;
 
-// This structure is used by ParseHandleBuffer() and CommandDispatcher. The
+// This structure is used by ParseHandleBuffer() and CommandDispatcher(). The
 // parameters in this structure are unique for each command. The parameters are:
-// command --   holds the address of the command processing function that is called
+// command      holds the address of the command processing function that is called
 //              by Command Dispatcher.
-// inSize --    this is the size of the command-dependent input structure. The
+// inSize       this is the size of the command-dependent input structure. The
 //              input structure holds the unmarshaled handles and command
 //              parameters. If the command takes no arguments (handles or
 //              parameters) then inSize will have a value of 0.
-// outSize --   this is the size of the command-dependent output structure. The
+// outSize      this is the size of the command-dependent output structure. The
 //              output structure holds the results of the command in an unmarshaled
 //              form. When command processing is completed, these values are
 //              marshaled into the output buffer. It is always the case that the
 //              unmarshaled version of an output structure is larger then the
 //              marshaled version. This is because the marshaled version contains
 //              the exact same number of significant bytes but with padding removed.
-// typesOffsets -- this parameter points to the list of data types that are to be
+// typesOffsets    this parameter points to the list of data types that are to be
 //              marshaled or unmarshaled. The list of types follows the 'offsets'
 //              array. The offsets array is variable sized so the typesOffset filed
 //              is necessary for the handle and command processing to be able to
 //              find the types that are being handled. The 'offsets' array may be
 //              empty. The types structure is described below.
-// offsets --   this is an array of offsets of each of the parameters in the
+// offsets      this is an array of offsets of each of the parameters in the
 //              command or response. When processing the command parameters (not
 //              handles) the list contains the offset of the next parameter. For
 //              example, if the first command parameter has a size of 4 and there is
@@ -89,7 +89,7 @@ typedef union
 //              in offsets is 12 (4 for the first parameter and 8 for the second).
 //              An offset value of 0 in the list indicates the start of the response
 //              parameter list. When CommandDispatcher hits this value, it will stop
-//              unmarshaling the parameters and call 'command.' If a command has no
+//              unmarshaling the parameters and call 'command'. If a command has no
 //              response parameters and only one command parameter, then offsets can
 //              be an empty list.
 
@@ -102,21 +102,21 @@ typedef struct
     UINT16          offsets[1];
 } COMMAND_DESCRIPTOR_t;
 
-// The types list is an encoded byte array. The byte value has two parts. The most
+// The 'types' list is an encoded byte array. The byte value has two parts. The most
 // significant bit is used when a parameter takes a flag and indicates if the flag
 // should be SET or not. The remaining 7 bits are an index into an array of
 // addresses of marshaling and unmarshaling functions.
 // The array of functions is divided into 6 sections with a value assigned
 // to denote the start of that section (and the end of the previous section). The
 // defined offset values for each section are:
-// 1) 0 -- unmarshaling for handles that do not take flags
-// 2) HANDLE_FIRST_FLAG_TYPE -- unmarshaling for handles that take flags
-// 3) PARAMETER_FIRST_TYPE -- unmarshaling for parameters that do not take flags
-// 4) PARAMETER_FIRST_FLAG_TYPE -- unmarshaling for parameters that take flags
-// 5) PARAMETER_LAST_TYPE + 1 -- marshaling for handles
-// 6) RESPONSE_PARAMETER_FIRST_TYPE -- marshaling for parameters
-// RESPONSE_PARAMETER_LAST_TYPE is the last value in the list of marshaling and
-// unmarshaling functions.
+// 0                                unmarshaling for handles that do not take flags
+// HANDLE_FIRST_FLAG_TYPE           unmarshaling for handles that take flags
+// PARAMETER_FIRST_TYPE             unmarshaling for parameters that do not take flags
+// PARAMETER_FIRST_FLAG_TYPE        unmarshaling for parameters that take flags
+// PARAMETER_LAST_TYPE + 1          marshaling for handles
+// RESPONSE_PARAMETER_FIRST_TYPE    marshaling for parameters
+// RESPONSE_PARAMETER_LAST_TYPE     is the last value in the list of marshaling and
+//                                  unmarshaling functions.
 //
 // The types list is constructed with a byte of 0xff at the end of the command
 // parameters and with an 0xff at the end of the response parameters.

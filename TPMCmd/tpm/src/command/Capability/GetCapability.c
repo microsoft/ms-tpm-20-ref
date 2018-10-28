@@ -41,10 +41,10 @@
 // This command returns various information regarding the TPM and its current
 // state
 */
-// return type: TPM_RC
-//   TPM_RC_HANDLE          value of 'property' is in an unsupported handle range
+//  Return Type: TPM_RC
+//      TPM_RC_HANDLE       value of 'property' is in an unsupported handle range
 //                          for the TPM_CAP_HANDLES 'capability' value
-//   TPM_RC_VALUE           invalid 'capability'; or 'property' is not 0 for the
+//      TPM_RC_VALUE        invalid 'capability'; or 'property' is not 0 for the
 //                          TPM_CAP_PCRS 'capability' value
 TPM_RC
 TPM2_GetCapability(

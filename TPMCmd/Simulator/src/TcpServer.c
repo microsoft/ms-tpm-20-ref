@@ -336,7 +336,8 @@ RegularCommandService(
 }
 
 //*** StartTcpServer()
-// This is the main entry-point to the TCP server.  The server listens on port specified.
+// This is the main entry-point to the TCP server.  The server listens on port 
+// specified.
 //
 // Note that there is no way to specify the network interface in this implementation.
 int

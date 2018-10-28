@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jul 16, 2018  Time: 02:57:16PM
+ *  Date: Sep 27, 2018  Time: 07:41:23PM
  */
 
 #ifndef    _SIMULATOR_FP_H_
@@ -74,9 +74,10 @@ RegularCommandService(
     );
 
 //*** StartTcpServer()
-// Main entry-point to the TCP server.  The server listens on port specified.
-// Note that there is no way to specify the network interface
-// in this implementation.
+// This is the main entry-point to the TCP server.  The server listens on port
+// specified.
+//
+// Note that there is no way to specify the network interface in this implementation.
 int
 StartTcpServer(
     int              PortNumber
@@ -214,7 +215,7 @@ _rpc__Signal_HashEnd(
 
 //*** _rpc__Send_Command()
 // This is the interface to the TPM code.
-// return type: void
+//  Return Type: void
 void
 _rpc__Send_Command(
     unsigned char    locality,
@@ -282,5 +283,13 @@ main(
     int              argc,
     char            *argv[]
     );
+
+//*** nothing()
+// This function does nothing. It only exists so that there are two named functions in
+// this section to avoid a 'dangling paragraph'.
+void
+nothing(
+    void
+);
 
 #endif  // _SIMULATOR_FP_H_

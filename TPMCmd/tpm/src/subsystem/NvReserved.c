@@ -80,9 +80,9 @@
 #define NV_C
 #include    "Tpm.h"
 
-// ************************************************
+//************************************************
 //** Functions
-// ************************************************
+//************************************************
 
 
 //*** NvInitStatic()
@@ -135,10 +135,10 @@ NvCommit(
 
 //*** NvPowerOn()
 //  This function is called at _TPM_Init to initialize the NV environment.
-// return type: BOOL
-//  TRUE        all NV was initialized
-//  FALSE       the NV containing saved state had an error and TPM2_Startup(CLEAR)
-//              is required
+//  Return Type: BOOL
+//      TRUE(1)         all NV was initialized
+//      FALSE(0)        the NV containing saved state had an error and 
+//                      TPM2_Startup(CLEAR) is required
 BOOL
 NvPowerOn(
     void

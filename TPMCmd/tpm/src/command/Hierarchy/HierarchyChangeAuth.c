@@ -42,8 +42,9 @@
 /*(See part 3 specification)
 // Set a hierarchy authValue
 */
-// return type: TPM_RC
-//   TPM_RC_SIZE        'newAuth' size is greater than that of integrity hash digest
+//  Return Type: TPM_RC
+//      TPM_RC_SIZE        'newAuth' size is greater than that of integrity hash 
+//                          digest
 TPM_RC
 TPM2_HierarchyChangeAuth(
     HierarchyChangeAuth_In  *in             // IN: input parameter list

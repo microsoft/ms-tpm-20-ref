@@ -58,9 +58,9 @@ TPMRegisterStartup(
 //*** TPMIsStarted()
 // Indicates if the TPM has been initialized (a TPM2_Startup() has completed
 // successfully after a _TPM_Init).
-// return type: BOOL
-//      TRUE        TPM has been initialized
-//      FALSE       TPM has not been initialized
+//  Return Type: BOOL
+//      TRUE(1)         TPM has been initialized
+//      FALSE(0)        TPM has not been initialized
 BOOL
 TPMIsStarted(
     void

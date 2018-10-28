@@ -225,9 +225,9 @@ SessionStartup(
     return;
 }
 
-// ************************************************
+//************************************************
 //** Access Functions
-// ************************************************
+//************************************************
 
 //*** SessionIsLoaded()
 // This function test a session handle references a loaded session.  The handle
@@ -235,9 +235,9 @@ SessionStartup(
 // an authorization session.
 // NOTE:    A PWAP authorization does not have a session.
 //
-// return type: BOOL
-//      TRUE        if session is loaded
-//      FALSE       if it is not loaded
+//  Return Type: BOOL
+//      TRUE(1)         session is loaded
+//      FALSE(0)        session is not loaded
 //
 BOOL
 SessionIsLoaded(
@@ -267,9 +267,9 @@ SessionIsLoaded(
 //
 // This function requires that the handle be a valid session handle.
 //
-// return type: BOOL
-//      TRUE        if session is saved
-//      FALSE       if it is not saved
+//  Return Type: BOOL
+//      TRUE(1)         session is saved
+//      FALSE(0)        session is not saved
 //
 BOOL
 SessionIsSaved(
@@ -325,9 +325,9 @@ SequenceNumberForSavedContextIsValid(
 // last time they were checked in a policy session.
 //
 // This function requires the session is loaded.
-// return type: BOOL
-//      TRUE          if PCR value is current
-//      FALSE         if PCR value is not current
+//  Return Type: BOOL
+//      TRUE(1)         PCR value is current
+//      FALSE(0)        PCR value is not current
 BOOL
 SessionPCRValueIsCurrent(
     SESSION         *session        // IN: session structure
@@ -371,28 +371,25 @@ SessionGet(
     return &s_sessions[sessionIndex].session;
 }
 
-// ************************************************
+//************************************************
 //** Utility Functions
-// ************************************************
+//************************************************
 
 //*** ContextIdSessionCreate()
-/*
-    This function is called when a session is created.  It will check
-    to see if the current gap would prevent a context from being saved.  If
-    so it will return TPM_RC_CONTEXT_GAP.  Otherwise, it will try to find
-    an open slot in contextArray, set contextArray to the slot.
-
-    This routine requires that the caller has determined the session array
-    index for the session.
-*/
-/*
-    return type                 TPM_RC
-    TPM_RC_SUCCESS              context ID was assigned
-    TPM_RC_CONTEXT_GAP          can't assign a new contextID until the oldest
-                                saved session context is recycled
-    TPM_RC_SESSION_HANDLE       there is no slot available in the context array
-                                for tracking of this session context
-*/
+//
+//  This function is called when a session is created.  It will check
+//  to see if the current gap would prevent a context from being saved.  If
+//  so it will return TPM_RC_CONTEXT_GAP.  Otherwise, it will try to find
+//  an open slot in contextArray, set contextArray to the slot.
+//  
+//  This routine requires that the caller has determined the session array
+//  index for the session.
+//
+//  Return Type: TPM_RC
+//      TPM_RC_CONTEXT_GAP      can't assign a new contextID until the oldest
+//                              saved session context is recycled
+//      TPM_RC_SESSION_HANDLE   there is no slot available in the context array
+//                              for tracking of this session context
 static TPM_RC
 ContextIdSessionCreate(
     TPM_HANDLE      *handle,        // OUT: receives the assigned handle. This will
@@ -438,14 +435,14 @@ ContextIdSessionCreate(
 }
 
 //*** SessionCreate()
-/*
-    This function does the detailed work for starting an authorization session.
-    This is done in a support routine rather than in the action code because
-    the session management may differ in implementations.  This implementation
-    uses a fixed memory allocation to hold sessions and a fixed allocation
-    to hold the contextID for the saved contexts.
-*/
-// return type: TPM_RC
+//
+//  This function does the detailed work for starting an authorization session.
+//  This is done in a support routine rather than in the action code because
+//  the session management may differ in implementations.  This implementation
+//  uses a fixed memory allocation to hold sessions and a fixed allocation
+//  to hold the contextID for the saved contexts.
+//  
+//  Return Type: TPM_RC
 //      TPM_RC_CONTEXT_GAP          need to recycle sessions
 //      TPM_RC_SESSION_HANDLE       active session space is full
 //      TPM_RC_SESSION_MEMORY       loaded session space is full
@@ -590,9 +587,9 @@ SessionCreate(
 // This function requires that 'handle' references a loaded session.
 // Otherwise, it should not be called at the first place.
 //
-//  Return type:                TPM_RC
-//  TPM_RC_CONTEXT_GAP          a contextID could not be assigned.
-//  TPM_RC_TOO_MANY_CONTEXTS    the counter maxed out
+//  Return Type: TPM_RC
+//      TPM_RC_CONTEXT_GAP      a contextID could not be assigned.
+//      TPM_RC_TOO_MANY_CONTEXTSthe counter maxed out
 //
 TPM_RC
 SessionContextSave(
@@ -666,7 +663,7 @@ SessionContextSave(
 ///
 // This function requires that 'handle' references a valid saved session.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_SESSION_MEMORY       no free session slots
 //      TPM_RC_CONTEXT_GAP          the gap count is maximum and this
 //                                  is not the oldest saved context
@@ -884,7 +881,7 @@ SessionResetPolicyData(
 //
 // 'Handle' must be in valid loaded session handle range, but does not
 // have to point to a loaded session.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO
@@ -949,7 +946,7 @@ SessionCapGetLoaded(
 // 'Handle' must be in a valid handle range, but does not have to point to a
 // saved session
 //
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO

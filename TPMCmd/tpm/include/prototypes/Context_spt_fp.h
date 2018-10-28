@@ -44,7 +44,7 @@
 // This function retrieves the symmetric protection key for context encryption
 // It is used by TPM2_ConextSave and TPM2_ContextLoad to create the symmetric
 // encryption key and iv
-// return type: void
+//  Return Type: void
 void
 ComputeContextProtectionKey(
     TPMS_CONTEXT    *contextBlob,   // IN: context blob
@@ -56,7 +56,7 @@ ComputeContextProtectionKey(
 // Generate the integrity hash for a context
 //       It is used by TPM2_ContextSave to create an integrity hash
 //       and by TPM2_ContextLoad to compare an integrity hash
-// return type: void
+//  Return Type: void
 void
 ComputeContextIntegrity(
     TPMS_CONTEXT    *contextBlob,   // IN: context blob

@@ -43,16 +43,16 @@
 // Load context
 */
 
-// return type: TPM_RC
-//    TPM_RC_CONTEXT_GAP        there is only one available slot and this is not
-//                              the oldest saved session context
-//    TPM_RC_HANDLE             'context.savedHandle' does not reference a saved
-//                              session
-//    TPM_RC_HIERARCHY          'context.hierarchy' is disabled
-//    TPM_RC_INTEGRITY          'context' integrity check fail
-//    TPM_RC_OBJECT_MEMORY      no free slot for an object
-//    TPM_RC_SESSION_MEMORY     no free session slots
-//    TPM_RC_SIZE               incorrect context blob size
+//  Return Type: TPM_RC
+//      TPM_RC_CONTEXT_GAP          there is only one available slot and this is not
+//                                  the oldest saved session context
+//      TPM_RC_HANDLE               context.savedHandle' does not reference a saved
+//                                  session
+//      TPM_RC_HIERARCHY            'context.hierarchy' is disabled
+//      TPM_RC_INTEGRITY            'context' integrity check fail
+//      TPM_RC_OBJECT_MEMORY        no free slot for an object
+//      TPM_RC_SESSION_MEMORY       no free session slots
+//      TPM_RC_SIZE                 incorrect context blob size
 TPM_RC
 TPM2_ContextLoad(
     ContextLoad_In      *in,            // IN: input parameter list

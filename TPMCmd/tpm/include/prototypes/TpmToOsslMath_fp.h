@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jun 16, 2018  Time: 08:35:57PM
+ *  Date: Oct 24, 2018  Time: 03:14:15PM
  */
 
 #ifndef    _TPMTOOSSLMATH_FP_H_
@@ -44,12 +44,12 @@
 
 //*** OsslToTpmBn()
 // This function converts an OpenSSL BIGNUM to a TPM bignum. In this implementation
-// it is assumed that OpenSSL used the same format for a big number as does the
-// TPM -- an array of native-endian words in little-endian order.
-//
-// If the array allocated for the OpenSSL BIGNUM is not the space within the TPM
-// bignum, then the data is copied. Otherwise, just the size field of the BIGNUM
-// is copied.
+// it is assumed that OpenSSL uses a different control structure but the same data
+// layout -- an array of native-endian words in little-endian order.
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure because value will not fit or OpenSSL variable doesn't
+//                      exist
 void
 OsslToTpmBn(
     bigNum          bn,
@@ -57,7 +57,9 @@ OsslToTpmBn(
     );
 
 //*** BigInitialized()
-// This function initializes an OSSL BIGNUM from a TPM bignum.
+// This function initializes an OSSL BIGNUM from a TPM bigConst. Do not use this for
+// values that are passed to OpenSLL when they are not declared as const in the
+// function prototype. Instead, use BnNewVariable().
 BIGNUM *
 BigInitialized(
     BIGNUM             *toInit,
@@ -72,7 +74,11 @@ MathLibraryCompatibilityCheck(
 #endif
 
 //*** BnModMult()
-// Does multiply and divide returning the remainder of the divide.
+// This function does a modular multiply. It first does a multiply and then a divide
+// and returns the remainder of the divide.
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnModMult(
     bigNum              result,
@@ -83,6 +89,9 @@ BnModMult(
 
 //*** BnMult()
 // Multiplies two numbers
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnMult(
     bigNum               result,
@@ -93,6 +102,9 @@ BnMult(
 //*** BnDiv()
 // This function divides two bigNum values. The function returns FALSE if
 // there is an error in the operation.
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnDiv(
     bigNum               quotient,
@@ -104,6 +116,9 @@ BnDiv(
 #if     ALG_RSA
 //*** BnGcd()
 // Get the greatest common divisor of two numbers
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnGcd(
     bigNum      gcd,            // OUT: the common divisor
@@ -114,6 +129,9 @@ BnGcd(
 //***BnModExp()
 // Do modular exponentiation using bigNum values. The conversion from a bignum_t to
 // a bigNum is trivial as they are based on the same structure
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnModExp(
     bigNum               result,         // OUT: the result
@@ -124,6 +142,9 @@ BnModExp(
 
 //*** BnModInverse()
 // Modular multiplicative inverse
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnModInverse(
     bigNum               result,
@@ -134,22 +155,24 @@ BnModInverse(
 #if     ALG_ECC
 
 //*** BnCurveInitialize()
-// This function initializes the OpenSSL group definition
-//
-// It is a fatal error if 'groupContext' is not provided.
-// return type: bigCurve *
-//      NULL        the TPM_ECC_CURVE is not valid
-//      non-NULL    points to a structure in 'groupContext'
+// This function initializes the OpenSSL curve information structure. This
+// structure points to the TPM-defined values for the curve, to the context for the
+// number values in the frame, and to the OpenSSL-defined group values.
+//  Return Type: bigCurve *
+//      NULL        the TPM_ECC_CURVE is not valid or there was a problem in
+//                  in initializing the curve data
+//      non-NULL    points to 'E'
 bigCurve
 BnCurveInitialize(
     bigCurve          E,           // IN: curve structure to initialize
     TPM_ECC_CURVE     curveId      // IN: curve identifier
-    );
+);
 
 //*** BnEccModMult()
 // This function does a point multiply of the form R = [d]S
-// return type: BOOL
-//  FALSE       failure in operation; treat as result being point at infinity
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation; treat as result being point at infinity
 LIB_EXPORT BOOL
 BnEccModMult(
     bigPoint             R,         // OUT: computed point
@@ -160,8 +183,9 @@ BnEccModMult(
 
 //*** BnEccModMult2()
 // This function does a point multiply of the form R = [d]G + [u]Q
-// return type: BOOL
-//  FALSE       failure in operation; treat as result being point at infinity
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation; treat as result being point at infinity
 LIB_EXPORT BOOL
 BnEccModMult2(
     bigPoint             R,         // OUT: computed point
@@ -174,8 +198,9 @@ BnEccModMult2(
 
 //** BnEccAdd()
 // This function does addition of two points.
-// return type: BOOL
-//  FALSE       failure in operation; treat as result being point at infinity
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation; treat as result being point at infinity
 LIB_EXPORT BOOL
 BnEccAdd(
     bigPoint             R,         // OUT: computed point

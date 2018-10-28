@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Oct 22, 2018  Time: 09:04:41PM
  */
 
 #ifndef    _CRYPTRSA_FP_H_
@@ -79,9 +79,9 @@ CryptRsaSelectScheme(
     );
 
 //*** CryptRsaLoadPrivateExponent()
-// This function is called to generate the private exponent of an RSA key. //
-// return type: TPM_RC
-//  TPM_RC_BINDING      public and private parts of 'rsaKey' are not matched
+// This function is called to generate the private exponent of an RSA key.
+//  Return Type: TPM_RC
+//      TPM_RC_BINDING      public and private parts of 'rsaKey' are not matched
 TPM_RC
 CryptRsaLoadPrivateExponent(
     OBJECT          *rsaKey        // IN: the RSA key object
@@ -103,7 +103,7 @@ CryptRsaLoadPrivateExponent(
 //       added, it would have a numeric value larger than the modulus even though
 //       it started out with a lower numeric value.
 //
-//  return type:    TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_VALUE     'cOutSize' is too small (must be the size
 //                        of the modulus)
 //      TPM_RC_SCHEME    'padType' is not a supported scheme
@@ -122,10 +122,10 @@ CryptRsaEncrypt(
 
 //*** CryptRsaDecrypt()
 // This is the entry point for decryption using RSA. Decryption is
-// use of the private exponent. The "padType" parameter determines what
+// use of the private exponent. The 'padType' parameter determines what
 // padding was used.
 //
-//  return type:    TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_SIZE        'cInSize' is not the same as the size of the public
 //                          modulus of 'key'; or numeric value of the encrypted
 //                          data is greater than the modulus
@@ -145,7 +145,7 @@ CryptRsaDecrypt(
 // This function is used to generate an RSA signature of the type indicated in
 // 'scheme'.
 //
-//  return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_SCHEME       'scheme' or 'hashAlg' are not supported
 //      TPM_RC_VALUE        'hInSize' does not match 'hashAlg' (for RSASSA)
 //
@@ -163,7 +163,7 @@ CryptRsaSign(
 // TPM_RC_SUCCESS is returned. If the signature is not valid, TPM_RC_SIGNATURE is
 // returned. Other return codes indicate either parameter problems or fatal errors.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_SIGNATURE    the signature does not check
 //      TPM_RC_SCHEME       unsupported scheme or hash algorithm
 //
@@ -176,10 +176,10 @@ CryptRsaValidateSignature(
 
 //*** CryptRsaGenerateKey()
 // Generate an RSA key from a provided seed
-// return type: TPM_RC
-//  TPM_RC_CANCELED     operation was canceled
-//  TPM_RC_RANGE        public exponent is not supported
-//  TPM_RC_VALUE        could not find a prime using the provided parameters
+//  Return Type: TPM_RC
+//      TPM_RC_CANCELED     operation was canceled
+//      TPM_RC_RANGE        public exponent is not supported
+//      TPM_RC_VALUE        could not find a prime using the provided parameters
 LIB_EXPORT TPM_RC
 CryptRsaGenerateKey(
     OBJECT              *rsaKey,            // IN/OUT: The object structure in which

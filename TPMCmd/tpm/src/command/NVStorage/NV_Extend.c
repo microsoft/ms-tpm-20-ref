@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Write to a NV index
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_ATTRIBUTES               the TPMA_NV_EXTEND attribute is not SET in
 //                                      the Index referenced by 'nvIndex'
 //      TPM_RC_NV_AUTHORIZATION         the authorization was valid but the

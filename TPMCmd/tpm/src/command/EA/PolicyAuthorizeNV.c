@@ -42,11 +42,11 @@
 /*(See part 3 specification)
 // Change policy by a signature from authority
 */
-// return type: TPM_RC
-//    TPM_RC_HASH           hash algorithm in 'keyName' is not supported or is not
+//  Return Type: TPM_RC
+//      TPM_RC_HASH         hash algorithm in 'keyName' is not supported or is not
 //                          the same as the hash algorithm of the policy session
-//    TPM_RC_SIZE           'keyName' is not the correct size for its hash algorithm
-//    TPM_RC_VALUE          the current policyDigest of 'policySession' does not
+//      TPM_RC_SIZE         'keyName' is not the correct size for its hash algorithm
+//      TPM_RC_VALUE        the current policyDigest of 'policySession' does not
 //                          match 'approvedPolicy'; or 'checkTicket' doesn't match
 //                          the provided values
 TPM_RC

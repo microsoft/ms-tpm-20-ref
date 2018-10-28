@@ -42,9 +42,9 @@
 
 //*** TestBit()
 // This function is used to check the setting of a bit in an array of bits.
-// return type: BOOL
-//  TRUE    bit is set
-//  FALSE   bit is not set
+//  Return Type: BOOL
+//      TRUE(1)         bit is set
+//      FALSE(0)        bit is not set
 BOOL
 TestBit(
     unsigned int     bitNum,        // IN: number of the bit in 'bArray'

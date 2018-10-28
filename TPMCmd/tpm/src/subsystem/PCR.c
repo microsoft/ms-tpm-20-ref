@@ -78,9 +78,9 @@ static const PCR_Attributes s_initAttributes[] =
 // This function indicates if a PCR belongs to a group that requires an authValue
 // in order to modify the PCR.  If it does, 'groupIndex' is set to value of
 // the group index.  This feature of PCR is decided by the platform specification.
-// return type: BOOL
-//      TRUE:           PCR belongs an authorization group
-//      FALSE:          PCR does not belong an authorization group
+//  Return Type: BOOL
+//      TRUE(1)         PCR belongs an authorization group
+//      FALSE(0)        PCR does not belong an authorization group
 BOOL
 PCRBelongsAuthGroup(
     TPMI_DH_PCR      handle,        // IN: handle of PCR
@@ -112,9 +112,9 @@ PCRBelongsAuthGroup(
 // authorization in order to modify the PCR.  If it does, 'groupIndex' is set
 // to value of the group index.  This feature of PCR is decided by the platform
 // specification.
-// return type: BOOL
-//      TRUE:           PCR belongs a policy group
-//      FALSE:          PCR does not belong a policy group
+//  Return Type: BOOL
+//      TRUE(1)         PCR belongs a policy group
+//      FALSE(0)        PCR does not belong a policy group
 BOOL
 PCRBelongsPolicyGroup(
     TPMI_DH_PCR      handle,        // IN: handle of PCR
@@ -140,9 +140,9 @@ PCRBelongsPolicyGroup(
 
 //*** PCRBelongsTCBGroup()
 // This function indicates if a PCR belongs to the TCB group.
-// return type: BOOL
-//      TRUE:           PCR belongs to TCB group
-//      FALSE:          PCR does not belong to TCB group
+//  Return Type: BOOL
+//      TRUE(1)         PCR belongs to TCB group
+//      FALSE(0)        PCR does not belong to TCB group
 static BOOL
 PCRBelongsTCBGroup(
     TPMI_DH_PCR      handle         // IN: handle of PCR
@@ -162,9 +162,9 @@ PCRBelongsTCBGroup(
 
 //*** PCRPolicyIsAvailable()
 // This function indicates if a policy is available for a PCR.
-// return type: BOOL
-//      TRUE        the PCR should be authorized by policy
-//      FALSE       the PCR does not allow policy
+//  Return Type: BOOL
+//      TRUE(1)         the PCR should be authorized by policy
+//      FALSE(0)        the PCR does not allow policy
 BOOL
 PCRPolicyIsAvailable(
     TPMI_DH_PCR      handle         // IN: PCR handle
@@ -268,9 +268,9 @@ PCRSimStart(
 //*** GetSavedPcrPointer()
 // This function returns the address of an array of state saved PCR based
 // on the hash algorithm.
-// return type: BYTE *
-//      NULL          no such algorithm
-//      not NULL      pointer to the 0th byte of the 0th PCR
+//  Return Type: BYTE *
+//      NULL            no such algorithm
+//      != NULL         pointer to the 0th byte of the 0th PCR
 static BYTE *
 GetSavedPcrPointer(
     TPM_ALG_ID       alg,           // IN: algorithm for bank
@@ -314,9 +314,9 @@ GetSavedPcrPointer(
 //*** PcrIsAllocated()
 // This function indicates if a PCR number for the particular hash algorithm
 // is allocated.
-// return type: BOOL
-//      FALSE     PCR is not allocated
-//      TRUE      PCR is allocated
+//  Return Type: BOOL
+//      TRUE(1)         PCR is allocated
+//      FALSE(0)        PCR is not allocated
 BOOL
 PcrIsAllocated(
     UINT32           pcr,           // IN: The number of the PCR
@@ -347,9 +347,9 @@ PcrIsAllocated(
 //*** GetPcrPointer()
 // This function returns the address of an array of PCR based on the
 // hash algorithm.
-// return type: BYTE *
-//      NULL          no such algorithm
-//      not NULL      pointer to the 0th byte of the 0th PCR
+//  Return Type: BYTE *
+//      NULL            no such algorithm
+//      != NULL         pointer to the 0th byte of the 0th PCR
 static BYTE *
 GetPcrPointer(
     TPM_ALG_ID       alg,           // IN: algorithm for bank
@@ -399,9 +399,9 @@ GetPcrPointer(
 //*** IsPcrSelected()
 // This function indicates if an indicated PCR number is selected by the bit map in
 // 'selection'.
-// return type: BOOL
-//      FALSE     PCR is not selected
-//      TRUE      PCR is selected
+//  Return Type: BOOL
+//      TRUE(1)         PCR is selected
+//      FALSE(0)        PCR is not selected
 static BOOL
 IsPcrSelected(
     UINT32               pcr,           // IN: The number of the PCR
@@ -636,9 +636,9 @@ PCRStateSave(
 //*** PCRIsStateSaved()
 // This function indicates if the selected PCR is a PCR that is state saved
 // on TPM2_Shutdown(STATE). The return value is based on PCR attributes.
-// return type: BOOL
-//      TRUE        PCR is state saved
-//      FALSE       PCR is not state saved
+//  Return Type: BOOL
+//      TRUE(1)         PCR is state saved
+//      FALSE(0)        PCR is not state saved
 BOOL
 PCRIsStateSaved(
     TPMI_DH_PCR      handle         // IN: PCR handle to be extended
@@ -655,9 +655,9 @@ PCRIsStateSaved(
 //*** PCRIsResetAllowed()
 // This function indicates if a PCR may be reset by the current command locality.
 // The return value is based on PCR attributes, and not the PCR allocation.
-// return type: BOOL
-//      TRUE        TPM2_PCR_Reset is allowed
-//      FALSE       TPM2_PCR_Reset is not allowed
+//  Return Type: BOOL
+//      TRUE(1)         TPM2_PCR_Reset is allowed
+//      FALSE(0)        TPM2_PCR_Reset is not allowed
 BOOL
 PCRIsResetAllowed(
     TPMI_DH_PCR      handle         // IN: PCR handle to be extended
@@ -707,9 +707,9 @@ PCRChanged(
 //*** PCRIsExtendAllowed()
 // This function indicates a PCR may be extended at the current command locality.
 // The return value is based on PCR attributes, and not the PCR allocation.
-// return type: BOOL
-//      TRUE        extend is allowed
-//      FALSE       extend is not allowed
+//  Return Type: BOOL
+//      TRUE(1)         extend is allowed
+//      FALSE(0)        extend is not allowed
 BOOL
 PCRIsExtendAllowed(
     TPMI_DH_PCR      handle         // IN: PCR handle to be extended
@@ -918,9 +918,8 @@ PcrWrite(
 
 //*** PCRAllocate()
 // This function is used to change the PCR allocation.
-//  return type: TPM_RC
-//      TPM_RC_SUCCESS          allocate success
-//      TPM_RC_NO_RESULT       allocate failed
+//  Return Type: TPM_RC
+//      TPM_RC_NO_RESULT        allocate failed
 //      TPM_RC_PCR              improper allocation
 TPM_RC
 PCRAllocate(
@@ -1105,9 +1104,9 @@ PCRResetDynamics(
 
 //*** PCRCapGetAllocation()
 // This function is used to get the current allocation of PCR banks.
-// return type: TPMI_YES_NO
-//  YES:        if the return count is 0
-//  NO:         if the return count is not 0
+//  Return Type: TPMI_YES_NO
+//      YES         if the return count is 0
+//      NO          if the return count is not 0
 TPMI_YES_NO
 PCRCapGetAllocation(
     UINT32               count,         // IN: count of return
@@ -1140,9 +1139,9 @@ PCRSetSelectBit(
 
 //*** PCRGetProperty()
 // This function returns the selected PCR property.
-// return type: BOOL
-//  TRUE        the property type is implemented
-//  FALSE       the property type is not implemented
+//  Return Type: BOOL
+//      TRUE(1)         the property type is implemented
+//      FALSE(0)        the property type is not implemented
 static BOOL
 PCRGetProperty(
     TPM_PT_PCR               property,
@@ -1243,9 +1242,9 @@ PCRGetProperty(
 
 //*** PCRCapGetProperties()
 // This function returns a list of PCR properties starting at 'property'.
-// return type: TPMI_YES_NO
-//  YES:        if no more property is available
-//  NO:         if there are more properties not reported
+//  Return Type: TPMI_YES_NO
+//      YES         if no more property is available
+//      NO          if there are more properties not reported
 TPMI_YES_NO
 PCRCapGetProperties(
     TPM_PT_PCR                   property,      // IN: the starting PCR property
@@ -1292,7 +1291,7 @@ PCRCapGetProperties(
 // This function is used to get a list of handles of PCR, started from 'handle'.
 // If 'handle' exceeds the maximum PCR handle range, an empty list will be
 // returned and the return value will be NO.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO

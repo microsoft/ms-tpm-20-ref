@@ -41,7 +41,7 @@
 /*(See part 3 specification)
 // Include an asymmetrically signed authorization to the policy evaluation
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_CPHASH           cpHash was previously set to a different value
 //      TPM_RC_EXPIRED          'expiration' indicates a time in the past or
 //                              'expiration' is non-zero but no nonceTPM is present

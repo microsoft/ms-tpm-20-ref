@@ -214,7 +214,7 @@ _rpc__Signal_HashEnd(
 
 //*** _rpc__Send_Command()
 // This is the interface to the TPM code.
-// return type: void
+//  Return Type: void
 void
 _rpc__Send_Command(
     unsigned char    locality,

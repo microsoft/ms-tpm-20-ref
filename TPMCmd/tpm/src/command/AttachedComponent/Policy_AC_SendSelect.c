@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // allows qualification of attached component and object to be sent.
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_COMMAND_CODE   'commandCode' of 'policySession; is not empty
 //      TPM_RC_CPHASH         'cpHash' of 'policySession' is not empty
 TPM_RC

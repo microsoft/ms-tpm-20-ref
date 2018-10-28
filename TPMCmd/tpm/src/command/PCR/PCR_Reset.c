@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Reset PCR
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_LOCALITY             current command locality is not allowed to
 //                                  reset the PCR referenced by 'pcrHandle'
 TPM_RC

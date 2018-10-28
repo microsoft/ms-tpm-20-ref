@@ -40,10 +40,10 @@
 /*(See part 3 specification)
 // perform a test of selected algorithms
 */
-// return type: TPM_RC
-//  TPM_RC_CANCELED         the command was canceled (some tests may have
-//                          completed)
-//  TPM_RC_VALUE            an algorithm in the toTest list is not implemented
+//  Return Type: TPM_RC
+//      TPM_RC_CANCELED         the command was canceled (some tests may have
+//                              completed)
+//      TPM_RC_VALUE            an algorithm in the toTest list is not implemented
 TPM_RC
 TPM2_IncrementalSelfTest(
     IncrementalSelfTest_In      *in,            // IN: input parameter list

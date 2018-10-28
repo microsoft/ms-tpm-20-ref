@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jun 16, 2018  Time: 12:44:14AM
+ *  Date: Sep 27, 2018  Time: 09:28:59PM
  */
 
 #ifndef    _ALGORITHMTESTS_FP_H_
@@ -59,9 +59,8 @@
 //
 // Note: 'toTest' will only ever have bits set for implemented algorithms but 'alg'
 // can be anything.
-// return type: TPM_RC
-//  TPM_RC_SUCCESS      test complete
-//  TPM_RC_CANCELED     test was canceled
+//  Return Type: TPM_RC
+//      TPM_RC_CANCELED     test was canceled
 LIB_EXPORT
 TPM_RC
 TestAlgorithm(

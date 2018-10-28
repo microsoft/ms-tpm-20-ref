@@ -42,11 +42,11 @@
 /*(See part 3 specification)
  Save context
 */
-// return type: TPM_RC
-//   TPM_RC_CONTEXT_GAP         a contextID could not be assigned for a session
-//                              context save
-//   TPM_RC_TOO_MANY_CONTEXTS   no more contexts can be saved as the counter has
-//                              maxed out
+//  Return Type: TPM_RC
+//      TPM_RC_CONTEXT_GAP          a contextID could not be assigned for a session
+//                                  context save
+//      TPM_RC_TOO_MANY_CONTEXTS    no more contexts can be saved as the counter has
+//                                  maxed out
 TPM_RC
 TPM2_ContextSave(
     ContextSave_In      *in,            // IN: input parameter list

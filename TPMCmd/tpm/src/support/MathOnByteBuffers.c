@@ -45,7 +45,7 @@
 //*** UnsignedCmpB
 // This function compare two unsigned values. The values are byte-aligned,
 // big-endian numbers (e.g, a hash).
-// return type: int
+//  Return Type: int
 //      1          if (a > b)
 //      0          if (a = b)
 //      -1         if (a < b)
@@ -75,7 +75,7 @@ UnsignedCompareB(
 
 //***SignedCompareB()
 // Compare two signed integers:
-// return type: int
+//  Return Type: int
 //      1         if a > b
 //      0         if a = b
 //      -1        if a < b
@@ -123,7 +123,7 @@ SignedCompareB(
 // This version is intended for use with RSA and requires that 'm' be
 // less than 'n'.
 //
-//  return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_SIZE         number to exponentiate is larger than the modulus
 //      TPM_RC_NO_RESULT    result will not fit into the provided buffer
 //
@@ -172,8 +172,7 @@ Exit:
 // a remainder ('r'). If 'q' or 'r' is not needed, then the pointer to them
 // may be set to NULL.
 //
-// return type: TPM_RC
-//      TPM_RC_SUCCESS           operation complete
+//  Return Type: TPM_RC
 //      TPM_RC_NO_RESULT         'q' or 'r' is too small to receive the result
 //
 LIB_EXPORT TPM_RC

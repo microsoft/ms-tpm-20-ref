@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Oct  2, 2018  Time: 11:32:55AM
  */
 
 #ifndef    _CRYPTECCSIGNATURE_FP_H_
@@ -45,11 +45,10 @@
 //*** BnSignEcdsa()
 // This function implements the ECDSA signing algorithm. The method is described
 // in the comments below.
-// This version works with internal numbers.
 TPM_RC
 BnSignEcdsa(
-    bigNum                   bnR,           // OUT: r component of the signature
-    bigNum                   bnS,           // OUT: s component of the signature
+    bigNum                   bnR,           // OUT: 'r' component of the signature
+    bigNum                   bnS,           // OUT: 's' component of the signature
     bigCurve                 E,             // IN: the curve used in the signature
                                             //     process
     bigNum                   bnD,           // IN: private signing key
@@ -68,8 +67,8 @@ BnSignEcdsa(
 // both needs with minimal fuss, a special type of RAND_STATE is defined to carry
 // the address of the commit value. The setup and handling of this is not very
 // different for the caller than what was in previous versions of the code.
-// return type: TPM_RC
-//  TPM_RC_SCHEME            'scheme' is not supported
+//  Return Type: TPM_RC
+//      TPM_RC_SCHEME            'scheme' is not supported
 LIB_EXPORT TPM_RC
 CryptEccSign(
     TPMT_SIGNATURE          *signature,     // OUT: signature
@@ -82,13 +81,13 @@ CryptEccSign(
 
 //*** BnValidateSignatureEcdsa()
 // This function validates an ECDSA signature. rIn and sIn should have been checked
-// to make sure that they are in the range 0 < v < n
-// return type: TPM_RC
-//  TPM_RC_SIGNATURE           signature not valid
+// to make sure that they are in the range 0 < 'v' < 'n'
+//  Return Type: TPM_RC
+//      TPM_RC_SIGNATURE           signature not valid
 TPM_RC
 BnValidateSignatureEcdsa(
-    bigNum                   bnR,           // IN: r component of the signature
-    bigNum                   bnS,           // IN: s component of the signature
+    bigNum                   bnR,           // IN: 'r' component of the signature
+    bigNum                   bnS,           // IN: 's' component of the signature
     bigCurve                 E,             // IN: the curve used in the signature
                                             //     process
     bn_point_t              *ecQ,           // IN: the public point of the key
@@ -99,8 +98,8 @@ BnValidateSignatureEcdsa(
 //*** CryptEccValidateSignature()
 // This function validates an EcDsa or EcSchnorr signature.
 // The point 'Qin' needs to have been validated to be on the curve of 'curveId'.
-// return type: TPM_RC
-//  TPM_RC_SIGNATURE           not a valid signature
+//  Return Type: TPM_RC
+//      TPM_RC_SIGNATURE            not a valid signature
 LIB_EXPORT TPM_RC
 CryptEccValidateSignature(
     TPMT_SIGNATURE          *signature,     // IN: signature to be verified
@@ -119,11 +118,10 @@ CryptEccValidateSignature(
 // fatal error if 'd' is NULL or if 'K' and 'L' are both NULL.
 // If 'M' is not NULL, then it is a fatal error if 'E' is NULL.
 //
-// return type: TPM_RC
-//      TPM_RC_SUCCESS           computations completed normally
-//      TPM_RC_NO_RESULT             if 'K', 'L' or 'E' was computed to be the point
+//  Return Type: TPM_RC
+//      TPM_RC_NO_RESULT        if 'K', 'L' or 'E' was computed to be the point
 //                              at infinity
-//      TPM_RC_CANCELED            a cancel indication was asserted during this
+//      TPM_RC_CANCELED         a cancel indication was asserted during this
 //                              function
 LIB_EXPORT TPM_RC
 CryptEccCommitCompute(

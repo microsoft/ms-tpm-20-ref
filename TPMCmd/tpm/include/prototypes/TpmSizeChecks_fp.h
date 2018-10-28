@@ -42,7 +42,7 @@
 
 #if RUNTIME_SIZE_CHECKS
 
-// ** TpmSizeChecks()
+//** TpmSizeChecks()
 // This function is used during the development process to make sure that the
 // vendor-specific values result in a consistent implementation. When possible,
 // the code contains #if to do compile-time checks. However, in some cases, the

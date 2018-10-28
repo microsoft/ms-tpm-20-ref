@@ -47,9 +47,9 @@
 // It checks if the leading bytes of an input buffer is TPM_GENERATED_VALUE
 // or its substring of canonical form.  If so, it is not safe to produce ticket
 // for an input buffer claiming to be TPM generated buffer
-// return type: BOOL
-//      TRUE        It is safe to produce ticket
-//      FALSE       It is not safe to produce ticket
+//  Return Type: BOOL
+//      TRUE(1)         safe to produce ticket
+//      FALSE(0)        not safe to produce ticket
 BOOL
 TicketIsSafe(
     TPM2B           *buffer

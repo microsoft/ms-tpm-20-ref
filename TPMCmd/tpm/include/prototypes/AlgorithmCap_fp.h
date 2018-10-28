@@ -43,7 +43,7 @@
 //** AlgorithmCapGetImplemented()
 // This function is used by TPM2_GetCapability() to return a list of the
 // implemented algorithms.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //  YES        more algorithms to report
 //  NO         no more algorithms to report
 TPMI_YES_NO

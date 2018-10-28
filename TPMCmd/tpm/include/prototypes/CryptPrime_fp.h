@@ -71,9 +71,9 @@ MillerRabinRounds(
 // This function performs a Miller-Rabin test from FIPS 186-3. It does
 // 'iterations' trials on the number. In all likelihood, if the number
 // is not prime, the first test fails.
-// return type: BOOL
-//  TRUE        probably prime
-//  FALSE       composite
+//  Return Type: BOOL
+//      TRUE(1)         probably prime
+//      FALSE(0)        composite
 BOOL
 MillerRabin(
     bigNum           bnW,

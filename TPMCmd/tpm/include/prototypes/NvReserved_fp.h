@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Sep 26, 2018  Time: 04:53:47PM
  */
 
 #ifndef    _NVRESERVED_FP_H_
@@ -61,10 +61,10 @@ NvCommit(
 
 //*** NvPowerOn()
 //  This function is called at _TPM_Init to initialize the NV environment.
-// return type: BOOL
-//  TRUE        all NV was initialized
-//  FALSE       the NV containing saved state had an error and TPM2_Startup(CLEAR)
-//              is required
+//  Return Type: BOOL
+//      TRUE(1)         all NV was initialized
+//      FALSE(0)        the NV containing saved state had an error and
+//                      TPM2_Startup(CLEAR) is required
 BOOL
 NvPowerOn(
     void

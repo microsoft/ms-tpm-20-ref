@@ -41,14 +41,14 @@
 /*(See part 3 specification)
 // Get current value of command audit log
 */
-// return type: TPM_RC
-//   TPM_RC_KEY             key referenced by 'signHandle' is not a signing key
-//   TPM_RC_SCHEME          'inScheme' is incompatible with 'signHandle' type; or
+//  Return Type: TPM_RC
+//      TPM_RC_KEY          key referenced by 'signHandle' is not a signing key
+//      TPM_RC_SCHEME       'inScheme' is incompatible with 'signHandle' type; or
 //                          both 'scheme' and key's default scheme are empty; or
 //                          'scheme' is empty while key's default scheme requires
 //                          explicit input scheme (split signing); or
 //                          non-empty default key scheme differs from 'scheme'
-//   TPM_RC_VALUE           digest generated for the given 'scheme' is greater than
+//      TPM_RC_VALUE        digest generated for the given 'scheme' is greater than
 //                          the modulus of 'signHandle' (for an RSA key);
 //                          invalid commit status or failed to generate "r" value
 //                          (for an ECC key)

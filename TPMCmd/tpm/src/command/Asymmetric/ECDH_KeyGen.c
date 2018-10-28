@@ -43,8 +43,8 @@
 // This command uses the TPM to generate an ephemeral public key and the product
 // of the ephemeral private key and the public portion of an ECC key.
 */
-// return type: TPM_RC
-//  TPM_RC_KEY              'keyHandle' does not reference an ECC key
+//  Return Type: TPM_RC
+//      TPM_RC_KEY              'keyHandle' does not reference an ECC key
 TPM_RC
 TPM2_ECDH_KeyGen(
     ECDH_KeyGen_In      *in,            // IN: input parameter list

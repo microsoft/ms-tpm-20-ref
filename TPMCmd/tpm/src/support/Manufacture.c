@@ -48,7 +48,7 @@
 // This function initializes the TPM values in preparation for the TPM's first
 // use. This function will fail if previously called. The TPM can be re-manufactured
 // by calling TPM_Teardown() first and then calling this function again.
-// return type: int
+//  Return Type: int
 //      0           success
 //      1           manufacturing process previously performed
 LIB_EXPORT int
@@ -142,7 +142,7 @@ TPM_Manufacture(
 // In this implementation, all that is needs is to stop the cryptographic units
 // and set a flag to indicate that the TPM can be re-manufactured. This should
 // be all that is necessary to start the manufacturing process again.
-// return type: int
+//  Return Type: int
 //      0        success
 //      1        TPM not previously manufactured
 LIB_EXPORT int

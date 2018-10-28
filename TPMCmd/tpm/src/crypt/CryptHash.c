@@ -131,9 +131,9 @@ CryptGetHashDef(
 //*** CryptHashIsValidAlg()
 // This function tests to see if an algorithm ID is a valid hash algorithm. If
 // flag is true, then TPM_ALG_NULL is a valid hash.
-// return type: BOOL
-//  TRUE        hashAlg is a valid, implemented hash on this TPM.
-//  FALSE       not valid
+//  Return Type: BOOL
+//      TRUE(1)         hashAlg is a valid, implemented hash on this TPM
+//      FALSE(0)        hashAlg is not valid for this TPM
 BOOL
 CryptHashIsValidAlg(
     TPM_ALG_ID       hashAlg,
@@ -199,7 +199,7 @@ GetHashInfoPointer(
 // return the first implemented hash and an 'index' of 2 will return the
 // last. All other index values will return TPM_ALG_NULL.
 //
-// return type: TPM_ALG_ID
+//  Return Type: TPM_ALG_ID
 // ALG_xxx         a hash algorithm
 // ALG_NULL        this can be used as a stop value
 LIB_EXPORT TPM_ALG_ID
@@ -215,7 +215,7 @@ CryptHashGetAlgByIndex(
 //*** CryptHashGetDigestSize()
 // Returns the size of the digest produced by the hash. If 'hashAlg' is not a hash
 // algorithm, the TPM will FAIL.
-// return type: UINT16
+//  Return Type: UINT16
 //   0       TPM_ALG_NULL
 //   > 0     the digest size
 //
@@ -230,7 +230,7 @@ CryptHashGetDigestSize(
 //*** CryptHashGetBlockSize()
 // Returns the size of the block used by the hash. If 'hashAlg' is not a hash
 // algorithm, the TPM will FAIL.
-// return type: UINT16
+//  Return Type: UINT16
 //   0       TPM_ALG_NULL
 //   > 0     the digest size
 //
@@ -270,7 +270,7 @@ CryptHashGetContextAlg(
 //** State Import and Export
 
 //*** CryptHashCopyState
-// This function is used to "clone" a HASH_STATE.
+// This function is used to clone a HASH_STATE.
 LIB_EXPORT void
 CryptHashCopyState(
     HASH_STATE          *out,           // OUT: destination of the state
@@ -421,7 +421,7 @@ HashEnd(
 // and export the state to the input buffer. Will need to add a flag to the state
 // structure to indicate that it needs to be imported before it can be used.
 // (BLEH).
-// return type:     CRTYP_RESULT
+//  Return Type: CRTYP_RESULT
 //  0           hash is TPM_ALG_NULL
 // >0           digest size
 LIB_EXPORT UINT16
@@ -482,7 +482,7 @@ CryptDigestUpdate(
 // 'digestSize' or the size of the digest in 'dOut'. The number of bytes in the
 // placed in the buffer is returned. If there is a failure, the returned value
 // is <= 0.
-//  return type: UINT16
+//  Return Type: UINT16
 //       0      no data returned
 //      > 0     the number of bytes in the digest or dOutSize, whichever is smaller
 LIB_EXPORT UINT16
@@ -500,9 +500,9 @@ CryptHashEnd(
 // Start a hash, hash a single block, update 'digest' and return the size of
 // the results.
 //
-// The "digestSize" parameter can be smaller than the digest. If so, only the more
+// The 'digestSize' parameter can be smaller than the digest. If so, only the more
 // significant bytes are returned.
-// return type: UINT16
+//  Return Type: UINT16
 //  >= 0        number of bytes placed in 'dOut'
 LIB_EXPORT UINT16
 CryptHashBlock(
@@ -544,7 +544,7 @@ CryptDigestUpdate2B(
 // placed in a TPM2B. This is the most common use and this is provided
 // for specification clarity. 'digest.size' should be set to indicate the number of
 // bytes to place in the buffer
-//   return type: UINT16
+//  Return Type: UINT16
 //      >=0     the number of bytes placed in 'digest.buffer'
 LIB_EXPORT UINT16
 CryptHashEnd2B(
@@ -574,14 +574,14 @@ CryptDigestUpdateInt(
 
 //** HMAC Functions
 
-//*** CryptHmacStart
+//*** CryptHmacStart()
 // This function is used to start an HMAC using a temp
 // hash context. The function does the initialization
 // of the hash with the HMAC key XOR iPad and updates the
 // HMAC key XOR oPad.
 //
 // The function returns the number of bytes in a digest produced by 'hashAlg'.
-// return type: UINT16
+//  Return Type: UINT16
 //  >= 0        number of bytes in digest produced by 'hashAlg' (may be zero)
 //
 LIB_EXPORT UINT16
@@ -647,7 +647,7 @@ CryptHmacStart(
 // digest, and start a new digest. It will then add the oPadKey and the
 // completed digest and return the results in dOut. It will not return more
 // than dOutSize bytes.
-// return type: UINT16
+//  Return Type: UINT16
 //  >= 0        number of bytes in 'dOut' (may be zero)
 LIB_EXPORT UINT16
 CryptHmacEnd(
@@ -696,7 +696,7 @@ CryptHmacEnd(
 // is kept.  The caller should not alter the contents of this buffer until the
 // hash sequence is completed or abandoned.
 //
-//  return type: UINT16
+//  Return Type: UINT16
 //      > 0     the digest size of the algorithm
 //      = 0     the hashAlg was TPM_ALG_NULL
 LIB_EXPORT UINT16
@@ -713,7 +713,7 @@ CryptHmacStart2B(
 //*** CryptHmacEnd2B()
 //   This function is the same as CryptHmacEnd() but the HMAC result
 //   is returned in a TPM2B which is the most common use.
-//   return type: UINT16
+//  Return Type: UINT16
 //      >=0     the number of bytes placed in 'digest'
 LIB_EXPORT UINT16
 CryptHmacEnd2B(
@@ -725,12 +725,12 @@ CryptHmacEnd2B(
 }
 
 //** Mask and Key Generation Functions
-//*** _crypi_MGF1()
+//*** CryptMGF1()
 // This function performs MGF1 using the selected hash. MGF1 is
 // T(n) = T(n-1) || H(seed || counter).
 // This function returns the length of the mask produced which
 // could be zero if the digest algorithm is not supported
-// return type: TPM_RC
+//  Return Type: UINT16
 //      0       hash algorithm was TPM_ALG_NULL
 //    > 0       should be the same as 'mSize'
 LIB_EXPORT UINT16
@@ -785,16 +785,16 @@ CryptMGF1(
 // pointer values may be NULL. The value of 'sizeInBits' must be no larger
 // than (2^18)-1 = 256K bits (32385 bytes).
 //
-// The "once" parameter is set to allow incremental generation of a large
-// value. If this flag is TRUE, "sizeInBits" will be used in the HMAC computation
+// The 'once' parameter is set to allow incremental generation of a large
+// value. If this flag is TRUE, 'sizeInBits' will be used in the HMAC computation
 // but only one iteration of the KDF is performed. This would be used for
 // XOR obfuscation so that the mask value can be generated in digest-sized
 // chunks rather than having to be generated all at once in an arbitrarily
-// large buffer and then XORed into the result. If "once" is TRUE, then
-// "sizeInBits" must be a multiple of 8.
+// large buffer and then XORed into the result. If 'once' is TRUE, then
+// 'sizeInBits' must be a multiple of 8.
 //
 // Any error in the processing of this command is considered fatal.
-//  return type: TPM_RC
+//  Return Type: UINT16
 //     0            hash algorithm is not supported or is TPM_ALG_NULL
 //    > 0           the number of bytes in the 'keyStream' buffer
 LIB_EXPORT UINT16
@@ -887,7 +887,7 @@ CryptKDFa(
 }
 
 //*** CryptKDFe()
-// KDFe as defined in TPM specification part 1.
+// This function implements KDFe() as defined in TPM specification part 1.
 //
 // This function returns the number of bytes generated which may be zero.
 //
@@ -895,7 +895,7 @@ CryptKDFa(
 // pointer values may be NULL. The value of 'sizeInBits' must be no larger
 // than (2^18)-1 = 256K bits (32385 bytes).
 // Any error in the processing of this command is considered fatal.
-//  return type: TPM_RC
+//  Return Type: UINT16
 //     0            hash algorithm is not supported or is TPM_ALG_NULL
 //    > 0           the number of bytes in the 'keyStream' buffer
 //
@@ -929,13 +929,13 @@ CryptKDFe(
     //The inner loop of that KDF uses:
     //  Hash[i] := H(counter | Z | OtherInfo) (5)
     // Where:
-    //  Hash[i]   the hash generated on the i-th iteration of the loop.
-    //  H()     an approved hash function
-    //  counter a 32-bit counter that is initialized to 1 and incremented
-    //          on each iteration
-    //  Z       the X coordinate of the product of a public ECC key and a
-    //          different private ECC key.
-    //  OtherInfo   a collection of qualifying data for the KDF defined below.
+    //  Hash[i]         the hash generated on the i-th iteration of the loop.
+    //  H()             an approved hash function
+    //  counter         a 32-bit counter that is initialized to 1 and incremented
+    //                  on each iteration
+    //  Z               the X coordinate of the product of a public ECC key and a
+    //                  different private ECC key.
+    //  OtherInfo       a collection of qualifying data for the KDF defined below.
     //  In this specification, OtherInfo will be constructed by:
     //      OtherInfo := Use | PartyUInfo  | PartyVInfo
     for(; bytes > 0; stream = &stream[hLen], bytes = bytes - hLen)

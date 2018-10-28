@@ -42,7 +42,7 @@
 /*(See part 3 specification)
 // Do comparison to NV location
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_AUTH_TYPE            NV index authorization type is not correct
 //      TPM_RC_NV_LOCKED            NV index read locked
 //      TPM_RC_NV_UNINITIALIZED     the NV index has not been initialized

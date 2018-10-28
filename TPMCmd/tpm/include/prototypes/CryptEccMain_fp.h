@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Oct  2, 2018  Time: 11:32:55AM
  */
 
 #ifndef    _CRYPTECCMAIN_FP_H_
@@ -75,16 +75,16 @@ ClearPoint2B(
 // the indicated curveId.
 // If there is no curve with the indicated ID, the function returns NULL. This
 // function is in this module so that it can be called by GetCurve data.
-// return type: const ECC_CURVE_DATA
-//  NULL        curve with the indicated TPM_ECC_CURVE value is not implemented
-//  non-NULL    pointer to the curve data
+//  Return Type: const ECC_CURVE_DATA
+//      NULL            curve with the indicated TPM_ECC_CURVE is not implemented
+//      != NULL         pointer to the curve data
 LIB_EXPORT const ECC_CURVE *
 CryptEccGetParametersByCurveId(
     TPM_ECC_CURVE       curveId     // IN: the curveID
     );
 
 //*** CryptEccGetKeySizeForCurve()
-// This function returns the key size in bits of the indicated curve
+// This function returns the key size in bits of the indicated curve.
 LIB_EXPORT UINT16
 CryptEccGetKeySizeForCurve(
     TPM_ECC_CURVE            curveId    // IN: the curve
@@ -99,8 +99,8 @@ GetCurveData(
     );
 
 //*** CryptEccGetCurveByIndex()
-// This function returns the number of the i-th implemented curve. The normal
-// use would be to call this function with 'i' starting at 0. When the i is greater
+// This function returns the number of the 'i'-th implemented curve. The normal
+// use would be to call this function with 'i' starting at 0. When the 'i' is greater
 // than or equal to the number of implemented curves, TPM_ECC_NONE is returned.
 LIB_EXPORT TPM_ECC_CURVE
 CryptEccGetCurveByIndex(
@@ -109,10 +109,10 @@ CryptEccGetCurveByIndex(
 
 //*** CryptEccGetParameter()
 // This function returns an ECC curve parameter. The parameter is
-// selected by a single character designator from the set of @.
-// return type: BOOL
-//  TRUE        curve exists and parameter returned
-//  FALSE       curve does not exist or parameter selector
+// selected by a single character designator from the set of ""PNABXYH"".
+//  Return Type: BOOL
+//      TRUE(1)         curve exists and parameter returned
+//      FALSE(0)        curve does not exist or parameter selector
 LIB_EXPORT BOOL
 CryptEccGetParameter(
     TPM2B_ECC_PARAMETER     *out,       // OUT: place to put parameter
@@ -122,9 +122,9 @@ CryptEccGetParameter(
 
 //*** CryptCapGetECCCurve()
 // This function returns the list of implemented ECC curves.
-// return type: TPMI_YES_NO
-//  YES        if no more ECC curve is available
-//  NO         if there are more ECC curves not reported
+//  Return Type: TPMI_YES_NO
+//      YES             if no more ECC curve is available
+//      NO              if there are more ECC curves not reported
 TPMI_YES_NO
 CryptCapGetECCCurve(
     TPM_ECC_CURVE    curveID,       // IN: the starting ECC curve
@@ -144,12 +144,12 @@ CryptGetCurveSignScheme(
 //
 // If 'c' is NULL, it indicates that 'r' is being generated
 // for TPM2_Commit.
-// If 'c' is not NULL, the TPM will validate that the gr.commitArray
+// If 'c' is not NULL, the TPM will validate that the 'gr.commitArray'
 // bit associated with the input value of 'c' is SET. If not, the TPM
 // returns FALSE and no 'r' value is generated.
-//  return type:    BOOL
-//  TRUE            r value computed
-//  FALSE           no r value computed
+//  Return Type: BOOL
+//      TRUE(1)         r value computed
+//      FALSE(0)        no r value computed
 BOOL
 CryptGenerateR(
     TPM2B_ECC_PARAMETER     *r,             // OUT: the generated random value
@@ -160,7 +160,7 @@ CryptGenerateR(
     );
 
 //*** CryptCommit()
-// This function is called when the count value is committed. The gr.commitArray
+// This function is called when the count value is committed. The 'gr.commitArray'
 // value associated with the current count value is SET and g_commitCounter is
 // incremented. The low-order 16 bits of old value of the counter is returned.
 UINT16
@@ -178,10 +178,10 @@ CryptEndCommit(
     );
 
 //*** CryptEccGetParameters()
-// This function returns the ECC parameter details of the given curve
-// return type: BOOL
-//      TRUE            Get parameters success
-//      FALSE           Unsupported ECC curve ID
+// This function returns the ECC parameter details of the given curve.
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        unsupported ECC curve ID
 BOOL
 CryptEccGetParameters(
     TPM_ECC_CURVE                curveId,       // IN: ECC curve ID
@@ -189,7 +189,7 @@ CryptEccGetParameters(
     );
 
 //*** BnGetCurvePrime()
-// This function is used to get just the prime modulus associated with a curve
+// This function is used to get just the prime modulus associated with a curve.
 const bignum_t *
 BnGetCurvePrime(
     TPM_ECC_CURVE            curveId
@@ -211,7 +211,7 @@ BnIsOnCurve(
     );
 
 //*** BnIsValidPrivateEcc()
-// Checks that 0 < x < q
+// Checks that 0 < 'x' < 'q'
 BOOL
 BnIsValidPrivateEcc(
     bigConst                 x,         // IN: private key to check
@@ -225,16 +225,17 @@ CryptEccIsValidPrivateKey(
     );
 
 //*** BnPointMul()
-// This function does a point multiply of the form R = [d]S + [u]Q where the
-// parameters are bigNum values. If S is NULL and d is not NULL, then it computes
-// R = [d]G + [u]Q  or just R = [d]G if u and Q are NULL. If 'skipChecks' is TRUE,
-// then the function will not verify that the inputs are correct for the domain.
-// This would be the case when the values were created by the CryptoEngine code.
+// This function does a point multiply of the form 'R' = ['d']'S' + ['u']'Q' where the
+// parameters are bigNum values. If 'S' is NULL and d is not NULL, then it computes
+// 'R' = ['d']'G' + ['u']'Q'  or just 'R' = ['d']'G' if 'u' and 'Q' are NULL.
+// If 'skipChecks' is TRUE, then the function will not verify that the inputs are
+// correct for the domain. This would be the case when the values were created by the
+// CryptoEngine code.
 // It will return TPM_RC_NO_RESULT if the resulting point is the point at infinity.
-// return type: TPM_RC
-//  TPM_RC_NO_RESULT     result of multiplication is a point at infinity
-//  TPM_RC_ECC_POINT      'S' or 'Q' is not on the curve
-//  TPM_RC_VALUE          'd' or 'u' is not < n
+//  Return Type: TPM_RC
+//      TPM_RC_NO_RESULT        result of multiplication is a point at infinity
+//      TPM_RC_ECC_POINT        'S' or 'Q' is not on the curve
+//      TPM_RC_VALUE            'd' or 'u' is not < n
 TPM_RC
 BnPointMult(
     bigPoint             R,         // OUT: computed point
@@ -249,10 +250,10 @@ BnPointMult(
 // This function gets random values that are the size of the key plus 64 bits. The
 // value is reduced (mod ('q' - 1)) and incremented by 1 ('q' is the order of the
 // curve. This produces a value ('d') such that 1 <= 'd' < 'q'. This is the method
-// of FIPS 186-4 Section B.4.1 'Key Pair Generation Using Extra Random Bits'.
-// return type: BOOL
-//  TRUE        value generated
-//  FALSE       failure generating private key
+// of FIPS 186-4 Section B.4.1 ""Key Pair Generation Using Extra Random Bits"".
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure generating private key
 BOOL
 BnEccGetPrivate(
     bigNum                   dOut,      // OUT: the qualified random value
@@ -283,8 +284,8 @@ CryptEccNewKeyPair(
     );
 
 //*** CryptEccPointMultiply()
-// This function computes 'R := ['dIn']'G' + ['uIn']'QIn'. Where 'dIn' and
-// 'uIn' are scalars, 'G' and 'QIn' are points on the specified curve and G is the
+// This function computes 'R' := ['dIn']'G' + ['uIn']'QIn'. Where 'dIn' and
+// 'uIn' are scalars, 'G' and 'QIn' are points on the specified curve and 'G' is the
 // default generator of the curve.
 //
 // The 'xOut' and 'yOut' parameters are optional and may be set to NULL if not
@@ -302,7 +303,7 @@ CryptEccNewKeyPair(
 // It is a fatal error if 'dIn' and 'uIn' are both unspecified (NULL) or if 'Qin'
 // or 'Rout' is unspecified.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_ECC_POINT         the point 'Pin' or 'Qin' is not on the curve
 //      TPM_RC_NO_RESULT         the product point is at infinity
 //      TPM_RC_CURVE             bad curve
@@ -322,12 +323,12 @@ CryptEccPointMultiply(
 
 //*** CryptEccIsPointOnCurve()
 // This function is used to test if a point is on a defined curve. It does this
-// by checking that y^2 mod p = x^3 + a*x + b mod p
+// by checking that 'y'^2 mod 'p' = 'x'^3 + 'a'*'x' + 'b' mod 'p'.
 //
-// It is a fatal error if Q is not specified (is NULL).
-// return type: BOOL
-//      TRUE        point is on curve
-//      FALSE       point is not on curve or curve is not supported
+// It is a fatal error if 'Q' is not specified (is NULL).
+//  Return Type: BOOL
+//      TRUE(1)         point is on curve
+//      FALSE(0)        point is not on curve or curve is not supported
 LIB_EXPORT BOOL
 CryptEccIsPointOnCurve(
     TPM_ECC_CURVE            curveId,       // IN: the curve selector
@@ -345,9 +346,9 @@ CryptEccIsPointOnCurve(
 //
 // If the curve is not supported
 // If 'seed' is not provided, then a random number will be used for the key
-// return type: TPM_RC
-//  TPM_RC_CURVE                curve is not supported
-//  TPM_RC_NO_RESULT            could not verify key with signature (FIPS only)
+//  Return Type: TPM_RC
+//      TPM_RC_CURVE            curve is not supported
+//      TPM_RC_NO_RESULT        could not verify key with signature (FIPS only)
 LIB_EXPORT TPM_RC
 CryptEccGenerateKey(
     TPMT_PUBLIC         *publicArea,        // IN/OUT: The public area template for

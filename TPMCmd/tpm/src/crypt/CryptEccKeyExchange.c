@@ -49,11 +49,12 @@
 // This function does the associated value computation required by MQV key
 // exchange.
 // Process:
-// 1. Convert xQ to an integer xqi using the convention specified in Appendix C.3.
+// 1. Convert 'xQ' to an integer 'xqi' using the convention specified in Appendix C.3.
 // 2. Calculate
 //        xqm = xqi mod 2^ceil(f/2) (where f = ceil(log2(n)).
 // 3. Calculate the associate value function
 //        avf(Q) = xqm + 2ceil(f / 2)
+// Always returns TRUE(1).
 static BOOL
 avf1(
     bigNum               bnX,           // IN/OUT: the reduced value
@@ -76,12 +77,11 @@ avf1(
 // CAUTION: Implementation of this function may require use of essential claims in
 // patents not owned by TCG members.
 //
-// Points QsB and QeB are required to be on the curve of inQsA. The function will
-// fail, possibly catastrophically, if this is not the case.
-// return type: TPM_RC
-//      TPM_RC_SUCCESS           results is valid
-//      TPM_RC_NO_RESULT       the value for dsA does not give a valid point on the
-//                          curve
+// Points 'QsB' and 'QeB' are required to be on the curve of 'inQsA'. The function 
+// will fail, possibly catastrophically, if this is not the case.
+//  Return Type: TPM_RC
+//      TPM_RC_NO_RESULT        the value for dsA does not give a valid point on the
+//                              curve
 static TPM_RC
 C_2_2_MQV(
     TPMS_ECC_POINT          *outZ,         // OUT: the computed point
@@ -213,8 +213,8 @@ Exit:
 //*** CryptEcc2PhaseKeyExchange()
 // This function is the dispatch routine for the EC key exchange functions that use
 // two ephemeral and two static keys.
-// return type: TPM_RC
-//  TPM_RC_SCHEME             scheme is not defined
+//  Return Type: TPM_RC
+//      TPM_RC_SCHEME             scheme is not defined
 LIB_EXPORT TPM_RC
 CryptEcc2PhaseKeyExchange(
     TPMS_ECC_POINT          *outZ1,         // OUT: a computed point
@@ -275,11 +275,11 @@ ComputeWForSM2(
 
 //*** avfSm2()
 // This function does the associated value computation required by SM2 key
-// exchange. This is different form the avf() in the international standards
+// exchange. This is different from the avf() in the international standards
 // because it returns a value that is half the size of the value returned by the
-// standard avf. For example, if n is 15, Ws (w in the standard) is 2 but the W
-// here is 1. This means that an input value of 14 (1110b) would return a value
-// of 110b with the standard but 10b with the scheme in SM2.
+// standard avf(). For example, if 'n' is 15, 'Ws' ('w' in the standard) is 2 but 
+// the 'W' here is 1. This means that an input value of 14 (1110b) would return a 
+// value of 110b with the standard but 10b with the scheme in SM2.
 static bigNum
 avfSm2(
     bigNum              bn,           // IN/OUT: the reduced value
@@ -297,19 +297,18 @@ avfSm2(
     return bn;
 }
 
-// SM2KeyExchange()
+//*** SM2KeyExchange()
 // This function performs the key exchange defined in SM2.
 // The first step is to compute
-//  'tA' = ('dsA' + 'deA'  avf(Xe,A)) mod n
-// Then, compute the Z value from
-// 'outZ' = ('h'  'tA' mod 'n') ('QsA' + [avf(QeB.x)](QeB)).
+//  'tA' = ('dsA' + 'deA'  avf(Xe,A)) mod 'n'
+// Then, compute the 'Z' value from
+// 'outZ' = ('h'  'tA' mod 'n') ('QsA' + [avf('QeB.x')]('QeB')).
 // The function will compute the ephemeral public key from the ephemeral
 // private key.
-// All points are required to be on the curve of inQsA. The function will fail
+// All points are required to be on the curve of 'inQsA'. The function will fail
 // catastrophically if this is not the case
-// return type: TPM_RC
-//      TPM_RC_SUCCESS           results is valid
-//      TPM_RC_NO_RESULT       the value for dsA does not give a valid point on the
+//  Return Type: TPM_RC
+//      TPM_RC_NO_RESULT        the value for dsA does not give a valid point on the
 //                              curve
 LIB_EXPORT TPM_RC
 SM2KeyExchange(

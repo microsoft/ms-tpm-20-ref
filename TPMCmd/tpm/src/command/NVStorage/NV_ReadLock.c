@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Set read lock on a NV index
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_ATTRIBUTES               TPMA_NV_READ_STCLEAR is not SET so
 //                                      Index referenced by 'nvIndex' may not be
 //                                      write locked

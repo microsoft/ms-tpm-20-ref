@@ -42,7 +42,7 @@
 /*(See part 3 specification)
 // decrypts the provided data block and removes the padding if applicable
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_ATTRIBUTES       'decrypt' is not SET or if 'restricted' is SET in
 //                              the key referenced by 'keyHandle'
 //      TPM_RC_BINDING          The public an private parts of the key are not

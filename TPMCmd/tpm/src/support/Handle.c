@@ -94,7 +94,7 @@ NextPermanentHandle(
 // This function returns a list of the permanent handles of PCR, started from
 // 'handle'. If 'handle' is larger than the largest permanent handle, an empty list
 // will be returned with 'more' set to NO.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO
@@ -141,7 +141,7 @@ PermanentCapGetHandles(
 // This function returns a list of the permanent handles of PCR, started from
 // 'handle'. If 'handle' is larger than the largest permanent handle, an empty list
 // will be returned with 'more' set to NO.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO

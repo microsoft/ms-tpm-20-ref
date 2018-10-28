@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug  4, 2018  Time: 07:27:08PM
+ *  Date: Oct  2, 2018  Time: 11:32:55AM
  */
 
 #ifndef    _CRYPTECCKEYEXCHANGE_FP_H_
@@ -45,8 +45,8 @@
 //*** CryptEcc2PhaseKeyExchange()
 // This function is the dispatch routine for the EC key exchange functions that use
 // two ephemeral and two static keys.
-// return type: TPM_RC
-//  TPM_RC_SCHEME             scheme is not defined
+//  Return Type: TPM_RC
+//      TPM_RC_SCHEME             scheme is not defined
 LIB_EXPORT TPM_RC
 CryptEcc2PhaseKeyExchange(
     TPMS_ECC_POINT          *outZ1,         // OUT: a computed point
@@ -60,19 +60,18 @@ CryptEcc2PhaseKeyExchange(
     );
 #if     ALG_SM2
 
-// SM2KeyExchange()
+//*** SM2KeyExchange()
 // This function performs the key exchange defined in SM2.
 // The first step is to compute
-//  'tA' = ('dsA' + 'deA'  avf(Xe,A)) mod n
-// Then, compute the Z value from
-// 'outZ' = ('h'  'tA' mod 'n') ('QsA' + [avf(QeB.x)](QeB)).
+//  'tA' = ('dsA' + 'deA'  avf(Xe,A)) mod 'n'
+// Then, compute the 'Z' value from
+// 'outZ' = ('h'  'tA' mod 'n') ('QsA' + [avf('QeB.x')]('QeB')).
 // The function will compute the ephemeral public key from the ephemeral
 // private key.
-// All points are required to be on the curve of inQsA. The function will fail
+// All points are required to be on the curve of 'inQsA'. The function will fail
 // catastrophically if this is not the case
-// return type: TPM_RC
-//      TPM_RC_SUCCESS           results is valid
-//      TPM_RC_NO_RESULT       the value for dsA does not give a valid point on the
+//  Return Type: TPM_RC
+//      TPM_RC_NO_RESULT        the value for dsA does not give a valid point on the
 //                              curve
 LIB_EXPORT TPM_RC
 SM2KeyExchange(

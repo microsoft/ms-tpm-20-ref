@@ -42,7 +42,7 @@
 /*(See part 3 specification)
 // PolicyOR command
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_VALUE            no digest in 'pHashList' matched the current
 //                              value of policyDigest for 'policySession'
 TPM_RC

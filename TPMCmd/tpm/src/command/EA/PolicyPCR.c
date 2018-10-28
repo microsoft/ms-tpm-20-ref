@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Add a PCR gate for a policy session
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_VALUE          if provided, 'pcrDigest' does not match the
 //                            current PCR settings
 //      TPM_RC_PCR_CHANGED    a previous TPM2_PolicyPCR() set

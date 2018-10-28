@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Delete an NV Index
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_ATTRIBUTES               TPMA_NV_POLICY_DELETE is SET in the Index
 //                                      referenced by 'nvIndex' so this command may
 //                                      not be used to delete this Index (see

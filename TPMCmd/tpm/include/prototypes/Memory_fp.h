@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug  8, 2018  Time: 12:19:58AM
+ *  Date: Sep 27, 2018  Time: 09:04:43PM
  */
 
 #ifndef    _MEMORY_FP_H_
@@ -56,9 +56,9 @@ MemoryCopy(
 //*** MemoryEqual()
 // This function indicates if two buffers have the same values in the indicated
 // number of bytes.
-// return type: BOOL
-//      TRUE    all octets are the same
-//      FALSE   all octets are not the same
+//  Return Type: BOOL
+//      TRUE(1)         all octets are the same
+//      FALSE(0)        all octets are not the same
 BOOL
 MemoryEqual(
     const void      *buffer1,       // IN: compare buffer1
@@ -94,9 +94,9 @@ MemoryConcat2B(
 // This function will compare two TPM2B structures. To be equal, they
 // need to be the same size and the buffer contexts need to be the same
 // in all octets.
-// return type: BOOL
-//      TRUE    size and buffer contents are the same
-//      FALSE   size or buffer contents are not the same
+//  Return Type: BOOL
+//      TRUE(1)         size and buffer contents are the same
+//      FALSE(0)        size or buffer contents are not the same
 BOOL
 MemoryEqual2B(
     const TPM2B     *aIn,           // IN: compare value

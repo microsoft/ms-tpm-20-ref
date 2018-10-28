@@ -42,7 +42,7 @@
 /*(See part 3 specification)
 // Include ticket to the policy evaluation
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_CPHASH           policy's cpHash was previously set to a different
 //                              value
 //      TPM_RC_EXPIRED          'timeout' value in the ticket is in the past and the

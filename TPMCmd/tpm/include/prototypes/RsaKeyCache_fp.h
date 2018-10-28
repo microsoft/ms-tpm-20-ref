@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jun 16, 2018  Time: 12:44:14AM
+ *  Date: Oct 22, 2018  Time: 11:31:57PM
  */
 
 #ifndef    _RSAKEYCACHE_FP_H_
@@ -49,6 +49,10 @@ RsaKeyCacheControl(
     int             state
     );
 
+//*** GetCachedRsaKey()
+//  Return Type: BOOL
+//      TRUE(1)         key loaded
+//      FALSE(0)        key not loaded
 BOOL
 GetCachedRsaKey(
     OBJECT              *key,

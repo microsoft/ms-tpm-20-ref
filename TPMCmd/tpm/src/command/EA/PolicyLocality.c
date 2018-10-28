@@ -37,7 +37,7 @@
 
 #if CC_PolicyLocality  // Conditional expansion of this file
 
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_RANGE          all the locality values selected by
 //                            'locality' have been disabled
 //                            by previous TPM2_PolicyLocality() calls.

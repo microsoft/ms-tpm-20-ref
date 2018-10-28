@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Sep 26, 2018  Time: 04:53:47PM
  */
 
 #ifndef    _PP_FP_H_
@@ -73,9 +73,9 @@ PhysicalPresenceCommandClear(
 
 //*** PhysicalPresenceIsRequired()
 // This function indicates if PP confirmation is required for a command.
-// return type: BOOL
-//      TRUE           if physical presence is required
-//      FALSE          if physical presence is not required
+//  Return Type: BOOL
+//      TRUE(1)         physical presence is required
+//      FALSE(0)        physical presence is not required
 BOOL
 PhysicalPresenceIsRequired(
     COMMAND_INDEX    commandIndex   // IN: command index
@@ -85,7 +85,7 @@ PhysicalPresenceIsRequired(
 // This function returns a list of commands that require PP confirmation. The
 // list starts from the first implemented command that has a command code that
 // the same or greater than 'commandCode'.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //      YES         if there are more command codes available
 //      NO          all the available command codes have been returned
 TPMI_YES_NO

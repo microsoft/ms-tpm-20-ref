@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Sep 27, 2018  Time: 09:25:05PM
  */
 
 #ifndef    _CRYPTPRIMESIEVE_FP_H_
@@ -67,7 +67,7 @@ RsaNextPrime(
 // This function finds the nth SET bit in a bit array. The 'n' parameter is
 // between 1 and the number of bits in the array (always a multiple of 8).
 // If called when the array does not have n bits set, it will return -1
-// return type: unsigned int
+//  Return Type: unsigned int
 //      <0      no bit is set or no bit with the requested number is set
 //      >=0    the number of the bit in the array that is the nth set
 LIB_EXPORT int
@@ -116,10 +116,10 @@ SetFieldSize(
 // all values in the field have been checked. If all bits in the field have
 // been checked and none is prime, the function returns FALSE and a new random
 // value needs to be chosen.
-// return type: TPM_RC
-//  TPM_RC_SUCCESS      candidate is probably prime
-//  TPM_RC_NO_RESULT    candidate is not prime and couldn't find and alternative in
-//                      in the field
+//  Return Type: TPM_RC
+//      TPM_RC_SUCCESS      candidate is probably prime
+//      TPM_RC_NO_RESULT    candidate is not prime and couldn't find and alternative
+//                          in the field
 LIB_EXPORT TPM_RC
 PrimeSelectWithSieve(
     bigNum           candidate,         // IN/OUT: The candidate to filter

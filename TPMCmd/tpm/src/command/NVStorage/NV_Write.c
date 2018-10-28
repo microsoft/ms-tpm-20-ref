@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Write to a NV index
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_ATTRIBUTES               Index referenced by 'nvIndex' has either
 //                                      TPMA_NV_BITS, TPMA_NV_COUNTER, or
 //                                      TPMA_NV_EVENT attribute SET

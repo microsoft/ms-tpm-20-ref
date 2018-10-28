@@ -44,7 +44,7 @@
 // of an object into the TPM. The command allows loading of a public area or
 // both a public and sensitive area
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_ATTRIBUTES       'fixedParent", 'fixedTPM', and 'restricted' must 
 //                              be CLEAR if sensitive portion of an object is loaded
 //      TPM_RC_BINDING          the 'inPublic' and 'inPrivate' structures are not

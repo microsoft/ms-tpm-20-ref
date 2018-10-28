@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Shut down TPM for power off
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_TYPE             if PCR bank has been re-configured, a
 //                              CLEAR StateSave is required
 TPM_RC

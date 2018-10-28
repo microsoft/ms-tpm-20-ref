@@ -38,8 +38,8 @@
 // on a demand basis or to run all the self-tests before proceeding.
 //
 // The self-tests are controlled by a set of bit vectors. The
-// "g_untestedDecryptionAlgorithms" vector has a bit for each decryption algorithm
-// that needs to be tested and "g_untestedEncryptionAlgorithms" has a bit for
+// 'g_untestedDecryptionAlgorithms' vector has a bit for each decryption algorithm
+// that needs to be tested and 'g_untestedEncryptionAlgorithms' has a bit for
 // each encryption algorithm that needs to be tested. Before an algorithm
 // is used, the appropriate vector is checked (indexed using the algorithm ID).
 // If the bit is 1, then the test function should be called.
@@ -84,7 +84,7 @@ CryptRunSelfTests(
 // will check after each test to see if the command is canceled. If so, then the
 // TPM will returned TPM_RC_CANCELLED. To continue with the self-tests, call
 // TPM2_SelfTest(fullTest == No) and the TPM will complete the testing.
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_CANCELED        if the command is canceled
 LIB_EXPORT
 TPM_RC
@@ -116,7 +116,7 @@ CryptSelfTest(
 // This command may be canceled. If it is, then there is no return result.
 // However, this command can be run again and the incremental progress will not
 // be lost.
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_CANCELED         processing of this command was canceled
 //      TPM_RC_TESTING          if toTest list is not empty
 //      TPM_RC_VALUE            an algorithm in the toTest list is not implemented
@@ -192,9 +192,8 @@ CryptInitializeToTest(
 // ALG_ERROR, TestAlgorithm() will CLEAR any bit in 'toTest' for which it has
 // no test. This allows the knowledge about which algorithms have test to be
 // accessed through the interface that provides the test.
-// return type: TPM_RC
-//  TPM_RC_SUCCESS      test complete
-//  TPM_RC_CANCELED     test was canceled
+//  Return Type: TPM_RC
+//      TPM_RC_CANCELED     test was canceled
 LIB_EXPORT
 TPM_RC
 CryptTestAlgorithm(
@@ -203,7 +202,7 @@ CryptTestAlgorithm(
     )
 {
     TPM_RC                   result;
-#if defined SELF_TEST
+#if SELF_TEST
     result = TestAlgorithm(alg, toTest);
 #else
     // If this is an attempt to determine the algorithms for which there is a

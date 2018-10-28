@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jul 16, 2018  Time: 02:57:16PM
+ *  Date: Oct  2, 2018  Time: 12:21:16AM
  */
 
 #ifndef    _CRYPTRAND_FP_H_
@@ -46,9 +46,9 @@
 // (DRBG_GetEntropy32()).
 // This function is only used during instantiation of the DRBG for
 // manufacturing and on each start-up after an non-orderly shutdown.
-// return type: BOOL
-//  TRUE        Requested entropy returned
-//  FALSE       Entropy Failure
+//  Return Type: BOOL
+//      TRUE(1)         requested entropy returned
+//      FALSE(0)        entropy Failure
 BOOL
 DRBG_GetEntropy(
     UINT32           requiredEntropy,   // IN: requested number of bytes of full
@@ -57,7 +57,7 @@ DRBG_GetEntropy(
     );
 
 //*** IncrementIv()
-// Used by EncryptDRBG
+// This function increments the IV value by 1. It is used by EncryptDRBG().
 void
 IncrementIv(
     DRBG_IV         *iv
@@ -101,9 +101,9 @@ DRBG_Update(
 // This function is used when reseeding of the DRBG is required. If
 // entropy is provided, it is used in lieu of using hardware entropy.
 // Note: the provided entropy must be the required size.
-// return type: BOOL
-//  TRUE        reseed succeeded
-//  FALSE       reseed failed, probably due to the entropy generation
+//  Return Type: BOOL
+//      TRUE(1)         reseed succeeded
+//      FALSE(0)        reseed failed, probably due to the entropy generation
 BOOL
 DRBG_Reseed(
     DRBG_STATE          *drbgState,         // IN: the state to update
@@ -113,9 +113,9 @@ DRBG_Reseed(
 
 //*** DRBG_SelfTest()
 // This is run when the DRBG is instantiated and at startup
-// return type: BOOL
-// FALSE    test failed
-// TRUE     test OK
+//  Return Type: BOOL
+//      TRUE(1)         test OK
+//      FALSE(0)        test failed
 BOOL
 DRBG_SelfTest(
     void
@@ -124,8 +124,8 @@ DRBG_SelfTest(
 //*** CryptRandomStir()
 // This function is used to cause a reseed. A DRBG_SEED amount of entropy is
 // collected from the hardware and then additional data is added.
-// return type: TPM_RC
-// TPM_RC_NO_RESULT    failure of the entropy generator
+//  Return Type: TPM_RC
+//      TPM_RC_NO_RESULT        failure of the entropy generator
 LIB_EXPORT TPM_RC
 CryptRandomStir(
     UINT16           additionalDataSize,
@@ -141,7 +141,8 @@ CryptRandomGenerate(
     );
 
 //**** DRBG_InstantiateSeededKdf()
-// Function used to instantiate a KDF-based RNG. This is used for derivations
+// This function is used to instantiate a KDF-based RNG. This is used for derivations.
+// This function always returns TRUE.
 LIB_EXPORT BOOL
 DRBG_InstantiateSeededKdf(
     KDF_STATE       *state,         // OUT: buffer to hold the state
@@ -154,7 +155,7 @@ DRBG_InstantiateSeededKdf(
     );
 
 //**** DRBG_AdditionalData()
-// Function to reseed the DRBG with additional "entropy". This is normally called
+// Function to reseed the DRBG with additional entropy. This is normally called
 // before computing the protection value of a primary key in the Endorsement
 // hierarchy.
 LIB_EXPORT void
@@ -166,7 +167,7 @@ DRBG_AdditionalData(
 //**** DRBG_InstantiateSeeded()
 // This function is used to instantiate a random number generator from seed values.
 // The nominal use of this generator is to create sequences of pseudo-random
-// numbers from a seed value.
+// numbers from a seed value. This function always returns TRUE.
 LIB_EXPORT BOOL
 DRBG_InstantiateSeeded(
     DRBG_STATE      *drbgState,     // IN/OUT: buffer to hold the state
@@ -177,15 +178,18 @@ DRBG_InstantiateSeeded(
     );
 
 //**** CryptRandStartup()
-// This function is called when TPM_Startup is executed.
-//
+// This function is called when TPM_Startup is executed. This function always returns
+// TRUE.
 LIB_EXPORT BOOL
 CryptRandStartup(
     void
     );
 
 //**** CryptRandInit()
-// This function is called when _TPM_Init is being processed
+// This function is called when _TPM_Init is being processed.
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure
 LIB_EXPORT BOOL
 CryptRandInit(
     void
@@ -211,9 +215,9 @@ DRBG_Generate(
 // This is called when a the TPM DRBG is to be instantiated. This is
 // called to instantiate a DRBG used by the TPM for normal
 // operations.
-// return type: BOOL
-//  TRUE            instantiation succeeded
-//  FALSE           instantiation failed
+//  Return Type: BOOL
+//      TRUE(1)         instantiation succeeded
+//      FALSE(0)        instantiation failed
 LIB_EXPORT BOOL
 DRBG_Instantiate(
     DRBG_STATE      *drbgState,         // OUT: the instantiated value
@@ -224,7 +228,8 @@ DRBG_Instantiate(
 //*** DRBG_Uninstantiate()
 // This is Uninstantiate_function() from [SP 800-90A 9.4].
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
+//      TPM_RC_VALUE        not a valid
 LIB_EXPORT TPM_RC
 DRBG_Uninstantiate(
     DRBG_STATE      *drbgState      // IN/OUT: working state to erase

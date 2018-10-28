@@ -41,14 +41,14 @@
 /*(See part 3 specification)
 // Prove the association between an object and its creation data
 */
-// return type: TPM_RC
-//   TPM_RC_KEY         key referenced by 'signHandle' is not a signing key
-//   TPM_RC_SCHEME      'inScheme' is not compatible with 'signHandle'
-//   TPM_RC_TICKET      'creationTicket' does not match 'objectHandle'
-//   TPM_RC_VALUE       digest generated for 'inScheme' is greater or has larger
-//                      size than the modulus of 'signHandle', or the buffer for
-//                      the result in 'signature' is too small (for an RSA key);
-//                      invalid commit status (for an ECC key with a split scheme).
+//  Return Type: TPM_RC
+//      TPM_RC_KEY          key referenced by 'signHandle' is not a signing key
+//      TPM_RC_SCHEME       'inScheme' is not compatible with 'signHandle'
+//      TPM_RC_TICKET       'creationTicket' does not match 'objectHandle'
+//      TPM_RC_VALUE        digest generated for 'inScheme' is greater or has larger
+//                          size than the modulus of 'signHandle', or the buffer for
+//                          the result in 'signature' is too small (for an RSA key);
+//                          invalid commit status (for an ECC key with a split scheme).
 TPM_RC
 TPM2_CertifyCreation(
     CertifyCreation_In      *in,            // IN: input parameter list

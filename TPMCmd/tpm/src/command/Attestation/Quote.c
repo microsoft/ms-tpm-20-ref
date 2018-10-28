@@ -41,7 +41,7 @@
 /*(See part 3 specification)
 // quote PCR values
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_KEY              'signHandle' does not reference a signing key;
 //      TPM_RC_SCHEME           the scheme is not compatible with sign key type,
 //                              or input scheme is not compatible with default

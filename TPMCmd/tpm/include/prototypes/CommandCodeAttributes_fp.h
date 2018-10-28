@@ -43,7 +43,7 @@
 //*** GetClosestCommandIndex()
 // This function returns the command index for the command with a value that is
 // equal to or greater than the input value
-// return type: COMMAND_INDEX
+//  Return Type: COMMAND_INDEX
 //  UNIMPLEMENTED_COMMAND_INDEX     command is not implemented
 //  other                           index of a command
 COMMAND_INDEX
@@ -54,7 +54,7 @@ GetClosestCommandIndex(
 //*** CommandCodeToComandIndex()
 // This function returns the index in the various attributes arrays of the
 // command.
-// return type: COMMAND_INDEX
+//  Return Type: COMMAND_INDEX
 //  UNIMPLEMENTED_COMMAND_INDEX     command is not implemented
 //  other                           index of the command
 COMMAND_INDEX
@@ -64,7 +64,7 @@ CommandCodeToCommandIndex(
 
 //*** GetNextCommandIndex()
 // This function returns the index of the next implemented command.
-// return type: COMMAND_INDEX
+//  Return Type: COMMAND_INDEX
 //  UNIMPLEMENTED_COMMAND_INDEX     no more implemented commands
 //  other                           the index of the next implemented command
 COMMAND_INDEX
@@ -83,7 +83,7 @@ GetCommandCode(
 //
 //  This function returns the authorization role required of a handle.
 //
-// return type:     AUTH_ROLE
+//  Return Type: AUTH_ROLE
 //  AUTH_NONE       no authorization is required
 //  AUTH_USER       user role authorization is required
 //  AUTH_ADMIN      admin role authorization is required
@@ -97,7 +97,7 @@ CommandAuthRole(
 //*** EncryptSize()
 // This function returns the size of the decrypt size field. This function returns
 // 0 if encryption is not allowed
-// return type: int
+//  Return Type: int
 //  0       encryption not allowed
 //  2       size field is two bytes
 //  4       size field is four bytes
@@ -109,7 +109,7 @@ EncryptSize(
 //*** DecryptSize()
 // This function returns the size of the decrypt size field. This function returns
 // 0 if decryption is not allowed
-// return type: int
+//  Return Type: int
 //  0       encryption not allowed
 //  2       size field is two bytes
 //  4       size field is four bytes
@@ -124,9 +124,9 @@ DecryptSize(
 //
 // This function must not be called if the command is not known to be implemented.
 //
-//  return type:        BOOL
-//  TRUE                session is allowed with this command
-//  FALSE               session is not allowed with this command
+//  Return Type: BOOL
+//      TRUE(1)         session is allowed with this command
+//      FALSE(0)        session is not allowed with this command
 BOOL
 IsSessionAllowed(
     COMMAND_INDEX    commandIndex   // IN: the command to be checked
@@ -158,7 +158,7 @@ IsReadOperation(
 //*** CommandCapGetCCList()
 // This function returns a list of implemented commands and command attributes
 // starting from the command in 'commandCode'.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //      YES         more command attributes are available
 //      NO          no more command attributes are available
 TPMI_YES_NO
@@ -171,9 +171,9 @@ CommandCapGetCCList(
 
 //*** IsVendorCommand()
 // Function indicates if a command index references a vendor command.
-// return type: BOOL
-//  TRUE        command is a vendor command
-//  FALSE       command is not a vendor command
+//  Return Type: BOOL
+//      TRUE(1)         command is a vendor command
+//      FALSE(0)        command is not a vendor command
 BOOL
 IsVendorCommand(
     COMMAND_INDEX    commandIndex   // IN: command index to check

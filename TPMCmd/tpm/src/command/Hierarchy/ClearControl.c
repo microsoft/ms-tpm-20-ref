@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Enable or disable the execution of TPM2_Clear command
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_AUTH_FAIL            authorization is not properly given
 TPM_RC
 TPM2_ClearControl(

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Sep 27, 2018  Time: 09:25:05PM
  */
 
 #ifndef    _CRYPTUTIL_FP_H_
@@ -97,10 +97,10 @@ CryptXORObfuscation(
 // NOTE: The hash algorithms do not have to be tested, they just need to be
 // available. They have to be tested before the TPM can accept HMAC authorization
 // or return any result that relies on a hash algorithm.
-// return type: BOOL
-//  TRUE        initializations succeeded
-//  FALSE       initialization failed and caller should place the TPM into
-//              Failure Mode
+//  Return Type: BOOL
+//      TRUE(1)         initializations succeeded
+//      FALSE(0)        initialization failed and caller should place the TPM into
+//                      Failure Mode
 BOOL
 CryptInit(
     void
@@ -111,10 +111,10 @@ CryptInit(
 // this cryptographic library and in the provided CryptoLibrary. This function
 // and CryptUtilInit() are both provided so that the implementation may move the
 // initialization around to get the best interaction.
-// return type: BOOL
-//  TRUE        startup succeeded
-//  FALSE       startup failed and caller should place the TPM into
-//              Failure Mode
+//  Return Type: BOOL
+//      TRUE(1)         startup succeeded
+//      FALSE(0)        startup failed and caller should place the TPM into
+//                      Failure Mode
 BOOL
 CryptStartup(
     STARTUP_TYPE     type           // IN: the startup type
@@ -130,9 +130,9 @@ CryptStartup(
 //
 //*** CryptIsAsymAlgorithm()
 // This function indicates if an algorithm is an asymmetric algorithm.
-// return type: BOOL
-//      TRUE           if it is an asymmetric algorithm
-//      FALSE          if it is not an asymmetric algorithm
+//  Return Type: BOOL
+//      TRUE(1)         if it is an asymmetric algorithm
+//      FALSE(0)        if it is not an asymmetric algorithm
 BOOL
 CryptIsAsymAlgorithm(
     TPM_ALG_ID       algID          // IN: algorithm ID
@@ -144,11 +144,11 @@ CryptIsAsymAlgorithm(
 //
 // This function is used by TPM2_Rewrap() TPM2_MakeCredential(),
 // and TPM2_Duplicate().
-// return type: TPM_RC
-//   TPM_RC_ATTRIBUTES      'keyHandle' does not reference a valid decryption key
-//   TPM_RC_KEY             invalid ECC key (public point is not on the curve)
-//   TPM_RC_SCHEME          RSA key with an unsupported padding scheme
-//   TPM_RC_VALUE           numeric value of the data to be decrypted is greater
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES   'keyHandle' does not reference a valid decryption key
+//      TPM_RC_KEY          invalid ECC key (public point is not on the curve)
+//      TPM_RC_SCHEME       RSA key with an unsupported padding scheme
+//      TPM_RC_VALUE        numeric value of the data to be decrypted is greater
 //                          than the RSA key modulus
 TPM_RC
 CryptSecretEncrypt(
@@ -164,21 +164,21 @@ CryptSecretEncrypt(
 // decryption, and StartAuthSession for both asymmetric and symmetric
 // decryption process
 //
-// return type: TPM_RC
-//   TPM_RC_ATTRIBUTES           RSA key is not a decryption key
-//   TPM_RC_BINDING              Invalid RSA key (public and private parts are not
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES        RSA key is not a decryption key
+//      TPM_RC_BINDING           Invalid RSA key (public and private parts are not
 //                               cryptographically bound.
-//   TPM_RC_ECC_POINT            ECC point in the secret is not on the curve
-//   TPM_RC_INSUFFICIENT         failed to retrieve ECC point from the secret
-//   TPM_RC_NO_RESULT            multiplication resulted in ECC point at infinity
-//   TPM_RC_SIZE                 data to decrypt is not of the same size as RSA key
-//   TPM_RC_VALUE                For RSA key, numeric value of the encrypted data is
+//      TPM_RC_ECC_POINT         ECC point in the secret is not on the curve
+//      TPM_RC_INSUFFICIENT      failed to retrieve ECC point from the secret
+//      TPM_RC_NO_RESULT         multiplication resulted in ECC point at infinity
+//      TPM_RC_SIZE              data to decrypt is not of the same size as RSA key
+//      TPM_RC_VALUE             For RSA key, numeric value of the encrypted data is
 //                               greater than the modulus, or the recovered data is
 //                               larger than the output buffer.
 //                               For keyedHash or symmetric key, the secret is
 //                               larger than the size of the digest produced by
 //                               the name algorithm.
-//   TPM_RC_FAILURE              internal error
+//      TPM_RC_FAILURE           internal error
 TPM_RC
 CryptSecretDecrypt(
     OBJECT                  *decryptKey,    // IN: decrypt key
@@ -206,9 +206,9 @@ CryptParameterEncryption(
 
 //*** CryptParameterDecryption()
 // This function does in-place decryption of a command parameter.
-// return type: TPM_RC
-//  TPM_RC_SIZE             The number of bytes in the input buffer is less than
-//                          the number of bytes to be decrypted.
+//  Return Type: TPM_RC
+//      TPM_RC_SIZE             The number of bytes in the input buffer is less than
+//                              the number of bytes to be decrypted.
 TPM_RC
 CryptParameterDecryption(
     TPM_HANDLE       handle,            // IN: encrypted session handle
@@ -254,15 +254,15 @@ CryptComputeSymmetricUnique(
 // 'context' will be set according to the parameters of TPM2_CreateLoaded() and
 // 'hashAlg' will be set which causes the RAND_STATE to be a KDF generator.
 //
-// return type: TPM_RC
-//   TPM_RC_KEY             a provided key is not an allowed value
-//   TPM_RC_KEY_SIZE        key size in the public area does not match the size
+//  Return Type: TPM_RC
+//      TPM_RC_KEY          a provided key is not an allowed value
+//      TPM_RC_KEY_SIZE     key size in the public area does not match the size
 //                          in the sensitive creation area for a symmetric key
-//   TPM_RC_NO_RESULT       unable to get random values (only in derivation)
-//   TPM_RC_RANGE           for an RSA key, the exponent is not supported
-//   TPM_RC_SIZE            sensitive data size is larger than allowed for the
+//      TPM_RC_NO_RESULT    unable to get random values (only in derivation)
+//      TPM_RC_RANGE        for an RSA key, the exponent is not supported
+//      TPM_RC_SIZE         sensitive data size is larger than allowed for the
 //                          scheme for a keyed hash object
-//   TPM_RC_VALUE           exponent is not prime or could not find a prime using
+//      TPM_RC_VALUE        exponent is not prime or could not find a prime using
 //                          the provided parameters for an RSA key;
 //                          unsupported name algorithm for an ECC key
 TPM_RC
@@ -320,12 +320,12 @@ CryptIsAsymDecryptScheme(
 // This function should not be called if 'signObject->publicArea.type' ==
 // ALG_SYMCIPHER.
 //
-// return type: BOOL
-//   FALSE          both 'scheme' and key's default scheme are empty; or
-//                  'scheme' is empty while key's default scheme requires
-//                  explicit input scheme (split signing); or
-//                  non-empty default key scheme differs from 'scheme'
-//  TRUE            scheme selected
+//  Return Type: BOOL
+//      TRUE(1)         scheme selected
+//      FALSE(0)        both 'scheme' and key's default scheme are empty; or
+//                      'scheme' is empty while key's default scheme requires
+//                      explicit input scheme (split signing); or
+//                      non-empty default key scheme differs from 'scheme'
 BOOL
 CryptSelectSignScheme(
     OBJECT              *signObject,    // IN: signing key
@@ -341,9 +341,9 @@ CryptSelectSignScheme(
 // checked before the function is called.
 // The function will assert if the key is not a signing key.
 //
-// return type: TPM_RC
-//   TPM_RC_SCHEME         'signScheme' is not compatible with the signing key type
-//   TPM_RC_VALUE          'digest' value is greater than the modulus of
+//  Return Type: TPM_RC
+//      TPM_RC_SCHEME      'signScheme' is not compatible with the signing key type
+//      TPM_RC_VALUE       'digest' value is greater than the modulus of
 //                         'signHandle' or size of 'hashData' does not match hash
 //                         algorithm in'signScheme' (for an RSA key);
 //                         invalid commit status or failed to generate "r" value
@@ -365,7 +365,7 @@ CryptSign(
 // any public key that they like with any scheme that they like. This routine
 // simply makes sure that the signature is correct, whatever the type.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_SIGNATURE            the signature is not genuine
 //      TPM_RC_SCHEME               the scheme is not supported
 //      TPM_RC_HANDLE               an HMAC key was selected but the
@@ -391,9 +391,9 @@ CryptGetTestResult(
 //*** CryptIsUniqueSizeValid()
 // This function validates that the unique values are consistent.
 // NOTE: This is not a comprehensive test of the public key.
-//  return type: BOOL
-//  TRUE        sizes are consistent
-//  FALSE       sizes are not consistent
+//  Return Type: BOOL
+//      TRUE(1)         sizes are consistent
+//      FALSE(0)        sizes are not consistent
 BOOL
 CryptIsUniqueSizeValid(
     TPMT_PUBLIC     *publicArea     // IN: the public area to check
@@ -419,12 +419,13 @@ CryptIsSensitiveSizeValid(
 // For an RSA key, the reason for loading the sensitive area is to use it. The
 // only way to use a private RSA key is to compute the private exponent. To compute
 // the private exponent, the public modulus is used.
-// Return Type: TPM_RC
-//  TPM_RC_BINDING      the public and private parts are not cryptographically bound
-//  TPM_RC_HASH         cannot have a publicOnly key with nameAlg of TPM_ALG_NULL
-//  TPM_RC_KEY          the public unique is not valid
-//  TPM_RC_KEY_SIZE     the private area key is not valid
-//  TPM_RC_TYPE         the types of the sensitive and private parts do not match
+//  Return Type: TPM_RC
+//      TPM_RC_BINDING      the public and private parts are not cryptographically
+//                          bound
+//      TPM_RC_HASH         cannot have a publicOnly key with nameAlg of TPM_ALG_NULL
+//      TPM_RC_KEY          the public unique is not valid
+//      TPM_RC_KEY_SIZE     the private area key is not valid
+//      TPM_RC_TYPE         the types of the sensitive and private parts do not match
 TPM_RC
 CryptValidateKeys(
     TPMT_PUBLIC      *publicArea,
@@ -446,10 +447,10 @@ CryptAlgsSetImplemented(
 //*** CryptSelectMac()
 // This function is used to set the MAC scheme based on the key parameters and
 // the input scheme.
-// return type: TPM_RC
-//  TPM_RC_SCHEME       the scheme is not a valid mac scheme
-//  TPM_RC_TYPE         the input key is not a type that supports a mac
-//  TPM_RC_VALUE        the input scheme and the key scheme are not compatible
+//  Return Type: TPM_RC
+//      TPM_RC_SCHEME       the scheme is not a valid mac scheme
+//      TPM_RC_TYPE         the input key is not a type that supports a mac
+//      TPM_RC_VALUE        the input scheme and the key scheme are not compatible
 TPM_RC
 CryptSelectMac(
     TPMT_PUBLIC             *publicArea,

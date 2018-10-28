@@ -56,9 +56,9 @@
 //  3. an NV Index with TPMA_NV_NO_DA bit SET, or
 //  4. a PCR handle.
 //
-// return type: BOOL
-//  TRUE            handle is exempted from DA logic
-//  FALSE           handle is not exempted from DA logic
+//  Return Type: BOOL
+//      TRUE(1)         handle is exempted from DA logic
+//      FALSE(0)        handle is not exempted from DA logic
 BOOL
 IsDAExempted(
     TPM_HANDLE       handle         // IN: entity handle
@@ -102,9 +102,10 @@ IsDAExempted(
 // an authValue. If the entity referenced by the handle is not exempt from DA
 // protection, then the failedTries counter will be incremented.
 //
-// return type: TPM_RC
-//  TPM_RC_AUTH_FAIL    authorization failure that caused DA lockout to increment
-//  TPM_RC_BAD_AUTH     authorization failure did not cause DA lockout to increment
+//  Return Type: TPM_RC
+//      TPM_RC_AUTH_FAIL    authorization failure that caused DA lockout to increment
+//      TPM_RC_BAD_AUTH     authorization failure did not cause DA lockout to 
+//                          increment
 static TPM_RC
 IncrementLockout(
     UINT32           sessionIndex
@@ -181,9 +182,9 @@ IncrementLockout(
 // occurs if the session is an HMAC session. The bind value is a combination of
 // the Name and the authValue of the entity.
 //
-// return type: BOOL
-//        TRUE          handle points to the session start entity
-//        FALSE         handle does not point to the session start entity
+//  Return Type: BOOL
+//      TRUE(1)         handle points to the session start entity
+//      FALSE(0)        handle does not point to the session start entity
 static BOOL
 IsSessionBindEntity(
     TPM_HANDLE       associatedHandle,  // IN: handle to be authorized
@@ -218,9 +219,9 @@ IsSessionBindEntity(
 //         is a permanent handle or an NV Index.
 //      4. The authorized entity is a PCR belonging to a policy group, and
 //         has its policy initialized
-// return type: BOOL
-//      TRUE            policy session is required
-//      FALSE           policy session is not required
+//  Return Type: BOOL
+//      TRUE(1)         policy session is required
+//      FALSE(0)        policy session is not required
 static BOOL
 IsPolicySessionRequired(
     COMMAND_INDEX    commandIndex,  // IN: command index
@@ -276,9 +277,9 @@ IsPolicySessionRequired(
 // is in an enabled hierarchy. Those checks are assumed to have been performed
 // during the handle unmarshaling.
 //
-// return type: BOOL
-//        TRUE          authValue is available
-//        FALSE         authValue is not available
+//  Return Type: BOOL
+//      TRUE(1)         authValue is available
+//      FALSE(0)        authValue is not available
 static BOOL
 IsAuthValueAvailable(
     TPM_HANDLE       handle,        // IN: handle of entity
@@ -405,9 +406,9 @@ IsAuthValueAvailable(
 // is in an enabled hierarchy. Those checks are assumed to have been performed
 // during the handle unmarshaling.
 //
-// return type: BOOL
-//        TRUE          authPolicy is available
-//        FALSE         authPolicy is not available
+//  Return Type: BOOL
+//      TRUE(1)         authPolicy is available
+//      FALSE(0)        authPolicy is not available
 static BOOL
 IsAuthPolicyAvailable(
     TPM_HANDLE       handle,        // IN: handle of entity
@@ -661,6 +662,9 @@ GetCpHash(
 // templateHash. It is the hash of the second parameter
 // assuming that the command is TPM2_Create(), TPM2_CreatePrimary(), or
 // TPM2_CreateLoaded()
+//  Return Type: BOOL
+//      TRUE(1)         template hash equal to session->templateHash
+//      FALSE(0)        template hash not equal to session->templateHash
 static BOOL
 CompareTemplateHash(
     COMMAND         *command,       // IN: parsing structure
@@ -738,7 +742,7 @@ CompareNameHash(
 // sessionIndex is used to get handles handle of the referenced entities from
 // s_inputAuthValues[] and s_associatedHandles[].
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //        TPM_RC_AUTH_FAIL          authorization fails and increments DA failure
 //                                  count
 //        TPM_RC_BAD_AUTH           authorization fails but DA does not apply
@@ -923,7 +927,7 @@ ComputeCommandHMAC(
 // return TPM_RC_AUTH_FAIL if the failure caused the failureCount to increment.
 // Otherwise, it will return TPM_RC_BAD_AUTH.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_AUTH_FAIL        authorization failure caused failureCount increment
 //      TPM_RC_BAD_AUTH         authorization failure did not cause failureCount
 //                              increment
@@ -965,7 +969,7 @@ CheckSessionHMAC(
 // The order of these comparisons is not important because any failure will
 // result in the same error code.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_PCR_CHANGED          PCR value is not current
 //      TPM_RC_POLICY_FAIL          policy session fails
 //      TPM_RC_LOCALITY             command locality is not allowed
@@ -1114,10 +1118,10 @@ CheckPolicyAuthSession(
 // values are placed in the arrays that are defined at the beginning of this file.
 // The normal unmarshaling errors are possible.
 //
-//  return type:    TPM_RC
-//  TPM_RC_SUCCSS       unmarshaled without error
-//  TPM_RC_SIZE         the number of bytes unmarshaled is not the same
-//                      as the value for authorizationSize in the command
+//  Return Type: TPM_RC
+//      TPM_RC_SUCCSS       unmarshaled without error
+//      TPM_RC_SIZE         the number of bytes unmarshaled is not the same
+//                          as the value for authorizationSize in the command
 //
 static TPM_RC
 RetrieveSessionData(
@@ -1283,10 +1287,10 @@ RetrieveSessionData(
 // is in lockout if the NV is not available and a DA write is pending. Otherwise
 // the TPM is locked out if checking for lockoutAuth ('lockoutAuthCheck' == TRUE)
 // and use of lockoutAuth is disabled, or 'failedTries' >= 'maxTries'
-// return type: TPM_RC
-//  TPM_RC_NV_RATE          NV is rate limiting
-//  TPM_RC_NV_UNAVAILABLE   NV is not available at this time
-//  TPM_RC_LOCKOUT          TPM is in lockout
+//  Return Type: TPM_RC
+//      TPM_RC_NV_RATE          NV is rate limiting
+//      TPM_RC_NV_UNAVAILABLE   NV is not available at this time
+//      TPM_RC_LOCKOUT          TPM is in lockout
 static TPM_RC
 CheckLockedOut(
     BOOL             lockoutAuthCheck   // IN: TRUE if checking is for lockoutAuth
@@ -1340,7 +1344,7 @@ CheckLockedOut(
 // This function checks that the authorization session properly authorizes the
 // use of the associated handle.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_LOCKOUT              entity is protected by DA and TPM is in
 //                                  lockout, or TPM is locked out on NV update
 //                                  pending on DA parameters
@@ -1446,10 +1450,7 @@ CheckAuthSession(
     else
         result = CheckSessionHMAC(command, sessionIndex);
     // Do processing for PIN Indexes are only three possibilities for 'result' at
-    // this point.
-    //  TPM_RC_SUCCESS
-    //  TPM_RC_AUTH_FAIL
-    //  TPM_RC_BAD_AUTH
+    // this point: TPM_RC_SUCCESS, TPM_RC_AUTH_FAIL, and TPM_RC_BAD_AUTH.
     // For all these cases, we would have to process a PIN index if the
     // authValue of the index was used for authorization.
     // See if we need to do anything to a PIN index
@@ -1497,7 +1498,7 @@ CheckAuthSession(
 // This function is called before the command is processed if audit is enabled
 // for the command. It will check to see if the audit can be performed and
 // will ensure that the cpHash is available for the audit.
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_NV_UNAVAILABLE       NV is not available for write
 //      TPM_RC_NV_RATE              NV is rate limiting
 static TPM_RC
@@ -1526,7 +1527,7 @@ CheckCommandAudit(
 // has been properly provided. It also processes audit session and passes the
 // information of encryption sessions to parameter encryption module.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //        various           parsing failure or authorization failure
 //
 TPM_RC
@@ -1685,7 +1686,7 @@ ParseSessionBuffer(
 // Function to process a command with no session associated.
 // The function makes sure all the handles in the command require no authorization.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_AUTH_MISSING         failure - one or more handles require
 //                                  authorization
 TPM_RC

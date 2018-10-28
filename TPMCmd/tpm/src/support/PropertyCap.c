@@ -49,9 +49,9 @@
 // All the fixed values are vendor dependent or determined by a
 // platform-specific specification. The values in the table below
 // are examples and should be changed by the vendor.
-// return type: BOOL
-//  TRUE        referenced property exists and 'value' set
-//  FALSE       referenced property does not exist
+//  Return Type: BOOL
+//      TRUE(1)         referenced property exists and 'value' set
+//      FALSE(0)        referenced property does not exist
 static BOOL
 TPMPropertyIsDefined(
     TPM_PT           property,      // IN: property
@@ -535,7 +535,7 @@ TPMPropertyIsDefined(
 // start at 'property' and continue until 'propertyList' has as many values as
 // will fit, or the last property has been reported, or the list has as many
 // values as requested in 'count'.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //  YES        more properties are available
 //  NO         no more properties to be reported
 TPMI_YES_NO

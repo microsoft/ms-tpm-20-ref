@@ -42,21 +42,21 @@
 /*(See part 3 specification)
 // Duplicate a loaded object
 */
-// return type: TPM_RC
-//   TPM_RC_ATTRIBUTES      key to duplicate has 'fixedParent' SET
-//   TPM_RC_HASH            for an RSA key, the nameAlg digest size for the
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES   key to duplicate has 'fixedParent' SET
+//      TPM_RC_HASH         for an RSA key, the nameAlg digest size for the
 //                          newParent is not compatible with the key size
-//   TPM_RC_HIERARCHY       'encryptedDuplication' is SET and 'newParentHandle'
+//      TPM_RC_HIERARCHY    'encryptedDuplication' is SET and 'newParentHandle'
 //                          specifies Null Hierarchy
-//   TPM_RC_KEY             'newParentHandle' references invalid ECC key (public
+//      TPM_RC_KEY          'newParentHandle' references invalid ECC key (public
 //                          point not on the curve)
-//   TPM_RC_SIZE            input encryption key size does not match the
+//      TPM_RC_SIZE         input encryption key size does not match the
 //                          size specified in symmetric algorithm
-//   TPM_RC_SYMMETRIC       'encryptedDuplication' is SET but no symmetric
+//      TPM_RC_SYMMETRIC    'encryptedDuplication' is SET but no symmetric
 //                          algorithm is provided
-//   TPM_RC_TYPE            'newParentHandle' is neither a storage key nor
+//      TPM_RC_TYPE         'newParentHandle' is neither a storage key nor
 //                          TPM_RH_NULL; or the object has a NULL nameAlg
-//   TPM_RC_VALUE           for an RSA newParent, the sizes of the digest and
+//      TPM_RC_VALUE        for an RSA newParent, the sizes of the digest and
 //                          the encryption key are too large to be OAEP encoded
 TPM_RC
 TPM2_AC_Send(

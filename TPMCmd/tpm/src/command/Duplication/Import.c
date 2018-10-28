@@ -44,58 +44,61 @@
 // object to be re-encrypted using the group symmetric key associated with the
 // parent.
 */
-// return type: TPM_RC
-//   TPM_RC_ATTRIBUTES      'FixedTPM' and 'fixedParent' of 'objectPublic' are not
-//                          both CLEAR; or 'inSymSeed' is nonempty and 
-//                          'parentHandle' does not reference a decryption key; or
-//                          'objectPublic' and 'parentHandle' have incompatible
-//                          or inconsistent attributes; or
-//                          encrytpedDuplication is SET in 'objectPublic' but the
-//                          inner or outer wrapper is missing.
-//                          NOTE: if the TPM provides parameter values, the
-//                          parameter number will indicate 'symmetricKey' (missing
-//                          inner wrapper) or 'inSymSeed' (missing outer wrapper).
-//   TPM_RC_BINDING         'duplicate' and 'objectPublic' are not cryptographically
-//                          bound
-//   TPM_RC_ECC_POINT       'inSymSeed' is nonempty and ECC point in 'inSymSeed'
-//                          is not on the curve
-//   TPM_RC_HASH            'objectPublic' does not have a valid nameAlg
-//   TPM_RC_INSUFFICIENT    'inSymSeed' is nonempty and failed to retrieve ECC point
-//                          from the secret; or
-//                          unmarshaling sensitive value from 'duplicate' failed
-//                          the result of 'inSymSeed' decryption
-//   TPM_RC_INTEGRITY       'duplicate' integrity is broken
-//   TPM_RC_KDF             'objectPublic' representing decrypting keyed hash object
-//                          specifies invalid KDF
-//   TPM_RC_KEY             inconsistent parameters of 'objectPublic'; or
-//                          'inSymSeed' is nonempty and 'parentHandle' does not
-//                          reference a key of supported type; or
-//                          invalid key size in 'objectPublic' representing an
-//                          asymmetric key
-//   TPM_RC_NO_RESULT       'inSymSeed' is nonempty and multiplication resulted in
-//                          ECC point at infinity
-//   TPM_RC_OBJECT_MEMORY   no available object slot
-//   TPM_RC_SCHEME          inconsistent attributes 'decrypt', 'sign', 'restricted'
-//                          and key's scheme ID in 'objectPublic'; or hash algorithm
-//                          is inconsistent with the scheme ID for keyed hash object
-//   TPM_RC_SIZE            'authPolicy' size does not match digest size of the
-//                          name algorithm in 'objectPublic'; or
-//                          'symmetricAlg' and 'encryptionKey' have different sizes;
-//                          or 'inSymSeed' is nonempty and it size is not
-//                          consistent with the type of 'parentHandle'; or
-//                          unmarshaling sensitive value from 'duplicate' failed
-//   TPM_RC_SYMMETRIC       'objectPublic' is either a storage key with no symmetric
-//                          algorithm or a non-storage key with
-//                          symmetric algorithm different from TPM_ALG_NULL
-//   TPM_RC_TYPE            unsupported type of 'objectPublic'; or
-//                          'parentHandle' is not a storage key; or
-//                          only the public portion of 'parentHandle' is loaded; or
-//                          'objectPublic' and 'duplicate' are of different types
-//   TPM_RC_VALUE           nonempty 'inSymSeed' and its numeric value is
-//                          greater than the modulus of the key referenced by
-//                          'parentHandle' or 'inSymSeed' is larger than the
-//                          size of the digest produced by the name algorithm of
-//                          the symmetric key referenced by 'parentHandle'
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES       'FixedTPM' and 'fixedParent' of 'objectPublic' are not
+//                              both CLEAR; or 'inSymSeed' is nonempty and 
+//                              'parentHandle' does not reference a decryption key; or
+//                              'objectPublic' and 'parentHandle' have incompatible
+//                              or inconsistent attributes; or
+//                              encrytpedDuplication is SET in 'objectPublic' but the
+//                              inner or outer wrapper is missing.
+//                              Note that if the TPM provides parameter values, the
+//                              parameter number will indicate 'symmetricKey' (missing
+//                              inner wrapper) or 'inSymSeed' (missing outer wrapper)
+//      TPM_RC_BINDING          'duplicate' and 'objectPublic' are not 
+//                              cryptographically bound
+//      TPM_RC_ECC_POINT        'inSymSeed' is nonempty and ECC point in 'inSymSeed'
+//                              is not on the curve
+//      TPM_RC_HASH             'objectPublic' does not have a valid nameAlg
+//      TPM_RC_INSUFFICIENT     'inSymSeed' is nonempty and failed to retrieve ECC 
+//                              point from the secret; or unmarshaling sensitive value
+//                              from 'duplicate' failed the result of 'inSymSeed' 
+//                              decryption
+//      TPM_RC_INTEGRITY        'duplicate' integrity is broken
+//      TPM_RC_KDF              'objectPublic' representing decrypting keyed hash 
+//                              object specifies invalid KDF
+//      TPM_RC_KEY              inconsistent parameters of 'objectPublic'; or
+//                              'inSymSeed' is nonempty and 'parentHandle' does not
+//                              reference a key of supported type; or
+//                              invalid key size in 'objectPublic' representing an
+//                              asymmetric key
+//      TPM_RC_NO_RESULT        'inSymSeed' is nonempty and multiplication resulted in
+//                              ECC point at infinity
+//      TPM_RC_OBJECT_MEMORY    no available object slot
+//      TPM_RC_SCHEME           inconsistent attributes 'decrypt', 'sign', 
+//                              'restricted' and key's scheme ID in 'objectPublic'; 
+//                              or hash algorithm is inconsistent with the scheme ID 
+//                              for keyed hash object
+//      TPM_RC_SIZE             'authPolicy' size does not match digest size of the
+//                              name algorithm in 'objectPublic'; or
+//                              'symmetricAlg' and 'encryptionKey' have different 
+//                              sizes; or 
+//                              'inSymSeed' is nonempty and it size is not
+//                              consistent with the type of 'parentHandle'; or
+//                              unmarshaling sensitive value from 'duplicate' failed
+//      TPM_RC_SYMMETRIC        'objectPublic' is either a storage key with no 
+//                              symmetric algorithm or a non-storage key with
+//                              symmetric algorithm different from TPM_ALG_NULL
+//      TPM_RC_TYPE             unsupported type of 'objectPublic'; or
+//                              'parentHandle' is not a storage key; or
+//                              only the public portion of 'parentHandle' is loaded; 
+//                              or 'objectPublic' and 'duplicate' are of different 
+//                              types
+//      TPM_RC_VALUE            nonempty 'inSymSeed' and its numeric value is
+//                              greater than the modulus of the key referenced by
+//                              'parentHandle' or 'inSymSeed' is larger than the
+//                              size of the digest produced by the name algorithm of
+//                              the symmetric key referenced by 'parentHandle'
 TPM_RC
 TPM2_Import(
     Import_In       *in,            // IN: input parameter list

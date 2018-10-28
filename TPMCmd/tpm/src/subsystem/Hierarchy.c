@@ -209,9 +209,9 @@ HierarchyGetPrimarySeed(
 //*** HierarchyIsEnabled()
 // This function checks to see if a hierarchy is enabled.
 // NOTE: The TPM_RH_NULL hierarchy is always enabled.
-// return type: BOOL
-//  TRUE           hierarchy is enabled
-//  FALSE          hierarchy is disabled
+//  Return Type: BOOL
+//      TRUE(1)         hierarchy is enabled
+//      FALSE(0)        hierarchy is disabled
 BOOL
 HierarchyIsEnabled(
     TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy

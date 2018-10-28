@@ -41,20 +41,20 @@
 
 /*(See part 3 specification)
 // This command performs the point multiply operations for anonymous signing
-// schem
+// scheme.
 */
-// return type: TPM_RC
-//  TPM_RC_ATTRIBUTES       'keyHandle' references a restricted key that is not a
-//                          signing key
-//  TPM_RC_ECC_POINT        either 'P1' or the point derived from 's2' is not on
-//                          the curve of 'keyHandle'
-//  TPM_RC_HASH             invalid name algorithm in 'keyHandle'
-//  TPM_RC_KEY              'keyHandle' does not reference an ECC key
-//  TPM_RC_SCHEME           the scheme of 'keyHandle' is not an anonymous scheme
-//  TPM_RC_NO_RESULT        'K', 'L' or 'E' was a point at infinity; or
-//                          failed to generate "r" value
-//  TPM_RC_SIZE             's2' is empty but 'y2' is not or 's2' provided but
-//                          'y2' is not
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES       'keyHandle' references a restricted key that is not a
+//                              signing key
+//      TPM_RC_ECC_POINT        either 'P1' or the point derived from 's2' is not on
+//                              the curve of 'keyHandle'
+//      TPM_RC_HASH             invalid name algorithm in 'keyHandle'
+//      TPM_RC_KEY              'keyHandle' does not reference an ECC key
+//      TPM_RC_SCHEME           the scheme of 'keyHandle' is not an anonymous scheme
+//      TPM_RC_NO_RESULT        'K', 'L' or 'E' was a point at infinity; or
+//                              failed to generate "r" value
+//      TPM_RC_SIZE             's2' is empty but 'y2' is not or 's2' provided but
+//                              'y2' is not
 TPM_RC
 TPM2_Commit(
     Commit_In       *in,            // IN: input parameter list

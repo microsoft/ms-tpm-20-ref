@@ -60,7 +60,7 @@ PolicyParameterChecks(
 // Update policy hash
 //      Update the policyDigest in policy session by extending policyRef and
 //      objectName to it. This will also update the cpHash if it is present.
-// return type: void
+//  Return Type: void
 void
 PolicyContextUpdate(
     TPM_CC           commandCode,   // IN: command code

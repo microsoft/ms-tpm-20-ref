@@ -113,9 +113,9 @@ MemoryGetOutBuffer(
 //*** IsLabelProperlyFormatted()
 // This function checks that a label is a null-terminated string.
 // NOTE: this function is here because there was no better place for it.
-// return type: BOOL
-//  FALSE   string is not null terminated
-//  TRUE    string is null terminated
+//  Return Type: BOOL
+//      TRUE(1)         string is null terminated
+//      FALSE(0)        string is not null terminated
 BOOL
 IsLabelProperlyFormatted(
     TPM2B           *x

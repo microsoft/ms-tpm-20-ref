@@ -48,9 +48,9 @@
 //  3. an NV Index with TPMA_NV_NO_DA bit SET, or
 //  4. a PCR handle.
 //
-// return type: BOOL
-//  TRUE            handle is exempted from DA logic
-//  FALSE           handle is not exempted from DA logic
+//  Return Type: BOOL
+//      TRUE(1)         handle is exempted from DA logic
+//      FALSE(0)        handle is not exempted from DA logic
 BOOL
 IsDAExempted(
     TPM_HANDLE       handle         // IN: entity handle
@@ -77,7 +77,7 @@ CompareNameHash(
 // has been properly provided. It also processes audit session and passes the
 // information of encryption sessions to parameter encryption module.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //        various           parsing failure or authorization failure
 //
 TPM_RC
@@ -89,7 +89,7 @@ ParseSessionBuffer(
 // Function to process a command with no session associated.
 // The function makes sure all the handles in the command require no authorization.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_AUTH_MISSING         failure - one or more handles require
 //                                  authorization
 TPM_RC

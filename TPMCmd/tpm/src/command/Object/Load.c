@@ -42,7 +42,7 @@
 /*(See part 3 specification)
 // Load an ordinary or temporary object
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_ATTRIBUTES       'inPulblic' attributes are not allowed with selected
 //                              parent
 //      TPM_RC_BINDING          'inPrivate' and 'inPublic' are not
@@ -89,7 +89,6 @@ TPM2_Load(
     // Is the object that is being used as the parent actually a parent.
     if(!ObjectIsParent(parentObject))
         return TPM_RCS_TYPE + RC_Load_parentHandle;
-
 
     // Compute the name of object. If there isn't one, it is because the nameAlg is
     // not valid.

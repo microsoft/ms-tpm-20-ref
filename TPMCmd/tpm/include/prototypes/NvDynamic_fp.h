@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jun 16, 2018  Time: 12:44:14AM
+ *  Date: Sep 27, 2018  Time: 09:21:50PM
  */
 
 #ifndef    _NVDYNAMIC_FP_H_
@@ -86,10 +86,10 @@ NvIndexIsDefined(
 //*** NvIsPlatformPersistentHandle()
 // This function indicates if a handle references a persistent object in the
 // range belonging to the platform.
-// return type: BOOL
-//      TRUE            handle references a platform persistent object
-//      FALSE           handle does not reference platform persistent object
+//  Return Type: BOOL
+//      TRUE(1)         handle references a platform persistent object
 //                      and may reference an owner persistent object either
+//      FALSE(0)        handle does not reference platform persistent object
 BOOL
 NvIsPlatformPersistentHandle(
     TPM_HANDLE       handle         // IN: handle
@@ -98,9 +98,9 @@ NvIsPlatformPersistentHandle(
 //*** NvIsOwnerPersistentHandle()
 // This function indicates if a handle references a persistent object in the
 // range belonging to the owner.
-// return type: BOOL
-//      TRUE            handle is owner persistent handle
-//      FALSE           handle is not owner persistent handle and may not be
+//  Return Type: BOOL
+//      TRUE(1)         handle is owner persistent handle
+//      FALSE(0)        handle is not owner persistent handle and may not be
 //                      a persistent handle at all
 BOOL
 NvIsOwnerPersistentHandle(
@@ -111,7 +111,7 @@ NvIsOwnerPersistentHandle(
 //
 // This function validates that a handle references a defined NV Index and
 // that the Index is currently accessible.
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_HANDLE           the handle points to an undefined NV Index
 //                              If shEnable is CLEAR, this would include an index
 //                              created using ownerAuth. If phEnableNV is CLEAR,
@@ -129,7 +129,7 @@ NvIndexIsAccessible(
 //*** NvGetEvictObject()
 // This function is used to dereference an evict object handle and get a pointer
 // to the object.
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_HANDLE           the handle does not point to an existing
 //                              persistent object
 TPM_RC
@@ -174,9 +174,9 @@ NvGetUINT64Data(
 
 //*** NvWriteIndexAttributes()
 // This function is used to write just the attributes of an index.
-// Return type: TPM_RC
-//  TPM_RC_NV_RATE          NV is rate limiting so retry
-//  TPM_RC_NV_UNAVAILABLE   NV is not available
+//  Return type: TPM_RC
+//      TPM_RC_NV_RATE          NV is rate limiting so retry
+//      TPM_RC_NV_UNAVAILABLE   NV is not available
 TPM_RC
 NvWriteIndexAttributes(
     TPM_HANDLE       handle,
@@ -187,9 +187,9 @@ NvWriteIndexAttributes(
 //*** NvWriteIndexAuth()
 // This function is used to write the authValue of an index. It is used by
 // TPM2_NV_ChangeAuth()
-// Return type: TPM_RC
-//  TPM_RC_NV_RATE          NV is rate limiting so retry
-//  TPM_RC_NV_UNAVAILABLE   NV is not available
+//  Return type: TPM_RC
+//      TPM_RC_NV_RATE          NV is rate limiting so retry
+//      TPM_RC_NV_UNAVAILABLE   NV is not available
 TPM_RC
 NvWriteIndexAuth(
     NV_REF           locator,       // IN: location of the index
@@ -222,9 +222,9 @@ NvGetIndexInfo(
 // same time. Multiple attributes may be change but not multiple index data. This
 // is important because we will normally be handling the index for which we have
 // the cached pointer values.
-// Return type: TPM_RC
-//  TPM_RC_NV_RATE          NV is rate limiting so retry
-//  TPM_RC_NV_UNAVAILABLE   NV is not available
+//  Return type: TPM_RC
+//      TPM_RC_NV_RATE          NV is rate limiting so retry
+//      TPM_RC_NV_UNAVAILABLE   NV is not available
 TPM_RC
 NvWriteIndexData(
     NV_INDEX        *nvIndex,       // IN: the description of the index
@@ -277,7 +277,7 @@ NvGetNameByIndexHandle(
 //*** NvDefineIndex()
 // This function is used to assign NV memory to an NV Index.
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_NV_SPACE         insufficient NV space
 TPM_RC
 NvDefineIndex(
@@ -287,7 +287,7 @@ NvDefineIndex(
 
 //*** NvAddEvictObject()
 // This function is used to assign NV memory to a persistent object.
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_NV_HANDLE        the requested handle is already in use
 //      TPM_RC_NV_SPACE         insufficient NV space
 TPM_RC
@@ -298,9 +298,9 @@ NvAddEvictObject(
 
 //*** NvDeleteIndex()
 // This function is used to delete an NV Index.
-// return type: TPM_RC
-//  TPM_RC_NV_UNAVAILABLE       NV is not accessible
-//  TPM_RC_NV_RATE              NV is rate limiting
+//  Return Type: TPM_RC
+//      TPM_RC_NV_UNAVAILABLE   NV is not accessible
+//      TPM_RC_NV_RATE          NV is rate limiting
 TPM_RC
 NvDeleteIndex(
     NV_INDEX        *nvIndex,       // IN: an in RAM index descriptor
@@ -316,9 +316,9 @@ NvDeleteEvict(
 // This function will delete persistent objects belonging to the indicated hierarchy.
 // If the storage hierarchy is selected, the function will also delete any
 // NV Index defined using ownerAuth.
-// return type: TPM_RC
-//   TPM_RC_NV_RATE              NV is unavailable because of rate limit
-//   TPM_RC_NV_UNAVAILABLE       NV is inaccessible
+//  Return Type: TPM_RC
+//      TPM_RC_NV_RATE           NV is unavailable because of rate limit
+//      TPM_RC_NV_UNAVAILABLE    NV is inaccessible
 TPM_RC
 NvFlushHierarchy(
     TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy to be flushed.
@@ -328,9 +328,9 @@ NvFlushHierarchy(
 // This function is used to SET the TPMA_NV_WRITELOCKED attribute for all
 // NV indexes that have TPMA_NV_GLOBALLOCK SET. This function is use by
 // TPM2_NV_GlobalWriteLock().
-// return type: TPM_RC
-//   TPM_RC_NV_RATE              NV is unavailable because of rate limit
-//   TPM_RC_NV_UNAVAILABLE       NV is inaccessible
+//  Return Type: TPM_RC
+//      TPM_RC_NV_RATE           NV is unavailable because of rate limit
+//      TPM_RC_NV_UNAVAILABLE    NV is inaccessible
 TPM_RC
 NvSetGlobalLock(
     void
@@ -342,7 +342,7 @@ NvSetGlobalLock(
 //
 // 'Handle' must be in valid persistent object handle range, but does not
 // have to reference an existing persistent object.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO
@@ -356,7 +356,7 @@ NvCapGetPersistent(
 // This function returns a list of handles of NV indexes, starting from 'handle'.
 // 'Handle' must be in the range of NV indexes, but does not have to reference
 // an existing NV Index.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //      YES         if there are more handles to report
 //      NO          all the available handles has been reported
 TPMI_YES_NO

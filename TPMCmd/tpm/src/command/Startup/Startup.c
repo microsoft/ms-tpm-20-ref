@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Initialize TPM because a system-wide reset
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_LOCALITY             a Startup(STATE) does not have the same H-CRTM
 //                                  state as the previous Startup() or the locality
 //                                  of the startup is not 0 pr 3

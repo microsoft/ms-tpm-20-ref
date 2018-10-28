@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Add a Command Code restriction to the policyDigest
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_VALUE        'commandCode' of 'policySession' previously set to
 //                          a different value
 

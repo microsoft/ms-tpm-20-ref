@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Sep 26, 2018  Time: 04:53:47PM
  */
 
 #ifndef    _COMMANDAUDIT_FP_H_
@@ -70,9 +70,9 @@ CommandAuditStartup(
 //
 // The actions in TPM2_SetCommandCodeAuditStatus() are expected to cause the
 // changes to be saved to NV after it is setting and clearing bits.
-// return type: BOOL
-//  TRUE        the command code audit status was changed
-//  FALSE       the command code audit status was not changed
+//  Return Type: BOOL
+//      TRUE(1)         command code audit status was changed
+//      FALSE(0)        command code audit status was not changed
 BOOL
 CommandAuditSet(
     TPM_CC           commandCode    // IN: command code
@@ -86,9 +86,9 @@ CommandAuditSet(
 //
 // The actions in TPM2_SetCommandCodeAuditStatus() are expected to cause the
 // changes to be saved to NV after it is setting and clearing bits.
-// return type: BOOL
-//  TRUE        the command code audit status was changed
-//  FALSE       the command code audit status was not changed
+//  Return Type: BOOL
+//      TRUE(1)         command code audit status was changed
+//      FALSE(0)        command code audit status was not changed
 BOOL
 CommandAuditClear(
     TPM_CC           commandCode    // IN: command code
@@ -96,9 +96,9 @@ CommandAuditClear(
 
 //*** CommandAuditIsRequired()
 // This function indicates if the audit flag is SET for a command.
-// return type: BOOL
-//      TRUE           if command is audited
-//      FALSE          if command is not audited
+//  Return Type: BOOL
+//      TRUE(1)         command is audited
+//      FALSE(0)        command is not audited
 BOOL
 CommandAuditIsRequired(
     COMMAND_INDEX    commandIndex   // IN: command index
@@ -108,7 +108,7 @@ CommandAuditIsRequired(
 // This function returns a list of commands that have their audit bit SET.
 //
 // The list starts at the input commandCode.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //      YES         if there are more command code available
 //      NO          all the available command code has been returned
 TPMI_YES_NO

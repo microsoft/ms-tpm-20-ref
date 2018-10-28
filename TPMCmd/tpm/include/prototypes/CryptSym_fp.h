@@ -58,7 +58,7 @@ CryptSymStartup(
 
 //*** CryptGetSymmetricBlockSize()
 // This function returns the block size of the algorithm.
-// return type: INT16
+//  Return Type: INT16
 //   <= 0     cipher not supported
 //   > 0      the cipher block size in bytes
 LIB_EXPORT INT16
@@ -69,8 +69,7 @@ CryptGetSymmetricBlockSize(
 
 //** Symmetric Encryption
 // This function performs symmetric encryption based on the mode.
-// return type: TPM_RC
-//      TPM_RC_SUCCESS      if success
+//  Return Type: TPM_RC
 //      TPM_RC_SIZE         'dSize' is not a multiple of the block size for an
 //                          algorithm that requires it
 //      TPM_RC_FAILURE      Fatal error
@@ -90,9 +89,8 @@ CryptSymmetricEncrypt(
 
 //*** CryptSymmetricDecrypt()
 // This function performs symmetric decryption based on the mode.
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_FAILURE      A fatal error
-//      TPM_RC_SUCCESS      if success
 //      TPM_RCS_SIZE        'dSize' is not a multiple of the block size for an
 //                          algorithm that requires it
 LIB_EXPORT TPM_RC
@@ -111,9 +109,9 @@ CryptSymmetricDecrypt(
 
 //*** CryptSymKeyValidate()
 // Validate that a provided symmetric key meets the requirements of the TPM
-// return type: TPM_RC
-//  TPM_RC_KEY_SIZE         Key size specifiers do not match
-//  TPM_RC_KEY              Key is not allowed
+//  Return Type: TPM_RC
+//      TPM_RC_KEY_SIZE         Key size specifiers do not match
+//      TPM_RC_KEY              Key is not allowed
 TPM_RC
 CryptSymKeyValidate(
     TPMT_SYM_DEF_OBJECT *symDef,

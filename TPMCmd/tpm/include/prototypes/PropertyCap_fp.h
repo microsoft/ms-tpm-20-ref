@@ -45,7 +45,7 @@
 // start at 'property' and continue until 'propertyList' has as many values as
 // will fit, or the last property has been reported, or the list has as many
 // values as requested in 'count'.
-// return type: TPMI_YES_NO
+//  Return Type: TPMI_YES_NO
 //  YES        more properties are available
 //  NO         no more properties to be reported
 TPMI_YES_NO

@@ -35,8 +35,8 @@
 //** Introduction
 // This file contains the code to perform the various self-test functions.
 //
-// IMPLEMENTATION NOTE: Large local variables are made static to minimize stack
-// usage, which is critical for resource constrained platforms.
+// NOTE: In this implementation, large local variables are made static to minimize 
+// stack usage, which is critical for stack-constrained platforms.
 
 //** Includes and Defines
 #include    "Tpm.h"
@@ -207,6 +207,9 @@ TestSymmetricAlgorithm(
 //*** AllSymsAreDone()
 // Checks if both symmetric algorithms have been tested. This is put here
 // so that addition of a symmetric algorithm will be relatively easy to handle
+//  Return Type: BOOL
+//      TRUE(1)         all symmetric algorithms tested
+//      FALSE(0)        not all symmetric algorithms tested
 static BOOL
 AllSymsAreDone(
     ALGORITHM_VECTOR        *toTest
@@ -217,6 +220,9 @@ AllSymsAreDone(
 
 //*** AllModesAreDone()
 // Checks if all the modes have been tested
+//  Return Type: BOOL
+//      TRUE(1)         all modes tested
+//      FALSE(0)        all modes not tested
 static BOOL
 AllModesAreDone(
     ALGORITHM_VECTOR            *toTest
@@ -781,9 +787,8 @@ TestEcc(
 //
 // Note: 'toTest' will only ever have bits set for implemented algorithms but 'alg'
 // can be anything.
-// return type: TPM_RC
-//  TPM_RC_SUCCESS      test complete
-//  TPM_RC_CANCELED     test was canceled
+//  Return Type: TPM_RC
+//      TPM_RC_CANCELED     test was canceled
 LIB_EXPORT
 TPM_RC
 TestAlgorithm(

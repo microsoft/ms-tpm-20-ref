@@ -40,7 +40,7 @@
 /*(See part 3 specification)
 // Complete a sequence and flush the object.
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_MODE             'sequenceHandle' does not reference a hash or HMAC
 //                              sequence object
 TPM_RC

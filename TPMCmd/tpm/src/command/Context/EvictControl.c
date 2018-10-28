@@ -40,16 +40,16 @@
 /*(See part 3 specification)
 // Make a transient object persistent or evict a persistent object
 */
-// return type: TPM_RC
-//   TPM_RC_ATTRIBUTES      an object with 'temporary', 'stClear' or 'publicOnly'
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES   an object with 'temporary', 'stClear' or 'publicOnly'
 //                          attribute SET cannot be made persistent
-//   TPM_RC_HIERARCHY       'auth' cannot authorize the operation in the hierarchy
+//      TPM_RC_HIERARCHY    'auth' cannot authorize the operation in the hierarchy
 //                          of 'evictObject'
-//   TPM_RC_HANDLE          'evictHandle' of the persistent object to be evicted is
+//      TPM_RC_HANDLE       'evictHandle' of the persistent object to be evicted is
 //                          not the same as the 'persistentHandle' argument
-//   TPM_RC_NV_HANDLE       'persistentHandle' is unavailable
-//   TPM_RC_NV_SPACE        no space in NV to make 'evictHandle' persistent
-//   TPM_RC_RANGE           'persistentHandle' is not in the range corresponding to
+//      TPM_RC_NV_HANDLE    'persistentHandle' is unavailable
+//      TPM_RC_NV_SPACE     no space in NV to make 'evictHandle' persistent
+//      TPM_RC_RANGE        'persistentHandle' is not in the range corresponding to
 //                          the hierarchy of 'evictObject'
 TPM_RC
 TPM2_EvictControl(

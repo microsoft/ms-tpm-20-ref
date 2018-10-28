@@ -57,7 +57,7 @@
     bits            the number of bits needed for a symmetric key and IV for
                     the context encryption
 */
-// return type: void
+//  Return Type: void
 void
 ComputeContextProtectionKey(
     TPMS_CONTEXT    *contextBlob,   // IN: context blob
@@ -135,7 +135,7 @@ ComputeContextProtectionKey(
     handle              the handle parameter of the TPMS_CONTEXT
     encContext          the encrypted context blob
 */
-// return type: void
+//  Return Type: void
 void
 ComputeContextIntegrity(
     TPMS_CONTEXT    *contextBlob,   // IN: context blob

@@ -54,10 +54,10 @@ FillInAttestInfo(
 // Sign a TPMS_ATTEST structure. If signHandle is TPM_RH_NULL, a null signature
 // is returned.
 //
-// return type: TPM_RC
-//   TPM_RC_ATTRIBUTES      'signHandle' references not a signing key
-//   TPM_RC_SCHEME          'scheme' is not compatible with 'signHandle' type
-//   TPM_RC_VALUE           digest generated for the given 'scheme' is greater than
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES   'signHandle' references not a signing key
+//      TPM_RC_SCHEME       'scheme' is not compatible with 'signHandle' type
+//      TPM_RC_VALUE        digest generated for the given 'scheme' is greater than
 //                          the modulus of 'signHandle' (for an RSA key);
 //                          invalid commit status or failed to generate "r" value
 //                          (for an ECC key)
@@ -77,9 +77,9 @@ SignAttestInfo(
 // Checks to see if the object is OK for signing. This is here rather than in
 // Object_spt.c because all the attestation commands use this file but not
 // Object_spt.c.
-// return type: BOOL
-//  TRUE        object may sign
-//  FALSE       object may not sign
+//  Return Type: BOOL
+//      TRUE(1)         object may sign
+//      FALSE(0)        object may not sign
 BOOL
 IsSigningObject(
     OBJECT          *object         // IN:

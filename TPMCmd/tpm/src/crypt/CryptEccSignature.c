@@ -69,18 +69,19 @@ EcdsaDigest(
 
 //*** BnSchnorrSign()
 // This contains the Schnorr signature computation. It is used by both ECDSA and
-// Schnorr signing. The result is computed as: [s = k + r * d (mod n)] where
+// Schnorr signing. The result is computed as: ['s' = 'k' + 'r' * 'd' (mod 'n')] 
+// where
 // 1) 's' is the signature
 // 2) 'k' is a random value
 // 3) 'r' is the value to sign
 // 4) 'd' is the private EC key
 // 5) 'n' is the order of the curve
-// return type: TPM_RC
-//  TPM_RC_NO_RESULT        the result of the operation was zero or r (mod n) 
-//                          is zero
+//  Return Type: TPM_RC
+//      TPM_RC_NO_RESULT        the result of the operation was zero or 'r' (mod 'n') 
+//                              is zero
 static TPM_RC
 BnSchnorrSign(
-    bigNum                   bnS,           // OUT: s component of the signature
+    bigNum                   bnS,           // OUT: 's' component of the signature
     bigConst                 bnK,           // IN: a random value
     bigNum                   bnR,           // IN: the signature 'r' value
     bigConst                 bnD,           // IN: the private key
@@ -110,11 +111,10 @@ BnSchnorrSign(
 //*** BnSignEcdsa()
 // This function implements the ECDSA signing algorithm. The method is described
 // in the comments below.
-// This version works with internal numbers.
 TPM_RC
 BnSignEcdsa(
-    bigNum                   bnR,           // OUT: r component of the signature
-    bigNum                   bnS,           // OUT: s component of the signature
+    bigNum                   bnR,           // OUT: 'r' component of the signature
+    bigNum                   bnS,           // OUT: 's' component of the signature
     bigCurve                 E,             // IN: the curve used in the signature
                                             //     process
     bigNum                   bnD,           // IN: private signing key
@@ -192,27 +192,26 @@ Exit:
 
 //*** BnSignEcdaa()
 //
-// This function performs 's' = 'r' + 'T' * 'd' mod q where
+// This function performs 's' = 'r' + 'T' * 'd' mod 'q' where
 // 1) 'r is a random, or pseudo-random value created in the commit phase
-// 2) 'nonceK' is a TPM-generated, random value 0 < nonceK < n
-// 3) 'T' is mod q of Hash(nonceK || digest), and
+// 2) 'nonceK' is a TPM-generated, random value 0 < 'nonceK' < 'n'
+// 3) 'T' is mod 'q' of "Hash"('nonceK' || 'digest'), and
 // 4) 'd' is a private key.
 //
-// The signature is the tuple (nonceK, s)
-//
+// The signature is the tuple ('nonceK', 's')
 //
 // Regrettably, the parameters in this function kind of collide with the parameter
-// names used in ECSCHNORR making for a lot of confusion. //
-//  return type: TPM_RC
+// names used in ECSCHNORR making for a lot of confusion.
+//  Return Type: TPM_RC
 //      TPM_RC_SCHEME       unsupported hash algorithm
 //      TPM_RC_NO_RESULT    cannot get values from random number generator
 static TPM_RC
 BnSignEcdaa(
-    TPM2B_ECC_PARAMETER     *nonceK,        // OUT: nonce component of the signature
-    bigNum                   bnS,           // OUT: s component of the signature
+    TPM2B_ECC_PARAMETER     *nonceK,        // OUT: 'nonce' component of the signature
+    bigNum                   bnS,           // OUT: 's' component of the signature
     bigCurve                 E,             // IN: the curve used in signing
     bigNum                   bnD,           // IN: the private key
-    const TPM2B_DIGEST      *digest,        // IN: the value to sign (mod q)
+    const TPM2B_DIGEST      *digest,        // IN: the value to sign (mod 'q')
     TPMT_ECC_SCHEME         *scheme,        // IN: signing scheme (contains the
                                             //      commit count value).
     OBJECT                  *eccKey,        // IN: The signing key
@@ -278,10 +277,10 @@ BnSignEcdaa(
 #if ALG_ECSCHNORR
 
 //*** SchnorrReduce()
-// Function to reduce a hash result if it's magnitude is to large. The size of
-// 'number' is set so that it has no more bytes of significance than the reference
-// value. If the resulting number can have more bits of significance than the
-// reference.
+// Function to reduce a hash result if it's magnitude is too large. The size of
+// 'number' is set so that it has no more bytes of significance than 'reference'
+// value. If the resulting number can have more bits of significance than
+// 'reference'.
 static void
 SchnorrReduce(
     TPM2B       *number,        // IN/OUT: Value to reduce
@@ -296,20 +295,20 @@ SchnorrReduce(
 //*** SchnorrEcc()
 // This function is used to perform a modified Schnorr signature.
 //
-// This function will generate a random value k and compute
+// This function will generate a random value 'k' and compute
 // a) ('xR', 'yR') = ['k']'G'
-// b) 'r' = hash('xR' || P)(mod q)
+// b) 'r' = "Hash"('xR' || 'P')(mod 'q')
 // c) 'rT' = truncated 'r'
-// d) 's'= 'k' + 'rT' * 'ds' (mod q)
-// e) return the tuple rT, s
+// d) 's'= 'k' + 'rT' * 'ds' (mod 'q')
+// e) return the tuple 'rT', 's'
 //
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_NO_RESULT        failure in the Schnorr sign process
 //      TPM_RC_SCHEME           hashAlg can't produce zero-length digest
 static TPM_RC
 BnSignEcSchnorr(
-    bigNum                   bnR,           // OUT: r component of the signature
-    bigNum                   bnS,           // OUT: s component of the signature
+    bigNum                   bnR,           // OUT: 'r' component of the signature
+    bigNum                   bnS,           // OUT: 's' component of the signature
     bigCurve                 E,             // IN: the curve used in signing
     bigNum                   bnD,           // IN: the signing key
     const TPM2B_DIGEST      *digest,        // IN: the digest to sign
@@ -373,6 +372,11 @@ Exit:
 #if ALG_SM2
 #ifdef  _SM2_SIGN_DEBUG
 
+//*** BnHexEqual()
+// This function compares a bignum value to a hex string.
+//  Return Type: BOOL
+//      TRUE(1)         values equal
+//      FALSE(0)        values not equal
 static BOOL
 BnHexEqual(
     bigNum           bn,        //IN: big number value
@@ -389,13 +393,13 @@ BnHexEqual(
 // This function signs a digest using the method defined in SM2 Part 2. The method
 // in the standard will add a header to the message to be signed that is a hash of
 // the values that define the key. This then hashed with the message to produce a
-// digest (e) that is signed. This function signs e.
-// return type: TPM_RC
+// digest ('e'). This function signs 'e'.
+//  Return Type: TPM_RC
 //      TPM_RC_VALUE         bad curve
 static TPM_RC
 BnSignEcSm2(
-    bigNum                   bnR,       // OUT: r component of the signature
-    bigNum                   bnS,       // OUT: s component of the signature
+    bigNum                   bnR,       // OUT: 'r' component of the signature
+    bigNum                   bnS,       // OUT: 's' component of the signature
     bigCurve                 E,         // IN: the curve used in signing
     bigNum                   bnD,       // IN: the private key
     const TPM2B_DIGEST      *digest,    // IN: the digest to sign
@@ -432,7 +436,7 @@ loop:
         // data type of x1 into an integer;
         if(!BnEccModMult(Q1, NULL, bnK, E))
             goto loop;
-        // A5: Figure out r = (e + x1) mod n,
+        // A5: Figure out 'r' = ('e' + 'x1') mod 'n',
         BnAdd(bnR, bnE, Q1->x);
         BnMod(bnR, order);
 #ifdef _SM2_SIGN_DEBUG
@@ -492,8 +496,8 @@ loop:
 // both needs with minimal fuss, a special type of RAND_STATE is defined to carry
 // the address of the commit value. The setup and handling of this is not very
 // different for the caller than what was in previous versions of the code.
-// return type: TPM_RC
-//  TPM_RC_SCHEME            'scheme' is not supported
+//  Return Type: TPM_RC
+//      TPM_RC_SCHEME            'scheme' is not supported
 LIB_EXPORT TPM_RC
 CryptEccSign(
     TPMT_SIGNATURE          *signature,     // OUT: signature
@@ -567,13 +571,13 @@ Exit:
 
 //*** BnValidateSignatureEcdsa()
 // This function validates an ECDSA signature. rIn and sIn should have been checked
-// to make sure that they are in the range 0 < v < n
-// return type: TPM_RC
-//  TPM_RC_SIGNATURE           signature not valid
+// to make sure that they are in the range 0 < 'v' < 'n'
+//  Return Type: TPM_RC
+//      TPM_RC_SIGNATURE           signature not valid
 TPM_RC
 BnValidateSignatureEcdsa(
-    bigNum                   bnR,           // IN: r component of the signature
-    bigNum                   bnS,           // IN: s component of the signature
+    bigNum                   bnR,           // IN: 'r' component of the signature
+    bigNum                   bnS,           // IN: 's' component of the signature
     bigCurve                 E,             // IN: the curve used in the signature
                                             //     process
     bn_point_t              *ecQ,           // IN: the public point of the key
@@ -628,12 +632,12 @@ Exit:
 
 //*** BnValidateSignatureEcSm2()
 // This function is used to validate an SM2 signature.
-// return type: TPM_RC
-//  TPM_RC_SIGNATURE               signature not valid
+//  Return Type: TPM_RC
+//      TPM_RC_SIGNATURE            signature not valid
 static TPM_RC
 BnValidateSignatureEcSm2(
-    bigNum                   bnR,       // IN: r component of the signature
-    bigNum                   bnS,       // IN: s component of the signature
+    bigNum                   bnR,       // IN: 'r' component of the signature
+    bigNum                   bnS,       // IN: 's' component of the signature
     bigCurve                 E,         // IN: the curve used in the signature
                                         //     process
     bigPoint                 ecQ,       // IN: the public point of the key
@@ -696,12 +700,12 @@ BnValidateSignatureEcSm2(
 
 //*** BnValidateSignatureEcSchnorr()
 // This function is used to validate an EC Schnorr signature.
-// return type: TPM_RC
-//  TPM_RC_SIGNATURE         signature not valid
+//  Return Type: TPM_RC
+//      TPM_RC_SIGNATURE        signature not valid
 static TPM_RC
 BnValidateSignatureEcSchnorr(
-    bigNum               bnR,       // IN: r component of the signature
-    bigNum               bnS,       // IN: s component of the signature
+    bigNum               bnR,       // IN: 'r' component of the signature
+    bigNum               bnS,       // IN: 's' component of the signature
     TPM_ALG_ID           hashAlg,   // IN: hash algorithm of the signature
     bigCurve             E,         // IN: the curve used in the signature
                                     //     process
@@ -750,8 +754,8 @@ BnValidateSignatureEcSchnorr(
 //*** CryptEccValidateSignature()
 // This function validates an EcDsa or EcSchnorr signature.
 // The point 'Qin' needs to have been validated to be on the curve of 'curveId'.
-// return type: TPM_RC
-//  TPM_RC_SIGNATURE           not a valid signature
+//  Return Type: TPM_RC
+//      TPM_RC_SIGNATURE            not a valid signature
 LIB_EXPORT TPM_RC
 CryptEccValidateSignature(
     TPMT_SIGNATURE          *signature,     // IN: signature to be verified
@@ -836,11 +840,10 @@ Exit:
 // fatal error if 'd' is NULL or if 'K' and 'L' are both NULL. 
 // If 'M' is not NULL, then it is a fatal error if 'E' is NULL.
 //
-// return type: TPM_RC
-//      TPM_RC_SUCCESS           computations completed normally
-//      TPM_RC_NO_RESULT             if 'K', 'L' or 'E' was computed to be the point
+//  Return Type: TPM_RC
+//      TPM_RC_NO_RESULT        if 'K', 'L' or 'E' was computed to be the point
 //                              at infinity
-//      TPM_RC_CANCELED            a cancel indication was asserted during this
+//      TPM_RC_CANCELED         a cancel indication was asserted during this
 //                              function
 LIB_EXPORT TPM_RC
 CryptEccCommitCompute(

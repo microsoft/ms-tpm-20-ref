@@ -54,9 +54,9 @@ AdjustAuthSize(
 // This function is called by create, load, and import functions.
 // Note: The 'isParent' attribute is SET when an object is loaded and it has
 // attributes that are suitable for a parent object.
-// return type: BOOL
-//      TRUE            properties are those of a parent
-//      FALSE           properties are not those of a parent
+//  Return Type: BOOL
+//      TRUE(1)         properties are those of a parent
+//      FALSE(0)        properties are not those of a parent
 BOOL
 ObjectIsParent(
     OBJECT          *parentObject   // IN: parent handle
@@ -64,8 +64,8 @@ ObjectIsParent(
 
 //*** CreateChecks()
 // Attribute checks that are unique to creation.
-// return type: TPM_RC
-//  TPM_RC_ATTRIBUTES       sensitiveDataOrigin is not consistent with the
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES   sensitiveDataOrigin is not consistent with the
 //                          object type
 //  other                   returns from PublicAttributesValidation()
 TPM_RC
@@ -78,15 +78,15 @@ CreateChecks(
 //*** SchemeChecks
 // This function is called by TPM2_LoadExternal() and PublicAttributesValidation().
 // This function validates the schemes in the public area of an object.
-// return type: TPM_RC
-//   TPM_RC_HASH            non-duplicable storage key and its parent have different
+//  Return Type: TPM_RC
+//      TPM_RC_HASH         non-duplicable storage key and its parent have different
 //                          name algorithm
-//   TPM_RC_KDF             incorrect KDF specified for decrypting keyed hash object
-//   TPM_RC_KEY             invalid key size values in an asymmetric key public area
-//   TPM_RCS_SCHEME          inconsistent attributes 'decrypt', 'sign', 'restricted'
+//      TPM_RC_KDF          incorrect KDF specified for decrypting keyed hash object
+//      TPM_RC_KEY          invalid key size values in an asymmetric key public area
+//      TPM_RCS_SCHEME       inconsistent attributes 'decrypt', 'sign', 'restricted'
 //                          and key's scheme ID; or hash algorithm is inconsistent
 //                          with the scheme ID for keyed hash object
-//   TPM_RC_SYMMETRIC       a storage key with no symmetric algorithm specified; or
+//      TPM_RC_SYMMETRIC    a storage key with no symmetric algorithm specified; or
 //                          non-storage key with symmetric algorithm different from
 // ALG_NULL
 TPM_RC
@@ -101,8 +101,8 @@ SchemeChecks(
 // TPM2_CreateLoaded(), TPM2_Load(),  TPM2_Import(), and TPM2_LoadExternal().
 // For TPM2_Import() this is only used if the new parent has fixedTPM SET. For
 // TPM2_LoadExternal(), this is not used for a public-only key
-// return type: TPM_RC
-//   TPM_RC_ATTRIBUTES      'fixedTPM', 'fixedParent', or 'encryptedDuplication'
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES   'fixedTPM', 'fixedParent', or 'encryptedDuplication'
 //                          attributes are inconsistent between themselves or with
 //                          those of the parent object;
 //                          inconsistent 'restricted', 'decrypt' and 'sign'
@@ -110,8 +110,8 @@ SchemeChecks(
 //                          attempt to inject sensitive data for an asymmetric key;
 //                          attempt to create a symmetric cipher key that is not
 //                          a decryption key
-//   TPM_RC_HASH            nameAlg is TPM_ALG_NULL
-//   TPM_RC_SIZE            'authPolicy' size does not match digest size of the name
+//      TPM_RC_HASH         nameAlg is TPM_ALG_NULL
+//      TPM_RC_SIZE         'authPolicy' size does not match digest size of the name
 //                          algorithm in 'publicArea'
 //   other                  returns from SchemeChecks()
 TPM_RC
@@ -122,7 +122,7 @@ PublicAttributesValidation(
 
 //*** FillInCreationData()
 // Fill in creation data for an object.
-// return type: void
+//  Return Type: void
 void
 FillInCreationData(
     TPMI_DH_OBJECT           parentHandle,  // IN: handle of parent
@@ -177,11 +177,11 @@ ProduceOuterWrap(
 //  1. check integrity of outer blob
 //  2. decrypt outer blob
 //
-// return type: TPM_RC
-//   TPM_RCS_INSUFFICIENT        error during sensitive data unmarshaling
-//   TPM_RCS_INTEGRITY           sensitive data integrity is broken
-//   TPM_RCS_SIZE                error during sensitive data unmarshaling
-//   TPM_RCS_VALUE               IV size for CFB does not match the encryption
+//  Return Type: TPM_RC
+//      TPM_RCS_INSUFFICIENT     error during sensitive data unmarshaling
+//      TPM_RCS_INTEGRITY        sensitive data integrity is broken
+//      TPM_RCS_SIZE             error during sensitive data unmarshaling
+//      TPM_RCS_VALUE            IV size for CFB does not match the encryption
 //                               algorithm block size
 TPM_RC
 UnwrapOuter(
@@ -226,7 +226,7 @@ SensitiveToPrivate(
 //  1. check the integrity HMAC of the input private area
 //  2. decrypt the private buffer
 //  3. unmarshal TPMT_SENSITIVE structure into the buffer of TPMT_SENSITIVE
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RCS_INTEGRITY       if the private area integrity is bad
 //      TPM_RC_SENSITIVE        unmarshal errors while unmarshaling TPMS_ENCRYPT
 //                              from input private
@@ -286,10 +286,10 @@ SensitiveToDuplicate(
 //  2. decrypt the private buffer
 //  3. unmarshal TPMT_SENSITIVE structure into the buffer of TPMT_SENSITIVE
 //
-// return type: TPM_RC
-//   TPM_RC_INSUFFICIENT         unmarshaling sensitive data from 'inPrivate' failed
-//   TPM_RC_INTEGRITY            'inPrivate' data integrity is broken
-//   TPM_RC_SIZE                 unmarshaling sensitive data from 'inPrivate' failed
+//  Return Type: TPM_RC
+//      TPM_RC_INSUFFICIENT      unmarshaling sensitive data from 'inPrivate' failed
+//      TPM_RC_INTEGRITY         'inPrivate' data integrity is broken
+//      TPM_RC_SIZE              unmarshaling sensitive data from 'inPrivate' failed
 TPM_RC
 DuplicateToSensitive(
     TPM2B               *inPrivate,     // IN: input private structure
@@ -333,11 +333,11 @@ SecretToCredential(
 //  2. decrypt the credential buffer
 //  3. unmarshal TPM2B_DIGEST structure into the buffer of TPM2B_DIGEST
 //
-// return type: TPM_RC
-//   TPM_RC_INSUFFICIENT         error during credential unmarshaling
-//   TPM_RC_INTEGRITY            credential integrity is broken
-//   TPM_RC_SIZE                 error during credential unmarshaling
-//   TPM_RC_VALUE                IV size does not match the encryption algorithm
+//  Return Type: TPM_RC
+//      TPM_RC_INSUFFICIENT      error during credential unmarshaling
+//      TPM_RC_INTEGRITY         credential integrity is broken
+//      TPM_RC_SIZE              error during credential unmarshaling
+//      TPM_RC_VALUE             IV size does not match the encryption algorithm
 //                               block size
 TPM_RC
 CredentialToSecret(

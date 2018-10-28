@@ -40,11 +40,11 @@
 /*(See part 3 specification)
 // Compute HMAC on a data buffer
 */
-// return type: TPM_RC
-//   TPM_RC_ATTRIBUTES          key referenced by 'handle' is a restricted key
-//   TPM_RC_KEY                 'handle' does not reference a signing key
-//   TPM_RC_TYPE                key referenced by 'handle' is not an HMAC key
-//   TPM_RC_VALUE              'hashAlg' is not compatible with the hash algorithm
+//  Return Type: TPM_RC
+//      TPM_RC_ATTRIBUTES       key referenced by 'handle' is a restricted key
+//      TPM_RC_KEY              'handle' does not reference a signing key
+//      TPM_RC_TYPE             key referenced by 'handle' is not an HMAC key
+//      TPM_RC_VALUE           'hashAlg' is not compatible with the hash algorithm
 //                              of the scheme of the object referenced by 'handle'
 TPM_RC
 TPM2_HMAC(

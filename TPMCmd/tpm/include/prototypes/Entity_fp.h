@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Sep 27, 2018  Time: 09:04:43PM
  */
 
 #ifndef    _ENTITY_FP_H_
@@ -43,7 +43,7 @@
 //** Functions
 //*** EntityGetLoadStatus()
 // This function will check that all the handles access loaded entities.
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_HANDLE           handle type does not match
 //      TPM_RC_REFERENCE_Hx     entity is not present
 //      TPM_RC_HIERARCHY        entity belongs to a disabled hierarchy
@@ -63,7 +63,7 @@ EntityGetLoadStatus(
 //
 // This function copies the authorization value of the entity to 'auth'.
 // Return Type: UINT16
-//  count        number of bytes in the authValue with 0's stripped
+//      count           number of bytes in the authValue with 0's stripped
 UINT16
 EntityGetAuthValue(
     TPMI_DH_ENTITY   handle,        // IN: handle of entity

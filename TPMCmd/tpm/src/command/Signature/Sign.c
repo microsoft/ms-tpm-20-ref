@@ -42,16 +42,16 @@
 /*(See part 3 specification)
 // sign an externally provided hash using an asymmetric signing key
 */
-// return type: TPM_RC
-//    TPM_RC_BINDING            The public and private portions of the key are not
+//  Return Type: TPM_RC
+//      TPM_RC_BINDING          The public and private portions of the key are not
 //                              properly bound.
-//    TPM_RC_KEY                'signHandle' does not reference a signing key;
-//    TPM_RC_SCHEME             the scheme is not compatible with sign key type,
+//      TPM_RC_KEY              'signHandle' does not reference a signing key;
+//      TPM_RC_SCHEME           the scheme is not compatible with sign key type,
 //                              or input scheme is not compatible with default
 //                              scheme, or the chosen scheme is not a valid
 //                              sign scheme
-//    TPM_RC_TICKET             'validation' is not a valid ticket
-//    TPM_RC_VALUE              the value to sign is larger than allowed for the
+//      TPM_RC_TICKET           'validation' is not a valid ticket
+//      TPM_RC_VALUE            the value to sign is larger than allowed for the
 //                              type of 'keyHandle'
 
 TPM_RC
@@ -75,7 +75,8 @@ TPM2_Sign(
 
     // If validation is provided, or the key is restricted, check the ticket
     if(in->validation.digest.t.size != 0
-       || IS_ATTRIBUTE(signObject->publicArea.objectAttributes, TPMA_OBJECT, restricted))
+       || IS_ATTRIBUTE(signObject->publicArea.objectAttributes, 
+                       TPMA_OBJECT, restricted))
     {
         // Compute and compare ticket
         TicketComputeHashCheck(in->validation.hierarchy,

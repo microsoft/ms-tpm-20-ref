@@ -39,7 +39,7 @@
 
 // This command uses the TPM to recover one or two Z values in a two phase key
 // exchange protocol
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_ATTRIBUTES               key referenced by 'keyA' is restricted or
 //                                      not a decrypt key
 //      TPM_RC_ECC_POINT                'inQsB' or  'inQeB' is not on the curve of
@@ -101,14 +101,15 @@ TPM2_ZGen_2Phase(
 
 // Command Output
 
-    result = CryptEcc2PhaseKeyExchange(&out->outZ1.point,
-                                       &out->outZ2.point,
-                                       eccKey->publicArea.parameters.eccDetail.curveID,
-                                       scheme,
-                                       &eccKey->sensitive.sensitive.ecc,
-                                       &r,
-                                       &in->inQsB.point,
-                                       &in->inQeB.point);
+    result = 
+        CryptEcc2PhaseKeyExchange(&out->outZ1.point,
+                                  &out->outZ2.point,
+                                  eccKey->publicArea.parameters.eccDetail.curveID,
+                                  scheme,
+                                  &eccKey->sensitive.sensitive.ecc,
+                                  &r,
+                                  &in->inQsB.point,
+                                  &in->inQeB.point);
     if(result == TPM_RC_SCHEME)
         return TPM_RCS_SCHEME + RC_ZGen_2Phase_inScheme;
 

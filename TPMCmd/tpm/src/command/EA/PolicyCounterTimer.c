@@ -43,7 +43,7 @@
 // Add a conditional gating of a policy based on the contents of the
 // TPMS_TIME_INFO structure.
 */
-// return type: TPM_RC
+//  Return Type: TPM_RC
 //      TPM_RC_POLICY           the comparison of the selected portion of the
 //                              TPMS_TIME_INFO with 'operandB' failed
 //      TPM_RC_RANGE            'offset' + 'size' exceed size of TPMS_TIME_INFO
