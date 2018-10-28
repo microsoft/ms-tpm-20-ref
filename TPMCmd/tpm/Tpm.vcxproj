@@ -1059,7 +1059,6 @@
     <ClCompile Include="src\command\Symmetric\Hash.c" />
     <ClCompile Include="src\command\Symmetric\HMAC.c" />
     <ClCompile Include="src\command\Symmetric\MAC.c" />
-    <ClCompile Include="src\command\Symmetric\SMAC.c" />
     <ClCompile Include="src\command\Testing\GetTestResult.c" />
     <ClCompile Include="src\command\Testing\IncrementalSelfTest.c" />
     <ClCompile Include="src\command\Testing\SelfTest.c" />

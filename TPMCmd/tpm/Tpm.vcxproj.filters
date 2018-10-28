@@ -568,9 +568,6 @@
     <ClCompile Include="src\crypt\CryptCmac.c">
       <Filter>Source Files\Crypt</Filter>
     </ClCompile>
-    <ClCompile Include="src\command\Symmetric\SMAC.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\crypt\CryptEccData.c">
       <Filter>Source Files\Crypt</Filter>
     </ClCompile>
