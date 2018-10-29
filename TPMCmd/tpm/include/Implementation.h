@@ -40,7 +40,6 @@
 #ifndef _IMPLEMENTATION_H_
 #define _IMPLEMENTATION_H_
 
-    
 #include    "TpmBuildSwitches.h"
 #include    "BaseTypes.h"
 #include    "TPMB.h"
@@ -1180,6 +1179,5 @@ typedef TPM2B_MAX_HASH_BLOCK    TPM2B_HASH_BLOCK;
 #if MAX_SYM_KEY_BITS == 0 || MAX_SYM_BLOCK_SIZE == 0
 #   error Bad size for MAX_SYM_KEY_BITS or MAX_SYM_BLOCK_SIZE
 #endif
-
 
 #endif  // _IMPLEMENTATION_H_
