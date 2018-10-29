@@ -181,7 +181,6 @@ srcs-y += tpm_symlink/TPMCmd/tpm/src/command/Symmetric/EncryptDecrypt_spt.c
 srcs-y += tpm_symlink/TPMCmd/tpm/src/command/Symmetric/Hash.c
 srcs-y += tpm_symlink/TPMCmd/tpm/src/command/Symmetric/HMAC.c
 srcs-y += tpm_symlink/TPMCmd/tpm/src/command/Symmetric/MAC.c
-srcs-y += tpm_symlink/TPMCmd/tpm/src/command/Symmetric/SMAC.c
 srcs-y += tpm_symlink/TPMCmd/tpm/src/command/Testing/GetTestResult.c
 srcs-y += tpm_symlink/TPMCmd/tpm/src/command/Testing/IncrementalSelfTest.c
 srcs-y += tpm_symlink/TPMCmd/tpm/src/command/Testing/SelfTest.c
