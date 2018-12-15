@@ -112,7 +112,6 @@ typedef struct out_buffer
 #ifndef WIN32
 typedef unsigned long        DWORD;
 typedef void                *LPVOID;
-#undef WINAPI
 #endif
 
 #endif

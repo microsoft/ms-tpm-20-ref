@@ -44,8 +44,21 @@
 #ifdef _MSC_VER
 #include <windows.h>
 #include <winsock.h>
-#else
+typedef int socklen_t;
+#elif defined(__unix__)
+#  include <string.h>
+#  define ZeroMemory(ptr, sz) (memset((ptr), 0, (sz)))
+#  include <unistd.h>
+#  define closesocket(x) close(x)
+#  define INVALID_SOCKET (-1)
+#  define SOCKET_ERROR   (-1)
 typedef int SOCKET;
+#  include <errno.h>
+#  define WSAGetLastError() (errno)
+#  include <stdint.h>
+#  define INT_PTR intptr_t
+#  include <netinet/in.h>
+#  include <sys/socket.h>
 #endif
 
 
@@ -53,7 +66,7 @@ typedef int SOCKET;
 #include <stdlib.h>
 #include <stdint.h>
 
-//#include "BaseTypes.h"
+#include "BaseTypes.h"
 
 #include "TpmTcpProtocol.h"
 #include "Manufacture_fp.h"
@@ -91,17 +104,19 @@ CreateSocket(
     SOCKET              *listenSocket
     )
 {
-    WSADATA              wsaData;
     struct               sockaddr_in MyAddress;
     int res;
 //  
     // Initialize Winsock
+#ifdef _MSC_VER
+    WSADATA              wsaData;
     res = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if(res != 0)
     {
         printf("WSAStartup failed with error: %d\n", res);
         return -1;
     }
+#endif
     // create listening socket
     *listenSocket = socket(PF_INET, SOCK_STREAM, 0);
     if(INVALID_SOCKET == *listenSocket)
@@ -227,7 +242,7 @@ PlatformSvcRoutine(
     SOCKET               listenSocket, serverSocket;
     struct               sockaddr_in HerAddress;
     int                  res;
-    int                  length;
+    socklen_t            length;
     BOOL                 continueServing;
 //
     res = CreateSocket(PortNumber, &listenSocket);
@@ -268,6 +283,7 @@ PlatformSvcRoutine(
 // This function starts a new thread waiting for platform signals.
 // Platform signals are processed one at a time in the order in which they are
 // received.
+#if defined(_MSC_VER)
 int
 PlatformSignalService(
     int              PortNumber
@@ -288,7 +304,28 @@ PlatformSignalService(
     }
     return 0;
 }
+#elif defined(__unix__)
+#include <pthread.h>
+int
+PlatformSignalService(
+    int              PortNumber
+    )
+{
+    pthread_t thread_id;
+    int ret;
+    int port = PortNumber;
 
+    ret = pthread_create(&thread_id, NULL, (void*)PlatformSvcRoutine, (LPVOID)(INT_PTR)port);
+    if (ret == -1)
+    {
+        printf("pthread_create failed: %s", strerror(ret));
+    }
+
+    return ret;
+}
+#else
+#error "Unsupported platform."
+#endif // _MSC_VER
 //*** RegularCommandService()
 // This function services regular commands.
 int
@@ -299,7 +336,8 @@ RegularCommandService(
     SOCKET               listenSocket;
     SOCKET               serverSocket;
     struct               sockaddr_in HerAddress;
-    int                  res, length;
+    int                  res;
+    socklen_t            length;
     BOOL                 continueServing;
 //
     res = CreateSocket(PortNumber, &listenSocket);
