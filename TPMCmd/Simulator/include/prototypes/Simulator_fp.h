@@ -42,10 +42,6 @@
 
 //** From TcpServer.c 
 
-#ifdef __unix__
-typedef int SOCKET;
-#endif
-
 //*** PlatformServer()
 // This function processes incoming platform requests.
 BOOL
