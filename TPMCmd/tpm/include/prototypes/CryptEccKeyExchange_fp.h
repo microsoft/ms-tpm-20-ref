@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Oct  2, 2018  Time: 11:32:55AM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _CRYPTECCKEYEXCHANGE_FP_H_
@@ -58,7 +58,7 @@ CryptEcc2PhaseKeyExchange(
     TPMS_ECC_POINT          *QsB,           // IN: static public party B key
     TPMS_ECC_POINT          *QeB            // IN: ephemeral public party B key
     );
-#if     ALG_SM2
+#if ALG_SM2
 
 //*** SM2KeyExchange()
 // This function performs the key exchange defined in SM2.

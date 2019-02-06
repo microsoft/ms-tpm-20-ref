@@ -34,13 +34,13 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Oct  2, 2018  Time: 11:32:55AM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _CRYPTECCSIGNATURE_FP_H_
 #define    _CRYPTECCSIGNATURE_FP_H_
 
-#if     ALG_ECC
+#if ALG_ECC
 
 //*** BnSignEcdsa()
 // This function implements the ECDSA signing algorithm. The method is described

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Sep 26, 2018  Time: 03:48:06PM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _BNCONVERT_FP_H_
@@ -101,7 +101,7 @@ BnTo2B(
     TPM2B           *a2B,               // OUT:
     NUMBYTES         size               // IN: the desired size
     );
-#if     ALG_ECC
+#if ALG_ECC
 
 //*** BnPointFrom2B()
 // Function to create a BIG_POINT structure from a 2B point.

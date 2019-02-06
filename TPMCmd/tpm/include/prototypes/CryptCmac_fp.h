@@ -34,13 +34,13 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jun 16, 2018  Time: 08:35:57PM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _CRYPTCMAC_FP_H_
 #define    _CRYPTCMAC_FP_H_
 
-#if     ALG_CMAC
+#if ALG_CMAC
 //** Functions
 //*** CryptCmacStart()
 // This is the function to start the CMAC sequence operation. It initializes the

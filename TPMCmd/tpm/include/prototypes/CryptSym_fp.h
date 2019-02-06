@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _CRYPTSYM_FP_H_
@@ -57,7 +57,12 @@ CryptSymStartup(
     );
 
 //*** CryptGetSymmetricBlockSize()
-// This function returns the block size of the algorithm.
+// This function returns the block size of the algorithm. The table of bit sizes has
+// an entry for each allowed key size. The entry for a key size is 0 if the TPM does
+// not implement that key size. The key size table is delimited with a negative number
+// (-1). After the delimiter is a list of block sizes with each entry corresponding
+// to the key bit size. For most symmetric algorithms, the block size is the same
+// regardless of the key size but this arrangement allows them to be different.
 //  Return Type: INT16
 //   <= 0     cipher not supported
 //   > 0      the cipher block size in bytes

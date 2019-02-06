@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Oct  2, 2018  Time: 12:21:16AM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _CRYPTRAND_FP_H_
@@ -229,7 +229,7 @@ DRBG_Instantiate(
 // This is Uninstantiate_function() from [SP 800-90A 9.4].
 //
 //  Return Type: TPM_RC
-//      TPM_RC_VALUE        not a valid
+//      TPM_RC_VALUE        not a valid state
 LIB_EXPORT TPM_RC
 DRBG_Uninstantiate(
     DRBG_STATE      *drbgState      // IN/OUT: working state to erase

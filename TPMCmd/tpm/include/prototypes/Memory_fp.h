@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Sep 27, 2018  Time: 09:04:43PM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _MEMORY_FP_H_
@@ -44,8 +44,6 @@
 // This is an alias for memmove. This is used in place of memcpy because
 // some of the moves may overlap and rather than try to make sure that
 // memmove is used when necessary, it is always used.
-// The #if 0 is used to prevent instantiation of the MemoryCopy function so that
-// the #define is always used
 void
 MemoryCopy(
     void        *dest,

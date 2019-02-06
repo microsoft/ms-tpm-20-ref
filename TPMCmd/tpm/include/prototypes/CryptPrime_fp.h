@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _CRYPTPRIME_FP_H_
@@ -47,7 +47,7 @@ IsPrimeInt(
     uint32_t            n
     );
 
-//*** BnIsPrime()
+//*** BnIsProbablyPrime()
 // This function is used when the key sieve is not implemented. This function
 // Will try to eliminate some of the obvious things before going on
 // to perform MillerRabin as a final verification of primeness.
@@ -79,7 +79,7 @@ MillerRabin(
     bigNum           bnW,
     RAND_STATE      *rand
     );
-#if     ALG_RSA
+#if ALG_RSA
 
 //*** RsaCheckPrime()
 // This will check to see if a number is prime and appropriate for an
@@ -104,11 +104,17 @@ RsaCheckPrime(
 // This function adjusts the candidate prime so that it is odd and > root(2)/2.
 // This allows the product of these two numbers to be .5, which, in fixed point
 // notation means that the most significant bit is 1.
-// For this routine, the root(2)/2 is approximated with 0xB505 which is, in fixed
-// point is 0.7071075439453125 or an error of 0.0001%. Just setting the upper
-// two bits would give a value > 0.75 which is an error of > 6%. Given the amount
-// of time all the other computations take, reducing the error is not much of
+// For this routine, the root(2)/2 (0.7071067811865475) approximated with 0xB505
+// which is, in fixed point, 0.7071075439453125 or an error of 0.000108%. Just setting
+// the upper two bits would give a value > 0.75 which is an error of > 6%. Given the
+// amount of time all the other computations take, reducing the error is not much of
 // a cost, but it isn't totally required either.
+//
+// The code maps the most significant crypt_uword_t in 'prime' so that a 32-/64-bit
+// value of 0 to 0xB5050...0 and a value of 0xff...f to 0xff...f. It also sets the LSb
+// of 'prime' to make sure that the number is odd.
+//
+// This code has been fixed so that it will work with a RADIX_SIZE == 64.
 //
 // The function also puts the number on a field boundary.
 LIB_EXPORT void

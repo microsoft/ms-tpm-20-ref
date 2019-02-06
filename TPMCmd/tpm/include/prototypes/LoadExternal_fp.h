@@ -33,9 +33,10 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 3.0 June 16, 2017
- *  Date: Jun 16, 2018  Time: 12:44:12AM
+ *  Created by TpmStructures; Version 4.1 Dec 8, 2018
+ *  Date: Jan 28, 2019  Time: 12:39:24AM
  */
+
 #ifdef TPM_CC_LoadExternal // Command must be defined
 #ifndef _LOADEXTERNAL_FP_H_
 #define _LOADEXTERNAL_FP_H_

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Oct 24, 2018  Time: 03:14:15PM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _TPMTOOSSLMATH_FP_H_
@@ -65,8 +65,9 @@ BigInitialized(
     BIGNUM             *toInit,
     bigConst            initializer
     );
-
 #if LIBRARY_COMPATIBILITY_CHECK
+
+//*** MathLibraryCompatibilityCheck()
 void
 MathLibraryCompatibilityCheck(
     void
@@ -113,7 +114,7 @@ BnDiv(
     bigConst             divisor
     );
 
-#if     ALG_RSA
+#if ALG_RSA
 //*** BnGcd()
 // Get the greatest common divisor of two numbers
 //  Return Type: BOOL
@@ -152,7 +153,7 @@ BnModInverse(
     bigConst             modulus
     );
 #endif // ALG_RSA
-#if     ALG_ECC
+#if ALG_ECC
 
 //*** BnCurveInitialize()
 // This function initializes the OpenSSL curve information structure. This

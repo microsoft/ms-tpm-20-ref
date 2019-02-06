@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Oct  2, 2018  Time: 12:33:57AM
+ *  Date: Jan 28, 2019  Time: 10:01:12PM
  */
 
 #ifndef    _CRYPTHASH_FP_H_
@@ -73,8 +73,9 @@ CryptGetHashDef(
 //      FALSE(0)        hashAlg is not valid for this TPM
 BOOL
 CryptHashIsValidAlg(
-    TPM_ALG_ID       hashAlg,
-    BOOL             flag
+    TPM_ALG_ID       hashAlg,           // IN: the algorithm to check
+    BOOL             flag               // IN: TRUE if TPM_ALG_NULL is to be treated
+                                        //     as a valid hash
     );
 
 //*** CryptHashGetAlgByIndex()
@@ -85,8 +86,8 @@ CryptHashIsValidAlg(
 // last. All other index values will return TPM_ALG_NULL.
 //
 //  Return Type: TPM_ALG_ID
-// ALG_xxx         a hash algorithm
-// ALG_NULL        this can be used as a stop value
+// TPM_ALG_xxx         a hash algorithm
+// TPM_ALG_NULL        this can be used as a stop value
 LIB_EXPORT TPM_ALG_ID
 CryptHashGetAlgByIndex(
     UINT32           index          // IN: the index
@@ -173,7 +174,7 @@ CryptHashImportState(
 // and export the state to the input buffer. Will need to add a flag to the state
 // structure to indicate that it needs to be imported before it can be used.
 // (BLEH).
-//  Return Type: CRTYP_RESULT
+//  Return Type: UINT16
 //  0           hash is TPM_ALG_NULL
 // >0           digest size
 LIB_EXPORT UINT16

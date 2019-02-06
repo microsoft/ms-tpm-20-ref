@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Sep 26, 2018  Time: 04:53:47PM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _OBJECT_FP_H_
@@ -198,7 +198,7 @@ ObjectLoad(
     TPM_RC           blameSensitive,// IN: parameter number to associate with the
                                     //     sensitive area errors
     TPM2B_NAME      *name           // IN: (optional)
-    );
+);
 
 #if CC_HMAC_Start || CC_MAC_Start
 //*** ObjectCreateHMACSequence()

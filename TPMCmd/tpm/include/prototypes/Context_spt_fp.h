@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _CONTEXT_SPT_FP_H_
@@ -42,8 +42,8 @@
 
 //*** ComputeContextProtectionKey()
 // This function retrieves the symmetric protection key for context encryption
-// It is used by TPM2_ConextSave and TPM2_ContextLoad to create the symmetric
-// encryption key and iv
+// It is used by TPM2_ConextSave() and TPM2_ContextLoad() to create the symmetric
+// encryption key and iv.
 //  Return Type: void
 void
 ComputeContextProtectionKey(

@@ -34,13 +34,13 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Jan 28, 2019  Time: 12:39:25AM
  */
 
 #ifndef    _CRYPTDES_FP_H_
 #define    _CRYPTDES_FP_H_
 
-#if     ALG_TDES
+#if ALG_TDES
 
 //*** CryptSetOddByteParity()
 // This function sets the per byte parity of a 64-bit value. The least-significant
