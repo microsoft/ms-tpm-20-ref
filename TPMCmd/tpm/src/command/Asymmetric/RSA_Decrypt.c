@@ -37,7 +37,7 @@
 
 #ifdef TPM_CC_RSA_Decrypt  // Conditional expansion of this file
 
-#if     ALG_RSA
+#if ALG_RSA
 
 /*(See part 3 specification)
 // decrypts the provided data block and removes the padding if applicable

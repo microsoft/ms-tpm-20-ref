@@ -50,7 +50,7 @@
 //      TRUE(1)         success
 //      FALSE(0)        failure because value will not fit or OpenSSL variable doesn't
 //                      exist
-void
+BOOL
 OsslToTpmBn(
     bigNum          bn,
     BIGNUM          *osslBn
@@ -163,10 +163,18 @@ BnModInverse(
 //      NULL        the TPM_ECC_CURVE is not valid or there was a problem in
 //                  in initializing the curve data
 //      non-NULL    points to 'E'
-bigCurve
+LIB_EXPORT bigCurve
 BnCurveInitialize(
     bigCurve          E,           // IN: curve structure to initialize
     TPM_ECC_CURVE     curveId      // IN: curve identifier
+);
+
+//*** BnCurveFree()
+// This function will free the allocated components of the curve and end the
+// frame in which the curve data exists
+LIB_EXPORT void
+BnCurveFree(
+    bigCurve                    E
 );
 
 //*** BnEccModMult()

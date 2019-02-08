@@ -68,6 +68,10 @@ TPM2_Sign(
     if(!IsSigningObject(signObject))
         return TPM_RCS_KEY + RC_Sign_keyHandle;
 
+    // A key that will be used for x.509 signatures can't be used in TPM2_Sign().
+    if(IS_ATTRIBUTE(signObject->publicArea.objectAttributes, TPMA_OBJECT, x509sign))
+        return TPM_RCS_ATTRIBUTES + RC_Sign_keyHandle;
+
     // pick a scheme for sign.  If the input sign scheme is not compatible with
     // the default scheme, return an error.
     if(!CryptSelectSignScheme(signObject, &in->inScheme))

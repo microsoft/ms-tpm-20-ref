@@ -53,11 +53,11 @@
 //** Links to the OpenSSL AES code
 //***************************************************************
 
-#if     ALG_SM4
+#if ALG_SM4
 #error "SM4 is not available"
 #endif
 
-#if     ALG_CAMELLIA
+#if ALG_CAMELLIA
 #error "Camellia is not available"
 #endif
 
@@ -110,7 +110,7 @@ typedef void(*TpmCryptSetSymKeyCall_t)(
 
 typedef union tpmCryptKeySchedule_t tpmCryptKeySchedule_t;
 
-#if     ALG_TDES
+#if ALG_TDES
 #include "TpmToOsslDesSupport_fp.h"
 #endif
 

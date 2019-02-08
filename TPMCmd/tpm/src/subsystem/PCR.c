@@ -277,38 +277,39 @@ GetSavedPcrPointer(
     UINT32           pcrIndex       // IN: PCR index in PCR_SAVE
     )
 {
+    BYTE            *retVal;
     switch(alg)
     {
-#if     ALG_SHA1
+#if ALG_SHA1
         case ALG_SHA1_VALUE:
-            return gc.pcrSave.sha1[pcrIndex];
+            retVal = gc.pcrSave.sha1[pcrIndex];
             break;
 #endif
-#if     ALG_SHA256
+#if ALG_SHA256
         case ALG_SHA256_VALUE:
-            return gc.pcrSave.sha256[pcrIndex];
+            retVal = gc.pcrSave.sha256[pcrIndex];
             break;
 #endif
-#if     ALG_SHA384
+#if ALG_SHA384
         case ALG_SHA384_VALUE:
-            return gc.pcrSave.sha384[pcrIndex];
+            retVal = gc.pcrSave.sha384[pcrIndex];
             break;
 #endif
 
-#if     ALG_SHA512
+#if ALG_SHA512
         case ALG_SHA512_VALUE:
-            return gc.pcrSave.sha512[pcrIndex];
+            retVal = gc.pcrSave.sha512[pcrIndex];
             break;
 #endif
-#if     ALG_SM3_256
+#if ALG_SM3_256
         case ALG_SM3_256_VALUE:
-            return gc.pcrSave.sm3_256[pcrIndex];
+            retVal = gc.pcrSave.sm3_256[pcrIndex];
             break;
 #endif
         default:
-            break;
+            FAIL(FATAL_ERROR_INTERNAL);
     }
-    FAIL(FATAL_ERROR_INTERNAL);
+    return retVal;
 }
 
 //*** PcrIsAllocated()
@@ -363,27 +364,27 @@ GetPcrPointer(
 
     switch(alg)
     {
-#if     ALG_SHA1
+#if ALG_SHA1
         case ALG_SHA1_VALUE:
             pcr = s_pcrs[pcrNumber].sha1Pcr;
             break;
 #endif
-#if     ALG_SHA256
+#if ALG_SHA256
         case ALG_SHA256_VALUE:
             pcr = s_pcrs[pcrNumber].sha256Pcr;
             break;
 #endif
-#if     ALG_SHA384
+#if ALG_SHA384
         case ALG_SHA384_VALUE:
             pcr = s_pcrs[pcrNumber].sha384Pcr;
             break;
 #endif
-#if     ALG_SHA512
+#if ALG_SHA512
         case ALG_SHA512_VALUE:
             pcr = s_pcrs[pcrNumber].sha512Pcr;
             break;
 #endif
-#if     ALG_SM3_256
+#if ALG_SM3_256
         case ALG_SM3_256_VALUE:
             pcr = s_pcrs[pcrNumber].sm3_256Pcr;
             break;
@@ -392,7 +393,6 @@ GetPcrPointer(
             FAIL(FATAL_ERROR_INTERNAL);
             break;
     }
-
     return pcr;
 }
 

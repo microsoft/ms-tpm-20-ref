@@ -179,7 +179,7 @@ CryptGenerateKeyedHash(
         sensitive->sensitive.bits.t.size =
             DRBG_Generate(rand, sensitive->sensitive.bits.t.buffer, digestSize);
         if(sensitive->sensitive.bits.t.size == 0)
-            return TPM_RC_NO_RESULT;
+            return (g_inFailureMode) ? TPM_RC_FAILURE : TPM_RC_NO_RESULT;
     }
     return TPM_RC_SUCCESS;
 }
@@ -332,7 +332,7 @@ CryptGenerateKeySymmetric(
             MemoryCopy2B(&sensitive->sensitive.sym.b, &sensitiveCreate->data.b,
                          sizeof(sensitive->sensitive.sym.t.buffer));
     } 
-#if     ALG_TDES
+#if ALG_TDES
     else if(publicArea->parameters.symDetail.sym.algorithm == ALG_TDES_VALUE)
     {
         result = CryptGenerateKeyDes(publicArea, sensitive, rand);
@@ -343,8 +343,12 @@ CryptGenerateKeySymmetric(
         sensitive->sensitive.sym.t.size = 
             DRBG_Generate(rand, sensitive->sensitive.sym.t.buffer, 
                           BITS_TO_BYTES(keyBits));
-        result = (sensitive->sensitive.sym.t.size == 0) 
-            ? TPM_RC_NO_RESULT : TPM_RC_SUCCESS;
+        if(g_inFailureMode)
+            result = TPM_RC_FAILURE;
+        else if(sensitive->sensitive.sym.t.size == 0)
+            result = TPM_RC_NO_RESULT;
+        else
+            result = TPM_RC_SUCCESS;
     }
     return result;
 }
@@ -420,10 +424,10 @@ CryptInit(
     ok = ok && CryptSymInit();
     ok = ok && CryptRandInit();
     ok = ok && CryptHashInit();
-#if     ALG_RSA
+#if ALG_RSA
     ok = ok && CryptRsaInit();
 #endif // ALG_RSA
-#if     ALG_ECC
+#if ALG_ECC
     ok = ok && CryptEccInit();
 #endif // ALG_ECC
     return ok;
@@ -447,14 +451,14 @@ CryptStartup(
     NOT_REFERENCED(type);
 
     OK = CryptSymStartup() && CryptRandStartup() && CryptHashStartup()
-#if     ALG_RSA
+#if ALG_RSA
         &&  CryptRsaStartup()
 #endif // ALG_RSA
-#if     ALG_ECC
+#if ALG_ECC
         &&  CryptEccStartup()
 #endif // ALG_ECC
         ;
-#if     ALG_ECC
+#if ALG_ECC
     // Don't directly check for SU_RESET because that is the default
     if(OK && (type != SU_RESTART) && (type != SU_RESUME))
     {
@@ -491,10 +495,10 @@ CryptIsAsymAlgorithm(
 {
     switch(algID)
     {
-#if     ALG_RSA
+#if ALG_RSA
         case ALG_RSA_VALUE:
 #endif
-#if     ALG_ECC
+#if ALG_ECC
         case ALG_ECC_VALUE:
 #endif
             return TRUE;
@@ -541,7 +545,7 @@ CryptSecretEncrypt(
         return TPM_RC_ATTRIBUTES;
     switch(encryptKey->publicArea.type)
     {
-#if     ALG_RSA
+#if ALG_RSA
         case ALG_RSA_VALUE:
         {
             // Create secret data from RNG
@@ -554,7 +558,7 @@ CryptSecretEncrypt(
         break;
 #endif // ALG_RSA
 
-#if     ALG_ECC
+#if ALG_ECC
         case ALG_ECC_VALUE:
         {
             TPMS_ECC_POINT      eccPublic;
@@ -660,7 +664,7 @@ CryptSecretDecrypt(
     // Decryption for secret
     switch(decryptKey->publicArea.type)
     {
-#if     ALG_RSA
+#if ALG_RSA
         case ALG_RSA_VALUE:
         {
             TPMT_RSA_DECRYPT        scheme;
@@ -700,7 +704,7 @@ CryptSecretDecrypt(
         }
         break;
 #endif // ALG_RSA
-#if     ALG_ECC
+#if ALG_ECC
         case ALG_ECC_VALUE:
         {
             TPMS_ECC_POINT       eccPublic;
@@ -1028,17 +1032,18 @@ CryptCreateObject(
     )
 {
     TPMT_PUBLIC             *publicArea = &object->publicArea;
+    TPMT_SENSITIVE          *sensitive = &object->sensitive;
     TPM_RC                   result = TPM_RC_SUCCESS;
 //
     // Set the sensitive type for the object
-    object->sensitive.sensitiveType = publicArea->type;
+    sensitive->sensitiveType = publicArea->type;
 
     // For all objects, copy the initial authorization data
-    object->sensitive.authValue = sensitiveCreate->userAuth;
+    sensitive->authValue = sensitiveCreate->userAuth;
 
     // If the TPM is the source of the data, set the size of the provided data to
     // zero so that there's no confusion about what to do.
-    if(IS_ATTRIBUTE(object->publicArea.objectAttributes, 
+    if(IS_ATTRIBUTE(publicArea->objectAttributes, 
                     TPMA_OBJECT, sensitiveDataOrigin))
         sensitiveCreate->data.t.size = 0;
 
@@ -1046,29 +1051,27 @@ CryptCreateObject(
     // sensitive value for symmetric object
     switch(publicArea->type)
     {
-#if     ALG_RSA
+#if ALG_RSA
         // Create RSA key
         case ALG_RSA_VALUE:
             // RSA uses full object so that it has a place to put the private
             // exponent
-            result = CryptRsaGenerateKey(object, rand);
+            result = CryptRsaGenerateKey(publicArea, sensitive, rand);
             break;
 #endif // ALG_RSA
 
-#if     ALG_ECC
+#if ALG_ECC
         // Create ECC key
         case ALG_ECC_VALUE:
-            result = CryptEccGenerateKey(&object->publicArea, &object->sensitive, 
-                                         rand);
+            result = CryptEccGenerateKey(publicArea, sensitive, rand);
             break;
 #endif // ALG_ECC
         case ALG_SYMCIPHER_VALUE:
-            result = CryptGenerateKeySymmetric(&object->publicArea, 
-                                               &object->sensitive,
+            result = CryptGenerateKeySymmetric(publicArea, sensitive,
                                                sensitiveCreate, rand);
             break;
         case ALG_KEYEDHASH_VALUE:
-            result = CryptGenerateKeyedHash(&object->publicArea, &object->sensitive,
+            result = CryptGenerateKeyedHash(publicArea, sensitive,
                                             sensitiveCreate, rand);
             break;
         default:
@@ -1087,17 +1090,18 @@ CryptCreateObject(
         DRBG_AdditionalData((DRBG_STATE *)rand, &gp.ehProof.b);
     }
     // Generate a seedValue that is the size of the digest produced by nameAlg
-    object->sensitive.seedValue.t.size =
-        DRBG_Generate(rand, object->sensitive.seedValue.t.buffer, 
+    sensitive->seedValue.t.size =
+        DRBG_Generate(rand, sensitive->seedValue.t.buffer, 
                       CryptHashGetDigestSize(publicArea->nameAlg));
-    if(object->sensitive.seedValue.t.size == 0)
+    if(g_inFailureMode)
+        return TPM_RC_FAILURE;
+    else if(sensitive->seedValue.t.size == 0)
         return TPM_RC_NO_RESULT;
     // For symmetric objects, need to compute the unique value for the public area
     if(publicArea->type == ALG_SYMCIPHER_VALUE
        || publicArea->type == ALG_KEYEDHASH_VALUE)
     {
-        CryptComputeSymmetricUnique(&object->publicArea, &object->sensitive, 
-                                    &object->publicArea.unique.sym);
+        CryptComputeSymmetricUnique(publicArea, sensitive, &publicArea->unique.sym);
     }
     else
     {
@@ -1105,11 +1109,10 @@ CryptCreateObject(
         // get rid of the seed.
         if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign)
            || !IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, restricted))
-            memset(&object->sensitive.seedValue, 0, 
-                   sizeof(object->sensitive.seedValue));
+            memset(&sensitive->seedValue, 0, sizeof(sensitive->seedValue));
     }
     // Compute the name
-    PublicMarshalAndComputeName(&object->publicArea, &object->name);
+    PublicMarshalAndComputeName(publicArea, &object->name);
     return result;
 }
 
@@ -1128,7 +1131,7 @@ CryptGetSignHashAlg(
     // Get authHash algorithm based on signing scheme
     switch(auth->sigAlg)
     {
-#if     ALG_RSA
+#if ALG_RSA
     // If RSA is supported, both RSASSA and RSAPSS are required
 #   if !defined ALG_RSASSA_VALUE || !defined ALG_RSAPSS_VALUE
 #       error "RSASSA and RSAPSS are required for RSA"
@@ -1139,7 +1142,7 @@ CryptGetSignHashAlg(
             return auth->signature.rsapss.hash;
 #endif // ALG_RSA
 
-#if     ALG_ECC
+#if ALG_ECC
     // If ECC is defined, ECDSA is mandatory
 #   if !ALG_ECDSA
 #       error "ECDSA is requried for ECC"
@@ -1207,7 +1210,7 @@ CryptIsAsymSignScheme(
 
     switch(publicType)
     {
-#if     ALG_RSA
+#if ALG_RSA
         case ALG_RSA_VALUE:
             switch(scheme)
             {
@@ -1224,20 +1227,20 @@ CryptIsAsymSignScheme(
             break;
 #endif // ALG_RSA
 
-#if     ALG_ECC
+#if ALG_ECC
         // If ECC is implemented ECDSA is required
         case ALG_ECC_VALUE:
             switch(scheme)
             {
                 // Support for ECDSA is required for ECC
                 case ALG_ECDSA_VALUE:
-#if     ALG_ECDAA // ECDAA is optional
+#if ALG_ECDAA // ECDAA is optional
                 case ALG_ECDAA_VALUE:
 #endif
-#if     ALG_ECSCHNORR // Schnorr is also optional
+#if ALG_ECSCHNORR // Schnorr is also optional
                 case ALG_ECSCHNORR_VALUE:
 #endif
-#if     ALG_SM2 // SM2 is optional
+#if ALG_SM2 // SM2 is optional
                 case ALG_SM2_VALUE:
 #endif
                     break;
@@ -1266,7 +1269,7 @@ CryptIsAsymDecryptScheme(
 
     switch(publicType)
     {
-#if     ALG_RSA
+#if ALG_RSA
         case ALG_RSA_VALUE:
             switch(scheme)
             {
@@ -1280,7 +1283,7 @@ CryptIsAsymDecryptScheme(
             break;
 #endif // ALG_RSA
 
-#if     ALG_ECC
+#if ALG_ECC
         // If ECC is implemented ECDH is required
         case ALG_ECC_VALUE:
             switch(scheme)
@@ -1289,10 +1292,10 @@ CryptIsAsymDecryptScheme(
 #   error "ECDH is required for ECC"
 #endif
                 case ALG_ECDH_VALUE:
-#if     ALG_SM2
+#if ALG_SM2
                 case ALG_SM2_VALUE:
 #endif
-#if     ALG_ECMQV
+#if ALG_ECMQV
                 case ALG_ECMQV_VALUE:
 #endif
                     break;
@@ -1444,12 +1447,12 @@ CryptSign(
     // perform sign operation based on different key type
     switch(signKey->publicArea.type)
     {
-#if     ALG_RSA
+#if ALG_RSA
         case ALG_RSA_VALUE:
             result = CryptRsaSign(signature, signKey, digest, NULL);
             break;
 #endif // ALG_RSA
-#if     ALG_ECC
+#if ALG_ECC
         case ALG_ECC_VALUE:
             // The reason that signScheme is passed to CryptEccSign but not to the
             // other signing methods is that the signing for ECC may be split and
@@ -1504,7 +1507,7 @@ CryptValidateSignature(
 
     switch(publicArea->type)
     {
-#if     ALG_RSA
+#if ALG_RSA
         case ALG_RSA_VALUE:
         {
     //
@@ -1514,7 +1517,7 @@ CryptValidateSignature(
         }
 #endif // ALG_RSA
 
-#if     ALG_ECC
+#if ALG_ECC
         case ALG_ECC_VALUE:
             result = CryptEccValidateSignature(signature, signObject, digest);
             break;
@@ -1563,14 +1566,14 @@ CryptIsUniqueSizeValid(
 
     switch(publicArea->type)
     {
-#if     ALG_RSA
+#if ALG_RSA
         case ALG_RSA_VALUE:
             keySizeInBytes = BITS_TO_BYTES(
                                         publicArea->parameters.rsaDetail.keyBits);
             consistent = publicArea->unique.rsa.t.size == keySizeInBytes;
             break;
 #endif // ALG_RSA
-#if     ALG_ECC
+#if ALG_ECC
         case ALG_ECC_VALUE:
         {
             keySizeInBytes = BITS_TO_BYTES(CryptEccGetKeySizeForCurve(
@@ -1606,7 +1609,7 @@ CryptIsSensitiveSizeValid(
 
     switch(publicArea->type)
     {
-#if     ALG_RSA
+#if ALG_RSA
         case ALG_RSA_VALUE:
             // sensitive prime value has to be half the size of the public modulus
             keySizeInBytes = BITS_TO_BYTES(publicArea->parameters.rsaDetail.keyBits);
@@ -1614,7 +1617,7 @@ CryptIsSensitiveSizeValid(
                 ((sensitiveArea->sensitive.rsa.t.size * 2) == keySizeInBytes);
             break;
 #endif
-#if     ALG_ECC
+#if ALG_ECC
         case ALG_ECC_VALUE:
             keySizeInBytes = BITS_TO_BYTES(CryptEccGetKeySizeForCurve(
                 publicArea->parameters.eccDetail.curveID));
@@ -1690,7 +1693,7 @@ CryptValidateKeys(
     }
     switch(publicArea->type)
     {
-#if     ALG_RSA
+#if ALG_RSA
         case ALG_RSA_VALUE:
             keySizeInBytes = BITS_TO_BYTES(params->rsaDetail.keyBits);
 
@@ -1717,7 +1720,7 @@ CryptValidateKeys(
             }
             break;
 #endif
-#if     ALG_ECC
+#if ALG_ECC
         case ALG_ECC_VALUE:
         {
             TPMI_ECC_CURVE      curveId;
@@ -1912,7 +1915,7 @@ CryptSelectMac(
     else
     {
         // Since the input value is TPM_ALG_NULL, then the key value can't be
-        // ALG_NULL
+        // TPM_ALG_NULL
         if(macAlg == ALG_NULL_VALUE)
             return TPM_RCS_VALUE;
         *inMac = macAlg;
@@ -1956,7 +1959,7 @@ CryptSmacIsValidAlg(
 {
     switch (alg)
     {
-#if     ALG_CMAC
+#if ALG_CMAC
         case ALG_CMAC_VALUE:
             return TRUE;
             break;
@@ -1981,19 +1984,19 @@ CryptSymModeIsValid(
 {
     switch(mode)
     {
-#if         ALG_CTR
+#if ALG_CTR
         case ALG_CTR_VALUE:
 #endif // ALG_CTR
-#if         ALG_OFB
+#if ALG_OFB
         case ALG_OFB_VALUE:
 #endif // ALG_OFB
-#if         ALG_CBC
+#if ALG_CBC
         case ALG_CBC_VALUE:
 #endif // ALG_CBC
-#if         ALG_CFB
+#if ALG_CFB
         case ALG_CFB_VALUE:
 #endif // ALG_CFB
-#if         ALG_ECB
+#if ALG_ECB
         case ALG_ECB_VALUE:
 #endif // ALG_ECB
             return TRUE;

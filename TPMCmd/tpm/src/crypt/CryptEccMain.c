@@ -35,7 +35,7 @@
 //** Includes and Defines
 #include "Tpm.h"
 
-#if     ALG_ECC
+#if ALG_ECC
 
 // This version requires that the new format for ECC data be used
 #if !USE_BN_ECC_DATA
@@ -136,6 +136,16 @@ GetCurveData(
 {
     const ECC_CURVE      *curve = CryptEccGetParametersByCurveId(curveId);
     return (curve != NULL) ? curve->curveData : NULL;
+}
+
+//***CryptEccGetOID()
+const BYTE *
+CryptEccGetOID(
+    TPM_ECC_CURVE       curveId
+)
+{
+    const ECC_CURVE         *curve = CryptEccGetParametersByCurveId(curveId);
+    return (curve != NULL) ? curve->OID : NULL;
 }
 
 //*** CryptEccGetCurveByIndex()
@@ -593,7 +603,7 @@ BnEccGetPrivate(
     OK = OK && BnSubWord(nMinus1, order, 1);
     OK = OK && BnMod(bnExtraBits, nMinus1);
     OK = OK && BnAddWord(dOut, bnExtraBits, 1);
-    return OK;
+    return OK && !g_inFailureMode;
 }
 
 //*** BnEccGenerateKeyPair()
@@ -794,6 +804,8 @@ CryptEccGenerateKey(
         digest.t.size = MIN(sensitive->sensitive.ecc.t.size, sizeof(digest.t.buffer));
         // Get a random value to sign using the built in DRBG state
         DRBG_Generate(NULL, digest.t.buffer, digest.t.size);
+        if(g_inFailureMode)
+            return TPM_RC_FAILURE;
         BnSignEcdsa(bnT, bnS, E, bnD, &digest, NULL);
         // and make sure that we can validate the signature
         OK = BnValidateSignatureEcdsa(bnT, bnS, E, ecQ, &digest) == TPM_RC_SUCCESS;

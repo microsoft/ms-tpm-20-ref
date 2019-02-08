@@ -89,13 +89,9 @@ TPM2_Shutdown(
         else if(g_StartupLocality3)
             gp.orderlyState = TPM_SU_STATE | STARTUP_LOCALITY_3;
     }
-    else if(in->shutdownType == TPM_SU_CLEAR)
-    {
-        // Save STATE_RESET data
-        NvWrite(NV_STATE_RESET_DATA, sizeof(STATE_RESET_DATA), &gr);
-    }
-    else
-        FAIL(FATAL_ERROR_INTERNAL);
+    // only two shutdown options. 
+    else if(in->shutdownType != TPM_SU_CLEAR)
+        return TPM_RCS_VALUE + RC_Shutdown_shutdownType;
 
     NV_SYNC_PERSISTENT(orderlyState);
 

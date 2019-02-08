@@ -151,7 +151,7 @@ BnCopy(
     return TRUE;
 }
 
-#if     ALG_ECC
+#if ALG_ECC
 
 //*** BnPointCopy()
 // Function to copy a bn point.

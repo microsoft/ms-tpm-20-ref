@@ -152,7 +152,7 @@ TPM2_GetCapability(
                                                 in->propertyCount,
                                                 &data->tpmProperties);
             break;
-#if     ALG_ECC
+#if ALG_ECC
         case TPM_CAP_ECC_CURVES:
             out->moreData = CryptCapGetECCCurve((TPM_ECC_CURVE)in->property,
                                                 in->propertyCount,

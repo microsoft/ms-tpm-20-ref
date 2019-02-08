@@ -75,7 +75,7 @@
 //                              larger than is allowed for the scheme
 //      TPM_RC_SYMMETRIC        a storage key with no symmetric algorithm specified; 
 //                              or non-storage key with symmetric algorithm different 
-//                              from ALG_NULL
+//                              from TPM_ALG_NULL
 //      TPM_RC_TYPE             unknown object type;
 //                              'parentHandle' does not reference a restricted
 //                              decryption key in the storage hierarchy with both
@@ -142,7 +142,7 @@ TPM2_Create(
                           &out->creationHash, &out->creationTicket);
 
     // Prepare output private data from sensitive
-    SensitiveToPrivate(&newObject->sensitive, &newObject->name.b, parentObject,
+    SensitiveToPrivate(&newObject->sensitive, &newObject->name, parentObject,
                        publicArea->nameAlg,
                        &out->outPrivate);
 

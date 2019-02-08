@@ -50,7 +50,7 @@ typedef TPM_RC(COMMAND_IN_ARG)(void *in);
 typedef TPM_RC(COMMAND_OUT_ARG)(void *out);
 typedef TPM_RC(COMMAND_INOUT_ARG)(void *in, void *out);
 
-typedef union
+typedef union COMMAND_t
 {
     COMMAND_NO_ARGS         *noArgs;
     COMMAND_IN_ARG          *inArg;
@@ -93,7 +93,7 @@ typedef union
 //              response parameters and only one command parameter, then offsets can
 //              be an empty list.
 
-typedef struct
+typedef struct COMMAND_DESCRIPTOR_t
 {
     COMMAND_t       command;        // Address of the command
     UINT16          inSize;         // Maximum size of the input structure

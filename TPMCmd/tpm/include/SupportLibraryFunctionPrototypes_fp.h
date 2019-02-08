@@ -128,4 +128,10 @@ BnEccAdd(bigPoint R, pointConst S, pointConst Q, bigCurve E);
 LIB_EXPORT bigCurve 
 BnCurveInitialize(bigCurve E, TPM_ECC_CURVE curveId);
 
+//*** BnCurveFree()
+// This function will free the allocated components of the curve and end the
+// frame in which the curve data exists
+LIB_EXPORT void
+BnCurveFree(bigCurve E);
+
 #endif 

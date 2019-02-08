@@ -60,7 +60,7 @@
 #define tpmHashStateSHA384_t      SHA512_CTX
 #define tpmHashStateSHA512_t      SHA512_CTX
 
-#if     ALG_SM3_256
+#if ALG_SM3_256
 #   error "The version of OpenSSL used by this code does not support SM3"
 #endif
 
@@ -145,8 +145,6 @@ typedef const BYTE    *PCBYTE;
 
 // Function aliases. The code in CryptHash.c uses the internal designation for the
 // functions. These need to be translated to the function names of the library.
-//          Internal                    External
-//          Designation                 Designation
 #define tpmHashStart_SHA1           SHA1_Init   // external name of the 
                                                 // initialization method
 #define tpmHashData_SHA1            SHA1_Update

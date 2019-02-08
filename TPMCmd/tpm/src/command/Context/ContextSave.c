@@ -111,6 +111,13 @@ TPM2_ContextSave(
             // plus fingerprint plus the whole internal OBJECT structure
             out->context.contextBlob.t.size = integritySize +
                 fingerprintSize + objectSize;
+#if ALG_RSA
+            // For an RSA key, make sure that the key has had the private exponent
+            // computed before saving.
+            if(object->publicArea.type == TPM_ALG_RSA &&
+               !(object->attributes.publicOnly))
+                CryptRsaLoadPrivateExponent(&object->publicArea, &object->sensitive);
+#endif
             // Make sure things fit
             pAssert(out->context.contextBlob.t.size
                     <= sizeof(out->context.contextBlob.t.buffer));

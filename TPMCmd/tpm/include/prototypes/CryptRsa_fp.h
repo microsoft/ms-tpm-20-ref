@@ -56,10 +56,27 @@ CryptRsaStartup(
     void
     );
 
-void
-RsaInitializeExponent(
-    privateExponent_t      *pExp
-    );
+//*** CryptRsaPssSaltSize()
+// This function computes the salt size used in PSS. It is broken out so that
+// the X509 code can get the same value that is used by the encoding function in this
+// module.
+INT16
+CryptRsaPssSaltSize(
+    INT16              hashSize,
+    INT16               outSize
+);
+
+//*** MakeDerTag()
+// Construct the DER value that is used in RSASSA
+//  Return Type: INT16
+//   > 0        size of value
+//   <= 0       no hash exists
+INT16
+MakeDerTag(
+    TPM_ALG_ID   hashAlg,
+    INT16        sizeOfBuffer,
+    BYTE        *buffer
+);
 
 //*** CryptRsaSelectScheme()
 // This function is used by TPM2_RSA_Decrypt and TPM2_RSA_Encrypt.  It sets up
@@ -84,7 +101,8 @@ CryptRsaSelectScheme(
 //      TPM_RC_BINDING      public and private parts of 'rsaKey' are not matched
 TPM_RC
 CryptRsaLoadPrivateExponent(
-    OBJECT          *rsaKey        // IN: the RSA key object
+    TPMT_PUBLIC             *publicArea,
+    TPMT_SENSITIVE          *sensitive
     );
 
 //*** CryptRsaEncrypt()
@@ -182,8 +200,8 @@ CryptRsaValidateSignature(
 //      TPM_RC_VALUE        could not find a prime using the provided parameters
 LIB_EXPORT TPM_RC
 CryptRsaGenerateKey(
-    OBJECT              *rsaKey,            // IN/OUT: The object structure in which
-                                            //          the key is created.
+    TPMT_PUBLIC         *publicArea,
+    TPMT_SENSITIVE      *sensitive,
     RAND_STATE          *rand               // IN: if not NULL, the deterministic
                                             //     RNG state
     );

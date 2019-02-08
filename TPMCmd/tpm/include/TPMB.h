@@ -62,15 +62,6 @@ typedef const TPM2B     *PC2B;
 // This lets the user of the label add their terminating 0. This method
 // is chosen so that existing code that provides a label will continue
 // to work correctly.
-#define TPM2B_STRING(name, value)           \
-    static const union {                    \
-        struct  {                           \
-            UINT16  size;                   \
-            BYTE    buffer[sizeof(value)];  \
-        } t;                                \
-        TPM2B   b;                          \
-    } name##_ = {{sizeof(value), {value}}}; \
-    const TPM2B       *name = &name##_.b
 
 // Macro to instance and initialize a TPM2B value
 #define TPM2B_INIT(TYPE, name)  \

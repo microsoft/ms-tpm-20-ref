@@ -126,6 +126,7 @@ HierarchyStartup(
     {
         gc.platformAuth.t.size = 0;
         gc.platformPolicy.t.size = 0;
+        gc.platformAlg = TPM_ALG_NULL;
 
         // enable the storage and endorsement hierarchies and the platformNV
         gc.shEnable = gc.ehEnable = gc.phEnableNV = TRUE;
@@ -167,12 +168,9 @@ HierarchyGetProof(
             // shProof for TPM_RH_OWNER
             proof = &gp.shProof;
             break;
-        case TPM_RH_NULL:
-            // nullProof for TPM_RH_NULL
-            proof = &gr.nullProof;
-            break;
         default:
-            FAIL(FATAL_ERROR_INTERNAL);
+            // nullProof for TPM_RH_NULL or anything else
+            proof = &gr.nullProof;
             break;
     }
     return proof;
@@ -197,10 +195,8 @@ HierarchyGetPrimarySeed(
         case TPM_RH_ENDORSEMENT:
             seed = &gp.EPSeed;
             break;
-        case TPM_RH_NULL:
-            return &gr.nullSeed;
-        default:
-            FAIL(FATAL_ERROR_INTERNAL);
+         default:
+            seed = &gr.nullSeed;
             break;
     }
     return seed;
@@ -234,7 +230,7 @@ HierarchyIsEnabled(
             enabled = TRUE;
             break;
         default:
-            FAIL(FATAL_ERROR_INTERNAL);
+            enabled = FALSE;
             break;
     }
     return enabled;

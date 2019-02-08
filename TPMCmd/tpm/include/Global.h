@@ -58,6 +58,14 @@
 #ifndef         GLOBAL_H
 #define         GLOBAL_H
 
+#ifdef GLOBAL_C
+#define EXTERN
+#define INITIALIZER(_value_)  = _value_
+#else
+#define EXTERN  extern
+#define INITIALIZER(_name_)
+#endif
+
 _REDUCE_WARNING_LEVEL_(2)
 #include <string.h>
 #include <stddef.h>
@@ -82,10 +90,6 @@ _NORMAL_WARNING_LEVEL_
 #include "NV.h"
 
 //** Defines and Types
-
-//*** Crypto Self-Test Values
-extern ALGORITHM_VECTOR     g_implementedAlgorithms;
-extern ALGORITHM_VECTOR     g_toTest;
 
 //*** Size Types
 // These types are used to differentiate the two different size values used.
@@ -168,14 +172,24 @@ typedef struct
                                             //    works with ticketSafe bit
     unsigned            isParent : 1;       //13) SET if the key has the proper
                                             //    attributes to be a parent key
-    unsigned            privateExp : 1;     //14) SET when the private exponent
-                                            //    of an RSA key has been validated.
+//   unsigned            privateExp : 1;    //14) SET when the private exponent
+//                                          //    of an RSA key has been validated.
+    unsigned            not_used_14 : 1;
     unsigned            occupied : 1;       //15) SET when the slot is occupied.
     unsigned            derivation : 1;     //16) SET when the key is a derivation
                                             //        parent
     unsigned            external : 1;       //17) SET when the object is loaded with
                                             //    TPM2_LoadExternal();
 } OBJECT_ATTRIBUTES;
+
+#if ALG_RSA
+// There is an overload of the sensitive.rsa.t.size field of a TPMT_SENSITIVE when an 
+// RSA key is loaded. When the sensitive->sensitive contains an RSA key with all of 
+// the CRT values, then the MSB of the size field will be set to indicate that the
+// buffer contains all 5 of the CRT private key values.
+#define     RSA_prime_flag      0x8000
+#endif
+
 
 //*** OBJECT Structure
 // An OBJECT structure holds the object public, sensitive, and meta-data
@@ -194,16 +208,11 @@ typedef struct OBJECT
     OBJECT_ATTRIBUTES   attributes;         // object attributes
     TPMT_PUBLIC         publicArea;         // public area of an object
     TPMT_SENSITIVE      sensitive;          // sensitive area of an object
-
-#if     ALG_RSA
-    privateExponent_t   privateExponent;    // Additional field for the private
-#endif
     TPM2B_NAME          qualifiedName;      // object qualified name
     TPMI_DH_OBJECT      evictHandle;        // if the object is an evict object,
                                             // the original handle is kept here.
                                             // The 'working' handle will be the
                                             // handle of an object slot.
-
     TPM2B_NAME          name;               // Name of the object name. Kept here
                                             // to avoid repeatedly computing it.
 } OBJECT;
@@ -507,28 +516,35 @@ typedef union
 //*****************************************************************************
 //*****************************************************************************
 //*** Description
-// The values in this section are only extant in RAM. They are defined here
-// and instanced in Global.c.
+// The values in this section are only extant in RAM or ROM as constant values.
+
+//*** Crypto Self-Test Values
+EXTERN ALGORITHM_VECTOR     g_implementedAlgorithms;
+EXTERN ALGORITHM_VECTOR     g_toTest;
 
 //*** g_rcIndex[]
 // This array is used to contain the array of values that are added to a return
 // code when it is a parameter-, handle-, or session-related error.
 // This is an implementation choice and the same result can be achieved by using
 // a macro.
-extern const UINT16     g_rcIndex[15];
+#define g_rcIndexInitializer {  TPM_RC_1, TPM_RC_2, TPM_RC_3, TPM_RC_4,             \
+                                TPM_RC_5, TPM_RC_6, TPM_RC_7, TPM_RC_8,             \
+                                TPM_RC_9, TPM_RC_A, TPM_RC_B, TPM_RC_C,             \
+                                TPM_RC_D, TPM_RC_E, TPM_RC_F }
+EXTERN const UINT16     g_rcIndex[15] INITIALIZER(g_rcIndexInitializer);
 
 //*** g_exclusiveAuditSession
 // This location holds the session handle for the current exclusive audit
 // session. If there is no exclusive audit session, the location is set to
 // TPM_RH_UNASSIGNED.
-extern TPM_HANDLE       g_exclusiveAuditSession;
+EXTERN TPM_HANDLE       g_exclusiveAuditSession;
 
 //*** g_time
 // This is the value in which we keep the current command time. This is initialized
 // at the start of each command. The time is the accumulated time since the last
 // time that the TPM's timer was last powered up. Clock is the accumulated time
 // since the last time that the TPM was cleared. g_time is in mS.
-extern  UINT64          g_time;
+EXTERN  UINT64          g_time;
 
 //*** g_timeEpoch
 // This value contains the current clock Epoch. It changes when there is a clock 
@@ -537,7 +553,7 @@ extern  UINT64          g_time;
 // If the nonce is placed in NV, it should go in gp because it should be changing
 // slowly.
 #if CLOCK_STOPS
-extern CLOCK_NONCE       g_timeEpoch;
+EXTERN CLOCK_NONCE       g_timeEpoch;
 #else
 #define g_timeEpoch      gp.timeEpoch
 #endif
@@ -547,33 +563,33 @@ extern CLOCK_NONCE       g_timeEpoch;
 // This is the platform hierarchy control and determines if the platform hierarchy
 // is available. This value is SET on each TPM2_Startup(). The default value is
 // SET.
-extern BOOL             g_phEnable;
+EXTERN BOOL             g_phEnable;
 
 //*** g_pcrReConfig
 // This value is SET if a TPM2_PCR_Allocate command successfully executed since
 // the last TPM2_Startup(). If so, then the next shutdown is required to be
 // Shutdown(CLEAR).
-extern BOOL             g_pcrReConfig;
+EXTERN BOOL             g_pcrReConfig;
 
 //*** g_DRTMHandle
 // This location indicates the sequence object handle that holds the DRTM
 // sequence data. When not used, it is set to TPM_RH_UNASSIGNED. A sequence
 // DRTM sequence is started on either _TPM_Init or _TPM_Hash_Start.
-extern TPMI_DH_OBJECT   g_DRTMHandle;
+EXTERN TPMI_DH_OBJECT   g_DRTMHandle;
 
 //*** g_DrtmPreStartup
 // This value indicates that an H-CRTM occurred after _TPM_Init but before
 // TPM2_Startup(). The define for PRE_STARTUP_FLAG is used to add the
 // g_DrtmPreStartup value to gp_orderlyState at shutdown. This hack is to avoid
 // adding another NV variable.
-extern  BOOL            g_DrtmPreStartup;
+EXTERN  BOOL            g_DrtmPreStartup;
 
 //*** g_StartupLocality3
 // This value indicates that a TPM2_Startup() occurred at locality 3. Otherwise, it
 // at locality 0. The define for STARTUP_LOCALITY_3 is to
 // indicate that the startup was not at locality 0. This hack is to avoid
 // adding another NV variable.
-extern  BOOL            g_StartupLocality3;
+EXTERN  BOOL            g_StartupLocality3;
 
 //***TPM_SU_NONE
 // Part 2 defines the two shutdown/startup types that may be used in
@@ -608,7 +624,7 @@ extern  BOOL            g_StartupLocality3;
 // cycle. If none has, then there is no need to increment 'failedTries' on the
 // next non-orderly startup. This bit is merged with gp.orderlyState when that
 // gp.orderly is set to SU_NONE_VALUE
-extern  BOOL                 g_daUsed;
+EXTERN  BOOL                 g_daUsed;
 #endif
 
 //*** g_updateNV
@@ -623,7 +639,7 @@ typedef BYTE        UPDATE_TYPE;
 #define UT_NONE     (UPDATE_TYPE)0
 #define UT_NV       (UPDATE_TYPE)1
 #define UT_ORDERLY  (UPDATE_TYPE)(UT_NV + 2)
-extern UPDATE_TYPE          g_updateNV;
+EXTERN UPDATE_TYPE          g_updateNV;
 
 //*** g_powerWasLost
 // This flag is used to indicate if the power was lost. It is SET in _TPM__Init.
@@ -634,7 +650,7 @@ extern UPDATE_TYPE          g_updateNV;
 // power is actually lost, we get the correct answer. When power was not lost, but
 // the power-lost processing has not been completed before the next _TPM_Init(), 
 // then the TPM still does the correct thing.
-extern BOOL             g_powerWasLost;
+EXTERN BOOL             g_powerWasLost;
 
 //*** g_clearOrderly
 // This flag indicates if the execution of a command should cause the orderly
@@ -644,13 +660,13 @@ extern BOOL             g_powerWasLost;
 // 'g_updateNV'. If this flag is TRUE, and the orderly state is not
 // SU_NONE_VALUE, then the orderly state in NV memory will be changed to
 // SU_NONE_VALUE or SU_DA_USED_VALUE.
-extern BOOL             g_clearOrderly;
+EXTERN BOOL             g_clearOrderly;
 
 //*** g_prevOrderlyState
 // This location indicates how the TPM was shut down before the most recent
 // TPM2_Startup(). This value, along with the startup type, determines if
 // the TPM should do a TPM Reset, TPM Restart, or TPM Resume.
-extern TPM_SU           g_prevOrderlyState;
+EXTERN TPM_SU           g_prevOrderlyState;
 
 //*** g_nvOk
 // This value indicates if the NV integrity check was successful or not. If not and
@@ -658,10 +674,10 @@ extern TPM_SU           g_prevOrderlyState;
 // it had been re-manufactured. If the NV failure was in the area where the state-save
 // data is kept, then this variable will have a value of FALSE indicating that
 // a TPM2_Startup(CLEAR) is required.
-extern BOOL             g_nvOk;
+EXTERN BOOL             g_nvOk;
 // NV availability is sampled as the start of each command and stored here
 // so that its value remains consistent during the command execution
-extern TPM_RC           g_NvStatus;
+EXTERN TPM_RC           g_NvStatus;
 
 //*** g_platformUnique
 // This location contains the unique value(s) used to identify the TPM. It is
@@ -674,9 +690,9 @@ extern TPM_RC           g_NvStatus;
 // first value depends on the various signers of the code and the second depends on
 // what was signed. The TPM vendor should not be able to know the first value but
 // they are expected to know the second.
-extern TPM2B_AUTH       g_platformUniqueAuthorities; // Reserved for RNG
+EXTERN TPM2B_AUTH       g_platformUniqueAuthorities; // Reserved for RNG
 
-extern TPM2B_AUTH       g_platformUniqueDetails;   // referenced by VENDOR_PERMANENT
+EXTERN TPM2B_AUTH       g_platformUniqueDetails;   // referenced by VENDOR_PERMANENT
 
 //*********************************************************************************
 //*********************************************************************************
@@ -843,7 +859,7 @@ typedef struct
 
 } PERSISTENT_DATA;
 
-extern PERSISTENT_DATA  gp;
+EXTERN PERSISTENT_DATA  gp;
 
 //*********************************************************************************
 //*********************************************************************************
@@ -893,7 +909,7 @@ typedef struct orderly_data
 
 #  define drbgDefault go.drbgState
 
-extern ORDERLY_DATA     go;
+EXTERN ORDERLY_DATA     go;
 
 //*********************************************************************************
 //*********************************************************************************
@@ -934,7 +950,7 @@ typedef struct state_clear_data
     PCR_AUTHVALUE       pcrAuthValues;
 } STATE_CLEAR_DATA;
 
-extern STATE_CLEAR_DATA gc;
+EXTERN STATE_CLEAR_DATA gc;
 
 //*********************************************************************************
 //*********************************************************************************
@@ -1044,7 +1060,7 @@ typedef struct state_reset_data
 #endif // ALG_ECC
 } STATE_RESET_DATA;
 
-extern STATE_RESET_DATA gr;
+EXTERN STATE_RESET_DATA gr;
 
 //** NV Layout
 // The NV data organization is
@@ -1061,17 +1077,17 @@ extern STATE_RESET_DATA gr;
 #define NV_USER_DYNAMIC     (NV_INDEX_RAM_DATA + sizeof(s_indexOrderlyRam))
 #define NV_USER_DYNAMIC_END     NV_MEMORY_SIZE
 
-//**Global Macro Definitions
+//** Global Macro Definitions
 // The NV_READ_PERSISTENT and NV_WRITE_PERSISTENT macros are used to access members
 // of the PERSISTENT_DATA structure in NV.
-#define NV_READ_PERSISTENT(to, from)      \
+#define NV_READ_PERSISTENT(to, from)                \
             NvRead(&to, offsetof(PERSISTENT_DATA, from), sizeof(to))
 
-#define NV_WRITE_PERSISTENT(to, from)     \
+#define NV_WRITE_PERSISTENT(to, from)               \
             NvWrite(offsetof(PERSISTENT_DATA, to), sizeof(gp.to), &from)
 
 #define CLEAR_PERSISTENT(item)                      \
-    NvClearPersistent(offsetof(PERSISTENT_DATA, item), sizeof(gp.item))
+            NvClearPersistent(offsetof(PERSISTENT_DATA, item), sizeof(gp.item))
 
 #define NV_SYNC_PERSISTENT(item) NV_WRITE_PERSISTENT(item, gp.item)
 
@@ -1138,121 +1154,141 @@ typedef struct _COMMAND_
 } COMMAND;
 
 // Global sting constants for consistency in KDF function calls.
-extern const TPM2B      *PRIMARY_OBJECT_CREATION;
-extern const TPM2B      *SECRET_KEY;
-extern const TPM2B      *SESSION_KEY;
-extern const TPM2B      *STORAGE_KEY;
-extern const TPM2B      *INTEGRITY_KEY;
-extern const TPM2B      *CONTEXT_KEY;
-extern const TPM2B      *CFB_KEY;
-extern const TPM2B      *XOR_KEY;
-extern const TPM2B      *DUPLICATE_STRING; 
-extern const TPM2B      *OBFUSCATE_STRING;
-extern const TPM2B      *IDENTITY_STRING;
-extern const TPM2B      *COMMIT_STRING;
+// These string constants are shared across functions to make sure that they 
+// are all using consistent sting values.
+
+#define STRING_INITIALIZER(value)   {{sizeof(value), {value}}}
+#define TPM2B_STRING(name, value)                                                   \
+typedef union name##_ {                                                             \
+        struct  {                                                                   \
+            UINT16  size;                                                           \
+            BYTE    buffer[sizeof(value)];                                          \
+        } t;                                                                        \
+        TPM2B   b;                                                                  \
+    } TPM2B_##name##_;                                                              \
+EXTERN  const TPM2B_##name##_      name##_ INITIALIZER(STRING_INITIALIZER(value));  \
+EXTERN  const TPM2B               *name INITIALIZER(&name##_.b)
+
+TPM2B_STRING(PRIMARY_OBJECT_CREATION, "Primary Object Creation");
+TPM2B_STRING(CFB_KEY, "CFB");
+TPM2B_STRING(CONTEXT_KEY, "CONTEXT");
+TPM2B_STRING(INTEGRITY_KEY, "INTEGRITY");
+TPM2B_STRING(SECRET_KEY, "SECRET");
+TPM2B_STRING(SESSION_KEY, "ATH");
+TPM2B_STRING(STORAGE_KEY, "STORAGE");
+TPM2B_STRING(XOR_KEY, "XOR");
+TPM2B_STRING(COMMIT_STRING, "ECDAA Commit");
+TPM2B_STRING(DUPLICATE_STRING, "DUPLICATE");
+TPM2B_STRING(IDENTITY_STRING, "IDENTITY");
+TPM2B_STRING(OBFUSCATE_STRING, "OBFUSCATE");
 #if SELF_TEST
-extern const TPM2B      *OAEP_TEST_STRING;
+TPM2B_STRING(OAEP_TEST_STRING, "OAEP Test Value");
 #endif // SELF_TEST
 
+//*****************************************************************************
+//** From CryptTest.c
+//*****************************************************************************
+// This structure contains the self-test state values for the cryptographic modules.
+EXTERN CRYPTO_SELF_TEST_STATE   g_cryptoSelfTestState;
 
 //*****************************************************************************
-// From Manufacture.c
+//** From Manufacture.c
 //*****************************************************************************
-extern BOOL              g_manufactured;
+EXTERN BOOL              g_manufactured INITIALIZER(FALSE);
 
 // This value indicates if a TPM2_Startup commands has been
 // receive since the power on event.  This flag is maintained in power
 // simulation module because this is the only place that may reliably set this
 // flag to FALSE.
-extern BOOL              g_initialized;
+EXTERN BOOL              g_initialized;
 
 //** Private data
 
+//*****************************************************************************
+//*** From SessionProcess.c
+//*****************************************************************************
 #if defined SESSION_PROCESS_C || defined GLOBAL_C || defined MANUFACTURE_C
-//*****************************************************************************
-// From SessionProcess.c
-//*****************************************************************************
 // The following arrays are used to save command sessions information so that the
 // command handle/session buffer does not have to be preserved for the duration of
 // the command. These arrays are indexed by the session index in accordance with
 // the order of sessions in the session area of the command.
 //
 // Array of the authorization session handles
-extern TPM_HANDLE       s_sessionHandles[MAX_SESSION_NUM];
+EXTERN TPM_HANDLE       s_sessionHandles[MAX_SESSION_NUM];
 
 // Array of authorization session attributes
-extern TPMA_SESSION     s_attributes[MAX_SESSION_NUM];
+EXTERN TPMA_SESSION     s_attributes[MAX_SESSION_NUM];
 
 // Array of handles authorized by the corresponding authorization sessions;
 // and if none, then TPM_RH_UNASSIGNED value is used
-extern TPM_HANDLE       s_associatedHandles[MAX_SESSION_NUM];
+EXTERN TPM_HANDLE       s_associatedHandles[MAX_SESSION_NUM];
 
 // Array of nonces provided by the caller for the corresponding sessions
-extern TPM2B_NONCE      s_nonceCaller[MAX_SESSION_NUM];
+EXTERN TPM2B_NONCE      s_nonceCaller[MAX_SESSION_NUM];
 
 // Array of authorization values (HMAC's or passwords) for the corresponding
 // sessions
-extern TPM2B_AUTH       s_inputAuthValues[MAX_SESSION_NUM];
+EXTERN TPM2B_AUTH       s_inputAuthValues[MAX_SESSION_NUM];
 
 // Array of pointers to the SESSION structures for the sessions in a command
-extern SESSION          *s_usedSessions[MAX_SESSION_NUM];
+EXTERN SESSION          *s_usedSessions[MAX_SESSION_NUM];
 
 // Special value to indicate an undefined session index
 #define             UNDEFINED_INDEX     (0xFFFF)
 
 // Index of the session used for encryption of a response parameter
-extern UINT32           s_encryptSessionIndex;
+EXTERN UINT32           s_encryptSessionIndex;
 
 // Index of the session used for decryption of a command parameter
-extern UINT32           s_decryptSessionIndex;
+EXTERN UINT32           s_decryptSessionIndex;
 
 // Index of a session used for audit
-extern UINT32           s_auditSessionIndex;
+EXTERN UINT32           s_auditSessionIndex;
 
 // The cpHash for command audit
 #ifdef  TPM_CC_GetCommandAuditDigest
-extern TPM2B_DIGEST    s_cpHashForCommandAudit;
+EXTERN TPM2B_DIGEST    s_cpHashForCommandAudit;
 #endif
 
 // Flag indicating if NV update is pending for the lockOutAuthEnabled or
 // failedTries DA parameter
-extern BOOL             s_DAPendingOnNV;
+EXTERN BOOL             s_DAPendingOnNV;
 
 #endif // SESSION_PROCESS_C
 
+//*****************************************************************************
+//*** From DA.c
+//*****************************************************************************
 #if defined DA_C || defined GLOBAL_C || defined MANUFACTURE_C
-//*****************************************************************************
-// From DA.c
-//*****************************************************************************
 // This variable holds the accumulated time since the last time
 // that 'failedTries' was decremented. This value is in millisecond.
 #if !ACCUMULATE_SELF_HEAL_TIMER
-extern UINT64       s_selfHealTimer;
+EXTERN UINT64       s_selfHealTimer;
 
 // This variable holds the accumulated time that the lockoutAuth has been
 // blocked.
-extern UINT64       s_lockoutTimer;
+EXTERN UINT64       s_lockoutTimer;
 #endif // ACCUMULATE_SELF_HEAL_TIMER
 
 #endif // DA_C
 
+//*****************************************************************************
+//*** From NV.c
+//*****************************************************************************
 #if defined NV_C || defined GLOBAL_C
-//*****************************************************************************
-// From NV.c
-//*****************************************************************************
 // This marks the end of the NV area. This is a run-time variable as it might
 // not be compile-time constant.
-extern NV_REF   s_evictNvEnd;
+EXTERN NV_REF   s_evictNvEnd;
 
 // This space is used to hold the index data for an orderly Index. It also contains
 // the attributes for the index.
-extern BYTE      s_indexOrderlyRam[RAM_INDEX_SPACE];   // The orderly NV Index data
+EXTERN BYTE      s_indexOrderlyRam[RAM_INDEX_SPACE];   // The orderly NV Index data
 
 // This value contains the current max counter value. It is written to the end of
 // allocatable NV space each time an index is deleted or added. This value is
 // initialized on Startup. The indices are searched and the maximum of all the
 // current counter indices and this value is the initial value for this.
-extern UINT64    s_maxCounter;
+EXTERN UINT64    s_maxCounter;
 
 // This is space used for the NV Index cache. As with a persistent object, the
 // contents of a referenced index are copied into the cache so that the
@@ -1265,29 +1301,29 @@ extern UINT64    s_maxCounter;
 // ever directly referenced by any command. If that changes, then the NV Index
 // caching needs to be changed to accommodate that. Currently, the code will verify
 // that only one NV Index is referenced by the handles of the command.
-extern      NV_INDEX         s_cachedNvIndex;
-extern      NV_REF           s_cachedNvRef;
-extern      BYTE            *s_cachedNvRamRef;
+EXTERN      NV_INDEX         s_cachedNvIndex;
+EXTERN      NV_REF           s_cachedNvRef;
+EXTERN      BYTE            *s_cachedNvRamRef;
 
 // Initial NV Index/evict object iterator value
 #define     NV_REF_INIT     (NV_REF)0xFFFFFFFF
 
 #endif
 
+//*****************************************************************************
+//*** From Object.c
+//*****************************************************************************
 #if defined OBJECT_C || defined GLOBAL_C
-//*****************************************************************************
-// From Object.c
-//*****************************************************************************
 // This type is the container for an object.
 
-extern OBJECT           s_objects[MAX_LOADED_OBJECTS];
+EXTERN OBJECT           s_objects[MAX_LOADED_OBJECTS];
 
 #endif // OBJECT_C
 
+//*****************************************************************************
+//*** From PCR.c
+//*****************************************************************************
 #if defined PCR_C || defined GLOBAL_C
-//*****************************************************************************
-// From PCR.c
-//*****************************************************************************
 typedef struct
 {
 #if     ALG_SHA1
@@ -1322,14 +1358,14 @@ typedef struct
                                                 // can be extend
 } PCR_Attributes;
 
-extern PCR          s_pcrs[IMPLEMENTATION_PCR];
+EXTERN PCR          s_pcrs[IMPLEMENTATION_PCR];
 
 #endif // PCR_C
 
+//*****************************************************************************
+//*** From Session.c
+//*****************************************************************************
 #if defined SESSION_C || defined GLOBAL_C
-//*****************************************************************************
-// From Session.c
-//*****************************************************************************
 // Container for HMAC or policy session tracking information
 typedef struct
 {
@@ -1337,61 +1373,64 @@ typedef struct
     SESSION             session;        // session structure
 } SESSION_SLOT;
 
-extern SESSION_SLOT     s_sessions[MAX_LOADED_SESSIONS];
+EXTERN SESSION_SLOT     s_sessions[MAX_LOADED_SESSIONS];
 
-/*
-    The index in conextArray that has the value of the oldest saved session
-    context. When no context is saved, this will have a value that is greater
-    than or equal to MAX_ACTIVE_SESSIONS.
-*/
-extern UINT32            s_oldestSavedSession;
+//  The index in contextArray that has the value of the oldest saved session
+//  context. When no context is saved, this will have a value that is greater
+//  than or equal to MAX_ACTIVE_SESSIONS.
+EXTERN UINT32            s_oldestSavedSession;
 
 // The number of available session slot openings.  When this is 1,
 // a session can't be created or loaded if the GAP is maxed out.
 // The exception is that the oldest saved session context can always
 // be loaded (assuming that there is a space in memory to put it)
-extern int               s_freeSessionSlots;
+EXTERN int               s_freeSessionSlots;
 
 #endif // SESSION_C
 
+//*****************************************************************************
+//*** From IoBuffers.c
+//*****************************************************************************
 #if defined IO_BUFFER_C || defined GLOBAL_C
 // Each command function is allowed a structure for the inputs to the function and
 // a structure for the outputs. The command dispatch code unmarshals the input butter 
-// to the command action input structure starting at the first byte of s_actionIoBuffer. 
-// The value of s_actionIoAllocation is the number of UINT64 values allocated. It is 
-// used to set the pointer for the response structure. The command dispatch code will 
-// marshal the response values into the final output buffer.
-extern UINT64   s_actionIoBuffer[768];      // action I/O buffer
-extern UINT32   s_actionIoAllocation;       // number of UIN64 allocated for the
+// to the command action input structure starting at the first byte of
+// s_actionIoBuffer. The value of s_actionIoAllocation is the number of UINT64 values 
+// allocated. It is used to set the pointer for the response structure. The command 
+// dispatch code will marshal the response values into the final output buffer.
+EXTERN UINT64   s_actionIoBuffer[768];      // action I/O buffer
+EXTERN UINT32   s_actionIoAllocation;       // number of UIN64 allocated for the
                                             // action input structure
-#endif // MEMORY_LIB_C
+#endif // IO_BUFFER_C
 
 //*****************************************************************************
-// From TPMFail.c
+//*** From TPMFail.c
 //*****************************************************************************
 // This value holds the address of the string containing the name of the function
 // in which the failure occurred. This address value isn't useful for anything
 // other than helping the vendor to know in which file the failure  occurred.
-extern BOOL      g_inFailureMode;       // Indicates that the TPM is in failure mode
+EXTERN BOOL      g_inFailureMode;       // Indicates that the TPM is in failure mode
 #if SIMULATION
-extern BOOL      g_forceFailureMode;    // flag to force failure mode during test
+EXTERN BOOL      g_forceFailureMode;    // flag to force failure mode during test
 #endif
 
 typedef void(FailFunction)(const char *function, int line, int code);
 
-#if defined TPM_FAIL_C || defined GLOBAL_C || 1
-extern UINT32    s_failFunction;
-extern UINT32    s_failLine;            // the line in the file at which
+#if defined TPM_FAIL_C || defined GLOBAL_C
+EXTERN UINT32    s_failFunction;
+EXTERN UINT32    s_failLine;            // the line in the file at which
                                         // the error was signaled
-extern UINT32    s_failCode;            // the error code used
+EXTERN UINT32    s_failCode;            // the error code used
 
-extern FailFunction    *LibFailCallback;
+EXTERN FailFunction    *LibFailCallback;
 
 #endif // TPM_FAIL_C
 
 //*****************************************************************************
-// From CommandCodeAttributes.c
+//*** From CommandCodeAttributes.c
 //*****************************************************************************
+// This array is instanced in CommandCodeAttributes.c when it includes
+// CommandCodeAttributes.h. Don't change the extern to EXTERN.
 extern  const  TPMA_CC               s_ccAttr[];
 extern  const  COMMAND_ATTRIBUTES    s_commandAttributes[];
 

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 3.0 June 16, 2017
- *  Date: Aug 14, 2017  Time: 02:53:08PM
+ *  Date: Oct  9, 2018  Time: 07:25:18PM
  */
 // This file should only be included by CommandCodeAttibutes.c
 #ifdef _COMMAND_CODE_ATTRIBUTES_
@@ -411,6 +411,9 @@ const TPMA_CC    s_ccAttr [] = {
 #endif
 #if (PAD_LIST || CC_Policy_AC_SendSelect)
         TPMA_CC_INITIALIZER(0x0196, 0, 0, 0, 0, 1, 0, 0, 0),
+#endif
+#if (PAD_LIST || CC_CertifyX509)
+        TPMA_CC_INITIALIZER(0x0197, 0, 0, 0, 0, 2, 0, 0, 0),
 #endif
 #if (PAD_LIST || CC_Vendor_TCG_Test)
         TPMA_CC_INITIALIZER(0x0000, 0, 0, 0, 0, 0, 0, 1, 0),
@@ -896,6 +899,10 @@ const COMMAND_ATTRIBUTES    s_commandAttributes [] = {
 #if (PAD_LIST || CC_Policy_AC_SendSelect)
         (COMMAND_ATTRIBUTES)(CC_Policy_AC_SendSelect        *  // 0x0196
             (IS_IMPLEMENTED+DECRYPT_2+ALLOW_TRIAL)),
+#endif
+#if (PAD_LIST || CC_CertifyX509)
+        (COMMAND_ATTRIBUTES)(CC_CertifyX509                 *  // 0x0197
+            (IS_IMPLEMENTED+DECRYPT_2+HANDLE_1_ADMIN+HANDLE_2_USER+ENCRYPT_2)),
 #endif
 #if (PAD_LIST || CC_Vendor_TCG_Test)
         (COMMAND_ATTRIBUTES)(CC_Vendor_TCG_Test             *  // 0x0000

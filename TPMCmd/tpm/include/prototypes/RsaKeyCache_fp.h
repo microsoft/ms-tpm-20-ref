@@ -55,7 +55,8 @@ RsaKeyCacheControl(
 //      FALSE(0)        key not loaded
 BOOL
 GetCachedRsaKey(
-    OBJECT              *key,
+    TPMT_PUBLIC         *publicArea,
+    TPMT_SENSITIVE      *sensitive,
     RAND_STATE          *rand               // IN: if not NULL, the deterministic
                                             //     RNG state
     );

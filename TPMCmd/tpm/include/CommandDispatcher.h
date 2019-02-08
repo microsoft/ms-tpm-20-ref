@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmDispatch; Version 4.0 July 8,2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Oct 27, 2018  Time: 06:49:39PM
  */
 
 // This macro is added just so that the code is only excessively long.
@@ -905,6 +905,32 @@ result = TPM2_GetTime (in, out);
 break; 
 }
 #endif     // CC_GetTime
+#if CC_CertifyX509
+case TPM_CC_CertifyX509: {
+    CertifyX509_In *in = (CertifyX509_In *)
+            MemoryGetInBuffer(sizeof(CertifyX509_In));
+    CertifyX509_Out *out = (CertifyX509_Out *) 
+            MemoryGetOutBuffer(sizeof(CertifyX509_Out));
+    in->objectHandle = handles[0];
+    in->signHandle = handles[1];
+    result = TPM2B_DATA_Unmarshal(&in->qualifyingData, paramBuffer, paramBufferSize);
+        ERROR_IF_EXIT_PLUS(RC_CertifyX509_qualifyingData);
+    result = TPMT_SIG_SCHEME_Unmarshal(&in->inScheme, paramBuffer, paramBufferSize, TRUE);
+        ERROR_IF_EXIT_PLUS(RC_CertifyX509_inScheme);
+    result = TPM2B_MAX_BUFFER_Unmarshal(&in->partialCertificate, paramBuffer, paramBufferSize);
+        ERROR_IF_EXIT_PLUS(RC_CertifyX509_partialCertificate);
+    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+result = TPM2_CertifyX509 (in, out);
+    rSize = sizeof(CertifyX509_Out);
+    *respParmSize += TPM2B_MAX_BUFFER_Marshal(&out->addedToCertificate, 
+                                          responseBuffer, &rSize);
+    *respParmSize += TPM2B_DIGEST_Marshal(&out->tbsDigest, 
+                                          responseBuffer, &rSize);
+    *respParmSize += TPMT_SIGNATURE_Marshal(&out->signature, 
+                                          responseBuffer, &rSize);
+break; 
+}
+#endif     // CC_CertifyX509
 #if CC_Commit
 case TPM_CC_Commit: {
     Commit_In *in = (Commit_In *)

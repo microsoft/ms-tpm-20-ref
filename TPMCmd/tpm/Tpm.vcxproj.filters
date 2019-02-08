@@ -517,9 +517,6 @@
     <ClCompile Include="src\crypt\ltc\TpmToLtcDesSupport.c">
       <Filter>Source Files\Crypt\ltc</Filter>
     </ClCompile>
-    <ClCompile Include="src\crypt\CryptHashData.c">
-      <Filter>Source Files\Crypt</Filter>
-    </ClCompile>
     <ClCompile Include="src\support\ResponseCodeProcessing.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -579,6 +576,21 @@
     </ClCompile>
     <ClCompile Include="src\crypt\wolf\TpmToWolfSupport.c">
       <Filter>Source Files\Crypt\wolf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Attestation\CertifyX509.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\X509\X509_spt.c">
+      <Filter>Source Files\X509</Filter>
+    </ClCompile>
+    <ClCompile Include="src\X509\X509_RSA.c">
+      <Filter>Source Files\X509</Filter>
+    </ClCompile>
+    <ClCompile Include="src\X509\X509_ECC.c">
+      <Filter>Source Files\X509</Filter>
+    </ClCompile>
+    <ClCompile Include="src\X509\TpmASN1.c">
+      <Filter>Source Files\X509</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1188,6 +1200,15 @@
     <ClInclude Include="include\CryptEcc.h">
       <Filter>Headers\Crypt</Filter>
     </ClInclude>
+    <ClInclude Include="include\X509.h">
+      <Filter>Source Files\X509</Filter>
+    </ClInclude>
+    <ClInclude Include="include\X509_RSA.h">
+      <Filter>Source Files\X509</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OIDS.h">
+      <Filter>Source Files\X509</Filter>
+    </ClInclude>
     <ClInclude Include="include\CryptHash.h">
       <Filter>Headers\Crypt</Filter>
     </ClInclude>
@@ -1348,6 +1369,9 @@
     </Filter>
     <Filter Include="Headers\Crypt\wolf">
       <UniqueIdentifier>{19c87ebb-c1f3-4521-a442-d9120957d238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\X509">
+      <UniqueIdentifier>{c0101f08-45d5-48bf-bc4d-a64e300da76d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

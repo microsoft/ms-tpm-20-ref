@@ -38,41 +38,18 @@
 #ifndef                 _SELF_TEST_H_
 #define                 _SELF_TEST_H_
 
-
 //** Defines
 
 // Was typing this a lot
 #define SELF_TEST_FAILURE   FAIL(FATAL_ERROR_SELF_TEST)
 
-// Use the definition of key sizes to set algorithm values for key size. Need to
-// do this to avoid a lot of #ifdefs in the code. Also, define the index for
-// each of the algorithms.
-#if ALG_AES && defined  AES_KEY_SIZE_BITS_128
-#   define  AES_128     YES
-#   define  AES_128_INDEX   0
-#else
-#   define  AES_128     NO
-#endif
-#if ALG_AES && defined  AES_KEY_SIZE_BITS_192
-#   define  AES_192     YES
-#   define  AES_192_INDEX   (AES_128)
-#else
-#   define  AES_192     NO
-#endif
-#if ALG_AES && defined  AES_KEY_SIZE_BITS_256
-#   define  AES_256     YES
-#   define  AES_256_INDEX   (AES_128 + AES_192)
-#else
-#   define  AES_256     NO
-#endif
-#if ALG_SM4 && defined SM4_KEY_SIZE_BITS_128
-#   define  SM4_128     YES
-#   define  SM4_128_INDEX   (AES_128 + AES_192 + AES_256)
-#else
-#   define  SM4_128     NO
-#endif
+// Use the definition of key sizes to set algorithm values for key size. 
+#define AES_ENTRIES (AES_128 + AES_192 + AES_256)
+#define SM4_ENTRIES (SM4_128)
+#define CAMELLIA_ENTRIES (CAMELLIA_128 + CAMELLIA_192 + CAMELLIA_256)
+#define TDES_ENTRIES (TDES_128 + TDES_192)
 
-#define NUM_SYMS    (AES_128 + AES_192 + AES_256 + SM4_128)
+#define NUM_SYMS    (AES_ENTRIES + SM4_ENTRIES + CAMELLIA_ENTRIES + TDES_ENTRIES)
 
 typedef UINT32      SYM_INDEX;
 
@@ -96,7 +73,7 @@ typedef UINT32  SYM_MODES;
 #error "Too many symmetric modes"
 #endif
 
-typedef struct {
+typedef struct SYMMETRIC_TEST_VECTOR {
     const TPM_ALG_ID     alg;                   // the algorithm
     const UINT16         keyBits;               // bits in the key
     const BYTE          *key;                   // The test key
@@ -105,19 +82,6 @@ typedef struct {
     const BYTE          *dataIn;                // data to encrypt
     const BYTE          *dataOut[NUM_SYM_MODES];// data to decrypt
 } SYMMETRIC_TEST_VECTOR;
-
-
-#if     ALG_RSA
-extern const RSA_KEY        c_rsaTestKey; // This is a constant structure
-#endif
-
-#define SYM_TEST_VALUE_REF(value, alg, keyBits, mode)                           \
-    SIZED_REFERENCE(value##_##alg##keyBits##_##mode)
-
-typedef struct {
-    TPM_ALG_ID      alg;
-    UINT16          keySizeBits;
-} SYM_ALG;
 
 #define SET_ALG(ALG, v)  MemorySetBit((v), ALG, sizeof(v) * 8)
 

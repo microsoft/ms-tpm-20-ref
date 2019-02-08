@@ -174,17 +174,6 @@ HandleToObject(
     return &s_objects[index];
 }
 
-//*** ObjectGetNameAlg()
-// This function is used to get the Name algorithm of a object.
-//
-// This function requires that 'object' references a loaded object.
-TPMI_ALG_HASH
-ObjectGetNameAlg(
-    OBJECT          *object         // IN: handle of the object
-    )
-{
-    return object->publicArea.nameAlg;
-}
 
 //*** GetQualifiedName()
 // This function returns the Qualified Name of the object. In this implementation,
@@ -409,12 +398,12 @@ ObjectLoad(
     TPM_RC           blameSensitive,// IN: parameter number to associate with the
                                     //     sensitive area errors
     TPM2B_NAME      *name           // IN: (optional)
-    )
+)
 {
     TPM_RC           result = TPM_RC_SUCCESS;
-    BOOL             doCheck = FALSE;
 //
-    // Do validations of public area object descriptions
+// Do validations of public area object descriptions
+    pAssert(publicArea != NULL);
 
     // Is this public only or a no-name object?
     if(sensitive == NULL || publicArea->nameAlg == TPM_ALG_NULL)
@@ -427,64 +416,55 @@ ObjectLoad(
     {
         // For any sensitive area, make sure that the seedSize is no larger than the
         // digest size of nameAlg
-        if(sensitive->seedValue.t.size  
-                > CryptHashGetDigestSize(publicArea->nameAlg))
+        if(sensitive->seedValue.t.size > CryptHashGetDigestSize(publicArea->nameAlg))
             return TPM_RCS_KEY_SIZE + blameSensitive;
         // Check attributes and schemes for consistency
         result = PublicAttributesValidation(parent, publicArea);
     }
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, blamePublic);
-    // If object == NULL, then this is an import and a full object structure is not
-    // created. When doing TPM2_Import(), ObjectLoad() is only called if the parent
-    // is 'fixedTPM.' We want to do the check because, during the check, everything
-    // is created.
-    if(object == NULL)
-        doCheck = TRUE;// //
-    // If the parent is not NULL, then this is an ordinary load and we only check
-    // if the parent is not fixedTPM
-    else if(parent != NULL)
-        doCheck = !IS_ATTRIBUTE(parent->publicArea.objectAttributes, 
-                                TPMA_OBJECT, fixedTPM);
-    else
-        // This is a loadExternal. Check everything.
-        // Note: the check functions will filter things based on the name algorithm
-        // and whether or not both parts are loaded.
-        doCheck = TRUE;
-    // Note: the parent will be NULL if this is a load external. CryptValidateKeys()
-    // will only check the parts that need to be checked based on the settings
-    // of publicOnly and nameAlg.
-    // Note: For an RSA key, the keys sizes are checked but the binding is not 
-    // checked.
-    if(doCheck)
+
+// Sensitive area and binding checks
+
+    // On load, check nothing if the parent is fixedTPM. For all other cases, validate
+    // the keys.
+    if((parent == NULL)
+       || ((parent != NULL) && !IS_ATTRIBUTE(parent->publicArea.objectAttributes,
+                                             TPMA_OBJECT, fixedTPM)))
     {
         // Do the cryptographic key validation
-        result = CryptValidateKeys(publicArea, sensitive, blamePublic, 
+        result = CryptValidateKeys(publicArea, sensitive, blamePublic,
                                    blameSensitive);
+        if(result != TPM_RC_SUCCESS)
+            return result;
     }
-    // If this is an import, we are done
-    if(object == NULL || result != TPM_RC_SUCCESS)
-        return result;
-    // Set the name, if one was provided
-    if(name != NULL)
-        object->name = *name;
-    else
-        object->name.t.size = 0;
-    // Initialize public
-    object->publicArea = *publicArea;
-
-    // If there is a sensitive area, load it
-    if(sensitive == NULL)
-        object->attributes.publicOnly = SET;
-    else
+#if ALG_RSA
+    // If this is an RSA key, then expand the private exponent. 
+    // Note: ObjectLoad() is only called by TPM2_Import() if the parent is fixedTPM.
+    // For any key that does not have a fixedTPM parent, the exponent is computed
+    // whenever it is loaded
+    if((publicArea->type == TPM_ALG_RSA) && (sensitive != NULL))
     {
-        object->sensitive = *sensitive;
-#if     ALG_RSA
-        // If this is an RSA key, complete the load by 
-        // computing the private exponent.
-        if(publicArea->type == ALG_RSA_VALUE)
-            result = CryptRsaLoadPrivateExponent(object);
-#endif
+        result = CryptRsaLoadPrivateExponent(publicArea, sensitive);
+        if(result != TPM_RC_SUCCESS)
+            return result;
+    }
+#endif // ALG_RSA
+    // See if there is an object to populate
+    if((result == TPM_RC_SUCCESS) && (object != NULL))
+    {
+        // Initialize public
+        object->publicArea = *publicArea;
+        // Copy sensitive if there is one
+        if(sensitive == NULL)
+            object->attributes.publicOnly = SET;
+        else
+            object->sensitive = *sensitive;
+        // Set the name, if one was provided
+        if(name != NULL)
+            object->name = *name;
+        else
+            object->name.t.size = 0;
     }
     return result;
 }

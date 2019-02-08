@@ -244,7 +244,7 @@ BnTo2B(
     return FALSE;
 }
 
-#if     ALG_ECC
+#if ALG_ECC
 
 //*** BnPointFrom2B()
 // Function to create a BIG_POINT structure from a 2B point.

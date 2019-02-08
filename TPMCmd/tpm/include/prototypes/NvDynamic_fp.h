@@ -161,6 +161,18 @@ NvGetIndexData(
     void                *data           // OUT: data buffer
     );
 
+//*** NvHashIndexData()
+// This function adds Index data to a hash. It does this in parts to avoid large stack
+// buffers.
+void
+NvHashIndexData(
+    HASH_STATE          *hashState,     // IN: Initialized hash state
+    NV_INDEX            *nvIndex,       // IN: Index
+    NV_REF               locator,       // IN: where the data is located
+    UINT32               offset,        // IN: starting offset
+    UINT16               size           // IN: amount to hash
+);
+
 //*** NvGetUINT64Data()
 // Get data in integer format of a bit or counter NV Index.
 //

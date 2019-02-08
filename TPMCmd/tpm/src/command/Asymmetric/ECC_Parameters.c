@@ -37,7 +37,7 @@
 
 #ifdef TPM_CC_ECC_Parameters  // Conditional expansion of this file
 
-#if     ALG_ECC
+#if ALG_ECC
 
 /*(See part 3 specification)
 // This command returns the parameters of an ECC curve identified by its TCG

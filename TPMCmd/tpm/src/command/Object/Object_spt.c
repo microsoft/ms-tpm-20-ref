@@ -424,7 +424,7 @@ CreateChecks(
 //                          with the scheme ID for keyed hash object
 //      TPM_RC_SYMMETRIC    a storage key with no symmetric algorithm specified; or
 //                          non-storage key with symmetric algorithm different from
-// ALG_NULL
+//                          TPM_ALG_NULL
 TPM_RC
 SchemeChecks(
     OBJECT          *parentObject,  // IN: parent (null if primary seed)
@@ -454,7 +454,7 @@ SchemeChecks(
                == IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
             {
                 // if both sign and decrypt are set or clear, then need
-                // ALG_NULL as scheme
+                // TPM_ALG_NULL as scheme
                 if(scheme != TPM_ALG_NULL)
                     return TPM_RCS_SCHEME;
             }
@@ -485,7 +485,7 @@ SchemeChecks(
             scheme = parms->asymDetail.scheme.scheme;
             symAlgs = &parms->asymDetail.symmetric;
             // if the key is both sign and decrypt, then the scheme must be
-            // ALG_NULL because there is no way to specify both a sign and a
+            // TPM_ALG_NULL because there is no way to specify both a sign and a
             // decrypt scheme in the key.
             if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
                == IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
@@ -541,7 +541,7 @@ SchemeChecks(
                     return TPM_RCS_SYMMETRIC;
             }
             // Special checks for an ECC key
-#if     ALG_ECC
+#if ALG_ECC
             if(publicArea->type == TPM_ALG_ECC)
             {
                 TPM_ECC_CURVE            curveID;
@@ -746,14 +746,13 @@ FillInCreationData(
         OBJECT          *parentObject = HandleToObject(parentHandle);
 //
         // Set name algorithm
-        outCreation->creationData.parentNameAlg =
-            parentObject->publicArea.nameAlg;
+        outCreation->creationData.parentNameAlg = parentObject->publicArea.nameAlg;
+
         // Copy parent name
         outCreation->creationData.parentName = parentObject->name;
 
         // Copy parent qualified name
-        outCreation->creationData.parentQualifiedName =
-            parentObject->qualifiedName;
+        outCreation->creationData.parentQualifiedName = parentObject->qualifiedName;
     }
     // Copy outside information
     outCreation->creationData.outsideInfo = *outsideData;
@@ -958,11 +957,11 @@ UnwrapOuter(
 //*** MarshalSensitive()
 // This function is used to marshal a sensitive area. Among other things, it
 // adjusts the size of the authValue to be no smaller than the digest of
-// 'nameAlg'. It will also make sure that the RSA sensitive contains the right number
-// of values.
+// 'nameAlg'
 // Returns the size of the marshaled area.
 static UINT16
 MarshalSensitive(
+    OBJECT              *parent,            // IN: the object parent (optional)
     BYTE                *buffer,            // OUT: receiving buffer
     TPMT_SENSITIVE      *sensitive,         // IN: the sensitive area to marshal
     TPMI_ALG_HASH        nameAlg            // IN:
@@ -972,12 +971,33 @@ MarshalSensitive(
                                                 // marshaled after it is known
     UINT16               retVal;
 //
-
     // Pad the authValue if needed
     MemoryPad2B(&sensitive->authValue.b, CryptHashGetDigestSize(nameAlg));
     buffer += 2;
 
     // Marshal the structure
+#if ALG_RSA
+    // If the sensitive size is the special case for a prime in the type 
+    if((sensitive->sensitive.rsa.t.size & RSA_prime_flag) > 0)
+    {
+        UINT16               sizeSave = sensitive->sensitive.rsa.t.size;
+    //
+        // Turn off the flag that indicates that the sensitive->sensitive contains
+        // the CRT form of the exponent.
+        sensitive->sensitive.rsa.t.size &= ~(RSA_prime_flag);
+        // If the parent isn't fixedTPM, then truncate the sensitive data to be
+        // the size of the prime. Otherwise, leave it at the current size which 
+        // is the full CRT size.
+        if(parent == NULL
+           || !IS_ATTRIBUTE(parent->publicArea.objectAttributes,
+                            TPMA_OBJECT, fixedTPM))
+            sensitive->sensitive.rsa.t.size /= 5;
+        retVal = TPMT_SENSITIVE_Marshal(sensitive, &buffer, NULL);
+        // Restore the flag and the size.
+        sensitive->sensitive.rsa.t.size = sizeSave;
+    }
+    else
+#endif
     retVal = TPMT_SENSITIVE_Marshal(sensitive, &buffer, NULL);
 
     // Marshal the size
@@ -995,7 +1015,7 @@ MarshalSensitive(
 void
 SensitiveToPrivate(
     TPMT_SENSITIVE  *sensitive,     // IN: sensitive structure
-    TPM2B           *name,          // IN: the name of the object
+    TPM2B_NAME      *name,          // IN: the name of the object
     OBJECT          *parent,        // IN: The parent object
     TPM_ALG_ID       nameAlg,       // IN: hash algorithm in public area.  This
                                     //     parameter is used when parentHandle is
@@ -1010,7 +1030,7 @@ SensitiveToPrivate(
     UINT16              integritySize;
     UINT16              ivSize;
 //
-    pAssert(name != NULL && name->size != 0);
+    pAssert(name != NULL && name->t.size != 0);
 
     // Find the hash algorithm for integrity computation
     if(parent == NULL)
@@ -1021,7 +1041,7 @@ SensitiveToPrivate(
     else
     {
         // Otherwise, using parent's name algorithm
-        hashAlg = ObjectGetNameAlg(parent);
+        hashAlg = parent->publicArea.nameAlg;
     }
     // Starting of sensitive data without wrappers
     sensitiveData = outPrivate->t.buffer;
@@ -1039,10 +1059,10 @@ SensitiveToPrivate(
     sensitiveData += ivSize;
 
     // Marshal the sensitive area including authValue size adjustments.
-    dataSize = MarshalSensitive(sensitiveData, sensitive, nameAlg);
+    dataSize = MarshalSensitive(parent, sensitiveData, sensitive, nameAlg);
 
     //Produce outer wrap, including encryption and HMAC
-    outPrivate->t.size = ProduceOuterWrap(parent, name, hashAlg, NULL,
+    outPrivate->t.size = ProduceOuterWrap(parent, &name->b, hashAlg, NULL,
                                           TRUE, dataSize, outPrivate->t.buffer);
     return;
 }
@@ -1091,16 +1111,10 @@ PrivateToSensitive(
     pAssert(name != NULL && name->size != 0);
 
     // Find the hash algorithm for integrity computation
-    if(parent == NULL)
-    {
-        // For Temporary Object, using self name algorithm
-        hashAlg = nameAlg;
-    }
-    else
-    {
-        // Otherwise, using parent's name algorithm
-        hashAlg = ObjectGetNameAlg(parent);
-    }
+    // For Temporary Object (parent == NULL) use self name algorithm;
+    // Otherwise, using parent's name algorithm
+    hashAlg = (parent == NULL) ? nameAlg : parent->publicArea.nameAlg;
+
     // unwrap outer
     result = UnwrapOuter(parent, name, hashAlg, NULL, TRUE,
                          inPrivate->size, inPrivate->buffer);
@@ -1199,13 +1213,13 @@ SensitiveToDuplicate(
         doOuterWrap = TRUE;
 
         // Use parent nameAlg as outer hash algorithm
-        outerHash = ObjectGetNameAlg(parent);
+        outerHash = parent->publicArea.nameAlg;
 
         // Adjust sensitive data pointer
         sensitiveData += sizeof(UINT16) + CryptHashGetDigestSize(outerHash);
     }
     // Marshal sensitive area
-    dataSize = MarshalSensitive(sensitiveData, sensitive, nameAlg);
+    dataSize = MarshalSensitive(NULL, sensitiveData, sensitive, nameAlg);
 
     // Apply inner wrap for duplication blob.  It includes both integrity and
     // encryption
@@ -1381,8 +1395,8 @@ SecretToCredential(
 //
     pAssert(secret != NULL && outIDObject != NULL);
 
-    // use protector's name algorithm as outer hash
-    outerHash = ObjectGetNameAlg(protector);
+    // use protector's name algorithm as outer hash ????
+    outerHash = protector->publicArea.nameAlg;
 
     // Marshal secret area to credential buffer, leave space for integrity
     sensitiveData = outIDObject->t.credential
@@ -1428,7 +1442,7 @@ CredentialToSecret(
     UINT16                   dataSize;
 //
     // use protector's name algorithm as outer hash
-    outerHash = ObjectGetNameAlg(protector);
+    outerHash = protector->publicArea.nameAlg;
 
     // Unwrap outer, a TPM_RC_INTEGRITY error may be returned at this point
     result = UnwrapOuter(protector, name, outerHash, seed, FALSE,

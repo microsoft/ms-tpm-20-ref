@@ -43,7 +43,7 @@
 #include "Tpm.h"
 #include "CryptSym.h"
 
-#if     ALG_CMAC
+#if ALG_CMAC
 //** Functions
 //*** CryptCmacStart()
 // This is the function to start the CMAC sequence operation. It initializes the

@@ -69,7 +69,7 @@
 //                              object is larger than is allowed for the scheme
 //      TPM_RC_SYMMETRIC        a storage key with no symmetric algorithm specified; 
 //                              or non-storage key with symmetric algorithm different 
-//                              from ALG_NULL
+//                              from TPM_ALG_NULL
 //      TPM_RC_TYPE             cannot create the object of the indicated type 
 //                              (usually only occurs if trying to derive an RSA key).
 TPM_RC
@@ -180,12 +180,14 @@ TPM2_CreateLoaded(
                 newObject->attributes.epsHierarchy = SET;
             // If so, use the primary seed and the digest of the template
             // to seed the DRBG
-            DRBG_InstantiateSeeded((DRBG_STATE *)rand,
+            result = DRBG_InstantiateSeeded((DRBG_STATE *)rand,
                                    &HierarchyGetPrimarySeed(in->parentHandle)->b,
                                    PRIMARY_OBJECT_CREATION,
                                    (TPM2B *)PublicMarshalAndComputeName(publicArea, 
                                                                         &name),
                                    &in->inSensitive.sensitive.data.b);
+            if(result != TPM_RC_SUCCESS)
+                return result;
         }
         else
         {
@@ -202,7 +204,7 @@ TPM2_CreateLoaded(
     // area
     if(parent != NULL && !derivation)
         // Prepare output private data from sensitive
-        SensitiveToPrivate(&newObject->sensitive, &newObject->name.b,
+        SensitiveToPrivate(&newObject->sensitive, &newObject->name,
                            parent, newObject->publicArea.nameAlg,
                            &out->outPrivate);
     else

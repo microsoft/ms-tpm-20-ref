@@ -253,8 +253,8 @@ PrimeSieve(
     BYTE            *field      // IN: field
     )
 {
-    INT32            i;
-    UINT32            j;
+    UINT32           i;
+    UINT32           j;
     UINT32           fieldBits = fieldSize * 8;
     UINT32           r;
     BYTE            *pField;
@@ -385,6 +385,7 @@ SetFieldSize(
 // been checked and none is prime, the function returns FALSE and a new random
 // value needs to be chosen.
 //  Return Type: TPM_RC
+//      TPM_RC_FAILURE      TPM in failure mode, probably due to entropy source
 //      TPM_RC_SUCCESS      candidate is probably prime
 //      TPM_RC_NO_RESULT    candidate is not prime and couldn't find and alternative
 //                          in the field
@@ -459,7 +460,7 @@ PrimeSelectWithSieve(
     }
     // Ran out of bits and couldn't find a prime in this field
     INSTRUMENT_INC(noPrimeFields[PrimeIndex]);
-    return TPM_RC_NO_RESULT;
+    return (g_inFailureMode ? TPM_RC_FAILURE : TPM_RC_NO_RESULT);
 }
 
 #if RSA_INSTRUMENT

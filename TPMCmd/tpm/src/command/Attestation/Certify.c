@@ -74,7 +74,14 @@ TPM2_Certify(
     // NOTE: the certified object is not allowed to be TPM_ALG_NULL so
     // 'certifiedObject' will never be NULL
     certifyInfo.attested.certify.name = certifiedObject->name;
-    certifyInfo.attested.certify.qualifiedName = certifiedObject->qualifiedName;
+
+    // When using an anonymous signing scheme, need to set the qualified Name to the
+    // empty buffer to avoid correlation between keys
+    if(CryptIsSchemeAnonymous(in->inScheme.scheme))
+        certifyInfo.attested.certify.qualifiedName.t.size = 0;
+    else
+        certifyInfo.attested.certify.qualifiedName = certifiedObject->qualifiedName;
+
 
     // Sign attestation structure.  A NULL signature will be returned if
     // signHandle is TPM_RH_NULL.  A TPM_RC_NV_UNAVAILABLE, TPM_RC_NV_RATE,

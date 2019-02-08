@@ -309,7 +309,7 @@ TPMPropertyIsDefined(
         case TPM_PT_SPLIT_MAX:
             // number of split signing operations supported by the TPM
             *value = 0;
-#if     ALG_ECC
+#if ALG_ECC
             *value = sizeof(gr.commitArray) * 8;
 #endif
             break;
@@ -481,7 +481,7 @@ TPMPropertyIsDefined(
             *value = gp.algorithmSet;
             break;
         case TPM_PT_LOADED_CURVES:
-#if     ALG_ECC
+#if ALG_ECC
         // number of loaded ECC curves
             *value = ECC_CURVE_COUNT;
 #else // ALG_ECC

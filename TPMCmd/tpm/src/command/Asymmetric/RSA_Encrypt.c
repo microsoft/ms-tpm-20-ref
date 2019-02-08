@@ -37,7 +37,7 @@
 
 #ifdef TPM_CC_RSA_Encrypt  // Conditional expansion of this file
 
-#if     ALG_RSA
+#if ALG_RSA
 
 /*(See part 3 specification)
 // This command performs the padding and encryption of a data block

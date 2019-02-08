@@ -316,7 +316,7 @@ IncrementIv(
 // the input state counter (IV) using the state key. Into the output
 // buffer for as many times as it takes to generate the required
 // number of bytes.
-void
+static BOOL
 EncryptDRBG(
     BYTE                *dOut,
     UINT32               dOutBytes,
@@ -345,11 +345,14 @@ EncryptDRBG(
 #error  "Unsuppored IV size in DRBG"
 #endif
         if((lastValue[0] == temp[0])
-           && (lastValue[1] == temp[1])
-           && (lastValue[2] == temp[2])
-           && (lastValue[3] == temp[3])
-           )
-            FAIL(FATAL_ERROR_DRBG);
+            && (lastValue[1] == temp[1])
+            && (lastValue[2] == temp[2])
+            && (lastValue[3] == temp[3])
+            )
+        {
+            LOG_FAILURE(FATAL_ERROR_ENTROPY);
+            return FALSE;
+        }
         lastValue[0] = temp[0];
         lastValue[1] = temp[1];
         lastValue[2] = temp[2];
@@ -379,6 +382,7 @@ EncryptDRBG(
         memcpy(dOut, temp, dOutBytes);
     }
 #endif
+    return TRUE;
 }
 
 //*** DRBG_Update()
@@ -394,7 +398,7 @@ EncryptDRBG(
 // to complete the encryption of 'providedData'. This works because
 // the IV is the last thing that gets encrypted.
 //
-void
+static BOOL 
 DRBG_Update(
     DRBG_STATE          *drbgState,     // IN:OUT state to update
     DRBG_KEY_SCHEDULE   *keySchedule,   // IN: the key schedule (optional)
@@ -413,8 +417,11 @@ DRBG_Update(
     if(keySchedule == NULL)
     {
         if(DRBG_ENCRYPT_SETUP((BYTE *)key,
-                              DRBG_KEY_SIZE_BITS, &localKeySchedule) != 0)
-            FAIL(FATAL_ERROR_INTERNAL);
+            DRBG_KEY_SIZE_BITS, &localKeySchedule) != 0)
+        {
+            LOG_FAILURE(FATAL_ERROR_INTERNAL);
+            return FALSE;
+        }
         keySchedule = &localKeySchedule;
     }
     // Encrypt the temp value
@@ -429,6 +436,7 @@ DRBG_Update(
     }
     // Since temp points to the input key and IV, we are done and
     // don't need to copy the resulting 'temp' to drbgState->seed
+    return TRUE;
 }
 
 //*** DRBG_Reseed()
@@ -658,7 +666,7 @@ DRBG_AdditionalData(
 // This function is used to instantiate a random number generator from seed values.
 // The nominal use of this generator is to create sequences of pseudo-random
 // numbers from a seed value. This function always returns TRUE.
-LIB_EXPORT BOOL
+LIB_EXPORT TPM_RC
 DRBG_InstantiateSeeded(
     DRBG_STATE      *drbgState,     // IN/OUT: buffer to hold the state
     const TPM2B     *seed,          // IN: the seed to use
@@ -671,7 +679,10 @@ DRBG_InstantiateSeeded(
     int              totalInputSize;
     // DRBG should have been tested, but...
     if(!IsDrbgTested() && !DRBG_SelfTest())
-        FAIL(FATAL_ERROR_SELF_TEST);
+    {
+        LOG_FAILURE(FATAL_ERROR_SELF_TEST);
+        return TPM_RC_FAILURE;
+    }
     // Initialize the DRBG state
     memset(drbgState, 0, sizeof(DRBG_STATE));
     drbgState->magic = DRBG_MAGIC;
@@ -699,7 +710,7 @@ DRBG_InstantiateSeeded(
     // how it is described in SP800-90A but this is the equivalent function
     DRBG_Reseed(((DRBG_STATE *)drbgState), DfEnd(&dfState), NULL);
 
-    return TRUE;
+    return TPM_RC_SUCCESS;
 }
 
 //**** CryptRandStartup()
@@ -846,9 +857,12 @@ DRBG_Generate(
                     return 0;
             }
             else
+            {
                 // If this is a PRNG then the only way to get
                 // here is if the SW has run away.
-                FAIL(FATAL_ERROR_INTERNAL);
+                LOG_FAILURE(FATAL_ERROR_INTERNAL);
+                return 0;
+            }
         }
         // if the allowed number of bytes in a request is larger than the
         // less than the number of bytes that can be requested, then check
@@ -859,7 +873,10 @@ DRBG_Generate(
         // Create  encryption schedule
         if(DRBG_ENCRYPT_SETUP((BYTE *)pDRBG_KEY(seed),
                               DRBG_KEY_SIZE_BITS, &keySchedule) != 0)
-            FAIL(FATAL_ERROR_INTERNAL);
+        {
+            LOG_FAILURE(FATAL_ERROR_INTERNAL);
+            return 0;
+        }
         // Generate the random data
         EncryptDRBG(random, randomSize, &keySchedule, pDRBG_IV(seed),
                     drbgState->lastValue);
@@ -871,7 +888,8 @@ DRBG_Generate(
     }
     else
     {
-        FAIL(FATAL_ERROR_INTERNAL);
+        LOG_FAILURE(FATAL_ERROR_INTERNAL);
+        return FALSE;
     }
     return randomSize;
 }
@@ -920,7 +938,7 @@ DRBG_Instantiate(
 // This is Uninstantiate_function() from [SP 800-90A 9.4].
 //
 //  Return Type: TPM_RC
-//      TPM_RC_VALUE        not a valid 
+//      TPM_RC_VALUE        not a valid state
 LIB_EXPORT TPM_RC
 DRBG_Uninstantiate(
     DRBG_STATE      *drbgState      // IN/OUT: working state to erase

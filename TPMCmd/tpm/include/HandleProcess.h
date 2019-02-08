@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmDispatch; Version 4.0 July 8,2017
- *  Date: Aug 12, 2017  Time: 03:40:11PM
+ *  Date: Oct  9, 2018  Time: 07:25:19PM
  */
 #if CC_Startup
 case TPM_CC_Startup:
@@ -380,6 +380,17 @@ case TPM_CC_GetTime:
     if(TPM_RC_SUCCESS != result) return result + TPM_RC_H + TPM_RC_2;
     break;
 #endif     // CC_GetTime
+#if CC_CertifyX509
+case TPM_CC_CertifyX509:
+    *handleCount = 2;
+    result = TPMI_DH_OBJECT_Unmarshal(&handles[0], handleBufferStart, 
+                                              bufferRemainingSize, FALSE);
+    if(TPM_RC_SUCCESS != result) return result + TPM_RC_H + TPM_RC_1;
+    result = TPMI_DH_OBJECT_Unmarshal(&handles[1], handleBufferStart, 
+                                              bufferRemainingSize, TRUE);
+    if(TPM_RC_SUCCESS != result) return result + TPM_RC_H + TPM_RC_2;
+    break;
+#endif     // CC_CertifyX509
 #if CC_Commit
 case TPM_CC_Commit:
     *handleCount = 1;

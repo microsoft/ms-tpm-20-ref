@@ -117,14 +117,13 @@ CryptHashGetBlockSize(
     TPM_ALG_ID       hashAlg        // IN: hash algorithm to look up
     );
 
-//*** CryptHashGetDer
-// This function returns a pointer to the DER string for the algorithm and
-// indicates its size.
-LIB_EXPORT UINT16
-CryptHashGetDer(
-    TPM_ALG_ID       hashAlg,       // IN: the algorithm to look up
-    const BYTE      **p
-    );
+//*** CryptHashGetOid()
+// This function returns a pointer to DER=encoded OID for a hash algorithm. All OIDs
+// are full OID values including the Tag (0x06) and length byte.
+LIB_EXPORT const BYTE *
+CryptHashGetOid(
+    TPM_ALG_ID      hashAlg
+);
 
 //***  CryptHashGetContextAlg()
 // This function returns the hash algorithm associated with a hash context.

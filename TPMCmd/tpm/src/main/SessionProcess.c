@@ -539,32 +539,40 @@ GetCpHashPointer(
     TPMI_ALG_HASH    hashAlg
     )
 {
+    TPM2B_DIGEST     *retVal;
+//
     switch(hashAlg)
     {
 #if ALG_SHA1
         case ALG_SHA1_VALUE:
-            return (TPM2B_DIGEST *)&command->sha1CpHash;
+            retVal = (TPM2B_DIGEST *)&command->sha1CpHash;
+			break;
 #endif
 #if ALG_SHA256
         case ALG_SHA256_VALUE:
-            return (TPM2B_DIGEST *)&command->sha256CpHash;
+            retVal = (TPM2B_DIGEST *)&command->sha256CpHash;
+			break;
 #endif
 #if ALG_SHA384
         case ALG_SHA384_VALUE:
-            return (TPM2B_DIGEST *)&command->sha384CpHash;
+            retVal = (TPM2B_DIGEST *)&command->sha384CpHash;
+			break;
 #endif
 #if ALG_SHA512
         case ALG_SHA512_VALUE:
-            return (TPM2B_DIGEST *)&command->sha512CpHash;
+            retVal = (TPM2B_DIGEST *)&command->sha512CpHash;
+			break;
 #endif
 #if ALG_SM3_256
         case ALG_SM3_256_VALUE:
-            return (TPM2B_DIGEST *)&command->sm3_256CpHash;
+            retVal = (TPM2B_DIGEST *)&command->sm3_256CpHash;
+			break;
 #endif
         default:
+            retVal = NULL;
             break;
     }
-    return NULL;
+    return retVal;
 }
 
 //*** GetRpHashPointer()
@@ -575,32 +583,40 @@ GetRpHashPointer(
     TPMI_ALG_HASH    hashAlg
     )
 {
+    TPM2B_DIGEST    *retVal;
+//
     switch(hashAlg)
     {
 #if ALG_SHA1
         case ALG_SHA1_VALUE:
-            return (TPM2B_DIGEST *)&command->sha1RpHash;
+            retVal = (TPM2B_DIGEST *)&command->sha1RpHash;
+			break;
 #endif
 #if ALG_SHA256
         case ALG_SHA256_VALUE:
-            return (TPM2B_DIGEST *)&command->sha256RpHash;
+            retVal = (TPM2B_DIGEST *)&command->sha256RpHash;
+			break;
 #endif
 #if ALG_SHA384
         case ALG_SHA384_VALUE:
-            return (TPM2B_DIGEST *)&command->sha384RpHash;
+            retVal = (TPM2B_DIGEST *)&command->sha384RpHash;
+			break;
 #endif
 #if ALG_SHA512
         case ALG_SHA512_VALUE:
-            return (TPM2B_DIGEST *)&command->sha512RpHash;
+            retVal = (TPM2B_DIGEST *)&command->sha512RpHash;
+			break;
 #endif
 #if ALG_SM3_256
         case ALG_SM3_256_VALUE:
-            return (TPM2B_DIGEST *)&command->sm3_256RpHash;
+            retVal = (TPM2B_DIGEST *)&command->sm3_256RpHash;
+			break;
 #endif
         default:
+            retVal = NULL;
             break;
     }
-    return NULL;
+    return retVal;
 }
 
 

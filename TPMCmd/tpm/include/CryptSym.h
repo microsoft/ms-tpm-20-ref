@@ -43,17 +43,17 @@
 #define CRYPT_SYM_H
 
 typedef union tpmCryptKeySchedule_t {
-#if     ALG_AES
+#if ALG_AES
     tpmKeyScheduleAES           AES;
 #endif
-#if     ALG_SM4
+#if ALG_SM4
     tpmKeyScheduleSM4           SM4;
 #endif
-#if     ALG_CAMELLIA
+#if ALG_CAMELLIA
     tpmKeyScheduleCAMELLIA      CAMELLIA;
 #endif
  
-#if     ALG_TDES
+#if ALG_TDES
     tpmKeyScheduleTDES          TDES[3];
 #endif
 #if SYMMETRIC_ALIGNMENT == 8
@@ -98,28 +98,28 @@ typedef union tpmCryptKeySchedule_t {
         decrypt = (TpmCryptSetSymKeyCall_t)TpmCryptDecrypt##ALG;            \
         break;
 
-#if     ALG_AES
+#if ALG_AES
 #define ENCRYPT_CASE_AES    ENCRYPT_CASE(AES)
 #define DECRYPT_CASE_AES    DECRYPT_CASE(AES)
 #else
 #define ENCRYPT_CASE_AES
 #define DECRYPT_CASE_AES
 #endif
-#if     ALG_SM4
+#if ALG_SM4
 #define ENCRYPT_CASE_SM4    ENCRYPT_CASE(SM4)
 #define DECRYPT_CASE_SM4    DECRYPT_CASE(SM4)
 #else
 #define ENCRYPT_CASE_SM4
 #define DECRYPT_CASE_SM4
 #endif
-#if     ALG_CAMELLIA
+#if ALG_CAMELLIA
 #define ENCRYPT_CASE_CAMELLIA    ENCRYPT_CASE(CAMELLIA)
 #define DECRYPT_CASE_CAMELLIA    DECRYPT_CASE(CAMELLIA)
 #else
 #define ENCRYPT_CASE_CAMELLIA
 #define DECRYPT_CASE_CAMELLIA
 #endif
-#if     ALG_TDES
+#if ALG_TDES
 #define ENCRYPT_CASE_TDES    ENCRYPT_CASE(TDES)
 #define DECRYPT_CASE_TDES    DECRYPT_CASE(TDES)
 #else

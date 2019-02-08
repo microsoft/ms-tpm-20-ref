@@ -85,6 +85,7 @@
   <ItemGroup>
     <ClCompile Include="src\Cancel.c" />
     <ClCompile Include="src\Clock.c" />
+    <ClCompile Include="src\DebugHelpers.c" />
     <ClCompile Include="src\Entropy.c" />
     <ClCompile Include="src\LocalityPlat.c" />
     <ClCompile Include="src\NVMem.c" />
@@ -103,7 +104,7 @@
     <RootNamespace>platform</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ProjectName>Platform</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

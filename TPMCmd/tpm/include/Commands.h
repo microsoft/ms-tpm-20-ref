@@ -33,8 +33,8 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 3.0 June 16, 2017
- *  Date: Jun 16, 2018  Time: 12:44:12AM
+ *  Created by TpmStructures; Version 4.1 Dec 8, 2018
+ *  Date: Jan 28, 2019  Time: 01:24:09AM
  */
 
 #ifndef _COMMANDS_H_
@@ -191,6 +191,9 @@
 #endif
 #ifdef TPM_CC_GetTime
 #include "GetTime_fp.h"
+#endif
+#ifdef TPM_CC_CertifyX509
+#include "CertifyX509_fp.h"
 #endif
 
 // Ephemeral EC Keys

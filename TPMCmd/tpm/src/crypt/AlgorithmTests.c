@@ -54,26 +54,26 @@
 #include    "HashTestData.h"
 #include    "KdfTestData.h"
 
-#define TEST_DEFAULT_TEST_HASH(vector)                                          \
-            if(TEST_BIT(DEFAULT_TEST_HASH, g_toTest))                           \
+#define TEST_DEFAULT_TEST_HASH(vector)                                              \
+            if(TEST_BIT(DEFAULT_TEST_HASH, g_toTest))                               \
                 TestHash(DEFAULT_TEST_HASH, vector);
 
 // Make sure that the algorithm has been tested
-#define CLEAR_BOTH(alg)     {   CLEAR_BIT(alg, *toTest);                        \
-                                if(toTest != &g_toTest)                         \
+#define CLEAR_BOTH(alg)     {   CLEAR_BIT(alg, *toTest);                            \
+                                if(toTest != &g_toTest)                             \
                                     CLEAR_BIT(alg, g_toTest); }
 
-#define SET_BOTH(alg)     {   SET_BIT(alg, *toTest);                            \
-                                if(toTest != &g_toTest)                         \
+#define SET_BOTH(alg)     {   SET_BIT(alg, *toTest);                                \
+                                if(toTest != &g_toTest)                             \
                                     SET_BIT(alg, g_toTest); }
 
-#define TEST_BOTH(alg)       ((toTest != &g_toTest)                              \
-                            ? TEST_BIT(alg, *toTest) || TEST_BIT(alg, g_toTest)  \
+#define TEST_BOTH(alg)       ((toTest != &g_toTest)                                 \
+                            ? TEST_BIT(alg, *toTest) || TEST_BIT(alg, g_toTest)     \
                             : TEST_BIT(alg, *toTest))
 
 // Can only cancel if doing a list.
-#define CHECK_CANCELED                                                  \
-    if(_plat__IsCanceled() && toTest != &g_toTest)                      \
+#define CHECK_CANCELED                                                              \
+    if(_plat__IsCanceled() && toTest != &g_toTest)                                  \
         return TPM_RC_CANCELED;
 
 //** Hash Tests
@@ -314,7 +314,7 @@ TestSymmetric(
 }
 
 //** RSA Tests
-#if     ALG_RSA
+#if ALG_RSA
 
 //*** Introduction
 // The tests are for public key only operations and for private key operations.
@@ -351,7 +351,6 @@ RsaKeyInitialize(
     testObject->publicArea.parameters.rsaDetail.keyBits = RSA_TEST_KEY_SIZE * 8;
     // Use the default exponent
     testObject->publicArea.parameters.rsaDetail.exponent = 0;
-    testObject->attributes.privateExp = 0;
 }
 
 //*** TestRsaEncryptDecrypt()
@@ -370,9 +369,7 @@ TestRsaEncryptDecrypt(
     const TPM2B                     *testLabel = NULL;
     TPMT_RSA_DECRYPT                 rsaScheme;
 //
-    // Don't need to initialize much of the test object but do need to initialize
-    // the flag indicating that the private exponent has been computed.
-    testObject.attributes.privateExp = CLEAR;
+    // Don't need to initialize much of the test object 
     RsaKeyInitialize(&testObject);
     rsaScheme.scheme = scheme;
     rsaScheme.details.anySig.hashAlg = DEFAULT_TEST_HASH;
@@ -582,7 +579,7 @@ TestRsa(
 
 //** ECC Tests
 
-#if     ALG_ECC
+#if ALG_ECC
 
 //*** LoadEccParameter()
 // This function is mostly for readability and type checking
@@ -831,15 +828,15 @@ TestAlgorithm(
         switch(alg)
         {
         // Symmetric block ciphers
-#if     ALG_AES
+#if ALG_AES
             case ALG_AES_VALUE:
 #endif  // ALG_AES
-#if     ALG_SM4
+#if ALG_SM4
             // if SM4 is implemented, its test is like other block ciphers but there
             // aren't any test vectors for it yet
 //            case ALG_SM4_VALUE:
 #endif  // ALG_SM4
-#if     ALG_CAMELLIA
+#if ALG_CAMELLIA
             // no test vectors for camellia
 //            case ALG_CAMELLIA_VALUE:
 #endif
@@ -851,16 +848,16 @@ TestAlgorithm(
                 if(doTest)
                     result = TestSymmetric(alg, toTest);
                 break;
-#if     ALG_CTR
+#if ALG_CTR
             case ALG_CTR_VALUE:
 #endif // ALG_CRT
-#if     ALG_OFB
+#if ALG_OFB
             case ALG_OFB_VALUE:
 #endif // ALG_OFB
-#if     ALG_CBC
+#if ALG_CBC
             case ALG_CBC_VALUE:
 #endif // ALG_CBC
-#if     ALG_ECB
+#if ALG_ECB
             case ALG_ECB_VALUE:
 #endif
                 if(doTest)
@@ -887,28 +884,28 @@ TestAlgorithm(
                     // tested because this uses HMAC
                     SET_BOTH(DEFAULT_TEST_HASH);
                 break;
-#if     ALG_SHA1
+#if ALG_SHA1
             case ALG_SHA1_VALUE:
 #endif // ALG_SHA1
-#if     ALG_SHA256
+#if ALG_SHA256
             case ALG_SHA256_VALUE:
 #endif // ALG_SHA256
-#if     ALG_SHA384
+#if ALG_SHA384
             case ALG_SHA384_VALUE:
 #endif // ALG_SHA384
-#if     ALG_SHA512
+#if ALG_SHA512
             case ALG_SHA512_VALUE:
 #endif // ALG_SHA512
             // if SM3 is implemented its test is like any other hash, but there
             // aren't any test vectors yet.
-#if     ALG_SM3_256
+#if ALG_SM3_256
 //            case ALG_SM3_256_VALUE:
 #endif // ALG_SM3_256
                 if(doTest)
                     result = TestHash(alg, toTest);
                 break;
     // RSA-dependent
-#if     ALG_RSA
+#if ALG_RSA
             case ALG_RSA_VALUE:
                 CLEAR_BOTH(alg);
                 if(doTest)
@@ -925,13 +922,13 @@ TestAlgorithm(
                     result = TestRsa(alg, toTest);
                 break;
 #endif // ALG_RSA
-#if     ALG_KDF1_SP800_108
+#if ALG_KDF1_SP800_108
             case ALG_KDF1_SP800_108_VALUE:
                 if(doTest)
                     result = TestKDFa(toTest);
                 break;
 #endif // ALG_KDF1_SP800_108
-#if     ALG_ECC
+#if ALG_ECC
     // ECC dependent but no tests
     //        case ALG_ECDAA_VALUE:
     //        case ALG_ECMQV_VALUE:

@@ -53,8 +53,8 @@
 // 2) the block size (the IV size)
 // 3) the symmetric algorithm
 
-#define DRBG_KEY_SIZE_BITS      MAX_AES_KEY_BITS
-#define DRBG_IV_SIZE_BITS       (MAX_AES_BLOCK_SIZE_BYTES * 8)
+#define DRBG_KEY_SIZE_BITS      AES_MAX_KEY_SIZE_BITS
+#define DRBG_IV_SIZE_BITS       (AES_MAX_BLOCK_SIZE * 8)
 #define DRBG_ALGORITHM          TPM_ALG_AES
 
 

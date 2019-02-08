@@ -171,6 +171,37 @@ SetForceFailureMode(
 }
 #endif
 
+//*** TpmLogFailure()
+// This function saves the failure values when the code will continue to operate. It
+// if similar to TpmFail() but returns to the caller. The assumption is that the
+// caller will propagate a failure back up the stack.
+void
+TpmLogFailure(
+#if FAIL_TRACE
+    const char      *function,
+    int              line,
+#endif
+    int              code
+)
+{
+    // Save the values that indicate where the error occurred.
+    // On a 64-bit machine, this may truncate the address of the string
+    // of the function name where the error occurred.
+#if FAIL_TRACE
+    s_failFunction = (UINT32)function;
+    s_failLine = line;
+#else
+    s_failFunction = 0;
+    s_failLine = 0;
+#endif
+    s_failCode = code;
+
+    // We are in failure mode
+    g_inFailureMode = TRUE;
+
+    return;
+}
+
 //*** TpmFail()
 // This function is called by TPM.lib when a failure occurs. It will set up the
 // failure values to be returned on TPM2_GetTestResult().

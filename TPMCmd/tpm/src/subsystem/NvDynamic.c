@@ -876,11 +876,11 @@ NvIndexCacheInit(
 // of the Index is SET.
 void
 NvGetIndexData(
-    NV_INDEX        *nvIndex,       // IN: the in RAM index descriptor
-    NV_REF           locator,       // IN: where the data is located
-    UINT32           offset,        // IN: offset of NV data
-    UINT16           size,          // IN: size of NV data
-    void            *data           // OUT: data buffer
+    NV_INDEX            *nvIndex,       // IN: the in RAM index descriptor
+    NV_REF               locator,       // IN: where the data is located
+    UINT32               offset,        // IN: offset of NV data
+    UINT16               size,          // IN: number of octets of NV data to read
+    void                *data           // OUT: data buffer
     )
 {
     TPMA_NV             nvAttributes;
@@ -909,6 +909,45 @@ NvGetIndexData(
     return;
 }
 
+//*** NvHashIndexData()
+// This function adds Index data to a hash. It does this in parts to avoid large stack
+// buffers.
+void
+NvHashIndexData(
+    HASH_STATE          *hashState,     // IN: Initialized hash state
+    NV_INDEX            *nvIndex,       // IN: Index 
+    NV_REF               locator,       // IN: where the data is located
+    UINT32               offset,        // IN: starting offset
+    UINT16               size           // IN: amount to hash
+)
+{
+#define BUFFER_SIZE     64
+    BYTE                 buffer[BUFFER_SIZE];
+    if (offset > nvIndex->publicArea.dataSize)
+        return;
+    // Make sure that we don't try to read off the end.
+    if ((offset + size) > nvIndex->publicArea.dataSize)
+        size = nvIndex->publicArea.dataSize - (UINT16)offset;
+#if BUFFER_SIZE >= MAX_NV_INDEX_SIZE
+    NvGetIndexData(nvIndex, locator, offset, size, buffer);
+    CryptDigestUpdate(hashState, size, buffer);
+#else
+    {
+        INT16                i;
+        UINT16               readSize;
+        //
+        for (i = size; i > 0; offset += readSize, i -= readSize)
+        {
+            readSize = (i < BUFFER_SIZE) ? i : BUFFER_SIZE;
+            NvGetIndexData(nvIndex, locator, offset, readSize, buffer);
+            CryptDigestUpdate(hashState, readSize, buffer);
+        }
+    }
+#endif // BUFFER_SIZE >= MAX_NV_INDEX_SIZE
+#undef  BUFFER_SIZE
+}
+
+
 //*** NvGetUINT64Data()
 // Get data in integer format of a bit or counter NV Index.
 //
@@ -916,8 +955,8 @@ NvGetIndexData(
 // previously has been written.
 UINT64
 NvGetUINT64Data(
-    NV_INDEX        *nvIndex,       // IN: the in RAM index descriptor
-    NV_REF           locator        // IN: where index exists in NV
+    NV_INDEX            *nvIndex,       // IN: the in RAM index descriptor
+    NV_REF               locator        // IN: where index exists in NV
     )
 {
     UINT64                intVal;

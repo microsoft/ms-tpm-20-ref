@@ -37,7 +37,7 @@
 
 #ifdef TPM_CC_ECDH_ZGen  // Conditional expansion of this file
 
-#if     ALG_ECC
+#if ALG_ECC
 
 /*(See part 3 specification)
 // This command uses the TPM to recover the Z value from a public point

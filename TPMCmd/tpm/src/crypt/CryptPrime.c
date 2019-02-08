@@ -111,7 +111,7 @@ IsPrimeInt(
     return TRUE;
 }
 
-//*** BnIsPrime()
+//*** BnIsProbablyPrime()
 // This function is used when the key sieve is not implemented. This function
 // Will try to eliminate some of the obvious things before going on
 // to perform MillerRabin as a final verification of primeness.
@@ -206,24 +206,24 @@ MillerRabin(
   // 4. For i = 1 to iterations do
     for(i = 0; i < iterations; i++)
     {
-      // 4.1 Obtain a string b of wlen bits from an RBG.
-      // Ensure that 1 < b < w1.
-        do
-        {
-            BnGetRandomBits(bnB, wLen, rand);
-            // 4.2 If ((b <= 1) or (b >= w1)), then go to step 4.1.
-        } while((BnUnsignedCmpWord(bnB, 1) <= 0)
-                || (BnUnsignedCmp(bnB, bnWm1) >= 0));
-     // 4.3 z = b^m mod w.
-     // if ModExp fails, then say this is not
-     // prime and bail out.
+        // 4.1 Obtain a string b of wlen bits from an RBG.
+        // Ensure that 1 < b < w1.
+        // 4.2 If ((b <= 1) or (b >= w1)), then go to step 4.1.
+        while(BnGetRandomBits(bnB, wLen, rand) && ((BnUnsignedCmpWord(bnB, 1) <= 0)
+            || (BnUnsignedCmp(bnB, bnWm1) >= 0)));
+        if(g_inFailureMode)
+            return FALSE;
+
+       // 4.3 z = b^m mod w.
+       // if ModExp fails, then say this is not
+       // prime and bail out.
         BnModExp(bnZ, bnB, bnM, bnW);
 
-      // 4.4 If ((z == 1) or (z = w == 1)), then go to step 4.7.
+        // 4.4 If ((z == 1) or (z = w == 1)), then go to step 4.7.
         if((BnUnsignedCmpWord(bnZ, 1) == 0)
            || (BnUnsignedCmp(bnZ, bnWm1) == 0))
             goto step4point7;
-      // 4.5 For j = 1 to a  1 do.
+        // 4.5 For j = 1 to a  1 do.
         for(j = 1; j < a; j++)
         {
           // 4.5.1 z = z^2 mod w.
@@ -249,7 +249,7 @@ end:
     return ret;
 }
 
-#if     ALG_RSA
+#if ALG_RSA
 
 //*** RsaCheckPrime()
 // This will check to see if a number is prime and appropriate for an
@@ -287,7 +287,7 @@ RsaCheckPrime(
         BnSubWord(prime, prime, 2);
 
     if(BnIsProbablyPrime(prime, rand) == 0)
-        ERROR_RETURN(TPM_RC_VALUE);
+        ERROR_RETURN(g_inFailureMode ? TPM_RC_FAILURE : TPM_RC_VALUE);
 Exit:
     return retVal;
 #else
@@ -299,11 +299,17 @@ Exit:
 // This function adjusts the candidate prime so that it is odd and > root(2)/2.
 // This allows the product of these two numbers to be .5, which, in fixed point
 // notation means that the most significant bit is 1.
-// For this routine, the root(2)/2 is approximated with 0xB505 which is, in fixed
-// point is 0.7071075439453125 or an error of 0.0001%. Just setting the upper
-// two bits would give a value > 0.75 which is an error of > 6%. Given the amount
-// of time all the other computations take, reducing the error is not much of
+// For this routine, the root(2)/2 (0.7071067811865475) approximated with 0xB505 
+// which is, in fixed point, 0.7071075439453125 or an error of 0.000108%. Just setting
+// the upper two bits would give a value > 0.75 which is an error of > 6%. Given the 
+// amount of time all the other computations take, reducing the error is not much of
 // a cost, but it isn't totally required either.
+//
+// The code maps the most significant crypt_uword_t in 'prime' so that a 32-/64-bit 
+// value of 0 to 0xB5050...0 and a value of 0xff...f to 0xff...f. It also sets the LSb
+// of 'prime' to make sure that the number is odd.
+//
+// This code has been fixed so that it will work with a RADIX_SIZE == 64.
 //
 // The function also puts the number on a field boundary.
 LIB_EXPORT void
@@ -311,22 +317,26 @@ RsaAdjustPrimeCandidate(
     bigNum          prime
     )
 {
-    UINT16  highBytes;
-    crypt_uword_t       *msw = &prime->d[prime->size - 1];
-#define MASK (MAX_CRYPT_UWORD >> (RADIX_BITS - 16))
-
-    highBytes = *msw >> (RADIX_BITS - 16);
-    // This is fixed point arithmetic on 16-bit values
-    highBytes = ((UINT32)highBytes * (UINT32)0x4AFB) >> 16;
-    highBytes += 0xB505;
-    *msw = ((crypt_uword_t)(highBytes) << (RADIX_BITS - 16)) + (*msw & MASK);
+    crypt_uword_t       msw = prime->d[prime->size - 1];
+    crypt_uword_t       adjusted;
+#if RADIX_BITS == 64
+#   define ADD_CONST ((crypt_uword_t)0xB505000000000000ULL)
+#else
+#   define ADD_CONST ((crypt_uword_t)0xB5050000UL)
+#endif
+    // Multiplying 0xff...f by 0x4AFB gives 0xff..f - 0xB5050...0
+    adjusted = (crypt_uword_t)(msw >> 16) * (crypt_uword_t)0x4AFB;
+    adjusted += ((msw & 0xFFFF) * (crypt_uword_t)0x4AFB) >> 16;
+    adjusted += ADD_CONST;
+    prime->d[prime->size - 1] = adjusted;
+    // make sure the number is odd
     prime->d[0] |= 1;
 }
 
 //***BnGeneratePrimeForRSA()
 // Function to generate a prime of the desired size with the proper attributes
 // for an RSA prime.
-void
+TPM_RC
 BnGeneratePrimeForRSA(
     bigNum          prime,
     UINT32          bits,
@@ -346,9 +356,12 @@ BnGeneratePrimeForRSA(
     while(!found)
     {
         DRBG_Generate(rand, (BYTE *)prime->d, (UINT16)BITS_TO_BYTES(bits));
+        if(g_inFailureMode)
+            return TPM_RC_FAILURE;
         RsaAdjustPrimeCandidate(prime);
         found = RsaCheckPrime(prime, exponent, rand) == TPM_RC_SUCCESS;
     }
+    return TPM_RC_SUCCESS;
 }
 
 #endif // ALG_RSA

@@ -62,7 +62,7 @@
 //                              hash object is larger than is allowed for the scheme
 //      TPM_RC_SYMMETRIC        a storage key with no symmetric algorithm specified; 
 //                              or non-storage key with symmetric algorithm different 
-//                              from ALG_NULL
+//                              from TPM_ALG_NULL
 //      TPM_RC_TYPE             unknown object type
 TPM_RC
 TPM2_CreatePrimary(
@@ -104,18 +104,21 @@ TPM2_CreatePrimary(
     // used as a random number generator during the object creation.
     // The caller does not know the seed values so the actual name does not have
     // to be over the input, it can be over the unmarshaled structure.
-    DRBG_InstantiateSeeded(&rand, 
+    result = DRBG_InstantiateSeeded(&rand, 
                            &HierarchyGetPrimarySeed(in->primaryHandle)->b, 
                            PRIMARY_OBJECT_CREATION,
                            (TPM2B *)PublicMarshalAndComputeName(publicArea, &name),
                            &in->inSensitive.sensitive.data.b);
-    newObject->attributes.primary = SET;
-    if(in->primaryHandle == TPM_RH_ENDORSEMENT)
-        newObject->attributes.epsHierarchy = SET;
+    if(result == TPM_RC_SUCCESS)
+    {
+        newObject->attributes.primary = SET;
+        if(in->primaryHandle == TPM_RH_ENDORSEMENT)
+            newObject->attributes.epsHierarchy = SET;
 
-    // Create the primary object.
-    result = CryptCreateObject(newObject, &in->inSensitive.sensitive, 
-                               (RAND_STATE *)&rand);
+        // Create the primary object.
+        result = CryptCreateObject(newObject, &in->inSensitive.sensitive,
+            (RAND_STATE *)&rand);
+    }
     if(result != TPM_RC_SUCCESS)
         return result;
 

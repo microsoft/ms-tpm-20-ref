@@ -210,7 +210,7 @@ UnwrapOuter(
 void
 SensitiveToPrivate(
     TPMT_SENSITIVE  *sensitive,     // IN: sensitive structure
-    TPM2B           *name,          // IN: the name of the object
+    TPM2B_NAME      *name,          // IN: the name of the object
     OBJECT          *parent,        // IN: The parent object
     TPM_ALG_ID       nameAlg,       // IN: hash algorithm in public area.  This
                                     //     parameter is used when parentHandle is

@@ -58,15 +58,13 @@ typedef struct
     UINT32      rng;
     UINT32      hash;
     UINT32      sym;
-#if     ALG_RSA
+#if ALG_RSA
     UINT32      rsa;
 #endif
-#if     ALG_ECC
+#if ALG_ECC
     UINT32      ecc;
 #endif
 } CRYPTO_SELF_TEST_STATE;
 
-// This structure contains the self-test state values for the cryptographic modules.
-extern CRYPTO_SELF_TEST_STATE   g_cryptoSelfTestState;
 
 #endif // _CRYPT_TEST_H

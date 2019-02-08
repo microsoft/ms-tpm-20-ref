@@ -36,7 +36,7 @@
 #include "Tpm.h"
 #include "CryptEccSignature_fp.h"
 
-#if     ALG_ECC
+#if ALG_ECC
 
 //** Utility Functions
 

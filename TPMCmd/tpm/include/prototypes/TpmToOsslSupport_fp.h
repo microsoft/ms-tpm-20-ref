@@ -61,7 +61,23 @@ OsslContextEnter(
 // This is the companion function to OsslContextEnter().
 void
 OsslContextLeave(
-    BN_CTX          *context
+    BN_CTX          *CTX
+    );
+
+//*** OsslPushContext()
+// This function is used to create a frame in a context. All values allocated within
+// this context after the frame is started will be automatically freed when the
+// context (OsslPopContext()
+BN_CTX *
+OsslPushContext(
+    BN_CTX          *CTX
+    );
+
+//*** OsslPopContext()
+// This is the companion function to OsslPushContext().
+void
+OsslPopContext(
+    BN_CTX          *CTX
     );
 #endif // MATH_LIB == OSSL
 

@@ -33,8 +33,8 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 3.0 June 16, 2017
- *  Date: Aug 14, 2017  Time: 02:53:08PM
+ *  Created by TpmStructures; Version 4.1 Dec 8, 2018
+ *  Date: Jan 28, 2019  Time: 01:24:09AM
  */
 
 #ifndef _BASETYPES_H

@@ -98,6 +98,12 @@ GetCurveData(
     TPM_ECC_CURVE        curveId     // IN: the curveID
     );
 
+//***CryptEccGetOID()
+const BYTE *
+CryptEccGetOID(
+    TPM_ECC_CURVE       curveId
+);
+
 //*** CryptEccGetCurveByIndex()
 // This function returns the number of the 'i'-th implemented curve. The normal
 // use would be to call this function with 'i' starting at 0. When the 'i' is greater

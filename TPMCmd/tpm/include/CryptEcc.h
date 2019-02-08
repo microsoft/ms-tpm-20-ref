@@ -44,8 +44,8 @@
 //** Structures
 
 // This is used to define the macro that may or may not be in the data set for the
-// curve (BnEccData.c). If there is a mismatch, the compiler will warn that there is
-// to much/not enough initialization data in the curve. The macro is used because
+// curve (CryptEccData.c). If there is a mismatch, the compiler will warn that there 
+// is to much/not enough initialization data in the curve. The macro is used because
 // not all versions of the CryptEccData.c need the curve name.
 #ifdef NAMED_CURVES
 #define CURVE_NAME(a) , a
@@ -62,6 +62,7 @@ typedef struct ECC_CURVE
     const TPMT_KDF_SCHEME        kdf;
     const TPMT_ECC_SCHEME        sign;
     const ECC_CURVE_DATA        *curveData; // the address of the curve data
+    const BYTE                  *OID;
     CURVE_NAME_DEF
 } ECC_CURVE;
 

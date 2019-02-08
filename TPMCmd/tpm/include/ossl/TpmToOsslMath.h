@@ -88,23 +88,25 @@ typedef OSSL_CURVE_DATA      *bigCurve;
 
 #define AccessCurveData(E)      ((E)->C)
 
-#define CURVE_INITIALIZED(name, initializer)                        \
-    OSSL_CURVE_DATA     _##name;                                 \
-    bigCurve            name =  BnCurveInitialize(&_##name, initializer)
 
 #include "TpmToOsslSupport_fp.h"
 
-#define CURVE_FREE(E)                   \
-    if(E != NULL)                       \
-    {                                   \
-        if(E->G != NULL)                \
-            EC_GROUP_free(E->G);        \
-        OsslContextLeave(E->CTX);       \
-    }
+// Start and end a context within which the OpenSSL memory management works
+#define OSSL_ENTER()    BN_CTX          *CTX = OsslContextEnter()
+#define OSSL_LEAVE()    OsslContextLeave(CTX)
 
-#define OSSL_ENTER()     BN_CTX      *CTX = OsslContextEnter()
+// Start and end a context that spans multiple ECC functions. This is used so that
+// the group for the curve can persist across multiple frames.
+#define CURVE_INITIALIZED(name, initializer)                        \
+    OSSL_CURVE_DATA     _##name;                                 \
+    bigCurve            name =  BnCurveInitialize(&_##name, initializer)
+#define CURVE_FREE(name)               BnCurveFree(name)
 
-#define OSSL_LEAVE()     OsslContextLeave(CTX)
+// Start and end a local stack frame within the context of the curve frame 
+#define ECC_ENTER()     BN_CTX         *CTX = OsslPushContext(E->CTX)
+#define ECC_LEAVE()     OsslPopContext(CTX)
+
+#define BN_NEW()        BnNewVariable(CTX)
 
 // This definition would change if there were something to report
 #define MathLibSimulationEnd()

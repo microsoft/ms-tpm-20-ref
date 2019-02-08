@@ -79,7 +79,7 @@
     <ProjectGuid>{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}</ProjectGuid>
     <RootNamespace>TPMCmd</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -952,6 +952,7 @@
     <ClCompile Include="src\command\Attestation\Attest_spt.c" />
     <ClCompile Include="src\command\Attestation\Certify.c" />
     <ClCompile Include="src\command\Attestation\CertifyCreation.c" />
+    <ClCompile Include="src\command\Attestation\CertifyX509.c" />
     <ClCompile Include="src\command\Attestation\GetCommandAuditDigest.c" />
     <ClCompile Include="src\command\Attestation\GetSessionAuditDigest.c" />
     <ClCompile Include="src\command\Attestation\GetTime.c" />
@@ -1070,7 +1071,6 @@
     <ClCompile Include="src\crypt\CryptCmac.c" />
     <ClCompile Include="src\crypt\CryptDes.c" />
     <ClCompile Include="src\crypt\CryptEccData.c" />
-    <ClCompile Include="src\crypt\CryptHashData.c" />
     <ClCompile Include="src\crypt\CryptPrime.c" />
     <ClCompile Include="src\crypt\CryptPrimeSieve.c" />
     <ClCompile Include="src\crypt\CryptRsa.c" />
@@ -1136,6 +1136,10 @@
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='WolfDebug|Win32'">false</ShowIncludes>
     </ClCompile>
     <ClCompile Include="src\support\TpmSizeChecks.c" />
+    <ClCompile Include="src\X509\TpmASN1.c" />
+    <ClCompile Include="src\X509\X509_ECC.c" />
+    <ClCompile Include="src\X509\X509_RSA.c" />
+    <ClCompile Include="src\X509\X509_spt.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BnValues.h" />
@@ -1162,6 +1166,7 @@
     <ClInclude Include="include\ltc\TpmToLtcMath.h" />
     <ClInclude Include="include\ltc\TpmToLtcSym.h" />
     <ClInclude Include="include\NV.h" />
+    <ClInclude Include="include\OIDS.h" />
     <ClInclude Include="include\ossl\TpmToOsslHash.h" />
     <ClInclude Include="include\ossl\TpmToOsslMath.h" />
     <ClInclude Include="include\ossl\TpmToOsslSym.h" />
@@ -1380,6 +1385,8 @@
     <ClInclude Include="include\wolf\TpmToWolfHash.h" />
     <ClInclude Include="include\wolf\TpmToWolfMath.h" />
     <ClInclude Include="include\wolf\TpmToWolfSym.h" />
+    <ClInclude Include="include\X509.h" />
+    <ClInclude Include="include\X509_RSA.h" />
     <ClInclude Include="$(SolutionDir)\wolfcrypt\include\user_settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

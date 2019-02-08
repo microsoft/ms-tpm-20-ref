@@ -97,7 +97,7 @@ NvFileCommit(
 
 //*** NvFileSize()
 // This function gets the size of the NV file and puts the file pointer were desired
-// using the seek method values. SEEK_SET => beginning; SEEK_CUr => current position 
+// using the seek method values. SEEK_SET => beginning; SEEK_CUR => current position 
 // and SEEK_END => to the end of the file.
 static long
 NvFileSize(

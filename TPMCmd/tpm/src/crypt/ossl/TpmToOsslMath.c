@@ -44,6 +44,27 @@
 // the pointers are not changed. The size of the returned BIGGNUM is copied to
 // bignum_t.
 
+//** Introduction
+// The functions in this file provide the low-level interface between the TPM code
+// and the big number and elliptic curve math routines in OpenSSL.
+//
+// Most math on big numbers require a context. The context contains the memory in 
+// which OpenSSL creates and manages the big number values. When a OpenSSL math 
+// will be called that modifies a BIGNUM value, that value must be created in
+// an OpenSSL context. The first line of code in such a function must be:
+// OSSL_ENTER(); and the last operation before returning must be OSSL_LEAVE(). 
+// OpenSSL variables can then be created with BnNewVariable(). Constant values to be
+// used by OpenSSL are created from the bigNum values passed to the functions in this
+// file. Space for the BIGNUM control block is allocated in the stack of the
+// function and then it is initialized by calling BigInitialized(). That function 
+// sets up the values in the BIGNUM structure and sets the data pointer to point to
+// the data in the bignum_t. This is only used when the value is known to be a
+// constant in the called function.
+//
+// Because the allocations of constants is on the local stack and the 
+// OSSL_ENTER()/OSSL_LEAVE() pair flushes everything created in OpenSSL memory, there
+// should be no chance of a memory leak.
+
 //** Includes and Defines
 #include "Tpm.h"
 
@@ -55,39 +76,47 @@
 
 //*** OsslToTpmBn()
 // This function converts an OpenSSL BIGNUM to a TPM bignum. In this implementation
-// it is assumed that OpenSSL used the same format for a big number as does the
-// TPM -- an array of native-endian words in little-endian order.
-//
-// If the array allocated for the OpenSSL BIGNUM is not the space within the TPM
-// bignum, then the data is copied. Otherwise, just the size field of the BIGNUM
-// is copied.
-void
+// it is assumed that OpenSSL uses a different control structure but the same data
+// layout -- an array of native-endian words in little-endian order. 
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure because value will not fit or OpenSSL variable doesn't
+//                      exist
+BOOL
 OsslToTpmBn(
     bigNum          bn,
     BIGNUM          *osslBn
     )
 {
+    VERIFY(osslBn != NULL);
+    // If the bn is NULL, it means that an output value pointer was NULL meaning that
+    // the results is simply to be discarded.
     if(bn != NULL)
     {
-        if((crypt_uword_t *)osslBn->d != bn->d)
-        {
-            int         i;
-            pAssert((unsigned)osslBn->top <= BnGetAllocated(bn));
-            for(i = 0; i < osslBn->top; i++)
-                bn->d[i] = osslBn->d[i];
-        }
+        int         i;
+    //
+        VERIFY((unsigned)osslBn->top <= BnGetAllocated(bn));
+        for(i = 0; i < osslBn->top; i++)
+            bn->d[i] = osslBn->d[i];
         BnSetTop(bn, osslBn->top);
     }
+    return TRUE;
+Error:
+    return FALSE;
 }
 
 //*** BigInitialized()
-// This function initializes an OSSL BIGNUM from a TPM bignum.
+// This function initializes an OSSL BIGNUM from a TPM bigConst. Do not use this for
+// values that are passed to OpenSLL when they are not declared as const in the 
+// function prototype. Instead, use BnNewVariable().
 BIGNUM *
 BigInitialized(
     BIGNUM             *toInit,
     bigConst            initializer
     )
 {
+    if(initializer == NULL)
+        FAIL(FATAL_ERROR_PARAMETER);
     if(toInit == NULL || initializer == NULL)
         return NULL;
     toInit->d = (BN_ULONG *)&initializer->d[0];
@@ -104,8 +133,10 @@ BigInitialized(
 #else
 #   define DEBUG_PRINT(x)   printf("%s", x)
 #   define BIGNUM_PRINT(label, bn, eol) BIGNUM_print((label), (bn), (eol))
-static
-void BIGNUM_print(
+
+//*** BIGNUM_print()
+static void 
+BIGNUM_print(
     const char      *label,
     const BIGNUM    *a,
     BOOL             eol
@@ -145,35 +176,61 @@ done:
 }
 #endif
 
+//*** BnNewVariable()
+// This function allocates a new variable in the provided context. If the context
+// does not exist or the allocation fails, it is a catastrophic failure.
+static BIGNUM *
+BnNewVariable(
+    BN_CTX          *CTX
+)
+{
+    BIGNUM          *new;
+//
+    // This check is intended to protect against calling this function without
+    // having initialized the CTX.
+    if((CTX == NULL) || ((new = BN_CTX_get(CTX)) == NULL))
+        FAIL(FATAL_ERROR_ALLOCATION);
+    return new;
+}
+
 #if LIBRARY_COMPATIBILITY_CHECK
+
+//*** MathLibraryCompatibilityCheck()
 void
 MathLibraryCompatibilityCheck(
     void 
     )
 {
     OSSL_ENTER();
-    BIGNUM          *osslTemp = BN_CTX_get(CTX);
-    BN_VAR(tpmTemp, 64 * 8); // allocate some space for a test value
-    crypt_uword_t           i;
-    TPM2B_TYPE(TEST, 16);
-    TPM2B_TEST              test = {{16, {0x0F, 0x0E, 0x0D, 0x0C, 
-                                          0x0B, 0x0A, 0x09, 0x08, 
-                                          0x07, 0x06, 0x05, 0x04, 
-                                          0x03, 0x02, 0x01, 0x00}}};
-    // Convert the test TPM2B to a bigNum
-    BnFrom2B(tpmTemp, &test.b);
-    // Convert the test TPM2B to an OpenSSL BIGNUM
-    BN_bin2bn(test.t.buffer, test.t.size, osslTemp);
+    BIGNUM              *osslTemp = BnNewVariable(CTX);
+    crypt_uword_t        i;
+    BYTE                 test[] = {0x1F, 0x1E, 0x1D, 0x1C, 0x1B, 0x1A, 0x19, 0x18, 
+                                   0x17, 0x16, 0x15, 0x14, 0x13, 0x12, 0x11, 0x10,
+                                   0x0F, 0x0E, 0x0D, 0x0C, 0x0B, 0x0A, 0x09, 0x08,
+                                   0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
+    BN_VAR(tpmTemp, sizeof(test) * 8); // allocate some space for a test value
+//
+    // Convert the test data to a bigNum
+    BnFromBytes(tpmTemp, test, sizeof(test));
+    // Convert the test data to an OpenSSL BIGNUM
+    BN_bin2bn(test, sizeof(test), osslTemp);
     // Make sure the values are consistent
-    cAssert(osslTemp->top == (int)tpmTemp->size);
+    VERIFY(osslTemp->top == (int)tpmTemp->size);
     for(i = 0; i < tpmTemp->size; i++)
-        cAssert(osslTemp->d[0] == tpmTemp->d[0]);
+        VERIFY(osslTemp->d[i] == tpmTemp->d[i]);
     OSSL_LEAVE();
+    return;
+Error:
+    FAIL(FATAL_ERROR_MATHLIBRARY);
 }
 #endif
 
 //*** BnModMult()
-// Does multiply and divide returning the remainder of the divide.
+// This function does a modular multiply. It first does a multiply and then a divide 
+// and returns the remainder of the divide.
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnModMult(
     bigNum              result,
@@ -183,26 +240,29 @@ BnModMult(
     )
 {
     OSSL_ENTER();
-    BIG_INITIALIZED(bnResult, result);
+    BOOL                OK = TRUE;
+    BIGNUM              *bnResult = BN_NEW();
+    BIGNUM              *bnTemp = BN_NEW();
     BIG_INITIALIZED(bnOp1, op1);
     BIG_INITIALIZED(bnOp2, op2);
     BIG_INITIALIZED(bnMod, modulus);
-    BIG_VAR(bnTemp, (LARGEST_NUMBER_BITS * 4));
-    BOOL                OK;
-    pAssert(BnGetAllocated(result) >= BnGetSize(modulus));
-    OK = BN_mul(bnTemp, bnOp1, bnOp2, CTX);
-    OK = OK && BN_div(NULL, bnResult, bnTemp, bnMod, CTX);
-    if(OK)
-    {
-        result->size = bnResult->top;
-        OsslToTpmBn(result, bnResult);
-    }
+//
+    VERIFY(BN_mul(bnTemp, bnOp1, bnOp2, CTX));
+    VERIFY(BN_div(NULL, bnResult, bnTemp, bnMod, CTX));
+    VERIFY(OsslToTpmBn(result, bnResult));
+    goto Exit;
+Error:
+    OK = FALSE;
+Exit:
     OSSL_LEAVE();
     return OK;
 }
 
 //*** BnMult()
 // Multiplies two numbers
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnMult(
     bigNum               result,
@@ -211,20 +271,17 @@ BnMult(
     )
 {
     OSSL_ENTER();
-    BN_VAR(temp, (LARGEST_NUMBER_BITS * 2));
-    BIG_INITIALIZED(bnTemp, temp);
+    BIGNUM              *bnTemp = BN_NEW();
+    BOOL                 OK = TRUE;
     BIG_INITIALIZED(bnA, multiplicand);
     BIG_INITIALIZED(bnB, multiplier);
-    BOOL                OK;
-    pAssert(result->allocated >=
-            (BITS_TO_CRYPT_WORDS(BnSizeInBits(multiplicand)
-                                 + BnSizeInBits(multiplier))));
-    OK = BN_mul(bnTemp, bnA, bnB, CTX);
-    if(OK)
-    {
-        OsslToTpmBn(temp, bnTemp);
-        BnCopy(result, temp);
-    }
+//
+    VERIFY(BN_mul(bnTemp, bnA, bnB, CTX));
+    VERIFY(OsslToTpmBn(result, bnTemp));
+    goto Exit;
+Error:
+    OK = FALSE;
+Exit:
     OSSL_LEAVE();
     return OK;
 }
@@ -232,6 +289,9 @@ BnMult(
 //*** BnDiv()
 // This function divides two bigNum values. The function returns FALSE if
 // there is an error in the operation.
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnDiv(
     bigNum               quotient,
@@ -241,46 +301,36 @@ BnDiv(
     )
 {
     OSSL_ENTER();
-    BIG_INITIALIZED(bnQ, quotient);
-    BIG_INITIALIZED(bnR, remainder);
+    BIGNUM              *bnQ = BN_NEW();
+    BIGNUM              *bnR = BN_NEW();
+    BOOL                 OK = TRUE;
     BIG_INITIALIZED(bnDend, dividend);
     BIG_INITIALIZED(bnSor, divisor);
-    BOOL        OK;
-    pAssert(!BnEqualZero(divisor));
-    if(BnGetSize(dividend) < BnGetSize(divisor))
-    {
-        if(quotient)
-            BnSetWord(quotient, 0);
-        if(remainder)
-            BnCopy(remainder, dividend);
-        OK = TRUE;
-    }
-    else
-    {
-        pAssert((quotient == NULL)
-                || (quotient->allocated >= (unsigned)(dividend->size 
-                                                      - divisor->size)));
-        pAssert((remainder == NULL)
-                || (remainder->allocated >= divisor->size));
-        OK = BN_div(bnQ, bnR, bnDend, bnSor, CTX);
-        if(OK)
-        {
-            OsslToTpmBn(quotient, bnQ);
-            OsslToTpmBn(remainder, bnR);
-        }
-    }
+//
+    if(BnEqualZero(divisor))
+        FAIL(FATAL_ERROR_DIVIDE_ZERO);
+    VERIFY(BN_div(bnQ, bnR, bnDend, bnSor, CTX));
+    VERIFY(OsslToTpmBn(quotient, bnQ));
+    VERIFY(OsslToTpmBn(remainder, bnR));
     DEBUG_PRINT("In BnDiv:\n");
     BIGNUM_PRINT("   bnDividend: ", bnDend, TRUE);
     BIGNUM_PRINT("    bnDivisor: ", bnSor, TRUE);
     BIGNUM_PRINT("   bnQuotient: ", bnQ, TRUE);
     BIGNUM_PRINT("  bnRemainder: ", bnR, TRUE);
+    goto Exit;
+Error:
+    OK = FALSE;
+Exit:
     OSSL_LEAVE();
     return OK;
 }
 
-#if     ALG_RSA
+#if ALG_RSA
 //*** BnGcd()
 // Get the greatest common divisor of two numbers
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnGcd(
     bigNum      gcd,            // OUT: the common divisor
@@ -289,17 +339,17 @@ BnGcd(
     )
 {
     OSSL_ENTER();
-    BIG_INITIALIZED(bnGcd, gcd);
+    BIGNUM              *bnGcd = BN_NEW();
+    BOOL                 OK = TRUE;
     BIG_INITIALIZED(bn1, number1);
     BIG_INITIALIZED(bn2, number2);
-    BOOL            OK;
-    pAssert(gcd != NULL);
-    OK = BN_gcd(bnGcd, bn1, bn2, CTX);
-    if(OK)
-    {
-        OsslToTpmBn(gcd, bnGcd);
-        gcd->size = bnGcd->top;
-    }
+//
+    VERIFY(BN_gcd(bnGcd, bn1, bn2, CTX));
+    VERIFY(OsslToTpmBn(gcd, bnGcd));
+    goto Exit;
+Error:
+    OK = FALSE;
+Exit:
     OSSL_LEAVE();
     return OK;
 }
@@ -307,6 +357,9 @@ BnGcd(
 //***BnModExp()
 // Do modular exponentiation using bigNum values. The conversion from a bignum_t to
 // a bigNum is trivial as they are based on the same structure
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnModExp(
     bigNum               result,         // OUT: the result
@@ -316,23 +369,27 @@ BnModExp(
     )
 {
     OSSL_ENTER();
-    BIG_INITIALIZED(bnResult, result);
+    BIGNUM              *bnResult = BN_NEW();
+    BOOL                 OK = TRUE;
     BIG_INITIALIZED(bnN, number);
     BIG_INITIALIZED(bnE, exponent);
     BIG_INITIALIZED(bnM, modulus);
-    BOOL            OK;
 //
-    OK = BN_mod_exp(bnResult, bnN, bnE, bnM, CTX);
-    if(OK)
-    {
-        OsslToTpmBn(result, bnResult);
-    }
+    VERIFY(BN_mod_exp(bnResult, bnN, bnE, bnM, CTX));
+    VERIFY(OsslToTpmBn(result, bnResult));
+    goto Exit;
+Error:
+    OK = FALSE;
+Exit:
     OSSL_LEAVE();
     return OK;
 }
 
 //*** BnModInverse()
 // Modular multiplicative inverse
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 LIB_EXPORT BOOL
 BnModInverse(
     bigNum               result,
@@ -341,25 +398,29 @@ BnModInverse(
     )
 {
     OSSL_ENTER();
-    BIG_INITIALIZED(bnResult, result);
+    BIGNUM              *bnResult = BN_NEW();
+    BOOL                 OK = TRUE;
     BIG_INITIALIZED(bnN, number);
     BIG_INITIALIZED(bnM, modulus);
-    BOOL                OK;
-
-    OK = (BN_mod_inverse(bnResult, bnN, bnM, CTX) != NULL);
-    if(OK)
-    {
-        OsslToTpmBn(result, bnResult);
-    }
+//
+    VERIFY(BN_mod_inverse(bnResult, bnN, bnM, CTX) != NULL);
+    VERIFY(OsslToTpmBn(result, bnResult));
+    goto Exit;
+Error:
+    OK = FALSE;
+Exit:
     OSSL_LEAVE();
     return OK;
 }
 #endif // ALG_RSA
 
-#if     ALG_ECC
+#if ALG_ECC
 
 //*** PointFromOssl()
 // Function to copy the point result from an OSSL function to a bigNum
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation
 static BOOL
 PointFromOssl(
     bigPoint         pOut,      // OUT: resulting point
@@ -399,85 +460,103 @@ EcPointInitialized(
     bigCurve            E
     )
 {
-    BIG_INITIALIZED(bnX, (initializer != NULL) ? initializer->x : NULL);
-    BIG_INITIALIZED(bnY, (initializer != NULL) ? initializer->y : NULL);
+    EC_POINT            *P = NULL;
 
-    EC_POINT            *P = (initializer != NULL && E != NULL) 
-                                ? EC_POINT_new(E->G) : NULL;
-    pAssert(E != NULL);
-    if(P != NULL)
-        EC_POINT_set_affine_coordinates_GFp(E->G, P, bnX, bnY, E->CTX);
+    if(initializer != NULL)
+    {
+        BIG_INITIALIZED(bnX, initializer->x);
+        BIG_INITIALIZED(bnY, initializer->y);
+        P = EC_POINT_new(E->G);
+        if(E == NULL)
+            FAIL(FATAL_ERROR_ALLOCATION);
+        if(!EC_POINT_set_affine_coordinates_GFp(E->G, P, bnX, bnY, E->CTX))
+            P = NULL;
+    }
     return P;
 }
 
 //*** BnCurveInitialize()
-// This function initializes the OpenSSL group definition
-//
-// It is a fatal error if 'groupContext' is not provided.
-// return type: bigCurve *
-//      NULL        the TPM_ECC_CURVE is not valid
-//      non-NULL    points to a structure in 'groupContext'
-bigCurve
+// This function initializes the OpenSSL curve information structure. This
+// structure points to the TPM-defined values for the curve, to the context for the
+// number values in the frame, and to the OpenSSL-defined group values. 
+//  Return Type: bigCurve *
+//      NULL        the TPM_ECC_CURVE is not valid or there was a problem in 
+//                  in initializing the curve data
+//      non-NULL    points to 'E'
+LIB_EXPORT bigCurve
 BnCurveInitialize(
     bigCurve          E,           // IN: curve structure to initialize
     TPM_ECC_CURVE     curveId      // IN: curve identifier
-    )
+)
 {
-    EC_GROUP                *group = NULL;
-    EC_POINT                *P = NULL;
     const ECC_CURVE_DATA    *C = GetCurveData(curveId);
-    BN_CTX                  *CTX = NULL;
+    if(C == NULL)
+        E = NULL;
+    if(E != NULL)
+    {
+        // This creates the OpenSSL memory context that stays in effect as long as the
+        // curve (E) is defined.
+        OSSL_ENTER();                       // if the allocation fails, the TPM fails
+        EC_POINT                *P = NULL;
+        BIG_INITIALIZED(bnP, C->prime);
+        BIG_INITIALIZED(bnA, C->a);
+        BIG_INITIALIZED(bnB, C->b);
+        BIG_INITIALIZED(bnX, C->base.x);
+        BIG_INITIALIZED(bnY, C->base.y);
+        BIG_INITIALIZED(bnN, C->order);
+        BIG_INITIALIZED(bnH, C->h);
+    //
+        E->C = C;
+        E->CTX = CTX;
 
-    BIG_INITIALIZED(bnP, C != NULL ? C->prime : NULL);
-    BIG_INITIALIZED(bnA, C != NULL ? C->a : NULL);
-    BIG_INITIALIZED(bnB, C != NULL ? C->b : NULL);
-    BIG_INITIALIZED(bnX, C != NULL ? C->base.x : NULL);
-    BIG_INITIALIZED(bnY, C != NULL ? C->base.y : NULL);
-    BIG_INITIALIZED(bnN, C != NULL ? C->order : NULL);
-    BIG_INITIALIZED(bnH, C != NULL ? C->h : NULL);
-    int                      OK = (C != NULL);
-//
-    OK = OK && ((CTX = OsslContextEnter()) != NULL);
+        // initialize EC group, associate a generator point and initialize the point
+        // from the parameter data
+        // Create a group structure
+        E->G = EC_GROUP_new_curve_GFp(bnP, bnA, bnB, CTX);
+        VERIFY(E->G != NULL);
 
-    // initialize EC group, associate a generator point and initialize the point
-    // from the parameter data
-    // Create a group structure
-    OK = OK && (group = EC_GROUP_new_curve_GFp(bnP, bnA, bnB, CTX)) != NULL;
+        // Allocate a point in the group that will be used in setting the
+        // generator. This is not needed after the generator is set.
+        P = EC_POINT_new(E->G);
+        VERIFY(P != NULL);
 
-    // Allocate a point in the group that will be used in setting the
-    // generator. This is not needed after the generator is set.
-    OK = OK && ((P = EC_POINT_new(group)) != NULL);
-    // Need to use this in case Montgomery method is being used
-    OK = OK
-        && EC_POINT_set_affine_coordinates_GFp(group, P, bnX, bnY, CTX);
-    // Now set the generator
-    OK = OK && EC_GROUP_set_generator(group, P, bnN, bnH);
+        // Need to use this in case Montgomery method is being used
+        VERIFY(EC_POINT_set_affine_coordinates_GFp(E->G, P, bnX, bnY, CTX));
+        // Now set the generator
+        VERIFY(EC_GROUP_set_generator(E->G, P, bnN, bnH));
 
-    if(P != NULL)
         EC_POINT_free(P);
-
-    if(!OK && group != NULL)
-    {
-        EC_GROUP_free(group);
-        group = NULL;
+        goto Exit;
+Error:
+        EC_POINT_free(P);
+        BnCurveFree(E);
+        E = NULL;
     }
-    if(!OK && CTX != NULL)
-    {
-        OsslContextLeave(CTX);
-        CTX = NULL;
-    }
-
-    E->G = group;
-    E->CTX = CTX;
-    E->C = C;
-
-    return OK ? E : NULL;
+Exit:
+    return E;
 }
+
+//*** BnCurveFree()
+// This function will free the allocated components of the curve and end the
+// frame in which the curve data exists
+LIB_EXPORT void
+BnCurveFree(
+    bigCurve                    E
+)
+{
+    if(E)
+    {
+        EC_GROUP_free(E->G);
+        OsslContextLeave(E->CTX);
+    }
+}
+
 
 //*** BnEccModMult()
 // This function does a point multiply of the form R = [d]S
-// return type: BOOL
-//  FALSE       failure in operation; treat as result being point at infinity
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure in operation; treat as result being point at infinity
 LIB_EXPORT BOOL
 BnEccModMult(
     bigPoint             R,         // OUT: computed point
@@ -502,8 +581,9 @@ BnEccModMult(
 
 //*** BnEccModMult2()
 // This function does a point multiply of the form R = [d]G + [u]Q
-// return type: BOOL
-//  FALSE       failure in operation; treat as result being point at infinity
+//  Return Type: BOOL
+//      TRUE(1)         success      
+//      FALSE(0)        failure in operation; treat as result being point at infinity
 LIB_EXPORT BOOL
 BnEccModMult2(
     bigPoint             R,         // OUT: computed point
@@ -541,8 +621,9 @@ BnEccModMult2(
 
 //** BnEccAdd()
 // This function does addition of two points.
-// return type: BOOL
-//  FALSE       failure in operation; treat as result being point at infinity
+//  Return Type: BOOL
+//      TRUE(1)         success      
+//      FALSE(0)        failure in operation; treat as result being point at infinity
 LIB_EXPORT BOOL
 BnEccAdd(
     bigPoint             R,         // OUT: computed point
@@ -565,5 +646,6 @@ BnEccAdd(
 }
 
 #endif // ALG_ECC
+
 
 #endif // MATHLIB OSSL

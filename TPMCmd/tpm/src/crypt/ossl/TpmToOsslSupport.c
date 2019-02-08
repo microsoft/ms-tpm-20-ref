@@ -67,25 +67,47 @@ OsslContextEnter(
     void
     )
 {
-    BN_CTX              *context = BN_CTX_new();
-    if(context == NULL)
-        FAIL(FATAL_ERROR_ALLOCATION);
-    BN_CTX_start(context);
-    return context;
+    BN_CTX              *CTX = BN_CTX_new();
+//
+    return OsslPushContext(CTX);
 }
 
 //*** OsslContextLeave()
 // This is the companion function to OsslContextEnter().
 void
 OsslContextLeave(
-    BN_CTX          *context
+    BN_CTX          *CTX
     )
 {
-    if(context != NULL)
-    {
-        BN_CTX_end(context);
-        BN_CTX_free(context);
-    }
+    OsslPopContext(CTX);
+    BN_CTX_free(CTX);
+}
+
+//*** OsslPushContext()
+// This function is used to create a frame in a context. All values allocated within
+// this context after the frame is started will be automatically freed when the
+// context (OsslPopContext()
+BN_CTX *
+OsslPushContext(
+    BN_CTX          *CTX
+    )
+{
+    if(CTX == NULL)
+        FAIL(FATAL_ERROR_ALLOCATION);
+    BN_CTX_start(CTX);
+    return CTX;
+}
+
+//*** OsslPopContext()
+// This is the companion function to OsslPushContext().
+void
+OsslPopContext(
+    BN_CTX          *CTX
+    )
+{
+    // BN_CTX_end can't be called with NULL. It will blow up.
+    if(CTX != NULL)
+        BN_CTX_end(CTX);
 }
 #endif // MATH_LIB == OSSL
 

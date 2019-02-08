@@ -590,10 +590,8 @@ BnGenerateRandomInRange(
     }
     else
     {
-        do
-        {
-            BnGetRandomBits(dest, bits, rand);
-        } while(BnEqualZero(dest) || BnUnsignedCmp(dest, limit) >= 0);
+        while(BnGetRandomBits(dest, bits, rand)
+              && (BnEqualZero(dest) || (BnUnsignedCmp(dest, limit) >= 0)));
     }
-    return TRUE;
+    return !g_inFailureMode;
 }

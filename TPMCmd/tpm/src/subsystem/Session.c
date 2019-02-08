@@ -588,8 +588,8 @@ SessionCreate(
 // Otherwise, it should not be called at the first place.
 //
 //  Return Type: TPM_RC
-//      TPM_RC_CONTEXT_GAP      a contextID could not be assigned.
-//      TPM_RC_TOO_MANY_CONTEXTSthe counter maxed out
+//      TPM_RC_CONTEXT_GAP              a contextID could not be assigned
+//      TPM_RC_TOO_MANY_CONTEXTS        the counter maxed out
 //
 TPM_RC
 SessionContextSave(

@@ -51,8 +51,6 @@
 // This is an alias for memmove. This is used in place of memcpy because
 // some of the moves may overlap and rather than try to make sure that
 // memmove is used when necessary, it is always used.
-// The #if 0 is used to prevent instantiation of the MemoryCopy function so that
-// the #define is always used
 void
 MemoryCopy(
     void        *dest,
@@ -60,7 +58,8 @@ MemoryCopy(
     int          sSize
     )
 {
-    memmove(dest, src, sSize);
+    if(dest != src)
+        memmove(dest, src, sSize);
 }
 
 

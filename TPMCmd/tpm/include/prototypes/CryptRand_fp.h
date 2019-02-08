@@ -63,40 +63,6 @@ IncrementIv(
     DRBG_IV         *iv
     );
 
-//*** EncryptDRBG()
-// This does the encryption operation for the DRBG. It will encrypt
-// the input state counter (IV) using the state key. Into the output
-// buffer for as many times as it takes to generate the required
-// number of bytes.
-void
-EncryptDRBG(
-    BYTE                *dOut,
-    UINT32               dOutBytes,
-    DRBG_KEY_SCHEDULE   *keySchedule,
-    DRBG_IV             *iv,
-    UINT32              *lastValue      // Points to the last output value
-    );
-
-//*** DRBG_Update()
-// This function performs the state update function.
-// According to SP800-90A, a temp value is created by doing CTR mode
-// encryption of 'providedData' and replacing the key and IV with
-// these values. The one difference is that, with counter mode, the
-// IV is incremented after each block is encrypted and in this
-// operation, the counter is incremented before each block is
-// encrypted. This function implements an 'optimized' version
-// of the algorithm in that it does the update of the drbgState->seed
-// in place and then 'providedData' is XORed into drbgState->seed
-// to complete the encryption of 'providedData'. This works because
-// the IV is the last thing that gets encrypted.
-//
-void
-DRBG_Update(
-    DRBG_STATE          *drbgState,     // IN:OUT state to update
-    DRBG_KEY_SCHEDULE   *keySchedule,   // IN: the key schedule (optional)
-    DRBG_SEED           *providedData   // IN: additional data
-    );
-
 //*** DRBG_Reseed()
 // This function is used when reseeding of the DRBG is required. If
 // entropy is provided, it is used in lieu of using hardware entropy.
@@ -168,7 +134,7 @@ DRBG_AdditionalData(
 // This function is used to instantiate a random number generator from seed values.
 // The nominal use of this generator is to create sequences of pseudo-random
 // numbers from a seed value. This function always returns TRUE.
-LIB_EXPORT BOOL
+LIB_EXPORT TPM_RC
 DRBG_InstantiateSeeded(
     DRBG_STATE      *drbgState,     // IN/OUT: buffer to hold the state
     const TPM2B     *seed,          // IN: the seed to use

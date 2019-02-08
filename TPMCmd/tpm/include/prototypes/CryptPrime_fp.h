@@ -125,7 +125,7 @@ RsaAdjustPrimeCandidate(
 //***BnGeneratePrimeForRSA()
 // Function to generate a prime of the desired size with the proper attributes
 // for an RSA prime.
-void
+TPM_RC
 BnGeneratePrimeForRSA(
     bigNum          prime,
     UINT32          bits,

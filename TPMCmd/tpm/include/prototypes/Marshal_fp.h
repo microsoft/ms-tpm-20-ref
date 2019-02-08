@@ -559,6 +559,16 @@ TPMA_MODES_Marshal(TPMA_MODES *source, BYTE **buffer, INT32 *size);
             UINT32_Marshal((UINT32 *)(source), (buffer), (size))
 #endif // !USE_MARSHALING_DEFINES
 
+// Table 2:39 - Definition of TPMA_X509_KEY_USAGE Bits
+#if !USE_MARSHALING_DEFINES
+UINT16
+TPMA_X509_KEY_USAGE_Marshal(TPMA_X509_KEY_USAGE *source,
+            BYTE **buffer, INT32 *size);
+#else
+#define TPMA_X509_KEY_USAGE_Marshal(source, buffer, size)                          \
+            UINT32_Marshal((UINT32 *)(source), (buffer), (size))
+#endif // !USE_MARSHALING_DEFINES
+
 // Table 2:40 - Definition of TPMI_YES_NO Type
 TPM_RC
 TPMI_YES_NO_Unmarshal(TPMI_YES_NO *target, BYTE **buffer, INT32 *size);
@@ -1177,6 +1187,11 @@ TPMS_CREATION_INFO_Marshal(TPMS_CREATION_INFO *source, BYTE **buffer, INT32 *siz
 // Table 2:124 - Definition of TPMS_NV_CERTIFY_INFO Structure 
 UINT16
 TPMS_NV_CERTIFY_INFO_Marshal(TPMS_NV_CERTIFY_INFO *source,
+            BYTE **buffer, INT32 *size);
+
+// Table 2:125 - Definition of TPMS_NV_DIGEST_CERTIFY_INFO Structure 
+UINT16
+TPMS_NV_DIGEST_CERTIFY_INFO_Marshal(TPMS_NV_DIGEST_CERTIFY_INFO *source,
             BYTE **buffer, INT32 *size);
 
 // Table 2:126 - Definition of TPMI_ST_ATTEST Type 

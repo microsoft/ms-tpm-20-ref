@@ -199,7 +199,7 @@ TPM2_Import(
     if(result == TPM_RC_SUCCESS)
     {
         // Prepare output private data from sensitive
-        SensitiveToPrivate(&sensitive, &name.b, parentObject,
+        SensitiveToPrivate(&sensitive, &name, parentObject,
                            in->objectPublic.publicArea.nameAlg,
                            &out->outPrivate);
     }

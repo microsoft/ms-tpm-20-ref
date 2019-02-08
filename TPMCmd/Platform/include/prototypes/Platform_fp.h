@@ -34,15 +34,13 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Sep 27, 2018  Time: 07:41:22PM
+ *  Date: Nov  1, 2018  Time: 09:58:34PM
  */
 
 #ifndef    _PLATFORM_FP_H_
 #define    _PLATFORM_FP_H_
 
 //** From Cancel.c 
-
-#include "BaseTypes.h"
 
 //***_plat__IsCanceled()
 // Check if the cancel flag is set
@@ -145,6 +143,31 @@ _plat__ClockAdjustRate(
     int              adjust         // IN: the adjust number.  It could be positive
                                     //     or negative
     );
+
+
+//** From DebugHelpers.c 
+
+//*** DebugFileOpen()
+// This function opens the file used to hold the debug data.
+//  Return Type: int
+//   0        success
+//  != 0          error
+int
+DebugFileOpen(
+    void
+);
+
+void
+DebugFileClose(
+    void
+);
+
+void
+DebugDumpBuffer(
+    int             size,
+    unsigned char   *buf,
+    unsigned char   *identifier
+);
 
 
 //** From Entropy.c 

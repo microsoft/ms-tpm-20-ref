@@ -109,15 +109,6 @@ HandleToObject(
     TPMI_DH_OBJECT   handle         // IN: handle of the object
     );
 
-//*** ObjectGetNameAlg()
-// This function is used to get the Name algorithm of a object.
-//
-// This function requires that 'object' references a loaded object.
-TPMI_ALG_HASH
-ObjectGetNameAlg(
-    OBJECT          *object         // IN: handle of the object
-    );
-
 //*** GetQualifiedName()
 // This function returns the Qualified Name of the object. In this implementation,
 // the Qualified Name is computed when the object is loaded and is saved in the

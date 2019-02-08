@@ -191,12 +191,12 @@ ExecuteCommand(
     // Excepting FUM, the TPM only accepts TPM2_Startup() after
     // _TPM_Init. After getting a TPM2_Startup(), TPM2_Startup()
     // is no longer allowed.
-        if((!TPMIsStarted() && command.code != TPM_CC_Startup)
-           || (TPMIsStarted() && command.code == TPM_CC_Startup))
-        {
-            result = TPM_RC_INITIALIZE;
-            goto Cleanup;
-        }
+    if((!TPMIsStarted() && command.code != TPM_CC_Startup)
+        || (TPMIsStarted() && command.code == TPM_CC_Startup))
+    {
+        result = TPM_RC_INITIALIZE;
+        goto Cleanup;
+    }
 // Start regular command process.
     NvIndexCacheInit();
     // Parse Handle buffer.

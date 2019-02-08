@@ -71,8 +71,10 @@
 
 #if !FAIL_TRACE
 #   define FAIL(errorCode) (TpmFail(errorCode))
+#   define LOG_FAILURE(errorCode) (TpmLogFailure(errorCode))
 #else
-#   define FAIL(errorCode) (TpmFail(FUNCTION_NAME, __LINE__, errorCode))
+#   define FAIL(errorCode)        TpmFail(FUNCTION_NAME, __LINE__, errorCode)
+#   define LOG_FAILURE(errorCode) TpmLogFailure(FUNCTION_NAME, __LINE__, errorCode)
 #endif
 
 
@@ -115,8 +117,6 @@
 #define PCR_SELECT_MIN          ((PLATFORM_PCR+7)/8)
 #define PCR_SELECT_MAX          ((IMPLEMENTATION_PCR+7)/8)
 #define MAX_ORDERLY_COUNT       ((1 << ORDERLY_BITS) - 1)
-#define PRIVATE_VENDOR_SPECIFIC_BYTES                                               \
-                ((MAX_RSA_KEY_BYTES/2) * (3 + CRT_FORMAT_RSA * 2))
 
 //** Compile-time Checks
 // In some cases, the relationship between two values may be dependent
@@ -181,7 +181,9 @@
 #define STD_RESPONSE_HEADER (sizeof(TPM_ST) + sizeof(UINT32) + sizeof(TPM_RC))
 
 #define JOIN(x,y) x##y
+#define JOIN3(x, y, z) x##y##z
 #define CONCAT(x,y) JOIN(x, y)
+#define CONCAT3(x,y,z) JOIN3(x,y,z)
 
 // If CONTEXT_INTEGRITY_HASH_ALG is defined, then the vendor is using the old style
 // table. Otherwise, pick the "strongest" implemented hash algorithm as the context
@@ -204,7 +206,7 @@
 #ifndef CONTEXT_INTEGRITY_HASH_SIZE
 #define CONTEXT_INTEGRITY_HASH_SIZE CONCAT(CONTEXT_HASH_ALGORITHM, _DIGEST_SIZE)
 #endif
-#if     ALG_RSA
+#if ALG_RSA
 #define     RSA_SECURITY_STRENGTH (MAX_RSA_KEY_BITS >= 15360 ? 256 :          \
                                   (MAX_RSA_KEY_BITS >=  7680 ? 192 :          \
                                   (MAX_RSA_KEY_BITS >=  3072 ? 128 :          \
@@ -214,7 +216,7 @@
 #define     RSA_SECURITY_STRENGTH   0
 #endif // ALG_RSA
 
-#if     ALG_ECC
+#if ALG_ECC
 #define     ECC_SECURITY_STRENGTH (MAX_ECC_KEY_BITS >= 521 ? 256 :              \
                                   (MAX_ECC_KEY_BITS >= 384 ? 192 :              \
                                   (MAX_ECC_KEY_BITS >= 256 ? 128 : 0)))
@@ -268,12 +270,32 @@
 #   endif
 #endif // !SKIP_PROOF_ERRORS
 
-// If CONTEXT_ENCRYP_ALG is defined, then the vendor is using the old style table
-#ifndef CONTEXT_ENCRYPT_ALG
-#define CONTEXT_ENCRYPT_ALG             CONCAT(TPM_ALG_, CONTEXT_ENCRYPT_ALGORITHM)
+// If CONTEXT_ENCRYPT_ALG is defined, then the vendor is using the old style table
+#if defined CONTEXT_ENCRYPT_ALG 
+#   undef CONTEXT_ENCRYPT_ALGORITHM
+#   if CONTEXT_ENCRYPT_ALG == ALG_AES_VALUE
+#       define CONTEXT_ENCRYPT_ALGORITHM  AES
+#   elif CONTEXT_ENCRYPT_ALG == ALG_SM4_VALUE
+#       define CONTEXT_ENCRYPT_ALGORITHM  SM4
+#   elif CONTEXT_ENCRYPT_ALG == ALG_CAMELLIA_VALUE
+#       define CONTEXT_ENCRYPT_ALGORITHM  CAMELLIA
+#   elif CONTEXT_ENCRYPT_ALG == ALG_TDES_VALUE
+#   error Are you kidding? 
+#   else
+#       error Unknown value for CONTEXT_ENCRYPT_ALG
+#   endif // CONTEXT_ENCRYPT_ALG == ALG_AES_VALUE
+#else
+#   define CONTEXT_ENCRYPT_ALG                                                      \
+            CONCAT3(ALG_, CONTEXT_ENCRYPT_ALGORITHM, _VALUE)
+#endif  // CONTEXT_ENCRYPT_ALG 
 #define CONTEXT_ENCRYPT_KEY_BITS                            \
-                CONCAT(CONCAT(MAX_, CONTEXT_ENCRYPT_ALGORITHM), _KEY_BITS)
+                CONCAT(CONTEXT_ENCRYPT_ALGORITHM, _MAX_KEY_SIZE_BITS)
 #define CONTEXT_ENCRYPT_KEY_BYTES       ((CONTEXT_ENCRYPT_KEY_BITS+7)/8)
+
+
+#if (CONTEXT_ENCRYPT_ALG != ALG_AES_VALUE) && (CONTEXT_ENCRYPT_ALG != ALG_SM4_VALUE)\
+ && (CONTEXT_ENCRYPT_ALG != ALG_CAMELLIA_VALUE)
+#   error Encryption algorithm selection broken
 #endif
 
 // This is updated to follow the requirement of P2 that the label not be larger
@@ -286,7 +308,7 @@
 // and TPM Restart. It is added to the timeout value returned by TPM2_PoliySigned()
 // and TPM2_PolicySecret() and used by TPM2_PolicyTicket(). The timeout value is 
 // relative to Time (g_time). Time is reset whenever the TPM loses power and cannot
-// be moved forward by the user (as can Clock). 'g_time' is a 64-bit value expressing
+// be moved forward by the user (as can Clock). 'g_time' is a 64-bit value expressing 
 // time in ms. Sealing the MSb for a flag means that the TPM needs to be reset
 // at least once every 292,471,208 years rather than once every 584,942,417 years.
 #define EXPIRATION_BIT ((UINT64)1 << 63)
@@ -310,5 +332,6 @@
         (type)((a & type##_##b) >> type##_##b##_SHIFT)
 #endif
 
+#define VERIFY(_X) if(!(_X)) goto Error 
 
 #endif // GP_MACROS_H

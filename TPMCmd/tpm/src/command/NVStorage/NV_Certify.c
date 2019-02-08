@@ -63,11 +63,11 @@ TPM2_NV_Certify(
     NV_Certify_Out  *out            // OUT: output parameter list
     )
 {
-    TPM_RC                  result;
+    TPM_RC                   result;
     NV_REF                   locator;
     NV_INDEX                *nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
     TPMS_ATTEST              certifyInfo;
-    OBJECT                 *signObject = HandleToObject(in->signHandle);
+    OBJECT                  *signObject = HandleToObject(in->signHandle);
 // Input Validation
     if(!IsSigningObject(signObject))
         return TPM_RCS_KEY + RC_NV_Certify_signHandle;
@@ -99,23 +99,39 @@ TPM2_NV_Certify(
     FillInAttestInfo(in->signHandle, &in->inScheme, &in->qualifyingData,
                      &certifyInfo);
 
-    // NV certify specific fields
-    // Attestation type
-    certifyInfo.type = TPM_ST_ATTEST_NV;
-
     // Get the name of the index
     NvGetIndexName(nvIndex, &certifyInfo.attested.nv.indexName);
 
-    // Set the return size
-    certifyInfo.attested.nv.nvContents.t.size = in->size;
+    // See if this is old format or new format
+    if ((in->size != 0) || (in->offset != 0))
+    {
+        // NV certify specific fields
+        // Attestation type
+        certifyInfo.type = TPM_ST_ATTEST_NV;
 
-    // Set the offset
-    certifyInfo.attested.nv.offset = in->offset;
+        // Set the return size
+        certifyInfo.attested.nv.nvContents.t.size = in->size;
 
-    // Perform the read
-    NvGetIndexData(nvIndex, locator, in->offset, in->size,
-                   certifyInfo.attested.nv.nvContents.t.buffer);
+        // Set the offset
+        certifyInfo.attested.nv.offset = in->offset;
 
+        // Perform the read
+        NvGetIndexData(nvIndex, locator, in->offset, in->size,
+            certifyInfo.attested.nv.nvContents.t.buffer);
+    }
+    else
+    {
+        HASH_STATE                  hashState;
+        // This is to sign a digest of the data
+        certifyInfo.type = TPM_ST_ATTEST_NV_DIGEST;
+        // Initialize the hash before calling the function to add the Index data to
+        // the hash.
+        certifyInfo.attested.nvDigest.nvDigest.t.size = 
+            CryptHashStart(&hashState, in->inScheme.details.any.hashAlg);
+        NvHashIndexData(&hashState, nvIndex, locator, 0,
+            nvIndex->publicArea.dataSize);
+        CryptHashEnd2B(&hashState, &certifyInfo.attested.nvDigest.nvDigest.b);
+    }
     // Sign attestation structure.  A NULL signature will be returned if
     // signObject is NULL.
     return SignAttestInfo(signObject, &in->inScheme, &certifyInfo,

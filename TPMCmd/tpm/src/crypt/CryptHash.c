@@ -40,25 +40,51 @@
 
 #define _CRYPT_HASH_C_
 #include "Tpm.h"
+#include "CryptHash_fp.h"
+#include "CryptHash.h"
+#include "OIDS.h"
 
 #define HASH_TABLE_SIZE     (HASH_COUNT + 1)
-extern const HASH_INFO   g_hashData[HASH_COUNT + 1];
+//extern const HASH_INFO   g_hashData[HASH_COUNT + 1];
 
 
 #if     ALG_SHA1
-HASH_DEF_TEMPLATE(SHA1);
+HASH_DEF_TEMPLATE(SHA1, Sha1);
 #endif
 #if     ALG_SHA256
-HASH_DEF_TEMPLATE(SHA256);
+HASH_DEF_TEMPLATE(SHA256, Sha256);
 #endif
 #if     ALG_SHA384
-HASH_DEF_TEMPLATE(SHA384);
+HASH_DEF_TEMPLATE(SHA384, Sha384);
 #endif
 #if     ALG_SHA512
-HASH_DEF_TEMPLATE(SHA512);
+HASH_DEF_TEMPLATE(SHA512, Sha512);
 #endif
+#if ALG_SM3_256
+HASH_DEF_TEMPLATE(SM3_256, Sm3_256);
+#endif
+HASH_DEF NULL_Def = {{0}};
 
-HASH_DEF nullDef = {{0}};
+
+PHASH_DEF       HashDefArray[] = {
+#if ALG_SHA1
+    &Sha1_Def,
+#endif
+#if ALG_SHA256
+    &Sha256_Def,
+#endif
+#if ALG_SHA384
+    &Sha384_Def,
+#endif
+#if ALG_SHA512
+    &Sha512_Def,
+#endif
+#if ALG_SM3_256
+    &Sm3_256_Def,
+#endif
+    &NULL_Def
+};
+
 
 //** Obligatory Initialization Functions
 
@@ -82,6 +108,8 @@ CryptHashStartup(
     void
     )
 {
+    int         i = sizeof(HashDefArray) / sizeof(PHASH_DEF) - 1;
+    pAssert(i == HASH_COUNT);
     return TRUE;
 }
 
@@ -98,34 +126,15 @@ CryptGetHashDef(
     TPM_ALG_ID       hashAlg
     )
 {
-    PHASH_DEF       retVal;
-    switch(hashAlg)
+    INT16           i;
+#define HASHES  (sizeof(HashDefArray) / sizeof(PHASH_DEF))
+    for(i = 0; i < HASHES; i++)
     {
-#if     ALG_SHA1
-        case ALG_SHA1_VALUE:
-            return &SHA1_Def;
-            break;
-#endif
-#if     ALG_SHA256
-        case ALG_SHA256_VALUE:
-            retVal = &SHA256_Def;
-            break;
-#endif
-#if     ALG_SHA384
-        case ALG_SHA384_VALUE:
-            retVal = &SHA384_Def;
-            break;
-#endif
-#if     ALG_SHA512
-        case ALG_SHA512_VALUE:
-            retVal = &SHA512_Def;
-            break;
-#endif
-        default:
-            retVal = &nullDef;
-            break;
+        PHASH_DEF p = HashDefArray[i];
+        if(p->hashAlg == hashAlg)
+            return p;
     }
-    return retVal;
+    return &NULL_Def;
 }
 
 //*** CryptHashIsValidAlg()
@@ -136,60 +145,14 @@ CryptGetHashDef(
 //      FALSE(0)        hashAlg is not valid for this TPM
 BOOL
 CryptHashIsValidAlg(
-    TPM_ALG_ID       hashAlg,
-    BOOL             flag
+    TPM_ALG_ID       hashAlg,           // IN: the algorithm to check
+    BOOL             flag               // IN: TRUE if TPM_ALG_NULL is to be treated
+                                        //     as a valid hash
     )
 {
-    switch(hashAlg)
-    {
-#if     ALG_SHA1
-        case ALG_SHA1_VALUE:
-#endif
-#if     ALG_SHA256
-        case ALG_SHA256_VALUE:
-#endif
-#if     ALG_SHA384
-        case ALG_SHA384_VALUE:
-#endif
-#if     ALG_SHA512
-        case ALG_SHA512_VALUE:
-#endif
-#if     ALG_SM3_256
-        case ALG_SHA256_VALUE:
-#endif
-            return TRUE;
-            break;
-        case ALG_NULL_VALUE:
-            return flag;
-            break;
-        default:
-            break;
-    }
-    return FALSE;
-}
-
-//*** GetHashInfoPointer()
-// This function returns a pointer to the hash info for the algorithm. If the
-// algorithm is not supported, function returns a pointer to the data block
-// associated with TPM_ALG_NULL.
-// NOTE: The data structure must have a digest size of 0 for TPM_ALG_NULL.
-static
-const HASH_INFO *
-GetHashInfoPointer(
-    TPM_ALG_ID       hashAlg
-    )
-{
-    UINT32              i;
-//
-    // ALG_NULL is the stop value so search up to it
-    for(i = 0; i < HASH_COUNT; i++)
-    {
-        if(g_hashData[i].alg == hashAlg)
-            return &g_hashData[i];
-    }
-    // either the input was TPM_ALG_NUL or we didn't find the requested algorithm
-    // in either case return a pointer to the TPM_ALG_NULL "hash" descriptor
-    return &g_hashData[HASH_COUNT];
+    if(hashAlg == TPM_ALG_NULL)
+        return flag;
+    return CryptGetHashDef(hashAlg) != &NULL_Def;
 }
 
 //*** CryptHashGetAlgByIndex()
@@ -200,16 +163,19 @@ GetHashInfoPointer(
 // last. All other index values will return TPM_ALG_NULL.
 //
 //  Return Type: TPM_ALG_ID
-// ALG_xxx         a hash algorithm
-// ALG_NULL        this can be used as a stop value
+// TPM_ALG_xxx         a hash algorithm
+// TPM_ALG_NULL        this can be used as a stop value
 LIB_EXPORT TPM_ALG_ID
 CryptHashGetAlgByIndex(
     UINT32           index          // IN: the index
     )
 {
+    TPM_ALG_ID       hashAlg;
     if(index >= HASH_COUNT)
-        return TPM_ALG_NULL;
-    return g_hashData[index].alg;
+        hashAlg = TPM_ALG_NULL;
+    else
+        hashAlg = HashDefArray[index]->hashAlg;
+    return hashAlg;
 }
 
 //*** CryptHashGetDigestSize()
@@ -242,19 +208,15 @@ CryptHashGetBlockSize(
     return CryptGetHashDef(hashAlg)->blockSize;
 }
 
-//*** CryptHashGetDer
-// This function returns a pointer to the DER string for the algorithm and
-// indicates its size.
-LIB_EXPORT UINT16
-CryptHashGetDer(
-    TPM_ALG_ID       hashAlg,       // IN: the algorithm to look up
-    const BYTE      **p
-    )
+//*** CryptHashGetOid()
+// This function returns a pointer to DER=encoded OID for a hash algorithm. All OIDs
+// are full OID values including the Tag (0x06) and length byte. 
+LIB_EXPORT const BYTE *
+CryptHashGetOid(
+    TPM_ALG_ID      hashAlg
+)
 {
-    const HASH_INFO       *q;
-    q = GetHashInfoPointer(hashAlg);
-    *p = &q->der[0];
-    return q->derSize;
+    return CryptGetHashDef(hashAlg)->OID;
 }
 
 //***  CryptHashGetContextAlg()
@@ -282,9 +244,6 @@ CryptHashCopyState(
     out->def = in->def;
     if(in->hashAlg != TPM_ALG_NULL)
     {
-        // Just verify that the hashAlg makes sense (is implemented)
-        CryptGetHashDef(in->hashAlg);
-        // ... and copy.
          HASH_STATE_COPY(out, in);
     }
     if(in->type == HASH_STATE_HMAC)
@@ -421,7 +380,7 @@ HashEnd(
 // and export the state to the input buffer. Will need to add a flag to the state
 // structure to indicate that it needs to be imported before it can be used.
 // (BLEH).
-//  Return Type: CRTYP_RESULT
+//  Return Type: UINT16
 //  0           hash is TPM_ALG_NULL
 // >0           digest size
 LIB_EXPORT UINT16
@@ -462,7 +421,6 @@ CryptDigestUpdate(
 {
     if(hashState->hashAlg != TPM_ALG_NULL)
     {
-        
         if((hashState->type == HASH_STATE_HASH)
            || (hashState->type == HASH_STATE_HMAC))
             HASH_DATA(hashState, dataSize, (BYTE *)data);

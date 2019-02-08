@@ -84,7 +84,7 @@ TPM2_ObjectChangeAuth(
     sensitive.authValue = in->newAuth;
 
     // Protect the sensitive area
-    SensitiveToPrivate(&sensitive, &object->name.b, HandleToObject(in->parentHandle),
+    SensitiveToPrivate(&sensitive, &object->name, HandleToObject(in->parentHandle),
                        object->publicArea.nameAlg,
                        &out->outPrivate);
     return TPM_RC_SUCCESS;

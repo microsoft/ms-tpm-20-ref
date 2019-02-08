@@ -79,8 +79,7 @@
 typedef struct _RSA_KEY_CACHE_
 {
     TPM2B_PUBLIC_KEY_RSA        publicModulus;
-    TPM2B_PRIVATE_KEY_RSA       privatePrime;
-    privateExponent_t           privateExponent;
+    TPM2B_PRIVATE_KEY_RSA       privateExponent;
 } RSA_KEY_CACHE;
 
 // Determine the number of RSA key sizes for the cache
@@ -151,32 +150,34 @@ RsaKeyCacheControl(
 //*** InitializeKeyCache()
 // This will initialize the key cache and attempt to write it to a file for later
 // use.
+//  Return Type: BOOL
+//      TRUE(1)         success
+//      FALSE(0)        failure
 static BOOL
 InitializeKeyCache(
-    OBJECT              *rsaKey,            // IN/OUT: The object structure in which
-                                            //          the key is created.
+    TPMT_PUBLIC         *publicArea,
+    TPMT_SENSITIVE      *sensitive,
     RAND_STATE          *rand               // IN: if not NULL, the deterministic
                                             //     RNG state
     )
 {
     int                  index;
-    TPM_KEY_BITS         keySave = rsaKey->publicArea.parameters.rsaDetail.keyBits;
+    TPM_KEY_BITS         keySave = publicArea->parameters.rsaDetail.keyBits;
     BOOL                 OK = TRUE;
 //
     s_rsaKeyCacheEnabled = FALSE;
     for(index = 0; OK && index < RSA_KEY_CACHE_ENTRIES; index++)
     {
-        rsaKey->publicArea.parameters.rsaDetail.keyBits
+        publicArea->parameters.rsaDetail.keyBits
             = SupportedRsaKeySizes[index];
-        OK = (CryptRsaGenerateKey(rsaKey, rand) == TPM_RC_SUCCESS);
+        OK = (CryptRsaGenerateKey(publicArea, sensitive, rand) == TPM_RC_SUCCESS);
         if(OK)
         {
-            s_rsaKeyCache[index].publicModulus = rsaKey->publicArea.unique.rsa;
-            s_rsaKeyCache[index].privatePrime = rsaKey->sensitive.sensitive.rsa;
-            s_rsaKeyCache[index].privateExponent = rsaKey->privateExponent;
+            s_rsaKeyCache[index].publicModulus = publicArea->unique.rsa;
+            s_rsaKeyCache[index].privateExponent = sensitive->sensitive.rsa;
         }
     }
-    rsaKey->publicArea.parameters.rsaDetail.keyBits = keySave;
+    publicArea->parameters.rsaDetail.keyBits = keySave;
     s_keyCacheLoaded = OK;
 #if SIMULATION && USE_RSA_KEY_CACHE && USE_KEY_CACHE_FILE
     if(OK)
@@ -184,7 +185,7 @@ InitializeKeyCache(
         FILE                *cacheFile;
         const char          *fn = CACHE_FILE_NAME;
 
-#if defined _MSC_VER && 1
+#if defined _MSC_VER
         if(fopen_s(&cacheFile, fn, "w+b") != 0)
 #else
         cacheFile = fopen(fn, "w+b");
@@ -209,10 +210,15 @@ InitializeKeyCache(
     return s_keyCacheLoaded;
 }
 
+//*** KeyCacheLoaded()
+// Checks that key cache is loaded.
+//  Return Type: BOOL
+//      TRUE(1)         cache loaded
+//      FALSE(0)        cache not loaded
 static BOOL
 KeyCacheLoaded(
-    OBJECT              *rsaKey,            // IN/OUT: The object structure in which
-                                            //          the key is created.
+    TPMT_PUBLIC         *publicArea,
+    TPMT_SENSITIVE      *sensitive,
     RAND_STATE          *rand               // IN: if not NULL, the deterministic
                                             //     RNG state
     )
@@ -242,30 +248,33 @@ KeyCacheLoaded(
     }
 #endif
     if(!s_keyCacheLoaded)
-        s_rsaKeyCacheEnabled = InitializeKeyCache(rsaKey, rand);
+        s_rsaKeyCacheEnabled = InitializeKeyCache(publicArea, sensitive, rand);
     return s_keyCacheLoaded;
 }
 
+//*** GetCachedRsaKey()
+//  Return Type: BOOL
+//      TRUE(1)         key loaded
+//      FALSE(0)        key not loaded
 BOOL
 GetCachedRsaKey(
-    OBJECT              *key,
+    TPMT_PUBLIC         *publicArea,
+    TPMT_SENSITIVE      *sensitive,
     RAND_STATE          *rand               // IN: if not NULL, the deterministic
                                             //     RNG state
     )
 {
-    int                      keyBits = key->publicArea.parameters.rsaDetail.keyBits;
+    int                      keyBits = publicArea->parameters.rsaDetail.keyBits;
     int                      index;
 //
-    if(KeyCacheLoaded(key, rand))
+    if(KeyCacheLoaded(publicArea, sensitive, rand))
     {
         for(index = 0; index < RSA_KEY_CACHE_ENTRIES; index++)
         {
             if((s_rsaKeyCache[index].publicModulus.t.size * 8) == keyBits)
             {
-                key->publicArea.unique.rsa = s_rsaKeyCache[index].publicModulus;
-                key->sensitive.sensitive.rsa = s_rsaKeyCache[index].privatePrime;
-                key->privateExponent = s_rsaKeyCache[index].privateExponent;
-                key->attributes.privateExp = SET;
+                publicArea->unique.rsa = s_rsaKeyCache[index].publicModulus;
+                sensitive->sensitive.rsa = s_rsaKeyCache[index].privateExponent;
                 return TRUE;
             }
         }

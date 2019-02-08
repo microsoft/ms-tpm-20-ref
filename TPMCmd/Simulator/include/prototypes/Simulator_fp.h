@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Sep 27, 2018  Time: 07:41:23PM
+ *  Date: Nov  2, 2018  Time: 11:14:29AM
  */
 
 #ifndef    _SIMULATOR_FP_H_
@@ -283,13 +283,5 @@ main(
     int              argc,
     char            *argv[]
     );
-
-//*** nothing()
-// This function does nothing. It only exists so that there are two named functions in
-// this section to avoid a 'dangling paragraph'.
-void
-nothing(
-    void
-);
 
 #endif  // _SIMULATOR_FP_H_
