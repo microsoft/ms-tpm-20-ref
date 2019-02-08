@@ -169,7 +169,8 @@ X509ProcessExtensions(
         // Set RUNTIME_SIZE_CHECKS to YES to force a check to verify this assumption
         // during debug. Doing this is lot easier than having to revisit the code
         // any time a new attribute is added.
-        if(value != *((UINT32 *)&object->publicArea.objectAttributes))
+        // NOTE: MemoryEqual() is used to avoid type-punned pointer warning/error.
+        if(!MemoryEqual(&value, &object->publicArea.objectAttributes, sizeof(value)))
             return TPM_RCS_ATTRIBUTES;
     }
     // Make sure the failure to find the value wasn't because of a fatal error 

@@ -42,7 +42,7 @@
 #include "Tpm.h"
 #include "CryptHash_fp.h"
 #include "CryptHash.h"
-#include "OIDS.h"
+#include "OIDs.h"
 
 #define HASH_TABLE_SIZE     (HASH_COUNT + 1)
 //extern const HASH_INFO   g_hashData[HASH_COUNT + 1];

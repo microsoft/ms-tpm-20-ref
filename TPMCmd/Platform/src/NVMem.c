@@ -179,8 +179,8 @@ _plat__NVEnable(
                                                     // file pointer at the start
 //
         // If the size is right, read the data
-        if(NV_MEMORY_SIZE == fileSize)
-            fread(s_NV, 1, NV_MEMORY_SIZE, s_NvFile);
+        if (NV_MEMORY_SIZE == fileSize)
+            s_NV_unrecoverable = 0 == fread(s_NV, 1, NV_MEMORY_SIZE, s_NvFile);
         else 
             NvFileCommit();     // for any other size, initialize it
     }

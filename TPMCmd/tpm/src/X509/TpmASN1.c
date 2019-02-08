@@ -36,7 +36,7 @@
 #include "Tpm.h"
 
 #define _OIDS_
-#include "OIDS.h"
+#include "OIDs.h"
 
 #include "TpmASN1.h"
 #include "TpmASN1_fp.h"
