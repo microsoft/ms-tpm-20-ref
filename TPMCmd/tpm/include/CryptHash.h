@@ -75,7 +75,11 @@ typedef struct sequenceMethods {
     SMAC_END_METHOD           end;
 } SMAC_METHODS;
 
-#define SMAC_IMPLEMENTED (defined TPM_CC_MAC || defined TPM_CC_MAC_Start)
+#if defined(TPM_CC_MAC) || defined(TPM_CC_MAC_Start)
+#define SMAC_IMPLEMENTED 1
+#else
+#define SMAC_IMPLEMENTED 0
+#endif
 
 // These definitions are here because the SMAC state is in the union of hash states.
 typedef struct tpmCmacState {
