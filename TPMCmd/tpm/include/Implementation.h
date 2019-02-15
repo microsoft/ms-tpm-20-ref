@@ -126,7 +126,13 @@
 
 // Table 0:7 - Defines for Implementation Values
 #define FIELD_UPGRADE_IMPLEMENTED       NO
+#if defined(__x86_64__) || defined(_WIN64)
+#define RADIX_BITS                      64
+#elif defined(__i386__) || defined(_WIN32)
 #define RADIX_BITS                      32
+#else
+#error "Unable to determine RADIX_BITS from compiler environment."
+#endif
 #define HASH_ALIGNMENT                  4
 #define SYMMETRIC_ALIGNMENT             4
 #ifdef USE_WOLFCRYPT
