@@ -53,6 +53,13 @@
 typedef int SOCKET;
 #endif
 
+#ifndef TRUE
+#define TRUE    1
+#endif
+#ifndef FALSE
+#define FALSE   0
+#endif
+
 #include "Platform_fp.h"
 #include "ExecCommand_fp.h"
 #include "Manufacture_fp.h"

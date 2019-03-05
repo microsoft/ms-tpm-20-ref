@@ -62,12 +62,17 @@ typedef int SOCKET;
 #  include <sys/socket.h>
 #endif
 
+#ifndef TRUE
+#define TRUE    1
+#endif
+#ifndef FALSE
+#define FALSE   0
+#endif
+
 
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
-
-#include "BaseTypes.h"
 
 #include "TpmTcpProtocol.h"
 #include "Manufacture_fp.h"

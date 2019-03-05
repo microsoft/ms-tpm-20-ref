@@ -193,9 +193,9 @@ X509ProcessExtensions(
             || ((keyUsageDecrypt.integer & keyUsage.integer) != 0)
             && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt)
             // Check that 'fixedTPM' is SET if Key Usage is non-repudiation
-            || (keyUsage.x509.nonrepudiation
+            || (IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, nonrepudiation)
                 && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM))
-            || (keyUsage.x509.keyAgreement 
+            || (IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, keyAgreement)
                 && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted))
             )
             return TPM_RCS_ATTRIBUTES;

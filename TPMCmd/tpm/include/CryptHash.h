@@ -300,8 +300,6 @@ typedef struct hmacState
     TPM2B_HASH_BLOCK     hmacKey;            // the HMAC key
 } HMAC_STATE, *PHMAC_STATE;
 
-//???extern const HASH_INFO   g_hashData[HASH_COUNT + 1];
-
 // This is for the external hash state. This implementation assumes that the size
 // of the exported hash state is no larger than the internal hash state. There
 // is a run time check that makes sure that this i.

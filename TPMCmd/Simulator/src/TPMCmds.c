@@ -55,6 +55,13 @@ typedef int SOCKET;
 #error "Unsupported platform."
 #endif
 
+#ifndef TRUE
+#define TRUE    1
+#endif
+#ifndef FALSE
+#define FALSE   0
+#endif
+
 #include "TpmTcpProtocol.h"
 #include "Manufacture_fp.h"
 #include "Platform_fp.h"
