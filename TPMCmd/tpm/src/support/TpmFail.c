@@ -188,7 +188,7 @@ TpmLogFailure(
     // On a 64-bit machine, this may truncate the address of the string
     // of the function name where the error occurred.
 #if FAIL_TRACE
-    s_failFunction = (UINT32)function;
+    s_failFunction = (UINT32)(ptrdiff_t)function;
     s_failLine = line;
 #else
     s_failFunction = 0;
@@ -218,7 +218,7 @@ TpmFail(
     // On a 64-bit machine, this may truncate the address of the string
     // of the function name where the error occurred.
 #if FAIL_TRACE
-    s_failFunction = (UINT32)function;
+    s_failFunction = (UINT32)(ptrdiff_t)function;
     s_failLine = line;
 #else
     s_failFunction = (UINT32)NULL;

@@ -46,9 +46,22 @@
 
 #include <openssl/evp.h>
 #include <openssl/ec.h>
-#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-#include <openssl/bn_lcl.h>
-#endif
+#if OPENSSL_VERSION_NUMBER >= 0x10200000L
+    // Check the bignum_st definition in crypto/bn/bn_lcl.h and either update the
+    // version check or provide the new definition for this version.
+#   error Untested OpenSSL version
+#elif OPENSSL_VERSION_NUMBER >= 0x10100000L
+    // from crypto/bn/bn_lcl.h
+    struct bignum_st {
+        BN_ULONG *d;                /* Pointer to an array of 'BN_BITS2' bit
+                                    * chunks. */
+        int top;                    /* Index of last used d +1. */
+                                    /* The next are internal book keeping for bn_expand. */
+        int dmax;                   /* Size of the d array. */
+        int neg;                    /* one if the number is negative */
+        int flags;
+    };
+#endif // OPENSSL_VERSION_NUMBER
 #include <openssl/bn.h>
 
 //** Macros and Defines
@@ -57,7 +70,7 @@
 #if    defined THIRTY_TWO_BIT && (RADIX_BITS != 32)  \
     || ((defined SIXTY_FOUR_BIT_LONG || defined SIXTY_FOUR_BIT) \
         && (RADIX_BITS != 64))
-#  error "Ossl library is using different radix"
+#   error Ossl library is using different radix
 #endif
 
 // Allocate a local BIGNUM value. For the allocation, a bigNum structure is created

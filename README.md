@@ -27,11 +27,6 @@ Before building the Visual Studio solution:
 
 2. Create `TPMCmd/OsslInclude/openssl` folder and copy there the contents of the `openssl/include/openssl` folder of the OpenSSL source tree used to build the static library used on the step 2).
 
-    If you use OpenSSL 1.1, you'll additionally need to:
-
- - Copy the `openssl/crypto/bn/bn_lcl.h` header to the `TPMCmd/OsslInclude/openssl` folder;
- - Create `TPMCmd/OsslInclude/openssl/internal` folder and copy there the contents of the `openssl/crypto/include/internal` folder (do not confuse it with the openssl/include/internal folder that need not be copied).
-
 3. Build the solution with either Debug or Release as the active configuration.
 
 ### Wolfcrypt library (wolfSSL) ###

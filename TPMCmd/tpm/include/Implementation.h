@@ -126,9 +126,9 @@
 
 // Table 0:7 - Defines for Implementation Values
 #define FIELD_UPGRADE_IMPLEMENTED       NO
-#if defined(__x86_64__) || defined(_WIN64)
+#if defined(__x86_64__) || defined(_WIN64) || defined(_M_X64) || defined(_M_ARM64)
 #define RADIX_BITS                      64
-#elif defined(__i386__) || defined(_WIN32)
+#elif defined(__i386__) || defined(_WIN32) || defined(_M_IX86) || defined(_M_ARM)
 #define RADIX_BITS                      32
 #else
 #error "Unable to determine RADIX_BITS from compiler environment."
