@@ -459,7 +459,7 @@ NvRamTestSpaceIndex(
     UINT32           size           // IN: size of the data to be added to RAM
     )
 {
-    UINT32          remaining = RAM_ORDERLY_END - NvRamGetEnd();
+    UINT32          remaining = (UINT32)(RAM_ORDERLY_END - NvRamGetEnd());
     UINT32          needed = sizeof(NV_RAM_HEADER) + size;
 //
     // NvRamGetEnd points to the next available byte. 
