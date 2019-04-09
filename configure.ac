@@ -43,7 +43,7 @@ AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_CONFIG_FILES([Makefile])
 AC_SUBST([DISTCHECK_CONFIGURE_FLAGS],[$ac_configure_args])
 
-PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto < 1.1 ])
+PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto])
 AX_PTHREAD([], [AC_MSG_ERROR([requires pthread])])
 
 ADD_COMPILER_FLAG([-std=gnu11])
