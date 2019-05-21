@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _CRYPTDES_FP_H_
-#define    _CRYPTDES_FP_H_
+#ifndef    _CRYPT_DES_FP_H_
+#define    _CRYPT_DES_FP_H_
 
 #if ALG_TDES
 
@@ -49,7 +49,7 @@
 UINT64
 CryptSetOddByteParity(
     UINT64          k
-    );
+);
 
 //*** CryptDesValidateKey()
 // Function to check to see if the input key is a valid DES key where the definition
@@ -59,7 +59,7 @@ CryptSetOddByteParity(
 BOOL
 CryptDesValidateKey(
     TPM2B_SYM_KEY       *desKey     // IN: key to validate
-    );
+);
 
 //*** CryptGenerateKeyDes()
 // This function is used to create a DES key of the appropriate size. The key will
@@ -70,7 +70,7 @@ CryptGenerateKeyDes(
                                                 //     for the new key.
     TPMT_SENSITIVE          *sensitive,         // OUT: sensitive area
     RAND_STATE              *rand               // IN: the "entropy" source for
-    );
+);
 #endif
 
-#endif  // _CRYPTDES_FP_H_
+#endif  // _CRYPT_DES_FP_H_

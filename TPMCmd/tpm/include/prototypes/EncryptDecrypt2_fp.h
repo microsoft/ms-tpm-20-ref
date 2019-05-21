@@ -33,13 +33,14 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.1 Dec 8, 2018
- *  Date: Jan 28, 2019  Time: 12:39:24AM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#ifdef TPM_CC_EncryptDecrypt2 // Command must be defined
-#ifndef _ENCRYPTDECRYPT2_FP_H_
-#define _ENCRYPTDECRYPT2_FP_H_
+#if CC_EncryptDecrypt2 // Command must be enabled
+
+#ifndef _Encrypt_Decrypt2_FP_H_
+#define _Encrypt_Decrypt2_FP_H_
 
 // Input structure definition
 typedef struct {
@@ -70,5 +71,5 @@ TPM2_EncryptDecrypt2(
     EncryptDecrypt2_Out         *out
 );
 
-#endif  // _ENCRYPTDECRYPT2_FP_H_
-#endif  // TPM_CC_EncryptDecrypt2
+#endif  // _Encrypt_Decrypt2_FP_H_
+#endif  // CC_EncryptDecrypt2

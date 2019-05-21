@@ -33,13 +33,12 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.1 Dec 8, 2018
- *  Date: Jan 28, 2019  Time: 01:24:09AM
+ *  Created by TpmStructures; Version 4.2 Feb 22, 2019
+ *  Date: Mar 20, 2019  Time: 08:27:26PM
  */
 
-#ifndef _BASETYPES_H
-#define _BASETYPES_H
-
+#ifndef _BASE_TYPES_H_
+#define _BASE_TYPES_H_
 
 // NULL definition
 #ifndef NULL
@@ -57,4 +56,5 @@ typedef int32_t             INT32;
 typedef uint64_t            UINT64;
 typedef int64_t             INT64;
 
-#endif // _BASETYPES_H
+
+#endif // _BASE_TYPES_H_

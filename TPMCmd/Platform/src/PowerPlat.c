@@ -34,8 +34,7 @@
  */
 //** Includes and Function Prototypes
 
-#include    "PlatformData.h"
-#include    "Platform_fp.h"
+#include    "Platform.h"
 #include    "_TPM_Init_fp.h"
 
 //** Functions

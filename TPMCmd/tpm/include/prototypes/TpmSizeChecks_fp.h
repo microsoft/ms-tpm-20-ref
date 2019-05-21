@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:26AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _TPMSIZECHECKS_FP_H_
-#define    _TPMSIZECHECKS_FP_H_
+#ifndef    _TPM_SIZE_CHECKS_FP_H_
+#define    _TPM_SIZE_CHECKS_FP_H_
 
 #if RUNTIME_SIZE_CHECKS
 
@@ -50,7 +50,7 @@
 void
 TpmSizeChecks(
     void
-    );
+);
 #endif // RUNTIME_SIZE_CHECKS
 
-#endif  // _TPMSIZECHECKS_FP_H_
+#endif  // _TPM_SIZE_CHECKS_FP_H_

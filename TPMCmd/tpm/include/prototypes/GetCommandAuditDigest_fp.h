@@ -33,13 +33,14 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.1 Dec 8, 2018
- *  Date: Jan 28, 2019  Time: 12:39:24AM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#ifdef TPM_CC_GetCommandAuditDigest // Command must be defined
-#ifndef _GETCOMMANDAUDITDIGEST_FP_H_
-#define _GETCOMMANDAUDITDIGEST_FP_H_
+#if CC_GetCommandAuditDigest // Command must be enabled
+
+#ifndef _Get_Command_Audit_Digest_FP_H_
+#define _Get_Command_Audit_Digest_FP_H_
 
 // Input structure definition
 typedef struct {
@@ -68,5 +69,5 @@ TPM2_GetCommandAuditDigest(
     GetCommandAuditDigest_Out           *out
 );
 
-#endif  // _GETCOMMANDAUDITDIGEST_FP_H_
-#endif  // TPM_CC_GetCommandAuditDigest
+#endif  // _Get_Command_Audit_Digest_FP_H_
+#endif  // CC_GetCommandAuditDigest

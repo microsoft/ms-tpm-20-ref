@@ -38,7 +38,7 @@
 #include "TpmASN1_fp.h"
 #include "X509_spt_fp.h"
 #include "Attest_spt_fp.h"
-#include "DebugHelpers_fp.h"
+#include "Platform_fp.h"
 
 
 #if CC_CertifyX509 // Conditional expansion of this file
@@ -250,7 +250,7 @@ TPM2_CertifyX509(
     {
         BYTE                 fullTBS[4096];
         BYTE                *fill = fullTBS;
-        int         j;
+        int         		 j;
         for (j = 0; j < REF_COUNT; j++)
         {
             MemoryCopy(fill, certTBS[j].buf, certTBS[j].len);

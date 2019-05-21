@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 03:18:00PM
  */
 
-#ifndef    _CRYPTRSA_FP_H_
-#define    _CRYPTRSA_FP_H_
+#ifndef    _CRYPT_RSA_FP_H_
+#define    _CRYPT_RSA_FP_H_
 
 #if ALG_RSA
 
@@ -47,14 +47,14 @@
 BOOL
 CryptRsaInit(
     void
-    );
+);
 
 //*** CryptRsaStartup()
 // Function called at TPM2_Startup()
 BOOL
 CryptRsaStartup(
     void
-    );
+);
 
 //*** CryptRsaPssSaltSize()
 // This function computes the salt size used in PSS. It is broken out so that
@@ -93,7 +93,7 @@ TPMT_RSA_DECRYPT*
 CryptRsaSelectScheme(
     TPMI_DH_OBJECT       rsaHandle,     // IN: handle of an RSA key
     TPMT_RSA_DECRYPT    *scheme         // IN: a sign or decrypt scheme
-    );
+);
 
 //*** CryptRsaLoadPrivateExponent()
 // This function is called to generate the private exponent of an RSA key.
@@ -103,7 +103,7 @@ TPM_RC
 CryptRsaLoadPrivateExponent(
     TPMT_PUBLIC             *publicArea,
     TPMT_SENSITIVE          *sensitive
-    );
+);
 
 //*** CryptRsaEncrypt()
 // This is the entry point for encryption using RSA. Encryption is
@@ -136,7 +136,7 @@ CryptRsaEncrypt(
     const TPM2B                 *label,         // IN: in case it is needed
     RAND_STATE                  *rand           // IN: random number generator
                                                 //     state (mostly for testing)
-    );
+);
 
 //*** CryptRsaDecrypt()
 // This is the entry point for decryption using RSA. Decryption is
@@ -157,7 +157,7 @@ CryptRsaDecrypt(
     OBJECT              *key,           // IN: the key to use for decryption
     TPMT_RSA_DECRYPT    *scheme,        // IN: the padding scheme
     const TPM2B         *label          // IN: in case it is needed for the scheme
-    );
+);
 
 //*** CryptRsaSign()
 // This function is used to generate an RSA signature of the type indicated in
@@ -174,7 +174,7 @@ CryptRsaSign(
     TPM2B_DIGEST        *hIn,           // IN: the digest to sign
     RAND_STATE          *rand           // IN: the random number generator
                                         //      to use (mostly for testing)
-    );
+);
 
 //*** CryptRsaValidateSignature()
 // This function is used to validate an RSA signature. If the signature is valid
@@ -190,7 +190,7 @@ CryptRsaValidateSignature(
     TPMT_SIGNATURE  *sig,           // IN: signature
     OBJECT          *key,           // IN: public modulus
     TPM2B_DIGEST    *digest         // IN: The digest being validated
-    );
+);
 
 //*** CryptRsaGenerateKey()
 // Generate an RSA key from a provided seed
@@ -204,7 +204,7 @@ CryptRsaGenerateKey(
     TPMT_SENSITIVE      *sensitive,
     RAND_STATE          *rand               // IN: if not NULL, the deterministic
                                             //     RNG state
-    );
+);
 #endif // ALG_RSA
 
-#endif  // _CRYPTRSA_FP_H_
+#endif  // _CRYPT_RSA_FP_H_

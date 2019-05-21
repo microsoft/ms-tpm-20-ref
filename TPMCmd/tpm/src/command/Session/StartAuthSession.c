@@ -41,23 +41,23 @@
 // Start an authorization session
 */
 //  Return Type: TPM_RC
-//      TPM_RC_ATTRIBUTES         'tpmKey' does not reference a decrypt key
-//      TPM_RC_CONTEXT_GAP        the difference between the most recently created
-//                                active context and the oldest active context is at
-//                                the limits of the TPM
-//      TPM_RC_HANDLE             input decrypt key handle only has public portion
-//                                loaded
-//      TPM_RC_MODE               'symmetric' specifies a block cipher but the mode
-//                                is not TPM_ALG_CFB.
-//      TPM_RC_SESSION_HANDLES    no session handle is available
-//      TPM_RC_SESSION_MEMORY     no more slots for loading a session
-//      TPM_RC_SIZE               nonce less than 16 octets or greater than the size
-//                                of the digest produced by 'authHash'
-//      TPM_RC_VALUE              secret size does not match decrypt key type; or the
-//                                recovered secret is larger than the digest size of
-//                                the nameAlg of 'tpmKey'; or, for an RSA decrypt key,
-//                                if 'encryptedSecret' is greater than the
-//                                public modulus of 'tpmKey'.
+//      TPM_RC_ATTRIBUTES       'tpmKey' does not reference a decrypt key
+//      TPM_RC_CONTEXT_GAP      the difference between the most recently created
+//                              active context and the oldest active context is at
+//                              the limits of the TPM
+//      TPM_RC_HANDLE           input decrypt key handle only has public portion
+//                              loaded
+//      TPM_RC_MODE             'symmetric' specifies a block cipher but the mode
+//                              is not TPM_ALG_CFB.
+//      TPM_RC_SESSION_HANDLES  no session handle is available
+//      TPM_RC_SESSION_MEMORY   no more slots for loading a session
+//      TPM_RC_SIZE             nonce less than 16 octets or greater than the size
+//                              of the digest produced by 'authHash'
+//      TPM_RC_VALUE            secret size does not match decrypt key type; or the
+//                              recovered secret is larger than the digest size of
+//                              the nameAlg of 'tpmKey'; or, for an RSA decrypt key,
+//                              if 'encryptedSecret' is greater than the
+//                              public modulus of 'tpmKey'.
 TPM_RC
 TPM2_StartAuthSession(
     StartAuthSession_In     *in,            // IN: input parameter buffer

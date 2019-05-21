@@ -43,7 +43,7 @@
 #ifndef _TPM_TO_WOLF_MATH_H
 #define _TPM_TO_WOLF_MATH_H
 
-#if MATH_LIB == WOLF
+#define MATH_LIB_WOLF
 
 #include <wolfssl/wolfcrypt/tfm.h>
 #include <wolfssl/wolfcrypt/ecc.h>
@@ -83,7 +83,5 @@ typedef bnCurve_t  *bigCurve;
 
 // This definition would change if there were something to report
 #define MathLibSimulationEnd()
-
-#endif // MATH_LIB == WOLF
 
 #endif

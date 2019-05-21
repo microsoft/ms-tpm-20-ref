@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _MATHONBYTEBUFFERS_FP_H_
-#define    _MATHONBYTEBUFFERS_FP_H_
+#ifndef    _MATH_ON_BYTE_BUFFERS_FP_H_
+#define    _MATH_ON_BYTE_BUFFERS_FP_H_
 
 //*** UnsignedCmpB
 // This function compare two unsigned values. The values are byte-aligned,
@@ -53,7 +53,7 @@ UnsignedCompareB(
     const BYTE      *a,             // IN: a
     UINT32           bSize,         // IN: size of b
     const BYTE      *b              // IN: b
-    );
+);
 
 //***SignedCompareB()
 // Compare two signed integers:
@@ -67,7 +67,7 @@ SignedCompareB(
     const BYTE      *a,             // IN: a buffer
     const UINT32     bSize,         // IN: size of b
     const BYTE      *b              // IN: b buffer
-    );
+);
 
 //*** ModExpB
 // This function is used to do modular exponentiation in support of RSA.
@@ -100,7 +100,7 @@ ModExpB(
     const BYTE      *e,             // IN: power
     const UINT32     nSize,
     const BYTE      *n              // IN: modulus
-    );
+);
 
 //*** DivideB()
 // Divide an integer ('n') by an integer ('d') producing a quotient ('q') and
@@ -116,7 +116,7 @@ DivideB(
     const TPM2B     *d,             // IN: denominator
     TPM2B           *q,             // OUT: quotient
     TPM2B           *r              // OUT: remainder
-    );
+);
 
 //*** AdjustNumberB()
 // Remove/add leading zeros from a number in a TPM2B. Will try to make the number
@@ -127,7 +127,7 @@ UINT16
 AdjustNumberB(
     TPM2B           *num,
     UINT16           requestedSize
-    );
+);
 
 //*** ShiftLeft()
 // This function shifts a byte buffer (a TPM2B) one byte to the left. That is,
@@ -144,4 +144,4 @@ IsNumeric(
     TPM2B       *value
 );
 
-#endif  // _MATHONBYTEBUFFERS_FP_H_
+#endif  // _MATH_ON_BYTE_BUFFERS_FP_H_

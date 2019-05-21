@@ -34,18 +34,18 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 03:18:00PM
  */
 
-#ifndef    _CRYPTPRIME_FP_H_
-#define    _CRYPTPRIME_FP_H_
+#ifndef    _CRYPT_PRIME_FP_H_
+#define    _CRYPT_PRIME_FP_H_
 
 //*** IsPrimeInt()
 // This will do a test of a word of up to 32-bits in size.
 BOOL
 IsPrimeInt(
     uint32_t            n
-    );
+);
 
 //*** BnIsProbablyPrime()
 // This function is used when the key sieve is not implemented. This function
@@ -56,7 +56,7 @@ BnIsProbablyPrime(
     bigNum          prime,           // IN:
     RAND_STATE      *rand            // IN: the random state just
                                      //     in case Miller-Rabin is required
-    );
+);
 
 //*** MillerRabinRounds()
 // Function returns the number of Miller-Rabin rounds necessary to give an
@@ -65,7 +65,7 @@ BnIsProbablyPrime(
 UINT32
 MillerRabinRounds(
     UINT32           bits           // IN: Number of bits in the RSA prime
-    );
+);
 
 //*** MillerRabin()
 // This function performs a Miller-Rabin test from FIPS 186-3. It does
@@ -78,7 +78,7 @@ BOOL
 MillerRabin(
     bigNum           bnW,
     RAND_STATE      *rand
-    );
+);
 #if ALG_RSA
 
 //*** RsaCheckPrime()
@@ -98,7 +98,7 @@ RsaCheckPrime(
     bigNum           prime,
     UINT32           exponent,
     RAND_STATE      *rand
-    );
+);
 
 //*** AdjustPrimeCandiate()
 // This function adjusts the candidate prime so that it is odd and > root(2)/2.
@@ -120,7 +120,7 @@ RsaCheckPrime(
 LIB_EXPORT void
 RsaAdjustPrimeCandidate(
     bigNum          prime
-    );
+);
 
 //***BnGeneratePrimeForRSA()
 // Function to generate a prime of the desired size with the proper attributes
@@ -131,7 +131,7 @@ BnGeneratePrimeForRSA(
     UINT32          bits,
     UINT32          exponent,
     RAND_STATE      *rand
-    );
+);
 #endif // ALG_RSA
 
-#endif  // _CRYPTPRIME_FP_H_
+#endif  // _CRYPT_PRIME_FP_H_

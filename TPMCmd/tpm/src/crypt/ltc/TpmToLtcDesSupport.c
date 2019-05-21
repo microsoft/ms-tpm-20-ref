@@ -43,7 +43,7 @@
 
 #include "Tpm.h"
 
-#if SYM_LIB == LTC && defined TPM_ALG_TDES
+#if (defined SYM_LIB_LTC) && ALG_TDES
 
 //** TDES_setup
 // This function calls the LTC function to generate a TDES key schedule. If the
@@ -72,4 +72,4 @@ void TDES_setup(
     des3_setup(kp, 24, 0, skey);
 }
 
-#endif
+#endif // MATH_LIB_LTC && ALG_TDES

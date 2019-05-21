@@ -369,7 +369,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>CRYPTO_ALIGN_4;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;%(PreprocessorDefinitions); </PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -467,7 +467,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>CRYPTO_ALIGN_4;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_4;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -555,7 +555,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>EMPTY_ASSERT;CRYPTO_ALIGN_4;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;EMPTY_ASSERT;CRYPTO_ALIGN_4;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -597,7 +597,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>CRYPTO_ALIGNMENT=4;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGNMENT=4;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -655,7 +655,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -709,7 +709,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -762,7 +762,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>EMPTY_ASSERT;CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;EMPTY_ASSERT;CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -789,7 +789,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -813,11 +813,11 @@
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CRYPTO_ALIGN_4;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_4;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
     </ClCompile>
@@ -868,7 +868,7 @@
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>CRYPTO_ALIGN_16;NDEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;NDEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -923,7 +923,7 @@
     </Link>
     <ProjectReference>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='GccCompile|Win32'">
@@ -1371,15 +1371,16 @@
     <ClInclude Include="include\swap.h" />
     <ClInclude Include="include\SymmetricTest.h" />
     <ClInclude Include="include\SymmetricTestData.h" />
+    <ClInclude Include="include\TpmAlgorithmDefines.h" />
     <ClInclude Include="include\TpmError.h" />
     <ClInclude Include="include\BaseTypes.h" />
     <ClInclude Include="include\Capabilities.h" />
     <ClInclude Include="include\Commands.h" />
-    <ClInclude Include="include\Implementation.h" />
     <ClInclude Include="include\InternalRoutines.h" />
     <ClInclude Include="include\Tpm.h" />
     <ClInclude Include="include\TPMB.h" />
     <ClInclude Include="include\TpmBuildSwitches.h" />
+    <ClInclude Include="include\TpmProfile.h" />
     <ClInclude Include="include\TpmTypes.h" />
     <ClInclude Include="include\VendorString.h" />
     <ClInclude Include="include\wolf\TpmToWolfHash.h" />

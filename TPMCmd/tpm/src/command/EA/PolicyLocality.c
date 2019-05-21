@@ -35,6 +35,7 @@
 #include "Tpm.h"
 #include "PolicyLocality_fp.h"
 
+
 #if CC_PolicyLocality  // Conditional expansion of this file
 
 //  Return Type: TPM_RC

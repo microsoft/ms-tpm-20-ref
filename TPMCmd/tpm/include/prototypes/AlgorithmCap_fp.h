@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _ALGORITHMCAP_FP_H_
-#define    _ALGORITHMCAP_FP_H_
+#ifndef    _ALGORITHM_CAP_FP_H_
+#define    _ALGORITHM_CAP_FP_H_
 
 //** AlgorithmCapGetImplemented()
 // This function is used by TPM2_GetCapability() to return a list of the
@@ -51,7 +51,7 @@ AlgorithmCapGetImplemented(
     TPM_ALG_ID                   algID,     // IN: the starting algorithm ID
     UINT32                       count,     // IN: count of returned algorithms
     TPML_ALG_PROPERTY           *algList    // OUT: algorithm list
-    );
+);
 
 //** AlgorithmGetImplementedVector()
 // This function returns the bit vector of the implemented algorithms.
@@ -59,6 +59,6 @@ LIB_EXPORT
 void
 AlgorithmGetImplementedVector(
     ALGORITHM_VECTOR    *implemented    // OUT: the implemented bits are SET
-    );
+);
 
-#endif  // _ALGORITHMCAP_FP_H_
+#endif  // _ALGORITHM_CAP_FP_H_

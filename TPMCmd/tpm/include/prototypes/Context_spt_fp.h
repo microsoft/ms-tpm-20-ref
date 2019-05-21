@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
 #ifndef    _CONTEXT_SPT_FP_H_
@@ -42,15 +42,15 @@
 
 //*** ComputeContextProtectionKey()
 // This function retrieves the symmetric protection key for context encryption
-// It is used by TPM2_ConextSave() and TPM2_ContextLoad() to create the symmetric
-// encryption key and iv.
+// It is used by TPM2_ConextSave and TPM2_ContextLoad to create the symmetric
+// encryption key and iv
 //  Return Type: void
 void
 ComputeContextProtectionKey(
     TPMS_CONTEXT    *contextBlob,   // IN: context blob
     TPM2B_SYM_KEY   *symKey,        // OUT: the symmetric key
     TPM2B_IV        *iv             // OUT: the IV.
-    );
+);
 
 //*** ComputeContextIntegrity()
 // Generate the integrity hash for a context
@@ -61,7 +61,7 @@ void
 ComputeContextIntegrity(
     TPMS_CONTEXT    *contextBlob,   // IN: context blob
     TPM2B_DIGEST    *integrity      // OUT: integrity
-    );
+);
 
 //*** SequenceDataExport();
 // This function is used scan through the sequence object and
@@ -76,7 +76,7 @@ void
 SequenceDataExport(
     HASH_OBJECT         *object,        // IN: an internal hash object
     HASH_OBJECT_BUFFER  *exportObject   // OUT: a sequence context in a buffer
-    );
+);
 
 //*** SequenceDataImport();
 // This function is used scan through the sequence object and
@@ -91,6 +91,6 @@ void
 SequenceDataImport(
     HASH_OBJECT         *object,        // IN/OUT: an internal hash object
     HASH_OBJECT_BUFFER  *exportObject   // IN/OUT: a sequence context in a buffer
-    );
+);
 
 #endif  // _CONTEXT_SPT_FP_H_

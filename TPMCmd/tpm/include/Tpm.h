@@ -37,7 +37,13 @@
 #ifndef     _TPM_H_
 #define     _TPM_H_
 
-#include "Implementation.h"
+#include "TpmBuildSwitches.h"
+#include "BaseTypes.h"
+#include "TPMB.h"
+#include "MinMax.h"
+
+#include "TpmProfile.h"
+#include "TpmAlgorithmDefines.h"
 #include "LibSupport.h"         // Types from the library. These need to come before
                                 // Global.h because some of the structures in
                                 // that file depend on the structures used by the

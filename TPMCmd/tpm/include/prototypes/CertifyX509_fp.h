@@ -33,13 +33,14 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.1 Dec 8, 2018
- *  Date: Jan 28, 2019  Time: 12:39:24AM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Apr  2, 2019  Time: 11:00:48AM
  */
 
-#ifdef TPM_CC_CertifyX509 // Command must be defined
-#ifndef _CERTIFYX509_FP_H_
-#define _CERTIFYX509_FP_H_
+#if CC_CertifyX509 // Command must be enabled
+
+#ifndef _Certify_X509_FP_H_
+#define _Certify_X509_FP_H_
 
 // Input structure definition
 typedef struct {
@@ -71,5 +72,5 @@ TPM2_CertifyX509(
     CertifyX509_Out             *out
 );
 
-#endif  // _CERTIFYX509_FP_H_
-#endif  // TPM_CC_CertifyX509
+#endif  // _Certify_X509_FP_H_
+#endif  // CC_CertifyX509

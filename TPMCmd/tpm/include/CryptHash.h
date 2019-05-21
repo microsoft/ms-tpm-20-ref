@@ -65,11 +65,7 @@ typedef struct sequenceMethods {
     SMAC_END_METHOD           end;
 } SMAC_METHODS;
 
-#if defined(TPM_CC_MAC) || defined(TPM_CC_MAC_Start)
-#define SMAC_IMPLEMENTED 1
-#else
-#define SMAC_IMPLEMENTED 0
-#endif
+#define SMAC_IMPLEMENTED (CC_MAC || CC_MAC_Start)
 
 // These definitions are here because the SMAC state is in the union of hash states.
 typedef struct tpmCmacState {
@@ -219,8 +215,6 @@ typedef struct _HASH_METHODS
 #define ECDSA_OID(NAME)
 #endif
 
-
-
 typedef const struct HASH_DEF
 {
     HASH_METHODS         method;
@@ -247,12 +241,9 @@ typedef const struct HASH_DEF
                         },                                                          \
                         HASH##_BLOCK_SIZE,              /* block size */            \
                         HASH##_DIGEST_SIZE,             /* data size */             \
-                        sizeof(tpmHashState##HASH##_t), /* context size */          \
-                        TPM_ALG_##HASH,                 /* hashAlg */               \
-                        OID_##HASH                      /* base OID */              \
-                        PKCS1_OID(HASH)                 /* PKCS1 OID */             \
-                        ECDSA_OID(HASH)                 /* ECDSA OID */             \
-    };
+                        sizeof(tpmHashState##HASH##_t),                         \
+                        TPM_ALG_##HASH, OID_##HASH                              \
+                        PKCS1_OID(HASH) ECDSA_OID(HASH)};
 
 // These definitions are for the types that can be in a hash state structure.
 // These types are used in the cryptographic utilities. This is a define rather than

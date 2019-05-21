@@ -41,8 +41,6 @@
 #ifndef _LTC_SETTINGS_H_
 #define _LTC_SETTINGS_H_
 
-#if HASH_LIB == LTC || SYM_LIB == LTC || MATH_LIB == LTC
-
 #ifdef TPM_ALG_AES
 #  define LTC_RIJNDAEL
 #endif
@@ -78,7 +76,5 @@ typedef unsigned long long  ulong64;
 _REDUCE_WARNING_LEVEL_(0)
 #include "tomcrypt.h"
 _NORMAL_WARNING_LEVEL_
-
-#endif
 
 #endif //

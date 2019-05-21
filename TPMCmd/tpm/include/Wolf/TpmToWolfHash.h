@@ -40,7 +40,7 @@
 #ifndef _TPM_TO_WOLF_HASH_H_
 #define _TPM_TO_WOLF_HASH_H_
 
-#if HASH_LIB == WOLF
+#define HASH_LIB_WOLF
 
 #ifndef WOLFSSL_USER_SETTINGS
 #define WOLFSSL_USER_SETTINGS
@@ -183,7 +183,5 @@ typedef const BYTE    *PCBYTE;
 #define LibHashInit()
 // This definition would change if there were something to report
 #define HashLibSimulationEnd()
-
-#endif // HASH_LIB == WOLF
 
 #endif //

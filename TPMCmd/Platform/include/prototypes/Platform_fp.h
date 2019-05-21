@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Nov  1, 2018  Time: 09:58:34PM
+ *  Date: Apr  2, 2019  Time: 04:26:21PM
  */
 
 #ifndef    _PLATFORM_FP_H_
@@ -284,7 +284,7 @@ _plat__NvIsDifferent(
 // NOTE: A useful optimization would be for this code to compare the current
 // contents of NV with the local copy and note the blocks that have changed. Then
 // only write those blocks when _plat__NvCommit() is called.
-LIB_EXPORT void
+LIB_EXPORT BOOL
 _plat__NvMemoryWrite(
     unsigned int     startOffset,   // IN: write start
     unsigned int     size,          // IN: size of bytes to write

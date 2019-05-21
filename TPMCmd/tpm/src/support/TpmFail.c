@@ -119,7 +119,9 @@ MarshalUint16(
     BYTE            **buffer
     )
 {
-    return UINT16_Marshal(&integer, buffer, NULL);
+    UINT16_TO_BYTE_ARRAY(integer, *buffer);
+    *buffer += 2;
+    return 2;
 }
 
 //*** MarshalUint32()
@@ -130,29 +132,36 @@ MarshalUint32(
     BYTE            **buffer
     )
 {
-    return UINT32_Marshal(&integer, buffer, NULL);
+    UINT32_TO_BYTE_ARRAY(integer, *buffer);
+    *buffer += 4;
+    return 4;
 }
 
-//*** UnmarshalHeader()
-// function to unmarshal the 10-byte command header.
-//  Return Type: BOOL
-//      TRUE(1)         success
-//      FALSE(0)        failure
-static BOOL
-UnmarshalHeader(
-    HEADER          *header,
+//***Unmarshal32()
+static BOOL Unmarshal32(
+    UINT32          *target,
     BYTE            **buffer,
     INT32           *size
     )
 {
-    UINT32 usize;
-    TPM_RC ucode;
-    if(UINT16_Unmarshal(&header->tag, buffer, size) != TPM_RC_SUCCESS
-       || UINT32_Unmarshal(&usize, buffer, size) != TPM_RC_SUCCESS
-       || UINT32_Unmarshal(&ucode, buffer, size) != TPM_RC_SUCCESS)
+    if((*size -= 4) < 0)
         return FALSE;
-    header->size = usize;
-    header->code = ucode;
+    *target = BYTE_ARRAY_TO_UINT32(*buffer);
+    *buffer += 4;
+    return TRUE;
+}
+
+//***Unmarshal16()
+static BOOL Unmarshal16(
+    UINT16          *target,
+    BYTE           **buffer,
+    INT32           *size
+)
+{
+    if((*size -= 2) < 0)
+        return FALSE;
+    *target = BYTE_ARRAY_TO_UINT16(*buffer);
+    *buffer += 2;
     return TRUE;
 }
 
@@ -254,20 +263,22 @@ TpmFailureMode(
     unsigned char   **outResponse       // OUT: response buffer
     )
 {
-    BYTE            *buffer;
     UINT32           marshalSize;
     UINT32           capability;
     HEADER           header;    // unmarshaled command header
     UINT32           pt;    // unmarshaled property type
     UINT32           count; // unmarshaled property count
+    UINT8           *buffer = inRequest;
+    INT32            size = inRequestSize;
 
     // If there is no command buffer, then just return TPM_RC_FAILURE
     if(inRequestSize == 0 || inRequest == NULL)
         goto FailureModeReturn;
     // If the header is not correct for TPM2_GetCapability() or
     // TPM2_GetTestResult() then just return the in failure mode response;
-    buffer = inRequest;
-    if(!UnmarshalHeader(&header, &inRequest, (INT32 *)&inRequestSize))
+    if(! (Unmarshal16(&header.tag,  &buffer, &size)
+       && Unmarshal32(&header.size, &buffer, &size)
+       && Unmarshal32(&header.code, &buffer, &size)))
         goto FailureModeReturn;
     if(header.tag != TPM_ST_NO_SESSIONS
        || header.size < 10)
@@ -293,13 +304,10 @@ TpmFailureMode(
             // returned for the capability, property, and count
             if(header.size != (10 + (3 * sizeof(UINT32)))
                     // also verify that this is requesting TPM properties
-               || TPM_RC_SUCCESS != UINT32_Unmarshal(&capability, &inRequest,
-                                                     (INT32 *)&inRequestSize)
+               || !Unmarshal32(&capability, &buffer, &size)
                || capability != TPM_CAP_TPM_PROPERTIES
-               || TPM_RC_SUCCESS != UINT32_Unmarshal(&pt, &inRequest,
-                                                     (INT32 *)&inRequestSize)
-               || TPM_RC_SUCCESS != UINT32_Unmarshal(&count, &inRequest,
-                                                     (INT32 *)&inRequestSize))
+               || !Unmarshal32(&pt, &buffer, &size)
+               || !Unmarshal32(&count, &buffer, &size))
                 goto FailureModeReturn;
             // If in failure mode because of an unrecoverable read error, and the
             // property is 0 and the count is 0, then this is an indication to

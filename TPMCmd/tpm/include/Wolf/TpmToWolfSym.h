@@ -40,7 +40,7 @@
 #ifndef _TPM_TO_WOLF_SYM_H_
 #define _TPM_TO_WOLF_SYM_H_
 
-#if SYM_LIB == WOLF
+#define SYM_LIB_WOLF
 
 #include <wolfssl/wolfcrypt/aes.h>
 #include <wolfssl/wolfcrypt/des3.h>
@@ -111,7 +111,5 @@ typedef union tpmCryptKeySchedule_t tpmCryptKeySchedule_t;
 
 // This definition would change if there were something to report
 #define SymLibSimulationEnd()
-
-#endif // SYM_LIB == WOLF
 
 #endif // _TPM_TO_WOLF_SYM_H_

@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _CRYPTECCSIGNATURE_FP_H_
-#define    _CRYPTECCSIGNATURE_FP_H_
+#ifndef    _CRYPT_ECC_SIGNATURE_FP_H_
+#define    _CRYPT_ECC_SIGNATURE_FP_H_
 
 #if ALG_ECC
 
@@ -54,7 +54,7 @@ BnSignEcdsa(
     bigNum                   bnD,           // IN: private signing key
     const TPM2B_DIGEST      *digest,        // IN: the digest to sign
     RAND_STATE              *rand           // IN: used in debug of signing
-    );
+);
 
 //*** CryptEccSign()
 // This function is the dispatch function for the various ECC-based
@@ -76,7 +76,7 @@ CryptEccSign(
     const TPM2B_DIGEST      *digest,        // IN: digest to sign
     TPMT_ECC_SCHEME         *scheme,        // IN: signing scheme
     RAND_STATE              *rand
-    );
+);
 #if ALG_ECDSA
 
 //*** BnValidateSignatureEcdsa()
@@ -92,7 +92,7 @@ BnValidateSignatureEcdsa(
                                             //     process
     bn_point_t              *ecQ,           // IN: the public point of the key
     const TPM2B_DIGEST      *digest         // IN: the digest that was signed
-    );
+);
 #endif      // ALG_ECDSA
 
 //*** CryptEccValidateSignature()
@@ -105,7 +105,7 @@ CryptEccValidateSignature(
     TPMT_SIGNATURE          *signature,     // IN: signature to be verified
     OBJECT                  *signKey,       // IN: ECC key signed the hash
     const TPM2B_DIGEST      *digest         // IN: digest that was signed
-    );
+);
 
 //***CryptEccCommitCompute()
 // This function performs the point multiply operations required by TPM2_Commit.
@@ -133,7 +133,7 @@ CryptEccCommitCompute(
     TPMS_ECC_POINT          *B,             // IN: B (optional)
     TPM2B_ECC_PARAMETER     *d,             // IN: d (optional)
     TPM2B_ECC_PARAMETER     *r              // IN: the computed r value (required)
-    );
+);
 #endif  // ALG_ECC
 
-#endif  // _CRYPTECCSIGNATURE_FP_H_
+#endif  // _CRYPT_ECC_SIGNATURE_FP_H_

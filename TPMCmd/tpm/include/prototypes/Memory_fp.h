@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  7, 2019  Time: 06:58:58PM
  */
 
 #ifndef    _MEMORY_FP_H_
@@ -49,7 +49,7 @@ MemoryCopy(
     void        *dest,
     const void  *src,
     int          sSize
-    );
+);
 
 //*** MemoryEqual()
 // This function indicates if two buffers have the same values in the indicated
@@ -62,7 +62,7 @@ MemoryEqual(
     const void      *buffer1,       // IN: compare buffer1
     const void      *buffer2,       // IN: compare buffer2
     unsigned int     size           // IN: size of bytes being compared
-    );
+);
 
 //*** MemoryCopy2B()
 // This function copies a TPM2B. This can be used when the TPM2B types are
@@ -74,7 +74,7 @@ MemoryCopy2B(
     TPM2B           *dest,          // OUT: receiving TPM2B
     const TPM2B     *source,        // IN: source TPM2B
     unsigned int     dSize          // IN: size of the receiving buffer
-    );
+);
 
 //*** MemoryConcat2B()
 // This function will concatenate the buffer contents of a TPM2B to an
@@ -86,7 +86,7 @@ MemoryConcat2B(
     TPM2B           *bIn,           // IN: second 2B
     unsigned int     aMaxSize       // IN: The size of aInOut.buffer (max values for
                                     //     aInOut.size)
-    );
+);
 
 //*** MemoryEqual2B()
 // This function will compare two TPM2B structures. To be equal, they
@@ -99,7 +99,7 @@ BOOL
 MemoryEqual2B(
     const TPM2B     *aIn,           // IN: compare value
     const TPM2B     *bIn            // IN: compare value
-    );
+);
 
 //*** MemorySet()
 // This function will set all the octets in the specified memory range to
@@ -113,7 +113,7 @@ MemorySet(
     void            *dest,
     int              value,
     size_t           size
-    );
+);
 
 //*** MemoryPad2B()
 // Function to pad a TPM2B with zeros and adjust the size.
@@ -121,7 +121,7 @@ void
 MemoryPad2B(
     TPM2B           *b,
     UINT16           newSize
-    );
+);
 
 //*** Uint16ToByteArray()
 // Function to write an integer to a byte array
@@ -129,7 +129,7 @@ void
 Uint16ToByteArray(
     UINT16              i,
     BYTE                *a
-    );
+);
 
 //*** Uint32ToByteArray()
 // Function to write an integer to a byte array
@@ -137,7 +137,7 @@ void
 Uint32ToByteArray(
     UINT32              i,
     BYTE                *a
-    );
+);
 
 //*** Uint64ToByteArray()
 // Function to write an integer to a byte array
@@ -145,27 +145,35 @@ void
 Uint64ToByteArray(
     UINT64               i,
     BYTE                *a
-    );
+);
+
+//*** ByteArrayToUint8()
+// Function to write a UINT8 to a byte array. This is included for completeness
+// and to allow certain macro expansions
+UINT8
+ByteArrayToUint8(
+    BYTE                *a
+);
 
 //*** ByteArrayToUint16()
 // Function to write an integer to a byte array
 UINT16
 ByteArrayToUint16(
     BYTE                *a
-    );
+);
 
 //*** ByteArrayToUint32()
 // Function to write an integer to a byte array
 UINT32
 ByteArrayToUint32(
     BYTE                *a
-    );
+);
 
 //*** ByteArrayToUint64()
 // Function to write an integer to a byte array
 UINT64
 ByteArrayToUint64(
     BYTE                *a
-    );
+);
 
 #endif  // _MEMORY_FP_H_

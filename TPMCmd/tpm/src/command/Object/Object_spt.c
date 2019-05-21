@@ -424,7 +424,7 @@ CreateChecks(
 //                          with the scheme ID for keyed hash object
 //      TPM_RC_SYMMETRIC    a storage key with no symmetric algorithm specified; or
 //                          non-storage key with symmetric algorithm different from
-//                          TPM_ALG_NULL
+// ALG_NULL
 TPM_RC
 SchemeChecks(
     OBJECT          *parentObject,  // IN: parent (null if primary seed)
@@ -454,7 +454,7 @@ SchemeChecks(
                == IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
             {
                 // if both sign and decrypt are set or clear, then need
-                // TPM_ALG_NULL as scheme
+                // ALG_NULL as scheme
                 if(scheme != TPM_ALG_NULL)
                     return TPM_RCS_SCHEME;
             }
@@ -485,7 +485,7 @@ SchemeChecks(
             scheme = parms->asymDetail.scheme.scheme;
             symAlgs = &parms->asymDetail.symmetric;
             // if the key is both sign and decrypt, then the scheme must be
-            // TPM_ALG_NULL because there is no way to specify both a sign and a
+            // ALG_NULL because there is no way to specify both a sign and a
             // decrypt scheme in the key.
             if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
                == IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
@@ -957,7 +957,8 @@ UnwrapOuter(
 //*** MarshalSensitive()
 // This function is used to marshal a sensitive area. Among other things, it
 // adjusts the size of the authValue to be no smaller than the digest of
-// 'nameAlg'
+// 'nameAlg'. It will also make sure that the RSA sensitive contains the right number
+// of values.
 // Returns the size of the marshaled area.
 static UINT16
 MarshalSensitive(

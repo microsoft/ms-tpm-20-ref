@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _CRYPTUTIL_FP_H_
-#define    _CRYPTUTIL_FP_H_
+#ifndef    _CRYPT_UTIL_FP_H_
+#define    _CRYPT_UTIL_FP_H_
 
 //*** CryptIsSchemeAnonymous()
 // This function is used to test a scheme to see if it is an anonymous scheme
@@ -47,7 +47,7 @@
 BOOL
 CryptIsSchemeAnonymous(
     TPM_ALG_ID       scheme         // IN: the scheme algorithm to test
-    );
+);
 
 //*** ParmDecryptSym()
 //  This function performs parameter decryption using symmetric block cipher.
@@ -61,7 +61,7 @@ ParmDecryptSym(
     TPM2B           *nonceTpm,      // IN: nonce TPM
     UINT32           dataSize,      // IN: size of parameter buffer
     BYTE            *data           // OUT: buffer to be decrypted
-    );
+);
 
 //*** ParmEncryptSym()
 //  This function performs parameter encryption using symmetric block cipher.
@@ -75,7 +75,7 @@ ParmEncryptSym(
     TPM2B           *nonceTpm,      // IN: nonce TPM
     UINT32           dataSize,      // IN: size of parameter buffer
     BYTE            *data           // OUT: buffer to be encrypted
-    );
+);
 
 //*** CryptXORObfuscation()
 // This function implements XOR obfuscation. It should not be called if the
@@ -89,7 +89,7 @@ CryptXORObfuscation(
     TPM2B           *contextV,      // IN: contextV
     UINT32           dataSize,      // IN: size of data buffer
     BYTE            *data           // IN/OUT: data to be XORed in place
-    );
+);
 
 //*** CryptInit()
 // This function is called when the TPM receives a _TPM_Init indication.
@@ -104,7 +104,7 @@ CryptXORObfuscation(
 BOOL
 CryptInit(
     void
-    );
+);
 
 //*** CryptStartup()
 // This function is called by TPM2_Startup() to initialize the functions in
@@ -118,7 +118,7 @@ CryptInit(
 BOOL
 CryptStartup(
     STARTUP_TYPE     type           // IN: the startup type
-    );
+);
 
 //****************************************************************************
 //** Algorithm-Independent Functions
@@ -136,7 +136,7 @@ CryptStartup(
 BOOL
 CryptIsAsymAlgorithm(
     TPM_ALG_ID       algID          // IN: algorithm ID
-    );
+);
 
 //*** CryptSecretEncrypt()
 // This function creates a secret value and its associated secret structure using
@@ -156,7 +156,7 @@ CryptSecretEncrypt(
     const TPM2B             *label,         // IN: a null-terminated string as L
     TPM2B_DATA              *data,          // OUT: secret value
     TPM2B_ENCRYPTED_SECRET  *secret         // OUT: secret structure
-    );
+);
 
 //*** CryptSecretDecrypt()
 // Decrypt a secret value by asymmetric (or symmetric) algorithm
@@ -189,7 +189,7 @@ CryptSecretDecrypt(
     const TPM2B             *label,         // IN: a value for L
     TPM2B_ENCRYPTED_SECRET  *secret,        // IN: input secret
     TPM2B_DATA              *data           // OUT: decrypted secret value
-    );
+);
 
 //*** CryptParameterEncryption()
 // This function does in-place encryption of a response parameter.
@@ -202,7 +202,7 @@ CryptParameterEncryption(
     TPM2B_AUTH      *extraKey,          // IN: additional key material other than
                                         //     sessionAuth
     BYTE            *buffer             // IN/OUT: parameter buffer to be encrypted
-    );
+);
 
 //*** CryptParameterDecryption()
 // This function does in-place decryption of a command parameter.
@@ -218,7 +218,7 @@ CryptParameterDecryption(
                                         //     byte
     TPM2B_AUTH      *extraKey,          // IN: the authValue
     BYTE            *buffer             // IN/OUT: parameter buffer to be decrypted
-    );
+);
 
 //*** CryptComputeSymmetricUnique()
 // This function computes the unique field in public area for symmetric objects.
@@ -227,7 +227,7 @@ CryptComputeSymmetricUnique(
     TPMT_PUBLIC     *publicArea,    // IN: the object's public area
     TPMT_SENSITIVE  *sensitive,     // IN: the associated sensitive area
     TPM2B_DIGEST    *unique         // OUT: unique buffer
-    );
+);
 
 //*** CryptCreateObject()
 // This function creates an object.
@@ -271,7 +271,7 @@ CryptCreateObject(
     TPMS_SENSITIVE_CREATE   *sensitiveCreate,   // IN: sensitive creation
     RAND_STATE              *rand               // IN: the random number generator
                                                 //      to use
-    );
+);
 
 //*** CryptGetSignHashAlg()
 // Get the hash algorithm of signature from a TPMT_SIGNATURE structure.
@@ -280,7 +280,7 @@ CryptCreateObject(
 TPMI_ALG_HASH
 CryptGetSignHashAlg(
     TPMT_SIGNATURE  *auth           // IN: signature
-    );
+);
 
 //*** CryptIsSplitSign()
 // This function us used to determine if the signing operation is a split
@@ -289,7 +289,7 @@ CryptGetSignHashAlg(
 BOOL
 CryptIsSplitSign(
     TPM_ALG_ID       scheme         // IN: the algorithm selector
-    );
+);
 
 //*** CryptIsAsymSignScheme()
 // This function indicates if a scheme algorithm is a sign algorithm.
@@ -297,7 +297,7 @@ BOOL
 CryptIsAsymSignScheme(
     TPMI_ALG_PUBLIC          publicType,        // IN: Type of the object
     TPMI_ALG_ASYM_SCHEME     scheme             // IN: the scheme
-    );
+);
 
 //*** CryptIsAsymDecryptScheme()
 // This function indicate if a scheme algorithm is a decrypt algorithm.
@@ -305,7 +305,7 @@ BOOL
 CryptIsAsymDecryptScheme(
     TPMI_ALG_PUBLIC          publicType,        // IN: Type of the object
     TPMI_ALG_ASYM_SCHEME     scheme             // IN: the scheme
-    );
+);
 
 //*** CryptSelectSignScheme()
 // This function is used by the attestation and signing commands.  It implements
@@ -330,7 +330,7 @@ BOOL
 CryptSelectSignScheme(
     OBJECT              *signObject,    // IN: signing key
     TPMT_SIG_SCHEME     *scheme         // IN/OUT: signing scheme
-    );
+);
 
 //*** CryptSign()
 // Sign a digest with asymmetric key or HMAC.
@@ -354,7 +354,7 @@ CryptSign(
     TPMT_SIG_SCHEME     *signScheme,    // IN: sign scheme.
     TPM2B_DIGEST        *digest,        // IN: The digest being signed
     TPMT_SIGNATURE      *signature      // OUT: signature
-    );
+);
 
 //*** CryptValidateSignature()
 // This function is used to verify a signature.  It is called by
@@ -375,7 +375,7 @@ CryptValidateSignature(
     TPMI_DH_OBJECT   keyHandle,     // IN: The handle of sign key
     TPM2B_DIGEST    *digest,        // IN: The digest being validated
     TPMT_SIGNATURE  *signature      // IN: signature
-    );
+);
 
 //*** CryptGetTestResult
 // This function returns the results of a self-test function.
@@ -386,7 +386,7 @@ CryptValidateSignature(
 TPM_RC
 CryptGetTestResult(
     TPM2B_MAX_BUFFER    *outData        // OUT: test result data
-    );
+);
 
 //*** CryptIsUniqueSizeValid()
 // This function validates that the unique values are consistent.
@@ -397,7 +397,7 @@ CryptGetTestResult(
 BOOL
 CryptIsUniqueSizeValid(
     TPMT_PUBLIC     *publicArea     // IN: the public area to check
-    );
+);
 
 //*** CryptIsSensitiveSizeValid()
 // This function is used by TPM2_LoadExternal() to validate that the sensitive area
@@ -407,7 +407,7 @@ BOOL
 CryptIsSensitiveSizeValid(
     TPMT_PUBLIC             *publicArea,        // IN: the object's public part
     TPMT_SENSITIVE          *sensitiveArea      // IN: the object's sensitive part
-    );
+);
 
 //*** CryptValidateKeys()
 // This function is used to verify that the key material of and object is valid.
@@ -432,7 +432,7 @@ CryptValidateKeys(
     TPMT_SENSITIVE   *sensitive,
     TPM_RC            blamePublic,
     TPM_RC            blameSensitive
-    );
+);
 
 //*** CryptAlgSetImplemented()
 // This function initializes the bit vector with one bit for each implemented
@@ -442,7 +442,7 @@ CryptValidateKeys(
 void
 CryptAlgsSetImplemented(
     void
-    );
+);
 
 //*** CryptSelectMac()
 // This function is used to set the MAC scheme based on the key parameters and
@@ -485,4 +485,4 @@ CryptSymModeIsValid(
     BOOL                flag
 );
 
-#endif  // _CRYPTUTIL_FP_H_
+#endif  // _CRYPT_UTIL_FP_H_

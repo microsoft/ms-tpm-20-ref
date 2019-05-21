@@ -34,13 +34,13 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 03:18:00PM
  */
 
-#ifndef    _TPMTOOSSLDESSUPPORT_FP_H_
-#define    _TPMTOOSSLDESSUPPORT_FP_H_
+#ifndef    _TPM_TO_OSSL_DES_SUPPORT_FP_H_
+#define    _TPM_TO_OSSL_DES_SUPPORT_FP_H_
 
-#if SYM_LIB == OSSL && defined TPM_ALG_TDES
+#if (defined SYM_LIB_OSSL) && ALG_TDES
 
 //**Functions
 //*** TDES_set_encyrpt_key()
@@ -53,7 +53,7 @@ TDES_set_encrypt_key(
     const BYTE                  *key,
     UINT16                       keySizeInBits,
     tpmKeyScheduleTDES          *keySchedule
-    );
+);
 
 //*** TDES_encyrpt()
 // The TPM code uses one key schedule. For TDES, the schedule contains three
@@ -63,7 +63,7 @@ void TDES_encrypt(
     const BYTE              *in,
     BYTE                    *out,
     tpmKeyScheduleTDES      *ks
-    );
+);
 
 //*** TDES_decrypt()
 // As with TDES_encypt() this function bridges between the TPM single schedule
@@ -72,7 +72,7 @@ void TDES_decrypt(
     const BYTE          *in,
     BYTE                *out,
     tpmKeyScheduleTDES   *ks
-    );
-#endif // SYM_LIB == OSSL
+);
+#endif // SYM_LIB_OSSL
 
-#endif  // _TPMTOOSSLDESSUPPORT_FP_H_
+#endif  // _TPM_TO_OSSL_DES_SUPPORT_FP_H_

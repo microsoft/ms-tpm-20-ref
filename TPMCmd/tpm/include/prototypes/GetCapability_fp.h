@@ -33,13 +33,14 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.1 Dec 8, 2018
- *  Date: Jan 28, 2019  Time: 12:39:24AM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#ifdef TPM_CC_GetCapability // Command must be defined
-#ifndef _GETCAPABILITY_FP_H_
-#define _GETCAPABILITY_FP_H_
+#if CC_GetCapability // Command must be enabled
+
+#ifndef _Get_Capability_FP_H_
+#define _Get_Capability_FP_H_
 
 // Input structure definition
 typedef struct {
@@ -66,5 +67,5 @@ TPM2_GetCapability(
     GetCapability_Out           *out
 );
 
-#endif  // _GETCAPABILITY_FP_H_
-#endif  // TPM_CC_GetCapability
+#endif  // _Get_Capability_FP_H_
+#endif  // CC_GetCapability

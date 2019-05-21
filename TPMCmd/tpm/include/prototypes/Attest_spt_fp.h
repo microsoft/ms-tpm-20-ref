@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
 #ifndef    _ATTEST_SPT_FP_H_
@@ -48,7 +48,7 @@ FillInAttestInfo(
     TPMT_SIG_SCHEME     *scheme,        // IN/OUT: scheme to be used for signing
     TPM2B_DATA          *data,          // IN: qualifying data
     TPMS_ATTEST         *attest         // OUT: attest structure
-    );
+);
 
 //***SignAttestInfo()
 // Sign a TPMS_ATTEST structure. If signHandle is TPM_RH_NULL, a null signature
@@ -71,7 +71,7 @@ SignAttestInfo(
     TPM2B_ATTEST        *attest,            // OUT: marshaled attest blob to be
                                             //     signed
     TPMT_SIGNATURE      *signature          // OUT: signature
-    );
+);
 
 //*** IsSigningObject()
 // Checks to see if the object is OK for signing. This is here rather than in
@@ -83,6 +83,6 @@ SignAttestInfo(
 BOOL
 IsSigningObject(
     OBJECT          *object         // IN:
-    );
+);
 
 #endif  // _ATTEST_SPT_FP_H_

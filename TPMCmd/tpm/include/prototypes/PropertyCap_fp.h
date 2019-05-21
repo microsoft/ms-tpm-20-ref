@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:26AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _PROPERTYCAP_FP_H_
-#define    _PROPERTYCAP_FP_H_
+#ifndef    _PROPERTY_CAP_FP_H_
+#define    _PROPERTY_CAP_FP_H_
 
 //*** TPMCapGetProperties()
 // This function is used to get the TPM_PT values. The search of properties will
@@ -54,6 +54,6 @@ TPMCapGetProperties(
     UINT32                       count,         // IN: maximum number of returned
                                                 //     properties
     TPML_TAGGED_TPM_PROPERTY    *propertyList   // OUT: property list
-    );
+);
 
-#endif  // _PROPERTYCAP_FP_H_
+#endif  // _PROPERTY_CAP_FP_H_

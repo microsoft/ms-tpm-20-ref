@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
 #ifndef    _BITS_FP_H_
@@ -50,7 +50,7 @@ TestBit(
     unsigned int     bitNum,        // IN: number of the bit in 'bArray'
     BYTE            *bArray,        // IN: array containing the bits
     unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
-    );
+);
 
 //*** SetBit()
 // This function will set the indicated bit in 'bArray'.
@@ -59,7 +59,7 @@ SetBit(
     unsigned int     bitNum,        // IN: number of the bit in 'bArray'
     BYTE            *bArray,        // IN: array containing the bits
     unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
-    );
+);
 
 //*** ClearBit()
 // This function will clear the indicated bit in 'bArray'.
@@ -68,6 +68,6 @@ ClearBit(
     unsigned int     bitNum,        // IN: number of the bit in 'bArray'.
     BYTE            *bArray,        // IN: array containing the bits
     unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
-    );
+);
 
 #endif  // _BITS_FP_H_

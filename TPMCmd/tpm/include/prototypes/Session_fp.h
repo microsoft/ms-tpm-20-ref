@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 04:06:42PM
  */
 
 #ifndef    _SESSION_FP_H_
@@ -42,10 +42,10 @@
 
 //** Startup Function -- SessionStartup()
 // This function initializes the session subsystem on TPM2_Startup().
-void
+BOOL
 SessionStartup(
     STARTUP_TYPE     type
-    );
+);
 
 //*** SessionIsLoaded()
 // This function test a session handle references a loaded session.  The handle
@@ -60,7 +60,7 @@ SessionStartup(
 BOOL
 SessionIsLoaded(
     TPM_HANDLE       handle         // IN: session handle
-    );
+);
 
 //*** SessionIsSaved()
 // This function test a session handle references a saved session.  The handle
@@ -77,7 +77,7 @@ SessionIsLoaded(
 BOOL
 SessionIsSaved(
     TPM_HANDLE       handle         // IN: session handle
-    );
+);
 
 //*** SequenceNumberForSavedContextIsValid()
 // This function validates that the sequence number and handle value within a
@@ -86,7 +86,7 @@ BOOL
 SequenceNumberForSavedContextIsValid(
     TPMS_CONTEXT    *context        // IN: pointer to a context structure to be
                                     //     validated
-    );
+);
 
 //*** SessionPCRValueIsCurrent()
 //
@@ -100,7 +100,7 @@ SequenceNumberForSavedContextIsValid(
 BOOL
 SessionPCRValueIsCurrent(
     SESSION         *session        // IN: session structure
-    );
+);
 
 //*** SessionGet()
 // This function returns a pointer to the session object associated with a
@@ -110,7 +110,7 @@ SessionPCRValueIsCurrent(
 SESSION *
 SessionGet(
     TPM_HANDLE       handle         // IN: session handle
-    );
+);
 
 //*** SessionCreate()
 //
@@ -134,7 +134,7 @@ SessionCreate(
     TPM2B_DATA      *seed,          // IN: seed data
     TPM_HANDLE      *sessionHandle, // OUT: the session handle
     TPM2B_NONCE     *nonceTpm       // OUT: the session nonce
-    );
+);
 
 //*** SessionContextSave()
 // This function is called when a session context is to be saved.  The
@@ -146,14 +146,14 @@ SessionCreate(
 // Otherwise, it should not be called at the first place.
 //
 //  Return Type: TPM_RC
-//      TPM_RC_CONTEXT_GAP              a contextID could not be assigned
-//      TPM_RC_TOO_MANY_CONTEXTS        the counter maxed out
+//      TPM_RC_CONTEXT_GAP      a contextID could not be assigned.
+//      TPM_RC_TOO_MANY_CONTEXTSthe counter maxed out
 //
 TPM_RC
 SessionContextSave(
     TPM_HANDLE           handle,        // IN: session handle
     CONTEXT_COUNTER     *contextID      // OUT: assigned contextID
-    );
+);
 
 //*** SessionContextLoad()
 // This function is used to load a session from saved context.  The session
@@ -173,7 +173,7 @@ TPM_RC
 SessionContextLoad(
     SESSION_BUF     *session,       // IN: session structure from saved context
     TPM_HANDLE      *handle         // IN/OUT: session handle
-    );
+);
 
 //*** SessionFlush()
 // This function is used to flush a session referenced by its handle.  If the
@@ -185,7 +185,7 @@ SessionContextLoad(
 void
 SessionFlush(
     TPM_HANDLE       handle         // IN: loaded or saved session handle
-    );
+);
 
 //*** SessionComputeBoundEntity()
 // This function computes the binding value for a session.  The binding value
@@ -198,14 +198,14 @@ void
 SessionComputeBoundEntity(
     TPMI_DH_ENTITY       entityHandle,  // IN: handle of entity
     TPM2B_NAME          *bind           // OUT: binding value
-    );
+);
 
 //*** SessionSetStartTime()
 // This function is used to initialize the session timing
 void
 SessionSetStartTime(
     SESSION         *session        // IN: the session to update
-    );
+);
 
 //*** SessionResetPolicyData()
 // This function is used to reset the policy data without changing the nonce
@@ -213,7 +213,7 @@ SessionSetStartTime(
 void
 SessionResetPolicyData(
     SESSION         *session        // IN: the session to reset
-    );
+);
 
 //*** SessionCapGetLoaded()
 // This function returns a list of handles of loaded session, started
@@ -229,7 +229,7 @@ SessionCapGetLoaded(
     TPMI_SH_POLICY   handle,        // IN: start handle
     UINT32           count,         // IN: count of returned handles
     TPML_HANDLE     *handleList     // OUT: list of handle
-    );
+);
 
 //*** SessionCapGetSaved()
 // This function returns a list of handles for saved session, starting at
@@ -246,7 +246,7 @@ SessionCapGetSaved(
     TPMI_SH_HMAC     handle,        // IN: start handle
     UINT32           count,         // IN: count of returned handles
     TPML_HANDLE     *handleList     // OUT: list of handle
-    );
+);
 
 //*** SessionCapGetLoadedNumber()
 // This function return the number of authorization sessions currently
@@ -254,7 +254,7 @@ SessionCapGetSaved(
 UINT32
 SessionCapGetLoadedNumber(
     void
-    );
+);
 
 //*** SessionCapGetLoadedAvail()
 // This function returns the number of additional authorization sessions, of
@@ -265,7 +265,7 @@ SessionCapGetLoadedNumber(
 UINT32
 SessionCapGetLoadedAvail(
     void
-    );
+);
 
 //*** SessionCapGetActiveNumber()
 // This function returns the number of active authorization sessions currently
@@ -273,7 +273,7 @@ SessionCapGetLoadedAvail(
 UINT32
 SessionCapGetActiveNumber(
     void
-    );
+);
 
 //*** SessionCapGetActiveAvail()
 // This function returns the number of additional authorization sessions, of any
@@ -282,6 +282,6 @@ SessionCapGetActiveNumber(
 UINT32
 SessionCapGetActiveAvail(
     void
-    );
+);
 
 #endif  // _SESSION_FP_H_

@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 04:06:42PM
  */
 
-#ifndef    _CRYPTPRIMESIEVE_FP_H_
-#define    _CRYPTPRIMESIEVE_FP_H_
+#ifndef    _CRYPT_PRIME_SIEVE_FP_H_
+#define    _CRYPT_PRIME_SIEVE_FP_H_
 
 #if RSA_KEY_SIEVE
 
@@ -51,7 +51,7 @@
 LIB_EXPORT void
 RsaAdjustPrimeLimit(
     uint32_t        requestedPrimes
-    );
+);
 
 //*** RsaNextPrime()
 // This the iterator used during the sieve process. The input is the
@@ -61,7 +61,7 @@ RsaAdjustPrimeLimit(
 LIB_EXPORT uint32_t
 RsaNextPrime(
     uint32_t    lastPrime
-    );
+);
 
 //*** FindNthSetBit()
 // This function finds the nth SET bit in a bit array. The 'n' parameter is
@@ -75,7 +75,7 @@ FindNthSetBit(
     const UINT16     aSize,         // IN: the size of the array to check
     const BYTE      *a,             // IN: the array to check
     const UINT32     n              // IN, the number of the SET bit
-    );
+);
 
 //*** PrimeSieve()
 // This function does a prime sieve over the input 'field' which has as its
@@ -96,7 +96,7 @@ PrimeSieve(
     bigNum           bnN,       // IN/OUT: number to sieve
     UINT32           fieldSize, // IN: size of the field area in bytes
     BYTE            *field      // IN: field
-    );
+);
 #ifdef SIEVE_DEBUG
 
 //***SetFieldSize()
@@ -104,7 +104,7 @@ PrimeSieve(
 LIB_EXPORT uint32_t
 SetFieldSize(
     uint32_t         newFieldSize
-    );
+);
 #endif // SIEVE_DEBUG
 
 //*** PrimeSelectWithSieve()
@@ -126,33 +126,33 @@ PrimeSelectWithSieve(
     bigNum           candidate,         // IN/OUT: The candidate to filter
     UINT32           e,                 // IN: the exponent
     RAND_STATE      *rand               // IN: the random number generator state
-    );
+);
 #if RSA_INSTRUMENT
 
 char *
 PrintTuple(
     UINT32      *i
-    );
+);
 
 void
 RsaSimulationEnd(
     void
-    );
+);
 
 LIB_EXPORT void
 GetSieveStats(
     uint32_t        *trials,
     uint32_t        *emptyFields,
     uint32_t        *averageBits
-    );
+);
+
 #endif
 #endif // RSA_KEY_SIEVE
-
 #if !RSA_INSTRUMENT
 void
 RsaSimulationEnd(
     void
-    );
+);
 #endif
 
-#endif  // _CRYPTPRIMESIEVE_FP_H_
+#endif  // _CRYPT_PRIME_SIEVE_FP_H_

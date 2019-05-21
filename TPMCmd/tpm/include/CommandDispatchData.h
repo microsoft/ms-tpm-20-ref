@@ -33,260 +33,271 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.0 October 30, 2018
- *  Date: Nov 17, 2018  Time: 11:36:04AM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Apr  2, 2019  Time: 11:00:48AM
  */
+
 // This file should only be included by CommandCodeAttibutes.c
 #ifdef _COMMAND_TABLE_DISPATCH_
 
-    
+   
 // Define the stop value
 #define END_OF_LIST     0xff
 #define ADD_FLAG        0x80
 
+// These macros provide some variability in how the data is encoded. They also make
+// the lines a little sorter. ;-)
+#   define UNMARSHAL_DISPATCH(name)   (UNMARSHAL_t)name##_Unmarshal
+#   define MARSHAL_DISPATCH(name)     (MARSHAL_t)name##_Marshal
+#   define _UNMARSHAL_T_    UNMARSHAL_t
+#   define _MARSHAL_T_      MARSHAL_t
+
+
 // The UnmarshalArray contains the dispatch functions for the unmarshaling code.
 // The defines in this array are used to make it easier to cross reference the
 // unmarshaling values in the types array of each command
-const UNMARSHAL_t UnmarshalArray[] = {
+
+const _UNMARSHAL_T_ UnmarshalArray[] = {
 #define TPMI_DH_CONTEXT_H_UNMARSHAL         0
-            (UNMARSHAL_t)TPMI_DH_CONTEXT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_DH_CONTEXT),
 #define TPMI_RH_AC_H_UNMARSHAL              (TPMI_DH_CONTEXT_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_AC_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_AC),
 #define TPMI_RH_CLEAR_H_UNMARSHAL           (TPMI_RH_AC_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_CLEAR_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_CLEAR),
 #define TPMI_RH_HIERARCHY_AUTH_H_UNMARSHAL  (TPMI_RH_CLEAR_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_HIERARCHY_AUTH_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_HIERARCHY_AUTH),
 #define TPMI_RH_LOCKOUT_H_UNMARSHAL         (TPMI_RH_HIERARCHY_AUTH_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_LOCKOUT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_LOCKOUT),
 #define TPMI_RH_NV_AUTH_H_UNMARSHAL         (TPMI_RH_LOCKOUT_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_NV_AUTH_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_NV_AUTH),
 #define TPMI_RH_NV_INDEX_H_UNMARSHAL        (TPMI_RH_NV_AUTH_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_NV_INDEX_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_NV_INDEX),
 #define TPMI_RH_PLATFORM_H_UNMARSHAL        (TPMI_RH_NV_INDEX_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_PLATFORM_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_PLATFORM),
 #define TPMI_RH_PROVISION_H_UNMARSHAL       (TPMI_RH_PLATFORM_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_PROVISION_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_PROVISION),
 #define TPMI_SH_HMAC_H_UNMARSHAL            (TPMI_RH_PROVISION_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_SH_HMAC_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_SH_HMAC),
 #define TPMI_SH_POLICY_H_UNMARSHAL          (TPMI_SH_HMAC_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_SH_POLICY_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_SH_POLICY),
 // HANDLE_FIRST_FLAG_TYPE is the first handle that needs a flag when called.
 #define HANDLE_FIRST_FLAG_TYPE              (TPMI_SH_POLICY_H_UNMARSHAL + 1)
 #define TPMI_DH_ENTITY_H_UNMARSHAL          (TPMI_SH_POLICY_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_DH_ENTITY_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_DH_ENTITY),
 #define TPMI_DH_OBJECT_H_UNMARSHAL          (TPMI_DH_ENTITY_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_DH_OBJECT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_DH_OBJECT),
 #define TPMI_DH_PARENT_H_UNMARSHAL          (TPMI_DH_OBJECT_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_DH_PARENT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_DH_PARENT),
 #define TPMI_DH_PCR_H_UNMARSHAL             (TPMI_DH_PARENT_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_DH_PCR_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_DH_PCR),
 #define TPMI_RH_ENDORSEMENT_H_UNMARSHAL     (TPMI_DH_PCR_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_ENDORSEMENT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_ENDORSEMENT),
 #define TPMI_RH_HIERARCHY_H_UNMARSHAL       (TPMI_RH_ENDORSEMENT_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_HIERARCHY_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_HIERARCHY),
 // PARAMETER_FIRST_TYPE marks the end of the handle list.
 #define PARAMETER_FIRST_TYPE                (TPMI_RH_HIERARCHY_H_UNMARSHAL + 1)
 #define TPM2B_DATA_P_UNMARSHAL              (TPMI_RH_HIERARCHY_H_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_DATA_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_DATA),
 #define TPM2B_DIGEST_P_UNMARSHAL            (TPM2B_DATA_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_DIGEST_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_DIGEST),
 #define TPM2B_ECC_PARAMETER_P_UNMARSHAL     (TPM2B_DIGEST_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_ECC_PARAMETER_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_ECC_PARAMETER),
 #define TPM2B_ECC_POINT_P_UNMARSHAL         (TPM2B_ECC_PARAMETER_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_ECC_POINT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_ECC_POINT),
 #define TPM2B_ENCRYPTED_SECRET_P_UNMARSHAL  (TPM2B_ECC_POINT_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_ENCRYPTED_SECRET_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_ENCRYPTED_SECRET),
 #define TPM2B_EVENT_P_UNMARSHAL             (TPM2B_ENCRYPTED_SECRET_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_EVENT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_EVENT),
 #define TPM2B_ID_OBJECT_P_UNMARSHAL         (TPM2B_EVENT_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_ID_OBJECT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_ID_OBJECT),
 #define TPM2B_IV_P_UNMARSHAL                (TPM2B_ID_OBJECT_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_IV_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_IV),
 #define TPM2B_MAX_BUFFER_P_UNMARSHAL        (TPM2B_IV_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_MAX_BUFFER_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_MAX_BUFFER),
 #define TPM2B_MAX_NV_BUFFER_P_UNMARSHAL     (TPM2B_MAX_BUFFER_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_MAX_NV_BUFFER_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_MAX_NV_BUFFER),
 #define TPM2B_NAME_P_UNMARSHAL              (TPM2B_MAX_NV_BUFFER_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_NAME_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_NAME),
 #define TPM2B_NV_PUBLIC_P_UNMARSHAL         (TPM2B_NAME_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_NV_PUBLIC_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_NV_PUBLIC),
 #define TPM2B_PRIVATE_P_UNMARSHAL           (TPM2B_NV_PUBLIC_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_PRIVATE_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_PRIVATE),
 #define TPM2B_PUBLIC_KEY_RSA_P_UNMARSHAL    (TPM2B_PRIVATE_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_PUBLIC_KEY_RSA_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_PUBLIC_KEY_RSA),
 #define TPM2B_SENSITIVE_P_UNMARSHAL         (TPM2B_PUBLIC_KEY_RSA_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_SENSITIVE_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_SENSITIVE),
 #define TPM2B_SENSITIVE_CREATE_P_UNMARSHAL  (TPM2B_SENSITIVE_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_SENSITIVE_CREATE_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_SENSITIVE_CREATE),
 #define TPM2B_SENSITIVE_DATA_P_UNMARSHAL    (TPM2B_SENSITIVE_CREATE_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_SENSITIVE_DATA_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_SENSITIVE_DATA),
 #define TPM2B_TEMPLATE_P_UNMARSHAL          (TPM2B_SENSITIVE_DATA_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_TEMPLATE_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_TEMPLATE),
 #define TPM2B_TIMEOUT_P_UNMARSHAL           (TPM2B_TEMPLATE_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_TIMEOUT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_TIMEOUT),
 #define TPMI_DH_CONTEXT_P_UNMARSHAL         (TPM2B_TIMEOUT_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_DH_CONTEXT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_DH_CONTEXT),
 #define TPMI_DH_PERSISTENT_P_UNMARSHAL      (TPMI_DH_CONTEXT_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_DH_PERSISTENT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_DH_PERSISTENT),
 #define TPMI_ECC_CURVE_P_UNMARSHAL          (TPMI_DH_PERSISTENT_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_ECC_CURVE_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_ECC_CURVE),
 #define TPMI_YES_NO_P_UNMARSHAL             (TPMI_ECC_CURVE_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_YES_NO_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_YES_NO),
 #define TPML_ALG_P_UNMARSHAL                (TPMI_YES_NO_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPML_ALG_Unmarshal,
+            UNMARSHAL_DISPATCH(TPML_ALG),
 #define TPML_CC_P_UNMARSHAL                 (TPML_ALG_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPML_CC_Unmarshal,
+            UNMARSHAL_DISPATCH(TPML_CC),
 #define TPML_DIGEST_P_UNMARSHAL             (TPML_CC_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPML_DIGEST_Unmarshal,
+            UNMARSHAL_DISPATCH(TPML_DIGEST),
 #define TPML_DIGEST_VALUES_P_UNMARSHAL      (TPML_DIGEST_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPML_DIGEST_VALUES_Unmarshal,
+            UNMARSHAL_DISPATCH(TPML_DIGEST_VALUES),
 #define TPML_PCR_SELECTION_P_UNMARSHAL      (TPML_DIGEST_VALUES_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPML_PCR_SELECTION_Unmarshal,
+            UNMARSHAL_DISPATCH(TPML_PCR_SELECTION),
 #define TPMS_CONTEXT_P_UNMARSHAL            (TPML_PCR_SELECTION_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMS_CONTEXT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMS_CONTEXT),
 #define TPMT_PUBLIC_PARMS_P_UNMARSHAL       (TPMS_CONTEXT_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMT_PUBLIC_PARMS_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMT_PUBLIC_PARMS),
 #define TPMT_TK_AUTH_P_UNMARSHAL            (TPMT_PUBLIC_PARMS_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMT_TK_AUTH_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMT_TK_AUTH),
 #define TPMT_TK_CREATION_P_UNMARSHAL        (TPMT_TK_AUTH_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMT_TK_CREATION_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMT_TK_CREATION),
 #define TPMT_TK_HASHCHECK_P_UNMARSHAL       (TPMT_TK_CREATION_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMT_TK_HASHCHECK_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMT_TK_HASHCHECK),
 #define TPMT_TK_VERIFIED_P_UNMARSHAL        (TPMT_TK_HASHCHECK_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMT_TK_VERIFIED_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMT_TK_VERIFIED),
 #define TPM_AT_P_UNMARSHAL                  (TPMT_TK_VERIFIED_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM_AT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM_AT),
 #define TPM_CAP_P_UNMARSHAL                 (TPM_AT_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM_CAP_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM_CAP),
 #define TPM_CLOCK_ADJUST_P_UNMARSHAL        (TPM_CAP_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM_CLOCK_ADJUST_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM_CLOCK_ADJUST),
 #define TPM_EO_P_UNMARSHAL                  (TPM_CLOCK_ADJUST_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM_EO_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM_EO),
 #define TPM_SE_P_UNMARSHAL                  (TPM_EO_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM_SE_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM_SE),
 #define TPM_SU_P_UNMARSHAL                  (TPM_SE_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM_SU_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM_SU),
 #define UINT16_P_UNMARSHAL                  (TPM_SU_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)UINT16_Unmarshal,
+            UNMARSHAL_DISPATCH(UINT16),
 #define UINT32_P_UNMARSHAL                  (UINT16_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)UINT32_Unmarshal,
+            UNMARSHAL_DISPATCH(UINT32),
 #define UINT64_P_UNMARSHAL                  (UINT32_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)UINT64_Unmarshal,
+            UNMARSHAL_DISPATCH(UINT64),
 #define UINT8_P_UNMARSHAL                   (UINT64_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)UINT8_Unmarshal,
+            UNMARSHAL_DISPATCH(UINT8),
 // PARAMETER_FIRST_FLAG_TYPE is the first parameter to need a flag.
 #define PARAMETER_FIRST_FLAG_TYPE           (UINT8_P_UNMARSHAL + 1)
 #define TPM2B_PUBLIC_P_UNMARSHAL            (UINT8_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPM2B_PUBLIC_Unmarshal,
+            UNMARSHAL_DISPATCH(TPM2B_PUBLIC),
 #define TPMI_ALG_CIPHER_MODE_P_UNMARSHAL    (TPM2B_PUBLIC_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_ALG_CIPHER_MODE_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_ALG_CIPHER_MODE),
 #define TPMI_ALG_HASH_P_UNMARSHAL           (TPMI_ALG_CIPHER_MODE_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_ALG_HASH_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_ALG_HASH),
 #define TPMI_ALG_MAC_SCHEME_P_UNMARSHAL     (TPMI_ALG_HASH_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_ALG_MAC_SCHEME_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_ALG_MAC_SCHEME),
 #define TPMI_DH_PCR_P_UNMARSHAL             (TPMI_ALG_MAC_SCHEME_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_DH_PCR_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_DH_PCR),
 #define TPMI_ECC_KEY_EXCHANGE_P_UNMARSHAL   (TPMI_DH_PCR_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_ECC_KEY_EXCHANGE_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_ECC_KEY_EXCHANGE),
 #define TPMI_RH_ENABLES_P_UNMARSHAL         (TPMI_ECC_KEY_EXCHANGE_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_ENABLES_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_ENABLES),
 #define TPMI_RH_HIERARCHY_P_UNMARSHAL       (TPMI_RH_ENABLES_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMI_RH_HIERARCHY_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMI_RH_HIERARCHY),
 #define TPMT_RSA_DECRYPT_P_UNMARSHAL        (TPMI_RH_HIERARCHY_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMT_RSA_DECRYPT_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMT_RSA_DECRYPT),
 #define TPMT_SIGNATURE_P_UNMARSHAL          (TPMT_RSA_DECRYPT_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMT_SIGNATURE_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMT_SIGNATURE),
 #define TPMT_SIG_SCHEME_P_UNMARSHAL         (TPMT_SIGNATURE_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMT_SIG_SCHEME_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMT_SIG_SCHEME),
 #define TPMT_SYM_DEF_P_UNMARSHAL            (TPMT_SIG_SCHEME_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMT_SYM_DEF_Unmarshal,
+            UNMARSHAL_DISPATCH(TPMT_SYM_DEF),
 #define TPMT_SYM_DEF_OBJECT_P_UNMARSHAL     (TPMT_SYM_DEF_P_UNMARSHAL + 1)
-            (UNMARSHAL_t)TPMT_SYM_DEF_OBJECT_Unmarshal
+            UNMARSHAL_DISPATCH(TPMT_SYM_DEF_OBJECT)
 // PARAMETER_LAST_TYPE is the end of the command parameter list.
 #define PARAMETER_LAST_TYPE                 (TPMT_SYM_DEF_OBJECT_P_UNMARSHAL)
 };
-    
+   
 // The MarshalArray contains the dispatch functions for the marshaling code.
 // The defines in this array are used to make it easier to cross reference the
 // marshaling values in the types array of each command
-const MARSHAL_t MarshalArray[] = {
+const _MARSHAL_T_ MarshalArray[] = {
+
 #define UINT32_H_MARSHAL                    0
-            (MARSHAL_t)UINT32_Marshal,
+            MARSHAL_DISPATCH(UINT32),
 // RESPONSE_PARAMETER_FIRST_TYPE marks the end of the response handles.
 #define RESPONSE_PARAMETER_FIRST_TYPE       (UINT32_H_MARSHAL + 1)
 #define TPM2B_ATTEST_P_MARSHAL              (UINT32_H_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_ATTEST_Marshal,
+            MARSHAL_DISPATCH(TPM2B_ATTEST),
 #define TPM2B_CREATION_DATA_P_MARSHAL       (TPM2B_ATTEST_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_CREATION_DATA_Marshal,
+            MARSHAL_DISPATCH(TPM2B_CREATION_DATA),
 #define TPM2B_DATA_P_MARSHAL                (TPM2B_CREATION_DATA_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_DATA_Marshal,
+            MARSHAL_DISPATCH(TPM2B_DATA),
 #define TPM2B_DIGEST_P_MARSHAL              (TPM2B_DATA_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_DIGEST_Marshal,
+            MARSHAL_DISPATCH(TPM2B_DIGEST),
 #define TPM2B_ECC_POINT_P_MARSHAL           (TPM2B_DIGEST_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_ECC_POINT_Marshal,
+            MARSHAL_DISPATCH(TPM2B_ECC_POINT),
 #define TPM2B_ENCRYPTED_SECRET_P_MARSHAL    (TPM2B_ECC_POINT_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_ENCRYPTED_SECRET_Marshal,
+            MARSHAL_DISPATCH(TPM2B_ENCRYPTED_SECRET),
 #define TPM2B_ID_OBJECT_P_MARSHAL           (TPM2B_ENCRYPTED_SECRET_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_ID_OBJECT_Marshal,
+            MARSHAL_DISPATCH(TPM2B_ID_OBJECT),
 #define TPM2B_IV_P_MARSHAL                  (TPM2B_ID_OBJECT_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_IV_Marshal,
+            MARSHAL_DISPATCH(TPM2B_IV),
 #define TPM2B_MAX_BUFFER_P_MARSHAL          (TPM2B_IV_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_MAX_BUFFER_Marshal,
+            MARSHAL_DISPATCH(TPM2B_MAX_BUFFER),
 #define TPM2B_MAX_NV_BUFFER_P_MARSHAL       (TPM2B_MAX_BUFFER_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_MAX_NV_BUFFER_Marshal,
+            MARSHAL_DISPATCH(TPM2B_MAX_NV_BUFFER),
 #define TPM2B_NAME_P_MARSHAL                (TPM2B_MAX_NV_BUFFER_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_NAME_Marshal,
+            MARSHAL_DISPATCH(TPM2B_NAME),
 #define TPM2B_NV_PUBLIC_P_MARSHAL           (TPM2B_NAME_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_NV_PUBLIC_Marshal,
+            MARSHAL_DISPATCH(TPM2B_NV_PUBLIC),
 #define TPM2B_PRIVATE_P_MARSHAL             (TPM2B_NV_PUBLIC_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_PRIVATE_Marshal,
+            MARSHAL_DISPATCH(TPM2B_PRIVATE),
 #define TPM2B_PUBLIC_P_MARSHAL              (TPM2B_PRIVATE_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_PUBLIC_Marshal,
+            MARSHAL_DISPATCH(TPM2B_PUBLIC),
 #define TPM2B_PUBLIC_KEY_RSA_P_MARSHAL      (TPM2B_PUBLIC_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_PUBLIC_KEY_RSA_Marshal,
+            MARSHAL_DISPATCH(TPM2B_PUBLIC_KEY_RSA),
 #define TPM2B_SENSITIVE_DATA_P_MARSHAL      (TPM2B_PUBLIC_KEY_RSA_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_SENSITIVE_DATA_Marshal,
+            MARSHAL_DISPATCH(TPM2B_SENSITIVE_DATA),
 #define TPM2B_TIMEOUT_P_MARSHAL             (TPM2B_SENSITIVE_DATA_P_MARSHAL + 1)
-            (MARSHAL_t)TPM2B_TIMEOUT_Marshal,
+            MARSHAL_DISPATCH(TPM2B_TIMEOUT),
 #define UINT8_P_MARSHAL                     (TPM2B_TIMEOUT_P_MARSHAL + 1)
-            (MARSHAL_t)UINT8_Marshal,
+            MARSHAL_DISPATCH(UINT8),
 #define TPML_AC_CAPABILITIES_P_MARSHAL      (UINT8_P_MARSHAL + 1)
-            (MARSHAL_t)TPML_AC_CAPABILITIES_Marshal,
+            MARSHAL_DISPATCH(TPML_AC_CAPABILITIES),
 #define TPML_ALG_P_MARSHAL                  (TPML_AC_CAPABILITIES_P_MARSHAL + 1)
-            (MARSHAL_t)TPML_ALG_Marshal,
+            MARSHAL_DISPATCH(TPML_ALG),
 #define TPML_DIGEST_P_MARSHAL               (TPML_ALG_P_MARSHAL + 1)
-            (MARSHAL_t)TPML_DIGEST_Marshal,
+            MARSHAL_DISPATCH(TPML_DIGEST),
 #define TPML_DIGEST_VALUES_P_MARSHAL        (TPML_DIGEST_P_MARSHAL + 1)
-            (MARSHAL_t)TPML_DIGEST_VALUES_Marshal,
+            MARSHAL_DISPATCH(TPML_DIGEST_VALUES),
 #define TPML_PCR_SELECTION_P_MARSHAL        (TPML_DIGEST_VALUES_P_MARSHAL + 1)
-            (MARSHAL_t)TPML_PCR_SELECTION_Marshal,
+            MARSHAL_DISPATCH(TPML_PCR_SELECTION),
 #define TPMS_AC_OUTPUT_P_MARSHAL            (TPML_PCR_SELECTION_P_MARSHAL + 1)
-            (MARSHAL_t)TPMS_AC_OUTPUT_Marshal,
+            MARSHAL_DISPATCH(TPMS_AC_OUTPUT),
 #define TPMS_ALGORITHM_DETAIL_ECC_P_MARSHAL (TPMS_AC_OUTPUT_P_MARSHAL + 1)
-            (MARSHAL_t)TPMS_ALGORITHM_DETAIL_ECC_Marshal,
+            MARSHAL_DISPATCH(TPMS_ALGORITHM_DETAIL_ECC),
 #define TPMS_CAPABILITY_DATA_P_MARSHAL      \
             (TPMS_ALGORITHM_DETAIL_ECC_P_MARSHAL + 1)
-            (MARSHAL_t)TPMS_CAPABILITY_DATA_Marshal,
+            MARSHAL_DISPATCH(TPMS_CAPABILITY_DATA),
 #define TPMS_CONTEXT_P_MARSHAL              (TPMS_CAPABILITY_DATA_P_MARSHAL + 1)
-            (MARSHAL_t)TPMS_CONTEXT_Marshal,
+            MARSHAL_DISPATCH(TPMS_CONTEXT),
 #define TPMS_TIME_INFO_P_MARSHAL            (TPMS_CONTEXT_P_MARSHAL + 1)
-            (MARSHAL_t)TPMS_TIME_INFO_Marshal,
+            MARSHAL_DISPATCH(TPMS_TIME_INFO),
 #define TPMT_HA_P_MARSHAL                   (TPMS_TIME_INFO_P_MARSHAL + 1)
-            (MARSHAL_t)TPMT_HA_Marshal,
+            MARSHAL_DISPATCH(TPMT_HA),
 #define TPMT_SIGNATURE_P_MARSHAL            (TPMT_HA_P_MARSHAL + 1)
-            (MARSHAL_t)TPMT_SIGNATURE_Marshal,
+            MARSHAL_DISPATCH(TPMT_SIGNATURE),
 #define TPMT_TK_AUTH_P_MARSHAL              (TPMT_SIGNATURE_P_MARSHAL + 1)
-            (MARSHAL_t)TPMT_TK_AUTH_Marshal,
+            MARSHAL_DISPATCH(TPMT_TK_AUTH),
 #define TPMT_TK_CREATION_P_MARSHAL          (TPMT_TK_AUTH_P_MARSHAL + 1)
-            (MARSHAL_t)TPMT_TK_CREATION_Marshal,
+            MARSHAL_DISPATCH(TPMT_TK_CREATION),
 #define TPMT_TK_HASHCHECK_P_MARSHAL         (TPMT_TK_CREATION_P_MARSHAL + 1)
-            (MARSHAL_t)TPMT_TK_HASHCHECK_Marshal,
+            MARSHAL_DISPATCH(TPMT_TK_HASHCHECK),
 #define TPMT_TK_VERIFIED_P_MARSHAL          (TPMT_TK_HASHCHECK_P_MARSHAL + 1)
-            (MARSHAL_t)TPMT_TK_VERIFIED_Marshal,
+            MARSHAL_DISPATCH(TPMT_TK_VERIFIED),
 #define UINT32_P_MARSHAL                    (TPMT_TK_VERIFIED_P_MARSHAL + 1)
-            (MARSHAL_t)UINT32_Marshal,
+            MARSHAL_DISPATCH(UINT32),
 #define UINT16_P_MARSHAL                    (UINT32_P_MARSHAL + 1)
-            (MARSHAL_t)UINT16_Marshal
+            MARSHAL_DISPATCH(UINT16)
 // RESPONSE_PARAMETER_LAST_TYPE is the end of the response parameter list.
 #define RESPONSE_PARAMETER_LAST_TYPE        (UINT16_P_MARSHAL)
 };
@@ -4781,7 +4792,7 @@ COMMAND_DESCRIPTOR_t *s_CommandDataArray[] = {
 #endif // CC_NV_UndefineSpace
 #if (PAD_LIST)
         (COMMAND_DESCRIPTOR_t *)0,
-#endif // 
+#endif //
 #if (PAD_LIST || CC_ChangeEPS)
         (COMMAND_DESCRIPTOR_t *)_ChangeEPSDataAddress,
 #endif // CC_ChangeEPS
@@ -4954,7 +4965,7 @@ COMMAND_DESCRIPTOR_t *s_CommandDataArray[] = {
 #endif // CC_RSA_Decrypt
 #if (PAD_LIST)
         (COMMAND_DESCRIPTOR_t *)0,
-#endif // 
+#endif //
 #if (PAD_LIST || (CC_HMAC_Start || CC_MAC_Start))
 #    if CC_HMAC_Start
         (COMMAND_DESCRIPTOR_t *)_HMAC_StartDataAddress,
@@ -4977,7 +4988,7 @@ COMMAND_DESCRIPTOR_t *s_CommandDataArray[] = {
 #endif // CC_Unseal
 #if (PAD_LIST)
         (COMMAND_DESCRIPTOR_t *)0,
-#endif // 
+#endif //
 #if (PAD_LIST || CC_PolicySigned)
         (COMMAND_DESCRIPTOR_t *)_PolicySignedDataAddress,
 #endif // CC_PolicySigned
@@ -4998,7 +5009,7 @@ COMMAND_DESCRIPTOR_t *s_CommandDataArray[] = {
 #endif // CC_FlushContext
 #if (PAD_LIST)
         (COMMAND_DESCRIPTOR_t *)0,
-#endif // 
+#endif //
 #if (PAD_LIST || CC_LoadExternal)
         (COMMAND_DESCRIPTOR_t *)_LoadExternalDataAddress,
 #endif // CC_LoadExternal
@@ -5043,7 +5054,7 @@ COMMAND_DESCRIPTOR_t *s_CommandDataArray[] = {
 #endif // CC_RSA_Encrypt
 #if (PAD_LIST)
         (COMMAND_DESCRIPTOR_t *)0,
-#endif // 
+#endif //
 #if (PAD_LIST || CC_StartAuthSession)
         (COMMAND_DESCRIPTOR_t *)_StartAuthSessionDataAddress,
 #endif // CC_StartAuthSession

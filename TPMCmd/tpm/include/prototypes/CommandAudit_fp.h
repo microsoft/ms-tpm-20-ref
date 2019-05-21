@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 04:23:27PM
  */
 
-#ifndef    _COMMANDAUDIT_FP_H_
-#define    _COMMANDAUDIT_FP_H_
+#ifndef    _COMMAND_AUDIT_FP_H_
+#define    _COMMAND_AUDIT_FP_H_
 
 //*** CommandAuditPreInstall_Init()
 // This function initializes the command audit list. This function is simulates
@@ -51,14 +51,14 @@
 void
 CommandAuditPreInstall_Init(
     void
-    );
+);
 
 //*** CommandAuditStartup()
 // This function clears the command audit digest on a TPM Reset.
-void
+BOOL
 CommandAuditStartup(
     STARTUP_TYPE     type           // IN: start up type
-    );
+);
 
 //*** CommandAuditSet()
 // This function will SET the audit flag for a command. This function
@@ -76,7 +76,7 @@ CommandAuditStartup(
 BOOL
 CommandAuditSet(
     TPM_CC           commandCode    // IN: command code
-    );
+);
 
 //*** CommandAuditClear()
 // This function will CLEAR the audit flag for a command. It will not CLEAR the
@@ -92,7 +92,7 @@ CommandAuditSet(
 BOOL
 CommandAuditClear(
     TPM_CC           commandCode    // IN: command code
-    );
+);
 
 //*** CommandAuditIsRequired()
 // This function indicates if the audit flag is SET for a command.
@@ -102,7 +102,7 @@ CommandAuditClear(
 BOOL
 CommandAuditIsRequired(
     COMMAND_INDEX    commandIndex   // IN: command index
-    );
+);
 
 //*** CommandAuditCapGetCCList()
 // This function returns a list of commands that have their audit bit SET.
@@ -116,7 +116,7 @@ CommandAuditCapGetCCList(
     TPM_CC           commandCode,   // IN: start command code
     UINT32           count,         // IN: count of returned TPM_CC
     TPML_CC         *commandList    // OUT: list of TPM_CC
-    );
+);
 
 //*** CommandAuditGetDigest
 // This command is used to create a digest of the commands being audited. The
@@ -126,6 +126,6 @@ CommandAuditCapGetCCList(
 void
 CommandAuditGetDigest(
     TPM2B_DIGEST    *digest         // OUT: command digest
-    );
+);
 
-#endif  // _COMMANDAUDIT_FP_H_
+#endif  // _COMMAND_AUDIT_FP_H_

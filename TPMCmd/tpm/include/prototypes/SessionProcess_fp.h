@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _SESSIONPROCESS_FP_H_
-#define    _SESSIONPROCESS_FP_H_
+#ifndef    _SESSION_PROCESS_FP_H_
+#define    _SESSION_PROCESS_FP_H_
 
 //*** IsDAExempted()
 // This function indicates if a handle is exempted from DA logic.
@@ -54,13 +54,13 @@
 BOOL
 IsDAExempted(
     TPM_HANDLE       handle         // IN: entity handle
-    );
+);
 
 //*** ClearCpRpHashes()
 void
 ClearCpRpHashes(
     COMMAND         *command
-    );
+);
 
 //*** CompareNameHash()
 // This function computes the name hash and compares it to the nameHash in the
@@ -69,7 +69,7 @@ BOOL
 CompareNameHash(
     COMMAND         *command,       // IN: main parsing structure
     SESSION         *session        // IN: session structure with nameHash
-    );
+);
 
 //*** ParseSessionBuffer()
 // This function is the entry function for command session processing.
@@ -83,7 +83,7 @@ CompareNameHash(
 TPM_RC
 ParseSessionBuffer(
     COMMAND         *command        // IN: the structure that contains
-    );
+);
 
 //*** CheckAuthNoSession()
 // Function to process a command with no session associated.
@@ -95,7 +95,7 @@ ParseSessionBuffer(
 TPM_RC
 CheckAuthNoSession(
     COMMAND         *command        // IN: command parsing structure
-    );
+);
 
 //*** BuildResponseSession()
 // Function to build Session buffer in a response. The authorization data is added
@@ -109,7 +109,7 @@ void
 BuildResponseSession(
     COMMAND         *command        // IN: structure that has relevant command
                                     //     information
-    );
+);
 
 //*** SessionRemoveAssociationToHandle()
 // This function deals with the case where an entity associated with an authorization
@@ -118,6 +118,6 @@ BuildResponseSession(
 void
 SessionRemoveAssociationToHandle(
     TPM_HANDLE       handle
-    );
+);
 
-#endif  // _SESSIONPROCESS_FP_H_
+#endif  // _SESSION_PROCESS_FP_H_

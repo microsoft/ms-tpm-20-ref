@@ -46,6 +46,10 @@ AC_SUBST([DISTCHECK_CONFIGURE_FLAGS],[$ac_configure_args])
 PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto])
 AX_PTHREAD([], [AC_MSG_ERROR([requires pthread])])
 
+AC_DEFINE([HASH_LIB], [Ossl], [Crypto lib for hash algorithms])
+AC_DEFINE([SYM_LIB], [Ossl], [Crypto lib for symmetric encryption algorithms])
+AC_DEFINE([MATH_LIB], [Ossl], [Crypto lib for bignum operations])
+
 ADD_COMPILER_FLAG([-std=gnu11])
 ADD_COMPILER_FLAG([-Werror])
 ADD_COMPILER_FLAG([-Wall])

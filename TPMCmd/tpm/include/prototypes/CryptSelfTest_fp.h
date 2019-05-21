@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _CRYPTSELFTEST_FP_H_
-#define    _CRYPTSELFTEST_FP_H_
+#ifndef    _CRYPT_SELF_TEST_FP_H_
+#define    _CRYPT_SELF_TEST_FP_H_
 
 //*** CryptSelfTest()
 // This function is called to start/complete a full self-test.
@@ -57,7 +57,7 @@ LIB_EXPORT
 TPM_RC
 CryptSelfTest(
     TPMI_YES_NO      fullTest       // IN: if full test is required
-    );
+);
 
 //*** CryptIncrementalSelfTest()
 // This function is used to perform an incremental self-test. This implementation
@@ -75,7 +75,7 @@ TPM_RC
 CryptIncrementalSelfTest(
     TPML_ALG            *toTest,        // IN: list of algorithms to be tested
     TPML_ALG            *toDoList       // OUT: list of algorithms needing test
-    );
+);
 
 //*** CryptInitializeToTest()
 // This function will initialize the data structures for testing all the
@@ -84,7 +84,7 @@ CryptIncrementalSelfTest(
 void
 CryptInitializeToTest(
     void
-    );
+);
 
 //*** CryptTestAlgorithm()
 // Only point of contact with the actual self tests. If a self-test fails, there
@@ -103,6 +103,6 @@ TPM_RC
 CryptTestAlgorithm(
     TPM_ALG_ID           alg,
     ALGORITHM_VECTOR    *toTest
-    );
+);
 
-#endif  // _CRYPTSELFTEST_FP_H_
+#endif  // _CRYPT_SELF_TEST_FP_H_

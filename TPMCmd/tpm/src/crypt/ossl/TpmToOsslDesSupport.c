@@ -41,7 +41,7 @@
 
 #include "Tpm.h"
 
-#if SYM_LIB == OSSL && defined TPM_ALG_TDES
+#if (defined SYM_LIB_OSSL) && ALG_TDES
 
 //**Functions
 //*** TDES_set_encyrpt_key()
@@ -97,4 +97,4 @@ void TDES_decrypt(
                      DES_DECRYPT);
 }
 
-#endif // SYM_LIB == OSSL
+#endif // SYM_LIB_OSSL

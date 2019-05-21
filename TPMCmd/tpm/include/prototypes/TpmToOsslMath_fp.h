@@ -34,13 +34,13 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 03:18:00PM
  */
 
-#ifndef    _TPMTOOSSLMATH_FP_H_
-#define    _TPMTOOSSLMATH_FP_H_
+#ifndef    _TPM_TO_OSSL_MATH_FP_H_
+#define    _TPM_TO_OSSL_MATH_FP_H_
 
-#if MATH_LIB == OSSL
+#ifdef MATH_LIB_OSSL
 
 //*** OsslToTpmBn()
 // This function converts an OpenSSL BIGNUM to a TPM bignum. In this implementation
@@ -54,7 +54,7 @@ BOOL
 OsslToTpmBn(
     bigNum          bn,
     BIGNUM          *osslBn
-    );
+);
 
 //*** BigInitialized()
 // This function initializes an OSSL BIGNUM from a TPM bigConst. Do not use this for
@@ -64,14 +64,14 @@ BIGNUM *
 BigInitialized(
     BIGNUM             *toInit,
     bigConst            initializer
-    );
+);
 #if LIBRARY_COMPATIBILITY_CHECK
 
 //*** MathLibraryCompatibilityCheck()
 void
 MathLibraryCompatibilityCheck(
     void
-    );
+);
 #endif
 
 //*** BnModMult()
@@ -86,7 +86,7 @@ BnModMult(
     bigConst            op1,
     bigConst            op2,
     bigConst            modulus
-    );
+);
 
 //*** BnMult()
 // Multiplies two numbers
@@ -98,7 +98,7 @@ BnMult(
     bigNum               result,
     bigConst             multiplicand,
     bigConst             multiplier
-    );
+);
 
 //*** BnDiv()
 // This function divides two bigNum values. The function returns FALSE if
@@ -112,7 +112,7 @@ BnDiv(
     bigNum               remainder,
     bigConst             dividend,
     bigConst             divisor
-    );
+);
 
 #if ALG_RSA
 //*** BnGcd()
@@ -125,7 +125,7 @@ BnGcd(
     bigNum      gcd,            // OUT: the common divisor
     bigConst    number1,        // IN:
     bigConst    number2         // IN:
-    );
+);
 
 //***BnModExp()
 // Do modular exponentiation using bigNum values. The conversion from a bignum_t to
@@ -139,7 +139,7 @@ BnModExp(
     bigConst             number,         // IN: number to exponentiate
     bigConst             exponent,       // IN:
     bigConst             modulus         // IN:
-    );
+);
 
 //*** BnModInverse()
 // Modular multiplicative inverse
@@ -151,7 +151,7 @@ BnModInverse(
     bigNum               result,
     bigConst             number,
     bigConst             modulus
-    );
+);
 #endif // ALG_RSA
 #if ALG_ECC
 
@@ -188,7 +188,7 @@ BnEccModMult(
     pointConst           S,         // IN: point to multiply by 'd' (optional)
     bigConst             d,         // IN: scalar for [d]S
     bigCurve             E
-    );
+);
 
 //*** BnEccModMult2()
 // This function does a point multiply of the form R = [d]G + [u]Q
@@ -203,7 +203,7 @@ BnEccModMult2(
     pointConst           Q,         // IN: second point
     bigConst             u,         // IN: second scalar
     bigCurve             E          // IN: curve
-    );
+);
 
 //** BnEccAdd()
 // This function does addition of two points.
@@ -216,8 +216,8 @@ BnEccAdd(
     pointConst           S,         // IN: point to multiply by 'd'
     pointConst           Q,         // IN: second point
     bigCurve             E          // IN: curve
-    );
+);
 #endif // ALG_ECC
 #endif // MATHLIB OSSL
 
-#endif  // _TPMTOOSSLMATH_FP_H_
+#endif  // _TPM_TO_OSSL_MATH_FP_H_

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
 #ifndef    _HANDLE_FP_H_
@@ -45,7 +45,7 @@
 TPM_HT
 HandleGetType(
     TPM_HANDLE       handle         // IN: a handle to be checked
-    );
+);
 
 //*** NextPermanentHandle()
 // This function returns the permanent handle that is equal to the input value or
@@ -54,7 +54,7 @@ HandleGetType(
 TPM_HANDLE
 NextPermanentHandle(
     TPM_HANDLE       inHandle       // IN: the handle to check
-    );
+);
 
 //*** PermanentCapGetHandles()
 // This function returns a list of the permanent handles of PCR, started from
@@ -68,7 +68,7 @@ PermanentCapGetHandles(
     TPM_HANDLE       handle,        // IN: start handle
     UINT32           count,         // IN: count of returned handles
     TPML_HANDLE     *handleList     // OUT: list of handle
-    );
+);
 
 //*** PermanentHandleGetPolicy()
 // This function returns a list of the permanent handles of PCR, started from
@@ -82,6 +82,6 @@ PermanentHandleGetPolicy(
     TPM_HANDLE           handle,        // IN: start handle
     UINT32               count,         // IN: max count of returned handles
     TPML_TAGGED_POLICY  *policyList     // OUT: list of handle
-    );
+);
 
 #endif  // _HANDLE_FP_H_

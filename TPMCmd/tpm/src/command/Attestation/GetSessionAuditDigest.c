@@ -36,7 +36,7 @@
 #include "Attest_spt_fp.h"
 #include "GetSessionAuditDigest_fp.h"
 
-#ifdef TPM_CC_GetSessionAuditDigest  // Conditional expansion of this file
+#if CC_GetSessionAuditDigest  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Get audit session digest

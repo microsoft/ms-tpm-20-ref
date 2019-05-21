@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
 #ifndef    _NV_SPT_FP_H_
@@ -55,7 +55,7 @@ NvReadAccessChecks(
                                     //     authorization
     TPM_HANDLE       nvHandle,      // IN: the handle of the NV index to be read
     TPMA_NV          attributes     // IN: the attributes of 'nvHandle'
-    );
+);
 
 //*** NvWriteAccessChecks()
 // Common routine for validating a write
@@ -70,7 +70,7 @@ NvWriteAccessChecks(
                                     //     authorization
     TPM_HANDLE       nvHandle,      // IN: the handle of the NV index to be written
     TPMA_NV          attributes     // IN: the attributes of 'nvHandle'
-    );
+);
 
 //*** NvClearOrderly()
 // This function is used to cause gp.orderlyState to be cleared to the
@@ -78,7 +78,7 @@ NvWriteAccessChecks(
 TPM_RC
 NvClearOrderly(
     void
-    );
+);
 
 //*** NvIsPinPassIndex()
 // Function to check to see if an NV index is a PIN Pass Index
@@ -88,6 +88,6 @@ NvClearOrderly(
 BOOL
 NvIsPinPassIndex(
     TPM_HANDLE          index       // IN: Handle to check
-    );
+);
 
 #endif  // _NV_SPT_FP_H_

@@ -37,8 +37,7 @@
 // descriptions for these variables are in Global.h for this project.
 
 //** Includes
-#include    "Implementation.h"
-#include    "PlatformData.h"
+#include    "Platform.h"
 
 // From Cancel.c
 BOOL                 s_isCanceled;

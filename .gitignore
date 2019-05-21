@@ -330,3 +330,5 @@ TPMCmd/Platform/src/libplatform.a
 TPMCmd/Simulator/src/tpm2-simulator
 TPMCmd/tpm/src/libtpm.a
 /TPMCmd/Simulator/DebugFile.txt
+/TPMCmd/ParserTemps
+/TPMCmd/TpmScripts

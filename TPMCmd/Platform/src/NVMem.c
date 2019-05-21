@@ -43,8 +43,7 @@
 #include <memory.h>
 #include <string.h>
 #include <assert.h>
-#include "PlatformData.h"
-#include "Platform_fp.h"
+#include "Platform.h"
 #if FILE_BACKED_NV
 #   include         <stdio.h>
 FILE                *s_NvFile = NULL;
@@ -180,7 +179,7 @@ _plat__NVEnable(
 //
         // If the size is right, read the data
         if (NV_MEMORY_SIZE == fileSize)
-            s_NV_unrecoverable = 0 == fread(s_NV, 1, NV_MEMORY_SIZE, s_NvFile);
+            fread(s_NV, 1, NV_MEMORY_SIZE, s_NvFile);
         else 
             NvFileCommit();     // for any other size, initialize it
     }
@@ -271,15 +270,19 @@ _plat__NvIsDifferent(
 // NOTE: A useful optimization would be for this code to compare the current 
 // contents of NV with the local copy and note the blocks that have changed. Then
 // only write those blocks when _plat__NvCommit() is called.
-LIB_EXPORT void
+LIB_EXPORT BOOL
 _plat__NvMemoryWrite(
     unsigned int     startOffset,   // IN: write start
     unsigned int     size,          // IN: size of bytes to write
     void            *data           // OUT: data buffer
     )
 {
-    assert(startOffset + size <= NV_MEMORY_SIZE);
+    if(startOffset + size <= NV_MEMORY_SIZE)
+    {
     memcpy(&s_NV[startOffset], data, size);     // Copy the data to the NV image
+        return TRUE;
+    }
+    return FALSE;
 }
 
 //***_plat__NvMemoryClear()

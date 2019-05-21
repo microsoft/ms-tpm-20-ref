@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _BNCONVERT_FP_H_
-#define    _BNCONVERT_FP_H_
+#ifndef    _BN_CONVERT_FP_H_
+#define    _BN_CONVERT_FP_H_
 
 //*** BnFromBytes()
 // This function will convert a big-endian byte array to the internal number
@@ -49,7 +49,7 @@ BnFromBytes(
     bigNum           bn,
     const BYTE      *bytes,
     NUMBYTES         nBytes
-    );
+);
 
 //*** BnFrom2B()
 // Convert an TPM2B to a BIG_NUM.
@@ -59,7 +59,7 @@ LIB_EXPORT bigNum
 BnFrom2B(
     bigNum           bn,         // OUT:
     const TPM2B     *a2B         // IN: number to convert
-    );
+);
 
 //*** BnFromHex()
 // Convert a hex string into a bigNum. This is primarily used in debugging.
@@ -67,7 +67,7 @@ LIB_EXPORT bigNum
 BnFromHex(
     bigNum          bn,         // OUT:
     const char      *hex        // IN:
-    );
+);
 
 //*** BnToBytes()
 // This function converts a BIG_NUM to a byte array. It converts the bigNum to a
@@ -87,7 +87,7 @@ BnToBytes(
     NUMBYTES            *size           // This the number of bytes that are
                                         // available in the buffer. The result
                                         // should be this big.
-    );
+);
 
 //*** BnTo2B()
 // Function to convert a BIG_NUM to TPM2B.
@@ -100,7 +100,7 @@ BnTo2B(
     bigConst         bn,                // IN:
     TPM2B           *a2B,               // OUT:
     NUMBYTES         size               // IN: the desired size
-    );
+);
 #if ALG_ECC
 
 //*** BnPointFrom2B()
@@ -111,7 +111,7 @@ LIB_EXPORT bn_point_t   *
 BnPointFrom2B(
     bigPoint             ecP,         // OUT: the preallocated point structure
     TPMS_ECC_POINT      *p            // IN: the number to convert
-    );
+);
 
 //*** BnPointTo2B()
 // This function converts a BIG_POINT into a TPMS_ECC_POINT. A TPMS_ECC_POINT
@@ -124,7 +124,7 @@ BnPointTo2B(
     TPMS_ECC_POINT  *p,             // OUT: the converted 2B structure
     bigPoint         ecP,           // IN: the values to be converted
     bigCurve         E              // IN: curve descriptor for the point
-    );
+);
 #endif // ALG_ECC
 
-#endif  // _BNCONVERT_FP_H_
+#endif  // _BN_CONVERT_FP_H_

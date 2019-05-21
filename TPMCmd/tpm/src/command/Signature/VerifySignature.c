@@ -75,7 +75,7 @@ TPM2_VerifySignature(
        || signObject->publicArea.nameAlg == TPM_ALG_NULL)
     {
         // produce empty ticket if hierarchy is TPM_RH_NULL or nameAlg is
-        // TPM_ALG_NULL
+        // ALG_NULL
         out->validation.tag = TPM_ST_VERIFIED;
         out->validation.hierarchy = TPM_RH_NULL;
         out->validation.digest.t.size = 0;

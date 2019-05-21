@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
 #ifndef    _AC_SPT_FP_H_
@@ -53,7 +53,7 @@ AcToCapabilities(
 BOOL
 AcIsAccessible(
     TPM_HANDLE          acHandle
-    );
+);
 
 //*** AcCapabilitiesGet()
 // This function returns a list of capabilities associated with an AC

@@ -35,9 +35,7 @@
 #include "Tpm.h"
 #include "ECC_Parameters_fp.h"
 
-#ifdef TPM_CC_ECC_Parameters  // Conditional expansion of this file
-
-#if ALG_ECC
+#if CC_ECC_Parameters  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This command returns the parameters of an ECC curve identified by its TCG
@@ -59,7 +57,5 @@ TPM2_ECC_Parameters(
     else
         return TPM_RCS_VALUE + RC_ECC_Parameters_curveID;
 }
-
-#endif
 
 #endif // CC_ECC_Parameters

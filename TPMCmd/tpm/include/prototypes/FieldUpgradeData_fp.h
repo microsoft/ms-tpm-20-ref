@@ -33,13 +33,14 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.1 Dec 8, 2018
- *  Date: Jan 28, 2019  Time: 12:39:24AM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#ifdef TPM_CC_FieldUpgradeData // Command must be defined
-#ifndef _FIELDUPGRADEDATA_FP_H_
-#define _FIELDUPGRADEDATA_FP_H_
+#if CC_FieldUpgradeData // Command must be enabled
+
+#ifndef _Field_Upgrade_Data_FP_H_
+#define _Field_Upgrade_Data_FP_H_
 
 // Input structure definition
 typedef struct {
@@ -62,5 +63,5 @@ TPM2_FieldUpgradeData(
     FieldUpgradeData_Out        *out
 );
 
-#endif  // _FIELDUPGRADEDATA_FP_H_
-#endif  // TPM_CC_FieldUpgradeData
+#endif  // _Field_Upgrade_Data_FP_H_
+#endif  // CC_FieldUpgradeData

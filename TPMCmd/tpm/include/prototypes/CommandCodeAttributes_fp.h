@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _COMMANDCODEATTRIBUTES_FP_H_
-#define    _COMMANDCODEATTRIBUTES_FP_H_
+#ifndef    _COMMAND_CODE_ATTRIBUTES_FP_H_
+#define    _COMMAND_CODE_ATTRIBUTES_FP_H_
 
 //*** GetClosestCommandIndex()
 // This function returns the command index for the command with a value that is
@@ -49,7 +49,7 @@
 COMMAND_INDEX
 GetClosestCommandIndex(
     TPM_CC           commandCode    // IN: the command code to start at
-    );
+);
 
 //*** CommandCodeToComandIndex()
 // This function returns the index in the various attributes arrays of the
@@ -60,7 +60,7 @@ GetClosestCommandIndex(
 COMMAND_INDEX
 CommandCodeToCommandIndex(
     TPM_CC           commandCode    // IN: the command code to look up
-    );
+);
 
 //*** GetNextCommandIndex()
 // This function returns the index of the next implemented command.
@@ -70,14 +70,14 @@ CommandCodeToCommandIndex(
 COMMAND_INDEX
 GetNextCommandIndex(
     COMMAND_INDEX    commandIndex   // IN: the starting index
-    );
+);
 
 //*** GetCommandCode()
 // This function returns the commandCode associated with the command index
 TPM_CC
 GetCommandCode(
     COMMAND_INDEX    commandIndex   // IN: the command index
-    );
+);
 
 //*** CommandAuthRole()
 //
@@ -92,7 +92,7 @@ AUTH_ROLE
 CommandAuthRole(
     COMMAND_INDEX    commandIndex,  // IN: command index
     UINT32           handleIndex    // IN: handle index (zero based)
-    );
+);
 
 //*** EncryptSize()
 // This function returns the size of the decrypt size field. This function returns
@@ -104,7 +104,7 @@ CommandAuthRole(
 int
 EncryptSize(
     COMMAND_INDEX    commandIndex   // IN: command index
-    );
+);
 
 //*** DecryptSize()
 // This function returns the size of the decrypt size field. This function returns
@@ -116,7 +116,7 @@ EncryptSize(
 int
 DecryptSize(
     COMMAND_INDEX    commandIndex   // IN: command index
-    );
+);
 
 //*** IsSessionAllowed()
 //
@@ -130,14 +130,14 @@ DecryptSize(
 BOOL
 IsSessionAllowed(
     COMMAND_INDEX    commandIndex   // IN: the command to be checked
-    );
+);
 
 //*** IsHandleInResponse()
 // This function determines if a command has a handle in the response
 BOOL
 IsHandleInResponse(
     COMMAND_INDEX    commandIndex
-    );
+);
 
 //*** IsWriteOperation()
 // Checks to see if an operation will write to an NV Index and is subject to being
@@ -145,7 +145,7 @@ IsHandleInResponse(
 BOOL
 IsWriteOperation(
     COMMAND_INDEX    commandIndex   // IN: Command to check
-    );
+);
 
 //*** IsReadOperation()
 // Checks to see if an operation will write to an NV Index and is
@@ -153,7 +153,7 @@ IsWriteOperation(
 BOOL
 IsReadOperation(
     COMMAND_INDEX    commandIndex   // IN: Command to check
-    );
+);
 
 //*** CommandCapGetCCList()
 // This function returns a list of implemented commands and command attributes
@@ -167,7 +167,7 @@ CommandCapGetCCList(
     UINT32           count,         // IN: maximum count for number of entries in
                                     //     'commandList'
     TPML_CCA        *commandList    // OUT: list of TPMA_CC
-    );
+);
 
 //*** IsVendorCommand()
 // Function indicates if a command index references a vendor command.
@@ -177,6 +177,6 @@ CommandCapGetCCList(
 BOOL
 IsVendorCommand(
     COMMAND_INDEX    commandIndex   // IN: command index to check
-    );
+);
 
-#endif  // _COMMANDCODEATTRIBUTES_FP_H_
+#endif  // _COMMAND_CODE_ATTRIBUTES_FP_H_

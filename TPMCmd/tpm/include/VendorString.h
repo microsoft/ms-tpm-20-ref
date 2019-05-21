@@ -65,7 +65,8 @@ manufacturer name.
 // is provided.
 #ifndef VENDOR_STRING_1
 #error VENDOR_STRING_1 is not provided. \
-Please modify include\VendorString.h to provide a vendor specific string.
+Please modify include\VendorString.h to provide a vednor-specific \
+string.
 #endif
 
 // the more significant 32-bits of a vendor-specific value 

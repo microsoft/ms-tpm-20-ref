@@ -40,8 +40,7 @@
 // between the TPM and the manufacturer.
 
 //** Includes
-#include "PlatformData.h"
-#include "Platform_fp.h"
+#include "Platform.h"
 
 const char notReallyUnique[] =
 "This is not really a unique value. A real unique value should"

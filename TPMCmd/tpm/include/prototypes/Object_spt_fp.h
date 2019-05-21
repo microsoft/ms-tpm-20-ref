@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
 #ifndef    _OBJECT_SPT_FP_H_
@@ -48,7 +48,7 @@ BOOL
 AdjustAuthSize(
     TPM2B_AUTH          *auth,          // IN/OUT: value to adjust
     TPMI_ALG_HASH        nameAlg        // IN:
-    );
+);
 
 //*** AreAttributesForParent()
 // This function is called by create, load, and import functions.
@@ -60,7 +60,7 @@ AdjustAuthSize(
 BOOL
 ObjectIsParent(
     OBJECT          *parentObject   // IN: parent handle
-    );
+);
 
 //*** CreateChecks()
 // Attribute checks that are unique to creation.
@@ -73,7 +73,7 @@ CreateChecks(
     OBJECT              *parentObject,
     TPMT_PUBLIC         *publicArea,
     UINT16               sensitiveDataSize
-    );
+);
 
 //*** SchemeChecks
 // This function is called by TPM2_LoadExternal() and PublicAttributesValidation().
@@ -88,12 +88,12 @@ CreateChecks(
 //                          with the scheme ID for keyed hash object
 //      TPM_RC_SYMMETRIC    a storage key with no symmetric algorithm specified; or
 //                          non-storage key with symmetric algorithm different from
-//                          TPM_ALG_NULL
+// ALG_NULL
 TPM_RC
 SchemeChecks(
     OBJECT          *parentObject,  // IN: parent (null if primary seed)
     TPMT_PUBLIC     *publicArea     // IN: public area of the object
-    );
+);
 
 //*** PublicAttributesValidation()
 // This function validates the values in the public area of an object.
@@ -118,7 +118,7 @@ TPM_RC
 PublicAttributesValidation(
     OBJECT          *parentObject,  // IN: input parent object
     TPMT_PUBLIC     *publicArea     // IN: public area of the object
-    );
+);
 
 //*** FillInCreationData()
 // Fill in creation data for an object.
@@ -131,14 +131,14 @@ FillInCreationData(
     TPM2B_DATA              *outsideData,   // IN: outside data
     TPM2B_CREATION_DATA     *outCreation,   // OUT: creation data for output
     TPM2B_DIGEST            *creationDigest // OUT: creation digest
-    );
+);
 
 //*** GetSeedForKDF()
 // Get a seed for KDF.  The KDF for encryption and HMAC key use the same seed.
 const TPM2B *
 GetSeedForKDF(
     OBJECT          *protector         // IN: the protector handle
-    );
+);
 
 //*** ProduceOuterWrap()
 // This function produce outer wrap for a buffer containing the sensitive data.
@@ -169,7 +169,7 @@ ProduceOuterWrap(
                                     //     optional iv size
     BYTE            *outerBuffer    // IN/OUT: outer buffer with sensitive data in
                                     //     it
-    );
+);
 
 //*** UnwrapOuter()
 // This function remove the outer wrap of a blob containing sensitive data
@@ -199,7 +199,7 @@ UnwrapOuter(
                                     //     including the leading integrity buffer
                                     //     size, and an optional iv area
     BYTE            *outerBuffer    // IN/OUT: sensitive data
-    );
+);
 
 //*** SensitiveToPrivate()
 // This function prepare the private blob for off the chip storage
@@ -217,7 +217,7 @@ SensitiveToPrivate(
                                     //     NULL, in which case the object is
                                     //     temporary.
     TPM2B_PRIVATE   *outPrivate     // OUT: output private structure
-    );
+);
 
 //*** PrivateToSensitive()
 // Unwrap a input private area.  Check the integrity, decrypt and retrieve data
@@ -247,7 +247,7 @@ PrivateToSensitive(
                                     //     wrap.  In other cases, this parameter
                                     //     will be ignored
     TPMT_SENSITIVE  *sensitive      // OUT: sensitive structure
-    );
+);
 
 //*** SensitiveToDuplicate()
 // This function prepare the duplication blob from the sensitive area.
@@ -276,7 +276,7 @@ SensitiveToDuplicate(
                                         //     wrap of a duplication blob. May
                                         //     be generated here if needed.
     TPM2B_PRIVATE       *outPrivate     // OUT: output private structure
-    );
+);
 
 //*** DuplicateToSensitive()
 // Unwrap a duplication blob.  Check the integrity, decrypt and retrieve data
@@ -307,7 +307,7 @@ DuplicateToSensitive(
                                         //     to decrypt the inner wrap of a
                                         //     duplication blob.
     TPMT_SENSITIVE      *sensitive      // OUT: sensitive structure
-    );
+);
 
 //*** SecretToCredential()
 // This function prepare the credential blob from a secret (a TPM2B_DIGEST)
@@ -323,7 +323,7 @@ SecretToCredential(
     TPM2B               *seed,          // IN: an external seed.
     OBJECT              *protector,     // IN: the protector
     TPM2B_ID_OBJECT     *outIDObject    // OUT: output credential
-    );
+);
 
 //*** CredentialToSecret()
 // Unwrap a credential.  Check the integrity, decrypt and retrieve data
@@ -346,7 +346,7 @@ CredentialToSecret(
     TPM2B               *seed,          // IN: an external seed.
     OBJECT              *protector,     // IN: the protector
     TPM2B_DIGEST        *secret         // OUT: secret information
-    );
+);
 
 //*** MemoryRemoveTrailingZeros()
 // This function is used to adjust the length of an authorization value.
@@ -356,7 +356,7 @@ CredentialToSecret(
 UINT16
 MemoryRemoveTrailingZeros(
     TPM2B_AUTH      *auth           // IN/OUT: value to adjust
-    );
+);
 
 //*** SetLabelAndContext()
 // This function sets the label and context for a derived key. It is possible
@@ -366,7 +366,7 @@ SetLabelAndContext(
     TPMS_DERIVE             *labelContext,  // IN/OUT: the recovered label and
                                             //      context
     TPM2B_SENSITIVE_DATA    *sensitive      // IN: the sensitive data
-    );
+);
 
 //*** UnmarshalToPublic()
 // Support function to unmarshal the template. This is used because the
@@ -381,13 +381,13 @@ UnmarshalToPublic(
     TPM2B_TEMPLATE      *tIn,        // IN:
     BOOL                 derivation, // IN: indicates if this is for a derivation
     TPMS_DERIVE         *labelContext// OUT: label and context if derivation
-    );
+);
 
 //*** ObjectSetExternal()
 // Set the external attributes for an object.
 void
 ObjectSetExternal(
     OBJECT      *object
-    );
+);
 
 #endif  // _OBJECT_SPT_FP_H_

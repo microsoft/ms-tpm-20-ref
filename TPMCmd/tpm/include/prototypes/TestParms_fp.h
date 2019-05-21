@@ -33,13 +33,14 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.1 Dec 8, 2018
- *  Date: Jan 28, 2019  Time: 12:39:24AM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#ifdef TPM_CC_TestParms // Command must be defined
-#ifndef _TESTPARMS_FP_H_
-#define _TESTPARMS_FP_H_
+#if CC_TestParms // Command must be enabled
+
+#ifndef _Test_Parms_FP_H_
+#define _Test_Parms_FP_H_
 
 // Input structure definition
 typedef struct {
@@ -55,5 +56,5 @@ TPM2_TestParms(
     TestParms_In                *in
 );
 
-#endif  // _TESTPARMS_FP_H_
-#endif  // TPM_CC_TestParms
+#endif  // _Test_Parms_FP_H_
+#endif  // CC_TestParms

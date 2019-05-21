@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 04:23:27PM
  */
 
 #ifndef    _DA_FP_H_
@@ -51,7 +51,7 @@
 void
 DAPreInstall_Init(
     void
-    );
+);
 
 //*** DAStartup()
 // This function is called  by TPM2_Startup() to initialize the DA parameters.
@@ -60,10 +60,10 @@ DAPreInstall_Init(
 // the TPM has been continuously powered for the lockoutRecovery time.
 //
 // This function requires that NV be available and not rate limiting.
-void
+BOOL
 DAStartup(
     STARTUP_TYPE     type           // IN: startup type
-    );
+);
 
 //*** DARegisterFailure()
 // This function is called when a authorization failure occurs on an entity
@@ -73,7 +73,7 @@ DAStartup(
 void
 DARegisterFailure(
     TPM_HANDLE       handle         // IN: handle for failure
-    );
+);
 
 //*** DASelfHeal()
 // This function is called to check if sufficient time has passed to allow
@@ -83,6 +83,6 @@ DARegisterFailure(
 void
 DASelfHeal(
     void
-    );
+);
 
 #endif  // _DA_FP_H_

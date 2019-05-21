@@ -77,7 +77,6 @@
 #   define LOG_FAILURE(errorCode) TpmLogFailure(FUNCTION_NAME, __LINE__, errorCode)
 #endif
 
-
 // If implementation is using longjmp, then the call to TpmFail() does not return
 // and the compiler will complain about unreachable code that comes after. To allow
 // for not having longjmp, TpmFail() will return and the subsequent code will be
@@ -117,6 +116,10 @@
 #define PCR_SELECT_MIN          ((PLATFORM_PCR+7)/8)
 #define PCR_SELECT_MAX          ((IMPLEMENTATION_PCR+7)/8)
 #define MAX_ORDERLY_COUNT       ((1 << ORDERLY_BITS) - 1)
+#ifndef PRIVATE_VENDOR_SPECIFIC_BYTES
+#   define PRIVATE_VENDOR_SPECIFIC_BYTES                                            \
+                ((MAX_RSA_KEY_BYTES/2) * (3 + CRT_FORMAT_RSA * 2))
+#endif
 
 //** Compile-time Checks
 // In some cases, the relationship between two values may be dependent

@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:26AM
+ *  Date: Apr  2, 2019  Time: 03:18:00PM
  */
 
-#ifndef    _TPMFAIL_FP_H_
-#define    _TPMFAIL_FP_H_
+#ifndef    _TPM_FAIL_FP_H_
+#define    _TPM_FAIL_FP_H_
 
 //*** SetForceFailureMode()
 // This function is called by the simulator to enable failure mode testing.
@@ -46,7 +46,7 @@
 LIB_EXPORT void
 SetForceFailureMode(
     void
-    );
+);
 #endif
 
 //*** TpmLogFailure()
@@ -72,7 +72,7 @@ TpmFail(
     int              line,
 #endif
     int              code
-    );
+);
 
 //*** TpmFailureMode(
 // This function is called by the interface code when the platform is in failure
@@ -83,7 +83,7 @@ TpmFailureMode(
     unsigned char   *inRequest,         // IN: command buffer
     unsigned int    *outResponseSize,   // OUT: response buffer size
     unsigned char   **outResponse       // OUT: response buffer
-    );
+);
 
 //*** UnmarshalFail()
 // This is a stub that is used to catch an attempt to unmarshal an entry
@@ -93,6 +93,6 @@ UnmarshalFail(
     void            *type,
     BYTE            **buffer,
     INT32           *size
-    );
+);
 
-#endif  // _TPMFAIL_FP_H_
+#endif  // _TPM_FAIL_FP_H_

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:26AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
 #ifndef    _RESPONSE_FP_H_
@@ -48,6 +48,6 @@ BuildResponseHeader(
     COMMAND         *command,       // IN: main control structure
     BYTE            *buffer,        // OUT: the output buffer
     TPM_RC           result         // IN: the response code
-    );
+);
 
 #endif  // _RESPONSE_FP_H_

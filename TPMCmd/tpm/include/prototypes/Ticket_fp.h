@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
 #ifndef    _TICKET_FP_H_
@@ -51,7 +51,7 @@
 BOOL
 TicketIsSafe(
     TPM2B           *buffer
-    );
+);
 
 //*** TicketComputeVerified()
 // This function creates a TPMT_TK_VERIFIED ticket.
@@ -61,7 +61,7 @@ TicketComputeVerified(
     TPM2B_DIGEST        *digest,        // IN: digest
     TPM2B_NAME          *keyName,       // IN: name of key that signed the values
     TPMT_TK_VERIFIED    *ticket         // OUT: verified ticket
-    );
+);
 
 //*** TicketComputeAuth()
 // This function creates a TPMT_TK_AUTH ticket.
@@ -76,7 +76,7 @@ TicketComputeAuth(
     TPM2B_NONCE         *policyRef,     // IN: input policyRef
     TPM2B_NAME          *entityName,    // IN: name of entity
     TPMT_TK_AUTH        *ticket         // OUT: Created ticket
-    );
+);
 
 //*** TicketComputeHashCheck()
 // This function creates a TPMT_TK_HASHCHECK ticket.
@@ -86,7 +86,7 @@ TicketComputeHashCheck(
     TPM_ALG_ID           hashAlg,       // IN: the hash algorithm for 'digest'
     TPM2B_DIGEST        *digest,        // IN: input digest
     TPMT_TK_HASHCHECK   *ticket         // OUT: Created ticket
-    );
+);
 
 //*** TicketComputeCreation()
 // This function creates a TPMT_TK_CREATION ticket.
@@ -96,6 +96,6 @@ TicketComputeCreation(
     TPM2B_NAME          *name,          // IN: object name
     TPM2B_DIGEST        *creation,      // IN: creation hash
     TPMT_TK_CREATION    *ticket         // OUT: created ticket
-    );
+);
 
 #endif  // _TICKET_FP_H_

@@ -39,10 +39,10 @@
 // in TpmTypes.h
 //
 
-#ifndef _TPM_TO_OSSL_MATH_H
-#define _TPM_TO_OSSL_MATH_H
+#ifndef MATH_LIB_DEFINED
+#define MATH_LIB_DEFINED
 
-#if MATH_LIB == OSSL
+#define MATH_LIB_OSSL
 
 #include <openssl/evp.h>
 #include <openssl/ec.h>
@@ -124,6 +124,4 @@ typedef OSSL_CURVE_DATA      *bigCurve;
 // This definition would change if there were something to report
 #define MathLibSimulationEnd()
 
-#endif // MATH_LIB == OSSL
-
-#endif
+#endif // MATH_LIB_DEFINED

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
 #ifndef    _PP_FP_H_
@@ -53,7 +53,7 @@
 void
 PhysicalPresencePreInstall_Init(
     void
-    );
+);
 
 //*** PhysicalPresenceCommandSet()
 // This function is used to set the indicator that a command requires
@@ -61,7 +61,7 @@ PhysicalPresencePreInstall_Init(
 void
 PhysicalPresenceCommandSet(
     TPM_CC           commandCode    // IN: command code
-    );
+);
 
 //*** PhysicalPresenceCommandClear()
 // This function is used to clear the indicator that a command requires PP
@@ -69,7 +69,7 @@ PhysicalPresenceCommandSet(
 void
 PhysicalPresenceCommandClear(
     TPM_CC           commandCode    // IN: command code
-    );
+);
 
 //*** PhysicalPresenceIsRequired()
 // This function indicates if PP confirmation is required for a command.
@@ -79,7 +79,7 @@ PhysicalPresenceCommandClear(
 BOOL
 PhysicalPresenceIsRequired(
     COMMAND_INDEX    commandIndex   // IN: command index
-    );
+);
 
 //*** PhysicalPresenceCapGetCCList()
 // This function returns a list of commands that require PP confirmation. The
@@ -93,6 +93,6 @@ PhysicalPresenceCapGetCCList(
     TPM_CC           commandCode,   // IN: start command code
     UINT32           count,         // IN: count of returned TPM_CC
     TPML_CC         *commandList    // OUT: list of TPM_CC
-    );
+);
 
 #endif  // _PP_FP_H_

@@ -36,7 +36,7 @@
 #include "Attest_spt_fp.h"
 #include "Quote_fp.h"
 
-#ifdef TPM_CC_Quote  // Conditional expansion of this file
+#if CC_Quote  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // quote PCR values

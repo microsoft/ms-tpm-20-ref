@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 04:23:27PM
  */
 
-#ifndef    _NVRESERVED_FP_H_
-#define    _NVRESERVED_FP_H_
+#ifndef    _NV_RESERVED_FP_H_
+#define    _NV_RESERVED_FP_H_
 
 //*** NvCheckState()
 // Function to check the NV state by accessing the platform-specific function
@@ -50,14 +50,14 @@
 void
 NvCheckState(
     void
-    );
+);
 
 //*** NvCommit
 // This is a wrapper for the platform function to commit pending NV writes.
 BOOL
 NvCommit(
     void
-    );
+);
 
 //*** NvPowerOn()
 //  This function is called at _TPM_Init to initialize the NV environment.
@@ -68,7 +68,7 @@ NvCommit(
 BOOL
 NvPowerOn(
     void
-    );
+);
 
 //*** NvManufacture()
 // This function initializes the NV system at pre-install time.
@@ -80,7 +80,7 @@ NvPowerOn(
 void
 NvManufacture(
     void
-    );
+);
 
 //*** NvRead()
 // This function is used to move reserved data from NV memory to RAM.
@@ -89,17 +89,17 @@ NvRead(
     void            *outBuffer,     // OUT: buffer to receive data
     UINT32           nvOffset,      // IN: offset in NV of value
     UINT32           size           // IN: size of the value to read
-    );
+);
 
 //*** NvWrite()
 // This function is used to post reserved data for writing to NV memory. Before
 // the TPM completes the operation, the value will be written.
-void
+BOOL
 NvWrite(
     UINT32           nvOffset,      // IN: location in NV to receive data
     UINT32           size,          // IN: size of the data to move
     void            *inBuffer       // IN: location containing data to write
-    );
+);
 
 //*** NvUpdatePersistent()
 // This function is used to update a value in the PERSISTENT_DATA structure and
@@ -109,7 +109,7 @@ NvUpdatePersistent(
     UINT32           offset,        // IN: location in PERMANENT_DATA to be updated
     UINT32           size,          // IN: size of the value
     void            *buffer         // IN: the new data
-    );
+);
 
 //*** NvClearPersistent()
 // This function is used to clear a persistent data entry and commit it to NV
@@ -118,13 +118,13 @@ NvClearPersistent(
     UINT32           offset,        // IN: the offset in the PERMANENT_DATA
                                     //     structure to be cleared (zeroed)
     UINT32           size           // IN: number of bytes to clear
-    );
+);
 
 //*** NvReadPersistent()
 // This function reads persistent data to the RAM copy of the 'gp' structure.
 void
 NvReadPersistent(
     void
-    );
+);
 
-#endif  // _NVRESERVED_FP_H_
+#endif  // _NV_RESERVED_FP_H_

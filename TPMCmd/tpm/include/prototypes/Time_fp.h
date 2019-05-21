@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 04:23:27PM
  */
 
 #ifndef    _TIME_FP_H_
@@ -52,7 +52,7 @@
 void
 TimePowerOn(
     void
-    );
+);
 
 //*** TimeStartup()
 // This function updates the resetCount and restartCount components of
@@ -63,10 +63,10 @@ TimePowerOn(
 // TPM_Startup() has not been run. This is because the state of NV is not known
 // until startup completes. When Startup is done, then it will create the epoch
 // nonce to complete the initializations by calling this function.
-void
+BOOL
 TimeStartup(
     STARTUP_TYPE     type           // IN: start up type
-    );
+);
 
 //*** TimeClockUpdate()
 // This function updates go.clock. If 'newTime' requires an update of NV, then
@@ -77,7 +77,7 @@ TimeStartup(
 void
 TimeClockUpdate(
     UINT64           newTime    // IN: New time value in mS.
-    );
+);
 
 //*** TimeUpdate()
 // This function is used to update the time and clock values. If the TPM
@@ -90,7 +90,7 @@ TimeClockUpdate(
 void
 TimeUpdate(
     void
-    );
+);
 
 //*** TimeUpdateToCurrent()
 // This function updates the 'Time' and 'Clock' in the global
@@ -118,7 +118,7 @@ TimeUpdateToCurrent(
 void
 TimeSetAdjustRate(
     TPM_CLOCK_ADJUST     adjust         // IN: adjust constant
-    );
+);
 
 //*** TimeGetMarshaled()
 // This function is used to access TPMS_TIME_INFO in canonical form.
@@ -127,13 +127,13 @@ TimeSetAdjustRate(
 UINT16
 TimeGetMarshaled(
     TIME_INFO       *dataBuffer     // OUT: result buffer
-    );
+);
 
 //*** TimeFillInfo
 // This function gathers information to fill in a TPMS_CLOCK_INFO structure.
 void
 TimeFillInfo(
     TPMS_CLOCK_INFO     *clockInfo
-    );
+);
 
 #endif  // _TIME_FP_H_

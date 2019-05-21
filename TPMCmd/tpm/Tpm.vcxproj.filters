@@ -648,9 +648,6 @@
     <ClInclude Include="include\SelfTest.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="include\Implementation.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="include\Commands.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -1331,6 +1328,12 @@
     </ClInclude>
     <ClInclude Include="include\prototypes\TpmToWolfMath_fp.h">
       <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TpmProfile.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TpmAlgorithmDefines.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

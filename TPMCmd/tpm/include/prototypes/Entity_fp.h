@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
 #ifndef    _ENTITY_FP_H_
@@ -52,7 +52,7 @@
 TPM_RC
 EntityGetLoadStatus(
     COMMAND         *command        // IN/OUT: command parsing structure
-    );
+);
 
 //*** EntityGetAuthValue()
 // This function is used to access the 'authValue' associated with a handle.
@@ -68,7 +68,7 @@ UINT16
 EntityGetAuthValue(
     TPMI_DH_ENTITY   handle,        // IN: handle of entity
     TPM2B_AUTH      *auth           // OUT: authValue of the entity
-    );
+);
 
 //*** EntityGetAuthPolicy()
 // This function is used to access the 'authPolicy' associated with a handle.
@@ -84,7 +84,7 @@ TPMI_ALG_HASH
 EntityGetAuthPolicy(
     TPMI_DH_ENTITY   handle,        // IN: handle of entity
     TPM2B_DIGEST    *authPolicy     // OUT: authPolicy of the entity
-    );
+);
 
 //*** EntityGetName()
 // This function returns the Name associated with a handle.
@@ -92,7 +92,7 @@ TPM2B_NAME *
 EntityGetName(
     TPMI_DH_ENTITY   handle,        // IN: handle of entity
     TPM2B_NAME      *name           // OUT: name of entity
-    );
+);
 
 //*** EntityGetHierarchy()
 // This function returns the hierarchy handle associated with an entity.
@@ -103,6 +103,6 @@ EntityGetName(
 TPMI_RH_HIERARCHY
 EntityGetHierarchy(
     TPMI_DH_ENTITY   handle         // IN :handle of entity
-    );
+);
 
 #endif  // _ENTITY_FP_H_

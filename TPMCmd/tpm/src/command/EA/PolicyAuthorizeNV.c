@@ -33,11 +33,10 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "Tpm.h"
-//#include "PolicyAuthorizeNV_fp.h"
 
 #if CC_PolicyAuthorizeNV  // Conditional expansion of this file
-#include "PolicyAuthorizeNV_fp.h"
 #include "Policy_spt_fp.h"
+#include "PolicyAuthorizeNV_fp.h"
 
 /*(See part 3 specification)
 // Change policy by a signature from authority

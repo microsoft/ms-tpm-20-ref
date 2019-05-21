@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _BNMATH_FP_H_
-#define    _BNMATH_FP_H_
+#ifndef    _BN_MATH_FP_H_
+#define    _BN_MATH_FP_H_
 
 //*** BnAdd()
 // This function adds two bigNum values. This function always returns TRUE.
@@ -47,7 +47,7 @@ BnAdd(
     bigNum           result,
     bigConst         op1,
     bigConst         op2
-    );
+);
 
 //*** BnAddWord()
 // This function adds a word value to a bigNum. This function always returns TRUE.
@@ -56,7 +56,7 @@ BnAddWord(
     bigNum           result,
     bigConst         op,
     crypt_uword_t    word
-    );
+);
 
 //*** BnSub()
 // This function does subtraction of two bigNum values and returns result = op1 - op2
@@ -67,7 +67,7 @@ BnSub(
     bigNum           result,
     bigConst         op1,
     bigConst         op2
-    );
+);
 
 //*** BnSubWord()
 // This function subtracts a word value from a bigNum. This function always
@@ -77,7 +77,7 @@ BnSubWord(
     bigNum           result,
     bigConst     op,
     crypt_uword_t    word
-    );
+);
 
 //*** BnUnsignedCmp()
 // This function performs a comparison of op1 to op2. The compare is approximately
@@ -91,7 +91,7 @@ LIB_EXPORT int
 BnUnsignedCmp(
     bigConst               op1,
     bigConst               op2
-    );
+);
 
 //*** BnUnsignedCmpWord()
 // Compare a bigNum to a crypt_uword_t.
@@ -103,7 +103,7 @@ LIB_EXPORT int
 BnUnsignedCmpWord(
     bigConst             op1,
     crypt_uword_t        word
-    );
+);
 
 //*** BnModWord()
 // This function does modular division of a big number when the modulus is a
@@ -112,7 +112,7 @@ LIB_EXPORT crypt_word_t
 BnModWord(
     bigConst         numerator,
     crypt_word_t     modulus
-    );
+);
 
 //*** Msb()
 // This function returns the bit number of the most significant bit of a
@@ -124,7 +124,7 @@ BnModWord(
 LIB_EXPORT int
 Msb(
     crypt_uword_t           word
-    );
+);
 
 //*** BnMsb()
 // This function returns the number of the MSb of a bigNum value.
@@ -134,7 +134,7 @@ Msb(
 LIB_EXPORT int
 BnMsb(
     bigConst            bn
-    );
+);
 
 //*** BnSizeInBits()
 // This function returns the number of bits required to hold a number. It is one
@@ -143,7 +143,7 @@ BnMsb(
 LIB_EXPORT unsigned
 BnSizeInBits(
     bigConst                 n
-    );
+);
 
 //*** BnSetWord()
 // Change the value of a bignum_t to a word value.
@@ -151,7 +151,7 @@ LIB_EXPORT bigNum
 BnSetWord(
     bigNum               n,
     crypt_uword_t        w
-    );
+);
 
 //*** BnSetBit()
 // This function will SET a bit in a bigNum. Bit 0 is the least-significant bit in
@@ -160,7 +160,7 @@ LIB_EXPORT BOOL
 BnSetBit(
     bigNum           bn,        // IN/OUT: big number to modify
     unsigned int     bitNum     // IN: Bit number to SET
-    );
+);
 
 //*** BnTestBit()
 // This function is used to check to see if a bit is SET in a bignum_t. The 0th bit
@@ -172,7 +172,7 @@ LIB_EXPORT BOOL
 BnTestBit(
     bigNum               bn,        // IN: number to check
     unsigned int         bitNum     // IN: bit to test
-    );
+);
 
 //***BnMaskBits()
 // This function is used to mask off high order bits of a big number.
@@ -186,7 +186,7 @@ LIB_EXPORT BOOL
 BnMaskBits(
     bigNum           bn,        // IN/OUT: number to mask
     crypt_uword_t    maskBit    // IN: the bit number for the mask.
-    );
+);
 
 //*** BnShiftRight()
 // This function will shift a bigNum to the right by the shiftAmount.
@@ -196,7 +196,7 @@ BnShiftRight(
     bigNum           result,
     bigConst         toShift,
     uint32_t         shiftAmount
-    );
+);
 
 //*** BnGetRandomBits()
 // This function gets random bits for use in various places. To make sure that the
@@ -233,6 +233,6 @@ BnGenerateRandomInRange(
     bigNum           dest,
     bigConst         limit,
     RAND_STATE      *rand
-    );
+);
 
-#endif  // _BNMATH_FP_H_
+#endif  // _BN_MATH_FP_H_

@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _EXECCOMMAND_FP_H_
-#define    _EXECCOMMAND_FP_H_
+#ifndef    _EXEC_COMMAND_FP_H_
+#define    _EXEC_COMMAND_FP_H_
 
 //** ExecuteCommand()
 //
@@ -83,6 +83,6 @@ ExecuteCommand(
     unsigned char   *request,       // IN: command buffer
     uint32_t        *responseSize,  // IN/OUT: response buffer size
     unsigned char   **response      // IN/OUT: response buffer
-    );
+);
 
-#endif  // _EXECCOMMAND_FP_H_
+#endif  // _EXEC_COMMAND_FP_H_

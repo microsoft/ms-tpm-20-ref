@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 03:18:00PM
  */
 
-#ifndef    _CRYPTRAND_FP_H_
-#define    _CRYPTRAND_FP_H_
+#ifndef    _CRYPT_RAND_FP_H_
+#define    _CRYPT_RAND_FP_H_
 
 //*** DRBG_GetEntropy()
 // Even though this implementation never fails, it may get blocked
@@ -54,14 +54,14 @@ DRBG_GetEntropy(
     UINT32           requiredEntropy,   // IN: requested number of bytes of full
                                         //     entropy
     BYTE            *entropy            // OUT: buffer to return collected entropy
-    );
+);
 
 //*** IncrementIv()
 // This function increments the IV value by 1. It is used by EncryptDRBG().
 void
 IncrementIv(
     DRBG_IV         *iv
-    );
+);
 
 //*** DRBG_Reseed()
 // This function is used when reseeding of the DRBG is required. If
@@ -75,7 +75,7 @@ DRBG_Reseed(
     DRBG_STATE          *drbgState,         // IN: the state to update
     DRBG_SEED           *providedEntropy,   // IN: entropy
     DRBG_SEED           *additionalData     // IN:
-    );
+);
 
 //*** DRBG_SelfTest()
 // This is run when the DRBG is instantiated and at startup
@@ -85,7 +85,7 @@ DRBG_Reseed(
 BOOL
 DRBG_SelfTest(
     void
-    );
+);
 
 //*** CryptRandomStir()
 // This function is used to cause a reseed. A DRBG_SEED amount of entropy is
@@ -96,7 +96,7 @@ LIB_EXPORT TPM_RC
 CryptRandomStir(
     UINT16           additionalDataSize,
     BYTE            *additionalData
-    );
+);
 
 //*** CryptRandomGenerate()
 // Generate a 'randomSize' number or random bytes.
@@ -104,7 +104,7 @@ LIB_EXPORT UINT16
 CryptRandomGenerate(
     INT32            randomSize,
     BYTE            *buffer
-    );
+);
 
 //**** DRBG_InstantiateSeededKdf()
 // This function is used to instantiate a KDF-based RNG. This is used for derivations.
@@ -118,7 +118,7 @@ DRBG_InstantiateSeededKdf(
     const TPM2B     *label,         // IN: a label for the generation process.
     TPM2B           *context,       // IN: the context value
     UINT32           limit          // IN: Maximum number of bits from the KDF
-    );
+);
 
 //**** DRBG_AdditionalData()
 // Function to reseed the DRBG with additional entropy. This is normally called
@@ -128,7 +128,7 @@ LIB_EXPORT void
 DRBG_AdditionalData(
     DRBG_STATE      *drbgState,     // IN:OUT state to update
     TPM2B           *additionalData // IN: value to incorporate
-    );
+);
 
 //**** DRBG_InstantiateSeeded()
 // This function is used to instantiate a random number generator from seed values.
@@ -141,7 +141,7 @@ DRBG_InstantiateSeeded(
     const TPM2B     *purpose,       // IN: a label for the generation process.
     const TPM2B     *name,          // IN: name of the object
     const TPM2B     *additional     // IN: additional data
-    );
+);
 
 //**** CryptRandStartup()
 // This function is called when TPM_Startup is executed. This function always returns
@@ -149,7 +149,7 @@ DRBG_InstantiateSeeded(
 LIB_EXPORT BOOL
 CryptRandStartup(
     void
-    );
+);
 
 //**** CryptRandInit()
 // This function is called when _TPM_Init is being processed.
@@ -159,7 +159,7 @@ CryptRandStartup(
 LIB_EXPORT BOOL
 CryptRandInit(
     void
-    );
+);
 
 //*** DRBG_Generate()
 // This function generates a random sequence according SP800-90A.
@@ -174,7 +174,7 @@ DRBG_Generate(
     RAND_STATE      *state,
     BYTE            *random,        // OUT: buffer to receive the random values
     UINT16           randomSize     // IN: the number of bytes to generate
-    );
+);
 
 //*** DRBG_Instantiate()
 // This is CTR_DRBG_Instantiate_algorithm() from [SP 800-90A 10.2.1.3.1].
@@ -189,7 +189,7 @@ DRBG_Instantiate(
     DRBG_STATE      *drbgState,         // OUT: the instantiated value
     UINT16           pSize,             // IN: Size of personalization string
     BYTE            *personalization    // IN: The personalization string
-    );
+);
 
 //*** DRBG_Uninstantiate()
 // This is Uninstantiate_function() from [SP 800-90A 9.4].
@@ -199,6 +199,6 @@ DRBG_Instantiate(
 LIB_EXPORT TPM_RC
 DRBG_Uninstantiate(
     DRBG_STATE      *drbgState      // IN/OUT: working state to erase
-    );
+);
 
-#endif  // _CRYPTRAND_FP_H_
+#endif  // _CRYPT_RAND_FP_H_

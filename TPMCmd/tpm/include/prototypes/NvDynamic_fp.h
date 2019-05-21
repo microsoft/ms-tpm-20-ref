@@ -34,18 +34,18 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  7, 2019  Time: 06:58:58PM
  */
 
-#ifndef    _NVDYNAMIC_FP_H_
-#define    _NVDYNAMIC_FP_H_
+#ifndef    _NV_DYNAMIC_FP_H_
+#define    _NV_DYNAMIC_FP_H_
 
 //*** NvWriteNvListEnd()
 // Function to write the list terminator.
 NV_REF
 NvWriteNvListEnd(
     NV_REF           end
-    );
+);
 
 //*** NvUpdateIndexOrderlyData()
 // This function is used to cause an update of the orderly data to the NV backing
@@ -53,7 +53,7 @@ NvWriteNvListEnd(
 void
 NvUpdateIndexOrderlyData(
     void
-    );
+);
 
 //*** NvReadIndex()
 // This function is used to read the NV Index NV_INDEX. This is used so that the
@@ -64,7 +64,7 @@ void
 NvReadNvIndexInfo(
     NV_REF           ref,           // IN: points to NV where index is located
     NV_INDEX        *nvIndex        // OUT: place to receive index data
-    );
+);
 
 //*** NvReadObject()
 // This function is used to read a persistent object. This is used so that the
@@ -74,14 +74,14 @@ void
 NvReadObject(
     NV_REF           ref,           // IN: points to NV where index is located
     OBJECT          *object         // OUT: place to receive the object data
-    );
+);
 
 //*** NvIndexIsDefined()
 // See if an index is already defined
 BOOL
 NvIndexIsDefined(
     TPM_HANDLE       nvHandle       // IN: Index to look for
-    );
+);
 
 //*** NvIsPlatformPersistentHandle()
 // This function indicates if a handle references a persistent object in the
@@ -93,7 +93,7 @@ NvIndexIsDefined(
 BOOL
 NvIsPlatformPersistentHandle(
     TPM_HANDLE       handle         // IN: handle
-    );
+);
 
 //*** NvIsOwnerPersistentHandle()
 // This function indicates if a handle references a persistent object in the
@@ -105,7 +105,7 @@ NvIsPlatformPersistentHandle(
 BOOL
 NvIsOwnerPersistentHandle(
     TPM_HANDLE       handle         // IN: handle
-    );
+);
 
 //*** NvIndexIsAccessible()
 //
@@ -124,7 +124,7 @@ NvIsOwnerPersistentHandle(
 TPM_RC
 NvIndexIsAccessible(
     TPMI_RH_NV_INDEX     handle        // IN: handle
-    );
+);
 
 //*** NvGetEvictObject()
 // This function is used to dereference an evict object handle and get a pointer
@@ -136,14 +136,14 @@ TPM_RC
 NvGetEvictObject(
     TPM_HANDLE       handle,        // IN: handle
     OBJECT          *object         // OUT: object data
-    );
+);
 
 //*** NvIndexCacheInit()
 // Function to initialize the Index cache
 void
 NvIndexCacheInit(
     void
-    );
+);
 
 //*** NvGetIndexData()
 // This function is used to access the data in an NV Index. The data is returned
@@ -159,7 +159,7 @@ NvGetIndexData(
     UINT32               offset,        // IN: offset of NV data
     UINT16               size,          // IN: number of octets of NV data to read
     void                *data           // OUT: data buffer
-    );
+);
 
 //*** NvHashIndexData()
 // This function adds Index data to a hash. It does this in parts to avoid large stack
@@ -182,7 +182,7 @@ UINT64
 NvGetUINT64Data(
     NV_INDEX            *nvIndex,       // IN: the in RAM index descriptor
     NV_REF               locator        // IN: where index exists in NV
-    );
+);
 
 //*** NvWriteIndexAttributes()
 // This function is used to write just the attributes of an index.
@@ -194,7 +194,7 @@ NvWriteIndexAttributes(
     TPM_HANDLE       handle,
     NV_REF           locator,       // IN: location of the index
     TPMA_NV          attributes     // IN: attributes to write
-    );
+);
 
 //*** NvWriteIndexAuth()
 // This function is used to write the authValue of an index. It is used by
@@ -206,7 +206,7 @@ TPM_RC
 NvWriteIndexAuth(
     NV_REF           locator,       // IN: location of the index
     TPM2B_AUTH      *authValue      // IN: the authValue to write
-    );
+);
 
 //*** NvGetIndexInfo()
 // This function loads the nvIndex Info into the NV cache and returns a pointer
@@ -220,7 +220,7 @@ NV_INDEX *
 NvGetIndexInfo(
     TPM_HANDLE       nvHandle,      // IN: the index handle
     NV_REF          *locator        // OUT: location of the index
-    );
+);
 
 //*** NvWriteIndexData()
 // This function is used to write NV index data. It is intended to be used to
@@ -243,7 +243,7 @@ NvWriteIndexData(
     UINT32           offset,        // IN: offset of NV data
     UINT32           size,          // IN: size of NV data
     void            *data           // IN: data buffer
-    );
+);
 
 //*** NvWriteUINT64Data()
 // This function to write back a UINT64 value. The various UINT64 values (bits,
@@ -258,7 +258,7 @@ TPM_RC
 NvWriteUINT64Data(
     NV_INDEX        *nvIndex,       // IN: the description of the index
     UINT64           intValue       // IN: the value to write
-    );
+);
 
 //*** NvGetIndexName()
 // This function computes the Name of an index
@@ -271,7 +271,7 @@ NvGetIndexName(
     NV_INDEX        *nvIndex,       // IN: the index over which the name is to be
                                     //     computed
     TPM2B_NAME      *name           // OUT: name of the index
-    );
+);
 
 //*** NvGetNameByIndexHandle()
 // This function is used to compute the Name of an NV Index referenced by handle.
@@ -284,7 +284,7 @@ TPM2B_NAME *
 NvGetNameByIndexHandle(
     TPMI_RH_NV_INDEX     handle,        // IN: handle of the index
     TPM2B_NAME          *name           // OUT: name of the index
-    );
+);
 
 //*** NvDefineIndex()
 // This function is used to assign NV memory to an NV Index.
@@ -295,7 +295,7 @@ TPM_RC
 NvDefineIndex(
     TPMS_NV_PUBLIC  *publicArea,    // IN: A template for an area to create.
     TPM2B_AUTH      *authValue      // IN: The initial authorization value
-    );
+);
 
 //*** NvAddEvictObject()
 // This function is used to assign NV memory to a persistent object.
@@ -306,7 +306,7 @@ TPM_RC
 NvAddEvictObject(
     TPMI_DH_OBJECT   evictHandle,   // IN: new evict handle
     OBJECT          *object         // IN: object to be added
-    );
+);
 
 //*** NvDeleteIndex()
 // This function is used to delete an NV Index.
@@ -317,12 +317,12 @@ TPM_RC
 NvDeleteIndex(
     NV_INDEX        *nvIndex,       // IN: an in RAM index descriptor
     NV_REF           entityAddr     // IN: location in NV
-    );
+);
 
 TPM_RC
 NvDeleteEvict(
     TPM_HANDLE       handle         // IN: handle of entity to be deleted
-    );
+);
 
 //*** NvFlushHierarchy()
 // This function will delete persistent objects belonging to the indicated hierarchy.
@@ -334,7 +334,7 @@ NvDeleteEvict(
 TPM_RC
 NvFlushHierarchy(
     TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy to be flushed.
-    );
+);
 
 //*** NvSetGlobalLock()
 // This function is used to SET the TPMA_NV_WRITELOCKED attribute for all
@@ -346,7 +346,7 @@ NvFlushHierarchy(
 TPM_RC
 NvSetGlobalLock(
     void
-    );
+);
 
 //*** NvCapGetPersistent()
 // This function is used to get a list of handles of the persistent objects,
@@ -362,7 +362,7 @@ NvCapGetPersistent(
     TPMI_DH_OBJECT   handle,        // IN: start handle
     UINT32           count,         // IN: maximum number of returned handles
     TPML_HANDLE     *handleList     // OUT: list of handle
-    );
+);
 
 //*** NvCapGetIndex()
 // This function returns a list of handles of NV indexes, starting from 'handle'.
@@ -376,21 +376,21 @@ NvCapGetIndex(
     TPMI_DH_OBJECT   handle,        // IN: start handle
     UINT32           count,         // IN: max number of returned handles
     TPML_HANDLE     *handleList     // OUT: list of handle
-    );
+);
 
 //*** NvCapGetIndexNumber()
 // This function returns the count of NV Indexes currently defined.
 UINT32
 NvCapGetIndexNumber(
     void
-    );
+);
 
 //*** NvCapGetPersistentNumber()
 // Function returns the count of persistent objects currently in NV memory.
 UINT32
 NvCapGetPersistentNumber(
     void
-    );
+);
 
 //*** NvCapGetPersistentAvail()
 // This function returns an estimate of the number of additional persistent
@@ -398,19 +398,29 @@ NvCapGetPersistentNumber(
 UINT32
 NvCapGetPersistentAvail(
     void
-    );
+);
 
 //*** NvCapGetCounterNumber()
 // Get the number of defined NV Indexes that are counter indexes.
 UINT32
 NvCapGetCounterNumber(
     void
-    );
+);
 
-void
+//*** NvEntityStartup()
+//  This function is called at TPM_Startup(). If the startup completes
+//  a TPM Resume cycle, no action is taken. If the startup is a TPM Reset
+//  or a TPM Restart, then this function will:
+//  1. clear read/write lock;
+//  2. reset NV Index data that has TPMA_NV_CLEAR_STCLEAR SET; and
+//  3. set the lower bits in orderly counters to 1 for a non-orderly startup
+//
+//  It is a prerequisite that NV be available for writing before this
+//  function is called.
+BOOL
 NvEntityStartup(
     STARTUP_TYPE     type           // IN: start up type
-    );
+);
 
 //*** NvCapGetCounterAvail()
 // This function returns an estimate of the number of additional counter type
@@ -418,7 +428,7 @@ NvEntityStartup(
 UINT32
 NvCapGetCounterAvail(
     void
-    );
+);
 
 //*** NvFindHandle()
 // this function returns the offset in NV memory of the entity associated
@@ -427,7 +437,7 @@ NvCapGetCounterAvail(
 NV_REF
 NvFindHandle(
     TPM_HANDLE       handle
-    );
+);
 
 //*** NvReadMaxCount()
 // This function returns the max NV counter value.
@@ -435,7 +445,7 @@ NvFindHandle(
 UINT64
 NvReadMaxCount(
     void
-    );
+);
 
 //*** NvUpdateMaxCount()
 // This function updates the max counter value to NV memory. This is just staging
@@ -444,7 +454,7 @@ NvReadMaxCount(
 void
 NvUpdateMaxCount(
     UINT64           count
-    );
+);
 
 //*** NvSetMaxCount()
 // This function is used at NV initialization time to set the initial value of
@@ -452,13 +462,13 @@ NvUpdateMaxCount(
 void
 NvSetMaxCount(
     UINT64          value
-    );
+);
 
 //*** NvGetMaxCount()
 // Function to get the NV max counter value from the end-of-list marker
 UINT64
 NvGetMaxCount(
     void
-    );
+);
 
-#endif  // _NVDYNAMIC_FP_H_
+#endif  // _NV_DYNAMIC_FP_H_

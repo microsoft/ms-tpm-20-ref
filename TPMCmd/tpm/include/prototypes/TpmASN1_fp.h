@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:26AM
+ *  Date: Apr  2, 2019  Time: 11:00:49AM
  */
 
-#ifndef    _TPMASN1_FP_H_
-#define    _TPMASN1_FP_H_
+#ifndef    _TPM_ASN1_FP_H_
+#define    _TPM_ASN1_FP_H_
 
 //*** ASN1UnmarshalContextInitialize()
 // Function does standard initialization of a context.
@@ -231,4 +231,4 @@ ASN1PushOID(
     const BYTE                  *OID
 );
 
-#endif  // _TPMASN1_FP_H_
+#endif  // _TPM_ASN1_FP_H_

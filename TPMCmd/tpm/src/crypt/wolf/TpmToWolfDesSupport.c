@@ -42,7 +42,7 @@
 
 #include "Tpm.h"
 
-#if SYM_LIB == WOLF && defined TPM_ALG_TDES
+#if (defined SYM_LIB_WOLF) && ALG_TDES
 
 //**Functions
 //** TDES_setup
@@ -114,4 +114,4 @@ void TDES_decrypt(
     wc_Des3_EcbDecrypt( ks, out, in, DES_BLOCK_SIZE );
 }
 
-#endif // SYM_LIB == WOLF
+#endif // MATH_LIB_WOLF && ALG_TDES

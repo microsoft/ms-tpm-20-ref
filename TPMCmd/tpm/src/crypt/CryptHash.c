@@ -45,7 +45,6 @@
 #include "OIDs.h"
 
 #define HASH_TABLE_SIZE     (HASH_COUNT + 1)
-//extern const HASH_INFO   g_hashData[HASH_COUNT + 1];
 
 
 #if     ALG_SHA1
@@ -64,7 +63,6 @@ HASH_DEF_TEMPLATE(SHA512, Sha512);
 HASH_DEF_TEMPLATE(SM3_256, Sm3_256);
 #endif
 HASH_DEF NULL_Def = {{0}};
-
 
 PHASH_DEF       HashDefArray[] = {
 #if ALG_SHA1
@@ -109,8 +107,7 @@ CryptHashStartup(
     )
 {
     int         i = sizeof(HashDefArray) / sizeof(PHASH_DEF) - 1;
-    pAssert(i == HASH_COUNT);
-    return TRUE;
+    return (i == HASH_COUNT);
 }
 
 //** Hash Information Access Functions
@@ -119,8 +116,8 @@ CryptHashStartup(
 
 //*** CryptGetHashDef()
 // This function accesses the hash descriptor associated with a hash a
-// algorithm. The function returns NULL for TPM_ALG_NULL and fails if
-// hashAlg is not a hash algorithm.
+// algorithm. The function returns a pointer to a 'null' descriptor if hashAlg is 
+// TPM_ALG_NULL or not a defined algorithm. 
 PHASH_DEF
 CryptGetHashDef(
     TPM_ALG_ID       hashAlg
@@ -835,7 +832,6 @@ CryptKDFa(
         CryptHmacEnd(&hState, bytes, stream);
         stream = &stream[digestSize];
     }
-
     // Masking in the KDF is disabled. If the calling function wants something
     // less than even number of bytes, then the caller should do the masking 
     // because there is no universal way to do it here

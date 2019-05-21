@@ -37,8 +37,6 @@
 
 #if CC_Commit  // Conditional expansion of this file
 
-#if ALG_ECC
-
 /*(See part 3 specification)
 // This command performs the point multiply operations for anonymous signing
 // scheme.
@@ -167,6 +165,5 @@ TPM2_Commit(
 
     return TPM_RC_SUCCESS;
 }
-#endif
 
 #endif // CC_Commit

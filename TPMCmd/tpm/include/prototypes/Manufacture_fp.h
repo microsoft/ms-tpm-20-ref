@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
 #ifndef    _MANUFACTURE_FP_H_
@@ -51,7 +51,7 @@ LIB_EXPORT int
 TPM_Manufacture(
     int             firstTime       // IN: indicates if this is the first call from
                                     //     main()
-    );
+);
 
 //*** TPM_TearDown()
 // This function prepares the TPM for re-manufacture. It should not be implemented
@@ -66,7 +66,7 @@ TPM_Manufacture(
 LIB_EXPORT int
 TPM_TearDown(
     void
-    );
+);
 
 //*** TpmEndSimulation()
 // This function is called at the end of the simulation run. It is used to provoke
@@ -74,6 +74,6 @@ TPM_TearDown(
 LIB_EXPORT void
 TpmEndSimulation(
     void
-    );
+);
 
 #endif  // _MANUFACTURE_FP_H_

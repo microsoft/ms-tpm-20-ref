@@ -36,10 +36,10 @@
 //
 // This header file is used to 'splice' the OpenSSL hash code into the TPM code.
 //
-#ifndef _TPM_TO_OSSL_HASH_H_
-#define _TPM_TO_OSSL_HASH_H_
+#ifndef HASH_LIB_DEFINED
+#define HASH_LIB_DEFINED
 
-#if HASH_LIB == OSSL
+#define HASH_LIB_OSSL
 
 #include <openssl/evp.h>
 #include <openssl/sha.h>
@@ -177,6 +177,4 @@ typedef const BYTE    *PCBYTE;
 // This definition would change if there were something to report
 #define HashLibSimulationEnd()
 
-#endif // HASH_LIB == OSSL
-
-#endif //
+#endif // HASH_LIB_DEFINED

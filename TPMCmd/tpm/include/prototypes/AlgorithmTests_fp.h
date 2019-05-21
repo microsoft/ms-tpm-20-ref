@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _ALGORITHMTESTS_FP_H_
-#define    _ALGORITHMTESTS_FP_H_
+#ifndef    _ALGORITHM_TESTS_FP_H_
+#define    _ALGORITHM_TESTS_FP_H_
 
 #if SELF_TEST
 
@@ -66,7 +66,7 @@ TPM_RC
 TestAlgorithm(
     TPM_ALG_ID               alg,
     ALGORITHM_VECTOR        *toTest
-    );
+);
 #endif // SELF_TESTS
 
-#endif  // _ALGORITHMTESTS_FP_H_
+#endif  // _ALGORITHM_TESTS_FP_H_

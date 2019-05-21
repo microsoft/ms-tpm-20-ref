@@ -33,13 +33,14 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.1 Dec 8, 2018
- *  Date: Jan 28, 2019  Time: 12:39:24AM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#ifdef TPM_CC_PolicyCpHash // Command must be defined
-#ifndef _POLICYCPHASH_FP_H_
-#define _POLICYCPHASH_FP_H_
+#if CC_PolicyCpHash // Command must be enabled
+
+#ifndef _Policy_Cp_Hash_FP_H_
+#define _Policy_Cp_Hash_FP_H_
 
 // Input structure definition
 typedef struct {
@@ -57,5 +58,5 @@ TPM2_PolicyCpHash(
     PolicyCpHash_In             *in
 );
 
-#endif  // _POLICYCPHASH_FP_H_
-#endif  // TPM_CC_PolicyCpHash
+#endif  // _Policy_Cp_Hash_FP_H_
+#endif  // CC_PolicyCpHash

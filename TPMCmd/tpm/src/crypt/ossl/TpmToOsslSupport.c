@@ -41,8 +41,7 @@
 
 #include "Tpm.h"
 
-#if MATH_LIB == OSSL
-
+#if defined(HASH_LIB_OSSL) || defined(MATH_LIB_OSSL) || defined(SYM_LIB_OSSL)
 // Used to pass the pointers to the correct sub-keys
 typedef const BYTE *desKeyPointers[3];
 
@@ -109,5 +108,5 @@ OsslPopContext(
     if(CTX != NULL)
         BN_CTX_end(CTX);
 }
-#endif // MATH_LIB == OSSL
 
+#endif // HASH_LIB_OSSL || MATH_LIB_OSSL || SYM_LIB_OSSL

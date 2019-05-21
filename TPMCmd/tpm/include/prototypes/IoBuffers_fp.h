@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _IOBUFFERS_FP_H_
-#define    _IOBUFFERS_FP_H_
+#ifndef    _IO_BUFFERS_FP_H_
+#define    _IO_BUFFERS_FP_H_
 
 //*** MemoryIoBufferAllocationReset()
 // This function is used to reset the allocation of buffers.
@@ -63,7 +63,7 @@ BYTE *
 MemoryGetInBuffer(
     UINT32           size           // Size, in bytes, required for the input
                                     // unmarshaling
-    );
+);
 
 //*** MemoryGetOutBuffer()
 // This function returns the address of the buffer into which the command
@@ -71,7 +71,7 @@ MemoryGetInBuffer(
 BYTE *
 MemoryGetOutBuffer(
     UINT32           size           // required size of the buffer
-    );
+);
 
 //*** IsLabelProperlyFormatted()
 // This function checks that a label is a null-terminated string.
@@ -82,6 +82,6 @@ MemoryGetOutBuffer(
 BOOL
 IsLabelProperlyFormatted(
     TPM2B           *x
-    );
+);
 
-#endif  // _IOBUFFERS_FP_H_
+#endif  // _IO_BUFFERS_FP_H_

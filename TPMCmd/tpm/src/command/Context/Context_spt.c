@@ -41,8 +41,8 @@
 
 //*** ComputeContextProtectionKey()
 // This function retrieves the symmetric protection key for context encryption
-// It is used by TPM2_ConextSave() and TPM2_ContextLoad() to create the symmetric
-// encryption key and iv.
+// It is used by TPM2_ConextSave and TPM2_ContextLoad to create the symmetric
+// encryption key and iv
 /*(See part 1 specification)
     KDFa is used to generate the symmetric encryption key and IV. The parameters
     of the call are:

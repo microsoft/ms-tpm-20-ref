@@ -1740,8 +1740,7 @@ NvSetStartupAttributes(
 //
 //  It is a prerequisite that NV be available for writing before this
 //  function is called.
-
-void
+BOOL
 NvEntityStartup(
     STARTUP_TYPE     type           // IN: start up type
     )
@@ -1761,7 +1760,7 @@ NvEntityStartup(
 
     // If recovering from state save, do nothing else
     if(type == SU_RESUME)
-        return;
+        return TRUE;
     // Iterate all the NV Index to clear the locks
     while((currentAddr = NvNextIndex(&nvHandle, &iter)) != 0)
     {
@@ -1802,7 +1801,7 @@ NvEntityStartup(
             UINT64_TO_BYTE_ARRAY(counter, currentRamAddr + sizeof(NV_RAM_HEADER));
         }
     }
-    return;
+    return TRUE;
 }
 
 //*** NvCapGetCounterAvail()

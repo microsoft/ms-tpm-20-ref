@@ -33,13 +33,14 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.1 Dec 8, 2018
- *  Date: Jan 28, 2019  Time: 12:39:24AM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#ifdef TPM_CC_ZGen_2Phase // Command must be defined
-#ifndef _ZGEN_2PHASE_FP_H_
-#define _ZGEN_2PHASE_FP_H_
+#if CC_ZGen_2Phase // Command must be enabled
+
+#ifndef _ZGen_2Phase_FP_H_
+#define _ZGen_2Phase_FP_H_
 
 // Input structure definition
 typedef struct {
@@ -70,5 +71,5 @@ TPM2_ZGen_2Phase(
     ZGen_2Phase_Out             *out
 );
 
-#endif  // _ZGEN_2PHASE_FP_H_
-#endif  // TPM_CC_ZGen_2Phase
+#endif  // _ZGen_2Phase_FP_H_
+#endif  // CC_ZGen_2Phase

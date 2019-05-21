@@ -38,76 +38,23 @@
 #ifndef _LIB_SUPPORT_H_
 #define _LIB_SUPPORT_H_
 
-// OSSL has a full suite but yields an executable that is much larger than it needs
-// to be.
-#define     OSSL        1
-// LTC has symmetric support, RSA support, and inadequate ECC support
-#define     LTC         2
-// MSBN only provides math support so should not be used as the hash or symmetric
-// library
-#define     MSBN        3
-// SYMCRYPT only provides symmetric cryptography so would need to be combined with
-// another library that has math support
-#define     SYMCRYPT    4
-// WolfCrypt from the statically linkable GPL WolfSLL, other commercial licenses
-// also available
-#define     WOLF        5
-
-//*********************
-#if RADIX_BITS == 32
-#   define RADIX_BYTES 4
-#elif RADIX_BITS == 64
-#   define RADIX_BYTES 8
-#else
-#error  "RADIX_BITS must either be 32 or 64."
-#endif
-
-// Include the options for hashing
-// If all the optional headers were always part of the distribution then it would
-// not be necessary to do the conditional testing before the include. )-;
-#if HASH_LIB == OSSL
-#  include "ossl/TpmToOsslHash.h"
-#elif HASH_LIB == LTC
-#  include "ltc/TpmToLtcHash.h"
-#elif HASH_LIB == SYMCRYPT
-#include "symcrypt/TpmToSymcryptHash.h"
-#elif HASH_LIB == WOLF
-#  include "wolf/TpmToWolfHash.h"
-#else
-#  error "No hash library selected"
-#endif
+// These macros use the selected libraries to the proper include files. 
+#define LIB_JOIN(x,y) x##y
+#define LIB_CONCAT(x,y) LIB_JOIN(x, y)
+#define LIB_QUOTE(_STRING_) #_STRING_
+#define LIB_INCLUDE2(_LIB_, _TYPE_) LIB_QUOTE(_LIB_/TpmTo##_LIB_##_TYPE_.h)
+#define LIB_INCLUDE(_LIB_, _TYPE_) LIB_INCLUDE2(_LIB_, _TYPE_)
+#define SYM_LIBRARY LIB_CONCAT(SYM_LIB_, SYM_LIB)
+#define HASH_LIBRARY(_LIB_) LIB_CONCAT(HASH_LIB_, HASH_LIB)
+#define MATH_LIBRARY(_LIB_) LIB_CONCAT(MATH_LIB_, MATH_LIB)
 
 
-// Set the linkage for the selected symmetric library
-#if SYM_LIB == OSSL
-#  include "ossl/TpmToOsslSym.h"
-#elif SYM_LIB == LTC
-#  include "ltc/TpmToLtcSym.h"
-#elif SYM_LIB == SYMCRYPT
-#include "symcrypt/TpmToSymcryptSym.h"
-#elif SYM_LIB == WOLF
-#  include "wolf/TpmToWolfSym.h"
-#else
-#  error "No symmetric library selected"
-#endif
+// Include the options for hashing and symmetric. Defer the load of the math package
+// Until the bignum parameters are defined.
+#include LIB_INCLUDE(SYM_LIB, Sym)
+#include LIB_INCLUDE(HASH_LIB, Hash)
 
 #undef MIN
-#undef MIN
-
-
-// Select a big number Library.
-// This uses a define rather than an include so that the header will not be included
-// until the required values have been defined.
-#if MATH_LIB == OSSL
-#  define MATHLIB_H  "ossl/TpmToOsslMath.h"
-#elif MATH_LIB == LTC
-#  define MATHLIB_H  "ltc/TpmToLtcMath.h"
-#elif MATH_LIB == MSBN
-#define MATHLIB_H  "msbn/TpmToMsBnMath.h"
-#elif MATH_LIB == WOLF
-#  define MATHLIB_H  "wolf/TpmToWolfMath.h"
-#else
-#  error "No math library selected"
-#endif
+#undef MAX
 
 #endif // _LIB_SUPPORT_H_

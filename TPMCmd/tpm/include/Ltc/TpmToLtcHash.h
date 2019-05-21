@@ -40,7 +40,7 @@
 #ifndef _TPM_TO_LTC_HASH_H_
 #define _TPM_TO_LTC_HASH_H_
 
-#if HASH_LIB == LTC
+#define HASH_LIB_LTC
 
 // Avoid pulling in the MPA math if not doing asymmetric with LTC
 #if MATH_LIB != LTC

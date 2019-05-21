@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 04:23:27PM
  */
 
 #ifndef    _HIERARCHY_FP_H_
@@ -48,15 +48,15 @@
 void
 HierarchyPreInstall_Init(
     void
-    );
+);
 
 //*** HierarchyStartup()
 // This function is called at TPM2_Startup() to initialize the hierarchy
 // related values.
-void
+BOOL
 HierarchyStartup(
     STARTUP_TYPE     type           // IN: start up type
-    );
+);
 
 //*** HierarchyGetProof()
 // This function finds the proof value associated with a hierarchy.It returns a
@@ -64,14 +64,14 @@ HierarchyStartup(
 TPM2B_PROOF *
 HierarchyGetProof(
     TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy constant
-    );
+);
 
 //*** HierarchyGetPrimarySeed()
 // This function returns the primary seed of a hierarchy.
 TPM2B_SEED *
 HierarchyGetPrimarySeed(
     TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy
-    );
+);
 
 //*** HierarchyIsEnabled()
 // This function checks to see if a hierarchy is enabled.
@@ -82,6 +82,6 @@ HierarchyGetPrimarySeed(
 BOOL
 HierarchyIsEnabled(
     TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy
-    );
+);
 
 #endif  // _HIERARCHY_FP_H_

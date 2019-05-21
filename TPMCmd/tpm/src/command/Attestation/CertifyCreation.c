@@ -36,7 +36,7 @@
 #include "Attest_spt_fp.h"
 #include "CertifyCreation_fp.h"
 
-#ifdef TPM_CC_CertifyCreation  // Conditional expansion of this file
+#if CC_CertifyCreation  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Prove the association between an object and its creation data

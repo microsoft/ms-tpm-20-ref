@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _RSAKEYCACHE_FP_H_
-#define    _RSAKEYCACHE_FP_H_
+#ifndef    _RSA_KEY_CACHE_FP_H_
+#define    _RSA_KEY_CACHE_FP_H_
 
 #if USE_RSA_KEY_CACHE
 
@@ -47,7 +47,7 @@
 LIB_EXPORT void
 RsaKeyCacheControl(
     int             state
-    );
+);
 
 //*** GetCachedRsaKey()
 //  Return Type: BOOL
@@ -59,7 +59,7 @@ GetCachedRsaKey(
     TPMT_SENSITIVE      *sensitive,
     RAND_STATE          *rand               // IN: if not NULL, the deterministic
                                             //     RNG state
-    );
+);
 #endif  // defined SIMULATION && defined USE_RSA_KEY_CACHE
 
-#endif  // _RSAKEYCACHE_FP_H_
+#endif  // _RSA_KEY_CACHE_FP_H_

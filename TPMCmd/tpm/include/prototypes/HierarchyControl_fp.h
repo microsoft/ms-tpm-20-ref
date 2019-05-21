@@ -33,13 +33,14 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.1 Dec 8, 2018
- *  Date: Jan 28, 2019  Time: 12:39:24AM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#ifdef TPM_CC_HierarchyControl // Command must be defined
-#ifndef _HIERARCHYCONTROL_FP_H_
-#define _HIERARCHYCONTROL_FP_H_
+#if CC_HierarchyControl // Command must be enabled
+
+#ifndef _Hierarchy_Control_FP_H_
+#define _Hierarchy_Control_FP_H_
 
 // Input structure definition
 typedef struct {
@@ -59,5 +60,5 @@ TPM2_HierarchyControl(
     HierarchyControl_In         *in
 );
 
-#endif  // _HIERARCHYCONTROL_FP_H_
-#endif  // TPM_CC_HierarchyControl
+#endif  // _Hierarchy_Control_FP_H_
+#endif  // CC_HierarchyControl

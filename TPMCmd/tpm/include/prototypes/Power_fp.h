@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:26AM
+ *  Date: Apr  2, 2019  Time: 11:00:49AM
  */
 
 #ifndef    _POWER_FP_H_
@@ -45,15 +45,15 @@
 void
 TPMInit(
     void
-    );
+);
 
 //*** TPMRegisterStartup()
 // This function registers the fact that the TPM has been initialized
 // (a TPM2_Startup() has completed successfully).
-void
+BOOL
 TPMRegisterStartup(
     void
-    );
+);
 
 //*** TPMIsStarted()
 // Indicates if the TPM has been initialized (a TPM2_Startup() has completed
@@ -64,6 +64,6 @@ TPMRegisterStartup(
 BOOL
 TPMIsStarted(
     void
-    );
+);
 
 #endif  // _POWER_FP_H_

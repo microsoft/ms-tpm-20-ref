@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 04:23:27PM
  */
 
 #ifndef    _PCR_FP_H_
@@ -55,7 +55,7 @@ PCRBelongsAuthGroup(
                                     //      does not belong to an authorization
                                     //      group, the value in this parameter is
                                     //      invalid
-    );
+);
 
 //*** PCRBelongsPolicyGroup()
 // This function indicates if a PCR belongs to a group that requires a policy
@@ -72,7 +72,7 @@ PCRBelongsPolicyGroup(
                                     //     allows policy.  If PCR does not belong to
                                     //     a policy group, the value in this
                                     //     parameter is invalid
-    );
+);
 
 //*** PCRPolicyIsAvailable()
 // This function indicates if a policy is available for a PCR.
@@ -82,7 +82,7 @@ PCRBelongsPolicyGroup(
 BOOL
 PCRPolicyIsAvailable(
     TPMI_DH_PCR      handle         // IN: PCR handle
-    );
+);
 
 //*** PCRGetAuthValue()
 // This function is used to access the authValue of a PCR.  If PCR does not
@@ -90,7 +90,7 @@ PCRPolicyIsAvailable(
 TPM2B_AUTH *
 PCRGetAuthValue(
     TPMI_DH_PCR      handle         // IN: PCR handle
-    );
+);
 
 //*** PCRGetAuthPolicy()
 // This function is used to access the authorization policy of a PCR. It sets
@@ -100,7 +100,7 @@ TPMI_ALG_HASH
 PCRGetAuthPolicy(
     TPMI_DH_PCR      handle,        // IN: PCR handle
     TPM2B_DIGEST    *policy         // OUT: policy of PCR
-    );
+);
 
 //*** PCRSimStart()
 // This function is used to initialize the policies when a TPM is manufactured.
@@ -109,7 +109,7 @@ PCRGetAuthPolicy(
 void
 PCRSimStart(
     void
-    );
+);
 
 //*** PcrIsAllocated()
 // This function indicates if a PCR number for the particular hash algorithm
@@ -121,7 +121,7 @@ BOOL
 PcrIsAllocated(
     UINT32           pcr,           // IN: The number of the PCR
     TPMI_ALG_HASH    hashAlg        // IN: The PCR algorithm
-    );
+);
 
 //*** PcrDrtm()
 // This function does the DRTM and H-CRTM processing it is called from
@@ -132,7 +132,7 @@ PcrDrtm(
                                             //     modified
     const TPMI_ALG_HASH      hash,          // IN: the bank identifier
     const TPM2B_DIGEST      *digest         // IN: the digest to modify the PCR
-    );
+);
 
 //*** PCR_ClearAuth()
 // This function is used to reset the PCR authorization values. It is called
@@ -140,22 +140,22 @@ PcrDrtm(
 void
 PCR_ClearAuth(
     void
-    );
+);
 
 //*** PCRStartup()
 // This function initializes the PCR subsystem at TPM2_Startup().
-void
+BOOL
 PCRStartup(
     STARTUP_TYPE     type,          // IN: startup type
     BYTE             locality       // IN: startup locality
-    );
+);
 
 //*** PCRStateSave()
 // This function is used to save the PCR values that will be restored on TPM Resume.
 void
 PCRStateSave(
     TPM_SU           type           // IN: startup type
-    );
+);
 
 //*** PCRIsStateSaved()
 // This function indicates if the selected PCR is a PCR that is state saved
@@ -166,7 +166,7 @@ PCRStateSave(
 BOOL
 PCRIsStateSaved(
     TPMI_DH_PCR      handle         // IN: PCR handle to be extended
-    );
+);
 
 //*** PCRIsResetAllowed()
 // This function indicates if a PCR may be reset by the current command locality.
@@ -177,7 +177,7 @@ PCRIsStateSaved(
 BOOL
 PCRIsResetAllowed(
     TPMI_DH_PCR      handle         // IN: PCR handle to be extended
-    );
+);
 
 //*** PCRChanged()
 // This function checks a PCR handle to see if the attributes for the PCR are set
@@ -188,7 +188,7 @@ PCRIsResetAllowed(
 void
 PCRChanged(
     TPM_HANDLE       pcrHandle      // IN: the handle of the PCR that changed.
-    );
+);
 
 //*** PCRIsExtendAllowed()
 // This function indicates a PCR may be extended at the current command locality.
@@ -199,7 +199,7 @@ PCRChanged(
 BOOL
 PCRIsExtendAllowed(
     TPMI_DH_PCR      handle         // IN: PCR handle to be extended
-    );
+);
 
 //*** PCRExtend()
 // This function is used to extend a PCR in a specific bank.
@@ -209,7 +209,7 @@ PCRExtend(
     TPMI_ALG_HASH    hash,          // IN: hash algorithm of PCR
     UINT32           size,          // IN: size of data to be extended
     BYTE            *data           // IN: data to be extended
-    );
+);
 
 //*** PCRComputeCurrentDigest()
 // This function computes the digest of the selected PCR.
@@ -222,7 +222,7 @@ PCRComputeCurrentDigest(
     TPML_PCR_SELECTION  *selection,     // IN/OUT: PCR selection (filtered on
                                         //     output)
     TPM2B_DIGEST        *digest         // OUT: digest
-    );
+);
 
 //*** PCRRead()
 // This function is used to read a list of selected PCR.  If the requested PCR
@@ -235,7 +235,7 @@ PCRRead(
     TPML_DIGEST         *digest,        // OUT: digest
     UINT32              *pcrCounter     // OUT: the current value of PCR generation
                                         //     number
-    );
+);
 
 //*** PcrWrite()
 // This function is used by _TPM_Hash_End to set a PCR to the computed hash
@@ -245,7 +245,7 @@ PcrWrite(
     TPMI_DH_PCR      handle,        // IN: PCR handle to be extended
     TPMI_ALG_HASH    hash,          // IN: hash algorithm of PCR
     TPM2B_DIGEST    *digest         // IN: the new value
-    );
+);
 
 //*** PCRAllocate()
 // This function is used to change the PCR allocation.
@@ -258,7 +258,7 @@ PCRAllocate(
     UINT32              *maxPCR,        // OUT: Maximum number of PCR
     UINT32              *sizeNeeded,    // OUT: required space
     UINT32              *sizeAvailable  // OUT: available space
-    );
+);
 
 //*** PCRSetValue()
 // This function is used to set the designated PCR in all banks to an initial value.
@@ -268,7 +268,7 @@ void
 PCRSetValue(
     TPM_HANDLE       handle,        // IN: the handle of the PCR to set
     INT8             initialValue   // IN: the value to set
-    );
+);
 
 //*** PCRResetDynamics
 // This function is used to reset a dynamic PCR to 0.  This function is used in
@@ -276,7 +276,7 @@ PCRSetValue(
 void
 PCRResetDynamics(
     void
-    );
+);
 
 //*** PCRCapGetAllocation()
 // This function is used to get the current allocation of PCR banks.
@@ -287,7 +287,7 @@ TPMI_YES_NO
 PCRCapGetAllocation(
     UINT32               count,         // IN: count of return
     TPML_PCR_SELECTION  *pcrSelection   // OUT: PCR allocation list
-    );
+);
 
 //*** PCRCapGetProperties()
 // This function returns a list of PCR properties starting at 'property'.
@@ -299,7 +299,7 @@ PCRCapGetProperties(
     TPM_PT_PCR                   property,      // IN: the starting PCR property
     UINT32                       count,         // IN: count of returned properties
     TPML_TAGGED_PCR_PROPERTY    *select         // OUT: PCR select
-    );
+);
 
 //*** PCRCapGetHandles()
 // This function is used to get a list of handles of PCR, started from 'handle'.
@@ -313,6 +313,6 @@ PCRCapGetHandles(
     TPMI_DH_PCR      handle,        // IN: start handle
     UINT32           count,         // IN: count of returned handles
     TPML_HANDLE     *handleList     // OUT: list of handle
-    );
+);
 
 #endif  // _PCR_FP_H_

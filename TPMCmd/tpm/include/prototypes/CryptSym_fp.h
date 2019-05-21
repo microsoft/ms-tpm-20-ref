@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Apr  2, 2019  Time: 03:18:00PM
  */
 
-#ifndef    _CRYPTSYM_FP_H_
-#define    _CRYPTSYM_FP_H_
+#ifndef    _CRYPT_SYM_FP_H_
+#define    _CRYPT_SYM_FP_H_
 
 //** Initialization and Data Access Functions
 //
@@ -47,14 +47,14 @@
 BOOL
 CryptSymInit(
     void
-    );
+);
 
 //*** CryptSymStartup()
 // This function is called to do TPM2_Startup() processing
 BOOL
 CryptSymStartup(
     void
-    );
+);
 
 //*** CryptGetSymmetricBlockSize()
 // This function returns the block size of the algorithm. The table of bit sizes has
@@ -70,7 +70,7 @@ LIB_EXPORT INT16
 CryptGetSymmetricBlockSize(
     TPM_ALG_ID      symmetricAlg,   // IN: the symmetric algorithm
     UINT16          keySizeInBits   // IN: the key size
-    );
+);
 
 //** Symmetric Encryption
 // This function performs symmetric encryption based on the mode.
@@ -90,7 +90,7 @@ CryptSymmetricEncrypt(
     INT32                dSize,         // IN: data size (may need to be a
                                         //     multiple of the blockSize)
     const BYTE          *dIn            // IN: data buffer
-    );
+);
 
 //*** CryptSymmetricDecrypt()
 // This function performs symmetric decryption based on the mode.
@@ -110,7 +110,7 @@ CryptSymmetricDecrypt(
     INT32                dSize,         // IN: data size (may need to be a
                                         //     multiple of the blockSize)
     const BYTE          *dIn            // IN: data buffer
-    );
+);
 
 //*** CryptSymKeyValidate()
 // Validate that a provided symmetric key meets the requirements of the TPM
@@ -121,6 +121,6 @@ TPM_RC
 CryptSymKeyValidate(
     TPMT_SYM_DEF_OBJECT *symDef,
     TPM2B_SYM_KEY       *key
-    );
+);
 
-#endif  // _CRYPTSYM_FP_H_
+#endif  // _CRYPT_SYM_FP_H_

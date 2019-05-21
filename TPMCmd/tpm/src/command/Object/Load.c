@@ -90,7 +90,6 @@ TPM2_Load(
     if(!ObjectIsParent(parentObject))
         return TPM_RCS_TYPE + RC_Load_parentHandle;
 
-
     // Compute the name of object. If there isn't one, it is because the nameAlg is
     // not valid.
     PublicMarshalAndComputeName(&in->inPublic.publicArea, &out->name);

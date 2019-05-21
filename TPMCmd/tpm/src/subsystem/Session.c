@@ -175,7 +175,7 @@ ContextIdSetOldest(
 
 //** Startup Function -- SessionStartup()
 // This function initializes the session subsystem on TPM2_Startup().
-void
+BOOL
 SessionStartup(
     STARTUP_TYPE     type
     )
@@ -222,7 +222,7 @@ SessionStartup(
         // Initialize oldest saved session
         s_oldestSavedSession = MAX_ACTIVE_SESSIONS + 1;
     }
-    return;
+    return TRUE;
 }
 
 //************************************************

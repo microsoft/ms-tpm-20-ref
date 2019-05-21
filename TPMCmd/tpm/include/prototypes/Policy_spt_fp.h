@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
 #ifndef    _POLICY_SPT_FP_H_
@@ -54,7 +54,7 @@ PolicyParameterChecks(
     TPM_RC           blameNonce,
     TPM_RC           blameCpHash,
     TPM_RC           blameExpiration
-    );
+);
 
 //*** PolicyContextUpdate()
 // Update policy hash
@@ -69,7 +69,7 @@ PolicyContextUpdate(
     TPM2B_DIGEST    *cpHash,        // IN: the cpHash (optional)
     UINT64           policyTimeout, // IN: the timeout value for the policy
     SESSION         *session        // IN/OUT: policy session to be updated
-    );
+);
 
 //*** ComputeAuthTimeout()
 // This function is used to determine what the authorization timeout value for
@@ -82,14 +82,14 @@ ComputeAuthTimeout(
                                             //     the start of the session or the
                                             //     time in g_timer;
     TPM2B_NONCE     *nonce                  // IN: indicator of the time base
-    );
+);
 
 //*** PolicyDigestClear()
 // Function to reset the policyDigest of a session
 void
 PolicyDigestClear(
     SESSION         *session
-    );
+);
 
 BOOL
 PolicySptCheckCondition(
@@ -97,6 +97,6 @@ PolicySptCheckCondition(
     BYTE            *opA,
     BYTE            *opB,
     UINT16           size
-    );
+);
 
 #endif  // _POLICY_SPT_FP_H_

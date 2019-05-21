@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _CRYPTECCKEYEXCHANGE_FP_H_
-#define    _CRYPTECCKEYEXCHANGE_FP_H_
+#ifndef    _CRYPT_ECC_KEY_EXCHANGE_FP_H_
+#define    _CRYPT_ECC_KEY_EXCHANGE_FP_H_
 
 #if CC_ZGen_2Phase == YES
 
@@ -57,7 +57,7 @@ CryptEcc2PhaseKeyExchange(
     TPM2B_ECC_PARAMETER     *deA,           // IN: ephemeral private TPM key
     TPMS_ECC_POINT          *QsB,           // IN: static public party B key
     TPMS_ECC_POINT          *QeB            // IN: ephemeral public party B key
-    );
+);
 #if ALG_SM2
 
 //*** SM2KeyExchange()
@@ -81,8 +81,8 @@ SM2KeyExchange(
     TPM2B_ECC_PARAMETER   *deAIn,        // IN: ephemeral private TPM key
     TPMS_ECC_POINT        *QsBIn,        // IN: static public party B key
     TPMS_ECC_POINT        *QeBIn         // IN: ephemeral public party B key
-    );
+);
 #endif
 #endif // CC_ZGen_2Phase
 
-#endif  // _CRYPTECCKEYEXCHANGE_FP_H_
+#endif  // _CRYPT_ECC_KEY_EXCHANGE_FP_H_

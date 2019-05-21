@@ -43,22 +43,22 @@
 #include    <stdio.h>
 #include    <time.h>
 
-FILE            *fDebug = NULL;
-const char      *fn = "DebugFile.txt";
+FILE        *fDebug = NULL;
+const char  *fn = "DebugFile.txt";
 
-static FILE *
+static FILE*
 fileOpen(
-    const char      *fn, 
-    const char      *mode
+    const char  *fn, 
+    const char  *mode
 )
 {
     FILE        *f;
-#   if defined _MSC_VER
+#if defined _MSC_VER
     if(fopen_s(&f, fn, mode) != 0)
         f = NULL;
-#   else
+#else
     f = fopen(fn, "w");
-#   endif
+#endif
     return f;
 }
 
@@ -72,19 +72,19 @@ DebugFileOpen(
     void
 )
 {
-#   if defined _MSC_VER
-    unsigned char           timeString[100];
-#   else
-    char                   *timeString;
-#   endif
-    time_t                  t = time(NULL);
+#if defined _MSC_VER
+    char    timeString[100];
+#else
+    char   *timeString;
+#endif
+    time_t  t = time(NULL);
 //
     // Get current date and time.
-#   if defined _MSC_VER
+#if defined _MSC_VER
     ctime_s(timeString, sizeof(timeString), &t);
-#   else
+#else
     timeString = ctime(&t);
-#   endif
+#endif
     // Try to open the debug file
     fDebug = fileOpen(fn, "w");
     if(fDebug)

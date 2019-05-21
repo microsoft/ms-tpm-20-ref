@@ -75,7 +75,7 @@
 //                              larger than is allowed for the scheme
 //      TPM_RC_SYMMETRIC        a storage key with no symmetric algorithm specified; 
 //                              or non-storage key with symmetric algorithm different 
-//                              from TPM_ALG_NULL
+//                              from ALG_NULL
 //      TPM_RC_TYPE             unknown object type;
 //                              'parentHandle' does not reference a restricted
 //                              decryption key in the storage hierarchy with both

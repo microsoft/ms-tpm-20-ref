@@ -43,7 +43,7 @@
 
 #include "Tpm.h"
 
-#if MATH_LIB == LTC
+#if defined(HASH_LIB_LTC) || defined(MATH_LIB_LTC) || defined(SYM_LIB_LTC)
 
 // This state is used because there is no way to pass the random number state
 // to LibTopCrypt. I do not think that this is currently an issue because...
@@ -93,4 +93,4 @@ LtcPoolInit(
     return pool;
 }
 
-#endif // MATH_LIB == LTC
+#endif // HASH_LIB_LTC || MATH_LIB_LTC || SYM_LIB_LTC

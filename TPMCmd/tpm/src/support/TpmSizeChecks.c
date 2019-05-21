@@ -93,6 +93,7 @@ TpmSizeChecks(
             }
         }
 
+#if 0
         printf("Size of OBJECT = %d\n", sizeof(OBJECT));
         printf("Size of components in TPMT_SENSITIVE = %d\n", sizeof(TPMT_SENSITIVE));
         printf("    TPMI_ALG_PUBLIC                 %d\n", sizeof(TPMI_ALG_PUBLIC));
@@ -100,9 +101,9 @@ TpmSizeChecks(
         printf("    TPM2B_DIGEST                    %d\n", sizeof(TPM2B_DIGEST));
         printf("    TPMU_SENSITIVE_COMPOSITE        %d\n",
                sizeof(TPMU_SENSITIVE_COMPOSITE));
-
-        // Make sure that the size of the context blob is large enough for the largest
-        // context
+#endif
+    // Make sure that the size of the context blob is large enough for the largest
+    // context
     // TPMS_CONTEXT_DATA contains two TPM2B values. That is not how this is 
     // implemented. Rather, the size field of the TPM2B_CONTEXT_DATA is used to 
     // determine the amount of data in the encrypted data. That part is not 
@@ -129,7 +130,7 @@ TpmSizeChecks(
 
             if(MAX_CONTEXT_SIZE != biggestContext)
             {
-                printf("MAX_CONTEXT_SIZE should be changed to %d\n", biggestContext);
+                printf("MAX_CONTEXT_SIZE should be changed to %d (%d)\n", biggestContext, MAX_CONTEXT_SIZE);
                 PASS = FALSE;
             }
         }

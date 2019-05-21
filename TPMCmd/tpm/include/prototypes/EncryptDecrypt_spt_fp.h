@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _ENCRYPTDECRYPT_SPT_FP_H_
-#define    _ENCRYPTDECRYPT_SPT_FP_H_
+#ifndef    _ENCRYPT_DECRYPT_SPT_FP_H_
+#define    _ENCRYPT_DECRYPT_SPT_FP_H_
 
 #if CC_EncryptDecrypt2
 
@@ -58,7 +58,7 @@ EncryptDecryptShared(
     TPM2B_IV              *ivIn,
     TPM2B_MAX_BUFFER      *inData,
     EncryptDecrypt_Out    *out
-    );
+);
 #endif // CC_EncryptDecrypt
 
-#endif  // _ENCRYPTDECRYPT_SPT_FP_H_
+#endif  // _ENCRYPT_DECRYPT_SPT_FP_H_

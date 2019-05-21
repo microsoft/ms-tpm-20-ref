@@ -34,11 +34,11 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Jan 28, 2019  Time: 12:39:25AM
+ *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _CRYPTSMAC_FP_H_
-#define    _CRYPTSMAC_FP_H_
+#ifndef    _CRYPT_SMAC_FP_H_
+#define    _CRYPT_SMAC_FP_H_
 
 #if SMAC_IMPLEMENTED
 
@@ -81,4 +81,4 @@ CryptMacEnd2B (
 );
 #endif // SMAC_IMPLEMENTED
 
-#endif  // _CRYPTSMAC_FP_H_
+#endif  // _CRYPT_SMAC_FP_H_
