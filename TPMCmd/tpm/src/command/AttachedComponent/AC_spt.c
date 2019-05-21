@@ -49,7 +49,7 @@ typedef struct {
 TPML_AC_CAPABILITIES acData0001 = {1, 
         {{TPM_AT_PV1, 0x01234567}}};
 
-acCapabilities  ac[1] = {0x0001, &acData0001};
+acCapabilities  ac[1] = { {0x0001, &acData0001} };
 
 #define NUM_AC  (sizeof(ac) / sizeof(acCapabilities))
 
