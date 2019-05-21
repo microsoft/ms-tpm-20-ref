@@ -33,15 +33,30 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Apr  8, 2019  Time: 03:18:09PM
+ *  Created by TpmStructures; Version 4.1 Dec 8, 2018
+ *  Date: Jan 28, 2019  Time: 12:36:23AM
  */
-
-#error MUST NOT BE COMPILED. KEPT FOR REFERENCE ONLY. USE "TpmProfile.h" INSTEAD.
-
 #ifndef _IMPLEMENTATION_H_
 #define _IMPLEMENTATION_H_
 
+    
+#include "TpmBuildSwitches.h"
+#include "BaseTypes.h"
+#include "TPMB.h"
+
+#undef TRUE
+#undef FALSE
+
+#ifndef MAX
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MAX3(a, b, c)           MAX((a), MAX((b), (c)))
+#define MAX4(a, b, c, d)        MAX((a), MAX3((b), (c), (d)))
+#define MAX5(a, b, c, d, e)     MAX((a), MAX4((b), (c), (d), (e)))
+#endif
+
+#ifndef MIN
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#endif
 // Table 2:3 - Definition of Base Types
 // Base Types are in BaseTypes.h
 
@@ -54,13 +69,23 @@
 #define CLEAR               0
 
 // Table 0:1 - Defines for Processor Values
+#ifndef BIG_ENDIAN_TPM
 #define BIG_ENDIAN_TPM              NO
+#endif // BIG_ENDIAN_TPM
 #define LITTLE_ENDIAN_TPM           !BIG_ENDIAN_TPM
+#ifndef MOST_SIGNIFICANT_BIT_0
 #define MOST_SIGNIFICANT_BIT_0      NO
+#endif // MOST_SIGNIFICANT_BIT_0
 #define LEAST_SIGNIFICANT_BIT_0     !MOST_SIGNIFICANT_BIT_0
+#ifndef AUTO_ALIGN
 #define AUTO_ALIGN                  NO
+#endif // AUTO_ALIGN
 
 // Table 0:3 - Defines for Key Size Constants
+#define RSA_KEY_SIZE_BITS_1024          RSA_ALLOWED_KEY_SIZE_1024
+#define RSA_KEY_SIZE_BITS_2048          RSA_ALLOWED_KEY_SIZE_2048
+#define MAX_RSA_KEY_BITS                2048
+#define MAX_RSA_KEY_BYTES               256
 
 // Table 0:4 - Defines for Implemented Curves
 #define ECC_NIST_P192                   NO
@@ -68,10 +93,15 @@
 #define ECC_NIST_P256                   YES
 #define ECC_NIST_P384                   YES
 #define ECC_NIST_P521                   NO
+#ifdef USE_WOLFCRYPT
+#define ECC_BN_P256                     NO
+#define ECC_SM2_P256                    NO
+#define ECC_BN_P638                     NO
+#else
 #define ECC_BN_P256                     YES
 #define ECC_BN_P638                     NO
 #define ECC_SM2_P256                    NO
-
+#endif
 #define ECC_CURVES                      \
             {TPM_ECC_BN_P256,   TPM_ECC_BN_P638,   TPM_ECC_NIST_P192,              \
              TPM_ECC_NIST_P224, TPM_ECC_NIST_P256, TPM_ECC_NIST_P384,              \
@@ -96,12 +126,24 @@
 
 // Table 0:7 - Defines for Implementation Values
 #define FIELD_UPGRADE_IMPLEMENTED       NO
+#if defined(__x86_64__) || defined(__x86_64) || defined(__amd64__) || defined(__amd64) || defined(_WIN64) || defined(_M_X64) || defined(_M_ARM64) || defined(__aarch64__)
+#define RADIX_BITS                      64
+#elif defined(__i386__) || defined(__i386) || defined(i386) || defined(_WIN32) || defined(_M_IX86) || defined(_M_ARM) || defined(__arm__) || defined(__thumb__)
 #define RADIX_BITS                      32
+#else
+#error "Unable to determine RADIX_BITS from compiler environment."
+#endif
 #define HASH_ALIGNMENT                  4
 #define SYMMETRIC_ALIGNMENT             4
+#ifdef USE_WOLFCRYPT
+#define HASH_LIB                        WOLF
+#define SYM_LIB                         WOLF
+#define MATH_LIB                        WOLF
+#else
 #define HASH_LIB                        OSSL
 #define SYM_LIB                         OSSL
 #define MATH_LIB                        OSSL
+#endif
 #define BSIZE                           UINT16
 #define PLATFORM_PCR                    24
 #define PCR_SELECT_MIN                  ((PLATFORM_PCR+7)/8)
@@ -146,7 +188,9 @@
 #define MAX_VENDOR_BUFFER_SIZE          1024
 #define TPM_MAX_DERIVATION_BITS         8192
 #define SIZE_OF_X509_SERIAL_NUMBER      20
-#define RSA_PRIVATE_SIZE                ((MAX_RSA_KEY_BYTES*5)/2)
+#define PRIMES                          5
+#define MAX_RSA_PRIME_SIZE              MAX_RSA_KEY_BYTES/2
+#define RSA_PRIVATE_SIZE                (PRIMES*MAX_RSA_PRIME_SIZE)
 #define PRIVATE_VENDOR_SPECIFIC_BYTES   RSA_PRIVATE_SIZE
 
 // Table 0:2 - Defines for Implemented Algorithms
@@ -179,9 +223,6 @@
 #define ALG_SHA1                        ALG_YES
 #define ALG_SHA256                      ALG_YES
 #define ALG_SHA384                      ALG_YES
-#define ALG_SHA3_256                    ALG_NO      /* Not specified by vendor */
-#define ALG_SHA3_384                    ALG_NO      /* Not specified by vendor */
-#define ALG_SHA3_512                    ALG_NO      /* Not specified by vendor */
 #define ALG_SHA512                      ALG_NO
 #define ALG_SM2                         (ALG_NO && ALG_ECC)
 #define ALG_SM3_256                     ALG_NO
@@ -190,98 +231,164 @@
 #define ALG_TDES                        ALG_NO
 #define ALG_XOR                         ALG_YES
 
-// Table 1:2 - Definition of TPM_ALG_ID Constants
+// Table 1:2 - Definition of TPM_ALG_ID Constants 
 typedef UINT16                          TPM_ALG_ID;
 #define TYPE_OF_TPM_ALG_ID              UINT16
 #define     ALG_ERROR_VALUE             0x0000
 #define TPM_ALG_ERROR                   (TPM_ALG_ID)(ALG_ERROR_VALUE)
 #define     ALG_RSA_VALUE               0x0001
+#if         ALG_RSA
 #define TPM_ALG_RSA                     (TPM_ALG_ID)(ALG_RSA_VALUE)
+#endif   // ALG_RSA
 #define     ALG_TDES_VALUE              0x0003
+#if         ALG_TDES
 #define TPM_ALG_TDES                    (TPM_ALG_ID)(ALG_TDES_VALUE)
+#endif   // ALG_TDES
 #define     ALG_SHA_VALUE               0x0004
+#if         ALG_SHA
 #define TPM_ALG_SHA                     (TPM_ALG_ID)(ALG_SHA_VALUE)
+#endif   // ALG_SHA
 #define     ALG_SHA1_VALUE              0x0004
+#if         ALG_SHA1
 #define TPM_ALG_SHA1                    (TPM_ALG_ID)(ALG_SHA1_VALUE)
+#endif   // ALG_SHA1
 #define     ALG_HMAC_VALUE              0x0005
+#if         ALG_HMAC
 #define TPM_ALG_HMAC                    (TPM_ALG_ID)(ALG_HMAC_VALUE)
+#endif   // ALG_HMAC
 #define     ALG_AES_VALUE               0x0006
+#if         ALG_AES
 #define TPM_ALG_AES                     (TPM_ALG_ID)(ALG_AES_VALUE)
+#endif   // ALG_AES
 #define     ALG_MGF1_VALUE              0x0007
+#if         ALG_MGF1
 #define TPM_ALG_MGF1                    (TPM_ALG_ID)(ALG_MGF1_VALUE)
+#endif   // ALG_MGF1
 #define     ALG_KEYEDHASH_VALUE         0x0008
+#if         ALG_KEYEDHASH
 #define TPM_ALG_KEYEDHASH               (TPM_ALG_ID)(ALG_KEYEDHASH_VALUE)
+#endif   // ALG_KEYEDHASH
 #define     ALG_XOR_VALUE               0x000A
+#if         ALG_XOR
 #define TPM_ALG_XOR                     (TPM_ALG_ID)(ALG_XOR_VALUE)
+#endif   // ALG_XOR
 #define     ALG_SHA256_VALUE            0x000B
+#if         ALG_SHA256
 #define TPM_ALG_SHA256                  (TPM_ALG_ID)(ALG_SHA256_VALUE)
+#endif   // ALG_SHA256
 #define     ALG_SHA384_VALUE            0x000C
+#if         ALG_SHA384
 #define TPM_ALG_SHA384                  (TPM_ALG_ID)(ALG_SHA384_VALUE)
+#endif   // ALG_SHA384
 #define     ALG_SHA512_VALUE            0x000D
+#if         ALG_SHA512
 #define TPM_ALG_SHA512                  (TPM_ALG_ID)(ALG_SHA512_VALUE)
+#endif   // ALG_SHA512
 #define     ALG_NULL_VALUE              0x0010
 #define TPM_ALG_NULL                    (TPM_ALG_ID)(ALG_NULL_VALUE)
 #define     ALG_SM3_256_VALUE           0x0012
+#if         ALG_SM3_256
 #define TPM_ALG_SM3_256                 (TPM_ALG_ID)(ALG_SM3_256_VALUE)
+#endif   // ALG_SM3_256
 #define     ALG_SM4_VALUE               0x0013
+#if         ALG_SM4
 #define TPM_ALG_SM4                     (TPM_ALG_ID)(ALG_SM4_VALUE)
+#endif   // ALG_SM4
 #define     ALG_RSASSA_VALUE            0x0014
+#if         ALG_RSASSA
 #define TPM_ALG_RSASSA                  (TPM_ALG_ID)(ALG_RSASSA_VALUE)
+#endif   // ALG_RSASSA
 #define     ALG_RSAES_VALUE             0x0015
+#if         ALG_RSAES
 #define TPM_ALG_RSAES                   (TPM_ALG_ID)(ALG_RSAES_VALUE)
+#endif   // ALG_RSAES
 #define     ALG_RSAPSS_VALUE            0x0016
+#if         ALG_RSAPSS
 #define TPM_ALG_RSAPSS                  (TPM_ALG_ID)(ALG_RSAPSS_VALUE)
+#endif   // ALG_RSAPSS
 #define     ALG_OAEP_VALUE              0x0017
+#if         ALG_OAEP
 #define TPM_ALG_OAEP                    (TPM_ALG_ID)(ALG_OAEP_VALUE)
+#endif   // ALG_OAEP
 #define     ALG_ECDSA_VALUE             0x0018
+#if         ALG_ECDSA
 #define TPM_ALG_ECDSA                   (TPM_ALG_ID)(ALG_ECDSA_VALUE)
+#endif   // ALG_ECDSA
 #define     ALG_ECDH_VALUE              0x0019
+#if         ALG_ECDH
 #define TPM_ALG_ECDH                    (TPM_ALG_ID)(ALG_ECDH_VALUE)
+#endif   // ALG_ECDH
 #define     ALG_ECDAA_VALUE             0x001A
+#if         ALG_ECDAA
 #define TPM_ALG_ECDAA                   (TPM_ALG_ID)(ALG_ECDAA_VALUE)
+#endif   // ALG_ECDAA
 #define     ALG_SM2_VALUE               0x001B
+#if         ALG_SM2
 #define TPM_ALG_SM2                     (TPM_ALG_ID)(ALG_SM2_VALUE)
+#endif   // ALG_SM2
 #define     ALG_ECSCHNORR_VALUE         0x001C
+#if         ALG_ECSCHNORR
 #define TPM_ALG_ECSCHNORR               (TPM_ALG_ID)(ALG_ECSCHNORR_VALUE)
+#endif   // ALG_ECSCHNORR
 #define     ALG_ECMQV_VALUE             0x001D
+#if         ALG_ECMQV
 #define TPM_ALG_ECMQV                   (TPM_ALG_ID)(ALG_ECMQV_VALUE)
+#endif   // ALG_ECMQV
 #define     ALG_KDF1_SP800_56A_VALUE    0x0020
+#if         ALG_KDF1_SP800_56A
 #define TPM_ALG_KDF1_SP800_56A          (TPM_ALG_ID)(ALG_KDF1_SP800_56A_VALUE)
+#endif   // ALG_KDF1_SP800_56A
 #define     ALG_KDF2_VALUE              0x0021
+#if         ALG_KDF2
 #define TPM_ALG_KDF2                    (TPM_ALG_ID)(ALG_KDF2_VALUE)
+#endif   // ALG_KDF2
 #define     ALG_KDF1_SP800_108_VALUE    0x0022
+#if         ALG_KDF1_SP800_108
 #define TPM_ALG_KDF1_SP800_108          (TPM_ALG_ID)(ALG_KDF1_SP800_108_VALUE)
+#endif   // ALG_KDF1_SP800_108
 #define     ALG_ECC_VALUE               0x0023
+#if         ALG_ECC
 #define TPM_ALG_ECC                     (TPM_ALG_ID)(ALG_ECC_VALUE)
+#endif   // ALG_ECC
 #define     ALG_SYMCIPHER_VALUE         0x0025
+#if         ALG_SYMCIPHER
 #define TPM_ALG_SYMCIPHER               (TPM_ALG_ID)(ALG_SYMCIPHER_VALUE)
+#endif   // ALG_SYMCIPHER
 #define     ALG_CAMELLIA_VALUE          0x0026
+#if         ALG_CAMELLIA
 #define TPM_ALG_CAMELLIA                (TPM_ALG_ID)(ALG_CAMELLIA_VALUE)
-#define     ALG_SHA3_256_VALUE          0x0027
-#define TPM_ALG_SHA3_256                (TPM_ALG_ID)(ALG_SHA3_256_VALUE)
-#define     ALG_SHA3_384_VALUE          0x0028
-#define TPM_ALG_SHA3_384                (TPM_ALG_ID)(ALG_SHA3_384_VALUE)
-#define     ALG_SHA3_512_VALUE          0x0029
-#define TPM_ALG_SHA3_512                (TPM_ALG_ID)(ALG_SHA3_512_VALUE)
+#endif   // ALG_CAMELLIA
 #define     ALG_CMAC_VALUE              0x003F
+#if         ALG_CMAC
 #define TPM_ALG_CMAC                    (TPM_ALG_ID)(ALG_CMAC_VALUE)
+#endif   // ALG_CMAC
 #define     ALG_CTR_VALUE               0x0040
+#if         ALG_CTR
 #define TPM_ALG_CTR                     (TPM_ALG_ID)(ALG_CTR_VALUE)
+#endif   // ALG_CTR
 #define     ALG_OFB_VALUE               0x0041
+#if         ALG_OFB
 #define TPM_ALG_OFB                     (TPM_ALG_ID)(ALG_OFB_VALUE)
+#endif   // ALG_OFB
 #define     ALG_CBC_VALUE               0x0042
+#if         ALG_CBC
 #define TPM_ALG_CBC                     (TPM_ALG_ID)(ALG_CBC_VALUE)
+#endif   // ALG_CBC
 #define     ALG_CFB_VALUE               0x0043
+#if         ALG_CFB
 #define TPM_ALG_CFB                     (TPM_ALG_ID)(ALG_CFB_VALUE)
+#endif   // ALG_CFB
 #define     ALG_ECB_VALUE               0x0044
+#if         ALG_ECB
 #define TPM_ALG_ECB                     (TPM_ALG_ID)(ALG_ECB_VALUE)
+#endif   // ALG_ECB
 // Values derived from Table 1:2
 #define     ALG_FIRST_VALUE             0x0001
 #define TPM_ALG_FIRST                   (TPM_ALG_ID)(ALG_FIRST_VALUE)
 #define     ALG_LAST_VALUE              0x0044
 #define TPM_ALG_LAST                    (TPM_ALG_ID)(ALG_LAST_VALUE)
 
-// Table 1:3 - Definition of TPM_ECC_CURVE Constants
+// Table 1:3 - Definition of TPM_ECC_CURVE Constants 
 typedef UINT16              TPM_ECC_CURVE;
 #define TYPE_OF_TPM_ECC_CURVE   UINT16
 #define TPM_ECC_NONE        (TPM_ECC_CURVE)(0x0000)
@@ -297,56 +404,46 @@ typedef UINT16              TPM_ECC_CURVE;
 // Table 1:12 - Defines for SHA1 Hash Values
 #define SHA1_DIGEST_SIZE    20
 #define SHA1_BLOCK_SIZE     64
+#define SHA1_DER_SIZE       15
+#define SHA1_DER            \
+            0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2B, 0x0E,                        \
+            0x03, 0x02, 0x1A, 0x05, 0x00, 0x04, 0x14
 
 // Table 1:13 - Defines for SHA256 Hash Values
 #define SHA256_DIGEST_SIZE  32
 #define SHA256_BLOCK_SIZE   64
+#define SHA256_DER_SIZE     19
+#define SHA256_DER          \
+            0x30, 0x31, 0x30, 0x0D, 0x06, 0x09, 0x60, 0x86,                        \
+            0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, 0x05,                        \
+            0x00, 0x04, 0x20
 
 // Table 1:14 - Defines for SHA384 Hash Values
 #define SHA384_DIGEST_SIZE  48
 #define SHA384_BLOCK_SIZE   128
+#define SHA384_DER_SIZE     19
+#define SHA384_DER          \
+            0x30, 0x41, 0x30, 0x0D, 0x06, 0x09, 0x60, 0x86,                        \
+            0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02, 0x05,                        \
+            0x00, 0x04, 0x30
 
 // Table 1:15 - Defines for SHA512 Hash Values
 #define SHA512_DIGEST_SIZE  64
 #define SHA512_BLOCK_SIZE   128
+#define SHA512_DER_SIZE     19
+#define SHA512_DER          \
+            0x30, 0x51, 0x30, 0x0D, 0x06, 0x09, 0x60, 0x86,                        \
+            0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03, 0x05,                        \
+            0x00, 0x04, 0x40
 
 // Table 1:16 - Defines for SM3_256 Hash Values
 #define SM3_256_DIGEST_SIZE     32
 #define SM3_256_BLOCK_SIZE      64
-
-// Table 1:16 - Defines for SHA3_256 Hash Values
-#define SHA3_256_DIGEST_SIZE    32
-#define SHA3_256_BLOCK_SIZE     136
-
-// Table 1:16 - Defines for SHA3_384 Hash Values
-#define SHA3_384_DIGEST_SIZE    48
-#define SHA3_384_BLOCK_SIZE     104
-
-// Table 1:16 - Defines for SHA3_512 Hash Values
-#define SHA3_512_DIGEST_SIZE    64
-#define SHA3_512_BLOCK_SIZE     72
-
-// Table 1:00 - Defines for RSA Asymmetric Cipher Algorithm Constants
-#define RSA_1024                    (ALG_RSA & YES)
-#define RSA_2048                    (ALG_RSA & YES)
-#define RSA_3072                    (ALG_RSA & NO)
-#define RSA_4096                    (ALG_RSA & NO)
-#define RSA_KEY_SIZES_BITS          \
-            (1024 * RSA_1024),  (2048 * RSA_2048), (3072 * RSA_3072),              \
-             (4096 * RSA_4096)
-#if   RSA_4096
-#   define RSA_MAX_KEY_SIZE_BITS    4096
-#elif RSA_3072
-#   define RSA_MAX_KEY_SIZE_BITS    3072
-#elif RSA_2048
-#   define RSA_MAX_KEY_SIZE_BITS    2048
-#elif RSA_1024
-#   define RSA_MAX_KEY_SIZE_BITS    1024
-#else
-#   define RSA_MAX_KEY_SIZE_BITS    0
-#endif
-#define MAX_RSA_KEY_BITS            RSA_MAX_KEY_SIZE_BITS
-#define MAX_RSA_KEY_BYTES           ((RSA_MAX_KEY_SIZE_BITS + 7) / 8)
+#define SM3_256_DER_SIZE        18
+#define SM3_256_DER             \
+            0x30, 0x30, 0x30, 0x0C, 0x06, 0x08, 0x2A, 0x81,                        \
+            0x1C, 0x81, 0x45, 0x01, 0x83, 0x11, 0x05, 0x00,                        \
+            0x04, 0x20
 
 // Table 1:17 - Defines for AES Symmetric Cipher Algorithm Constants
 #define AES_128                     (ALG_AES & YES)
@@ -360,11 +457,11 @@ typedef UINT16              TPM_ECC_CURVE;
 #   define AES_MAX_KEY_SIZE_BITS    192
 #elif AES_128
 #   define AES_MAX_KEY_SIZE_BITS    128
-#else
+#else 
 #   define AES_MAX_KEY_SIZE_BITS    0
-#endif
+#endif 
 #define MAX_AES_KEY_BITS            AES_MAX_KEY_SIZE_BITS
-#define MAX_AES_KEY_BYTES           ((AES_MAX_KEY_SIZE_BITS + 7) / 8)
+#define AES_MAX_KEY_SIZE            ((AES_MAX_KEY_SIZE_BITS + 7) / 8)
 #define AES_128_BLOCK_SIZE_BYTES    (AES_128 * 16)
 #define AES_192_BLOCK_SIZE_BYTES    (AES_192 * 16)
 #define AES_256_BLOCK_SIZE_BYTES    (AES_256 * 16)
@@ -373,9 +470,9 @@ typedef UINT16              TPM_ECC_CURVE;
             AES_256_BLOCK_SIZE_BYTES
 #if   ALG_AES
 #   define AES_MAX_BLOCK_SIZE       16
-#else
+#else 
 #   define AES_MAX_BLOCK_SIZE       0
-#endif
+#endif 
 #define MAX_AES_BLOCK_SIZE_BYTES    AES_MAX_BLOCK_SIZE
 
 // Table 1:18 - Defines for SM4 Symmetric Cipher Algorithm Constants
@@ -383,18 +480,18 @@ typedef UINT16              TPM_ECC_CURVE;
 #define SM4_KEY_SIZES_BITS          (128 * SM4_128)
 #if   SM4_128
 #   define SM4_MAX_KEY_SIZE_BITS    128
-#else
+#else 
 #   define SM4_MAX_KEY_SIZE_BITS    0
-#endif
+#endif 
 #define MAX_SM4_KEY_BITS            SM4_MAX_KEY_SIZE_BITS
-#define MAX_SM4_KEY_BYTES           ((SM4_MAX_KEY_SIZE_BITS + 7) / 8)
+#define SM4_MAX_KEY_SIZE            ((SM4_MAX_KEY_SIZE_BITS + 7) / 8)
 #define SM4_128_BLOCK_SIZE_BYTES    (SM4_128 * 16)
 #define SM4_BLOCK_SIZES             SM4_128_BLOCK_SIZE_BYTES
 #if   ALG_SM4
 #   define SM4_MAX_BLOCK_SIZE       16
-#else
+#else 
 #   define SM4_MAX_BLOCK_SIZE       0
-#endif
+#endif 
 #define MAX_SM4_BLOCK_SIZE_BYTES    SM4_MAX_BLOCK_SIZE
 
 // Table 1:19 - Defines for CAMELLIA Symmetric Cipher Algorithm Constants
@@ -409,11 +506,11 @@ typedef UINT16              TPM_ECC_CURVE;
 #   define CAMELLIA_MAX_KEY_SIZE_BITS   192
 #elif CAMELLIA_128
 #   define CAMELLIA_MAX_KEY_SIZE_BITS   128
-#else
+#else 
 #   define CAMELLIA_MAX_KEY_SIZE_BITS   0
-#endif
+#endif 
 #define MAX_CAMELLIA_KEY_BITS           CAMELLIA_MAX_KEY_SIZE_BITS
-#define MAX_CAMELLIA_KEY_BYTES          ((CAMELLIA_MAX_KEY_SIZE_BITS + 7) / 8)
+#define CAMELLIA_MAX_KEY_SIZE           ((CAMELLIA_MAX_KEY_SIZE_BITS + 7) / 8)
 #define CAMELLIA_128_BLOCK_SIZE_BYTES   (CAMELLIA_128 * 16)
 #define CAMELLIA_192_BLOCK_SIZE_BYTES   (CAMELLIA_192 * 16)
 #define CAMELLIA_256_BLOCK_SIZE_BYTES   (CAMELLIA_256 * 16)
@@ -422,9 +519,9 @@ typedef UINT16              TPM_ECC_CURVE;
             CAMELLIA_256_BLOCK_SIZE_BYTES
 #if   ALG_CAMELLIA
 #   define CAMELLIA_MAX_BLOCK_SIZE      16
-#else
+#else 
 #   define CAMELLIA_MAX_BLOCK_SIZE      0
-#endif
+#endif 
 #define MAX_CAMELLIA_BLOCK_SIZE_BYTES   CAMELLIA_MAX_BLOCK_SIZE
 
 // Table 1:17 - Defines for TDES Symmetric Cipher Algorithm Constants
@@ -435,20 +532,20 @@ typedef UINT16              TPM_ECC_CURVE;
 #   define TDES_MAX_KEY_SIZE_BITS   192
 #elif TDES_128
 #   define TDES_MAX_KEY_SIZE_BITS   128
-#else
+#else 
 #   define TDES_MAX_KEY_SIZE_BITS   0
-#endif
+#endif 
 #define MAX_TDES_KEY_BITS           TDES_MAX_KEY_SIZE_BITS
-#define MAX_TDES_KEY_BYTES          ((TDES_MAX_KEY_SIZE_BITS + 7) / 8)
+#define TDES_MAX_KEY_SIZE           ((TDES_MAX_KEY_SIZE_BITS + 7) / 8)
 #define TDES_128_BLOCK_SIZE_BYTES   (TDES_128 * 8)
 #define TDES_192_BLOCK_SIZE_BYTES   (TDES_192 * 8)
 #define TDES_BLOCK_SIZES            \
             TDES_128_BLOCK_SIZE_BYTES, TDES_192_BLOCK_SIZE_BYTES
 #if   ALG_TDES
 #   define TDES_MAX_BLOCK_SIZE      8
-#else
+#else 
 #   define TDES_MAX_BLOCK_SIZE      0
-#endif
+#endif 
 #define MAX_TDES_BLOCK_SIZE_BYTES   TDES_MAX_BLOCK_SIZE
 
 // Table 0:5 - Defines for Implemented Commands
@@ -572,135 +669,373 @@ typedef UINT16              TPM_ECC_CURVE;
 #define CC_VerifySignature                  CC_YES
 #define CC_ZGen_2Phase                      (CC_YES && ALG_ECC)
 
-// Table 2:12 - Definition of TPM_CC Constants
+// Table 2:12 - Definition of TPM_CC Constants 
 typedef UINT32                              TPM_CC;
 #define TYPE_OF_TPM_CC                      UINT32
+#if         CC_NV_UndefineSpaceSpecial
 #define TPM_CC_NV_UndefineSpaceSpecial      (TPM_CC)(0x0000011F)
+#endif
+#if         CC_EvictControl
 #define TPM_CC_EvictControl                 (TPM_CC)(0x00000120)
+#endif
+#if         CC_HierarchyControl
 #define TPM_CC_HierarchyControl             (TPM_CC)(0x00000121)
+#endif
+#if         CC_NV_UndefineSpace
 #define TPM_CC_NV_UndefineSpace             (TPM_CC)(0x00000122)
+#endif
+#if         CC_ChangeEPS
 #define TPM_CC_ChangeEPS                    (TPM_CC)(0x00000124)
+#endif
+#if         CC_ChangePPS
 #define TPM_CC_ChangePPS                    (TPM_CC)(0x00000125)
+#endif
+#if         CC_Clear
 #define TPM_CC_Clear                        (TPM_CC)(0x00000126)
+#endif
+#if         CC_ClearControl
 #define TPM_CC_ClearControl                 (TPM_CC)(0x00000127)
+#endif
+#if         CC_ClockSet
 #define TPM_CC_ClockSet                     (TPM_CC)(0x00000128)
+#endif
+#if         CC_HierarchyChangeAuth
 #define TPM_CC_HierarchyChangeAuth          (TPM_CC)(0x00000129)
+#endif
+#if         CC_NV_DefineSpace
 #define TPM_CC_NV_DefineSpace               (TPM_CC)(0x0000012A)
+#endif
+#if         CC_PCR_Allocate
 #define TPM_CC_PCR_Allocate                 (TPM_CC)(0x0000012B)
+#endif
+#if         CC_PCR_SetAuthPolicy
 #define TPM_CC_PCR_SetAuthPolicy            (TPM_CC)(0x0000012C)
+#endif
+#if         CC_PP_Commands
 #define TPM_CC_PP_Commands                  (TPM_CC)(0x0000012D)
+#endif
+#if         CC_SetPrimaryPolicy
 #define TPM_CC_SetPrimaryPolicy             (TPM_CC)(0x0000012E)
+#endif
+#if         CC_FieldUpgradeStart
 #define TPM_CC_FieldUpgradeStart            (TPM_CC)(0x0000012F)
+#endif
+#if         CC_ClockRateAdjust
 #define TPM_CC_ClockRateAdjust              (TPM_CC)(0x00000130)
+#endif
+#if         CC_CreatePrimary
 #define TPM_CC_CreatePrimary                (TPM_CC)(0x00000131)
+#endif
+#if         CC_NV_GlobalWriteLock
 #define TPM_CC_NV_GlobalWriteLock           (TPM_CC)(0x00000132)
+#endif
+#if         CC_GetCommandAuditDigest
 #define TPM_CC_GetCommandAuditDigest        (TPM_CC)(0x00000133)
+#endif
+#if         CC_NV_Increment
 #define TPM_CC_NV_Increment                 (TPM_CC)(0x00000134)
+#endif
+#if         CC_NV_SetBits
 #define TPM_CC_NV_SetBits                   (TPM_CC)(0x00000135)
+#endif
+#if         CC_NV_Extend
 #define TPM_CC_NV_Extend                    (TPM_CC)(0x00000136)
+#endif
+#if         CC_NV_Write
 #define TPM_CC_NV_Write                     (TPM_CC)(0x00000137)
+#endif
+#if         CC_NV_WriteLock
 #define TPM_CC_NV_WriteLock                 (TPM_CC)(0x00000138)
+#endif
+#if         CC_DictionaryAttackLockReset
 #define TPM_CC_DictionaryAttackLockReset    (TPM_CC)(0x00000139)
+#endif
+#if         CC_DictionaryAttackParameters
 #define TPM_CC_DictionaryAttackParameters   (TPM_CC)(0x0000013A)
+#endif
+#if         CC_NV_ChangeAuth
 #define TPM_CC_NV_ChangeAuth                (TPM_CC)(0x0000013B)
+#endif
+#if         CC_PCR_Event
 #define TPM_CC_PCR_Event                    (TPM_CC)(0x0000013C)
+#endif
+#if         CC_PCR_Reset
 #define TPM_CC_PCR_Reset                    (TPM_CC)(0x0000013D)
+#endif
+#if         CC_SequenceComplete
 #define TPM_CC_SequenceComplete             (TPM_CC)(0x0000013E)
+#endif
+#if         CC_SetAlgorithmSet
 #define TPM_CC_SetAlgorithmSet              (TPM_CC)(0x0000013F)
+#endif
+#if         CC_SetCommandCodeAuditStatus
 #define TPM_CC_SetCommandCodeAuditStatus    (TPM_CC)(0x00000140)
+#endif
+#if         CC_FieldUpgradeData
 #define TPM_CC_FieldUpgradeData             (TPM_CC)(0x00000141)
+#endif
+#if         CC_IncrementalSelfTest
 #define TPM_CC_IncrementalSelfTest          (TPM_CC)(0x00000142)
+#endif
+#if         CC_SelfTest
 #define TPM_CC_SelfTest                     (TPM_CC)(0x00000143)
+#endif
+#if         CC_Startup
 #define TPM_CC_Startup                      (TPM_CC)(0x00000144)
+#endif
+#if         CC_Shutdown
 #define TPM_CC_Shutdown                     (TPM_CC)(0x00000145)
+#endif
+#if         CC_StirRandom
 #define TPM_CC_StirRandom                   (TPM_CC)(0x00000146)
+#endif
+#if         CC_ActivateCredential
 #define TPM_CC_ActivateCredential           (TPM_CC)(0x00000147)
+#endif
+#if         CC_Certify
 #define TPM_CC_Certify                      (TPM_CC)(0x00000148)
+#endif
+#if         CC_PolicyNV
 #define TPM_CC_PolicyNV                     (TPM_CC)(0x00000149)
+#endif
+#if         CC_CertifyCreation
 #define TPM_CC_CertifyCreation              (TPM_CC)(0x0000014A)
+#endif
+#if         CC_Duplicate
 #define TPM_CC_Duplicate                    (TPM_CC)(0x0000014B)
+#endif
+#if         CC_GetTime
 #define TPM_CC_GetTime                      (TPM_CC)(0x0000014C)
+#endif
+#if         CC_GetSessionAuditDigest
 #define TPM_CC_GetSessionAuditDigest        (TPM_CC)(0x0000014D)
+#endif
+#if         CC_NV_Read
 #define TPM_CC_NV_Read                      (TPM_CC)(0x0000014E)
+#endif
+#if         CC_NV_ReadLock
 #define TPM_CC_NV_ReadLock                  (TPM_CC)(0x0000014F)
+#endif
+#if         CC_ObjectChangeAuth
 #define TPM_CC_ObjectChangeAuth             (TPM_CC)(0x00000150)
+#endif
+#if         CC_PolicySecret
 #define TPM_CC_PolicySecret                 (TPM_CC)(0x00000151)
+#endif
+#if         CC_Rewrap
 #define TPM_CC_Rewrap                       (TPM_CC)(0x00000152)
+#endif
+#if         CC_Create
 #define TPM_CC_Create                       (TPM_CC)(0x00000153)
+#endif
+#if         CC_ECDH_ZGen
 #define TPM_CC_ECDH_ZGen                    (TPM_CC)(0x00000154)
+#endif
+#if         CC_HMAC
 #define TPM_CC_HMAC                         (TPM_CC)(0x00000155)
+#endif
+#if         CC_MAC
 #define TPM_CC_MAC                          (TPM_CC)(0x00000155)
+#endif
+#if         CC_Import
 #define TPM_CC_Import                       (TPM_CC)(0x00000156)
+#endif
+#if         CC_Load
 #define TPM_CC_Load                         (TPM_CC)(0x00000157)
+#endif
+#if         CC_Quote
 #define TPM_CC_Quote                        (TPM_CC)(0x00000158)
+#endif
+#if         CC_RSA_Decrypt
 #define TPM_CC_RSA_Decrypt                  (TPM_CC)(0x00000159)
+#endif
+#if         CC_HMAC_Start
 #define TPM_CC_HMAC_Start                   (TPM_CC)(0x0000015B)
+#endif
+#if         CC_MAC_Start
 #define TPM_CC_MAC_Start                    (TPM_CC)(0x0000015B)
+#endif
+#if         CC_SequenceUpdate
 #define TPM_CC_SequenceUpdate               (TPM_CC)(0x0000015C)
+#endif
+#if         CC_Sign
 #define TPM_CC_Sign                         (TPM_CC)(0x0000015D)
+#endif
+#if         CC_Unseal
 #define TPM_CC_Unseal                       (TPM_CC)(0x0000015E)
+#endif
+#if         CC_PolicySigned
 #define TPM_CC_PolicySigned                 (TPM_CC)(0x00000160)
+#endif
+#if         CC_ContextLoad
 #define TPM_CC_ContextLoad                  (TPM_CC)(0x00000161)
+#endif
+#if         CC_ContextSave
 #define TPM_CC_ContextSave                  (TPM_CC)(0x00000162)
+#endif
+#if         CC_ECDH_KeyGen
 #define TPM_CC_ECDH_KeyGen                  (TPM_CC)(0x00000163)
+#endif
+#if         CC_EncryptDecrypt
 #define TPM_CC_EncryptDecrypt               (TPM_CC)(0x00000164)
+#endif
+#if         CC_FlushContext
 #define TPM_CC_FlushContext                 (TPM_CC)(0x00000165)
+#endif
+#if         CC_LoadExternal
 #define TPM_CC_LoadExternal                 (TPM_CC)(0x00000167)
+#endif
+#if         CC_MakeCredential
 #define TPM_CC_MakeCredential               (TPM_CC)(0x00000168)
+#endif
+#if         CC_NV_ReadPublic
 #define TPM_CC_NV_ReadPublic                (TPM_CC)(0x00000169)
+#endif
+#if         CC_PolicyAuthorize
 #define TPM_CC_PolicyAuthorize              (TPM_CC)(0x0000016A)
+#endif
+#if         CC_PolicyAuthValue
 #define TPM_CC_PolicyAuthValue              (TPM_CC)(0x0000016B)
+#endif
+#if         CC_PolicyCommandCode
 #define TPM_CC_PolicyCommandCode            (TPM_CC)(0x0000016C)
+#endif
+#if         CC_PolicyCounterTimer
 #define TPM_CC_PolicyCounterTimer           (TPM_CC)(0x0000016D)
+#endif
+#if         CC_PolicyCpHash
 #define TPM_CC_PolicyCpHash                 (TPM_CC)(0x0000016E)
+#endif
+#if         CC_PolicyLocality
 #define TPM_CC_PolicyLocality               (TPM_CC)(0x0000016F)
+#endif
+#if         CC_PolicyNameHash
 #define TPM_CC_PolicyNameHash               (TPM_CC)(0x00000170)
+#endif
+#if         CC_PolicyOR
 #define TPM_CC_PolicyOR                     (TPM_CC)(0x00000171)
+#endif
+#if         CC_PolicyTicket
 #define TPM_CC_PolicyTicket                 (TPM_CC)(0x00000172)
+#endif
+#if         CC_ReadPublic
 #define TPM_CC_ReadPublic                   (TPM_CC)(0x00000173)
+#endif
+#if         CC_RSA_Encrypt
 #define TPM_CC_RSA_Encrypt                  (TPM_CC)(0x00000174)
+#endif
+#if         CC_StartAuthSession
 #define TPM_CC_StartAuthSession             (TPM_CC)(0x00000176)
+#endif
+#if         CC_VerifySignature
 #define TPM_CC_VerifySignature              (TPM_CC)(0x00000177)
+#endif
+#if         CC_ECC_Parameters
 #define TPM_CC_ECC_Parameters               (TPM_CC)(0x00000178)
+#endif
+#if         CC_FirmwareRead
 #define TPM_CC_FirmwareRead                 (TPM_CC)(0x00000179)
+#endif
+#if         CC_GetCapability
 #define TPM_CC_GetCapability                (TPM_CC)(0x0000017A)
+#endif
+#if         CC_GetRandom
 #define TPM_CC_GetRandom                    (TPM_CC)(0x0000017B)
+#endif
+#if         CC_GetTestResult
 #define TPM_CC_GetTestResult                (TPM_CC)(0x0000017C)
+#endif
+#if         CC_Hash
 #define TPM_CC_Hash                         (TPM_CC)(0x0000017D)
+#endif
+#if         CC_PCR_Read
 #define TPM_CC_PCR_Read                     (TPM_CC)(0x0000017E)
+#endif
+#if         CC_PolicyPCR
 #define TPM_CC_PolicyPCR                    (TPM_CC)(0x0000017F)
+#endif
+#if         CC_PolicyRestart
 #define TPM_CC_PolicyRestart                (TPM_CC)(0x00000180)
+#endif
+#if         CC_ReadClock
 #define TPM_CC_ReadClock                    (TPM_CC)(0x00000181)
+#endif
+#if         CC_PCR_Extend
 #define TPM_CC_PCR_Extend                   (TPM_CC)(0x00000182)
+#endif
+#if         CC_PCR_SetAuthValue
 #define TPM_CC_PCR_SetAuthValue             (TPM_CC)(0x00000183)
+#endif
+#if         CC_NV_Certify
 #define TPM_CC_NV_Certify                   (TPM_CC)(0x00000184)
+#endif
+#if         CC_EventSequenceComplete
 #define TPM_CC_EventSequenceComplete        (TPM_CC)(0x00000185)
+#endif
+#if         CC_HashSequenceStart
 #define TPM_CC_HashSequenceStart            (TPM_CC)(0x00000186)
+#endif
+#if         CC_PolicyPhysicalPresence
 #define TPM_CC_PolicyPhysicalPresence       (TPM_CC)(0x00000187)
+#endif
+#if         CC_PolicyDuplicationSelect
 #define TPM_CC_PolicyDuplicationSelect      (TPM_CC)(0x00000188)
+#endif
+#if         CC_PolicyGetDigest
 #define TPM_CC_PolicyGetDigest              (TPM_CC)(0x00000189)
+#endif
+#if         CC_TestParms
 #define TPM_CC_TestParms                    (TPM_CC)(0x0000018A)
+#endif
+#if         CC_Commit
 #define TPM_CC_Commit                       (TPM_CC)(0x0000018B)
+#endif
+#if         CC_PolicyPassword
 #define TPM_CC_PolicyPassword               (TPM_CC)(0x0000018C)
+#endif
+#if         CC_ZGen_2Phase
 #define TPM_CC_ZGen_2Phase                  (TPM_CC)(0x0000018D)
+#endif
+#if         CC_EC_Ephemeral
 #define TPM_CC_EC_Ephemeral                 (TPM_CC)(0x0000018E)
+#endif
+#if         CC_PolicyNvWritten
 #define TPM_CC_PolicyNvWritten              (TPM_CC)(0x0000018F)
+#endif
+#if         CC_PolicyTemplate
 #define TPM_CC_PolicyTemplate               (TPM_CC)(0x00000190)
+#endif
+#if         CC_CreateLoaded
 #define TPM_CC_CreateLoaded                 (TPM_CC)(0x00000191)
+#endif
+#if         CC_PolicyAuthorizeNV
 #define TPM_CC_PolicyAuthorizeNV            (TPM_CC)(0x00000192)
+#endif
+#if         CC_EncryptDecrypt2
 #define TPM_CC_EncryptDecrypt2              (TPM_CC)(0x00000193)
+#endif
+#if         CC_AC_GetCapability
 #define TPM_CC_AC_GetCapability             (TPM_CC)(0x00000194)
+#endif
+#if         CC_AC_Send
 #define TPM_CC_AC_Send                      (TPM_CC)(0x00000195)
+#endif
+#if         CC_Policy_AC_SendSelect
 #define TPM_CC_Policy_AC_SendSelect         (TPM_CC)(0x00000196)
+#endif
+#if         CC_CertifyX509
 #define TPM_CC_CertifyX509                  (TPM_CC)(0x00000197)
+#endif
 #define CC_VEND                             0x20000000
+#if         CC_Vendor_TCG_Test
 #define TPM_CC_Vendor_TCG_Test              (TPM_CC)(0x20000000)
+#endif
 
 // Additional values for benefit of code
 #define TPM_CC_FIRST                        0x0000011F
 #define TPM_CC_LAST                         0x00000197
 
-   
+    
 #if COMPRESSED_LISTS
 #define ADD_FILL            0
 #else
@@ -839,30 +1174,23 @@ typedef UINT32                              TPM_CC;
 #define COMMAND_COUNT       (LIBRARY_COMMAND_ARRAY_SIZE + VENDOR_COMMAND_ARRAY_SIZE)
 
 #define HASH_COUNT          \
-            (ALG_SHA1     + ALG_SHA256   + ALG_SHA384   + ALG_SHA3_256 +           \
-             ALG_SHA3_384 + ALG_SHA3_512 + ALG_SHA512   + ALG_SM3_256)
+            (ALG_SHA1 + ALG_SHA256 + ALG_SHA384 + ALG_SHA512 + ALG_SM3_256)
 
 #define MAX_HASH_BLOCK_SIZE \
-            (MAX(ALG_SHA1     * SHA1_BLOCK_SIZE,                                   \
-             MAX(ALG_SHA256   * SHA256_BLOCK_SIZE,                                 \
-             MAX(ALG_SHA384   * SHA384_BLOCK_SIZE,                                 \
-             MAX(ALG_SHA3_256 * SHA3_256_BLOCK_SIZE,                               \
-             MAX(ALG_SHA3_384 * SHA3_384_BLOCK_SIZE,                               \
-             MAX(ALG_SHA3_512 * SHA3_512_BLOCK_SIZE,                               \
-             MAX(ALG_SHA512   * SHA512_BLOCK_SIZE,                                 \
-             MAX(ALG_SM3_256  * SM3_256_BLOCK_SIZE,                                \
-             0)))))))))
+            (MAX(ALG_SHA1    * SHA1_BLOCK_SIZE,                                    \
+             MAX(ALG_SHA256  * SHA256_BLOCK_SIZE,                                  \
+             MAX(ALG_SHA384  * SHA384_BLOCK_SIZE,                                  \
+             MAX(ALG_SHA512  * SHA512_BLOCK_SIZE,                                  \
+             MAX(ALG_SM3_256 * SM3_256_BLOCK_SIZE,                                 \
+             0))))))
 
 #define MAX_DIGEST_SIZE     \
-            (MAX(ALG_SHA1     * SHA1_DIGEST_SIZE,                                  \
-             MAX(ALG_SHA256   * SHA256_DIGEST_SIZE,                                \
-             MAX(ALG_SHA384   * SHA384_DIGEST_SIZE,                                \
-             MAX(ALG_SHA3_256 * SHA3_256_DIGEST_SIZE,                              \
-             MAX(ALG_SHA3_384 * SHA3_384_DIGEST_SIZE,                              \
-             MAX(ALG_SHA3_512 * SHA3_512_DIGEST_SIZE,                              \
-             MAX(ALG_SHA512   * SHA512_DIGEST_SIZE,                                \
-             MAX(ALG_SM3_256  * SM3_256_DIGEST_SIZE,                               \
-             0)))))))))
+            (MAX(ALG_SHA1    * SHA1_DIGEST_SIZE,                                   \
+             MAX(ALG_SHA256  * SHA256_DIGEST_SIZE,                                 \
+             MAX(ALG_SHA384  * SHA384_DIGEST_SIZE,                                 \
+             MAX(ALG_SHA512  * SHA512_DIGEST_SIZE,                                 \
+             MAX(ALG_SM3_256 * SM3_256_DIGEST_SIZE,                                \
+             0))))))
 
 
 #if MAX_DIGEST_SIZE == 0 || MAX_HASH_BLOCK_SIZE == 0
@@ -893,5 +1221,4 @@ typedef TPM2B_MAX_HASH_BLOCK    TPM2B_HASH_BLOCK;
 #endif
 
 
-
-#endif // _IMPLEMENTATION_H_
+#endif  // _IMPLEMENTATION_H_
