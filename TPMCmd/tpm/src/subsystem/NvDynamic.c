@@ -572,7 +572,7 @@ NvDeleteRAM(
     nextNode = nodeAddress + size;
 
     // Copy the data
-    MemoryCopy(nodeAddress, nextNode, lastUsed - nextNode);
+    MemoryCopy(nodeAddress, nextNode, (int)(lastUsed - nextNode));
 
     // Clear out the reclaimed space
     MemorySet(lastUsed - size, 0, size);
@@ -1830,7 +1830,7 @@ NvCapGetCounterAvail(
             availNVSpace -= reserved;
     }
     // Compute the available space in RAM
-    availRAMSpace = RAM_ORDERLY_END - NvRamGetEnd();
+    availRAMSpace = (int)(RAM_ORDERLY_END - NvRamGetEnd());
 
     // Return the min of counter number in NV and in RAM
     if(availNVSpace / NV_INDEX_COUNTER_SIZE

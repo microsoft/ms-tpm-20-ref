@@ -272,7 +272,7 @@ PrimeSieve(
     // If the remainder is odd, then subtracting the value will give an even number,
     // but we want an odd number, so subtract the 105+rem. Otherwise, just subtract
     // the even remainder.
-    adjust = BnModWord(bnN, 105);
+    adjust = (UINT32)BnModWord(bnN, 105);
     if(adjust & 1)
         adjust += 105;
 
@@ -309,7 +309,7 @@ PrimeSieve(
         }
         // Get the remainder when dividing the base field address
         // by the composite
-        composite = BnModWord(bnN, composite);
+        composite = (UINT32)BnModWord(bnN, composite);
         // 'composite' is divisible by the composite components. for each of the
         // composite components, divide 'composite'. That remainder (r) is used to
         // pick a starting point for clearing the array. The stride is equal to the
@@ -430,7 +430,7 @@ PrimeSelectWithSieve(
 
     // Save the low-order word to use as a search generator and make sure that
     // it has some interesting range to it
-    first = candidate->d[0] | 0x80000000;
+    first = (UINT32)(candidate->d[0] | 0x80000000);
 
     // Sieve the field
     ones = PrimeSieve(candidate, fieldSize, field);
@@ -449,7 +449,7 @@ PrimeSelectWithSieve(
         // The exponent might not have been one of the tested primes so
         // make sure that it isn't divisible and make sure that 0 != (p-1) mod e
         // Note: This is the same as 1 != p mod e 
-        modE = BnModWord(test, e);
+        modE = (UINT32)BnModWord(test, e);
         if((modE != 0) && (modE != 1) && MillerRabin(test, rand))
         {
             BnCopy(candidate, test);

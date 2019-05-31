@@ -119,8 +119,8 @@ BigInitialized(
     if(toInit == NULL || initializer == NULL)
         return NULL;
     toInit->d = (BN_ULONG *)&initializer->d[0];
-    toInit->dmax = initializer->allocated;
-    toInit->top = initializer->size;
+    toInit->dmax = (int)initializer->allocated;
+    toInit->top = (int)initializer->size;
     toInit->neg = 0;
     toInit->flags = 0;
     return toInit;

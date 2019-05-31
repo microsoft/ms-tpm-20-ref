@@ -127,7 +127,7 @@ BnIsProbablyPrime(
 #else
     if(BnGetSize(prime) == 1)
 #endif
-        return IsPrimeInt(prime->d[0]);
+        return IsPrimeInt((uint32_t)prime->d[0]);
 
     if(BnIsEven(prime))
         return FALSE;
@@ -193,7 +193,7 @@ MillerRabin(
     // Since w is odd (w-1) is even so start at bit number 1 rather than 0
     // Get the number of bits in bnWm1 so that it doesn't have to be recomputed
     // on each iteration.
-    i = bnWm1->size * RADIX_BITS;
+    i = (int)(bnWm1->size * RADIX_BITS);
   // Now find the largest power of 2 that divides w1
     for(a = 1;
     (a < (bnWm1->size * RADIX_BITS)) &&

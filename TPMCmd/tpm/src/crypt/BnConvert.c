@@ -127,7 +127,7 @@ BnFromHex(
     BYTE                *d = (BYTE *)&(bn->d[0]);
 //
     pAssert(bn && hex);
-    i = strlen(hex);
+    i = (unsigned)strlen(hex);
     wordCount = BYTES_TO_CRYPT_WORDS((i + 1) / 2);
     if((i == 0) || (wordCount >= BnGetAllocated(bn)))
         BnSetWord(bn, 0);

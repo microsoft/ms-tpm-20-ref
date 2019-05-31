@@ -256,7 +256,7 @@ TPM2_CertifyX509(
             MemoryCopy(fill, certTBS[j].buf, certTBS[j].len);
             fill += certTBS[j].len;
         }
-        DebugDumpBuffer(fill - &fullTBS[0], fullTBS, (BYTE *)"\nfull TBS");
+        DebugDumpBuffer((int)(fill - &fullTBS[0]), fullTBS, (BYTE *)"\nfull TBS");
     }
 #endif
 
