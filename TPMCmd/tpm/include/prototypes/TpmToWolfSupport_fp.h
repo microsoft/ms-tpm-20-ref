@@ -41,7 +41,7 @@
 #ifndef    _TPMTOWOLFSUPPORT_FP_H_
 #define    _TPMTOWOLFSUPPORT_FP_H_
 
-#if MATH_LIB == WOLF
+#ifdef MATH_LIB_WOLF
 //**Functions
 
 //*** SupportLibInit()

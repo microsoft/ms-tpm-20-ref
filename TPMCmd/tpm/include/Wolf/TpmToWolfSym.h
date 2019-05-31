@@ -49,11 +49,11 @@
 //** Links to the wolfCrypt AES code
 //***************************************************************
 
-#ifdef TPM_ALG_SM4
+#if ALG_SM4
 #error "SM4 is not available"
 #endif
 
-#ifdef  TPM_ALG_CAMELLIA
+#if  ALG_CAMELLIA
 #error "Camellia is not available"
 #endif
 
@@ -105,7 +105,7 @@ typedef void(*TpmCryptSetSymKeyCall_t)(
 
 typedef union tpmCryptKeySchedule_t tpmCryptKeySchedule_t;
 
-#ifdef TPM_ALG_TDES
+#if ALG_TDES
 #include "TpmToWolfDesSupport_fp.h"
 #endif
 

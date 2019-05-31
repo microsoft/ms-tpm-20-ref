@@ -45,6 +45,10 @@
 
 #define MATH_LIB_WOLF
 
+#if ALG_ECC
+#define HAVE_ECC
+#endif
+
 #include <wolfssl/wolfcrypt/tfm.h>
 #include <wolfssl/wolfcrypt/ecc.h>
 

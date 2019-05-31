@@ -40,8 +40,6 @@
 #ifndef WOLF_CRYPT_USER_SETTINGS_H
 #define WOLF_CRYPT_USER_SETTINGS_H
 
-#include <Implementation.h>
-
 /* Remove the automatic setting of the default I/O functions EmbedSend()
     and EmbedReceive(). */
 #define WOLFSSL_USER_IO
@@ -57,21 +55,21 @@
 #define WOLFSSL_AES_DIRECT
 
 /* Enable/Disable algorithm support based on TPM implementation header */
-#ifdef TPM_ALG_SHA256
+#ifdef ALG_SHA256
     #define WOLFSSL_SHA256
 #endif
-#if defined(TPM_ALG_SHA384) || defined(TPM_ALG_SHA512)
+#if ALG_SHA384 || ALG_SHA512 || defined(WOLFSSL_LIB)
     #define WOLFSSL_SHA384
     #define WOLFSSL_SHA512
 #endif
-#ifdef TPM_ALG_TDES
+#if ALG_TDES || defined(WOLFSSL_LIB)
     #define WOLFSSL_DES_ECB
 #endif
-#ifdef TPM_ALG_RSA
+#if ALG_RSA || defined(WOLFSSL_LIB)
     /* Turn on RSA key generation functionality */
     #define WOLFSSL_KEY_GEN
 #endif
-#ifdef TPM_ALG_ECC
+#if ALG_ECC || defined(WOLFSSL_LIB)
     #define HAVE_ECC
 
     /* Expose additional ECC primitives */
@@ -85,6 +83,14 @@
     #define NO_ECC_SIGN
     #define NO_ECC_VERIFY
     #define NO_ECC_SECP
+
+    #undef ECC_BN_P256
+    #undef ECC_SM2_P256
+    #undef ECC_BN_P638
+    #define ECC_BN_P256     NO
+    #define ECC_SM2_P256    NO
+    #define ECC_BN_P638     NO
+
 #endif
 
 /* Disable explicit RSA. The TPM support for RSA is dependent only on TFM */

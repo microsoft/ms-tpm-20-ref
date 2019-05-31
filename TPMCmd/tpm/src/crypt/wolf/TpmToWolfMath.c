@@ -95,7 +95,7 @@ BnToWolf(
         for (i = 0; i < initializer->size; i++)
             toInit->dp[i] = initializer->d[i];
 
-        toInit->used = initializer->size;
+        toInit->used = (int)initializer->size;
         toInit->sign = 0;
     }
 }
@@ -242,7 +242,7 @@ BnDiv(
     return OK;
 }
 
-#ifdef TPM_ALG_RSA
+#if ALG_RSA
 //*** BnGcd()
 // Get the greatest common divisor of two numbers
 LIB_EXPORT BOOL
@@ -320,7 +320,7 @@ BnModInverse(
 }
 #endif // TPM_ALG_RSA
 
-#ifdef TPM_ALG_ECC
+#if ALG_ECC
 
 //*** PointFromWolf()
 // Function to copy the point result from a wolf ecc_point to a bigNum

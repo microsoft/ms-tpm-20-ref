@@ -418,7 +418,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\wolf;$(SolutionDir)..\external\wolfssl;$(SolutionDir)\wolfcrypt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>USE_WOLFCRYPT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -427,7 +427,7 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>CompileAsC</CompileAs>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <DisableSpecificWarnings>4820;4255</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4820;4255</DisableSpecificWarnings>
       <BrowseInformation>true</BrowseInformation>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -682,7 +682,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\wolf;$(SolutionDir)..\external\wolfssl;$(SolutionDir)\wolfcrypt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>USE_WOLFCRYPT;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -839,13 +839,14 @@
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\wolf;$(SolutionDir)..\external\wolfssl;$(SolutionDir)\wolfcrypt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>USE_WOLFCRYPT;CRYPTO_ALIGN_4;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;CRYPTO_ALIGN_4;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4668</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>wolfssl.lib;platform.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -901,7 +902,7 @@
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\wolf;$(SolutionDir)..\external\wolfssl;$(SolutionDir)\wolfcrypt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>USE_WOLFCRYPT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -1386,9 +1387,9 @@
     <ClInclude Include="include\wolf\TpmToWolfHash.h" />
     <ClInclude Include="include\wolf\TpmToWolfMath.h" />
     <ClInclude Include="include\wolf\TpmToWolfSym.h" />
+    <ClInclude Include="include\Wolf\user_settings.h" />
     <ClInclude Include="include\X509.h" />
     <ClInclude Include="include\X509_RSA.h" />
-    <ClInclude Include="$(SolutionDir)\wolfcrypt\include\user_settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

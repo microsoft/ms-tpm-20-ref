@@ -46,6 +46,10 @@
 #define WOLFSSL_USER_SETTINGS
 #endif
 
+#if ALG_SHA384 || ALG_SHA512
+#define WOLFSSL_SHA512
+#endif
+
 #include <wolfssl/wolfcrypt/sha.h>
 #include <wolfssl/wolfcrypt/sha256.h>
 #include <wolfssl/wolfcrypt/sha512.h>
