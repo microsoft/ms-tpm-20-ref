@@ -629,7 +629,7 @@ PublicAttributesValidation(
     )
 {
     TPMA_OBJECT      attributes = publicArea->objectAttributes;
-    TPMA_OBJECT      parentAttributes = {0};
+    TPMA_OBJECT      parentAttributes = TPMA_ZERO_INITIALIZER();
 //
     if(parentObject != NULL)
         parentAttributes = parentObject->publicArea.objectAttributes;

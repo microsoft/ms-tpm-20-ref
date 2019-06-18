@@ -1,37 +1,37 @@
 /* Microsoft Reference Implementation for TPM 2.0
- *
- *  The copyright in this software is being made available under the BSD License,
- *  included below. This software may be subject to other third party and
- *  contributor rights, including patent rights, and no such rights are granted
- *  under this license.
- *
- *  Copyright (c) Microsoft Corporation
- *
- *  All rights reserved.
- *
- *  BSD License
- *
- *  Redistribution and use in source and binary forms, with or without modification,
- *  are permitted provided that the following conditions are met:
- *
- *  Redistributions of source code must retain the above copyright notice, this list
- *  of conditions and the following disclaimer.
- *
- *  Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or
- *  other materials provided with the distribution.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- *  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- *  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- *  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*
+*  The copyright in this software is being made available under the BSD License,
+*  included below. This software may be subject to other third party and
+*  contributor rights, including patent rights, and no such rights are granted
+*  under this license.
+*
+*  Copyright (c) Microsoft Corporation
+*
+*  All rights reserved.
+*
+*  BSD License
+*
+*  Redistribution and use in source and binary forms, with or without modification,
+*  are permitted provided that the following conditions are met:
+*
+*  Redistributions of source code must retain the above copyright notice, this list
+*  of conditions and the following disclaimer.
+*
+*  Redistributions in binary form must reproduce the above copyright notice, this
+*  list of conditions and the following disclaimer in the documentation and/or
+*  other materials provided with the distribution.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+*  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+*  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+*  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+*  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+*  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+*  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+*  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 //** Introduction
 // This file is a collection of miscellaneous macros.
 
@@ -247,7 +247,7 @@
 // As required by P1.14.4
 #define COMPLIANT_PROOF_SIZE                                                    \
             (MAX(CONTEXT_INTEGRITY_HASH_SIZE, (2 * MAX_SYM_KEY_BYTES)))
-      
+
 // As required by P1.14.3.1
 #define COMPLIANT_PRIMARY_SEED_SIZE                                             \
     BITS_TO_BYTES(MAX_SECURITY_STRENGTH_BITS * 2)
@@ -323,16 +323,18 @@
 
 // These macros are used to handle the variation in handling of bit fields. If 
 #if USE_BIT_FIELD_STRUCTURES // The default, old version, with bit fields
-#   define IS_ATTRIBUTE(a, type, b)    ((a.b != 0))
-#   define SET_ATTRIBUTE(a, type, b)       (a.b = SET)
-#   define CLEAR_ATTRIBUTE(a, type, b)     (a.b = CLEAR)
+#   define IS_ATTRIBUTE(a, type, b)         (a.b != 0)
+#   define SET_ATTRIBUTE(a, type, b)        (a.b = SET)
+#   define CLEAR_ATTRIBUTE(a, type, b)      (a.b = CLEAR)
 #   define GET_ATTRIBUTE(a, type, b)        (a.b)
+#   define TPMA_ZERO_INITIALIZER()          {0}
 #else
 #   define IS_ATTRIBUTE(a, type, b)         ((a & type##_##b) != 0)
 #   define SET_ATTRIBUTE(a, type, b)        (a |= type##_##b)
 #   define CLEAR_ATTRIBUTE(a, type, b)      (a &= ~type##_##b)
 #   define GET_ATTRIBUTE(a, type, b)        \
         (type)((a & type##_##b) >> type##_##b##_SHIFT)
+#   define TPMA_ZERO_INITIALIZER()          0
 #endif
 
 #define VERIFY(_X) if(!(_X)) goto Error 

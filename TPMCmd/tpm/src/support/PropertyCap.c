@@ -181,7 +181,7 @@ TPMPropertyIsDefined(
             {
                 TPMA_MEMORY     att;
                 UINT32          u32;
-            } attributes = {{0}};
+            } attributes = { TPMA_ZERO_INITIALIZER() };
             SET_ATTRIBUTE(attributes.att, TPMA_MEMORY, sharedNV);
             SET_ATTRIBUTE(attributes.att, TPMA_MEMORY, objectCopiedToRam);
 
@@ -380,7 +380,7 @@ TPMPropertyIsDefined(
             union {
                 TPMA_PERMANENT      attr;
                 UINT32              u32;
-            } flags = {{0}};
+            } flags = { TPMA_ZERO_INITIALIZER() };
             if(gp.ownerAuth.t.size != 0)
                 SET_ATTRIBUTE(flags.attr, TPMA_PERMANENT, ownerAuthSet);
             if(gp.endorsementAuth.t.size != 0)
@@ -407,7 +407,7 @@ TPMPropertyIsDefined(
             union {
                 TPMA_STARTUP_CLEAR  attr;
                 UINT32              u32;
-            } flags = {{0}};
+            } flags = { TPMA_ZERO_INITIALIZER() };
 //
             if(g_phEnable)
                 SET_ATTRIBUTE(flags.attr, TPMA_STARTUP_CLEAR, phEnable);
