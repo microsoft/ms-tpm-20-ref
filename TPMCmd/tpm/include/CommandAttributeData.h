@@ -418,7 +418,7 @@ const TPMA_CC    s_ccAttr [] = {
 #if (PAD_LIST || CC_Vendor_TCG_Test)
         TPMA_CC_INITIALIZER(0x0000, 0, 0, 0, 0, 0, 0, 1, 0),
 #endif
-        {0}
+        TPMA_ZERO_INITIALIZER()
 };
 
 
