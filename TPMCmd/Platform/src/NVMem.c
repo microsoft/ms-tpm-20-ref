@@ -182,7 +182,7 @@ _plat__NVEnable(
         if (NV_MEMORY_SIZE == fileSize)
         {
             s_NeedsManufacture =
-                fread(s_NV, 1, NV_MEMORY_SIZE, s_NvFile) == NV_MEMORY_SIZE;
+                fread(s_NV, 1, NV_MEMORY_SIZE, s_NvFile) != NV_MEMORY_SIZE;
         }
         else
         {
