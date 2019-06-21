@@ -46,20 +46,23 @@
 #include "BaseTypes.h"
 
 #ifdef _MSC_VER
-#include <windows.h>
-#include <winsock.h>
+#   pragma warning(push, 3)
+#   include <windows.h>
+#   include <winsock.h>
+#   pragma warning(pop)
+#   pragma warning(disable: 4710)
 #elif defined(__unix__)
-#define _strcmpi strcasecmp
-typedef int SOCKET;
+#   define _strcmpi strcasecmp
+    typedef int SOCKET;
 #else
-#error "Unsupported platform."
+#   error "Unsupported platform."
 #endif
 
 #ifndef TRUE
-#define TRUE    1
+#   define TRUE    1
 #endif
 #ifndef FALSE
-#define FALSE   0
+#   define FALSE   0
 #endif
 
 #include "TpmTcpProtocol.h"
@@ -68,28 +71,165 @@ typedef int SOCKET;
 #include "Simulator_fp.h"
 
 #define PURPOSE \
-"TPM Reference Simulator.\nCopyright Microsoft Corp.\n"
+"TPM 2.0 Reference Simulator.\n"  \
+"Copyright (c) Microsoft Corporation. All rights reserved."
 
 #define DEFAULT_TPM_PORT 2321
 
+// Information about command line arguments (does not include program name)
+static uint32_t     s_ArgsMask = 0;     // Bit mask of unmatched command line args
+static int          s_Argc = 0;
+static const char **s_Argv = NULL;
+
+
 //** Functions
+
+#ifdef DEBUG
+//*** Assert()
+// This function implements a run-time assertion.
+// Computation of its parameters must not result in any side effects, as these
+// computations will be stripped from the release builds.
+static void Assert (BOOL cond, const char* msg)
+{
+    if (cond)
+        return;
+    fputs(msg, stderr);
+    exit(2);
+}
+#else
+#define Assert(cond, msg)
+#endif
 
 //*** Usage()
 // This function prints the proper calling sequence for the simulator.
 static void
 Usage(
-    char                *pszProgramName
+    const char          *programName
+)
+{
+    fprintf(stderr, "%s\n\n", PURPOSE);
+    fprintf(stderr, "Usage:  %s [PortNum] [opts]\n\n"
+        "Starts the TPM server listening on TCP port PortNum (by default %d).\n\n"
+        "An option can be in the short form (one letter preceded with '-' or '/')\n"
+        "or in the full form (preceded with '--' or no option marker at all).\n"
+        "Possible options are:\n"
+        "   -h (--help) or ? - print this message\n"
+        "   -m (--manufacture) - forces NV state of the TPM simulator to be "
+        "(re)manufactured\n",
+        programName, DEFAULT_TPM_PORT);
+    exit(1);
+}
+
+//*** CmdLineParser_Init()
+// This function initializes command line option parser.
+static BOOL
+CmdLineParser_Init(
+    int argc,
+    char *argv[],
+    int maxOpts
     )
 {
-    fprintf(stderr, "%s", PURPOSE);
-    fprintf(stderr, "Usage:\n");
-    fprintf(stderr, "%s         - Starts the TPM server listening on port %d\n",
-              pszProgramName, DEFAULT_TPM_PORT);
-    fprintf(stderr,
-              "%s PortNum - Starts the TPM server listening on port PortNum\n",
-              pszProgramName);
-    fprintf(stderr, "%s ?       - This message\n", pszProgramName);
-    exit(1);
+    if (argc == 1)
+        return FALSE;
+
+    if (maxOpts && (argc - 1) > maxOpts)
+    {
+        fprintf(stderr, "No more than %d options can be specified\n\n", maxOpts);
+        Usage(argv[0]);
+    }
+
+    s_Argc = argc - 1;
+    s_Argv = (const char**)(argv + 1);
+    s_ArgsMask = (1 << s_Argc) - 1;
+    return TRUE;
+}
+
+//*** CmdLineParser_More()
+// Returns true if there are unparsed options still.
+static BOOL
+CmdLineParser_More(
+    void
+)
+{
+    return s_ArgsMask != 0;
+}
+
+//*** CmdLineParser_IsOpt()
+// This function determines if the given command line parameter represents a valid
+// option.
+static BOOL
+CmdLineParser_IsOpt(
+    const char* opt,        // Command line parameter to check
+    const char* optFull,    // Expected full name
+    const char* optShort,   // Expected short (single letter) name
+    BOOL dashed             // The parameter is preceded by a single dash
+    )
+{
+    return 0 == strcmp(opt, optFull)
+        || (optShort && opt[0] == optShort[0] && opt[1] == 0)
+        || (dashed && opt[0] == '-' && 0 == strcmp(opt + 1, optFull));
+}
+
+//*** CmdLineParser_IsOptPresent()
+// This function determines if the given command line parameter represents a valid
+// option.
+static BOOL
+CmdLineParser_IsOptPresent(
+    const char* optFull,
+    const char* optShort
+    )
+{
+    Assert(s_Argv != NULL,
+        "InitCmdLineOptParser(argc, argv) has not been invoked\n");
+    Assert(optFull && optFull[0],
+        "Full form of a command line option must be present.\n"
+        "If only a short (single letter) form is supported, it must be"
+        "specified as the full one.\n");
+    Assert(!optShort || (optShort[0] && !optShort[1]),
+        "If a short form of an option is specified, it must consist "
+        "of a single letter only.\n");
+
+    if (!CmdLineParser_More())
+        return FALSE;
+
+    for (int i = 0, curArgBit = 1; i < s_Argc; ++i, curArgBit <<= 1)
+    {
+        const char* opt = s_Argv[i];
+        if (   (s_ArgsMask & curArgBit) && opt
+            && (   0 == strcmp(opt, optFull)
+                || (   (opt[0] == '/' || opt[0] == '-')
+                    && CmdLineParser_IsOpt(opt + 1, optFull, optShort, opt[0] == '-'))))
+        {
+            s_ArgsMask ^= curArgBit;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+//*** CmdLineParser_IsOptPresent()
+// This function notifies the parser that no more options are needed.
+static void
+CmdLineParser_Done(
+    const char          *programName
+)
+{
+    char delim = ':';
+
+    if (!CmdLineParser_More())
+        return;
+
+    fprintf(stderr, "Command line contains unknown option%s", s_ArgsMask & (s_ArgsMask - 1) ? "s" : "");
+    for (int i = 0, curArgBit = 1; i < s_Argc; ++i, curArgBit <<= 1)
+    {
+        if (s_ArgsMask & curArgBit)
+        {
+            fprintf(stderr, "%c %s", delim, s_Argv[i]);
+            delim = ',';
+        }
+    }
+    fprintf(stderr, "\n\n");
+    Usage(programName);
 }
 
 //*** main()
@@ -101,45 +241,72 @@ main(
     char            *argv[]
     )
 {
-    int portNum = DEFAULT_TPM_PORT;
-    if(argc > 2)
+    BOOL    manufacture = FALSE;
+    int     PortNum = DEFAULT_TPM_PORT;
+
+    // Parse command line options
+
+    if (CmdLineParser_Init(argc, argv, 2))
     {
-        Usage(argv[0]);
+        if (   CmdLineParser_IsOptPresent("?", "?")
+            || CmdLineParser_IsOptPresent("help", "h"))
+        {
+            Usage(argv[0]);
+        }
+        if (CmdLineParser_IsOptPresent("manufacture", "m"))
+        {
+            manufacture = TRUE;
+        }
+        if (CmdLineParser_More())
+        {
+            for (int i = 0; i < s_Argc; ++i)
+            {
+                char *nptr = NULL;
+                int portNum = (int)strtol(s_Argv[i], &nptr, 0);
+                if (s_Argv[i] != nptr)
+                {
+                    // A numeric option is found
+                    if(!*nptr && portNum > 0 && portNum < 65535)
+                    {
+                        PortNum = portNum;
+                        s_ArgsMask ^= 1 << i;
+                        break;
+                    }
+                    fprintf(stderr, "Invalid numeric option %s\n\n", s_Argv[i]);
+                    Usage(argv[0]);
+                }
+            }
+        }
+        CmdLineParser_Done(argv[0]);
     }
 
-    if(argc == 2)
-    {
-        if(strcmp(argv[1], "?") == 0)
-        {
-            Usage(argv[0]);
-        }
-        portNum = atoi(argv[1]);
-        if(portNum <= 0 || portNum > 65535)
-        {
-            Usage(argv[0]);
-        }
-    }
+    // Enable NV memory
     _plat__NVEnable(NULL);
 
-    if(TPM_Manufacture(1) != 0)
+    if (manufacture || _plat__NVNeedsManufacture())
     {
-        exit(1);
+        printf("Manufacturing NV state...\n");
+        if(TPM_Manufacture(1) != 0)
+        {
+            exit(1);
+        }
+        // Coverage test - repeated manufacturing attempt
+        if(TPM_Manufacture(0) != 1)
+        {
+            exit(2);
+        }
+        // Coverage test - re-manufacturing
+        TPM_TearDown();
+        if(TPM_Manufacture(1) != 0)
+        {
+            exit(3);
+        }
     }
-    // Coverage test - repeated manufacturing attempt
-    if(TPM_Manufacture(0) != 1)
-    {
-        exit(2);
-    }
-    // Coverage test - re-manufacturing
-    TPM_TearDown();
-    if(TPM_Manufacture(1) != 0)
-    {
-        exit(3);
-    }
+
     // Disable NV memory
     _plat__NVDisable();
 
-    StartTcpServer(portNum);
+    StartTcpServer(PortNum);
     return EXIT_SUCCESS;
 }
 

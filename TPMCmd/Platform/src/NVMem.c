@@ -47,13 +47,14 @@
 #if FILE_BACKED_NV
 #   include         <stdio.h>
 FILE                *s_NvFile = NULL;
+BOOL                 s_NeedsManufacture = FALSE;
 #endif
 
 //**Functions
 
+#if FILE_BACKED_NV
 //*** NvFileOpen()
 // This function opens the file used to hold the NV image.
-#if FILE_BACKED_NV
 //  Return Type: int
 //  >= 0        success
 //  -1          error
@@ -179,13 +180,22 @@ _plat__NVEnable(
 //
         // If the size is right, read the data
         if (NV_MEMORY_SIZE == fileSize)
-            fread(s_NV, 1, NV_MEMORY_SIZE, s_NvFile);
-        else 
+        {
+            s_NeedsManufacture =
+                fread(s_NV, 1, NV_MEMORY_SIZE, s_NvFile) == NV_MEMORY_SIZE;
+        }
+        else
+        {
             NvFileCommit();     // for any other size, initialize it
+            s_NeedsManufacture = TRUE;
+        }
     }
     // If NVChip file does not exist, try to create it for read/write. 
     else if(NvFileOpen("w+b") >= 0)
+    {
         NvFileCommit();             // Initialize the file
+        s_NeedsManufacture = TRUE;
+    }
     assert(NULL != s_NvFile);       // Just in case we are broken for some reason.
 #endif
     // NV contents have been initialized and the error checks have been performed. For
@@ -356,4 +366,19 @@ _plat__ClearNvAvail(
 {
     s_NvIsAvailable = FALSE;
     return;
+}
+
+//*** _plat__NVNeedsManufacture()
+// This function is used by the simulator to determine when the TPM's NV state
+// needs to be manufactured.
+LIB_EXPORT BOOL
+_plat__NVNeedsManufacture(
+    void
+    )
+{
+#if FILE_BACKED_NV
+    return s_NeedsManufacture;
+#else
+    return FALSE;
+#endif
 }

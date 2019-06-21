@@ -338,6 +338,13 @@ _plat__ClearNvAvail(
     void
     );
 
+//*** _plat__NVNeedsManufacture()
+// This function is used by the simulator to determine when the TPM's NV state
+// needs to be manufactured.
+LIB_EXPORT BOOL
+_plat__NVNeedsManufacture(
+    void
+    );
 
 //** From PowerPlat.c 
 
