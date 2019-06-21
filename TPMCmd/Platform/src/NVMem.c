@@ -63,12 +63,22 @@ NvFileOpen(
     const char      *mode
 )
 {
+#if defined(NV_FILE_PATH)
+#   define TO_STRING(s) TO_STRING_IMPL(s)
+#   define TO_STRING_IMPL(s) #s
+    const char* s_NvFilePath = TO_STRING(NV_FILE_PATH);
+#   undef TO_STRING
+#   undef TO_STRING_IMPL
+#else
+    const char* s_NvFilePath = "NVchip";
+#endif
+
     // Try to open an exist NVChip file for read/write
 #   if defined _MSC_VER && 1
-    if(fopen_s(&s_NvFile, "NVChip", mode) != 0)
+    if(fopen_s(&s_NvFile, s_NvFilePath, mode) != 0)
         s_NvFile = NULL;
 #   else
-    s_NvFile = fopen("NVChip", mode);
+    s_NvFile = fopen(s_NvFilePath, mode);
 #   endif
     return (s_NvFile == NULL) ? -1 : 0;
 }

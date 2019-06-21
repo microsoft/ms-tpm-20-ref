@@ -43,7 +43,19 @@ AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_CONFIG_FILES([Makefile])
 AC_SUBST([DISTCHECK_CONFIGURE_FLAGS],[$ac_configure_args])
 
+dnl By enabling this feature tpm simulator gets seeds derived from hardware parameters.
+dnl It is enabled only for linux devices.
+dnl Note that the seeds are not derived from secure hardware source.
+
+AC_ARG_ENABLE(usedeviceid,
+    AS_HELP_STRING([--enable-usedeviceid],
+    [tpm simulator get seeds derived from hardware parameters. Seeds are not derived from secure hardware source.]))
+
 PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto])
+AS_IF([test "x$enable_usedeviceid" = "xyes"], [
+    PKG_CHECK_MODULES([LIBUDEV], [libudev])
+    [ADDITIONAL_LIBS="-ludev"]
+])
 AX_PTHREAD([], [AC_MSG_ERROR([requires pthread])])
 
 AC_DEFINE([HASH_LIB], [Ossl], [Crypto lib for hash algorithms])
@@ -62,6 +74,14 @@ ADD_COMPILER_FLAG([-Wno-error=parentheses])
 ADD_COMPILER_FLAG([-Wno-error=pointer-to-int-cast])
 ADD_COMPILER_FLAG([-Wno-error=missing-braces])
 ADD_COMPILER_FLAG([-Wno-error=unused-result])
+dnl Enable to build in release mode with symbols.
+
+AS_IF([test "x$enable_usedeviceid" = "xyes"], [
+    ADD_COMPILER_FLAG([-DNDEBUG])
+    ADD_COMPILER_FLAG([-g])
+    ADD_COMPILER_FLAG([-DUSE_PLATFORM_EPS])
+    AC_SUBST(ADDITIONAL_LIBS)
+])
 
 ADD_LINK_FLAG([-Wl,--no-undefined])
 ADD_LINK_FLAG([-Wl,-z,noexecstack])
