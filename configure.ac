@@ -74,7 +74,6 @@ ADD_COMPILER_FLAG([-Wno-error=parentheses])
 ADD_COMPILER_FLAG([-Wno-error=pointer-to-int-cast])
 ADD_COMPILER_FLAG([-Wno-error=missing-braces])
 ADD_COMPILER_FLAG([-Wno-error=unused-result])
-dnl Enable to build in release mode with symbols.
 
 AS_IF([test "x$enable_usedeviceid" = "xyes"], [
     ADD_COMPILER_FLAG([-DNDEBUG])
