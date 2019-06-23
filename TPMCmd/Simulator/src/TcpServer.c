@@ -43,30 +43,32 @@
 #include <stdio.h>
 
 #ifdef _MSC_VER
-#include <windows.h>
-#include <winsock.h>
+#   pragma warning(push, 3)
+#   include <windows.h>
+#   include <winsock.h>
+#   pragma warning(pop)
 typedef int socklen_t;
 #elif defined(__unix__)
-#  include <string.h>
-#  define ZeroMemory(ptr, sz) (memset((ptr), 0, (sz)))
-#  include <unistd.h>
-#  define closesocket(x) close(x)
-#  define INVALID_SOCKET (-1)
-#  define SOCKET_ERROR   (-1)
-typedef int SOCKET;
-#  include <errno.h>
-#  define WSAGetLastError() (errno)
-#  include <stdint.h>
-#  define INT_PTR intptr_t
-#  include <netinet/in.h>
-#  include <sys/socket.h>
-#endif
+#   include <string.h>
+#   include <unistd.h>
+#   include <errno.h>
+#   include <stdint.h>
+#   include <netinet/in.h>
+#   include <sys/socket.h>
+#   define ZeroMemory(ptr, sz) (memset((ptr), 0, (sz)))
+#   define closesocket(x) close(x)
+#   define INVALID_SOCKET (-1)
+#   define SOCKET_ERROR   (-1)
+#   define WSAGetLastError() (errno)
+#   define INT_PTR intptr_t
+    typedef int SOCKET;
+#endif // __unix__
 
 #ifndef TRUE
-#define TRUE    1
+#   define TRUE    1
 #endif
 #ifndef FALSE
-#define FALSE   0
+#   define FALSE   0
 #endif
 
 
@@ -168,7 +170,8 @@ PlatformServer(
         // client disconnected (or other error).  We stop processing this client
         // and return to our caller who can stop the server or listen for another
         // connection.
-        if(!OK) return TRUE;
+        if(!OK)
+            return TRUE;
         Command = ntohl(Command);
         switch(Command)
         {
@@ -233,7 +236,6 @@ PlatformServer(
         }
         WriteUINT32(s, 0);
     }
-    return FALSE;
 }
 
 //*** PlatformSvcRoutine()
@@ -272,7 +274,7 @@ PlatformSvcRoutine(
         if(serverSocket == SOCKET_ERROR)
         {
             printf("Accept error.  Error is 0x%x\n", WSAGetLastError());
-            return -1;
+            return (DWORD)-1;
         }
         printf("Client accepted\n");
 
@@ -644,5 +646,4 @@ TpmServer(
         if(!OK)
             return TRUE;
     }
-    return FALSE;
 }

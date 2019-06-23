@@ -48,13 +48,13 @@ const char  *fn = "DebugFile.txt";
 
 static FILE*
 fileOpen(
-    const char  *fn, 
+    const char  *fname, 
     const char  *mode
 )
 {
     FILE        *f;
 #if defined _MSC_VER
-    if(fopen_s(&f, fn, mode) != 0)
+    if(fopen_s(&f, fname, mode) != 0)
         f = NULL;
 #else
     f = fopen(fn, "w");

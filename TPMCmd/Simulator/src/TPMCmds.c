@@ -50,7 +50,6 @@
 #   include <windows.h>
 #   include <winsock.h>
 #   pragma warning(pop)
-#   pragma warning(disable: 4710)
 #elif defined(__unix__)
 #   define _strcmpi strcasecmp
     typedef int SOCKET;
@@ -84,7 +83,7 @@ static const char **s_Argv = NULL;
 
 //** Functions
 
-#ifdef DEBUG
+#if DEBUG
 //*** Assert()
 // This function implements a run-time assertion.
 // Computation of its parameters must not result in any side effects, as these
