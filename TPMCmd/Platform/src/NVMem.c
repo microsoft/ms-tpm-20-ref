@@ -70,7 +70,7 @@ NvFileOpen(
 #   undef TO_STRING
 #   undef TO_STRING_IMPL
 #else
-    const char* s_NvFilePath = "NVchip";
+    const char* s_NvFilePath = "NVChip";
 #endif
 
     // Try to open an exist NVChip file for read/write

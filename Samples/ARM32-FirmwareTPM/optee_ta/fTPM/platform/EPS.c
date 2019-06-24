@@ -46,13 +46,13 @@
 #define TEE_EPS_SIZE      (256/2)   // From TPM2B_RSA_TEST_PRIME in Hierarchy.c
 
 void
-_plat__GetEPS(size_t Size, uint8_t *EndorsementSeed)
+_plat__GetEPS(UINT16 Size, uint8_t *EndorsementSeed)
 {
     TEE_Result Result = TEE_ERROR_ITEM_NOT_FOUND;
     uint8_t EPS[TEE_EPS_SIZE] = { 0 };
     size_t EPSLen;
 
-    IMSG("Size=%d",Size);
+    IMSG("Size=%" PRIu16 "",Size);
     IMSG("EPS=%d",TEE_EPS_SIZE);
 
     pAssert(Size <= (TEE_EPS_SIZE));

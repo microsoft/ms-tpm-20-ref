@@ -60,7 +60,7 @@ static BOOL isDeviceIDSet = FALSE;
 // Read mac address of the device and copy over to the given buffer.
 // Returns 0 for success and -1 for error.
 
-static int getMacAddress()
+static int GetMacAddress()
 {
     struct ifreq interfaceRequest = {0};
     struct ifconf interfaceConfiguration = {0};
@@ -119,7 +119,7 @@ static int getMacAddress()
 // Read primary harddisk/emmc disk serial id from device and copy over to the given buffer.
 // Returns 0 for success and -1 for error.
 
-static int getDiskSerialNumber()
+static int GetDiskSerialNumber()
 {
     struct udev *ud = NULL;
     struct stat statbuf;
@@ -130,7 +130,6 @@ static int getDiskSerialNumber()
     ud = udev_new();
     if (NULL == ud)
     {
-        fprintf(stderr, "\nFailed to create udev.\n");
         return result;
     }
     else
@@ -149,10 +148,6 @@ static int getDiskSerialNumber()
             {
                 break;
             }
-            else
-            {
-                fprintf(stderr, "\nFailed to stat %s.\n", diskDeviceNames[i]);
-            }
             i++;
         }
 
@@ -165,7 +160,6 @@ static int getDiskSerialNumber()
         device = udev_device_new_from_devnum(ud, blockDeviceType, statbuf.st_rdev);
         if (NULL == device)
         {
-            fprintf(stderr, "\nFailed to open %s.\n", diskDeviceNames[i]);
             goto Cleanup;
         }
         else
@@ -202,7 +196,7 @@ static int getDiskSerialNumber()
         }
 
 Cleanup:
-        if(device == NULL)
+        if(device)
         {
             udev_device_unref(device);
         }
@@ -212,28 +206,23 @@ Cleanup:
     }
 }
 
-
+#if defined(SIMULATION) && (SIMULATION == YES)
 // Get device id from hardware parameters.
-// Note that, the device id is not derived from secure hardware source.
+// CAUTION: Primary seeds derived from device unique IDs are guaranteed to remain the same as long as the reference
+//  implementation manufactures its NV state on the same device. Since this implementation of GetDeviceID() relies 
+//  solely on publicly accessible values (storage device serial numbers and networking card MAC address), it can 
+//  only be used for the simulation purposes, as it cannot be used to produce a secret value.
 // pre-requisites - assumes that MAC address or disk device (i.e. /dev/sda or /dev/mmcblk0) present on the device.
-TPM_RC getDeviceID()
+TPM_RC GetDeviceID()
 {
     if(isDeviceIDSet == FALSE)
     {
-        if(getMacAddress() == -1)
-        {
-            fprintf(stderr, "\nerror occurred in retrieving mac address.\n");
-        }
-        else
+        if(GetMacAddress() == 0)
         {
             isDeviceIDSet = TRUE;
         }
 
-        if(getDiskSerialNumber() == -1)
-        {
-            fprintf(stderr, "\nerror occurred in retrieving disk serial.\n");
-        }
-        else
+        if(GetDiskSerialNumber() == 0)
         {
             isDeviceIDSet = TRUE;
         }
@@ -246,15 +235,16 @@ TPM_RC getDeviceID()
 
     return TPM_RC_SUCCESS;
 }
+#endif
 
-void _plat_getSeed(size_t size, uint8_t *seed, const TPM2B *purpose)
+void GetSeed(UINT16 size, uint8_t *seed, const TPM2B *purpose)
 {
     RAND_STATE rand;
 
-    TPM_RC result = getDeviceID();
+    TPM_RC result = GetDeviceID();
     if(result != TPM_RC_SUCCESS)
     {
-        LOG_FAILURE(FATAL_ERROR_INTERNAL);
+        LOG_FAILURE(FATAL_ERROR_DEVICEID);
         return;
     }
     
@@ -274,11 +264,11 @@ void _plat_getSeed(size_t size, uint8_t *seed, const TPM2B *purpose)
 
 void
 _plat__GetEPS(
-    size_t size,
+    UINT16 size,
     uint8_t *seed
     )
 {
-    _plat_getSeed(size, seed, EPS_CREATION);
+    GetSeed(size, seed, EPS_CREATION);
 }
 
 #endif

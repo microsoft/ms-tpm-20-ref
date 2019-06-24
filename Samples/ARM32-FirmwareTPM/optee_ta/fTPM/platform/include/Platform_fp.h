@@ -43,7 +43,7 @@
 //** From EPS.c
 
 LIB_EXPORT void
-_plat__GetEPS(size_t Size, uint8_t *EndorsementSeed);
+_plat__GetEPS(UINT16 Size, uint8_t *EndorsementSeed);
 
 //** From Cancel.c 
 

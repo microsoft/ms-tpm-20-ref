@@ -48,7 +48,7 @@
 // This function generate Endorsement seed from hardware parameters.
 LIB_EXPORT void
 _plat__GetEPS(
-    size_t size,
+    UINT16 size,
     uint8_t *seed
     );
 
