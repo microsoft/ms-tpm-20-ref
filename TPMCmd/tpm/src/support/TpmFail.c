@@ -230,7 +230,7 @@ TpmFail(
     s_failFunction = (UINT32)(ptrdiff_t)function;
     s_failLine = line;
 #else
-    s_failFunction = (UINT32)NULL;
+    s_failFunction = (UINT32)(ptrdiff_t)NULL;
     s_failLine = 0;
 #endif
     s_failCode = code;

@@ -239,7 +239,7 @@ BnSub(
     // Make sure that op2 is not obviously larger than op1
     pAssert(op1->size >= op2->size);
     borrow = SubSame(result->d, op1->d, op2->d, stop);
-    if(op1->size > stop)
+    if(op1->size > (crypt_uword_t)stop)
         borrow = BorrowProp(&result->d[stop], &op1->d[stop], (int)(op1->size - stop),
                             borrow);
     pAssert(!borrow);

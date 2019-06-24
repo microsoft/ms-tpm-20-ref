@@ -47,17 +47,21 @@
 #include "BaseTypes.h"
 
 #ifdef _MSC_VER
-#include <windows.h>
-#include <winsock.h>
+#   pragma warning(push, 3)
+#   include <windows.h>
+#   include <winsock.h>
+#   pragma warning(pop)
 #elif defined(__unix__)
-typedef int SOCKET;
+    typedef int SOCKET;
+#else
+#   error "Unsupported platform."
 #endif
 
 #ifndef TRUE
-#define TRUE    1
+#   define TRUE    1
 #endif
 #ifndef FALSE
-#define FALSE   0
+#   define FALSE   0
 #endif
 
 #include "Platform_fp.h"
@@ -329,36 +333,4 @@ _rpc__RsaKeyCacheControl(
 #else
     NOT_REFERENCED(state);
 #endif
-}
-
-//*** _rpc__Shutdown()
-// This function is used to stop the TPM simulator.
-void
-_rpc__Shutdown(
-    void
-    )
-{
-#ifdef _MSC_VER
-    RPC_STATUS status;
-#endif
-
-    // Stop TPM
-    TPM_TearDown();
-
-#ifdef _MSC_VER
-    status = RpcMgmtStopServerListening(NULL);
-    if(status != RPC_S_OK)
-    {
-        printf("RpcMgmtStopServerListening returned: 0x%x\n", status);
-        exit(status);
-    }
-
-    status = RpcServerUnregisterIf(NULL, NULL, FALSE);
-    if(status != RPC_S_OK)
-    {
-        printf("RpcServerUnregisterIf returned 0x%x\n", status);
-        exit(status);
-    }
-#endif
-    return;
 }

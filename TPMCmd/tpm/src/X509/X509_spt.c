@@ -187,11 +187,11 @@ X509ProcessExtensions(
         keyUsage.integer = value;
         // For KeyUsage:
         //  the 'sign' attribute is SET if Key Usage includes signing
-        if(((keyUsageSign.integer & keyUsage.integer) != 0)
-            && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign)
+        if(((keyUsageSign.integer & keyUsage.integer) != 0
+            && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign))
             // and the 'decrypt' attribute is Set if Key Usage includes decryption uses
-            || ((keyUsageDecrypt.integer & keyUsage.integer) != 0)
-            && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt)
+            || ((keyUsageDecrypt.integer & keyUsage.integer) != 0
+            && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
             // Check that 'fixedTPM' is SET if Key Usage is non-repudiation
             || (IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, nonrepudiation)
                 && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM))

@@ -93,6 +93,10 @@ enum TpmEndPointInfo
     tpmSupportsPP = 0x08
 };
 
+#ifdef _MSC_VER
+#   pragma warning(push, 3)
+#endif
+
 // Existing RPC interface type definitions retained so that the implementation
 // can be re-used
 typedef struct in_buffer
@@ -108,6 +112,10 @@ typedef struct out_buffer
     uint32_t         BufferSize;
     _OUTPUT_BUFFER   Buffer;
 } _OUT_BUFFER;
+
+#ifdef _MSC_VER
+#   pragma warning(pop)
+#endif
 
 #ifndef WIN32
 typedef unsigned long        DWORD;
