@@ -32,32 +32,31 @@
 
 include src.mk
 
-PLATFORM_INC = -I $(srcdir)/TPMCmd/Platform/include \
-    -I $(srcdir)/TPMCmd/Platform/include/prototypes
-SIMULATOR_INC =  -I $(srcdir)/TPMCmd/Simulator/include \
-    -I $(srcdir)/TPMCmd/Simulator/include/prototypes
-TPM_INC = -I $(srcdir)/TPMCmd/tpm/include \
-    -I $(srcdir)/TPMCmd/tpm/include/prototypes
+PLATFORM_INC = -I $(srcdir)/Platform/include \
+    -I $(srcdir)/Platform/include/prototypes
+SIMULATOR_INC =  -I $(srcdir)/Simulator/include \
+    -I $(srcdir)/Simulator/include/prototypes
+TPM_INC = -I $(srcdir)/tpm/include \
+    -I $(srcdir)/tpm/include/prototypes
 
-libplatform = TPMCmd/Platform/src/libplatform.a
-libtpm = TPMCmd/tpm/src/libtpm.a
-tpm2_simulator = TPMCmd/Simulator/src/tpm2-simulator
+libplatform = Platform/src/libplatform.a
+libtpm = tpm/src/libtpm.a
+tpm2_simulator = Simulator/src/tpm2-simulator
 
 bin_PROGRAMS = $(tpm2_simulator)
 noinst_LIBRARIES = $(libplatform) $(libtpm)
 
-TPMCmd_Platform_src_libplatform_a_CFLAGS = $(EXTRA_CFLAGS) $(PLATFORM_INC) \
-    $(TPM_INC)
-TPMCmd_Platform_src_libplatform_a_SOURCES = $(PLATFORM_C) $(PLATFORM_H)
+Platform_src_libplatform_a_CFLAGS = $(EXTRA_CFLAGS) $(PLATFORM_INC) $(TPM_INC)
+Platform_src_libplatform_a_SOURCES = $(PLATFORM_C) $(PLATFORM_H)
 
-TPMCmd_Simulator_src_tpm2_simulator_CFLAGS = $(EXTRA_CFLAGS) $(PLATFORM_INC) \
+Simulator_src_tpm2_simulator_CFLAGS = $(EXTRA_CFLAGS) $(PLATFORM_INC) \
     $(TPM_INC) $(SIMULATOR_INC) $(LIBCRYPTO_CFLAGS) $(PTHREAD_CFLAGS)
 # the weird / duplicate static library is necessary for dealing with the
 # circular dependency beetween libplatform and libtpm
-TPMCmd_Simulator_src_tpm2_simulator_LDADD = $(libplatform) $(libtpm) \
+Simulator_src_tpm2_simulator_LDADD = $(libplatform) $(libtpm) \
     $(libplatform) $(LIBCRYPTO_LIBS) $(PTHREAD_LIBS)
-TPMCmd_Simulator_src_tpm2_simulator_SOURCES = $(SIMULATOR_C) $(SIMULATOR_H)
+Simulator_src_tpm2_simulator_SOURCES = $(SIMULATOR_C) $(SIMULATOR_H)
 
-TPMCmd_tpm_src_libtpm_a_CFLAGS = $(EXTRA_CFLAGS) $(PLATFORM_INC) $(TPM_INC) \
+tpm_src_libtpm_a_CFLAGS = $(EXTRA_CFLAGS) $(PLATFORM_INC) $(TPM_INC) \
     $(LIBCRYPTO_CFLAGS)
-TPMCmd_tpm_src_libtpm_a_SOURCES = $(TPM_C) $(TPM_H) $(PLATFORM_H)
+tpm_src_libtpm_a_SOURCES = $(TPM_C) $(TPM_H) $(PLATFORM_H)

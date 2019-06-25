@@ -35,7 +35,7 @@ AC_INIT([ms-tpm-20-ref],
         [https://github.com/microsoft/ms-tpm-20-ref/issues],
         [],
         [https://github.com/microsoft/ms-tpm-20-ref])
-AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_MACRO_DIR([.])
 AC_PROG_CC
 AC_PROG_LN_S
 AC_PROG_RANLIB

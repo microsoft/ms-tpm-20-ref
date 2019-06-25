@@ -46,12 +46,12 @@ src_listvar () {
 
 echo "Generating file lists: src.mk"
 (
-    src_listvar "TPMCmd/Platform" "*.c" "PLATFORM_C"
-    src_listvar "TPMCmd/Platform" "*.h" "PLATFORM_H"
-    src_listvar "TPMCmd/Simulator" "*.c" "SIMULATOR_C"
-    src_listvar "TPMCmd/Simulator" "*.h" "SIMULATOR_H"
-    src_listvar "TPMCmd/tpm" "*.c" "TPM_C"
-    src_listvar "TPMCmd/tpm" "*.h" "TPM_H"
+    src_listvar "Platform" "*.c" "PLATFORM_C"
+    src_listvar "Platform" "*.h" "PLATFORM_H"
+    src_listvar "Simulator" "*.c" "SIMULATOR_C"
+    src_listvar "Simulator" "*.h" "SIMULATOR_H"
+    src_listvar "tpm" "*.c" "TPM_C"
+    src_listvar "tpm" "*.h" "TPM_H"
 ) > src.mk
 
 echo "Setting up build"
@@ -63,4 +63,4 @@ echo "Setting default vendor strings"
 sed -i 's&^\/\/\(#define[[:space:]]\+FIRMWARE_V1.*\)&\1&;
         s&^\/\/\(#define[[:space:]]\+MANUFACTURER.*\)&\1&;
         s&^\/\/\(#define[[:space:]]\+VENDOR_STRING_1.*\)&\1&' \
-       TPMCmd/tpm/include/VendorString.h
+       tpm/include/VendorString.h
