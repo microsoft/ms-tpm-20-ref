@@ -19,8 +19,10 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libssl-dev:i386
 
-script:
+before_script:
   - cd TPMCmd
+
+script:
   - ./bootstrap
   - ./configure --host=${HOST}
   - make --jobs=$(($(nproc)*3/2)) distcheck
