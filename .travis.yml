@@ -19,6 +19,9 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libssl-dev:i386
 
+before_script:
+  - cd TPMCmd
+
 script:
   - ./bootstrap
   - ./configure --host=${HOST}
