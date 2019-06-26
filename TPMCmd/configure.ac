@@ -81,7 +81,6 @@ AS_IF([test "x$enable_usedeviceid" = "xyes"], [
     ADD_COMPILER_FLAG([-DUSE_PLATFORM_EPS])
     AC_SUBST(ADDITIONAL_LIBS)
 ])
-
 ADD_LINK_FLAG([-Wl,--no-undefined])
 ADD_LINK_FLAG([-Wl,-z,noexecstack])
 ADD_LINK_FLAG([-Wl,-z,now])
