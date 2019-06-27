@@ -49,6 +49,15 @@
 #include "Platform_fp.h"
 
 #define DEVICEID_SIZE 48
+
+// This extension is needed as TPM2B_STRING only define TPM2B variable when #GLOBAL_C is defined.
+#define TPM2B_STRING_EXTENSION(name, value)                 \
+TPM2B_STRING(name, value);                                  \
+const TPM2B_##name##_ name##_ = STRING_INITIALIZER(value);  \
+const TPM2B *name = &name##_.b
+
+TPM2B_STRING_EXTENSION(EPS_CREATION, "EPS Creation");
+
 // Definition for Device ID value.
 TPM2B_TYPE(DEVICEID, DEVICEID_SIZE);
 const unsigned int MAC_ADDRESS_MAXIMUM_SIZE = 6;
@@ -244,7 +253,7 @@ void GetSeed(UINT16 size, uint8_t *seed, const TPM2B *purpose)
     TPM_RC result = GetDeviceID();
     if(result != TPM_RC_SUCCESS)
     {
-        LOG_FAILURE(FATAL_ERROR_DEVICEID);
+        LOG_FAILURE(FATAL_ERROR_INTERNAL);
         return;
     }
     
@@ -268,6 +277,8 @@ _plat__GetEPS(
     uint8_t *seed
     )
 {
+    // Ignore GCC warning.
+    (void)EPS_CREATION_;
     GetSeed(size, seed, EPS_CREATION);
 }
 

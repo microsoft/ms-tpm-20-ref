@@ -1184,9 +1184,6 @@ TPM2B_STRING(OBFUSCATE_STRING, "OBFUSCATE");
 #if SELF_TEST
 TPM2B_STRING(OAEP_TEST_STRING, "OAEP Test Value");
 #endif // SELF_TEST
-#if defined(USE_PLATFORM_EPS)
-TPM2B_STRING(EPS_CREATION, "EPS Creation");
-#endif
 
 //*****************************************************************************
 //** From CryptTest.c

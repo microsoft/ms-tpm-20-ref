@@ -51,9 +51,6 @@
 #define     FATAL_ERROR_COUNTER_OVERFLOW        (12)
 #define     FATAL_ERROR_SUBTRACT                (13)
 #define     FATAL_ERROR_MATHLIBRARY             (14)
-#if defined(USE_PLATFORM_EPS) && defined(SIMULATION) && (SIMULATION == YES)
-#define     FATAL_ERROR_DEVICEID                (15)
-#endif
 #define     FATAL_ERROR_FORCED                  (666)
 
 #endif // _TPM_ERROR_H
