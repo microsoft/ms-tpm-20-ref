@@ -40,20 +40,6 @@
 #ifndef    _PLATFORM_FP_H_
 #define    _PLATFORM_FP_H_
 
-#if defined(USE_PLATFORM_EPS)
-
-//** From DeviceID.c
-
-//** _plat__GetEPS()
-// This function generate Endorsement seed from hardware parameters.
-LIB_EXPORT void
-_plat__GetEPS(
-    UINT16 size,
-    uint8_t *seed
-    );
-
-#endif
-
 //** From Cancel.c 
 
 //***_plat__IsCanceled()

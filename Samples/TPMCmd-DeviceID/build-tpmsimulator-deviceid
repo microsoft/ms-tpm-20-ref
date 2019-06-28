@@ -40,12 +40,13 @@
 basedir=$1
 
 # Copy needed tpm simulator reference implementation source code files.
-cp -r -v $basedir/TPMCmd/* $basedir/Samples/TPMCmd-DeviceID
+cp -r -n -v $basedir/TPMCmd/* $basedir/Samples/TPMCmd-DeviceID
 
-pushd $basedir/Samples/TPMCmd-DeviceID
+cd $basedir/Samples/TPMCmd-DeviceID
 
 ./bootstrap
 ./configure --enable-usedeviceid=yes
 make -j2
 
+cd $basedir
 
