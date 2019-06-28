@@ -54,7 +54,7 @@ Simulator_src_tpm2_simulator_CFLAGS = $(EXTRA_CFLAGS) $(PLATFORM_INC) \
 # the weird / duplicate static library is necessary for dealing with the
 # circular dependency beetween libplatform and libtpm
 Simulator_src_tpm2_simulator_LDADD = $(libplatform) $(libtpm) \
-    $(libplatform) $(LIBCRYPTO_LIBS) $(PTHREAD_LIBS)
+    $(libplatform) $(LIBCRYPTO_LIBS) $(PTHREAD_LIBS) @ADDITIONAL_LIBS@
 Simulator_src_tpm2_simulator_SOURCES = $(SIMULATOR_C) $(SIMULATOR_H)
 
 tpm_src_libtpm_a_CFLAGS = $(EXTRA_CFLAGS) $(PLATFORM_INC) $(TPM_INC) \
