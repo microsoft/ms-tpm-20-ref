@@ -456,4 +456,12 @@ _plat__GetUnique(
     unsigned char       *b              // output buffer
     );
 
+//** From EPS.c 
+
+#if (defined USE_PLATFORM_EPS) && (USE_PLATFORM_EPS != NO)
+//** _plat__GetEPS()
+// This function is used to access the platform provided EPS value.
+void _plat__GetEPS(UINT16, BYTE*);
+#endif
+
 #endif  // _PLATFORM_FP_H_
