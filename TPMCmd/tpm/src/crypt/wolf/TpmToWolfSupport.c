@@ -42,7 +42,7 @@
 
 #include "Tpm.h"
 
-#if MATH_LIB == WOLF
+#ifdef MATH_LIB_WOLF
 
 //*** SupportLibInit()
 // This does any initialization required by the support library.

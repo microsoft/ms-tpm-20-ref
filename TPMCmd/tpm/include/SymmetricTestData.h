@@ -39,7 +39,6 @@
 // of the schemes (if any) and that implicitly checks that the chaining value
 // is handled properly.
 
-#if ALG_AES
 
 #if AES_128
 
@@ -175,7 +174,6 @@ const BYTE  dataOut_AES256_CTR [] = {
                 0xca, 0x84, 0xe9, 0x90, 0xca, 0xca, 0xf5, 0xc5};
 #endif
 
-#endif // ALG_AES
 
 
 

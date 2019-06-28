@@ -407,7 +407,7 @@ NvCapGetCounterNumber(
     void
     );
 
-void
+BOOL
 NvEntityStartup(
     STARTUP_TYPE     type           // IN: start up type
     );

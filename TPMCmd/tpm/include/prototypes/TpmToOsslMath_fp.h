@@ -40,7 +40,7 @@
 #ifndef    _TPMTOOSSLMATH_FP_H_
 #define    _TPMTOOSSLMATH_FP_H_
 
-#if MATH_LIB == OSSL
+#define MATH_LIB_OSSL
 
 //*** OsslToTpmBn()
 // This function converts an OpenSSL BIGNUM to a TPM bignum. In this implementation
@@ -218,6 +218,5 @@ BnEccAdd(
     bigCurve             E          // IN: curve
     );
 #endif // ALG_ECC
-#endif // MATHLIB OSSL
 
 #endif  // _TPMTOOSSLMATH_FP_H_

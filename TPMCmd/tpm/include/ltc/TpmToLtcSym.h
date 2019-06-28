@@ -37,15 +37,13 @@
 //
 // This header file is used to "splice" the TPM to the LTC symmetric cipher code.
 
-#ifndef _TPM_TO_LTC_SYM_H_
-#define _TPM_TO_LTC_SYM_H_
+#ifndef SYM_LIB_DEFINED
+#define SYM_LIB_DEFINED
 
-#if SYM_LIB == LTC
+#define SYM_LIB_LTC
 
-// Avoid pulling in the MPA math if not doing asymmetric with LTC
-#if MATH_LIB != LTC
-#  define LTC_NO_ASYMMETRIC
-#endif
+// Avoid pulling in the MPA math with the symmetric stuff
+#define LTC_NO_ASYMMETRIC
 
 #include "LtcSettings.h"
 
@@ -53,11 +51,11 @@
 //******** Linking to the TomCrypt AES code *********************
 //***************************************************************
 
-#ifdef TPM_ALG_SM4
+#if ALG_SM4
 #error "SM4 is not available"
 #endif
 
-#ifdef  TPM_ALG_CAMELLIA
+#if ALG_CAMELLIA
 #error "Camellia is not available"
 #endif
 
@@ -107,6 +105,4 @@ typedef union tpmCryptKeySchedule_t tpmCryptKeySchedule_t;
 
 #define SymLibSimulationEnd()
 
-#endif // SIM_LIB == LTC
-
-#endif // _TPM_TO_LTC_SYM_H_
+#endif // SYM_LIB_DEFINED

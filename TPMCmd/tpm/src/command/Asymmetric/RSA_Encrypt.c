@@ -35,9 +35,7 @@
 #include "Tpm.h"
 #include "RSA_Encrypt_fp.h"
 
-#ifdef TPM_CC_RSA_Encrypt  // Conditional expansion of this file
-
-#if ALG_RSA
+#if CC_RSA_Encrypt  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This command performs the padding and encryption of a data block
@@ -88,7 +86,5 @@ TPM2_RSA_Encrypt(
                              &in->label.b, NULL);
     return result;
 }
-
-#endif
 
 #endif // CC_RSA_Encrypt

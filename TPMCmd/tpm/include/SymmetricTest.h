@@ -49,9 +49,6 @@
 
 //** Symmetric Test Structures
 
-#define SYMMETRIC_TEST_ENTRY(SYM, SIZE, BLOCK_SIZE)                                 \
-    (ALG_##SYM##_VALUE, SIZE, key_##SYM##SIZE, )
-
 const SYMMETRIC_TEST_VECTOR   c_symTestValues[NUM_SYMS + 1] = {
 #if ALG_AES && AES_128
     {ALG_AES_VALUE, 128, key_AES128, 16, sizeof(dataIn_AES128), dataIn_AES128,
@@ -75,7 +72,5 @@ const SYMMETRIC_TEST_VECTOR   c_symTestValues[NUM_SYMS + 1] = {
 #endif
     {0}
 };
-
-
 
 #endif  // _SYMMETRIC_TEST_H

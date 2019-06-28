@@ -116,13 +116,8 @@
 #define ECC_NIST_P256                   YES
 #define ECC_NIST_P384                   YES
 #define ECC_NIST_P521                   YES
-#ifdef USE_WOLFCRYPT
-#define ECC_BN_P256                     NO
-#define ECC_SM2_P256                    NO
-#else
 #define ECC_BN_P256                     YES
 #define ECC_SM2_P256                    YES
-#endif
 #define ECC_BN_P638                     NO
 #define ECC_CURVES                      \
             {TPM_ECC_BN_P256,   TPM_ECC_BN_P638,   TPM_ECC_NIST_P192,              \
@@ -152,13 +147,13 @@
 #define HASH_ALIGNMENT                  4
 #define SYMMETRIC_ALIGNMENT             4
 #ifdef USE_WOLFCRYPT
-#define HASH_LIB                        WOLF
-#define SYM_LIB                         WOLF
-#define MATH_LIB                        WOLF
+#define HASH_LIB                        Wolf
+#define SYM_LIB                         Wolf
+#define MATH_LIB                        Wolf
 #else
-#define HASH_LIB                        OSSL
-#define SYM_LIB                         OSSL
-#define MATH_LIB                        OSSL
+#define HASH_LIB                        Ossl
+#define SYM_LIB                         Ossl
+#define MATH_LIB                        Ossl
 #endif
 #define BSIZE                           UINT16
 #define IMPLEMENTATION_PCR              24

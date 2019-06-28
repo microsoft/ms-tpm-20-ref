@@ -63,7 +63,7 @@ TimePowerOn(
 // TPM_Startup() has not been run. This is because the state of NV is not known
 // until startup completes. When Startup is done, then it will create the epoch
 // nonce to complete the initializations by calling this function.
-void
+BOOL
 TimeStartup(
     STARTUP_TYPE     type           // IN: start up type
     );

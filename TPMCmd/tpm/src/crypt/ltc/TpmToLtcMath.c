@@ -43,7 +43,7 @@
 //** Includes
 #include "Tpm.h"
 
-#if MATH_LIB == LTC
+#ifdef MATH_LIB_LTC
 
 #if defined ECC_NIST_P256 && ECC_NIST_P256 == YES && ECC_CURVE_COUNT > 1
 #error "LibTomCrypt only supports P256"

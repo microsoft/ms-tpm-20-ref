@@ -53,7 +53,7 @@
 //** Includes and Defines
 #include "Tpm.h"
 
-#if MATH_LIB == WOLF
+#ifdef MATH_LIB_WOLF
 
 #include "BnConvert_fp.h"
 #include "TpmToWolfMath_fp.h"

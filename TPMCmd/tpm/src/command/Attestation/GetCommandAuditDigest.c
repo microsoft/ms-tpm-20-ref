@@ -36,7 +36,7 @@
 #include "Attest_spt_fp.h"
 #include "GetCommandAuditDigest_fp.h"
 
-#ifdef TPM_CC_GetCommandAuditDigest  // Conditional expansion of this file
+#if CC_GetCommandAuditDigest  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Get current value of command audit log

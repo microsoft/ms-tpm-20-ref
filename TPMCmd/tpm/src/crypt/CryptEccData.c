@@ -38,7 +38,7 @@
  */
 
 #include "Tpm.h"
-#include "OIDs.h"
+#include "OIDS.h"
 
 
 // This file contains the ECC curve data. The format of the data depends on the

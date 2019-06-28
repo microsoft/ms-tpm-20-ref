@@ -144,7 +144,7 @@ PCR_ClearAuth(
 
 //*** PCRStartup()
 // This function initializes the PCR subsystem at TPM2_Startup().
-void
+BOOL
 PCRStartup(
     STARTUP_TYPE     type,          // IN: startup type
     BYTE             locality       // IN: startup locality

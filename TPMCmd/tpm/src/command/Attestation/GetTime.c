@@ -36,7 +36,7 @@
 #include "Attest_spt_fp.h"
 #include "GetTime_fp.h"
 
-#ifdef TPM_CC_GetTime  // Conditional expansion of this file
+#if CC_GetTime  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Applies a time stamp to the passed blob (qualifyingData).

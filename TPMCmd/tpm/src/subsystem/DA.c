@@ -79,7 +79,7 @@ DAPreInstall_Init(
 // the TPM has been continuously powered for the lockoutRecovery time.
 //
 // This function requires that NV be available and not rate limiting.
-void
+BOOL
 DAStartup(
     STARTUP_TYPE     type           // IN: startup type
     )
@@ -138,7 +138,7 @@ DAStartup(
     // do a time update which will do the DA update.
     TimeUpdate();
 
-    return;
+    return TRUE;
 }
 
 //*** DARegisterFailure()

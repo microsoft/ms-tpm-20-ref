@@ -303,13 +303,6 @@ typedef struct
             +    ((UINT64)(h))                                          \
             )
 
-
-
-
-// Add implementation dependent definitions for other ECC Values and for linkages. 
-// MATH_LIB_H is defined in LibSupport.h
-#include MATHLIB_H
-
 #ifndef RADIX_BYTES
 #   if RADIX_BITS == 32
 #       define RADIX_BYTES 4
@@ -319,5 +312,9 @@ typedef struct
 #       error "RADIX_BITS must either be 32 or 64"
 #   endif
 #endif
+
+// Add implementation dependent definitions for other ECC Values and for linkages. 
+#include LIB_INCLUDE(MATH_LIB, Math)
+
 
 #endif // _BN_NUMBERS_H

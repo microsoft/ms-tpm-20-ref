@@ -33,7 +33,6 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "Tpm.h"
-//#include "PolicyAuthorizeNV_fp.h"
 
 #if CC_PolicyAuthorizeNV  // Conditional expansion of this file
 #include "PolicyAuthorizeNV_fp.h"

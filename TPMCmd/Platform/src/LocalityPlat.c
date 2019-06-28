@@ -33,9 +33,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 //** Includes
-
-#include "PlatformData.h"
-#include "Platform_fp.h"
+#include "Platform.h"
 
 //** Functions
 

@@ -43,7 +43,7 @@
 
 #include "Tpm.h"
 
-#if MATH_LIB == LTC
+#ifdef MATH_LIB_LTC
 
 // This state is used because there is no way to pass the random number state
 // to LibTopCrypt. I do not think that this is currently an issue because...

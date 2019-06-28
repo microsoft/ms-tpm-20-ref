@@ -41,12 +41,12 @@
 #ifndef _LTC_SETTINGS_H_
 #define _LTC_SETTINGS_H_
 
-#if HASH_LIB == LTC || SYM_LIB == LTC || MATH_LIB == LTC
+#if defined HASH_LIB_LTC || defined SYM_LIB_LTC || defined MATH_LIB_LTC
 
-#ifdef TPM_ALG_AES
+#if ALG_AES
 #  define LTC_RIJNDAEL
 #endif
-#ifdef TPM_ALG_TDES
+#if ALG_TDES
 #   define LTC_DES
 #endif
 

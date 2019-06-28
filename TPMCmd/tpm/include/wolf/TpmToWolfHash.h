@@ -37,10 +37,10 @@
 //
 // This header file is used to 'splice' the wolfcrypt hash code into the TPM code.
 //
-#ifndef _TPM_TO_WOLF_HASH_H_
-#define _TPM_TO_WOLF_HASH_H_
+#ifndef HASH_LIB_DEFINED
+#define HASH_LIB_DEFINED
 
-#if HASH_LIB == WOLF
+#define HASH_LIB_WOLF
 
 #ifndef WOLFSSL_USER_SETTINGS
 #define WOLFSSL_USER_SETTINGS
@@ -65,7 +65,7 @@
 #define tpmHashStateSHA384_t      wc_Sha512
 #define tpmHashStateSHA512_t      wc_Sha512
 
-#ifdef TPM_ALG_SM3
+#if ALG_SM3
 #   error "The version of WolfCrypt used by this code does not support SM3"
 #endif
 
@@ -184,6 +184,6 @@ typedef const BYTE    *PCBYTE;
 // This definition would change if there were something to report
 #define HashLibSimulationEnd()
 
-#endif // HASH_LIB == WOLF
 
-#endif //
+
+#endif // HASH_LIB_DEFINED

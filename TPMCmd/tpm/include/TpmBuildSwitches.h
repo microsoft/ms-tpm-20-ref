@@ -59,6 +59,13 @@
 #undef NO
 #define NO 0
 
+// Allow the command line to specify a "profile" file
+#ifdef PROFILE
+#   define PROFILE_QUOTE(a) #a
+#   define PROFILE_INCLUDE(a) PROFILE_QUOTE(a)
+#   include PROFILE_INCLUDE(PROFILE)
+#endif
+
 // Need an unambiguous definition for DEBUG. Don't change this
 #ifndef DEBUG 
 #   ifdef NDEBUG

@@ -129,7 +129,7 @@ TpmSizeChecks(
 
             if(MAX_CONTEXT_SIZE != biggestContext)
             {
-                printf("MAX_CONTEXT_SIZE should be changed to %d\n", biggestContext);
+                printf("MAX_CONTEXT_SIZE should be changed to %d (%d)\n", biggestContext, MAX_CONTEXT_SIZE);
                 PASS = FALSE;
             }
         }

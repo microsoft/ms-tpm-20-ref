@@ -37,8 +37,7 @@
 //  This module simulates the cancel pins on the TPM.
 //
 //** Includes, Typedefs, Structures, and Defines
-#include "PlatformData.h"
-#include "Platform_fp.h"
+#include "Platform.h"
 
 //** Functions
 

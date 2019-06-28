@@ -42,11 +42,9 @@
 #include "Tpm.h"
 #include "CryptHash_fp.h"
 #include "CryptHash.h"
-#include "OIDs.h"
+#include "OIDS.h"
 
 #define HASH_TABLE_SIZE     (HASH_COUNT + 1)
-//extern const HASH_INFO   g_hashData[HASH_COUNT + 1];
-
 
 #if     ALG_SHA1
 HASH_DEF_TEMPLATE(SHA1, Sha1);
@@ -109,8 +107,7 @@ CryptHashStartup(
     )
 {
     int         i = sizeof(HashDefArray) / sizeof(PHASH_DEF) - 1;
-    pAssert(i == HASH_COUNT);
-    return TRUE;
+    return (i == HASH_COUNT);
 }
 
 //** Hash Information Access Functions

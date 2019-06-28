@@ -35,9 +35,7 @@
 #include "Tpm.h"
 #include "EC_Ephemeral_fp.h"
 
-#ifdef TPM_CC_EC_Ephemeral  // Conditional expansion of this file
-
-#if ALG_ECC
+#if CC_EC_Ephemeral  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This command creates an ephemeral key using the commit mechanism
@@ -71,6 +69,5 @@ TPM2_EC_Ephemeral(
 
     return TPM_RC_SUCCESS;
 }
-#endif
 
 #endif // CC_EC_Ephemeral

@@ -40,7 +40,7 @@
 #ifndef    _TPMTOOSSLSUPPORT_FP_H_
 #define    _TPMTOOSSLSUPPORT_FP_H_
 
-#if MATH_LIB == OSSL
+#define MATH_LIB_OSSL
 
 //*** SupportLibInit()
 // This does any initialization required by the support library.
@@ -79,6 +79,5 @@ void
 OsslPopContext(
     BN_CTX          *CTX
     );
-#endif // MATH_LIB == OSSL
 
 #endif  // _TPMTOOSSLSUPPORT_FP_H_

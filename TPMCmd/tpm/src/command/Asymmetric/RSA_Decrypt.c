@@ -35,9 +35,7 @@
 #include "Tpm.h"
 #include "RSA_Decrypt_fp.h"
 
-#ifdef TPM_CC_RSA_Decrypt  // Conditional expansion of this file
-
-#if ALG_RSA
+#if CC_RSA_Decrypt  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // decrypts the provided data block and removes the padding if applicable
@@ -104,6 +102,5 @@ TPM2_RSA_Decrypt(
                              scheme, &in->label.b);
     return result;
 }
-#endif
 
 #endif // CC_RSA_Decrypt

@@ -38,9 +38,6 @@
 #ifndef _PLATFORM_DATA_H_
 #define _PLATFORM_DATA_H_
 
-
-#include      "Implementation.h"
-
 // From Cancel.c
 // Cancel flag.  It is initialized as FALSE, which indicate the command is not
 // being canceled

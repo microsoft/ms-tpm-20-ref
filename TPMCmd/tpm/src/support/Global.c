@@ -52,8 +52,8 @@
 // that are defined in Global.h are used in OIDs.h in the same way as they are in 
 // Global.h.
 
-//** Defines and Included
+//** Defines and Includes
 #define GLOBAL_C
 #include "Tpm.h"
-#include "OIDs.h"
+#include "OIDS.h"
 

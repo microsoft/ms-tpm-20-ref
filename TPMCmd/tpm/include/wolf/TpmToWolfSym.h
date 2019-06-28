@@ -37,10 +37,10 @@
 //
 // This header file is used to 'splice' the wolfcrypt library into the TPM code.
 
-#ifndef _TPM_TO_WOLF_SYM_H_
-#define _TPM_TO_WOLF_SYM_H_
+#ifndef SYM_LIB_DEFINED
+#define SYM_LIB_DEFINED
 
-#if SYM_LIB == WOLF
+#define SYM_LIB_WOLF
 
 #include <wolfssl/wolfcrypt/aes.h>
 #include <wolfssl/wolfcrypt/des3.h>
@@ -49,11 +49,11 @@
 //** Links to the wolfCrypt AES code
 //***************************************************************
 
-#ifdef TPM_ALG_SM4
+#if ALG_SM4
 #error "SM4 is not available"
 #endif
 
-#ifdef  TPM_ALG_CAMELLIA
+#if ALG_CAMELLIA
 #error "Camellia is not available"
 #endif
 
@@ -112,6 +112,4 @@ typedef union tpmCryptKeySchedule_t tpmCryptKeySchedule_t;
 // This definition would change if there were something to report
 #define SymLibSimulationEnd()
 
-#endif // SYM_LIB == WOLF
-
-#endif // _TPM_TO_WOLF_SYM_H_
+#endif // SYM_LIB_DEFINED

@@ -83,48 +83,20 @@ typedef struct _RSA_KEY_CACHE_
 } RSA_KEY_CACHE;
 
 // Determine the number of RSA key sizes for the cache
-#ifdef RSA_KEY_SIZE_BITS_1024
-#define RSA_1024    YES
-#else
-#define RSA_1024    NO
-#endif
-#ifdef RSA_KEY_SIZE_BITS_2048
-#define RSA_2048    YES
-#else
-#define RSA_2048    NO
-#endif
-#ifdef RSA_KEY_SIZE_BITS_3072
-#define RSA_3072    YES
-#else
-#define RSA_3072    NO
-#endif
-#ifdef RSA_KEY_SIZE_BITS_4096
-#define RSA_4096    YES
-#else
-#define RSA_4096    NO
-#endif
-
-
-#define comma
 TPMI_RSA_KEY_BITS       SupportedRsaKeySizes[] = {
 #if RSA_1024
-    1024
-#   undef comma
-#   define comma ,
+    1024,
 #endif
 #if RSA_2048
-    comma 2048
-#   undef comma
-#   define comma ,
+    2048,
 #endif
 #if RSA_3072
-    comma 3072
-#   undef comma
-#   define comma ,
+    3072,
 #endif
 #if RSA_4096
-    comma 4096
+    4096,
 #endif
+    0
 };
 
 #define RSA_KEY_CACHE_ENTRIES (RSA_1024 + RSA_2048 + RSA_3072 + RSA_4096)

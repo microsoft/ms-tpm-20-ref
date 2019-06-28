@@ -35,9 +35,7 @@
 #include "Tpm.h"
 #include "ECDH_ZGen_fp.h"
 
-#ifdef TPM_CC_ECDH_ZGen  // Conditional expansion of this file
-
-#if ALG_ECC
+#if CC_ECDH_ZGen  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This command uses the TPM to recover the Z value from a public point
@@ -84,6 +82,5 @@ TPM2_ECDH_ZGen(
         return RcSafeAddToResult(result, RC_ECDH_ZGen_inPoint);
     return result;
 }
-#endif
 
 #endif // CC_ECDH_ZGen

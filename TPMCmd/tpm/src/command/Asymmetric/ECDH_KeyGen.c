@@ -35,9 +35,7 @@
 #include "Tpm.h"
 #include "ECDH_KeyGen_fp.h"
 
-#ifdef TPM_CC_ECDH_KeyGen  // Conditional expansion of this file
-
-#if ALG_ECC
+#if CC_ECDH_KeyGen  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This command uses the TPM to generate an ephemeral public key and the product
@@ -90,6 +88,5 @@ TPM2_ECDH_KeyGen(
     } while(result == TPM_RC_NO_RESULT);
     return result;
 }
-#endif // ALG_ECC
 
 #endif // CC_ECDH_KeyGen

@@ -43,7 +43,6 @@
 #include <stdint.h>
 #include <ctype.h>
 #include <string.h>
-#include "BaseTypes.h"
 
 #ifdef _MSC_VER
 #include <windows.h>

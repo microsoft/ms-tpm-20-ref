@@ -500,7 +500,7 @@ PCR_ClearAuth(
 
 //*** PCRStartup()
 // This function initializes the PCR subsystem at TPM2_Startup().
-void
+BOOL
 PCRStartup(
     STARTUP_TYPE     type,          // IN: startup type
     BYTE             locality       // IN: startup locality
@@ -558,6 +558,8 @@ PCRStartup(
                     pcrSavedData = GetSavedPcrPointer(
                         gp.pcrAllocated.pcrSelections[j].hash,
                         saveIndex);
+                    if(pcrSavedData == NULL)
+                        return FALSE;
                     MemoryCopy(pcrData, pcrSavedData, pcrSize);
                 }
                 else
@@ -582,6 +584,7 @@ PCRStartup(
     // Reset authValues on TPM2_Startup(CLEAR)
     if(type != SU_RESUME)
         PCR_ClearAuth();
+    return TRUE;
 }
 
 //*** PCRStateSave()

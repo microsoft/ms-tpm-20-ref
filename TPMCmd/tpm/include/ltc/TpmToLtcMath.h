@@ -37,10 +37,10 @@
 // This file contains the structure definitions used for linking from the TPM
 // code to the MPA and LTC math libraries.
 
-#ifndef _TPM_TO_LTC_MATH_H_
-#define _TPM_TO_LTC_MATH_H_
+#ifndef MATH_LIB_DEFINED
+#define MATH_LIB_DEFINED
 
-#if MATH_LIB == LTC
+#define MATH_LIB_LTC
 
 _REDUCE_WARNING_LEVEL_(2)
 #include "LtcSettings.h"
@@ -86,7 +86,4 @@ typedef bnCurve_t  *bigCurve;
 // This definition would change if there were something to report
 #define MathLibSimulationEnd()
 
-#endif // MATH_LIB == LTC
-
-
-#endif
+#endif // MATH_LIB_DEFINED

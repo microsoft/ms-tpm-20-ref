@@ -67,7 +67,7 @@ ObjectSetInUse(
 
 //*** ObjectStartup()
 // This function is called at TPM2_Startup() to initialize the object subsystem.
-void
+BOOL
 ObjectStartup(
     void
     )
@@ -80,7 +80,7 @@ ObjectStartup(
         //Set the slot to not occupied
         ObjectFlush(&s_objects[i]);
     }
-    return;
+    return TRUE;
 }
 
 //*** ObjectCleanupEvict()

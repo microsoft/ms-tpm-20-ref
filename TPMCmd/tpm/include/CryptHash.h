@@ -65,11 +65,7 @@ typedef struct sequenceMethods {
     SMAC_END_METHOD           end;
 } SMAC_METHODS;
 
-#if defined(TPM_CC_MAC) || defined(TPM_CC_MAC_Start)
-#define SMAC_IMPLEMENTED 1
-#else
-#define SMAC_IMPLEMENTED 0
-#endif
+#define SMAC_IMPLEMENTED (CC_MAC || CC_MAC_Start)
 
 // These definitions are here because the SMAC state is in the union of hash states.
 typedef struct tpmCmacState {
@@ -219,8 +215,6 @@ typedef struct _HASH_METHODS
 #define ECDSA_OID(NAME)
 #endif
 
-
-
 typedef const struct HASH_DEF
 {
     HASH_METHODS         method;
@@ -236,23 +230,20 @@ typedef const struct HASH_DEF
 // Macro to fill in the HASH_DEF for an algorithm. For SHA1, the instance would be:
 //  HASH_DEF_TEMPLATE(Sha1, SHA1)
 // This handles the difference in capitalization for the various pieces.
-#define HASH_DEF_TEMPLATE(HASH, Hash)                                               \
-    HASH_DEF    Hash##_Def= {                                                       \
-                        {(HASH_START_METHOD *)&tpmHashStart_##HASH,                 \
-                         (HASH_DATA_METHOD *)&tpmHashData_##HASH,                   \
-                         (HASH_END_METHOD *)&tpmHashEnd_##HASH,                     \
-                         (HASH_STATE_COPY_METHOD *)&tpmHashStateCopy_##HASH,        \
-                         (HASH_STATE_EXPORT_METHOD *)&tpmHashStateExport_##HASH,    \
-                         (HASH_STATE_IMPORT_METHOD *)&tpmHashStateImport_##HASH,    \
-                        },                                                          \
-                        HASH##_BLOCK_SIZE,              /* block size */            \
-                        HASH##_DIGEST_SIZE,             /* data size */             \
-                        sizeof(tpmHashState##HASH##_t), /* context size */          \
-                        TPM_ALG_##HASH,                 /* hashAlg */               \
-                        OID_##HASH                      /* base OID */              \
-                        PKCS1_OID(HASH)                 /* PKCS1 OID */             \
-                        ECDSA_OID(HASH)                 /* ECDSA OID */             \
-    };
+#define HASH_DEF_TEMPLATE(HASH, Hash)                                                 \
+    HASH_DEF    Hash##_Def= {                                                   \
+                        {(HASH_START_METHOD *)&tpmHashStart_##HASH,             \
+                         (HASH_DATA_METHOD *)&tpmHashData_##HASH,               \
+                         (HASH_END_METHOD *)&tpmHashEnd_##HASH,                 \
+                         (HASH_STATE_COPY_METHOD *)&tpmHashStateCopy_##HASH,    \
+                         (HASH_STATE_EXPORT_METHOD *)&tpmHashStateExport_##HASH,\
+                         (HASH_STATE_IMPORT_METHOD *)&tpmHashStateImport_##HASH,\
+                        },                                                      \
+                        HASH##_BLOCK_SIZE,     /*block size */                  \
+                        HASH##_DIGEST_SIZE,    /*data size */                   \
+                        sizeof(tpmHashState##HASH##_t),                         \
+                        TPM_ALG_##HASH, OID_##HASH                              \
+                        PKCS1_OID(HASH) ECDSA_OID(HASH)};
 
 // These definitions are for the types that can be in a hash state structure.
 // These types are used in the cryptographic utilities. This is a define rather than
@@ -299,8 +290,6 @@ typedef struct hmacState
     HASH_STATE           hashState;          // the hash state
     TPM2B_HASH_BLOCK     hmacKey;            // the HMAC key
 } HMAC_STATE, *PHMAC_STATE;
-
-//???extern const HASH_INFO   g_hashData[HASH_COUNT + 1];
 
 // This is for the external hash state. This implementation assumes that the size
 // of the exported hash state is no larger than the internal hash state. There

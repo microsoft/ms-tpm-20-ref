@@ -37,15 +37,12 @@
 // This header defines the interface between the hashing code and the LIbTomCrypt
 // hash functions.
 
-#ifndef _TPM_TO_LTC_HASH_H_
-#define _TPM_TO_LTC_HASH_H_
+#ifndef HASH_LIB_DEFINED
+#define HASH_LIB_DEFINED
 
-#if HASH_LIB == LTC
+#define HASH_LIB_LTC
 
-// Avoid pulling in the MPA math if not doing asymmetric with LTC
-#if MATH_LIB != LTC
-#  define LTC_NO_ASYMMETRIC
-#endif
+#define LTC_NO_ASYMMETRIC
 
 #include "LtcSettings.h"
 
@@ -172,6 +169,4 @@
 #define HashLibSimulationEnd()
 
 
-#endif // HASH_LIB == LTC
-
-#endif //
+#endif // HASH_LIB_DEFINED

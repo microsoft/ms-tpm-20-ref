@@ -55,7 +55,7 @@ CommandAuditPreInstall_Init(
 
 //*** CommandAuditStartup()
 // This function clears the command audit digest on a TPM Reset.
-void
+BOOL
 CommandAuditStartup(
     STARTUP_TYPE     type           // IN: start up type
     );

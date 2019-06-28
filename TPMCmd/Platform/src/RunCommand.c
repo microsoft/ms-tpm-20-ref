@@ -47,8 +47,7 @@
 // a system exit to the OS would be appropriate.
 
 //** Includes and locals
-#include "PlatformData.h"
-#include "Platform_fp.h"
+#include "Platform.h"
 #include <setjmp.h>
 #include "ExecCommand_fp.h"
 

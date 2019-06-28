@@ -42,7 +42,7 @@
 //** Includes
 
 #include "Tpm.h"
-#include "OIDs.h"
+#include "OIDS.h"
 
 //** Defined Constants
 //*** ASN.1 Universal Types (Class 00b)

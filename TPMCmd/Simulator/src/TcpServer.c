@@ -38,7 +38,6 @@
 //
 //** Includes, Locals, Defines and Function Prototypes
 #include "TpmBuildSwitches.h"
-#include "BaseTypes.h"
 
 #include <stdio.h>
 
@@ -48,6 +47,7 @@
 typedef int socklen_t;
 #elif defined(__unix__)
 #  include <string.h>
+#  include <pthread.h>
 #  define ZeroMemory(ptr, sz) (memset((ptr), 0, (sz)))
 #  include <unistd.h>
 #  define closesocket(x) close(x)
@@ -60,14 +60,14 @@ typedef int SOCKET;
 #  define INT_PTR intptr_t
 #  include <netinet/in.h>
 #  include <sys/socket.h>
-#endif
+#else
+#error "Unsupported platform."
+#endif // _MSC_VER
 
 
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
-
-#include "BaseTypes.h"
 
 #include "TpmTcpProtocol.h"
 #include "Manufacture_fp.h"
@@ -264,7 +264,7 @@ PlatformSvcRoutine(
         serverSocket = accept(listenSocket,
                               (struct sockaddr*) &HerAddress,
                               &length);
-        if(serverSocket == SOCKET_ERROR)
+        if(serverSocket == INVALID_SOCKET)
         {
             printf("Accept error.  Error is 0x%x\n", WSAGetLastError());
             return -1;
@@ -284,12 +284,12 @@ PlatformSvcRoutine(
 // This function starts a new thread waiting for platform signals.
 // Platform signals are processed one at a time in the order in which they are
 // received.
-#if defined(_MSC_VER)
 int
 PlatformSignalService(
     int              PortNumber
     )
 {
+#if defined(_MSC_VER)
     HANDLE               hPlatformSvc;
     int                  ThreadId;
     int                  port = PortNumber;
@@ -304,29 +304,21 @@ PlatformSignalService(
         return -1;
     }
     return 0;
-}
-#elif defined(__unix__)
-#include <pthread.h>
-int
-PlatformSignalService(
-    int              PortNumber
-    )
-{
-    pthread_t thread_id;
-    int ret;
-    int port = PortNumber;
+#else
+    pthread_t            thread_id;
+    int                  ret;
+    int                  port = PortNumber;
 
-    ret = pthread_create(&thread_id, NULL, (void*)PlatformSvcRoutine, (LPVOID)(INT_PTR)port);
+    ret = pthread_create(&thread_id, NULL, (void*)PlatformSvcRoutine, 
+                         (LPVOID)(INT_PTR)port);
     if (ret == -1)
     {
         printf("pthread_create failed: %s", strerror(ret));
     }
-
     return ret;
-}
-#else
-#error "Unsupported platform."
 #endif // _MSC_VER
+}
+
 //*** RegularCommandService()
 // This function services regular commands.
 int

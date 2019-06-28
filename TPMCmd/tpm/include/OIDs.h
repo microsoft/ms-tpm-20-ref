@@ -50,31 +50,74 @@
 // NOTE: When one of these macros is used, the NAME needs '_" on each side. The 
 // exception is when the macro is used for the hash OID when only a single '_' is
 // used.
+#ifndef ALG_SHA1
+#   define ALG_SHA1 NO
+#endif
 #if ALG_SHA1
 #define SHA1_OID(NAME)    MAKE_OID(NAME##SHA1)
 #else
 #define SHA1_OID(NAME)
+#endif
+#ifndef ALG_SHA256
+#   define ALG_SHA256 NO
 #endif
 #if ALG_SHA256
 #define SHA256_OID(NAME)  MAKE_OID(NAME##SHA256)
 #else
 #define SHA256_OID(NAME)
 #endif
+#ifndef ALG_SHA384
+#   define ALG_SHA384 NO
+#endif
 #if ALG_SHA384
 #define SHA384_OID(NAME)  MAKE_OID(NAME##SHA384)
 #else
 #define SHA#84_OID(NAME)
+#endif
+#ifndef ALG_SHA512
+#   define ALG_SHA512 NO
 #endif
 #if ALG_SHA512
 #define SHA512_OID(NAME)  MAKE_OID(NAME##SHA512)
 #else
 #define SHA512_OID(NAME)
 #endif
+#ifndef ALG_SM3_256
+#   define ALG_SM3_256 NO
+#endif
 #if ALG_SM3_256
 #define SM3_256_OID(NAME) MAKE_OID(NAME##SM2_256)
 #else
 #define SM3_256_OID(NAME)
 #endif
+#ifndef ALG_SHA3_256
+#   define ALG_SHA3_256 NO
+#endif
+#if ALG_SHA3_256
+#define SHA3_256_OID(NAME) MAKE_OID(NAME##SHA3_256)
+#else
+#define SHA3_256_OID(NAME)
+#endif
+#ifndef ALG_SHA3_384
+#   define ALG_SHA3_384 NO
+#endif
+#if ALG_SHA3_384
+#define SHA3_384_OID(NAME) MAKE_OID(NAME##SHA3_384)
+#else
+#define SHA3_384_OID(NAME)
+#endif
+#ifndef ALG_SHA3_512
+#   define ALG_SHA3_512 NO
+#endif
+#if ALG_SHA3_512
+#define SSHA3_512_OID(NAME) MAKE_OID(NAME##SHA3_512)
+#else
+#define SHA3_512_OID(NAME)
+#endif
+ 
+// These are encoded to take one additional byte of algorithm selector
+#define NIST_HASH       0x06, 0x09, 0x60, 0x86, 0x48, 1, 101, 3, 4, 2
+#define NIST_SIG        0x06, 0x09, 0x60, 0x86, 0x48, 1, 101, 3, 4, 3
 
 // These hash OIDs used in a lot of places.
 #define OID_SHA1_VALUE              0x06, 0x05, 0x2B, 0x0E, 0x03, 0x02, 0x1A
@@ -88,21 +131,28 @@ SHA1_OID(_);        // Expands to
                     //      const BYTE      OID_SHA1[] = {0x06, 0x05, 0x2B, 0x0E, 
                     //                                    0x03, 0x02, 0x1A}
 
-#define OID_SHA256_VALUE            0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, \
-                                    0x04, 0x02, 0x01
+
+#define OID_SHA256_VALUE            NIST_HASH, 1
 SHA256_OID(_);
 
-#define OID_SHA384_VALUE            0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, \
-                                    0x04, 0x02, 0x02
+#define OID_SHA384_VALUE            NIST_HASH, 2
 SHA384_OID(_);
 
-#define OID_SHA512_VALUE            0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, \
-                                    0x04, 0x02, 0x03
+#define OID_SHA512_VALUE            NIST_HASH, 3
 SHA512_OID(_);
 
 #define OID_SM3_256_VALUE           0x06, 0x08, 0x2A, 0x81, 0x1C, 0xCF, 0x55, 0x01, \
                                     0x83, 0x11
 SM3_256_OID(_);         // (1.2.156.10197.1.401)
+
+#define OID_SHA3_256_VALUE          NIST_HASH, 8
+SHA3_256_OID(_);
+
+#define OID_SHA3_384_VALUE          NIST_HASH, 9
+SHA3_384_OID(_);
+
+#define OID_SHA3_512_VALUE          NIST_HASH, 10
+SHA3_512_OID(_);
 
 
 // These are used for RSA-PSS
@@ -142,6 +192,14 @@ SHA512_OID(_PKCS1_);    //(1.2.840.113549.1.1.13)
                                     0x01, 0x83, 0x78
 SM3_256_OID(_PKCS1_);   // 1.2.156.10197.1.504
 
+#define OID_PKCS1_SHA3_256_VALUE    NIST_SIG, 14
+SHA3_256_OID(_PKCS1_); 
+#define OID_PKCS1_SHA3_384_VALUE    NIST_SIG, 15
+SHA3_256_OID(_PKCS1_);
+#define OID_PKCS1_SHA3_512_VALUE    NIST_SIG, 16
+SHA3_512_OID(_PKCS1_);
+
+
 #endif // ALG_RSA
 
 #if ALG_ECDSA
@@ -164,6 +222,15 @@ SHA512_OID(_ECDSA_);    // (1.2.840.10045.4.3.4) SHA512 digest signed by an ECDS
 
 #define OID_ECDSA_SM3_256_VALUE     0x00
 SM3_256_OID(_ECDSA_);
+
+#define OID_ECDSA_SHA3_256_VALUE    NIST_SIG, 10
+SHA3_256_OID(_ECDSA_);
+#define OID_ECDSA_SHA3_384_VALUE    NIST_SIG, 11
+SHA3_384_OID(_ECDSA_);
+#define OID_ECDSA_SHA3_512_VALUE    NIST_SIG, 12
+SHA3_512_OID(_ECDSA_);
+
+
 
 #endif // ALG_ECDSA
 
@@ -215,7 +282,7 @@ MAKE_OID(_ECC_BN_P638);
 #define OID_ECC_SM2_P256_VALUE      0x06, 0x08, 0x2A, 0x81, 0x1C, 0xCF, 0x55, 0x01, \
                                     0x82, 0x2D
 #if ECC_SM2_P256
-MAKE_OID(_ECC_SM2_P256);    // ???
+MAKE_OID(_ECC_SM2_P256);    // Don't know where I found this OID. It needs checking
 #endif // ECC_SM2_P256
 
 #if ECC_BN_P256

@@ -36,7 +36,7 @@
 #include "AC_GetCapability_fp.h"
 #include "AC_spt_fp.h"
 
-#ifdef TPM_CC_AC_GetCapability  // Conditional expansion of this file
+#if CC_AC_GetCapability  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // This command returns various information regarding Attached Components

@@ -350,7 +350,8 @@ CryptGenerateR(
     {
         int     i;
         CryptKDFa(CONTEXT_INTEGRITY_HASH_ALG, &gr.commitNonce.b, COMMIT_STRING,
-                  &name->b, &cntr.b, n.t.size * 8, r->t.buffer, &iterations, FALSE);
+                  (TPM2B *)name, &cntr.b, n.t.size * 8, r->t.buffer, 
+                  &iterations, FALSE);
 
         // "random" value must be less than the prime
         if(UnsignedCompareB(r->b.size, r->b.buffer, n.t.size, n.t.buffer) >= 0)

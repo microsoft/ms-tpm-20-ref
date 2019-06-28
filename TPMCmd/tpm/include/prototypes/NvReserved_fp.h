@@ -94,7 +94,7 @@ NvRead(
 //*** NvWrite()
 // This function is used to post reserved data for writing to NV memory. Before
 // the TPM completes the operation, the value will be written.
-void
+BOOL
 NvWrite(
     UINT32           nvOffset,      // IN: location in NV to receive data
     UINT32           size,          // IN: size of the data to move

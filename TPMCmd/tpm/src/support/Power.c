@@ -58,13 +58,13 @@ TPMInit(
 //*** TPMRegisterStartup()
 // This function registers the fact that the TPM has been initialized
 // (a TPM2_Startup() has completed successfully).
-void
+BOOL
 TPMRegisterStartup(
     void
     )
 {
     g_initialized = TRUE;
-    return;
+    return TRUE;
 }
 
 //*** TPMIsStarted()

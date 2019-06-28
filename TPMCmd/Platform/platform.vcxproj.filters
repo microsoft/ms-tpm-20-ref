@@ -31,6 +31,7 @@
     <ClCompile Include="src\Unique.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\DebugHelpers.c" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -49,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="include\prototypes\Platform_fp.h">
       <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Platform.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

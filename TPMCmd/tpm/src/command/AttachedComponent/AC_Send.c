@@ -37,7 +37,7 @@
 #include "AC_spt_fp.h"
 
 
-#ifdef TPM_CC_AC_Send  // Conditional expansion of this file
+#if CC_AC_Send  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // Duplicate a loaded object

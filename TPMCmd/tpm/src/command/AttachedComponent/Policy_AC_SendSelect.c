@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "Policy_AC_SendSelect_fp.h"
 
-#ifdef TPM_CC_Policy_AC_SendSelect      // Conditional expansion of this file
+#if CC_Policy_AC_SendSelect      // Conditional expansion of this file
 
 /*(See part 3 specification)
 // allows qualification of attached component and object to be sent.

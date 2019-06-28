@@ -112,7 +112,7 @@ HierarchyPreInstall_Init(
 //*** HierarchyStartup()
 // This function is called at TPM2_Startup() to initialize the hierarchy
 // related values.
-void
+BOOL
 HierarchyStartup(
     STARTUP_TYPE     type           // IN: start up type
     )
@@ -141,7 +141,7 @@ HierarchyStartup(
         CryptRandomGenerate(gr.nullSeed.t.size, gr.nullSeed.t.buffer);
     }
 
-    return;
+    return TRUE;
 }
 
 //*** HierarchyGetProof()

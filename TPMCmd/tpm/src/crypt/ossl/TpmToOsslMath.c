@@ -68,8 +68,7 @@
 //** Includes and Defines
 #include "Tpm.h"
 
-#if MATH_LIB == OSSL
-
+#ifdef MATH_LIB_OSSL
 #include "TpmToOsslMath_fp.h"
 
 //** Functions

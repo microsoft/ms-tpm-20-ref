@@ -36,7 +36,7 @@
 #include "Attest_spt_fp.h"
 #include "Certify_fp.h"
 
-#ifdef TPM_CC_Certify  // Conditional expansion of this file
+#if CC_Certify  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // prove an object with a specific Name is loaded in the TPM

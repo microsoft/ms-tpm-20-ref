@@ -37,9 +37,8 @@
 #define _CRT_RAND_S
 #include <stdlib.h>
 #include <memory.h>
-#include "PlatformData.h"
-#include "Platform_fp.h"
 #include <time.h>
+#include "Platform.h"
 
 #ifdef _MSC_VER
 #include <process.h>

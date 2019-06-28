@@ -39,10 +39,10 @@
 // The support required of a library are a hash module, a block cipher module and
 // portions of a big number library.
 
-#ifndef _TPM_TO_OSSL_SYM_H_
-#define _TPM_TO_OSSL_SYM_H_
+#ifndef SYM_LIB_DEFINED
+#define SYM_LIB_DEFINED
 
-#if SYM_LIB == OSSL
+#define SYM_LIB_OSSL
 
 #include <openssl/aes.h>
 #include <openssl/des.h>
@@ -117,6 +117,4 @@ typedef union tpmCryptKeySchedule_t tpmCryptKeySchedule_t;
 // This definition would change if there were something to report
 #define SymLibSimulationEnd()
 
-#endif // SYM_LIB == OSSL
-
-#endif // _TPM_TO_OSSL_SYM_H_
+#endif // SYM_LIB_DEFINED

@@ -37,8 +37,7 @@
 //    This module simulates the physical presence interface pins on the TPM.
 
 //** Includes
-#include "PlatformData.h"
-#include "Platform_fp.h"
+#include "Platform.h"
 
 //** Functions
 
