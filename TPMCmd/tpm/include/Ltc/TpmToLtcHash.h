@@ -59,10 +59,6 @@
 #define tpmHashStateSHA512_t          struct sha512_state
 #define tpmHashStateSHA384_t          struct sha512_state
 
-
-// The following defines are only needed by CryptHash.c
-#ifdef _CRYPT_HASH_C_
-
 // Define the interface between CryptHash.c to the functions provided by the 
 // library. For each method, define the calling parameters of the method and then 
 // define how the method is invoked in CryptHash.c.
@@ -161,9 +157,6 @@
 #define tpmHashStateCopy_SHA512     memcpy 
 #define tpmHashStateExport_SHA512   memcpy 
 #define tpmHashStateImport_SHA512   memcpy
-
-#endif // _CRYPT_HASH_C_
-
 
 // No special processing to initialize the LTC hash library
 #define LibHashInit()

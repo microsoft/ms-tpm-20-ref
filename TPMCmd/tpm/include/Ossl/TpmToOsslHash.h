@@ -64,13 +64,6 @@
 #   error "The version of OpenSSL used by this code does not support SM3"
 #endif
 
-// The defines below are only needed when compiling CryptHash.c or CryptSmac.c. 
-// This isolation is primarily to avoid name space collision. However, if there 
-// is a real collision, it will likely show up when the linker tries to put things 
-// together.
-
-#ifdef _CRYPT_HASH_C_
-
 typedef BYTE          *PBYTE;
 typedef const BYTE    *PCBYTE;
 
@@ -170,8 +163,6 @@ typedef const BYTE    *PCBYTE;
 #define tpmHashStateCopy_SHA512     memcpy 
 #define tpmHashStateExport_SHA512   memcpy 
 #define tpmHashStateImport_SHA512   memcpy 
-
-#endif // _CRYPT_HASH_C_
 
 #define LibHashInit()
 // This definition would change if there were something to report

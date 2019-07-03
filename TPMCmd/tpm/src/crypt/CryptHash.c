@@ -37,8 +37,6 @@
 // This file contains implementation of cryptographic functions for hashing.
 //
 //** Includes, Defines, and Types
-
-#define _CRYPT_HASH_C_
 #include "Tpm.h"
 #include "CryptHash_fp.h"
 #include "CryptHash.h"

@@ -39,7 +39,6 @@
 // encryption functions of the selected symmetric cryptographic library.
 
 //** Includes, Defines, and Typedefs
-#define _CRYPT_HASH_C_
 #include "Tpm.h"
 
 #if SMAC_IMPLEMENTED
