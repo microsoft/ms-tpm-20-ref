@@ -66,15 +66,6 @@
 #define EXTENSIONS_REF          (SUBJECT_PUBLIC_KEY_REF + 1)
 #define REF_COUNT               (EXTENSIONS_REF + 1)
 
-#undef MAKE_OID
-#ifdef _X509_SPT_
-#   define MAKE_OID(NAME)                  \
-        const BYTE      OID##NAME[] = {OID##NAME##_VALUE}
-#else
-#   define MAKE_OID(NAME)                   \
-        extern const BYTE    OID##NAME[]
-#endif
-
 
 //** Structures
 
@@ -92,43 +83,5 @@ typedef union x509KeyUsageUnion {
     TPMA_X509_KEY_USAGE     x509;
     UINT32                  integer;
 } x509KeyUsageUnion;
-
-
-//** Global X509 Constants
-// These values are instanced by X509_spt.c and referenced by other X509-related
-// files.
-
-
-// This is the DER-encoded value for the Key Usage OID  (2.5.29.15). This is the
-// full OID, not just the numeric value
-#define OID_KEY_USAGE_EXTENSTION_VALUE  0x06, 0x03, 0x55, 0x1D, 0x0F
-MAKE_OID(_KEY_USAGE_EXTENSTION);
-  
-// This is the DER-encoded value for the TCG-defined TPMA_OBJECT OID
-// (2.23.133.10.1.1.1)
-#define OID_TCG_TPMA_OBJECT_VALUE       0x06, 0x07, 0x67, 0x81, 0x05, 0x0a, 0x01,   \
-                                        0x01, 0x01
-MAKE_OID(_TCG_TPMA_OBJECT);
-
-#ifdef _X509_SPT_
-const x509KeyUsageUnion keyUsageSign = { TPMA_X509_KEY_USAGE_INITIALIZER(
-    /* digitalsignature */ 1, /* nonrepudiation   */ 0,
-    /* keyencipherment  */ 0, /* dataencipherment */ 0,
-    /* keyagreement     */ 0, /* keycertsign      */ 1,
-    /* crlsign          */ 1, /* encipheronly     */ 0,
-    /* decipheronly     */ 0, /* bits_at_9        */ 0) };
-
-const x509KeyUsageUnion keyUsageDecrypt = { TPMA_X509_KEY_USAGE_INITIALIZER(
-    /* digitalsignature */ 0, /* nonrepudiation   */ 0,
-    /* keyencipherment  */ 1, /* dataencipherment */ 1,
-    /* keyagreement     */ 1, /* keycertsign      */ 0,
-    /* crlsign          */ 0, /* encipheronly     */ 1,
-    /* decipheronly     */ 1, /* bits_at_9        */ 0) };
-#else
-extern x509KeyUsageUnion keyUsageSign;
-extern x509KeyUsageUnion keyUsageDecrypt;
-#endif
-
-#undef MAKE_OID
 
 #endif // _X509_H_

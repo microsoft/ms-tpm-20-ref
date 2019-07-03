@@ -44,6 +44,17 @@
 #define MAKE_OID(NAME)                      \
         EXTERN  const BYTE OID##NAME[] INITIALIZER({OID##NAME##_VALUE})
 
+//** Global X509 OIDs
+// This is the DER-encoded value for the Key Usage OID  (2.5.29.15). This is the
+// full OID, not just the numeric value
+#define OID_KEY_USAGE_EXTENSTION_VALUE  0x06, 0x03, 0x55, 0x1D, 0x0F
+MAKE_OID(_KEY_USAGE_EXTENSTION);
+
+// This is the DER-encoded value for the TCG-defined TPMA_OBJECT OID
+// (2.23.133.10.1.1.1)
+#define OID_TCG_TPMA_OBJECT_VALUE       0x06, 0x07, 0x67, 0x81, 0x05, 0x0a, 0x01,   \
+                                        0x01, 0x01
+MAKE_OID(_TCG_TPMA_OBJECT);
 
 // These macros allow OIDs to be defined (or not) depending on whether the associated
 // hash algorithm is implemented.
