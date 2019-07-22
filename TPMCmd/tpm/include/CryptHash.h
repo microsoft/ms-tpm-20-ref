@@ -239,10 +239,10 @@ typedef const struct HASH_DEF
                          (HASH_STATE_EXPORT_METHOD *)&tpmHashStateExport_##HASH,    \
                          (HASH_STATE_IMPORT_METHOD *)&tpmHashStateImport_##HASH,    \
                         },                                                          \
-                        HASH##_BLOCK_SIZE,              /* block size */            \
-                        HASH##_DIGEST_SIZE,             /* data size */             \
-                        sizeof(tpmHashState##HASH##_t),                         \
-                        TPM_ALG_##HASH, OID_##HASH                              \
+                        HASH##_BLOCK_SIZE,     /*block size */                      \
+                        HASH##_DIGEST_SIZE,    /*data size */                       \
+                        sizeof(tpmHashState##HASH##_t),                             \
+                        TPM_ALG_##HASH, OID_##HASH                                  \
                         PKCS1_OID(HASH) ECDSA_OID(HASH)};
 
 // These definitions are for the types that can be in a hash state structure.
@@ -292,8 +292,7 @@ typedef struct hmacState
 } HMAC_STATE, *PHMAC_STATE;
 
 // This is for the external hash state. This implementation assumes that the size
-// of the exported hash state is no larger than the internal hash state. There
-// is a run time check that makes sure that this i.
+// of the exported hash state is no larger than the internal hash state.
 typedef struct
 {
     BYTE                     buffer[sizeof(HASH_STATE)];

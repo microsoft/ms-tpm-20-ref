@@ -102,7 +102,7 @@ CryptRandomStir(
 // Generate a 'randomSize' number or random bytes.
 LIB_EXPORT UINT16
 CryptRandomGenerate(
-    INT32            randomSize,
+    UINT16           randomSize,
     BYTE            *buffer
 );
 

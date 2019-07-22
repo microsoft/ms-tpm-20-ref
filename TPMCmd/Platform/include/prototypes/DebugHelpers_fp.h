@@ -59,7 +59,7 @@ void
 DebugDumpBuffer(
     int             size,
     unsigned char   *buf,
-    unsigned char   *identifier
+    const char      *identifier
 );
 
 #endif  // _DEBUGHELPERS_FP_H_

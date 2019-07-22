@@ -99,8 +99,8 @@ CryptHashInit(
 }
 
 //*** CryptHashStartup()
-// This function is called by TPM2_Startup() in case there is work to do at startup.
-// Currently, this is a placeholder.
+// This function is called by TPM2_Startup(). It checks that the size of the 
+// HashDefArray is consistent with the HASH_COUNT.
 BOOL
 CryptHashStartup(
     void
@@ -123,7 +123,7 @@ CryptGetHashDef(
     TPM_ALG_ID       hashAlg
     )
 {
-    INT16           i;
+    size_t           i;
 #define HASHES  (sizeof(HashDefArray) / sizeof(PHASH_DEF))
     for(i = 0; i < HASHES; i++)
     {

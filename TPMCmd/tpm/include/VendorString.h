@@ -45,7 +45,7 @@
 // The following #if macro may be deleted after a proper MANUFACTURER is provided.
 #ifndef MANUFACTURER
 #error MANUFACTURER is not provided. \
-Please modify include\VendorString.h to provide a specific \
+Please modify include/VendorString.h to provide a specific \
 manufacturer name.
 #endif
 
@@ -65,8 +65,7 @@ manufacturer name.
 // is provided.
 #ifndef VENDOR_STRING_1
 #error VENDOR_STRING_1 is not provided. \
-Please modify include\VendorString.h to provide a vednor-specific \
-string.
+Please modify include/VendorString.h to provide a vendor-specific string.
 #endif
 
 // the more significant 32-bits of a vendor-specific value 
@@ -82,7 +81,7 @@ string.
 // The following #if macro may be deleted after a proper FIRMWARE_V1 is provided.
 #ifndef FIRMWARE_V1
 #error  FIRMWARE_V1 is not provided. \
-Please modify include\VendorString.h to provide a vendor specific firmware \
+Please modify include/VendorString.h to provide a vendor-specific firmware \
 version
 #endif
 

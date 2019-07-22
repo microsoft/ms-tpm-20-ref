@@ -189,7 +189,6 @@ Uint16ToByteArray(
     a[0] = (BYTE)(i);
 }
 
-
 //*** Uint32ToByteArray()
 // Function to write an integer to a byte array
 void
@@ -243,7 +242,6 @@ ByteArrayToUint16(
 {
     return ((UINT16)a[0] << 8) + a[1];
 }
-
 
 //*** ByteArrayToUint32()
 // Function to write an integer to a byte array

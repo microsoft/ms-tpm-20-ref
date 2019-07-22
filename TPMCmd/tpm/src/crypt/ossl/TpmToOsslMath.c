@@ -33,24 +33,12 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 //** Introduction
-//
-// This file contains the math functions that are not implemented in the BnMath
-// library (yet). These math functions will call the OpenSSL library to execute
-// the operations. There is a difference between the internal format and the
-// OpenSSL format. To call the OpenSSL function, a BIGNUM structure is created
-// for each passed variable. The sizes in the bignum_t are copied and the 'd'
-// pointer in the BIGNUM is set to point to the 'd' parameter of the bignum_t.
-// On return, SetSizeOsslToTpm is used for each returned variable to make sure that
-// the pointers are not changed. The size of the returned BIGGNUM is copied to
-// bignum_t.
-
-//** Introduction
 // The functions in this file provide the low-level interface between the TPM code
 // and the big number and elliptic curve math routines in OpenSSL.
 //
 // Most math on big numbers require a context. The context contains the memory in 
 // which OpenSSL creates and manages the big number values. When a OpenSSL math 
-// will be called that modifies a BIGNUM value, that value must be created in
+// function will be called that modifies a BIGNUM value, that value must be created in
 // an OpenSSL context. The first line of code in such a function must be:
 // OSSL_ENTER(); and the last operation before returning must be OSSL_LEAVE(). 
 // OpenSSL variables can then be created with BnNewVariable(). Constant values to be

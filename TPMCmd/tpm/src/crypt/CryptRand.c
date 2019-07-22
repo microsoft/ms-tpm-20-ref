@@ -551,8 +551,7 @@ DRBG_SelfTest(
 //** Public Interface
 //*** Description
 // The functions in this section are the interface to the RNG. These
-// are the functions that are used by TPM.lib. Other functions are only
-// visible to programs in the LtcCryptoEngine.
+// are the functions that are used by TPM.lib. 
 
 //*** CryptRandomStir()
 // This function is used to cause a reseed. A DRBG_SEED amount of entropy is
@@ -605,18 +604,16 @@ CryptRandomStir(
 // Generate a 'randomSize' number or random bytes.
 LIB_EXPORT UINT16
 CryptRandomGenerate(
-    INT32            randomSize,
+    UINT16           randomSize,
     BYTE            *buffer
     )
 {
-    if(randomSize > UINT16_MAX)
-        randomSize = UINT16_MAX;
-    return DRBG_Generate((RAND_STATE *)&drbgDefault, buffer, (UINT16)randomSize);
+    return DRBG_Generate((RAND_STATE *)&drbgDefault, buffer, randomSize);
 }
 
 
 
-//**** DRBG_InstantiateSeededKdf()
+//*** DRBG_InstantiateSeededKdf()
 // This function is used to instantiate a KDF-based RNG. This is used for derivations.
 // This function always returns TRUE.
 LIB_EXPORT BOOL
@@ -643,7 +640,7 @@ DRBG_InstantiateSeededKdf(
     return TRUE;
 }
 
-//**** DRBG_AdditionalData()
+//*** DRBG_AdditionalData()
 // Function to reseed the DRBG with additional entropy. This is normally called
 // before computing the protection value of a primary key in the Endorsement 
 // hierarchy.
@@ -662,10 +659,12 @@ DRBG_AdditionalData(
 }
 
 
-//**** DRBG_InstantiateSeeded()
+//*** DRBG_InstantiateSeeded()
 // This function is used to instantiate a random number generator from seed values.
 // The nominal use of this generator is to create sequences of pseudo-random
-// numbers from a seed value. This function always returns TRUE.
+// numbers from a seed value.
+// Return Type: TPM_RC
+//  TPM_RC_FAILURE      DRBG self-test failure
 LIB_EXPORT TPM_RC
 DRBG_InstantiateSeeded(
     DRBG_STATE      *drbgState,     // IN/OUT: buffer to hold the state
@@ -713,7 +712,7 @@ DRBG_InstantiateSeeded(
     return TPM_RC_SUCCESS;
 }
 
-//**** CryptRandStartup()
+//*** CryptRandStartup()
 // This function is called when TPM_Startup is executed. This function always returns
 // TRUE.
 LIB_EXPORT BOOL
@@ -755,10 +754,10 @@ CryptRandInit(
 // This function generates a random sequence according SP800-90A.
 // If 'random' is not NULL, then 'randomSize' bytes of random values are generated.
 // If 'random' is NULL or 'randomSize' is zero, then the function returns
-// TRUE without generating any bits or updating the reseed counter.
-// This function returns 0 if a reseed is required. Otherwise, it returns the
-// number of bytes produced which could be less than the number requested if the
-// request is too large.
+// zero without generating any bits or updating the reseed counter.
+// This function returns the number of bytes produced which could be less than the 
+// number requested if the request is too large ("too large" is implementation
+// dependent.)
 LIB_EXPORT UINT16
 DRBG_Generate(
     RAND_STATE      *state,
@@ -768,6 +767,8 @@ DRBG_Generate(
 {
     if(state == NULL)
         state = (RAND_STATE *)&drbgDefault;
+    if(random == NULL)
+        return 0;
 
     // If the caller used a KDF state, generate a sequence from the KDF not to 
     // exceed the limit.
@@ -776,9 +777,7 @@ DRBG_Generate(
         KDF_STATE       *kdf = (KDF_STATE *)state;
         UINT32           counter = (UINT32)kdf->counter;
         INT32            bytesLeft = randomSize;
-
-        if(random == NULL)
-            return 0;
+//
         // If the number of bytes to be returned would put the generator 
         // over the limit, then return 0
         if((((kdf->counter * kdf->digestSize) + randomSize) * 8) > kdf->limit)

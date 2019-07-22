@@ -39,7 +39,7 @@
 // organization was chosen so that the program that is used to generate the test
 // vector values does not have to also re-generate this data.
 #ifndef     SELF_TEST_DATA
-#error  "This file many only be included in AlgorithmTests.c"
+#error  "This file may only be included in AlgorithmTests.c"
 #endif
 
 #ifndef     _SYMMETRIC_TEST_H

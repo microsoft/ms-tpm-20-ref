@@ -50,64 +50,40 @@
 // NOTE: When one of these macros is used, the NAME needs '_" on each side. The 
 // exception is when the macro is used for the hash OID when only a single '_' is
 // used.
-#ifndef ALG_SHA1
-#   define ALG_SHA1 NO
-#endif
 #if ALG_SHA1
 #define SHA1_OID(NAME)    MAKE_OID(NAME##SHA1)
 #else
 #define SHA1_OID(NAME)
-#endif
-#ifndef ALG_SHA256
-#   define ALG_SHA256 NO
 #endif
 #if ALG_SHA256
 #define SHA256_OID(NAME)  MAKE_OID(NAME##SHA256)
 #else
 #define SHA256_OID(NAME)
 #endif
-#ifndef ALG_SHA384
-#   define ALG_SHA384 NO
-#endif
 #if ALG_SHA384
 #define SHA384_OID(NAME)  MAKE_OID(NAME##SHA384)
 #else
 #define SHA#84_OID(NAME)
-#endif
-#ifndef ALG_SHA512
-#   define ALG_SHA512 NO
 #endif
 #if ALG_SHA512
 #define SHA512_OID(NAME)  MAKE_OID(NAME##SHA512)
 #else
 #define SHA512_OID(NAME)
 #endif
-#ifndef ALG_SM3_256
-#   define ALG_SM3_256 NO
-#endif
 #if ALG_SM3_256
 #define SM3_256_OID(NAME) MAKE_OID(NAME##SM2_256)
 #else
 #define SM3_256_OID(NAME)
-#endif
-#ifndef ALG_SHA3_256
-#   define ALG_SHA3_256 NO
 #endif
 #if ALG_SHA3_256
 #define SHA3_256_OID(NAME) MAKE_OID(NAME##SHA3_256)
 #else
 #define SHA3_256_OID(NAME)
 #endif
-#ifndef ALG_SHA3_384
-#   define ALG_SHA3_384 NO
-#endif
 #if ALG_SHA3_384
 #define SHA3_384_OID(NAME) MAKE_OID(NAME##SHA3_384)
 #else
 #define SHA3_384_OID(NAME)
-#endif
-#ifndef ALG_SHA3_512
-#   define ALG_SHA3_512 NO
 #endif
 #if ALG_SHA3_512
 #define SSHA3_512_OID(NAME) MAKE_OID(NAME##SHA3_512)

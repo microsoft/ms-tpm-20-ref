@@ -33,21 +33,24 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 // This header file is used to select the library code that gets included in the
-// TPM built
+// TPM build.
 
 #ifndef _LIB_SUPPORT_H_
 #define _LIB_SUPPORT_H_
 
+//*********************
+#ifndef RADIX_BITS
+#   if defined(__x86_64__) || defined(_WIN64) || defined(_M_X64) || defined(_M_ARM64)
+#       define RADIX_BITS                      64
+#   else
+#       define RADIX_BITS                      32
+#   endif
+#endif // RADIX_BITS
+
 // These macros use the selected libraries to the proper include files. 
-#define LIB_JOIN(x,y) x##y
-#define LIB_CONCAT(x,y) LIB_JOIN(x, y)
 #define LIB_QUOTE(_STRING_) #_STRING_
 #define LIB_INCLUDE2(_LIB_, _TYPE_) LIB_QUOTE(_LIB_/TpmTo##_LIB_##_TYPE_.h)
 #define LIB_INCLUDE(_LIB_, _TYPE_) LIB_INCLUDE2(_LIB_, _TYPE_)
-#define SYM_LIBRARY LIB_CONCAT(SYM_LIB_, SYM_LIB)
-#define HASH_LIBRARY(_LIB_) LIB_CONCAT(HASH_LIB_, HASH_LIB)
-#define MATH_LIBRARY(_LIB_) LIB_CONCAT(MATH_LIB_, MATH_LIB)
-
 
 // Include the options for hashing and symmetric. Defer the load of the math package
 // Until the bignum parameters are defined.

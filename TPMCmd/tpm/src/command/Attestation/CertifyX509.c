@@ -35,15 +35,11 @@
 #include "Tpm.h"
 #include "CertifyX509_fp.h"
 #include "X509.h"
-#include "TpmASN1_fp.h"
+#include "TpmAsn1_fp.h"
 #include "X509_spt_fp.h"
 #include "Attest_spt_fp.h"
-#include "Platform_fp.h"
-
 
 #if CC_CertifyX509 // Conditional expansion of this file
-
-#define CERTIFYX509_DEBUG       YES
 
 /*(See part 3 specification)
 // Certify 
@@ -78,16 +74,16 @@ TPM2_CertifyX509(
     // certTBS holds an array of pointers and lengths. Each entry references the 
     // corresponding value in a TBSCertificate structure. For example, the 1th 
     // element references the version number
-    stringRef                certTBS[REF_COUNT] = {0};
+    stringRef                certTBS[REF_COUNT] = {{0}};
 #define ALLOWED_SEQUENCES   (SUBJECT_PUBLIC_KEY_REF - SIGNATURE_REF) 
-    stringRef                partial[ALLOWED_SEQUENCES] = {0};
+    stringRef                partial[ALLOWED_SEQUENCES] = {{0}};
     INT16                    countOfSequences = 0;
     INT16                    i;
     //
 #if CERTIFYX509_DEBUG
     DebugFileOpen();
     DebugDumpBuffer(in->partialCertificate.t.size, in->partialCertificate.t.buffer,
-        (BYTE *)"partialCertificate");
+        "partialCertificate");
 #endif
 
     // Input Validation
@@ -256,7 +252,7 @@ TPM2_CertifyX509(
             MemoryCopy(fill, certTBS[j].buf, certTBS[j].len);
             fill += certTBS[j].len;
         }
-        DebugDumpBuffer((int)(fill - &fullTBS[0]), fullTBS, (BYTE *)"\nfull TBS");
+        DebugDumpBuffer((int)(fill - &fullTBS[0]), fullTBS, "\nfull TBS");
     }
 #endif
 
@@ -269,7 +265,7 @@ TPM2_CertifyX509(
                out->addedToCertificate.t.size);
 #if CERTIFYX509_DEBUG
     DebugDumpBuffer(out->addedToCertificate.t.size, out->addedToCertificate.t.buffer,
-                    (BYTE *)"\naddedToCertificate");
+                    "\naddedToCertificate");
 #endif
     // only thing missing is the signature
     result = CryptSign(signKey, &in->inScheme, &out->tbsDigest, &out->signature);

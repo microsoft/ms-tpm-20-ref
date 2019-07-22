@@ -34,14 +34,14 @@
  */
 
 //** Introduction
-// This file contains the structure definitions used for ECC in the LibTopCrypt
+// This file contains the structure definitions used for ECC in the LibTomCrypt
 // version of the code. These definitions would change, based on the library.
 // The ECC-related structures that cross the TPM interface are defined
 // in TpmTypes.h
 //
 
-#ifndef _TPM_TO_WOLF_MATH_H
-#define _TPM_TO_WOLF_MATH_H
+#ifndef MATH_LIB_DEFINED
+#define MATH_LIB_DEFINED
 
 #define MATH_LIB_WOLF
 
@@ -88,4 +88,4 @@ typedef bnCurve_t  *bigCurve;
 // This definition would change if there were something to report
 #define MathLibSimulationEnd()
 
-#endif
+#endif // MATH_LIB_DEFINED

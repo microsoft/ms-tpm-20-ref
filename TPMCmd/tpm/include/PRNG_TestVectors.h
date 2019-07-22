@@ -64,7 +64,7 @@ ReturnedBits = 946f5182 d54510b9 461248f5 71ca06c9
 */
 
 
-// Entropy is the size of a the state. The state is the size of the key
+// Entropy is the size of the state. The state is the size of the key
 // plus the IV. The IV is a block. If Key = 256 and Block = 128 then State = 384
 #   define DRBG_TEST_INITIATE_ENTROPY                   \
         0x0d, 0x15, 0xaa, 0x80, 0xb1, 0x6c, 0x3a, 0x10, \

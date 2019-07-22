@@ -33,7 +33,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 //** Introduction
-// This file contains the structure definitions used for ECC in the LibTopCrypt
+// This file contains the structure definitions used for ECC in the LibTomCrypt
 // version of the code. These definitions would change, based on the library.
 // The ECC-related structures that cross the TPM interface are defined
 // in TpmTypes.h

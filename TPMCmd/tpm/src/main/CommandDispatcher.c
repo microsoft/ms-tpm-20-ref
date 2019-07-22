@@ -153,7 +153,7 @@ ParseHandleBuffer(
     COMMAND_DESCRIPTOR_t    *desc;
     BYTE                    *types;
     BYTE                     type;
-    BYTE                     dtype;
+    BYTE                     dType;
 
     // Make sure that nothing strange has happened
     pAssert(command->index
@@ -174,15 +174,15 @@ ParseHandleBuffer(
     for(type = *types++;
         // check each byte to make sure that we have not hit the start
         // of the parameters
-    (dtype = (type & 0x7F)) < PARAMETER_FIRST_TYPE;
+    (dType = (type & 0x7F)) < PARAMETER_FIRST_TYPE;
     // get the next type
         type = *types++)
     {
         // See if unmarshaling of this handle type requires a flag
-        if(dtype < HANDLE_FIRST_FLAG_TYPE)
+        if(dType < HANDLE_FIRST_FLAG_TYPE)
         {
             // Look up the function to do the unmarshaling
-            NoFlagFunction  *f = (NoFlagFunction *)UnmarshalArray[dtype];
+            NoFlagFunction  *f = (NoFlagFunction *)UnmarshalArray[dType];
             // call it
             result = f(&(command->handles[command->handleNum]),
                        &command->parameterBuffer,
@@ -191,7 +191,7 @@ ParseHandleBuffer(
         else
         {
             //  Look up the function
-            FlagFunction    *f = UnmarshalArray[dtype];
+            FlagFunction    *f = UnmarshalArray[dType];
 
             // Call it setting the flag to the appropriate value
             result = f(&(command->handles[command->handleNum]),
@@ -417,7 +417,8 @@ Exit:
     {
         const MARSHAL_t     f = MarshalArray[dType];
 
-        command->parameterSize += f(&commandOut[offset], &command->responseBuffer,
+        command->parameterSize += f(&commandOut[offset], 
+                                    &command->responseBuffer,
                                     &maxOutSize);
         offset = *offsets++;
     }

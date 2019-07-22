@@ -51,11 +51,11 @@ _NORMAL_WARNING_LEVEL_
 
 
 #if RADIX_BITS != 32
-#error "The mpa library used with LibTopCrypt only works for 32-bit words"
+#error "The mpa library used with LibTomCrypt only works for 32-bit words"
 #endif
 
 // These macros handle entering and leaving a scope
-// from which an MPA or LibTopCrypt function may be called.
+// from which an MPA or LibTomCrypt function may be called.
 // Many of these functions require a scratch pool from which
 // they will allocate scratch variables (rather than using their
 // own stack).

@@ -75,10 +75,10 @@ typedef union tpmCryptKeySchedule_t {
 // or decrypt with the algorithm chosen by setting a function pointer to select
 // the algorithm that is used.
 
-#   define ENCRYPT(keySchedule, in, out)                \
+#   define ENCRYPT(keySchedule, in, out)                                            \
       encrypt(SWIZZLE(keySchedule, in, out))
 
-#   define DECRYPT(keySchedule, in, out)                \
+#   define DECRYPT(keySchedule, in, out)                                            \
       decrypt(SWIZZLE(keySchedule, in, out))
 
 

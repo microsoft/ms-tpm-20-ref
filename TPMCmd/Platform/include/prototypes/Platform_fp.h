@@ -147,6 +147,8 @@ _plat__ClockAdjustRate(
 
 //** From DebugHelpers.c 
 
+#if CERTIFYX509_DEBUG
+
 //*** DebugFileOpen()
 // This function opens the file used to hold the debug data.
 //  Return Type: int
@@ -166,8 +168,9 @@ void
 DebugDumpBuffer(
     int             size,
     unsigned char   *buf,
-    unsigned char   *identifier
+    const char      *identifier
 );
+#endif // CERTIFYX509_DEBUG
 
 
 //** From Entropy.c 

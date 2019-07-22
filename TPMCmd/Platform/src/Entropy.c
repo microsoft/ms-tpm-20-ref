@@ -50,7 +50,7 @@
 // see that two consecutive 32-bit values are not the same because
 // (according to FIPS 140-2, annex C
 //
-// "If each call to a RNG produces blocks of n bits (where n > 15), the first
+// "If each call to an RNG produces blocks of n bits (where n > 15), the first
 // n-bit block generated after power-up, initialization, or reset shall not be
 // used, but shall be saved for comparison with the next n-bit block to be
 // generated. Each subsequent generation of an n-bit block shall be compared with

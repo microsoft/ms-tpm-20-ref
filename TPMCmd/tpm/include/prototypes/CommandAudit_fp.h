@@ -41,7 +41,7 @@
 #define    _COMMAND_AUDIT_FP_H_
 
 //*** CommandAuditPreInstall_Init()
-// This function initializes the command audit list. This function is simulates
+// This function initializes the command audit list. This function simulates
 // the behavior of manufacturing. A function is used instead of a structure
 // definition because this is easier than figuring out the initialization value
 // for a bit array.

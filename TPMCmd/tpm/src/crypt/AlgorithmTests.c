@@ -354,7 +354,7 @@ RsaKeyInitialize(
 }
 
 //*** TestRsaEncryptDecrypt()
-// These test are for an public key encryption that uses a random value
+// These tests are for a public key encryption that uses a random value.
 static TPM_RC
 TestRsaEncryptDecrypt(
     TPM_ALG_ID           scheme,            // IN: the scheme

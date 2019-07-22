@@ -37,13 +37,13 @@
 //
 // This header file is used to "splice" the TPM to the LTC symmetric cipher code.
 
-#ifndef _TPM_TO_LTC_SYM_H_
-#define _TPM_TO_LTC_SYM_H_
+#ifndef SYM_LIB_DEFINED
+#define SYM_LIB_DEFINED
 
 #define SYM_LIB_LTC
 
 // Avoid pulling in the MPA math if not doing asymmetric with LTC
-#if MATH_LIB != LTC
+#if !(defined MATH_LIB_LTC)
 #  define LTC_NO_ASYMMETRIC
 #endif
 
@@ -53,11 +53,11 @@
 //******** Linking to the TomCrypt AES code *********************
 //***************************************************************
 
-#ifdef TPM_ALG_SM4
+#if ALG_SM4
 #error "SM4 is not available"
 #endif
 
-#ifdef  TPM_ALG_CAMELLIA
+#if ALG_CAMELLIA
 #error "Camellia is not available"
 #endif
 
@@ -70,21 +70,21 @@ typedef void(*TpmCryptSetSymKeyCall_t)(
     );
 
 // Macro to put the parameters in the order required by the library
-#define SWIZZLE(keySchedule, in, out)                                   \
+#define SWIZZLE(keySchedule, in, out)                                               \
     (const void *)(in), (void *)(out), (void *)(keySchedule)
 
 // Macros to set up the encryption/decryption key schedules
 //
 // AES:
-# define TpmCryptSetEncryptKeyAES(key, keySizeInBits, schedule)            \
+# define TpmCryptSetEncryptKeyAES(key, keySizeInBits, schedule)                     \
     aes_setup((key), BITS_TO_BYTES(keySizeInBits), 0, (symmetric_key *)(schedule))
-# define TpmCryptSetDecryptKeyAES(key, keySizeInBits, schedule)            \
+# define TpmCryptSetDecryptKeyAES(key, keySizeInBits, schedule)                     \
     aes_setup((key), BITS_TO_BYTES(keySizeInBits), 0, (symmetric_key *)(schedule))
 
 // TDES:
-# define TpmCryptSetEncryptKeyTDES(key, keySizeInBits, schedule)            \
+# define TpmCryptSetEncryptKeyTDES(key, keySizeInBits, schedule)                    \
     TDES_setup((key), (keySizeInBits), (symmetric_key *)(schedule))
-# define TpmCryptSetDecryptKeyTDES(key, keySizeInBits, schedule)            \
+# define TpmCryptSetDecryptKeyTDES(key, keySizeInBits, schedule)                    \
     TDES_setup((key), (keySizeInBits), (symmetric_key *)(schedule))
 
 
@@ -107,6 +107,4 @@ typedef union tpmCryptKeySchedule_t tpmCryptKeySchedule_t;
 
 #define SymLibSimulationEnd()
 
-#endif // SIM_LIB == LTC
-
-#endif // _TPM_TO_LTC_SYM_H_
+#endif // SYM_LIB_DEFINED

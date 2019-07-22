@@ -1706,7 +1706,7 @@ NvCapGetCounterNumber(
 static TPMA_NV
 NvSetStartupAttributes(
     TPMA_NV         attributes,         // IN: attributes to change
-    STARTUP_TYPE     type           // IN: start up type
+    STARTUP_TYPE     type               // IN: start up type
     )
 {
     // Clear read lock

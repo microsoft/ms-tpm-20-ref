@@ -66,8 +66,6 @@
 #if USE_RSA_KEY_CACHE
 
 #include  <stdio.h>
-
-#include "Platform_fp.h"
 #include "RsaKeyCache_fp.h"
 
 #if CRT_FORMAT_RSA == YES 

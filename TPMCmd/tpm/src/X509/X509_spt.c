@@ -34,8 +34,8 @@
  */
 //** Includes
 #include "Tpm.h"
-#include "TpmASN1.h"
-#include "TpmASN1_fp.h"
+#include "TpmAsn1.h"
+#include "TpmAsn1_fp.h"
 #define _X509_SPT_
 #include "X509.h"
 #include "X509_spt_fp.h"
@@ -188,16 +188,16 @@ X509ProcessExtensions(
         // For KeyUsage:
         //  the 'sign' attribute is SET if Key Usage includes signing
         if(((keyUsageSign.integer & keyUsage.integer) != 0
-            && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign))
-            // and the 'decrypt' attribute is Set if Key Usage includes decryption uses
-            || ((keyUsageDecrypt.integer & keyUsage.integer) != 0
-            && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
-            // Check that 'fixedTPM' is SET if Key Usage is non-repudiation
-            || (IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, nonrepudiation)
-                && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM))
-            || (IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, keyAgreement)
-                && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted))
-            )
+           && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign))
+           // and the 'decrypt' attribute is Set if Key Usage includes decryption uses
+           || ((keyUsageDecrypt.integer & keyUsage.integer) != 0
+           && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
+           // Check that 'fixedTPM' is SET if Key Usage is non-repudiation
+           || (IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, nonrepudiation)
+           && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM))
+           || (IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, keyAgreement)
+           && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted))
+           )
             return TPM_RCS_ATTRIBUTES;
     }
     else

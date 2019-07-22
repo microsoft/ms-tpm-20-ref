@@ -80,7 +80,6 @@
 
 #define ASN1_CONSTRUCTED_SEQUENCE (ASN1_SEQUENCE + ASN1_CONSTRUCTED)
 
-
 #define MAX_DEPTH              10  // maximum push depth for marshaling context.
 
 //** Macros
@@ -99,12 +98,11 @@
 //*** Marshaling Macros
 
 // Marshaling works in reverse order. The offset is set to the top of the buffer and,
-// as the buffer is filled, offset counts down to zero. When the full thing is encoded
-// it can be moved to the top of the buffer. This happens when the last context is
-// closed (when the 
+// as the buffer is filled, 'offset' counts down to zero. When the full thing is 
+// encoded it can be moved to the top of the buffer. This happens when the last 
+// context is closed. 
 
 #define CHECK_SPACE(context, length)    VERIFY(context->offset > length)
-
 
 //** Structures
 
@@ -125,6 +123,5 @@ typedef struct ASN1MarshalContext {
     INT16            depth;     // how many pushed end values.
     INT16            ends[MAX_DEPTH];
 } ASN1MarshalContext;
-
 
 #endif // _TPMASN1_H_

@@ -108,7 +108,7 @@ typedef struct {
 // Defines the end-of-list marker for NV. The list terminator is
 // a UINT32 of zero, followed by the current value of s_maxCounter which is a
 // 64-bit value. The structure is defined as an array of 3 UINT32 values so that
-// there is no padding between the  UINT32 list end marker and the UIT64m maxCounter
+// there is no padding between the  UINT32 list end marker and the UINT64 maxCounter
 // value.
 typedef UINT32 NV_LIST_TERMINATOR[3];
 

@@ -366,7 +366,7 @@ RegularCommandService(
         serverSocket = accept(listenSocket,
                               (struct sockaddr*) &HerAddress,
                               &length);
-        if(serverSocket == SOCKET_ERROR)
+        if(serverSocket == INVALID_SOCKET)
         {
             printf("Accept error.  Error is 0x%x\n", WSAGetLastError());
             return -1;

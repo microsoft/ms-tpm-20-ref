@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Apr  8, 2019  Time: 03:18:09PM
+ *  Date: Apr 10, 2019  Time: 03:21:33PM
  */
 
 #ifndef _TPM_PROFILE_H_
@@ -101,9 +101,6 @@
 #ifndef FIELD_UPGRADE_IMPLEMENTED
 #define FIELD_UPGRADE_IMPLEMENTED       NO
 #endif
-#ifndef RADIX_BITS
-#define RADIX_BITS                      32
-#endif
 #ifndef HASH_ALIGNMENT
 #define HASH_ALIGNMENT                  4
 #endif
@@ -111,28 +108,28 @@
 #define SYMMETRIC_ALIGNMENT             4
 #endif
 #ifndef HASH_LIB
-#define HASH_LIB                        Wolf
+#define HASH_LIB                        Ossl
 #endif
 #ifndef SYM_LIB
-#define SYM_LIB                         Wolf
+#define SYM_LIB                         Ossl
 #endif
 #ifndef MATH_LIB
-#define MATH_LIB                        Wolf
+#define MATH_LIB                        Ossl
 #endif
 #ifndef BSIZE
 #define BSIZE                           UINT16
-#endif
-#ifndef PLATFORM_PCR
-#define PLATFORM_PCR                    24
-#endif
-#ifndef PCR_SELECT_MIN
-#define PCR_SELECT_MIN                  ((PLATFORM_PCR+7)/8)
 #endif
 #ifndef IMPLEMENTATION_PCR
 #define IMPLEMENTATION_PCR              24
 #endif
 #ifndef PCR_SELECT_MAX
 #define PCR_SELECT_MAX                  ((IMPLEMENTATION_PCR+7)/8)
+#endif
+#ifndef PLATFORM_PCR
+#define PLATFORM_PCR                    24
+#endif
+#ifndef PCR_SELECT_MIN
+#define PCR_SELECT_MIN                  ((PLATFORM_PCR+7)/8)
 #endif
 #ifndef DRTM_PCR
 #define DRTM_PCR                        17
@@ -203,8 +200,8 @@
 #ifndef PRIMARY_SEED_SIZE
 #define PRIMARY_SEED_SIZE               32
 #endif
-#ifndef CONTEXT_ENCRYPT_ALG
-#define CONTEXT_ENCRYPT_ALG             ALG_AES_VALUE
+#ifndef CONTEXT_ENCRYPT_ALGORITHM
+#define CONTEXT_ENCRYPT_ALGORITHM       AES
 #endif
 #ifndef NV_CLOCK_UPDATE_INTERVAL
 #define NV_CLOCK_UPDATE_INTERVAL        12
@@ -248,11 +245,14 @@
 #ifndef TPM_MAX_DERIVATION_BITS
 #define TPM_MAX_DERIVATION_BITS         8192
 #endif
-#ifndef SIZE_OF_X509_SERIAL_NUMBER
-#define SIZE_OF_X509_SERIAL_NUMBER      20
+#ifndef RSA_MAX_PRIME
+#define RSA_MAX_PRIME                   (MAX_RSA_KEY_BYTES/2)
 #endif
 #ifndef RSA_PRIVATE_SIZE
-#define RSA_PRIVATE_SIZE                ((MAX_RSA_KEY_BYTES*5)/2)
+#define RSA_PRIVATE_SIZE                (RSA_MAX_PRIME*5)
+#endif
+#ifndef SIZE_OF_X509_SERIAL_NUMBER
+#define SIZE_OF_X509_SERIAL_NUMBER      20
 #endif
 #ifndef PRIVATE_VENDOR_SPECIFIC_BYTES
 #define PRIVATE_VENDOR_SPECIFIC_BYTES   RSA_PRIVATE_SIZE
@@ -375,11 +375,6 @@
 #endif
 #ifndef ALG_XOR
 #define ALG_XOR                         ALG_YES
-#endif
-
-// Table 1:3 - Definition of TPM_ECC_CURVE Constants
-#ifndef TPM_ECC_NONE
-#define TPM_ECC_NONE        (TPM_ECC_CURVE)(0x0000)
 #endif
 
 // Table 1:00 - Defines for RSA Asymmetric Cipher Algorithm Constants

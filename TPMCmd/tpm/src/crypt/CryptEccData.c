@@ -154,7 +154,7 @@ ECC_CONST(NIST_P192_n, 24, TO_ECC_192(
         (bigNum)&NIST_P192_p, (bigNum)&NIST_P192_n, (bigNum)&NIST_P192_h,
         (bigNum)&NIST_P192_a, (bigNum)&NIST_P192_b, 
         {(bigNum)&NIST_P192_gX, (bigNum)&NIST_P192_gY, (bigNum)&NIST_P192_gZ}};
- 
+
 #else
     const ECC_CURVE_DATA NIST_P192 = {
         &NIST_P192_p.b, &NIST_P192_n.b, &NIST_P192_h.b,

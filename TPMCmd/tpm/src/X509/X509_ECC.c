@@ -36,7 +36,7 @@
 #include "Tpm.h"
 #include "X509.h"
 #include "OIDs.h"
-#include "TpmASN1_fp.h"
+#include "TpmAsn1_fp.h"
 #include "X509_spt_fp.h"
 #include "CryptHash_fp.h"
 

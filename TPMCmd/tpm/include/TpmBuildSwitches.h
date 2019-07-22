@@ -263,7 +263,7 @@
 #   endif
 
 // Some of the values (such as sizes) are the result of different options set in 
-// Implementation.h. The combination might not be consistent. A function is defined
+// TpmProfile.h. The combination might not be consistent. A function is defined
 // (TpmSizeChecks()) that is used to verify the sizes at run time. To enable the 
 // function, define this parameter.
 #   if !(defined RUNTIME_SIZE_CHECKS)                                               \
@@ -335,6 +335,13 @@
     || ((LIBRARY_COMPATIBILITY_CHECK != NO) && (LIBRARY_COMPATIBILITY_CHECK != YES))
 #   undef   LIBRARY_COMPATIBILITY_CHECK
 #   define  LIBRARY_COMPATIBILITY_CHECK NO      // Default: Either YES or NO
+#endif
+
+// This define is used to control the debug for the CertifyX509 command.
+#if !(defined CERTIFYX509_DEBUG)                                                    \
+    || ((CERTIFYX509_DEBUG != NO) && (CERTIFYX509_DEBUG != YES))
+#   undef   CERTIFYX509_DEBUG
+#   define  CERTIFYX509_DEBUG YES               // Default: Either YES or NO
 #endif
 
 // Change these definitions to turn all algorithms or commands ON or OFF. That is,

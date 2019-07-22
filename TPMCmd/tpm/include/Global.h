@@ -63,7 +63,7 @@
 #define INITIALIZER(_value_)  = _value_
 #else
 #define EXTERN  extern
-#define INITIALIZER(_name_)
+#define INITIALIZER(_value_)
 #endif
 
 _REDUCE_WARNING_LEVEL_(2)
@@ -916,9 +916,9 @@ EXTERN ORDERLY_DATA     go;
 //*** STATE_CLEAR_DATA
 //*********************************************************************************
 //*********************************************************************************
-// This structure contains the data that is saved on Shutdown(STATE).
+// This structure contains the data that is saved on Shutdown(STATE)
 // and restored on Startup(STATE).  The values are set to their default
-// settings on any Startup(Clear). In other words the data is only persistent
+// settings on any Startup(Clear). In other words, the data is only persistent
 // across TPM Resume.
 //
 // If the comments associated with a parameter indicate a default reset value, the

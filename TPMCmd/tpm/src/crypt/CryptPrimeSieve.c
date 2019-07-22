@@ -466,6 +466,7 @@ PrimeSelectWithSieve(
 #if RSA_INSTRUMENT
 static char            a[256];
 
+//*** PrintTuple()
 char *
 PrintTuple(
     UINT32      *i
@@ -477,6 +478,7 @@ PrintTuple(
 
 #define CLEAR_VALUE(x)    memset(x, 0, sizeof(x))
 
+//*** RsaSimulationEnd()
 void
 RsaSimulationEnd(
     void
@@ -510,6 +512,7 @@ RsaSimulationEnd(
     CLEAR_VALUE(bitsInFieldAfterSieve);
 }
 
+//*** GetSieveStats()
 LIB_EXPORT void
 GetSieveStats(
     uint32_t        *trials,
@@ -541,10 +544,14 @@ GetSieveStats(
 #endif // RSA_KEY_SIEVE
 
 #if !RSA_INSTRUMENT
+
+//*** RsaSimulationEnd()
+// Stub for call when not doing instrumentation. 
 void
 RsaSimulationEnd(
     void
     )
 {
+    return;
 }
 #endif

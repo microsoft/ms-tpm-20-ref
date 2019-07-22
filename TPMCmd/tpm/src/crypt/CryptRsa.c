@@ -330,7 +330,7 @@ OaepEncode(
     INT32        i;
     BYTE         mySeed[MAX_DIGEST_SIZE];
     BYTE        *seed = mySeed;
-    INT32        hLen = CryptHashGetDigestSize(hashAlg);
+    UINT16       hLen = CryptHashGetDigestSize(hashAlg);
     BYTE         mask[MAX_RSA_KEY_BYTES];
     BYTE        *pp;
     BYTE        *pm;
@@ -340,7 +340,7 @@ OaepEncode(
 
     // A value of zero is not allowed because the KDF can't produce a result
     // if the digest size is zero.
-    if(hLen <= 0)
+    if(hLen == 0)
         return TPM_RC_VALUE;
 
     // Basic size checks

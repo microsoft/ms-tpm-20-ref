@@ -263,19 +263,3 @@ ShiftLeft(
     return value;
 }
 
-//*** IsNumeric()
-// Verifies that all the characters are simple numeric (0-9)
-BOOL
-IsNumeric(
-    TPM2B       *value
-)
-{
-    UINT16      i;
-    for(i = 0; i < value->size; i++)
-    {
-        if(value->buffer[i] < '0' || value->buffer[i] > '9')
-            return FALSE;
-    }
-    return TRUE;
-}
-

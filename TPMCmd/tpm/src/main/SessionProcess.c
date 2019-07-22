@@ -1737,7 +1737,7 @@ CheckAuthNoSession(
 //** Response Session Processing
 //*** Introduction
 //
-//  The following functions build the session area in a response, and handle
+//  The following functions build the session area in a response and handle
 //  the audit sessions (if present).
 //
 

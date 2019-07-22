@@ -46,7 +46,7 @@
 #if defined(HASH_LIB_LTC) || defined(MATH_LIB_LTC) || defined(SYM_LIB_LTC)
 
 // This state is used because there is no way to pass the random number state
-// to LibTopCrypt. I do not think that this is currently an issue because...
+// to LibTomCrypt. I do not think that this is currently an issue because...
 // Heck, just put in an assert and see what happens.
 static void             *s_randState;
 

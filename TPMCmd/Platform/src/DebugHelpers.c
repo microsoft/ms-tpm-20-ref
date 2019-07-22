@@ -40,25 +40,28 @@
 //
 
 //** Includes and Local 
-#include    <stdio.h>
-#include    <time.h>
+#include <stdio.h>
+#include <time.h>
+#include "Platform.h"
 
-FILE        *fDebug = NULL;
-const char  *fn = "DebugFile.txt";
+#if CERTIFYX509_DEBUG
 
-static FILE*
+FILE            *fDebug = NULL;
+const char      *debugFileName = "DebugFile.txt";
+
+static FILE *
 fileOpen(
-    const char  *fname, 
-    const char  *mode
+    const char      *fn, 
+    const char      *mode
 )
 {
     FILE        *f;
-#if defined _MSC_VER
-    if(fopen_s(&f, fname, mode) != 0)
+#   if defined _MSC_VER
+    if(fopen_s(&f, fn, mode) != 0)
         f = NULL;
-#else
+#   else
     f = fopen(fn, "w");
-#endif
+#   endif
     return f;
 }
 
@@ -72,21 +75,18 @@ DebugFileOpen(
     void
 )
 {
-#if defined _MSC_VER
-    char    timeString[100];
-#else
-    char   *timeString;
-#endif
-    time_t  t = time(NULL);
+    time_t                  t = time(NULL);
 //
     // Get current date and time.
-#if defined _MSC_VER
-    ctime_s(timeString, sizeof(timeString), &t);
-#else
+#   if defined _MSC_VER
+    char                 timeString[100];
+    ctime_s(timeString, (size_t)sizeof(timeString), &t);
+#   else
+    char                *timeString;
     timeString = ctime(&t);
-#endif
+#   endif
     // Try to open the debug file
-    fDebug = fileOpen(fn, "w");
+    fDebug = fileOpen(debugFileName, "w");
     if(fDebug)
     {
         fprintf(fDebug, "%s\n", timeString);
@@ -96,6 +96,7 @@ DebugFileOpen(
     return -1;
 }
 
+//*** DebugFileClose()
 void
 DebugFileClose(
     void
@@ -105,16 +106,17 @@ DebugFileClose(
         fclose(fDebug);
 }
 
+//*** DebugDumpBuffer()
 void
 DebugDumpBuffer(
     int             size,
     unsigned char   *buf,
-    unsigned char   *identifier
+    const char      *identifier
 )
 {
     int             i;
 //
-    FILE *f = fileOpen(fn, "a");
+    FILE *f = fileOpen(debugFileName, "a");
     if(!f)
         return;
     if(identifier)
@@ -132,3 +134,5 @@ DebugDumpBuffer(
     }
     fclose(f);
 }
+
+#endif // CERTIFYX509_DEBUG
