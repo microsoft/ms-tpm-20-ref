@@ -48,8 +48,6 @@ TPM2_ClockSet(
     ClockSet_In     *in             // IN: input parameter list
     )
 {
-#define CLOCK_UPDATE_MASK  ~((1ULL << NV_CLOCK_UPDATE_INTERVAL)- 1)
-
 // Input Validation
     // new time can not be bigger than 0xFFFF000000000000 or smaller than
     // current clock
