@@ -43,7 +43,6 @@
 #include <stdint.h>
 #include <ctype.h>
 #include <string.h>
-#include "BaseTypes.h"
 
 #ifdef _MSC_VER
 #   pragma warning(push, 3)
@@ -178,6 +177,8 @@ CmdLineParser_IsOptPresent(
     const char* optShort
     )
 {
+    int         i;
+    int         curArgBit;
     Assert(s_Argv != NULL,
         "InitCmdLineOptParser(argc, argv) has not been invoked\n");
     Assert(optFull && optFull[0],
@@ -191,7 +192,7 @@ CmdLineParser_IsOptPresent(
     if (!CmdLineParser_More())
         return FALSE;
 
-    for (int i = 0, curArgBit = 1; i < s_Argc; ++i, curArgBit <<= 1)
+    for (i = 0, curArgBit = 1; i < s_Argc; ++i, curArgBit <<= 1)
     {
         const char* opt = s_Argv[i];
         if (   (s_ArgsMask & curArgBit) && opt
@@ -214,12 +215,14 @@ CmdLineParser_Done(
 )
 {
     char delim = ':';
+    int         i;
+    int         curArgBit;
 
     if (!CmdLineParser_More())
         return;
 
     fprintf(stderr, "Command line contains unknown option%s", s_ArgsMask & (s_ArgsMask - 1) ? "s" : "");
-    for (int i = 0, curArgBit = 1; i < s_Argc; ++i, curArgBit <<= 1)
+    for (i = 0, curArgBit = 1; i < s_Argc; ++i, curArgBit <<= 1)
     {
         if (s_ArgsMask & curArgBit)
         {
@@ -258,7 +261,8 @@ main(
         }
         if (CmdLineParser_More())
         {
-            for (int i = 0; i < s_Argc; ++i)
+            int     i;
+            for (i = 0; i < s_Argc; ++i)
             {
                 char *nptr = NULL;
                 int portNum = (int)strtol(s_Argv[i], &nptr, 0);
@@ -301,7 +305,6 @@ main(
             exit(3);
         }
     }
-
     // Disable NV memory
     _plat__NVDisable();
 

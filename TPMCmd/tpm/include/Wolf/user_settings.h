@@ -55,17 +55,17 @@
 #define WOLFSSL_AES_DIRECT
 
 /* Enable/Disable algorithm support based on TPM implementation header */
-#ifdef ALG_SHA256
+#if ALG_SHA256
     #define WOLFSSL_SHA256
 #endif
-#if ALG_SHA384 || ALG_SHA512 || defined(WOLFSSL_LIB)
+#if ALG_SHA384 || ALG_SHA512
     #define WOLFSSL_SHA384
     #define WOLFSSL_SHA512
 #endif
-#if ALG_TDES || defined(WOLFSSL_LIB)
+#if ALG_TDES
     #define WOLFSSL_DES_ECB
 #endif
-#if ALG_RSA || defined(WOLFSSL_LIB)
+#if ALG_RSA
     /* Turn on RSA key generation functionality */
     #define WOLFSSL_KEY_GEN
 #endif

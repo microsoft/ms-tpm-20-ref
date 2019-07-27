@@ -33,9 +33,9 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "Tpm.h"
-#include "Vendor_TCG_Test_fp.h"
 
 #if CC_Vendor_TCG_Test      // Conditional expansion of this file
+#include "Vendor_TCG_Test_fp.h"
 
 TPM_RC
 TPM2_Vendor_TCG_Test(

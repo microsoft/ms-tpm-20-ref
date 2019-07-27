@@ -324,19 +324,33 @@ PrimeSieve(
             if(next == 0)
                 goto done;
             r = composite % next;
-        // these computations deal with the fact that the field starts at some
-        // arbitrary offset within the number space. If the field were all numbers,
-        // then we would have gone through some number of bit clearings before we
-        // got to the start of this range. We don't know how many there were before,
-        // but we can tell from the remainder whether we are on an even or odd
+        // these computations deal with the fact that we have picked a field-sized
+        // range that is aligned to a 105 count boundary. The problem is, this field
+        // only contains odd numbers. If we take our prime guess and walk through all 
+        // the numbers using that prime as the 'stride', then every other 'stride' is
+        // going to be an even number. So, we are actually counting by 2 * the stride
+        // We want the count to start on an odd number at the start of our field. That
+        // is, we want to assume that we have counted up to the edge of the field by
+        // the 'stride' and now we are going to start flipping bits in the field as we
+        // continue to count up by 'stride'. If we take the base of our field and
+        // divide by the stride, we find out how much we find out how short the last
+        // count was from reaching the edge of the bit field. Say we get a quotient of
+        // 3 and remainder of 1. This means that after 3 strides, we are 1 short of
+        // the start of the field and the next stride will either land within the
+        // field or step completely over it. The confounding factor is that our field 
+        // only contains odd numbers and our stride is actually 2 * stride. If the
+        // quoitent is even, then that means that when we add 2 * stride, we are going
+        // to hit another even number. So, we have to know if we need to back off
+        // by 1 stride before we start couting by 2 * stride. 
+        // We can tell from the remainder whether we are on an even or odd
         // stride when we hit the beginning of the table. If we are on an odd stride
         // (r & 1), we would start half a stride in (next - r)/2. If we are on an
-        // even stride, we need 1.5 strides (next + r/2) because the table only has
+        // even stride, we need 0.5 strides (next - r/2) because the table only has
         // odd numbers. If the remainder happens to be zero, then the start of the
         // table is on stride so no adjustment is necessary.
             if(r & 1)           j = (next - r) / 2;
             else if(r == 0)     j = 0;
-            else                 j = next - r / 2;
+            else                 j = next - (r / 2); 
             for(; j < fieldBits; j += next)
                 ClearBit(j, field, fieldSize);
         }

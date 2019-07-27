@@ -34,11 +34,239 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Apr  2, 2019  Time: 11:00:48AM
+ *  Date: Apr 10, 2019  Time: 03:21:33PM
  */
 
 #ifndef _TPM_TYPES_H_
 #define _TPM_TYPES_H_
+
+// Table 1:2 - Definition of TPM_ALG_ID Constants
+typedef UINT16                          TPM_ALG_ID;
+#define TYPE_OF_TPM_ALG_ID              UINT16
+#define     ALG_ERROR_VALUE             0x0000
+#define TPM_ALG_ERROR                   (TPM_ALG_ID)(ALG_ERROR_VALUE)
+#define     ALG_RSA_VALUE               0x0001
+#define TPM_ALG_RSA                     (TPM_ALG_ID)(ALG_RSA_VALUE)
+#define     ALG_TDES_VALUE              0x0003
+#define TPM_ALG_TDES                    (TPM_ALG_ID)(ALG_TDES_VALUE)
+#define     ALG_SHA_VALUE               0x0004
+#define TPM_ALG_SHA                     (TPM_ALG_ID)(ALG_SHA_VALUE)
+#define     ALG_SHA1_VALUE              0x0004
+#define TPM_ALG_SHA1                    (TPM_ALG_ID)(ALG_SHA1_VALUE)
+#define     ALG_HMAC_VALUE              0x0005
+#define TPM_ALG_HMAC                    (TPM_ALG_ID)(ALG_HMAC_VALUE)
+#define     ALG_AES_VALUE               0x0006
+#define TPM_ALG_AES                     (TPM_ALG_ID)(ALG_AES_VALUE)
+#define     ALG_MGF1_VALUE              0x0007
+#define TPM_ALG_MGF1                    (TPM_ALG_ID)(ALG_MGF1_VALUE)
+#define     ALG_KEYEDHASH_VALUE         0x0008
+#define TPM_ALG_KEYEDHASH               (TPM_ALG_ID)(ALG_KEYEDHASH_VALUE)
+#define     ALG_XOR_VALUE               0x000A
+#define TPM_ALG_XOR                     (TPM_ALG_ID)(ALG_XOR_VALUE)
+#define     ALG_SHA256_VALUE            0x000B
+#define TPM_ALG_SHA256                  (TPM_ALG_ID)(ALG_SHA256_VALUE)
+#define     ALG_SHA384_VALUE            0x000C
+#define TPM_ALG_SHA384                  (TPM_ALG_ID)(ALG_SHA384_VALUE)
+#define     ALG_SHA512_VALUE            0x000D
+#define TPM_ALG_SHA512                  (TPM_ALG_ID)(ALG_SHA512_VALUE)
+#define     ALG_NULL_VALUE              0x0010
+#define TPM_ALG_NULL                    (TPM_ALG_ID)(ALG_NULL_VALUE)
+#define     ALG_SM3_256_VALUE           0x0012
+#define TPM_ALG_SM3_256                 (TPM_ALG_ID)(ALG_SM3_256_VALUE)
+#define     ALG_SM4_VALUE               0x0013
+#define TPM_ALG_SM4                     (TPM_ALG_ID)(ALG_SM4_VALUE)
+#define     ALG_RSASSA_VALUE            0x0014
+#define TPM_ALG_RSASSA                  (TPM_ALG_ID)(ALG_RSASSA_VALUE)
+#define     ALG_RSAES_VALUE             0x0015
+#define TPM_ALG_RSAES                   (TPM_ALG_ID)(ALG_RSAES_VALUE)
+#define     ALG_RSAPSS_VALUE            0x0016
+#define TPM_ALG_RSAPSS                  (TPM_ALG_ID)(ALG_RSAPSS_VALUE)
+#define     ALG_OAEP_VALUE              0x0017
+#define TPM_ALG_OAEP                    (TPM_ALG_ID)(ALG_OAEP_VALUE)
+#define     ALG_ECDSA_VALUE             0x0018
+#define TPM_ALG_ECDSA                   (TPM_ALG_ID)(ALG_ECDSA_VALUE)
+#define     ALG_ECDH_VALUE              0x0019
+#define TPM_ALG_ECDH                    (TPM_ALG_ID)(ALG_ECDH_VALUE)
+#define     ALG_ECDAA_VALUE             0x001A
+#define TPM_ALG_ECDAA                   (TPM_ALG_ID)(ALG_ECDAA_VALUE)
+#define     ALG_SM2_VALUE               0x001B
+#define TPM_ALG_SM2                     (TPM_ALG_ID)(ALG_SM2_VALUE)
+#define     ALG_ECSCHNORR_VALUE         0x001C
+#define TPM_ALG_ECSCHNORR               (TPM_ALG_ID)(ALG_ECSCHNORR_VALUE)
+#define     ALG_ECMQV_VALUE             0x001D
+#define TPM_ALG_ECMQV                   (TPM_ALG_ID)(ALG_ECMQV_VALUE)
+#define     ALG_KDF1_SP800_56A_VALUE    0x0020
+#define TPM_ALG_KDF1_SP800_56A          (TPM_ALG_ID)(ALG_KDF1_SP800_56A_VALUE)
+#define     ALG_KDF2_VALUE              0x0021
+#define TPM_ALG_KDF2                    (TPM_ALG_ID)(ALG_KDF2_VALUE)
+#define     ALG_KDF1_SP800_108_VALUE    0x0022
+#define TPM_ALG_KDF1_SP800_108          (TPM_ALG_ID)(ALG_KDF1_SP800_108_VALUE)
+#define     ALG_ECC_VALUE               0x0023
+#define TPM_ALG_ECC                     (TPM_ALG_ID)(ALG_ECC_VALUE)
+#define     ALG_SYMCIPHER_VALUE         0x0025
+#define TPM_ALG_SYMCIPHER               (TPM_ALG_ID)(ALG_SYMCIPHER_VALUE)
+#define     ALG_CAMELLIA_VALUE          0x0026
+#define TPM_ALG_CAMELLIA                (TPM_ALG_ID)(ALG_CAMELLIA_VALUE)
+#define     ALG_SHA3_256_VALUE          0x0027
+#define TPM_ALG_SHA3_256                (TPM_ALG_ID)(ALG_SHA3_256_VALUE)
+#define     ALG_SHA3_384_VALUE          0x0028
+#define TPM_ALG_SHA3_384                (TPM_ALG_ID)(ALG_SHA3_384_VALUE)
+#define     ALG_SHA3_512_VALUE          0x0029
+#define TPM_ALG_SHA3_512                (TPM_ALG_ID)(ALG_SHA3_512_VALUE)
+#define     ALG_CMAC_VALUE              0x003F
+#define TPM_ALG_CMAC                    (TPM_ALG_ID)(ALG_CMAC_VALUE)
+#define     ALG_CTR_VALUE               0x0040
+#define TPM_ALG_CTR                     (TPM_ALG_ID)(ALG_CTR_VALUE)
+#define     ALG_OFB_VALUE               0x0041
+#define TPM_ALG_OFB                     (TPM_ALG_ID)(ALG_OFB_VALUE)
+#define     ALG_CBC_VALUE               0x0042
+#define TPM_ALG_CBC                     (TPM_ALG_ID)(ALG_CBC_VALUE)
+#define     ALG_CFB_VALUE               0x0043
+#define TPM_ALG_CFB                     (TPM_ALG_ID)(ALG_CFB_VALUE)
+#define     ALG_ECB_VALUE               0x0044
+#define TPM_ALG_ECB                     (TPM_ALG_ID)(ALG_ECB_VALUE)
+// Values derived from Table 1:2
+#define     ALG_FIRST_VALUE             0x0001
+#define TPM_ALG_FIRST                   (TPM_ALG_ID)(ALG_FIRST_VALUE)
+#define     ALG_LAST_VALUE              0x0044
+#define TPM_ALG_LAST                    (TPM_ALG_ID)(ALG_LAST_VALUE)
+
+// Table 1:3 - Definition of TPM_ECC_CURVE Constants
+typedef UINT16              TPM_ECC_CURVE;
+#define TYPE_OF_TPM_ECC_CURVE   UINT16
+#define TPM_ECC_NONE        (TPM_ECC_CURVE)(0x0000)
+#define TPM_ECC_NIST_P192   (TPM_ECC_CURVE)(0x0001)
+#define TPM_ECC_NIST_P224   (TPM_ECC_CURVE)(0x0002)
+#define TPM_ECC_NIST_P256   (TPM_ECC_CURVE)(0x0003)
+#define TPM_ECC_NIST_P384   (TPM_ECC_CURVE)(0x0004)
+#define TPM_ECC_NIST_P521   (TPM_ECC_CURVE)(0x0005)
+#define TPM_ECC_BN_P256     (TPM_ECC_CURVE)(0x0010)
+#define TPM_ECC_BN_P638     (TPM_ECC_CURVE)(0x0011)
+#define TPM_ECC_SM2_P256    (TPM_ECC_CURVE)(0x0020)
+
+// Table 2:12 - Definition of TPM_CC Constants
+typedef UINT32                              TPM_CC;
+#define TYPE_OF_TPM_CC                      UINT32
+#define TPM_CC_NV_UndefineSpaceSpecial      (TPM_CC)(0x0000011F)
+#define TPM_CC_EvictControl                 (TPM_CC)(0x00000120)
+#define TPM_CC_HierarchyControl             (TPM_CC)(0x00000121)
+#define TPM_CC_NV_UndefineSpace             (TPM_CC)(0x00000122)
+#define TPM_CC_ChangeEPS                    (TPM_CC)(0x00000124)
+#define TPM_CC_ChangePPS                    (TPM_CC)(0x00000125)
+#define TPM_CC_Clear                        (TPM_CC)(0x00000126)
+#define TPM_CC_ClearControl                 (TPM_CC)(0x00000127)
+#define TPM_CC_ClockSet                     (TPM_CC)(0x00000128)
+#define TPM_CC_HierarchyChangeAuth          (TPM_CC)(0x00000129)
+#define TPM_CC_NV_DefineSpace               (TPM_CC)(0x0000012A)
+#define TPM_CC_PCR_Allocate                 (TPM_CC)(0x0000012B)
+#define TPM_CC_PCR_SetAuthPolicy            (TPM_CC)(0x0000012C)
+#define TPM_CC_PP_Commands                  (TPM_CC)(0x0000012D)
+#define TPM_CC_SetPrimaryPolicy             (TPM_CC)(0x0000012E)
+#define TPM_CC_FieldUpgradeStart            (TPM_CC)(0x0000012F)
+#define TPM_CC_ClockRateAdjust              (TPM_CC)(0x00000130)
+#define TPM_CC_CreatePrimary                (TPM_CC)(0x00000131)
+#define TPM_CC_NV_GlobalWriteLock           (TPM_CC)(0x00000132)
+#define TPM_CC_GetCommandAuditDigest        (TPM_CC)(0x00000133)
+#define TPM_CC_NV_Increment                 (TPM_CC)(0x00000134)
+#define TPM_CC_NV_SetBits                   (TPM_CC)(0x00000135)
+#define TPM_CC_NV_Extend                    (TPM_CC)(0x00000136)
+#define TPM_CC_NV_Write                     (TPM_CC)(0x00000137)
+#define TPM_CC_NV_WriteLock                 (TPM_CC)(0x00000138)
+#define TPM_CC_DictionaryAttackLockReset    (TPM_CC)(0x00000139)
+#define TPM_CC_DictionaryAttackParameters   (TPM_CC)(0x0000013A)
+#define TPM_CC_NV_ChangeAuth                (TPM_CC)(0x0000013B)
+#define TPM_CC_PCR_Event                    (TPM_CC)(0x0000013C)
+#define TPM_CC_PCR_Reset                    (TPM_CC)(0x0000013D)
+#define TPM_CC_SequenceComplete             (TPM_CC)(0x0000013E)
+#define TPM_CC_SetAlgorithmSet              (TPM_CC)(0x0000013F)
+#define TPM_CC_SetCommandCodeAuditStatus    (TPM_CC)(0x00000140)
+#define TPM_CC_FieldUpgradeData             (TPM_CC)(0x00000141)
+#define TPM_CC_IncrementalSelfTest          (TPM_CC)(0x00000142)
+#define TPM_CC_SelfTest                     (TPM_CC)(0x00000143)
+#define TPM_CC_Startup                      (TPM_CC)(0x00000144)
+#define TPM_CC_Shutdown                     (TPM_CC)(0x00000145)
+#define TPM_CC_StirRandom                   (TPM_CC)(0x00000146)
+#define TPM_CC_ActivateCredential           (TPM_CC)(0x00000147)
+#define TPM_CC_Certify                      (TPM_CC)(0x00000148)
+#define TPM_CC_PolicyNV                     (TPM_CC)(0x00000149)
+#define TPM_CC_CertifyCreation              (TPM_CC)(0x0000014A)
+#define TPM_CC_Duplicate                    (TPM_CC)(0x0000014B)
+#define TPM_CC_GetTime                      (TPM_CC)(0x0000014C)
+#define TPM_CC_GetSessionAuditDigest        (TPM_CC)(0x0000014D)
+#define TPM_CC_NV_Read                      (TPM_CC)(0x0000014E)
+#define TPM_CC_NV_ReadLock                  (TPM_CC)(0x0000014F)
+#define TPM_CC_ObjectChangeAuth             (TPM_CC)(0x00000150)
+#define TPM_CC_PolicySecret                 (TPM_CC)(0x00000151)
+#define TPM_CC_Rewrap                       (TPM_CC)(0x00000152)
+#define TPM_CC_Create                       (TPM_CC)(0x00000153)
+#define TPM_CC_ECDH_ZGen                    (TPM_CC)(0x00000154)
+#define TPM_CC_HMAC                         (TPM_CC)(0x00000155)
+#define TPM_CC_MAC                          (TPM_CC)(0x00000155)
+#define TPM_CC_Import                       (TPM_CC)(0x00000156)
+#define TPM_CC_Load                         (TPM_CC)(0x00000157)
+#define TPM_CC_Quote                        (TPM_CC)(0x00000158)
+#define TPM_CC_RSA_Decrypt                  (TPM_CC)(0x00000159)
+#define TPM_CC_HMAC_Start                   (TPM_CC)(0x0000015B)
+#define TPM_CC_MAC_Start                    (TPM_CC)(0x0000015B)
+#define TPM_CC_SequenceUpdate               (TPM_CC)(0x0000015C)
+#define TPM_CC_Sign                         (TPM_CC)(0x0000015D)
+#define TPM_CC_Unseal                       (TPM_CC)(0x0000015E)
+#define TPM_CC_PolicySigned                 (TPM_CC)(0x00000160)
+#define TPM_CC_ContextLoad                  (TPM_CC)(0x00000161)
+#define TPM_CC_ContextSave                  (TPM_CC)(0x00000162)
+#define TPM_CC_ECDH_KeyGen                  (TPM_CC)(0x00000163)
+#define TPM_CC_EncryptDecrypt               (TPM_CC)(0x00000164)
+#define TPM_CC_FlushContext                 (TPM_CC)(0x00000165)
+#define TPM_CC_LoadExternal                 (TPM_CC)(0x00000167)
+#define TPM_CC_MakeCredential               (TPM_CC)(0x00000168)
+#define TPM_CC_NV_ReadPublic                (TPM_CC)(0x00000169)
+#define TPM_CC_PolicyAuthorize              (TPM_CC)(0x0000016A)
+#define TPM_CC_PolicyAuthValue              (TPM_CC)(0x0000016B)
+#define TPM_CC_PolicyCommandCode            (TPM_CC)(0x0000016C)
+#define TPM_CC_PolicyCounterTimer           (TPM_CC)(0x0000016D)
+#define TPM_CC_PolicyCpHash                 (TPM_CC)(0x0000016E)
+#define TPM_CC_PolicyLocality               (TPM_CC)(0x0000016F)
+#define TPM_CC_PolicyNameHash               (TPM_CC)(0x00000170)
+#define TPM_CC_PolicyOR                     (TPM_CC)(0x00000171)
+#define TPM_CC_PolicyTicket                 (TPM_CC)(0x00000172)
+#define TPM_CC_ReadPublic                   (TPM_CC)(0x00000173)
+#define TPM_CC_RSA_Encrypt                  (TPM_CC)(0x00000174)
+#define TPM_CC_StartAuthSession             (TPM_CC)(0x00000176)
+#define TPM_CC_VerifySignature              (TPM_CC)(0x00000177)
+#define TPM_CC_ECC_Parameters               (TPM_CC)(0x00000178)
+#define TPM_CC_FirmwareRead                 (TPM_CC)(0x00000179)
+#define TPM_CC_GetCapability                (TPM_CC)(0x0000017A)
+#define TPM_CC_GetRandom                    (TPM_CC)(0x0000017B)
+#define TPM_CC_GetTestResult                (TPM_CC)(0x0000017C)
+#define TPM_CC_Hash                         (TPM_CC)(0x0000017D)
+#define TPM_CC_PCR_Read                     (TPM_CC)(0x0000017E)
+#define TPM_CC_PolicyPCR                    (TPM_CC)(0x0000017F)
+#define TPM_CC_PolicyRestart                (TPM_CC)(0x00000180)
+#define TPM_CC_ReadClock                    (TPM_CC)(0x00000181)
+#define TPM_CC_PCR_Extend                   (TPM_CC)(0x00000182)
+#define TPM_CC_PCR_SetAuthValue             (TPM_CC)(0x00000183)
+#define TPM_CC_NV_Certify                   (TPM_CC)(0x00000184)
+#define TPM_CC_EventSequenceComplete        (TPM_CC)(0x00000185)
+#define TPM_CC_HashSequenceStart            (TPM_CC)(0x00000186)
+#define TPM_CC_PolicyPhysicalPresence       (TPM_CC)(0x00000187)
+#define TPM_CC_PolicyDuplicationSelect      (TPM_CC)(0x00000188)
+#define TPM_CC_PolicyGetDigest              (TPM_CC)(0x00000189)
+#define TPM_CC_TestParms                    (TPM_CC)(0x0000018A)
+#define TPM_CC_Commit                       (TPM_CC)(0x0000018B)
+#define TPM_CC_PolicyPassword               (TPM_CC)(0x0000018C)
+#define TPM_CC_ZGen_2Phase                  (TPM_CC)(0x0000018D)
+#define TPM_CC_EC_Ephemeral                 (TPM_CC)(0x0000018E)
+#define TPM_CC_PolicyNvWritten              (TPM_CC)(0x0000018F)
+#define TPM_CC_PolicyTemplate               (TPM_CC)(0x00000190)
+#define TPM_CC_CreateLoaded                 (TPM_CC)(0x00000191)
+#define TPM_CC_PolicyAuthorizeNV            (TPM_CC)(0x00000192)
+#define TPM_CC_EncryptDecrypt2              (TPM_CC)(0x00000193)
+#define TPM_CC_AC_GetCapability             (TPM_CC)(0x00000194)
+#define TPM_CC_AC_Send                      (TPM_CC)(0x00000195)
+#define TPM_CC_Policy_AC_SendSelect         (TPM_CC)(0x00000196)
+#define TPM_CC_CertifyX509                  (TPM_CC)(0x00000197)
+#define CC_VEND                             0x20000000
+#define TPM_CC_Vendor_TCG_Test              (TPM_CC)(0x20000000)
 
 // Table 2:5 - Definition of Types for Documentation Clarity
 typedef UINT32              TPM_ALGORITHM_ID;
@@ -61,11 +289,11 @@ typedef UINT32                  TPM_SPEC;
 #define TPM_SPEC_FAMILY         (TPM_SPEC)(SPEC_FAMILY)
 #define SPEC_LEVEL              00
 #define TPM_SPEC_LEVEL          (TPM_SPEC)(SPEC_LEVEL)
-#define SPEC_VERSION            153
+#define SPEC_VERSION            154
 #define TPM_SPEC_VERSION        (TPM_SPEC)(SPEC_VERSION)
 #define SPEC_YEAR               2019
 #define TPM_SPEC_YEAR           (TPM_SPEC)(SPEC_YEAR)
-#define SPEC_DAY_OF_YEAR        28
+#define SPEC_DAY_OF_YEAR        81
 #define TPM_SPEC_DAY_OF_YEAR    (TPM_SPEC)(SPEC_DAY_OF_YEAR)
 
 // Table 2:7 - Definition of TPM_GENERATED Constants
@@ -546,9 +774,9 @@ typedef UINT32                      TPMA_ALGORITHM;
 #define TPMA_ALGORITHM_INITIALIZER(                                                \
              asymmetric, symmetric,  hash,       object,     bits_at_4,            \
              signing,    encrypting, method,     bits_at_11)                       \
-            ((asymmetric << 0) + (symmetric << 1)  + (hash << 2)       +           \
+            {(asymmetric << 0) + (symmetric << 1)  + (hash << 2)       +           \
              (object << 3)     + (signing << 8)    + (encrypting << 9) +           \
-             (method << 10))
+             (method << 10)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 #define TYPE_OF_TPMA_OBJECT UINT32
@@ -616,12 +844,12 @@ typedef UINT32                              TPMA_OBJECT;
              noda,                 encryptedduplication, bits_at_12,               \
              restricted,           decrypt,              sign,                     \
              x509sign,             bits_at_20)                                     \
-            ((fixedtpm << 1)              + (stclear << 2)               +         \
+            {(fixedtpm << 1)              + (stclear << 2)               +         \
              (fixedparent << 4)           + (sensitivedataorigin << 5)   +         \
              (userwithauth << 6)          + (adminwithpolicy << 7)       +         \
              (noda << 10)                 + (encryptedduplication << 11) +         \
              (restricted << 16)           + (decrypt << 17)              +         \
-             (sign << 18)                 + (x509sign << 19))
+             (sign << 18)                 + (x509sign << 19)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 #define TYPE_OF_TPMA_SESSION    UINT8
@@ -661,9 +889,9 @@ typedef UINT8                           TPMA_SESSION;
 #define TPMA_SESSION_INITIALIZER(                                                  \
              continuesession, auditexclusive,  auditreset,      bits_at_3,         \
              decrypt,         encrypt,         audit)                              \
-            ((continuesession << 0) + (auditexclusive << 1)  +                     \
+            {(continuesession << 0) + (auditexclusive << 1)  +                     \
              (auditreset << 2)      + (decrypt << 5)         +                     \
-             (encrypt << 6)         + (audit << 7))
+             (encrypt << 6)         + (audit << 7)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 #define TYPE_OF_TPMA_LOCALITY   UINT8
@@ -703,8 +931,8 @@ typedef UINT8                           TPMA_LOCALITY;
 #define TPMA_LOCALITY_INITIALIZER(                                                 \
              tpm_loc_zero,  tpm_loc_one,   tpm_loc_two,   tpm_loc_three,           \
              tpm_loc_four,  extended)                                              \
-            ((tpm_loc_zero << 0)  + (tpm_loc_one << 1)   + (tpm_loc_two << 2)   +  \
-             (tpm_loc_three << 3) + (tpm_loc_four << 4)  + (extended << 5))
+            {(tpm_loc_zero << 0)  + (tpm_loc_one << 1)   + (tpm_loc_two << 2)   +  \
+             (tpm_loc_three << 3) + (tpm_loc_four << 4)  + (extended << 5)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 #define TYPE_OF_TPMA_PERMANENT  UINT32
@@ -750,9 +978,9 @@ typedef UINT32                              TPMA_PERMANENT;
              ownerauthset,       endorsementauthset, lockoutauthset,               \
              bits_at_3,          disableclear,       inlockout,                    \
              tpmgeneratedeps,    bits_at_11)                                       \
-            ((ownerauthset << 0)       + (endorsementauthset << 1) +               \
+            {(ownerauthset << 0)       + (endorsementauthset << 1) +               \
              (lockoutauthset << 2)     + (disableclear << 8)       +               \
-             (inlockout << 9)          + (tpmgeneratedeps << 10))
+             (inlockout << 9)          + (tpmgeneratedeps << 10)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 #define TYPE_OF_TPMA_STARTUP_CLEAR  UINT32
@@ -789,8 +1017,8 @@ typedef UINT32                          TPMA_STARTUP_CLEAR;
 //  This is the initializer for a TPMA_STARTUP_CLEAR bit array.
 #define TPMA_STARTUP_CLEAR_INITIALIZER(                                            \
              phenable, shenable, ehenable, phenablenv, bits_at_4, orderly)         \
-            ((phenable << 0)   + (shenable << 1)   + (ehenable << 2)   +           \
-             (phenablenv << 3) + (orderly << 31))
+            {(phenable << 0)   + (shenable << 1)   + (ehenable << 2)   +           \
+             (phenablenv << 3) + (orderly << 31)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 #define TYPE_OF_TPMA_MEMORY UINT32
@@ -821,7 +1049,7 @@ typedef UINT32                          TPMA_MEMORY;
 //  This is the initializer for a TPMA_MEMORY bit array.
 #define TPMA_MEMORY_INITIALIZER(                                                   \
              sharedram, sharednv, objectcopiedtoram, bits_at_3)                    \
-            ((sharedram << 0) + (sharednv << 1) + (objectcopiedtoram << 2))
+            {(sharedram << 0) + (sharednv << 1) + (objectcopiedtoram << 2)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 #define TYPE_OF_TPMA_CC     UINT32
@@ -866,9 +1094,9 @@ typedef UINT32                      TPMA_CC;
 #define TPMA_CC_INITIALIZER(                                                       \
              commandindex, bits_at_16,   nv,           extensive,    flushed,      \
              chandles,     rhandle,      v,            bits_at_30)                 \
-            ((commandindex << 0) + (nv << 22)          + (extensive << 23)   +     \
+            {(commandindex << 0) + (nv << 22)          + (extensive << 23)   +     \
              (flushed << 24)     + (chandles << 25)    + (rhandle << 28)     +     \
-             (v << 29))
+             (v << 29)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 #define TYPE_OF_TPMA_MODES  UINT32
@@ -891,7 +1119,7 @@ typedef UINT32                  TPMA_MODES;
 #define TYPE_OF_TPMA_MODES      UINT32
 #define TPMA_MODES_FIPS_140_2   ((TPMA_MODES)1 << 0)
 //  This is the initializer for a TPMA_MODES bit array.
-#define TPMA_MODES_INITIALIZER(fips_140_2, bits_at_1) (fips_140_2 << 0)
+#define TPMA_MODES_INITIALIZER(fips_140_2, bits_at_1) {(fips_140_2 << 0)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 #define TYPE_OF_TPMA_X509_KEY_USAGE UINT32
@@ -945,11 +1173,11 @@ typedef UINT32                                  TPMA_X509_KEY_USAGE;
              dataencipherment, keyagreement,     keycertsign,                      \
              crlsign,          encipheronly,     decipheronly,                     \
              bits_at_9)                                                            \
-            ((digitalsignature << 0) + (nonrepudiation << 1)   +                   \
+            {(digitalsignature << 0) + (nonrepudiation << 1)   +                   \
              (keyencipherment << 2)  + (dataencipherment << 3) +                   \
              (keyagreement << 4)     + (keycertsign << 5)      +                   \
              (crlsign << 6)          + (encipheronly << 7)     +                   \
-             (decipheronly << 8))
+             (decipheronly << 8)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 typedef BYTE                TPMI_YES_NO;            // Table 2:40  /* Interface */
@@ -1948,7 +2176,7 @@ typedef UINT32                      TPM_NV_INDEX;
 #define TPM_NV_INDEX_RH_NV_SHIFT    24
 #define TPM_NV_INDEX_RH_NV          ((TPM_NV_INDEX)0xff << 24)
 //  This is the initializer for a TPM_NV_INDEX bit array.
-#define TPM_NV_INDEX_INITIALIZER(index, rh_nv) ((index << 0) + (rh_nv << 24))
+#define TPM_NV_INDEX_INITIALIZER(index, rh_nv) {(index << 0) + (rh_nv << 24)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 // Table 2:208 - Definition of TPM_NT Constants
@@ -2049,7 +2277,7 @@ typedef UINT32                  TPMA_NV;
              ppread,         ownerread,      authread,       policyread,           \
              bits_at_20,     no_da,          orderly,        clear_stclear,        \
              readlocked,     written,        platformcreate, read_stclear)         \
-            ((ppwrite << 0)         + (ownerwrite << 1)      +                     \
+            {(ppwrite << 0)         + (ownerwrite << 1)      +                     \
              (authwrite << 2)       + (policywrite << 3)     +                     \
              (tpm_nt << 4)          + (policy_delete << 10)  +                     \
              (writelocked << 11)    + (writeall << 12)       +                     \
@@ -2059,7 +2287,7 @@ typedef UINT32                  TPMA_NV;
              (policyread << 19)     + (no_da << 25)          +                     \
              (orderly << 26)        + (clear_stclear << 27)  +                     \
              (readlocked << 28)     + (written << 29)        +                     \
-             (platformcreate << 30) + (read_stclear << 31))
+             (platformcreate << 30) + (read_stclear << 31)}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 typedef struct {                                    // Table 2:211

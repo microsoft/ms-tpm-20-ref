@@ -53,6 +53,7 @@ BOOL                 s_NeedsManufacture = FALSE;
 //**Functions
 
 #if FILE_BACKED_NV
+
 //*** NvFileOpen()
 // This function opens the file used to hold the NV image.
 //  Return Type: int
@@ -289,7 +290,7 @@ _plat__NvMemoryWrite(
 {
     if(startOffset + size <= NV_MEMORY_SIZE)
     {
-    memcpy(&s_NV[startOffset], data, size);     // Copy the data to the NV image
+        memcpy(&s_NV[startOffset], data, size);     // Copy the data to the NV image
         return TRUE;
     }
     return FALSE;
