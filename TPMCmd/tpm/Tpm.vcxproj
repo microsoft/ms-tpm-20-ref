@@ -47,7 +47,7 @@
     <ProjectGuid>{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}</ProjectGuid>
     <RootNamespace>TPMCmd</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -239,12 +239,11 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>CompileAsC</CompileAs>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <DisableSpecificWarnings>4668; 4710;4711; 4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
       <BrowseInformation>true</BrowseInformation>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
@@ -763,7 +762,9 @@
     <ClCompile Include="src\subsystem\Session.c" />
     <ClCompile Include="src\subsystem\Time.c" />
     <ClCompile Include="src\support\AlgorithmCap.c" />
-    <ClCompile Include="src\support\Bits.c" />
+    <ClCompile Include="src\support\Bits.c">
+      <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
+    </ClCompile>
     <ClCompile Include="src\support\CommandCodeAttributes.c" />
     <ClCompile Include="src\support\Entity.c" />
     <ClCompile Include="src\support\Global.c" />

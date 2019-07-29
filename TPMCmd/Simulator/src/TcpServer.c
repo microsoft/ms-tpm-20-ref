@@ -38,6 +38,7 @@
 //
 //** Includes, Locals, Defines and Function Prototypes
 #include "TpmBuildSwitches.h"
+#include "BaseTypes.h"
 
 #include <stdio.h>
 
@@ -54,6 +55,7 @@ typedef int socklen_t;
 #   include <stdint.h>
 #   include <netinet/in.h>
 #   include <sys/socket.h>
+#   include <pthread.h>
 #   define ZeroMemory(ptr, sz) (memset((ptr), 0, (sz)))
 #   define closesocket(x) close(x)
 #   define INVALID_SOCKET (-1)
@@ -61,7 +63,9 @@ typedef int socklen_t;
 #   define WSAGetLastError() (errno)
 #   define INT_PTR intptr_t
     typedef int SOCKET;
-#endif // __unix__
+#else
+#   error "Unsupported platform."
+#endif
 
 #ifndef TRUE
 #   define TRUE    1
@@ -235,7 +239,6 @@ PlatformServer(
         }
         WriteUINT32(s, 0);
     }
-    return FALSE;
 }
 
 //*** PlatformSvcRoutine()

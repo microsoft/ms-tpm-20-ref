@@ -47,7 +47,7 @@
     <RootNamespace>simulator</RootNamespace>
     <Keyword>Win32Proj</Keyword>
     <ProjectName>Simulator</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -230,8 +230,8 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
       <BrowseInformation>true</BrowseInformation>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <DisableSpecificWarnings>4668; 4710; 4711;4820</DisableSpecificWarnings>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <DisableSpecificWarnings>4668; 4710; 4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>tpm.lib;platform.lib;Ws2_32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
