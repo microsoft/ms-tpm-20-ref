@@ -55,6 +55,7 @@ typedef int socklen_t;
 #   include <stdint.h>
 #   include <netinet/in.h>
 #   include <sys/socket.h>
+#   include <pthread.h>
 #   define ZeroMemory(ptr, sz) (memset((ptr), 0, (sz)))
 #   define closesocket(x) close(x)
 #   define INVALID_SOCKET (-1)
