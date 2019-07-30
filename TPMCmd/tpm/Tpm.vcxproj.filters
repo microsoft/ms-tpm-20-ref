@@ -589,7 +589,7 @@
     <ClCompile Include="src\X509\X509_ECC.c">
       <Filter>Source Files\X509</Filter>
     </ClCompile>
-    <ClCompile Include="src\X509\TpmAsn1.c">
+    <ClCompile Include="src\X509\TpmASN1.c">
       <Filter>Source Files\X509</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1203,7 +1203,7 @@
     <ClInclude Include="include\X509_RSA.h">
       <Filter>Source Files\X509</Filter>
     </ClInclude>
-    <ClInclude Include="include\OIDs.h">
+    <ClInclude Include="include\OIDS.h">
       <Filter>Source Files\X509</Filter>
     </ClInclude>
     <ClInclude Include="include\CryptHash.h">
@@ -1332,7 +1332,9 @@
     <ClInclude Include="include\TpmProfile.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="include\Wolf\user_settings.h" />
+    <ClInclude Include="include\Wolf\user_settings.h">
+      <Filter>Headers\Crypt\wolf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
