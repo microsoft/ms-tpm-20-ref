@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include <setjmp.h>
 #include "TpmBuildSwitches.h"
+#include "BaseTypes.h"
 
 #ifdef _MSC_VER
 #   pragma warning(push, 3)
@@ -332,36 +333,4 @@ _rpc__RsaKeyCacheControl(
 #else
     NOT_REFERENCED(state);
 #endif
-}
-
-//*** _rpc__Shutdown()
-// This function is used to stop the TPM simulator.
-void
-_rpc__Shutdown(
-    void
-    )
-{
-#ifdef _MSC_VER
-    RPC_STATUS status;
-#endif
-
-    // Stop TPM
-    TPM_TearDown();
-
-#ifdef _MSC_VER
-    status = RpcMgmtStopServerListening(NULL);
-    if(status != RPC_S_OK)
-    {
-        printf("RpcMgmtStopServerListening returned: 0x%x\n", (int)status);
-        exit(status);
-    }
-
-    status = RpcServerUnregisterIf(NULL, NULL, FALSE);
-    if(status != RPC_S_OK)
-    {
-        printf("RpcServerUnregisterIf returned 0x%x\n", (int)status);
-        exit(status);
-    }
-#endif
-    return;
 }

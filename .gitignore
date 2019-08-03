@@ -332,3 +332,4 @@ TPMCmd/tpm/src/libtpm.a
 /TPMCmd/Simulator/DebugFile.txt
 /TPMCmd/ParserTemps
 /TPMCmd/TpmScripts
+*.zip
