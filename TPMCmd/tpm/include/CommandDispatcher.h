@@ -38,7 +38,7 @@
  */
 
 // This macro is added just so that the code is only excessively long.
-#define EXIT_IF_ERROR_PLUS(x)         \
+#define ERROR_IF_EXIT_PLUS(x)         \
     if(TPM_RC_SUCCESS != result) { result += (x); goto Exit; }
 #if CC_Startup
 case TPM_CC_Startup: {
@@ -46,7 +46,7 @@ case TPM_CC_Startup: {
             MemoryGetInBuffer(sizeof(Startup_In));
     result = TPM_SU_Unmarshal(&in->startupType, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_Startup_startupType);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Startup (in);
 break; 
 }
@@ -57,7 +57,7 @@ case TPM_CC_Shutdown: {
             MemoryGetInBuffer(sizeof(Shutdown_In));
     result = TPM_SU_Unmarshal(&in->shutdownType, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_Shutdown_shutdownType);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Shutdown (in);
 break; 
 }
@@ -68,7 +68,7 @@ case TPM_CC_SelfTest: {
             MemoryGetInBuffer(sizeof(SelfTest_In));
     result = TPMI_YES_NO_Unmarshal(&in->fullTest, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_SelfTest_fullTest);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_SelfTest (in);
 break; 
 }
@@ -81,7 +81,7 @@ case TPM_CC_IncrementalSelfTest: {
             MemoryGetOutBuffer(sizeof(IncrementalSelfTest_Out));
     result = TPML_ALG_Unmarshal(&in->toTest, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_IncrementalSelfTest_toTest);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_IncrementalSelfTest (in, out);
     rSize = sizeof(IncrementalSelfTest_Out);
     *respParmSize += TPML_ALG_Marshal(&out->toDoList, 
@@ -93,7 +93,7 @@ break;
 case TPM_CC_GetTestResult: {
     GetTestResult_Out *out = (GetTestResult_Out *) 
             MemoryGetOutBuffer(sizeof(GetTestResult_Out));
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_GetTestResult (out);
     rSize = sizeof(GetTestResult_Out);
     *respParmSize += TPM2B_MAX_BUFFER_Marshal(&out->outData, 
@@ -121,7 +121,7 @@ case TPM_CC_StartAuthSession: {
         ERROR_IF_EXIT_PLUS(RC_StartAuthSession_symmetric);
     result = TPMI_ALG_HASH_Unmarshal(&in->authHash, paramBuffer, paramBufferSize, FALSE);
         ERROR_IF_EXIT_PLUS(RC_StartAuthSession_authHash);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_StartAuthSession (in, out);
     rSize = sizeof(StartAuthSession_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
@@ -136,7 +136,7 @@ case TPM_CC_PolicyRestart: {
     PolicyRestart_In *in = (PolicyRestart_In *)
             MemoryGetInBuffer(sizeof(PolicyRestart_In));
     in->sessionHandle = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyRestart (in);
 break; 
 }
@@ -156,7 +156,7 @@ case TPM_CC_Create: {
         ERROR_IF_EXIT_PLUS(RC_Create_outsideInfo);
     result = TPML_PCR_SELECTION_Unmarshal(&in->creationPCR, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_Create_creationPCR);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Create (in, out);
     rSize = sizeof(Create_Out);
     *respParmSize += TPM2B_PRIVATE_Marshal(&out->outPrivate, 
@@ -183,7 +183,7 @@ case TPM_CC_Load: {
         ERROR_IF_EXIT_PLUS(RC_Load_inPrivate);
     result = TPM2B_PUBLIC_Unmarshal(&in->inPublic, paramBuffer, paramBufferSize, FALSE);
         ERROR_IF_EXIT_PLUS(RC_Load_inPublic);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Load (in, out);
     rSize = sizeof(Load_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
@@ -205,7 +205,7 @@ case TPM_CC_LoadExternal: {
         ERROR_IF_EXIT_PLUS(RC_LoadExternal_inPublic);
     result = TPMI_RH_HIERARCHY_Unmarshal(&in->hierarchy, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_LoadExternal_hierarchy);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_LoadExternal (in, out);
     rSize = sizeof(LoadExternal_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
@@ -222,7 +222,7 @@ case TPM_CC_ReadPublic: {
     ReadPublic_Out *out = (ReadPublic_Out *) 
             MemoryGetOutBuffer(sizeof(ReadPublic_Out));
     in->objectHandle = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ReadPublic (in, out);
     rSize = sizeof(ReadPublic_Out);
     *respParmSize += TPM2B_PUBLIC_Marshal(&out->outPublic, 
@@ -246,7 +246,7 @@ case TPM_CC_ActivateCredential: {
         ERROR_IF_EXIT_PLUS(RC_ActivateCredential_credentialBlob);
     result = TPM2B_ENCRYPTED_SECRET_Unmarshal(&in->secret, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_ActivateCredential_secret);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ActivateCredential (in, out);
     rSize = sizeof(ActivateCredential_Out);
     *respParmSize += TPM2B_DIGEST_Marshal(&out->certInfo, 
@@ -265,7 +265,7 @@ case TPM_CC_MakeCredential: {
         ERROR_IF_EXIT_PLUS(RC_MakeCredential_credential);
     result = TPM2B_NAME_Unmarshal(&in->objectName, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_MakeCredential_objectName);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_MakeCredential (in, out);
     rSize = sizeof(MakeCredential_Out);
     *respParmSize += TPM2B_ID_OBJECT_Marshal(&out->credentialBlob, 
@@ -282,7 +282,7 @@ case TPM_CC_Unseal: {
     Unseal_Out *out = (Unseal_Out *) 
             MemoryGetOutBuffer(sizeof(Unseal_Out));
     in->itemHandle = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Unseal (in, out);
     rSize = sizeof(Unseal_Out);
     *respParmSize += TPM2B_SENSITIVE_DATA_Marshal(&out->outData, 
@@ -300,7 +300,7 @@ case TPM_CC_ObjectChangeAuth: {
     in->parentHandle = handles[1];
     result = TPM2B_AUTH_Unmarshal(&in->newAuth, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_ObjectChangeAuth_newAuth);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ObjectChangeAuth (in, out);
     rSize = sizeof(ObjectChangeAuth_Out);
     *respParmSize += TPM2B_PRIVATE_Marshal(&out->outPrivate, 
@@ -319,7 +319,7 @@ case TPM_CC_CreateLoaded: {
         ERROR_IF_EXIT_PLUS(RC_CreateLoaded_inSensitive);
     result = TPM2B_TEMPLATE_Unmarshal(&in->inPublic, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_CreateLoaded_inPublic);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_CreateLoaded (in, out);
     rSize = sizeof(CreateLoaded_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
@@ -345,7 +345,7 @@ case TPM_CC_Duplicate: {
         ERROR_IF_EXIT_PLUS(RC_Duplicate_encryptionKeyIn);
     result = TPMT_SYM_DEF_OBJECT_Unmarshal(&in->symmetricAlg, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_Duplicate_symmetricAlg);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Duplicate (in, out);
     rSize = sizeof(Duplicate_Out);
     *respParmSize += TPM2B_DATA_Marshal(&out->encryptionKeyOut, 
@@ -371,7 +371,7 @@ case TPM_CC_Rewrap: {
         ERROR_IF_EXIT_PLUS(RC_Rewrap_name);
     result = TPM2B_ENCRYPTED_SECRET_Unmarshal(&in->inSymSeed, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_Rewrap_inSymSeed);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Rewrap (in, out);
     rSize = sizeof(Rewrap_Out);
     *respParmSize += TPM2B_PRIVATE_Marshal(&out->outDuplicate, 
@@ -398,7 +398,7 @@ case TPM_CC_Import: {
         ERROR_IF_EXIT_PLUS(RC_Import_inSymSeed);
     result = TPMT_SYM_DEF_OBJECT_Unmarshal(&in->symmetricAlg, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_Import_symmetricAlg);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Import (in, out);
     rSize = sizeof(Import_Out);
     *respParmSize += TPM2B_PRIVATE_Marshal(&out->outPrivate, 
@@ -419,7 +419,7 @@ case TPM_CC_RSA_Encrypt: {
         ERROR_IF_EXIT_PLUS(RC_RSA_Encrypt_inScheme);
     result = TPM2B_DATA_Unmarshal(&in->label, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_RSA_Encrypt_label);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_RSA_Encrypt (in, out);
     rSize = sizeof(RSA_Encrypt_Out);
     *respParmSize += TPM2B_PUBLIC_KEY_RSA_Marshal(&out->outData, 
@@ -440,7 +440,7 @@ case TPM_CC_RSA_Decrypt: {
         ERROR_IF_EXIT_PLUS(RC_RSA_Decrypt_inScheme);
     result = TPM2B_DATA_Unmarshal(&in->label, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_RSA_Decrypt_label);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_RSA_Decrypt (in, out);
     rSize = sizeof(RSA_Decrypt_Out);
     *respParmSize += TPM2B_PUBLIC_KEY_RSA_Marshal(&out->message, 
@@ -455,7 +455,7 @@ case TPM_CC_ECDH_KeyGen: {
     ECDH_KeyGen_Out *out = (ECDH_KeyGen_Out *) 
             MemoryGetOutBuffer(sizeof(ECDH_KeyGen_Out));
     in->keyHandle = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ECDH_KeyGen (in, out);
     rSize = sizeof(ECDH_KeyGen_Out);
     *respParmSize += TPM2B_ECC_POINT_Marshal(&out->zPoint, 
@@ -474,7 +474,7 @@ case TPM_CC_ECDH_ZGen: {
     in->keyHandle = handles[0];
     result = TPM2B_ECC_POINT_Unmarshal(&in->inPoint, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_ECDH_ZGen_inPoint);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ECDH_ZGen (in, out);
     rSize = sizeof(ECDH_ZGen_Out);
     *respParmSize += TPM2B_ECC_POINT_Marshal(&out->outPoint, 
@@ -490,7 +490,7 @@ case TPM_CC_ECC_Parameters: {
             MemoryGetOutBuffer(sizeof(ECC_Parameters_Out));
     result = TPMI_ECC_CURVE_Unmarshal(&in->curveID, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_ECC_Parameters_curveID);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ECC_Parameters (in, out);
     rSize = sizeof(ECC_Parameters_Out);
     *respParmSize += TPMS_ALGORITHM_DETAIL_ECC_Marshal(&out->parameters, 
@@ -513,7 +513,7 @@ case TPM_CC_ZGen_2Phase: {
         ERROR_IF_EXIT_PLUS(RC_ZGen_2Phase_inScheme);
     result = UINT16_Unmarshal(&in->counter, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_ZGen_2Phase_counter);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ZGen_2Phase (in, out);
     rSize = sizeof(ZGen_2Phase_Out);
     *respParmSize += TPM2B_ECC_POINT_Marshal(&out->outZ1, 
@@ -538,7 +538,7 @@ case TPM_CC_EncryptDecrypt: {
         ERROR_IF_EXIT_PLUS(RC_EncryptDecrypt_ivIn);
     result = TPM2B_MAX_BUFFER_Unmarshal(&in->inData, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_EncryptDecrypt_inData);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_EncryptDecrypt (in, out);
     rSize = sizeof(EncryptDecrypt_Out);
     *respParmSize += TPM2B_MAX_BUFFER_Marshal(&out->outData, 
@@ -563,7 +563,7 @@ case TPM_CC_EncryptDecrypt2: {
         ERROR_IF_EXIT_PLUS(RC_EncryptDecrypt2_mode);
     result = TPM2B_IV_Unmarshal(&in->ivIn, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_EncryptDecrypt2_ivIn);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_EncryptDecrypt2 (in, out);
     rSize = sizeof(EncryptDecrypt2_Out);
     *respParmSize += TPM2B_MAX_BUFFER_Marshal(&out->outData, 
@@ -585,7 +585,7 @@ case TPM_CC_Hash: {
         ERROR_IF_EXIT_PLUS(RC_Hash_hashAlg);
     result = TPMI_RH_HIERARCHY_Unmarshal(&in->hierarchy, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_Hash_hierarchy);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Hash (in, out);
     rSize = sizeof(Hash_Out);
     *respParmSize += TPM2B_DIGEST_Marshal(&out->outHash, 
@@ -606,7 +606,7 @@ case TPM_CC_HMAC: {
         ERROR_IF_EXIT_PLUS(RC_HMAC_buffer);
     result = TPMI_ALG_HASH_Unmarshal(&in->hashAlg, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_HMAC_hashAlg);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_HMAC (in, out);
     rSize = sizeof(HMAC_Out);
     *respParmSize += TPM2B_DIGEST_Marshal(&out->outHMAC, 
@@ -625,7 +625,7 @@ case TPM_CC_MAC: {
         ERROR_IF_EXIT_PLUS(RC_MAC_buffer);
     result = TPMI_ALG_MAC_SCHEME_Unmarshal(&in->inScheme, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_MAC_inScheme);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_MAC (in, out);
     rSize = sizeof(MAC_Out);
     *respParmSize += TPM2B_DIGEST_Marshal(&out->outMAC, 
@@ -641,7 +641,7 @@ case TPM_CC_GetRandom: {
             MemoryGetOutBuffer(sizeof(GetRandom_Out));
     result = UINT16_Unmarshal(&in->bytesRequested, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_GetRandom_bytesRequested);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_GetRandom (in, out);
     rSize = sizeof(GetRandom_Out);
     *respParmSize += TPM2B_DIGEST_Marshal(&out->randomBytes, 
@@ -655,7 +655,7 @@ case TPM_CC_StirRandom: {
             MemoryGetInBuffer(sizeof(StirRandom_In));
     result = TPM2B_SENSITIVE_DATA_Unmarshal(&in->inData, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_StirRandom_inData);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_StirRandom (in);
 break; 
 }
@@ -671,7 +671,7 @@ case TPM_CC_HMAC_Start: {
         ERROR_IF_EXIT_PLUS(RC_HMAC_Start_auth);
     result = TPMI_ALG_HASH_Unmarshal(&in->hashAlg, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_HMAC_Start_hashAlg);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_HMAC_Start (in, out);
     rSize = sizeof(HMAC_Start_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
@@ -690,7 +690,7 @@ case TPM_CC_MAC_Start: {
         ERROR_IF_EXIT_PLUS(RC_MAC_Start_auth);
     result = TPMI_ALG_MAC_SCHEME_Unmarshal(&in->inScheme, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_MAC_Start_inScheme);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_MAC_Start (in, out);
     rSize = sizeof(MAC_Start_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
@@ -708,7 +708,7 @@ case TPM_CC_HashSequenceStart: {
         ERROR_IF_EXIT_PLUS(RC_HashSequenceStart_auth);
     result = TPMI_ALG_HASH_Unmarshal(&in->hashAlg, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_HashSequenceStart_hashAlg);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_HashSequenceStart (in, out);
     rSize = sizeof(HashSequenceStart_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
@@ -723,7 +723,7 @@ case TPM_CC_SequenceUpdate: {
     in->sequenceHandle = handles[0];
     result = TPM2B_MAX_BUFFER_Unmarshal(&in->buffer, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_SequenceUpdate_buffer);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_SequenceUpdate (in);
 break; 
 }
@@ -739,7 +739,7 @@ case TPM_CC_SequenceComplete: {
         ERROR_IF_EXIT_PLUS(RC_SequenceComplete_buffer);
     result = TPMI_RH_HIERARCHY_Unmarshal(&in->hierarchy, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_SequenceComplete_hierarchy);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_SequenceComplete (in, out);
     rSize = sizeof(SequenceComplete_Out);
     *respParmSize += TPM2B_DIGEST_Marshal(&out->result, 
@@ -759,7 +759,7 @@ case TPM_CC_EventSequenceComplete: {
     in->sequenceHandle = handles[1];
     result = TPM2B_MAX_BUFFER_Unmarshal(&in->buffer, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_EventSequenceComplete_buffer);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_EventSequenceComplete (in, out);
     rSize = sizeof(EventSequenceComplete_Out);
     *respParmSize += TPML_DIGEST_VALUES_Marshal(&out->results, 
@@ -779,7 +779,7 @@ case TPM_CC_Certify: {
         ERROR_IF_EXIT_PLUS(RC_Certify_qualifyingData);
     result = TPMT_SIG_SCHEME_Unmarshal(&in->inScheme, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_Certify_inScheme);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Certify (in, out);
     rSize = sizeof(Certify_Out);
     *respParmSize += TPM2B_ATTEST_Marshal(&out->certifyInfo, 
@@ -805,7 +805,7 @@ case TPM_CC_CertifyCreation: {
         ERROR_IF_EXIT_PLUS(RC_CertifyCreation_inScheme);
     result = TPMT_TK_CREATION_Unmarshal(&in->creationTicket, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_CertifyCreation_creationTicket);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_CertifyCreation (in, out);
     rSize = sizeof(CertifyCreation_Out);
     *respParmSize += TPM2B_ATTEST_Marshal(&out->certifyInfo, 
@@ -828,7 +828,7 @@ case TPM_CC_Quote: {
         ERROR_IF_EXIT_PLUS(RC_Quote_inScheme);
     result = TPML_PCR_SELECTION_Unmarshal(&in->PCRselect, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_Quote_PCRselect);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Quote (in, out);
     rSize = sizeof(Quote_Out);
     *respParmSize += TPM2B_ATTEST_Marshal(&out->quoted, 
@@ -851,7 +851,7 @@ case TPM_CC_GetSessionAuditDigest: {
         ERROR_IF_EXIT_PLUS(RC_GetSessionAuditDigest_qualifyingData);
     result = TPMT_SIG_SCHEME_Unmarshal(&in->inScheme, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_GetSessionAuditDigest_inScheme);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_GetSessionAuditDigest (in, out);
     rSize = sizeof(GetSessionAuditDigest_Out);
     *respParmSize += TPM2B_ATTEST_Marshal(&out->auditInfo, 
@@ -873,7 +873,7 @@ case TPM_CC_GetCommandAuditDigest: {
         ERROR_IF_EXIT_PLUS(RC_GetCommandAuditDigest_qualifyingData);
     result = TPMT_SIG_SCHEME_Unmarshal(&in->inScheme, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_GetCommandAuditDigest_inScheme);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_GetCommandAuditDigest (in, out);
     rSize = sizeof(GetCommandAuditDigest_Out);
     *respParmSize += TPM2B_ATTEST_Marshal(&out->auditInfo, 
@@ -895,7 +895,7 @@ case TPM_CC_GetTime: {
         ERROR_IF_EXIT_PLUS(RC_GetTime_qualifyingData);
     result = TPMT_SIG_SCHEME_Unmarshal(&in->inScheme, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_GetTime_inScheme);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_GetTime (in, out);
     rSize = sizeof(GetTime_Out);
     *respParmSize += TPM2B_ATTEST_Marshal(&out->timeInfo, 
@@ -919,7 +919,7 @@ case TPM_CC_CertifyX509: {
         ERROR_IF_EXIT_PLUS(RC_CertifyX509_inScheme);
     result = TPM2B_MAX_BUFFER_Unmarshal(&in->partialCertificate, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_CertifyX509_partialCertificate);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_CertifyX509 (in, out);
     rSize = sizeof(CertifyX509_Out);
     *respParmSize += TPM2B_MAX_BUFFER_Marshal(&out->addedToCertificate, 
@@ -944,7 +944,7 @@ case TPM_CC_Commit: {
         ERROR_IF_EXIT_PLUS(RC_Commit_s2);
     result = TPM2B_ECC_PARAMETER_Unmarshal(&in->y2, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_Commit_y2);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Commit (in, out);
     rSize = sizeof(Commit_Out);
     *respParmSize += TPM2B_ECC_POINT_Marshal(&out->K, 
@@ -966,7 +966,7 @@ case TPM_CC_EC_Ephemeral: {
             MemoryGetOutBuffer(sizeof(EC_Ephemeral_Out));
     result = TPMI_ECC_CURVE_Unmarshal(&in->curveID, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_EC_Ephemeral_curveID);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_EC_Ephemeral (in, out);
     rSize = sizeof(EC_Ephemeral_Out);
     *respParmSize += TPM2B_ECC_POINT_Marshal(&out->Q, 
@@ -987,7 +987,7 @@ case TPM_CC_VerifySignature: {
         ERROR_IF_EXIT_PLUS(RC_VerifySignature_digest);
     result = TPMT_SIGNATURE_Unmarshal(&in->signature, paramBuffer, paramBufferSize, FALSE);
         ERROR_IF_EXIT_PLUS(RC_VerifySignature_signature);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_VerifySignature (in, out);
     rSize = sizeof(VerifySignature_Out);
     *respParmSize += TPMT_TK_VERIFIED_Marshal(&out->validation, 
@@ -1008,7 +1008,7 @@ case TPM_CC_Sign: {
         ERROR_IF_EXIT_PLUS(RC_Sign_inScheme);
     result = TPMT_TK_HASHCHECK_Unmarshal(&in->validation, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_Sign_validation);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Sign (in, out);
     rSize = sizeof(Sign_Out);
     *respParmSize += TPMT_SIGNATURE_Marshal(&out->signature, 
@@ -1027,7 +1027,7 @@ case TPM_CC_SetCommandCodeAuditStatus: {
         ERROR_IF_EXIT_PLUS(RC_SetCommandCodeAuditStatus_setList);
     result = TPML_CC_Unmarshal(&in->clearList, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_SetCommandCodeAuditStatus_clearList);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_SetCommandCodeAuditStatus (in);
 break; 
 }
@@ -1039,7 +1039,7 @@ case TPM_CC_PCR_Extend: {
     in->pcrHandle = handles[0];
     result = TPML_DIGEST_VALUES_Unmarshal(&in->digests, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PCR_Extend_digests);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PCR_Extend (in);
 break; 
 }
@@ -1053,7 +1053,7 @@ case TPM_CC_PCR_Event: {
     in->pcrHandle = handles[0];
     result = TPM2B_EVENT_Unmarshal(&in->eventData, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PCR_Event_eventData);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PCR_Event (in, out);
     rSize = sizeof(PCR_Event_Out);
     *respParmSize += TPML_DIGEST_VALUES_Marshal(&out->digests, 
@@ -1069,7 +1069,7 @@ case TPM_CC_PCR_Read: {
             MemoryGetOutBuffer(sizeof(PCR_Read_Out));
     result = TPML_PCR_SELECTION_Unmarshal(&in->pcrSelectionIn, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PCR_Read_pcrSelectionIn);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PCR_Read (in, out);
     rSize = sizeof(PCR_Read_Out);
     *respParmSize += UINT32_Marshal(&out->pcrUpdateCounter, 
@@ -1090,7 +1090,7 @@ case TPM_CC_PCR_Allocate: {
     in->authHandle = handles[0];
     result = TPML_PCR_SELECTION_Unmarshal(&in->pcrAllocation, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PCR_Allocate_pcrAllocation);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PCR_Allocate (in, out);
     rSize = sizeof(PCR_Allocate_Out);
     *respParmSize += TPMI_YES_NO_Marshal(&out->allocationSuccess, 
@@ -1115,7 +1115,7 @@ case TPM_CC_PCR_SetAuthPolicy: {
         ERROR_IF_EXIT_PLUS(RC_PCR_SetAuthPolicy_hashAlg);
     result = TPMI_DH_PCR_Unmarshal(&in->pcrNum, paramBuffer, paramBufferSize, FALSE);
         ERROR_IF_EXIT_PLUS(RC_PCR_SetAuthPolicy_pcrNum);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PCR_SetAuthPolicy (in);
 break; 
 }
@@ -1127,7 +1127,7 @@ case TPM_CC_PCR_SetAuthValue: {
     in->pcrHandle = handles[0];
     result = TPM2B_DIGEST_Unmarshal(&in->auth, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PCR_SetAuthValue_auth);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PCR_SetAuthValue (in);
 break; 
 }
@@ -1137,7 +1137,7 @@ case TPM_CC_PCR_Reset: {
     PCR_Reset_In *in = (PCR_Reset_In *)
             MemoryGetInBuffer(sizeof(PCR_Reset_In));
     in->pcrHandle = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PCR_Reset (in);
 break; 
 }
@@ -1160,7 +1160,7 @@ case TPM_CC_PolicySigned: {
         ERROR_IF_EXIT_PLUS(RC_PolicySigned_expiration);
     result = TPMT_SIGNATURE_Unmarshal(&in->auth, paramBuffer, paramBufferSize, FALSE);
         ERROR_IF_EXIT_PLUS(RC_PolicySigned_auth);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicySigned (in, out);
     rSize = sizeof(PolicySigned_Out);
     *respParmSize += TPM2B_TIMEOUT_Marshal(&out->timeout, 
@@ -1186,7 +1186,7 @@ case TPM_CC_PolicySecret: {
         ERROR_IF_EXIT_PLUS(RC_PolicySecret_policyRef);
     result = INT32_Unmarshal(&in->expiration, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicySecret_expiration);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicySecret (in, out);
     rSize = sizeof(PolicySecret_Out);
     *respParmSize += TPM2B_TIMEOUT_Marshal(&out->timeout, 
@@ -1211,7 +1211,7 @@ case TPM_CC_PolicyTicket: {
         ERROR_IF_EXIT_PLUS(RC_PolicyTicket_authName);
     result = TPMT_TK_AUTH_Unmarshal(&in->ticket, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyTicket_ticket);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyTicket (in);
 break; 
 }
@@ -1223,7 +1223,7 @@ case TPM_CC_PolicyOR: {
     in->policySession = handles[0];
     result = TPML_DIGEST_Unmarshal(&in->pHashList, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyOR_pHashList);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyOR (in);
 break; 
 }
@@ -1237,7 +1237,7 @@ case TPM_CC_PolicyPCR: {
         ERROR_IF_EXIT_PLUS(RC_PolicyPCR_pcrDigest);
     result = TPML_PCR_SELECTION_Unmarshal(&in->pcrs, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyPCR_pcrs);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyPCR (in);
 break; 
 }
@@ -1249,7 +1249,7 @@ case TPM_CC_PolicyLocality: {
     in->policySession = handles[0];
     result = TPMA_LOCALITY_Unmarshal(&in->locality, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyLocality_locality);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyLocality (in);
 break; 
 }
@@ -1267,7 +1267,7 @@ case TPM_CC_PolicyNV: {
         ERROR_IF_EXIT_PLUS(RC_PolicyNV_offset);
     result = TPM_EO_Unmarshal(&in->operation, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyNV_operation);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyNV (in);
 break; 
 }
@@ -1283,7 +1283,7 @@ case TPM_CC_PolicyCounterTimer: {
         ERROR_IF_EXIT_PLUS(RC_PolicyCounterTimer_offset);
     result = TPM_EO_Unmarshal(&in->operation, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyCounterTimer_operation);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyCounterTimer (in);
 break; 
 }
@@ -1295,7 +1295,7 @@ case TPM_CC_PolicyCommandCode: {
     in->policySession = handles[0];
     result = TPM_CC_Unmarshal(&in->code, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyCommandCode_code);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyCommandCode (in);
 break; 
 }
@@ -1305,7 +1305,7 @@ case TPM_CC_PolicyPhysicalPresence: {
     PolicyPhysicalPresence_In *in = (PolicyPhysicalPresence_In *)
             MemoryGetInBuffer(sizeof(PolicyPhysicalPresence_In));
     in->policySession = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyPhysicalPresence (in);
 break; 
 }
@@ -1317,7 +1317,7 @@ case TPM_CC_PolicyCpHash: {
     in->policySession = handles[0];
     result = TPM2B_DIGEST_Unmarshal(&in->cpHashA, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyCpHash_cpHashA);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyCpHash (in);
 break; 
 }
@@ -1329,7 +1329,7 @@ case TPM_CC_PolicyNameHash: {
     in->policySession = handles[0];
     result = TPM2B_DIGEST_Unmarshal(&in->nameHash, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyNameHash_nameHash);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyNameHash (in);
 break; 
 }
@@ -1345,7 +1345,7 @@ case TPM_CC_PolicyDuplicationSelect: {
         ERROR_IF_EXIT_PLUS(RC_PolicyDuplicationSelect_newParentName);
     result = TPMI_YES_NO_Unmarshal(&in->includeObject, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyDuplicationSelect_includeObject);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyDuplicationSelect (in);
 break; 
 }
@@ -1363,7 +1363,7 @@ case TPM_CC_PolicyAuthorize: {
         ERROR_IF_EXIT_PLUS(RC_PolicyAuthorize_keySign);
     result = TPMT_TK_VERIFIED_Unmarshal(&in->checkTicket, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyAuthorize_checkTicket);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyAuthorize (in);
 break; 
 }
@@ -1373,7 +1373,7 @@ case TPM_CC_PolicyAuthValue: {
     PolicyAuthValue_In *in = (PolicyAuthValue_In *)
             MemoryGetInBuffer(sizeof(PolicyAuthValue_In));
     in->policySession = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyAuthValue (in);
 break; 
 }
@@ -1383,7 +1383,7 @@ case TPM_CC_PolicyPassword: {
     PolicyPassword_In *in = (PolicyPassword_In *)
             MemoryGetInBuffer(sizeof(PolicyPassword_In));
     in->policySession = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyPassword (in);
 break; 
 }
@@ -1395,7 +1395,7 @@ case TPM_CC_PolicyGetDigest: {
     PolicyGetDigest_Out *out = (PolicyGetDigest_Out *) 
             MemoryGetOutBuffer(sizeof(PolicyGetDigest_Out));
     in->policySession = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyGetDigest (in, out);
     rSize = sizeof(PolicyGetDigest_Out);
     *respParmSize += TPM2B_DIGEST_Marshal(&out->policyDigest, 
@@ -1410,7 +1410,7 @@ case TPM_CC_PolicyNvWritten: {
     in->policySession = handles[0];
     result = TPMI_YES_NO_Unmarshal(&in->writtenSet, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyNvWritten_writtenSet);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyNvWritten (in);
 break; 
 }
@@ -1422,7 +1422,7 @@ case TPM_CC_PolicyTemplate: {
     in->policySession = handles[0];
     result = TPM2B_DIGEST_Unmarshal(&in->templateHash, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PolicyTemplate_templateHash);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyTemplate (in);
 break; 
 }
@@ -1434,7 +1434,7 @@ case TPM_CC_PolicyAuthorizeNV: {
     in->authHandle = handles[0];
     in->nvIndex = handles[1];
     in->policySession = handles[2];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PolicyAuthorizeNV (in);
 break; 
 }
@@ -1454,7 +1454,7 @@ case TPM_CC_CreatePrimary: {
         ERROR_IF_EXIT_PLUS(RC_CreatePrimary_outsideInfo);
     result = TPML_PCR_SELECTION_Unmarshal(&in->creationPCR, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_CreatePrimary_creationPCR);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_CreatePrimary (in, out);
     rSize = sizeof(CreatePrimary_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
@@ -1481,7 +1481,7 @@ case TPM_CC_HierarchyControl: {
         ERROR_IF_EXIT_PLUS(RC_HierarchyControl_enable);
     result = TPMI_YES_NO_Unmarshal(&in->state, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_HierarchyControl_state);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_HierarchyControl (in);
 break; 
 }
@@ -1495,7 +1495,7 @@ case TPM_CC_SetPrimaryPolicy: {
         ERROR_IF_EXIT_PLUS(RC_SetPrimaryPolicy_authPolicy);
     result = TPMI_ALG_HASH_Unmarshal(&in->hashAlg, paramBuffer, paramBufferSize, TRUE);
         ERROR_IF_EXIT_PLUS(RC_SetPrimaryPolicy_hashAlg);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_SetPrimaryPolicy (in);
 break; 
 }
@@ -1505,7 +1505,7 @@ case TPM_CC_ChangePPS: {
     ChangePPS_In *in = (ChangePPS_In *)
             MemoryGetInBuffer(sizeof(ChangePPS_In));
     in->authHandle = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ChangePPS (in);
 break; 
 }
@@ -1515,7 +1515,7 @@ case TPM_CC_ChangeEPS: {
     ChangeEPS_In *in = (ChangeEPS_In *)
             MemoryGetInBuffer(sizeof(ChangeEPS_In));
     in->authHandle = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ChangeEPS (in);
 break; 
 }
@@ -1525,7 +1525,7 @@ case TPM_CC_Clear: {
     Clear_In *in = (Clear_In *)
             MemoryGetInBuffer(sizeof(Clear_In));
     in->authHandle = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Clear (in);
 break; 
 }
@@ -1537,7 +1537,7 @@ case TPM_CC_ClearControl: {
     in->auth = handles[0];
     result = TPMI_YES_NO_Unmarshal(&in->disable, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_ClearControl_disable);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ClearControl (in);
 break; 
 }
@@ -1549,7 +1549,7 @@ case TPM_CC_HierarchyChangeAuth: {
     in->authHandle = handles[0];
     result = TPM2B_AUTH_Unmarshal(&in->newAuth, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_HierarchyChangeAuth_newAuth);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_HierarchyChangeAuth (in);
 break; 
 }
@@ -1559,7 +1559,7 @@ case TPM_CC_DictionaryAttackLockReset: {
     DictionaryAttackLockReset_In *in = (DictionaryAttackLockReset_In *)
             MemoryGetInBuffer(sizeof(DictionaryAttackLockReset_In));
     in->lockHandle = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_DictionaryAttackLockReset (in);
 break; 
 }
@@ -1575,7 +1575,7 @@ case TPM_CC_DictionaryAttackParameters: {
         ERROR_IF_EXIT_PLUS(RC_DictionaryAttackParameters_newRecoveryTime);
     result = UINT32_Unmarshal(&in->lockoutRecovery, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_DictionaryAttackParameters_lockoutRecovery);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_DictionaryAttackParameters (in);
 break; 
 }
@@ -1589,7 +1589,7 @@ case TPM_CC_PP_Commands: {
         ERROR_IF_EXIT_PLUS(RC_PP_Commands_setList);
     result = TPML_CC_Unmarshal(&in->clearList, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_PP_Commands_clearList);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_PP_Commands (in);
 break; 
 }
@@ -1601,7 +1601,7 @@ case TPM_CC_SetAlgorithmSet: {
     in->authHandle = handles[0];
     result = UINT32_Unmarshal(&in->algorithmSet, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_SetAlgorithmSet_algorithmSet);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_SetAlgorithmSet (in);
 break; 
 }
@@ -1616,7 +1616,7 @@ case TPM_CC_FieldUpgradeStart: {
         ERROR_IF_EXIT_PLUS(RC_FieldUpgradeStart_fuDigest);
     result = TPMT_SIGNATURE_Unmarshal(&in->manifestSignature, paramBuffer, paramBufferSize, FALSE);
         ERROR_IF_EXIT_PLUS(RC_FieldUpgradeStart_manifestSignature);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_FieldUpgradeStart (in);
 break; 
 }
@@ -1629,7 +1629,7 @@ case TPM_CC_FieldUpgradeData: {
             MemoryGetOutBuffer(sizeof(FieldUpgradeData_Out));
     result = TPM2B_MAX_BUFFER_Unmarshal(&in->fuData, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_FieldUpgradeData_fuData);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_FieldUpgradeData (in, out);
     rSize = sizeof(FieldUpgradeData_Out);
     *respParmSize += TPMT_HA_Marshal(&out->nextDigest, 
@@ -1647,7 +1647,7 @@ case TPM_CC_FirmwareRead: {
             MemoryGetOutBuffer(sizeof(FirmwareRead_Out));
     result = UINT32_Unmarshal(&in->sequenceNumber, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_FirmwareRead_sequenceNumber);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_FirmwareRead (in, out);
     rSize = sizeof(FirmwareRead_Out);
     *respParmSize += TPM2B_MAX_BUFFER_Marshal(&out->fuData, 
@@ -1662,7 +1662,7 @@ case TPM_CC_ContextSave: {
     ContextSave_Out *out = (ContextSave_Out *) 
             MemoryGetOutBuffer(sizeof(ContextSave_Out));
     in->saveHandle = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ContextSave (in, out);
     rSize = sizeof(ContextSave_Out);
     *respParmSize += TPMS_CONTEXT_Marshal(&out->context, 
@@ -1678,7 +1678,7 @@ case TPM_CC_ContextLoad: {
             MemoryGetOutBuffer(sizeof(ContextLoad_Out));
     result = TPMS_CONTEXT_Unmarshal(&in->context, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_ContextLoad_context);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ContextLoad (in, out);
     rSize = sizeof(ContextLoad_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
@@ -1692,7 +1692,7 @@ case TPM_CC_FlushContext: {
             MemoryGetInBuffer(sizeof(FlushContext_In));
     result = TPMI_DH_CONTEXT_Unmarshal(&in->flushHandle, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_FlushContext_flushHandle);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_FlushContext (in);
 break; 
 }
@@ -1705,7 +1705,7 @@ case TPM_CC_EvictControl: {
     in->objectHandle = handles[1];
     result = TPMI_DH_PERSISTENT_Unmarshal(&in->persistentHandle, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_EvictControl_persistentHandle);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_EvictControl (in);
 break; 
 }
@@ -1714,7 +1714,7 @@ break;
 case TPM_CC_ReadClock: {
     ReadClock_Out *out = (ReadClock_Out *) 
             MemoryGetOutBuffer(sizeof(ReadClock_Out));
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ReadClock (out);
     rSize = sizeof(ReadClock_Out);
     *respParmSize += TPMS_TIME_INFO_Marshal(&out->currentTime, 
@@ -1729,7 +1729,7 @@ case TPM_CC_ClockSet: {
     in->auth = handles[0];
     result = UINT64_Unmarshal(&in->newTime, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_ClockSet_newTime);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ClockSet (in);
 break; 
 }
@@ -1741,7 +1741,7 @@ case TPM_CC_ClockRateAdjust: {
     in->auth = handles[0];
     result = TPM_CLOCK_ADJUST_Unmarshal(&in->rateAdjust, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_ClockRateAdjust_rateAdjust);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_ClockRateAdjust (in);
 break; 
 }
@@ -1758,7 +1758,7 @@ case TPM_CC_GetCapability: {
         ERROR_IF_EXIT_PLUS(RC_GetCapability_property);
     result = UINT32_Unmarshal(&in->propertyCount, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_GetCapability_propertyCount);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_GetCapability (in, out);
     rSize = sizeof(GetCapability_Out);
     *respParmSize += TPMI_YES_NO_Marshal(&out->moreData, 
@@ -1774,7 +1774,7 @@ case TPM_CC_TestParms: {
             MemoryGetInBuffer(sizeof(TestParms_In));
     result = TPMT_PUBLIC_PARMS_Unmarshal(&in->parameters, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_TestParms_parameters);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_TestParms (in);
 break; 
 }
@@ -1788,7 +1788,7 @@ case TPM_CC_NV_DefineSpace: {
         ERROR_IF_EXIT_PLUS(RC_NV_DefineSpace_auth);
     result = TPM2B_NV_PUBLIC_Unmarshal(&in->publicInfo, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_NV_DefineSpace_publicInfo);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_DefineSpace (in);
 break; 
 }
@@ -1799,7 +1799,7 @@ case TPM_CC_NV_UndefineSpace: {
             MemoryGetInBuffer(sizeof(NV_UndefineSpace_In));
     in->authHandle = handles[0];
     in->nvIndex = handles[1];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_UndefineSpace (in);
 break; 
 }
@@ -1810,7 +1810,7 @@ case TPM_CC_NV_UndefineSpaceSpecial: {
             MemoryGetInBuffer(sizeof(NV_UndefineSpaceSpecial_In));
     in->nvIndex = handles[0];
     in->platform = handles[1];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_UndefineSpaceSpecial (in);
 break; 
 }
@@ -1822,7 +1822,7 @@ case TPM_CC_NV_ReadPublic: {
     NV_ReadPublic_Out *out = (NV_ReadPublic_Out *) 
             MemoryGetOutBuffer(sizeof(NV_ReadPublic_Out));
     in->nvIndex = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_ReadPublic (in, out);
     rSize = sizeof(NV_ReadPublic_Out);
     *respParmSize += TPM2B_NV_PUBLIC_Marshal(&out->nvPublic, 
@@ -1842,7 +1842,7 @@ case TPM_CC_NV_Write: {
         ERROR_IF_EXIT_PLUS(RC_NV_Write_data);
     result = UINT16_Unmarshal(&in->offset, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_NV_Write_offset);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_Write (in);
 break; 
 }
@@ -1853,7 +1853,7 @@ case TPM_CC_NV_Increment: {
             MemoryGetInBuffer(sizeof(NV_Increment_In));
     in->authHandle = handles[0];
     in->nvIndex = handles[1];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_Increment (in);
 break; 
 }
@@ -1866,7 +1866,7 @@ case TPM_CC_NV_Extend: {
     in->nvIndex = handles[1];
     result = TPM2B_MAX_NV_BUFFER_Unmarshal(&in->data, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_NV_Extend_data);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_Extend (in);
 break; 
 }
@@ -1879,7 +1879,7 @@ case TPM_CC_NV_SetBits: {
     in->nvIndex = handles[1];
     result = UINT64_Unmarshal(&in->bits, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_NV_SetBits_bits);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_SetBits (in);
 break; 
 }
@@ -1890,7 +1890,7 @@ case TPM_CC_NV_WriteLock: {
             MemoryGetInBuffer(sizeof(NV_WriteLock_In));
     in->authHandle = handles[0];
     in->nvIndex = handles[1];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_WriteLock (in);
 break; 
 }
@@ -1900,7 +1900,7 @@ case TPM_CC_NV_GlobalWriteLock: {
     NV_GlobalWriteLock_In *in = (NV_GlobalWriteLock_In *)
             MemoryGetInBuffer(sizeof(NV_GlobalWriteLock_In));
     in->authHandle = handles[0];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_GlobalWriteLock (in);
 break; 
 }
@@ -1917,7 +1917,7 @@ case TPM_CC_NV_Read: {
         ERROR_IF_EXIT_PLUS(RC_NV_Read_size);
     result = UINT16_Unmarshal(&in->offset, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_NV_Read_offset);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_Read (in, out);
     rSize = sizeof(NV_Read_Out);
     *respParmSize += TPM2B_MAX_NV_BUFFER_Marshal(&out->data, 
@@ -1931,7 +1931,7 @@ case TPM_CC_NV_ReadLock: {
             MemoryGetInBuffer(sizeof(NV_ReadLock_In));
     in->authHandle = handles[0];
     in->nvIndex = handles[1];
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_ReadLock (in);
 break; 
 }
@@ -1943,7 +1943,7 @@ case TPM_CC_NV_ChangeAuth: {
     in->nvIndex = handles[0];
     result = TPM2B_AUTH_Unmarshal(&in->newAuth, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_NV_ChangeAuth_newAuth);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_ChangeAuth (in);
 break; 
 }
@@ -1965,7 +1965,7 @@ case TPM_CC_NV_Certify: {
         ERROR_IF_EXIT_PLUS(RC_NV_Certify_size);
     result = UINT16_Unmarshal(&in->offset, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_NV_Certify_offset);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_NV_Certify (in, out);
     rSize = sizeof(NV_Certify_Out);
     *respParmSize += TPM2B_ATTEST_Marshal(&out->certifyInfo, 
@@ -1986,7 +1986,7 @@ case TPM_CC_AC_GetCapability: {
         ERROR_IF_EXIT_PLUS(RC_AC_GetCapability_capability);
     result = UINT32_Unmarshal(&in->count, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_AC_GetCapability_count);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_AC_GetCapability (in, out);
     rSize = sizeof(AC_GetCapability_Out);
     *respParmSize += TPMI_YES_NO_Marshal(&out->moreData, 
@@ -2007,7 +2007,7 @@ case TPM_CC_AC_Send: {
     in->ac = handles[2];
     result = TPM2B_MAX_BUFFER_Unmarshal(&in->acDataIn, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_AC_Send_acDataIn);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_AC_Send (in, out);
     rSize = sizeof(AC_Send_Out);
     *respParmSize += TPMS_AC_OUTPUT_Marshal(&out->acDataOut, 
@@ -2028,7 +2028,7 @@ case TPM_CC_Policy_AC_SendSelect: {
         ERROR_IF_EXIT_PLUS(RC_Policy_AC_SendSelect_acName);
     result = TPMI_YES_NO_Unmarshal(&in->includeObject, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_Policy_AC_SendSelect_includeObject);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Policy_AC_SendSelect (in);
 break; 
 }
@@ -2041,7 +2041,7 @@ case TPM_CC_Vendor_TCG_Test: {
             MemoryGetOutBuffer(sizeof(Vendor_TCG_Test_Out));
     result = TPM2B_DATA_Unmarshal(&in->inputData, paramBuffer, paramBufferSize);
         ERROR_IF_EXIT_PLUS(RC_Vendor_TCG_Test_inputData);
-    if(*paramBufferSize != 0) (result = TPM_RC_SIZE; goto Exit; }
+    if(*paramBufferSize != 0) {result = TPM_RC_SIZE; goto Exit; }
 result = TPM2_Vendor_TCG_Test (in, out);
     rSize = sizeof(Vendor_TCG_Test_Out);
     *respParmSize += TPM2B_DATA_Marshal(&out->outputData, 
