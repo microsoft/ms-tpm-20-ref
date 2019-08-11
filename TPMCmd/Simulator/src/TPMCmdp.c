@@ -44,7 +44,6 @@
 #include <stdio.h>
 #include <setjmp.h>
 #include "TpmBuildSwitches.h"
-#include "BaseTypes.h"
 
 #ifdef _MSC_VER
 #   pragma warning(push, 3)

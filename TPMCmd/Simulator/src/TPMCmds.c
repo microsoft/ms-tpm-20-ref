@@ -43,7 +43,6 @@
 #include <stdint.h>
 #include <ctype.h>
 #include <string.h>
-#include "BaseTypes.h"
 
 #ifdef _MSC_VER
 #   pragma warning(push, 3)
@@ -199,7 +198,8 @@ CmdLineParser_IsOptPresent(
         if (   (s_ArgsMask & curArgBit) && opt
             && (   0 == strcmp(opt, optFull)
                 || (   (opt[0] == '/' || opt[0] == '-')
-                    && CmdLineParser_IsOpt(opt + 1, optFull, optShort, opt[0] == '-'))))
+                    && CmdLineParser_IsOpt(opt + 1, optFull, optShort, 
+                                           opt[0] == '-'))))
         {
             s_ArgsMask ^= curArgBit;
             return TRUE;
@@ -283,7 +283,6 @@ main(
         }
         CmdLineParser_Done(argv[0]);
     }
-
     // Enable NV memory
     _plat__NVEnable(NULL);
 

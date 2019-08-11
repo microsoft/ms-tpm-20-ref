@@ -282,7 +282,7 @@ EntityGetAuthValue(
             break;
     }
     // Copy the authValue
-    MemoryCopy2B(&auth->b, &pAuth->b, sizeof(auth->t.buffer));
+    MemoryCopy2B((TPM2B *)auth, (TPM2B *)pAuth, sizeof(auth->t.buffer));
     MemoryRemoveTrailingZeros(auth);
     return auth->t.size;
 }

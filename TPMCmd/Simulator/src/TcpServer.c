@@ -38,8 +38,6 @@
 //
 //** Includes, Locals, Defines and Function Prototypes
 #include "TpmBuildSwitches.h"
-#include "BaseTypes.h"
-
 #include <stdio.h>
 
 #ifdef _MSC_VER
@@ -641,4 +639,5 @@ TpmServer(
         if(!OK)
             return TRUE;
     }
+    return FALSE;
 }

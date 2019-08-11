@@ -237,16 +237,6 @@ PCRRead(
                                         //     number
 );
 
-//*** PcrWrite()
-// This function is used by _TPM_Hash_End to set a PCR to the computed hash
-// of the H-CRTM event.
-void
-PcrWrite(
-    TPMI_DH_PCR      handle,        // IN: PCR handle to be extended
-    TPMI_ALG_HASH    hash,          // IN: hash algorithm of PCR
-    TPM2B_DIGEST    *digest         // IN: the new value
-);
-
 //*** PCRAllocate()
 // This function is used to change the PCR allocation.
 //  Return Type: TPM_RC

@@ -111,11 +111,11 @@ typedef OSSL_CURVE_DATA      *bigCurve;
 // Start and end a context that spans multiple ECC functions. This is used so that
 // the group for the curve can persist across multiple frames.
 #define CURVE_INITIALIZED(name, initializer)                        \
-    OSSL_CURVE_DATA     _##name;                                 \
+    OSSL_CURVE_DATA     _##name;                                    \
     bigCurve            name =  BnCurveInitialize(&_##name, initializer)
 #define CURVE_FREE(name)               BnCurveFree(name)
 
-// Start and end a local stack frame within the context of the curve frame 
+// Start and end a local stack frame within the context of the curve frame
 #define ECC_ENTER()     BN_CTX         *CTX = OsslPushContext(E->CTX)
 #define ECC_LEAVE()     OsslPopContext(CTX)
 

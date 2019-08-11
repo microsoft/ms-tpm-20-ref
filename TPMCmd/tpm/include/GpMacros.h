@@ -329,4 +329,22 @@
 
 #define VERIFY(_X) if(!(_X)) goto Error 
 
+// These macros determine if the values in this file are referenced or instanced.
+// Global.c defines GLOBAL_C so all the values in this file will be instanced in
+// Global.obj. For all other files that include this file, the values will simply
+// be external references. For constants, there can be an initializer.
+#ifdef GLOBAL_C
+#define EXTERN
+#define INITIALIZER(_value_)  = _value_
+#else
+#define EXTERN  extern
+#define INITIALIZER(_value_)
+#endif
+
+// This macro will create an OID. All OIDs are in DER form with a first octet of
+// 0x06 indicating an OID fallowed by an octet indicating the number of octets in the
+// rest of the OID. This allows a user of this OID to know how much/little to copy.
+#define MAKE_OID(NAME)                      \
+        EXTERN  const BYTE OID##NAME[] INITIALIZER({OID##NAME##_VALUE})
+
 #endif // GP_MACROS_H

@@ -322,7 +322,6 @@ Exit:
 // significant bits of each prime candidate without introducing any computational 
 // issues. 
 //
-//
 LIB_EXPORT void
 RsaAdjustPrimeCandidate(
     bigNum          prime
@@ -367,7 +366,9 @@ BnGeneratePrimeForRSA(
     pAssert(prime->allocated >= BITS_TO_CRYPT_WORDS(bits));
     // Only try to handle specific sizes of keys in order to save overhead
     pAssert((bits % 32) == 0);
+
     prime->size = BITS_TO_CRYPT_WORDS(bits);
+    
     while(!found)
     {
 // The change below is to make sure that all keys that are generated from the same

@@ -58,14 +58,6 @@
 #ifndef         GLOBAL_H
 #define         GLOBAL_H
 
-#ifdef GLOBAL_C
-#define EXTERN
-#define INITIALIZER(_value_)  = _value_
-#else
-#define EXTERN  extern
-#define INITIALIZER(_value_)
-#endif
-
 _REDUCE_WARNING_LEVEL_(2)
 #include <string.h>
 #include <stddef.h>

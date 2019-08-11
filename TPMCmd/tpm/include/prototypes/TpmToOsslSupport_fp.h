@@ -40,7 +40,7 @@
 #ifndef    _TPM_TO_OSSL_SUPPORT_FP_H_
 #define    _TPM_TO_OSSL_SUPPORT_FP_H_
 
-#ifdef MATH_LIB_OSSL
+#if defined(HASH_LIB_OSSL) || defined(MATH_LIB_OSSL) || defined(SYM_LIB_OSSL)
 
 //*** SupportLibInit()
 // This does any initialization required by the support library.
@@ -79,6 +79,6 @@ void
 OsslPopContext(
     BN_CTX          *CTX
 );
-#endif // MATH_LIB_OSSL
+#endif // HASH_LIB_OSSL || MATH_LIB_OSSL || SYM_LIB_OSSL
 
 #endif  // _TPM_TO_OSSL_SUPPORT_FP_H_

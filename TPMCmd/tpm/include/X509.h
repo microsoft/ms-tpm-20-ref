@@ -66,18 +66,7 @@
 #define EXTENSIONS_REF          (SUBJECT_PUBLIC_KEY_REF + 1)
 #define REF_COUNT               (EXTENSIONS_REF + 1)
 
-#undef MAKE_OID
-#ifdef _X509_SPT_
-#   define MAKE_OID(NAME)                  \
-        const BYTE      OID##NAME[] = {OID##NAME##_VALUE}
-#else
-#   define MAKE_OID(NAME)                   \
-        extern const BYTE    OID##NAME[]
-#endif
-
-
 //** Structures
-
 
 // Used to access the fields of a TBSsignature some of which are in the in_CertifyX509
 // structure and some of which are in the out_CertifyX509 structure.
@@ -87,17 +76,14 @@ typedef struct stringRef
     INT16        len;
 } stringRef;
 
-
 typedef union x509KeyUsageUnion {
     TPMA_X509_KEY_USAGE     x509;
     UINT32                  integer;
 } x509KeyUsageUnion;
 
-
 //** Global X509 Constants
 // These values are instanced by X509_spt.c and referenced by other X509-related
 // files.
-
 
 // This is the DER-encoded value for the Key Usage OID  (2.5.29.15). This is the
 // full OID, not just the numeric value
@@ -128,7 +114,5 @@ const x509KeyUsageUnion keyUsageDecrypt = { TPMA_X509_KEY_USAGE_INITIALIZER(
 extern x509KeyUsageUnion keyUsageSign;
 extern x509KeyUsageUnion keyUsageDecrypt;
 #endif
-
-#undef MAKE_OID
 
 #endif // _X509_H_

@@ -46,7 +46,6 @@
 
 #define HASH_TABLE_SIZE     (HASH_COUNT + 1)
 
-
 #if     ALG_SHA1
 HASH_DEF_TEMPLATE(SHA1, Sha1);
 #endif
