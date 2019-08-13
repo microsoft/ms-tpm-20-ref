@@ -639,5 +639,4 @@ TpmServer(
         if(!OK)
             return TRUE;
     }
-    return FALSE;
 }
