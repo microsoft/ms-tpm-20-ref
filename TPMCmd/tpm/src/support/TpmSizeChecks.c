@@ -38,6 +38,10 @@
 
 #if RUNTIME_SIZE_CHECKS
 
+#if TABLE_DRIVEN_MARSHAL
+extern uint32_t    MarshalDataSize;
+#endif
+
 static      int once = 0;
 
 //** TpmSizeChecks()
@@ -92,8 +96,10 @@ TpmSizeChecks(
                 PASS = FALSE;
             }
         }
+#if TABLE_DRIVEN_MARSHAL
+        printf("sizeof(MarshalData) = %d\n", sizeof(MarshalData_st));
+#endif
 
-#if 0
         printf("Size of OBJECT = %d\n", sizeof(OBJECT));
         printf("Size of components in TPMT_SENSITIVE = %d\n", sizeof(TPMT_SENSITIVE));
         printf("    TPMI_ALG_PUBLIC                 %d\n", sizeof(TPMI_ALG_PUBLIC));
@@ -101,15 +107,15 @@ TpmSizeChecks(
         printf("    TPM2B_DIGEST                    %d\n", sizeof(TPM2B_DIGEST));
         printf("    TPMU_SENSITIVE_COMPOSITE        %d\n",
                sizeof(TPMU_SENSITIVE_COMPOSITE));
-#endif
-    // Make sure that the size of the context blob is large enough for the largest
-    // context
-    // TPMS_CONTEXT_DATA contains two TPM2B values. That is not how this is 
-    // implemented. Rather, the size field of the TPM2B_CONTEXT_DATA is used to 
-    // determine the amount of data in the encrypted data. That part is not 
-    // independently sized. This makes the actual size 2 bytes smaller than 
-    // calculated using Part 2. Since this is opaque to the caller, it is not 
-    // necessary to fix. The actual size is returned by TPM2_GetCapabilties().
+
+        // Make sure that the size of the context blob is large enough for the largest
+        // context
+        // TPMS_CONTEXT_DATA contains two TPM2B values. That is not how this is 
+        // implemented. Rather, the size field of the TPM2B_CONTEXT_DATA is used to 
+        // determine the amount of data in the encrypted data. That part is not 
+        // independently sized. This makes the actual size 2 bytes smaller than 
+        // calculated using Part 2. Since this is opaque to the caller, it is not 
+        // necessary to fix. The actual size is returned by TPM2_GetCapabilties().
 
         // Initialize output handle.  At the end of command action, the output
         // handle of an object will be replaced, while the output handle

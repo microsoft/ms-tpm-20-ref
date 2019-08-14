@@ -255,7 +255,7 @@
 #   if !(defined RUNTIME_SIZE_CHECKS)                                               \
     || ((RUNTIME_SIZE_CHECKS != NO) && (RUNTIME_SIZE_CHECKS != YES))
 #       undef RUNTIME_SIZE_CHECKS
-#       define RUNTIME_SIZE_CHECKS      NO      // Default: Either YES or NO
+#       define RUNTIME_SIZE_CHECKS      YES      // Default: Either YES or NO
 #   endif
 
 // If doing debug, can set the DRBG to print out the intermediate test values. 
@@ -328,6 +328,13 @@
     || ((CERTIFYX509_DEBUG != NO) && (CERTIFYX509_DEBUG != YES))
 #   undef   CERTIFYX509_DEBUG
 #   define  CERTIFYX509_DEBUG YES               // Default: Either YES or NO
+#endif
+
+// This define is used to enable the new table-driven marshaling code. 
+#if !(defined TABLE_DRIVEN_MARSHAL)                                                 \
+    || ((TABLE_DRIVEN_MARSHAL != NO) && (TABLE_DRIVEN_MARSHAL != YES))
+#   undef   TABLE_DRIVEN_MARSHAL
+#   define  TABLE_DRIVEN_MARSHAL YES    // Default: Either YES or NO
 #endif
 
 // Change these definitions to turn all algorithms or commands ON or OFF. That is,

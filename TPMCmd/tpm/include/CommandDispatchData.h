@@ -46,11 +46,20 @@
 #define ADD_FLAG        0x80
 
 // These macros provide some variability in how the data is encoded. They also make
-// the lines a little sorter. ;-)
+// the lines a little shorter. ;-)
+#if TABLE_DRIVEN_MARSHAL
+#   define UNMARSHAL_DISPATCH(name)   (marshalIndex_t)name##_MARSHAL_REF
+#   define MARSHAL_DISPATCH(name)     (marshalIndex_t)name##_MARSHAL_REF
+#   define _UNMARSHAL_T_    marshalIndex_t
+#   define _MARSHAL_T_      marshalIndex_t    
+#
+#else
 #   define UNMARSHAL_DISPATCH(name)   (UNMARSHAL_t)name##_Unmarshal
 #   define MARSHAL_DISPATCH(name)     (MARSHAL_t)name##_Marshal
 #   define _UNMARSHAL_T_    UNMARSHAL_t
 #   define _MARSHAL_T_      MARSHAL_t
+
+#endif
 
 
 // The UnmarshalArray contains the dispatch functions for the unmarshaling code.

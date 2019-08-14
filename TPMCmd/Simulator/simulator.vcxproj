@@ -231,7 +231,7 @@
       <CompileAs>CompileAsC</CompileAs>
       <BrowseInformation>true</BrowseInformation>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4668; 4710; 4711;4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668; 4710; 4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>tpm.lib;platform.lib;Ws2_32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>

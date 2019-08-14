@@ -592,6 +592,12 @@
     <ClCompile Include="src\X509\TpmASN1.c">
       <Filter>Source Files\X509</Filter>
     </ClCompile>
+    <ClCompile Include="src\support\TableDrivenMarshal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\TableMarshalData.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BaseTypes.h">

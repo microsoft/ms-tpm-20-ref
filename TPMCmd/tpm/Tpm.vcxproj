@@ -779,6 +779,8 @@
     <ClCompile Include="src\support\PropertyCap.c" />
     <ClCompile Include="src\support\Response.c" />
     <ClCompile Include="src\support\ResponseCodeProcessing.c" />
+    <ClCompile Include="src\support\TableDrivenMarshal.c" />
+    <ClCompile Include="src\support\TableMarshalData.c" />
     <ClCompile Include="src\support\TpmFail.c">
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='WolfDebug|Win32'">false</ShowIncludes>

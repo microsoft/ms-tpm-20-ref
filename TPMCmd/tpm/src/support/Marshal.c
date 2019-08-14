@@ -38,6 +38,7 @@
  */
 
 #include "Tpm.h"
+#if !TABLE_DRIVEN_MARSHAL
 #include "Marshal_fp.h"
 
 // Table 2:3 - Definition of Base Types
@@ -5809,3 +5810,4 @@ TPM_HANDLE_Array_Marshal(TPM_HANDLE *source, BYTE **buffer, INT32 *size, INT32 c
     return result;
 }
 
+#endif // !TABLE_DRIVEN_MARSHAL
