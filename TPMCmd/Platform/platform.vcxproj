@@ -290,7 +290,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4668;4710;4711;4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <BrowseInformation>true</BrowseInformation>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -328,7 +328,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4668;4710;4711;4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -355,7 +355,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4668;4710;4711;4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -380,7 +380,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4668;4710;4711;4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -403,7 +403,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4668;4710;4711;4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
       <StructMemberAlignment>Default</StructMemberAlignment>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -428,7 +428,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>$(ProjectDir)\include;$(ProjectDir)\include\prototypes;$(SolutionDir)\tpm\include;$(SolutionDir)\tpm\include\prototypes</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4668;4710;4711;4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <ModuleDefinitionFile>
@@ -449,7 +449,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>$(ProjectDir)\include;$(ProjectDir)\include\prototypes;$(SolutionDir)\tpm\include;$(SolutionDir)\tpm\include\prototypes</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4668;4710;4711;4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <ModuleDefinitionFile>
@@ -471,7 +471,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>$(ProjectDir)\include;$(ProjectDir)\include\prototypes;$(SolutionDir)\tpm\include;$(SolutionDir)\tpm\include\prototypes</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4668;4710;4711;4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <ModuleDefinitionFile>
@@ -492,7 +492,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>$(ProjectDir)\include;$(ProjectDir)\include\prototypes;$(SolutionDir)\tpm\include;$(SolutionDir)\tpm\include\prototypes</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4668;4710;4711;4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <ModuleDefinitionFile>

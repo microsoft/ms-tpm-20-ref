@@ -64,6 +64,10 @@ TPM_Manufacture(
     // compile options.
     TpmSizeChecks();
 #endif
+#if LIBRARY_COMPATIBILITY_CHECK
+// Make sure that the attached library performs as expected.
+    MathLibraryCompatibilityCheck();
+#endif
 
     // If TPM has been manufactured, return indication.
     if(!firstTime && g_manufactured)

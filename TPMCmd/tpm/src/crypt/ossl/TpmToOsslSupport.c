@@ -52,9 +52,6 @@ SupportLibInit(
     void
     )
 {
-#if LIBRARY_COMPATIBILITY_CHECK
-    MathLibraryCompatibilityCheck();
-#endif
     return TRUE;
 }
 

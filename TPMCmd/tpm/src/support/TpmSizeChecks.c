@@ -34,6 +34,7 @@
  */
 //** Includes, Defines, and Types
 #include    "Tpm.h"
+#include    <stdio.h>
 #include    <assert.h>
 
 #if RUNTIME_SIZE_CHECKS
@@ -91,8 +92,8 @@ TpmSizeChecks(
             UINT16                    max_rsa_key_bytes = MAX_RSA_KEY_BYTES;
             if((max_rsa_key_bytes / 2) != (sizeof(p->sensitive.rsa.t.buffer) / 5))
             {
-                printf("Sensitive part of TPMT_SENSITIVE is undersized. May be caused by"
-                       "use of wrong version of Part 2.\n");
+                printf("Sensitive part of TPMT_SENSITIVE is undersized. May be caused" 
+                       " by use of wrong version of Part 2.\n");
                 PASS = FALSE;
             }
         }

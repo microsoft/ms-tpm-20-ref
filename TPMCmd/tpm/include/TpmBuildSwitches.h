@@ -320,7 +320,7 @@
 #if !(defined LIBRARY_COMPATIBILITY_CHECK)                                          \
     || ((LIBRARY_COMPATIBILITY_CHECK != NO) && (LIBRARY_COMPATIBILITY_CHECK != YES))
 #   undef   LIBRARY_COMPATIBILITY_CHECK
-#   define  LIBRARY_COMPATIBILITY_CHECK NO      // Default: Either YES or NO
+#   define  LIBRARY_COMPATIBILITY_CHECK YES      // Default: Either YES or NO
 #endif
 
 // This define is used to control the debug for the CertifyX509 command.

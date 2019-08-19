@@ -239,7 +239,7 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>CompileAsC</CompileAs>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <DisableSpecificWarnings>4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
       <BrowseInformation>true</BrowseInformation>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -289,7 +289,7 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>CompileAsC</CompileAs>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
       <BrowseInformation>true</BrowseInformation>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -341,7 +341,7 @@
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>CompileAsC</CompileAs>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <DisableSpecificWarnings>4668; 4710;4711; 4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
       <ShowIncludes>false</ShowIncludes>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -388,7 +388,7 @@
       </PrecompiledHeader>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4668; 4710;4711; 4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -416,7 +416,7 @@
       </PrecompiledHeader>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -444,7 +444,7 @@
       </PrecompiledHeader>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4668; 4710;4711; 4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -470,7 +470,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4668; 4710;4711; 4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>platform.lib;libeay32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -497,7 +497,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -530,7 +530,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4668; 4710;4711; 4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -565,7 +565,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -762,9 +762,7 @@
     <ClCompile Include="src\subsystem\Session.c" />
     <ClCompile Include="src\subsystem\Time.c" />
     <ClCompile Include="src\support\AlgorithmCap.c" />
-    <ClCompile Include="src\support\Bits.c">
-      <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
-    </ClCompile>
+    <ClCompile Include="src\support\Bits.c" />
     <ClCompile Include="src\support\CommandCodeAttributes.c" />
     <ClCompile Include="src\support\Entity.c" />
     <ClCompile Include="src\support\Global.c" />
