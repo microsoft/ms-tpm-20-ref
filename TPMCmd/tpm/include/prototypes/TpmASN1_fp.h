@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Apr  2, 2019  Time: 11:00:49AM
+ *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
 #ifndef    _TPM_ASN1_FP_H_
@@ -77,7 +77,8 @@ ASN1NextTag(
 
 //*** ASN1GetBitStringValue()
 // Try to parse a bit string of up to 32 bits from a value that is expected to be
-// a bit string.
+// a bit string. The bit string is left justified so that the MSb of the input is
+// the MSb of the returned value.
 // If there is a general parsing error, the context->size is set to -1.
 //  Return Type: BOOL
 //      TRUE(1)     success

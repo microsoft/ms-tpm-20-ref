@@ -33,14 +33,15 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 3.0 June 16, 2017
- *  Date: Aug 14, 2017  Time: 02:53:08PM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Aug 30, 2019  Time: 02:11:52PM
  */
+
 // The attributes defined in this file are produced by the parser that
 // creates the structure definitions from Part 3. The attributes are defined
 // in that parser and should track the attributes being tested in
-// CommandCodeAttributes.c. Generally, when an attribute is added to this list, 
-// new code will be needed in CommandCodeAttributes.c to test it. 
+// CommandCodeAttributes.c. Generally, when an attribute is added to this list,
+// new code will be needed in CommandCodeAttributes.c to test it.
 
 #ifndef COMMAND_ATTRIBUTES_H
 #define COMMAND_ATTRIBUTES_H

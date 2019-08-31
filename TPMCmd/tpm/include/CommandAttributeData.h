@@ -33,9 +33,10 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 3.0 June 16, 2017
- *  Date: Oct  9, 2018  Time: 07:25:18PM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Aug 30, 2019  Time: 04:59:31PM
  */
+
 // This file should only be included by CommandCodeAttibutes.c
 #ifdef _COMMAND_CODE_ATTRIBUTES_
 
@@ -910,7 +911,6 @@ const COMMAND_ATTRIBUTES    s_commandAttributes [] = {
 #endif
         0
 };
-
 
 
 #endif  // _COMMAND_CODE_ATTRIBUTES_

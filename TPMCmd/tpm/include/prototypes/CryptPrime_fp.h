@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Apr  2, 2019  Time: 03:18:00PM
+ *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
 #ifndef    _CRYPT_PRIME_FP_H_
@@ -101,7 +101,20 @@ RsaCheckPrime(
 );
 
 //*** AdjustPrimeCandiate()
-// This function adjusts the candidate prime so that it is odd and > root(2)/2.
+// For this math, we assume that the RSA numbers are fixed-point numbers with
+// the decimal point to the "left" of the most significant bit. This approach helps
+// make it clear what is happening with the MSb of the values.
+// The two RSA primes have to be large enough so that their product will be a number
+// with the necessary number of significant bits. For example, we want to be able
+// to multiply two 1024-bit numbers to produce a number with 2028 significant bits. If
+// we accept any 1024-bit prime that has its MSb set, then it is possible to produce a
+// product that does not have the MSb SET. For example, if we use tiny keys of 16 bits
+// and have two 8-bit 'primes' of 0x80, then the public key would be 0x4000 which is
+// only 15-bits. So, what we need to do is made sure that each of the primes is large
+// enough so that the product of the primes is twice as large as each prime. A little
+// arithmetic will show that the only way to do this is to make sure that each of the
+// primes is no less than root(2)/2. That's what this functions does.
+// This function adjusts the candidate prime so that it is odd and >= root(2)/2.
 // This allows the product of these two numbers to be .5, which, in fixed point
 // notation means that the most significant bit is 1.
 // For this routine, the root(2)/2 (0.7071067811865475) approximated with 0xB505
@@ -110,13 +123,10 @@ RsaCheckPrime(
 // amount of time all the other computations take, reducing the error is not much of
 // a cost, but it isn't totally required either.
 //
-// The code maps the most significant crypt_uword_t in 'prime' so that a 32-/64-bit
-// value of 0 to 0xB5050...0 and a value of 0xff...f to 0xff...f. It also sets the LSb
-// of 'prime' to make sure that the number is odd.
+// This function can be replaced with a function that just sets the two most
+// significant bits of each prime candidate without introducing any computational
+// issues.
 //
-// This code has been fixed so that it will work with a RADIX_SIZE == 64.
-//
-// The function also puts the number on a field boundary.
 LIB_EXPORT void
 RsaAdjustPrimeCandidate(
     bigNum          prime
@@ -127,10 +137,11 @@ RsaAdjustPrimeCandidate(
 // for an RSA prime.
 TPM_RC
 BnGeneratePrimeForRSA(
-    bigNum          prime,
-    UINT32          bits,
-    UINT32          exponent,
-    RAND_STATE      *rand
+    bigNum          prime,          // IN/OUT: points to the BN that will get the
+                                    //  random value
+    UINT32          bits,           // IN: number of bits to get
+    UINT32          exponent,       // IN: the exponent
+    RAND_STATE      *rand           // IN: the random state
 );
 #endif // ALG_RSA
 

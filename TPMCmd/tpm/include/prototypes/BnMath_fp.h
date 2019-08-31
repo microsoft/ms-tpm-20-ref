@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Mar 28, 2019  Time: 08:25:18PM
+ *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
 #ifndef    _BN_MATH_FP_H_
@@ -75,7 +75,7 @@ BnSub(
 LIB_EXPORT BOOL
 BnSubWord(
     bigNum           result,
-    bigConst     op,
+    bigConst         op,
     crypt_uword_t    word
 );
 

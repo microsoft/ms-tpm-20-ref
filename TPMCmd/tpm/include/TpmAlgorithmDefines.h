@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Apr  7, 2019  Time: 06:58:55PM
+ *  Date: Aug 30, 2019  Time: 02:11:52PM
  */
 
 #ifndef _TPM_ALGORITHM_DEFINES_H_
@@ -42,6 +42,10 @@
 
 // Table 2:3 - Definition of Base Types
 // Base Types are in BaseTypes.h
+
+
+
+
 
 #define ECC_CURVES                      \
             {TPM_ECC_BN_P256,   TPM_ECC_BN_P638,   TPM_ECC_NIST_P192,              \
@@ -66,47 +70,11 @@
 #define PLATFORM_YEAR           TPM_SPEC_YEAR
 #define PLATFORM_DAY_OF_YEAR    TPM_SPEC_DAY_OF_YEAR
 
-// Table 1:12 - Defines for SHA1 Hash Values
-#define SHA1_DIGEST_SIZE    20
-#define SHA1_BLOCK_SIZE     64
 
 
-// Table 1:13 - Defines for SHA256 Hash Values
-#define SHA256_DIGEST_SIZE  32
-#define SHA256_BLOCK_SIZE   64
 
 
-// Table 1:14 - Defines for SHA384 Hash Values
-#define SHA384_DIGEST_SIZE  48
-#define SHA384_BLOCK_SIZE   128
-
-
-// Table 1:15 - Defines for SHA512 Hash Values
-#define SHA512_DIGEST_SIZE  64
-#define SHA512_BLOCK_SIZE   128
-
-
-// Table 1:16 - Defines for SM3_256 Hash Values
-#define SM3_256_DIGEST_SIZE     32
-#define SM3_256_BLOCK_SIZE      64
-
-
-// Table 1:16 - Defines for SHA3_256 Hash Values
-#define SHA3_256_DIGEST_SIZE    32
-#define SHA3_256_BLOCK_SIZE     136
-
-
-// Table 1:16 - Defines for SHA3_384 Hash Values
-#define SHA3_384_DIGEST_SIZE    48
-#define SHA3_384_BLOCK_SIZE     104
-
-
-// Table 1:16 - Defines for SHA3_512 Hash Values
-#define SHA3_512_DIGEST_SIZE    64
-#define SHA3_512_BLOCK_SIZE     72
-
-
-// Table 1:00 - Defines for RSA Asymmetric Cipher Algorithm Constants
+// Table 1:3 - Defines for RSA Asymmetric Cipher Algorithm Constants
 #define RSA_KEY_SIZES_BITS          \
             (1024 * RSA_1024),  (2048 * RSA_2048), (3072 * RSA_3072),              \
              (4096 * RSA_4096)
@@ -125,7 +93,48 @@
 #define MAX_RSA_KEY_BYTES           ((RSA_MAX_KEY_SIZE_BITS + 7) / 8)
 
 
-// Table 1:17 - Defines for AES Symmetric Cipher Algorithm Constants
+
+// Table 1:13 - Defines for SHA1 Hash Values
+#define SHA1_DIGEST_SIZE    20
+#define SHA1_BLOCK_SIZE     64
+
+
+// Table 1:14 - Defines for SHA256 Hash Values
+#define SHA256_DIGEST_SIZE  32
+#define SHA256_BLOCK_SIZE   64
+
+
+// Table 1:15 - Defines for SHA384 Hash Values
+#define SHA384_DIGEST_SIZE  48
+#define SHA384_BLOCK_SIZE   128
+
+
+// Table 1:16 - Defines for SHA512 Hash Values
+#define SHA512_DIGEST_SIZE  64
+#define SHA512_BLOCK_SIZE   128
+
+
+// Table 1:17 - Defines for SM3_256 Hash Values
+#define SM3_256_DIGEST_SIZE     32
+#define SM3_256_BLOCK_SIZE      64
+
+
+// Table 1:18 - Defines for SHA3_256 Hash Values
+#define SHA3_256_DIGEST_SIZE    32
+#define SHA3_256_BLOCK_SIZE     136
+
+
+// Table 1:19 - Defines for SHA3_384 Hash Values
+#define SHA3_384_DIGEST_SIZE    48
+#define SHA3_384_BLOCK_SIZE     104
+
+
+// Table 1:20 - Defines for SHA3_512 Hash Values
+#define SHA3_512_DIGEST_SIZE    64
+#define SHA3_512_BLOCK_SIZE     72
+
+
+// Table 1:21 - Defines for AES Symmetric Cipher Algorithm Constants
 #define AES_KEY_SIZES_BITS          \
             (128 * AES_128), (192 * AES_192), (256 * AES_256)
 #if   AES_256
@@ -153,7 +162,7 @@
 #define MAX_AES_BLOCK_SIZE_BYTES    AES_MAX_BLOCK_SIZE
 
 
-// Table 1:18 - Defines for SM4 Symmetric Cipher Algorithm Constants
+// Table 1:22 - Defines for SM4 Symmetric Cipher Algorithm Constants
 #define SM4_KEY_SIZES_BITS          (128 * SM4_128)
 #if   SM4_128
 #   define SM4_MAX_KEY_SIZE_BITS    128
@@ -172,7 +181,7 @@
 #define MAX_SM4_BLOCK_SIZE_BYTES    SM4_MAX_BLOCK_SIZE
 
 
-// Table 1:19 - Defines for CAMELLIA Symmetric Cipher Algorithm Constants
+// Table 1:23 - Defines for CAMELLIA Symmetric Cipher Algorithm Constants
 #define CAMELLIA_KEY_SIZES_BITS         \
             (128 * CAMELLIA_128), (192 * CAMELLIA_192), (256 * CAMELLIA_256)
 #if   CAMELLIA_256
@@ -200,7 +209,7 @@
 #define MAX_CAMELLIA_BLOCK_SIZE_BYTES   CAMELLIA_MAX_BLOCK_SIZE
 
 
-// Table 1:17 - Defines for TDES Symmetric Cipher Algorithm Constants
+// Table 1:24 - Defines for TDES Symmetric Cipher Algorithm Constants
 #define TDES_KEY_SIZES_BITS         (128 * TDES_128), (192 * TDES_192)
 #if   TDES_192
 #   define TDES_MAX_KEY_SIZE_BITS   192
@@ -221,6 +230,7 @@
 #   define TDES_MAX_BLOCK_SIZE      0
 #endif
 #define MAX_TDES_BLOCK_SIZE_BYTES   TDES_MAX_BLOCK_SIZE
+
 
 
 // Additional values for benefit of code

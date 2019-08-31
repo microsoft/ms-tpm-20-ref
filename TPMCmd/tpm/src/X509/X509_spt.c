@@ -277,6 +277,7 @@ X509AddPublicKey(
 
 
 //*** X509PushAlgorithmIdentifierSequence()
+// The function adds the algorithm identifier sequence.
 //  Return Type: INT16
 //      > 0         number of bytes added
 //     == 0         failure
@@ -286,6 +287,10 @@ X509PushAlgorithmIdentifierSequence(
     const BYTE                  *OID
     )
 {
+    // An algorithm ID sequence is:
+    //  SEQUENCE
+    //      OID
+    //      NULL
     ASN1StartMarshalContext(ctx);   // hash algorithm
     ASN1PushNull(ctx);
     ASN1PushOID(ctx, OID);

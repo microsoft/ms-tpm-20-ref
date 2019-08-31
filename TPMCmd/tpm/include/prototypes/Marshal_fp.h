@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmMarshal; Version 4.1 Dec 10, 2018
- *  Date: Apr  2, 2019  Time: 11:00:48AM
+ *  Date: Aug 30, 2019  Time: 02:11:53PM
  */
 
 #ifndef _MARSHAL_FP_H_
@@ -1745,18 +1745,6 @@ UINT16
 TPMT_KDF_SCHEME_Marshal(TPMT_KDF_SCHEME *source, BYTE **buffer, INT32 *size);
 
 // Table 2:163 - Definition of TPMI_ALG_ASYM_SCHEME Type
-TPM_RC
-TPMI_ALG_ASYM_SCHEME_Unmarshal(TPMI_ALG_ASYM_SCHEME *target,
-            BYTE **buffer, INT32 *size, BOOL flag);
-#if !USE_MARSHALING_DEFINES
-UINT16
-TPMI_ALG_ASYM_SCHEME_Marshal(TPMI_ALG_ASYM_SCHEME *source,
-            BYTE **buffer, INT32 *size);
-#else
-#define TPMI_ALG_ASYM_SCHEME_Marshal(source, buffer, size)                         \
-            TPM_ALG_ID_Marshal((TPM_ALG_ID *)(source), (buffer), (size))
-#endif // !USE_MARSHALING_DEFINES
-
 // Table 2:164 - Definition of TPMU_ASYM_SCHEME Union
 TPM_RC
 TPMU_ASYM_SCHEME_Unmarshal(TPMU_ASYM_SCHEME *target,
@@ -2076,13 +2064,6 @@ UINT16
 TPMT_SIGNATURE_Marshal(TPMT_SIGNATURE *source, BYTE **buffer, INT32 *size);
 
 // Table 2:186 - Definition of TPMU_ENCRYPTED_SECRET Union
-TPM_RC
-TPMU_ENCRYPTED_SECRET_Unmarshal(TPMU_ENCRYPTED_SECRET *target,
-            BYTE **buffer, INT32 *size, UINT32 selector);
-UINT16
-TPMU_ENCRYPTED_SECRET_Marshal(TPMU_ENCRYPTED_SECRET *source,
-            BYTE **buffer, INT32 *size, UINT32 selector);
-
 // Table 2:187 - Definition of TPM2B_ENCRYPTED_SECRET Structure
 TPM_RC
 TPM2B_ENCRYPTED_SECRET_Unmarshal(TPM2B_ENCRYPTED_SECRET *target,

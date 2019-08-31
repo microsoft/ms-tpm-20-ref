@@ -34,13 +34,13 @@
  */
 /*(Auto-generated)
  *  Created by NewMarshal; Version 1.4 Apr 7, 2019
- *  Date: Apr 13, 2019  Time: 12:17:31AM
+ *  Date: Aug 30, 2019  Time: 02:11:53PM
  */
 
 #ifndef _TABLE_MARSHAL_TYPES_H_
 #define _TABLE_MARSHAL_TYPES_H_
 
-typedef UINT16          marshalIndex_t;
+typedef UINT16      marshalIndex_t;
 
 //*** Structure Entries
 // A structure contains a list of elements to unmarshal. Each of the entries is a
@@ -57,26 +57,28 @@ typedef UINT16          marshalIndex_t;
 // is sufficient when the element type indicated by 'index' is always a simple type
 // and never a union or array.This is just shown for illustrative purposes.
 typedef struct simpleStructureEntry_t {
-    UINT16                  qualifiers; // indicates the type of entry (array, union
+    UINT16          qualifiers;         // indicates the type of entry (array, union
                                         // etc.)
-    marshalIndex_t          index;      // the index into the appropriate array of the
-                                        // descriptor of this type
-    UINT16                  offset;     // where this comes from or is placed
-} simpleStructureEntry_t;
-
-typedef const struct UintMarshal_mst
-{
-    UINT8               marshalType;       // UINT_MTYPE
-    UINT8               modifiers;  // size and signed indicator.
+    marshalIndex_t  index;              // the index into the appropriate array of
+                                        //  the descriptor of this type
+    UINT16          offset;             // where this comes from or is placed
+} simpleStructureEntry_t;  
+   
+typedef const struct UintMarshal_mst   
+{  
+    UINT8           marshalType;        // UINT_MTYPE
+    UINT8           modifiers;          // size and signed indicator.
 } UintMarshal_mst;
 
 typedef struct UnionMarshal_mst
 {
     UINT8           countOfselectors;
-    UINT8           modifiers;              // NULL_SELECTOR
+    UINT8           modifiers;          // NULL_SELECTOR
     UINT16          offsetOfUnmarshalTypes;
     UINT32          selectors[1];
-//  UINT16          marshalingTypes[1];     // This is not part of the prototypical
+//    UINT16          marshalingTypes[1]; // This is not part of the prototypical
+                                          //    entry. It is here to show where the
+                                          //    marshaling types will be in a union
 } UnionMarshal_mst;
 
 typedef struct NullUnionMarshal_mst
@@ -86,80 +88,88 @@ typedef struct NullUnionMarshal_mst
 
 typedef struct MarshalHeader_mst
 {
-    UINT8            marshalType; /* VALUES_MTYPE */
-    UINT8            modifiers;
-    UINT8            errorCode;
+    UINT8           marshalType;        // VALUES_MTYPE
+    UINT8           modifiers;
+    UINT8           errorCode;
 } MarshalHeader_mst;
 
-typedef const struct ArrayMarshal_mst    // used in structure
+typedef const struct ArrayMarshal_mst   // used in a structure
 {
-    marshalIndex_t       type;
-    UINT16               stride;
+    marshalIndex_t  type;
+    UINT16          stride;
 } ArrayMarshal_mst;
 
 typedef const struct StructMarshal_mst
 {
-    UINT8        marshalType;   // STRUCTURE_MTYPE
-    UINT8        elements;
-    UINT16     values[1];     // three times elements
+    UINT8           marshalType;        // STRUCTURE_MTYPE
+    UINT8           elements;
+    UINT16          values[1];          // three times elements
 } StructMarshal_mst;
 
-typedef const struct ValuesMarshal_mst  //                    
+typedef const struct ValuesMarshal_mst                    
 {
-    UINT8        marshalType; // VALUES_MTYPE */
-    UINT8        modifiers;
-    UINT8        errorCode;
-    UINT8        ranges;
-    UINT8        singles;
-    UINT32     values[1];
+    UINT8           marshalType;        // VALUES_MTYPE
+    UINT8           modifiers;
+    UINT8           errorCode;
+    UINT8           ranges;
+    UINT8           singles;
+    UINT32          values[1];
 } ValuesMarshal_mst;
 
-typedef const struct TableMarshal_mst  //                    
+typedef const struct TableMarshal_mst                    
 {
-    UINT8        marshalType; // TABLE_MTYPE */
-    UINT8        modifiers;
-    UINT8        errorCode;
-    UINT8        singles;
-    UINT32     values[1];
+    UINT8           marshalType;        // TABLE_MTYPE
+    UINT8           modifiers;
+    UINT8           errorCode;
+    UINT8           singles;
+    UINT32          values[1];
 } TableMarshal_mst;
 
 typedef const struct MinMaxMarshal_mst
 {
-    UINT8     marshalType;
-    UINT8     modifiers; 
-    UINT8     errorCode; 
-    UINT32    values[2]; 
+    UINT8           marshalType;        // MIN_MAX_MTYPE
+    UINT8           modifiers; 
+    UINT8           errorCode; 
+    UINT32          values[2]; 
 } MinMaxMarshal_mst;
 
 typedef const struct Tpm2bMarshal_mst
 {
-    UINT8     unmarshalType;  // TPM2B_MTYPE
-    UINT16    sizeIndex;      // reference to type for this size value
+    UINT8           unmarshalType;      // TPM2B_MTYPE
+    UINT16          sizeIndex;          // reference to type for this size value
 } Tpm2bMarshal_mst;
 
 typedef const struct Tpm2bsMarshal_mst
 {
-    UINT8     unmarshalType;  // TPM2BS_MTYPE
-    UINT8     modifiers;      // size= and offset (2 - 7)
-    UINT16    sizeIndex;      // index of the size value;
-    UINT16    dataIndex;      // the structure
+    UINT8           unmarshalType;      // TPM2BS_MTYPE
+    UINT8           modifiers;          // size= and offset (2 - 7)
+    UINT16          sizeIndex;          // index of the size value;
+    UINT16          dataIndex;          // the structure
 } Tpm2bsMarshal_mst;
 
 typedef const struct ListMarshal_mst
 {
-    UINT8     unmarshalType;  // LIST_MTYPE (for TPML)
-    UINT8     modifiers;      // size offset 2-7
-    UINT16    sizeIndex;      // reference to the minmax structure that unmarshals
-                                // the size parameter
-    UINT16    arrayRef;       // reference to an array definition (type and stride)
+    UINT8           unmarshalType;      // LIST_MTYPE (for TPML)
+    UINT8           modifiers;          // size offset 2-7
+    UINT16          sizeIndex;          // reference to the minmax structure that
+                                        //      unmarshals the size parameter
+    UINT16          arrayRef;           // reference to an array definition (type
+                                        //  and stride)
 } ListMarshal_mst;
 
 typedef const struct AttributesMarshal_mst
 {
-    UINT8     unmarashalTYpe; // ATTRIBUTE_MTYPE
-    UINT8     modifiers;      // size (ONE_BYTES, TWO_BYTES, or FOUR_BYTES
-    UINT32    attributeMask;  // the values that must be zero.
+    UINT8           unmarashalType;     // ATTRIBUTE_MTYPE
+    UINT8           modifiers;          // size (ONE_BYTES, TWO_BYTES, or FOUR_BYTES
+    UINT32          attributeMask;      // the values that must be zero.
 } AttributesMarshal_mst;
+
+typedef const struct CompositeMarshal_mst
+{
+    UINT8           unmashalType;       // COMPOSITE_MTYPE
+    UINT8           modifiers;          // number of entries and size
+    marshalIndex_t  types[1];           // array of unmarshaling types
+} CompositeMarshal_mst;
 
 typedef const struct TPM_ECC_CURVE_mst {
     UINT8       marshalType;
@@ -700,7 +710,7 @@ typedef const struct TPMI_TDES_KEY_BITS_mst {
     UINT8         modifiers;
     UINT8         errorCode;
     UINT8         entries;
-    UINT32        values[3];
+    UINT32        values[1];
 } TPMI_TDES_KEY_BITS_mst;
 
 typedef const struct TPMI_AES_KEY_BITS_mst {
@@ -708,7 +718,7 @@ typedef const struct TPMI_AES_KEY_BITS_mst {
     UINT8         modifiers;
     UINT8         errorCode;
     UINT8         entries;
-    UINT32        values[4];
+    UINT32        values[3];
 } TPMI_AES_KEY_BITS_mst;
 
 typedef const struct TPMI_SM4_KEY_BITS_mst {
@@ -716,7 +726,7 @@ typedef const struct TPMI_SM4_KEY_BITS_mst {
     UINT8         modifiers;
     UINT8         errorCode;
     UINT8         entries;
-    UINT32        values[2];
+    UINT32        values[1];
 } TPMI_SM4_KEY_BITS_mst;
 
 typedef const struct TPMI_CAMELLIA_KEY_BITS_mst {
@@ -724,7 +734,7 @@ typedef const struct TPMI_CAMELLIA_KEY_BITS_mst {
     UINT8         modifiers;
     UINT8         errorCode;
     UINT8         entries;
-    UINT32        values[4];
+    UINT32        values[1];
 } TPMI_CAMELLIA_KEY_BITS_mst;
 
 typedef struct TPMU_SYM_KEY_BITS_mst
@@ -905,7 +915,7 @@ typedef const struct TPMI_RSA_KEY_BITS_mst {
     UINT8         modifiers;
     UINT8         errorCode;
     UINT8         entries;
-    UINT32        values[5];
+    UINT32        values[3];
 } TPMI_RSA_KEY_BITS_mst;
 
 typedef const struct TPMS_ECC_POINT_mst

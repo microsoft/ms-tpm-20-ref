@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by NewMarshal; Version 1.4 Apr 7, 2019
- *  Date: Apr 13, 2019  Time: 12:17:31AM
+ *  Date: Aug 30, 2019  Time: 02:11:53PM
  */
 
 #ifndef _TABLE_MARSHAL_DEFINES_H_
@@ -1218,11 +1218,6 @@
       (buffer), (size))
 #define TPMT_KDF_SCHEME_Marshal(source, buffer, size)                               \
     Marshal(TPMT_KDF_SCHEME_MARSHAL_REF, (source), (buffer), (size))
-#define TPMI_ALG_ASYM_SCHEME_Unmarshal(target, buffer, size, flag)                  \
-    Unmarshal(TPMI_ALG_ASYM_SCHEME_MARSHAL_REF|(flag ? NULL_FLAG : 0), (target),    \
-      (buffer), (size))
-#define TPMI_ALG_ASYM_SCHEME_Marshal(source, buffer, size)                          \
-    Marshal(TPMI_ALG_ASYM_SCHEME_MARSHAL_REF, (source), (buffer), (size))
 #define TPMU_ASYM_SCHEME_Unmarshal(target, buffer, size, selector)                  \
     UnmarshalUnion(TPMU_ASYM_SCHEME_MARSHAL_REF, (target), (buffer), (size),        \
       (selector))
@@ -1331,12 +1326,6 @@
       (size))
 #define TPMT_SIGNATURE_Marshal(source, buffer, size)                                \
     Marshal(TPMT_SIGNATURE_MARSHAL_REF, (source), (buffer), (size))
-#define TPMU_ENCRYPTED_SECRET_Unmarshal(target, buffer, size, selector)             \
-    UnmarshalUnion(TPMU_ENCRYPTED_SECRET_MARSHAL_REF, (target), (buffer), (size),   \
-      (selector))
-#define TPMU_ENCRYPTED_SECRET_Marshal(source, buffer, size, selector)               \
-    MarshalUnion(TPMU_ENCRYPTED_SECRET_MARSHAL_REF, (target), (buffer), (size),     \
-      (selector))
 #define TPM2B_ENCRYPTED_SECRET_Unmarshal(target, buffer, size)                      \
     Unmarshal(TPM2B_ENCRYPTED_SECRET_MARSHAL_REF, (target), (buffer), (size))
 #define TPM2B_ENCRYPTED_SECRET_Marshal(source, buffer, size)                        \

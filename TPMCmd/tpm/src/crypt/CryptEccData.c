@@ -33,8 +33,8 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*(Auto-generated)
- *  Created by TpmStructures; Version 4.1 Dec 8, 2018
- *  Date: Jan 28, 2019  Time: 01:24:09AM
+ *  Created by TpmStructures; Version 4.4 Mar 26, 2019
+ *  Date: Aug 30, 2019  Time: 02:11:52PM
  */
 
 #include "Tpm.h"
@@ -66,7 +66,7 @@
 #       define TO_ECC_8(a)                      TO_ECC_32(0, 0, 0, a)
 #   endif
 #else // TPM2B_
-#   define TO_ECC_64(a, b, c, d, e, f, g, h) a, b, c, d, e, f, g, h 
+#   define TO_ECC_64(a, b, c, d, e, f, g, h) a, b, c, d, e, f, g, h
 #   define TO_ECC_56(a, b, c, d, e, f, g)    a, b, c, d, e, f, g
 #   define TO_ECC_48(a, b, c, d, e, f)       a, b, c, d, e, f
 #   define TO_ECC_40(a, b, c, d, e)          a, b, c, d, e
@@ -152,15 +152,15 @@ ECC_CONST(NIST_P192_n, 24, TO_ECC_192(
 #if USE_BN_ECC_DATA
     const ECC_CURVE_DATA NIST_P192 = {
         (bigNum)&NIST_P192_p, (bigNum)&NIST_P192_n, (bigNum)&NIST_P192_h,
-        (bigNum)&NIST_P192_a, (bigNum)&NIST_P192_b, 
+        (bigNum)&NIST_P192_a, (bigNum)&NIST_P192_b,
         {(bigNum)&NIST_P192_gX, (bigNum)&NIST_P192_gY, (bigNum)&NIST_P192_gZ}};
 
 #else
     const ECC_CURVE_DATA NIST_P192 = {
         &NIST_P192_p.b, &NIST_P192_n.b, &NIST_P192_h.b,
-        &NIST_P192_a.b, &NIST_P192_b.b, 
+        &NIST_P192_a.b, &NIST_P192_b.b,
         {&NIST_P192_gX.b, &NIST_P192_gY.b, &NIST_P192_gZ.b}};
-            
+           
 #endif // USE_BN_ECC_DATA
 
 #endif // ECC_NIST_P192
@@ -203,15 +203,15 @@ ECC_CONST(NIST_P224_n, 28, TO_ECC_224(
 #if USE_BN_ECC_DATA
     const ECC_CURVE_DATA NIST_P224 = {
         (bigNum)&NIST_P224_p, (bigNum)&NIST_P224_n, (bigNum)&NIST_P224_h,
-        (bigNum)&NIST_P224_a, (bigNum)&NIST_P224_b, 
+        (bigNum)&NIST_P224_a, (bigNum)&NIST_P224_b,
         {(bigNum)&NIST_P224_gX, (bigNum)&NIST_P224_gY, (bigNum)&NIST_P224_gZ}};
- 
+
 #else
     const ECC_CURVE_DATA NIST_P224 = {
         &NIST_P224_p.b, &NIST_P224_n.b, &NIST_P224_h.b,
-        &NIST_P224_a.b, &NIST_P224_b.b, 
+        &NIST_P224_a.b, &NIST_P224_b.b,
         {&NIST_P224_gX.b, &NIST_P224_gY.b, &NIST_P224_gZ.b}};
-            
+           
 #endif // USE_BN_ECC_DATA
 
 #endif // ECC_NIST_P224
@@ -254,15 +254,15 @@ ECC_CONST(NIST_P256_n, 32, TO_ECC_256(
 #if USE_BN_ECC_DATA
     const ECC_CURVE_DATA NIST_P256 = {
         (bigNum)&NIST_P256_p, (bigNum)&NIST_P256_n, (bigNum)&NIST_P256_h,
-        (bigNum)&NIST_P256_a, (bigNum)&NIST_P256_b, 
+        (bigNum)&NIST_P256_a, (bigNum)&NIST_P256_b,
         {(bigNum)&NIST_P256_gX, (bigNum)&NIST_P256_gY, (bigNum)&NIST_P256_gZ}};
- 
+
 #else
     const ECC_CURVE_DATA NIST_P256 = {
         &NIST_P256_p.b, &NIST_P256_n.b, &NIST_P256_h.b,
-        &NIST_P256_a.b, &NIST_P256_b.b, 
+        &NIST_P256_a.b, &NIST_P256_b.b,
         {&NIST_P256_gX.b, &NIST_P256_gY.b, &NIST_P256_gZ.b}};
-            
+           
 #endif // USE_BN_ECC_DATA
 
 #endif // ECC_NIST_P256
@@ -317,15 +317,15 @@ ECC_CONST(NIST_P384_n, 48, TO_ECC_384(
 #if USE_BN_ECC_DATA
     const ECC_CURVE_DATA NIST_P384 = {
         (bigNum)&NIST_P384_p, (bigNum)&NIST_P384_n, (bigNum)&NIST_P384_h,
-        (bigNum)&NIST_P384_a, (bigNum)&NIST_P384_b, 
+        (bigNum)&NIST_P384_a, (bigNum)&NIST_P384_b,
         {(bigNum)&NIST_P384_gX, (bigNum)&NIST_P384_gY, (bigNum)&NIST_P384_gZ}};
- 
+
 #else
     const ECC_CURVE_DATA NIST_P384 = {
         &NIST_P384_p.b, &NIST_P384_n.b, &NIST_P384_h.b,
-        &NIST_P384_a.b, &NIST_P384_b.b, 
+        &NIST_P384_a.b, &NIST_P384_b.b,
         {&NIST_P384_gX.b, &NIST_P384_gY.b, &NIST_P384_gZ.b}};
-            
+           
 #endif // USE_BN_ECC_DATA
 
 #endif // ECC_NIST_P384
@@ -398,15 +398,15 @@ ECC_CONST(NIST_P521_n, 66, TO_ECC_528(
 #if USE_BN_ECC_DATA
     const ECC_CURVE_DATA NIST_P521 = {
         (bigNum)&NIST_P521_p, (bigNum)&NIST_P521_n, (bigNum)&NIST_P521_h,
-        (bigNum)&NIST_P521_a, (bigNum)&NIST_P521_b, 
+        (bigNum)&NIST_P521_a, (bigNum)&NIST_P521_b,
         {(bigNum)&NIST_P521_gX, (bigNum)&NIST_P521_gY, (bigNum)&NIST_P521_gZ}};
- 
+
 #else
     const ECC_CURVE_DATA NIST_P521 = {
         &NIST_P521_p.b, &NIST_P521_n.b, &NIST_P521_h.b,
-        &NIST_P521_a.b, &NIST_P521_b.b, 
+        &NIST_P521_a.b, &NIST_P521_b.b,
         {&NIST_P521_gX.b, &NIST_P521_gY.b, &NIST_P521_gZ.b}};
-            
+           
 #endif // USE_BN_ECC_DATA
 
 #endif // ECC_NIST_P521
@@ -433,15 +433,15 @@ ECC_CONST(BN_P256_n, 32, TO_ECC_256(
 #if USE_BN_ECC_DATA
     const ECC_CURVE_DATA BN_P256 = {
         (bigNum)&BN_P256_p, (bigNum)&BN_P256_n, (bigNum)&BN_P256_h,
-        (bigNum)&BN_P256_a, (bigNum)&BN_P256_b, 
+        (bigNum)&BN_P256_a, (bigNum)&BN_P256_b,
         {(bigNum)&BN_P256_gX, (bigNum)&BN_P256_gY, (bigNum)&BN_P256_gZ}};
- 
+
 #else
     const ECC_CURVE_DATA BN_P256 = {
         &BN_P256_p.b, &BN_P256_n.b, &BN_P256_h.b,
-        &BN_P256_a.b, &BN_P256_b.b, 
+        &BN_P256_a.b, &BN_P256_b.b,
         {&BN_P256_gX.b, &BN_P256_gY.b, &BN_P256_gZ.b}};
-            
+           
 #endif // USE_BN_ECC_DATA
 
 #endif // ECC_BN_P256
@@ -490,15 +490,15 @@ ECC_CONST(BN_P638_n, 80, TO_ECC_640(
 #if USE_BN_ECC_DATA
     const ECC_CURVE_DATA BN_P638 = {
         (bigNum)&BN_P638_p, (bigNum)&BN_P638_n, (bigNum)&BN_P638_h,
-        (bigNum)&BN_P638_a, (bigNum)&BN_P638_b, 
+        (bigNum)&BN_P638_a, (bigNum)&BN_P638_b,
         {(bigNum)&BN_P638_gX, (bigNum)&BN_P638_gY, (bigNum)&BN_P638_gZ}};
- 
+
 #else
     const ECC_CURVE_DATA BN_P638 = {
         &BN_P638_p.b, &BN_P638_n.b, &BN_P638_h.b,
-        &BN_P638_a.b, &BN_P638_b.b, 
+        &BN_P638_a.b, &BN_P638_b.b,
         {&BN_P638_gX.b, &BN_P638_gY.b, &BN_P638_gZ.b}};
-            
+           
 #endif // USE_BN_ECC_DATA
 
 #endif // ECC_BN_P638
@@ -541,21 +541,21 @@ ECC_CONST(SM2_P256_n, 32, TO_ECC_256(
 #if USE_BN_ECC_DATA
     const ECC_CURVE_DATA SM2_P256 = {
         (bigNum)&SM2_P256_p, (bigNum)&SM2_P256_n, (bigNum)&SM2_P256_h,
-        (bigNum)&SM2_P256_a, (bigNum)&SM2_P256_b, 
+        (bigNum)&SM2_P256_a, (bigNum)&SM2_P256_b,
         {(bigNum)&SM2_P256_gX, (bigNum)&SM2_P256_gY, (bigNum)&SM2_P256_gZ}};
- 
+
 #else
     const ECC_CURVE_DATA SM2_P256 = {
         &SM2_P256_p.b, &SM2_P256_n.b, &SM2_P256_h.b,
-        &SM2_P256_a.b, &SM2_P256_b.b, 
+        &SM2_P256_a.b, &SM2_P256_b.b,
         {&SM2_P256_gX.b, &SM2_P256_gY.b, &SM2_P256_gZ.b}};
-            
+           
 #endif // USE_BN_ECC_DATA
 
 #endif // ECC_SM2_P256
 
 
-#define comma        
+#define comma       
 const ECC_CURVE   eccCurves[] = {
 #if ECC_NIST_P192
     comma

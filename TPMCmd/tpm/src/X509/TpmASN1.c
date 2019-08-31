@@ -146,7 +146,8 @@ Error:
 
 //*** ASN1GetBitStringValue()
 // Try to parse a bit string of up to 32 bits from a value that is expected to be
-// a bit string.
+// a bit string. The bit string is left justified so that the MSb of the input is
+// the MSb of the returned value.
 // If there is a general parsing error, the context->size is set to -1.
 //  Return Type: BOOL
 //      TRUE(1)     success
@@ -160,33 +161,39 @@ ASN1GetBitStringValue(
     int                  shift;
     INT16                length;
     UINT32               value = 0;
+    int                  inputBits;
 //
-
-    VERIFY((length = ASN1NextTag(ctx)) >= 1);
+    length = ASN1NextTag(ctx);
+    VERIFY(length >= 1);
     VERIFY(ctx->tag == ASN1_BITSTRING);
-    // Get the shift value for the bit field (how many bits to loop off of the end)
+    // Get the shift value for the bit field (how many bits to lop off of the end)
     shift = NEXT_OCTET(ctx);
     length--;
+    // Get the number of bits in the input
+    inputBits = (8 * length) - shift;
     // the shift count has to make sense
     VERIFY((shift < 8) && ((length > 0) || (shift == 0)));
     // if there are any bytes left
-    for(; length > 0; length--)
+    for(; length > 1; length--)
     {
-        if(length > 1)
-        {
-            // for all but the last octet, just shift and add the new octet
-            VERIFY((value & 0xFF000000) == 0); // can't loose significant bits
-            value = (value << 8) + NEXT_OCTET(ctx);
-        }
-        else
-        {
-            // for the last octet, just shift the accumulated value enough to 
-            // accept the significant bits in the last octet and shift the last 
-            // octet down
-            VERIFY(((value & (0xFF000000 << (8 - shift)))) == 0);
-            value = (value << (8 - shift)) + (NEXT_OCTET(ctx) >> shift);
-        }
+
+        // for all but the last octet, just shift and add the new octet
+        VERIFY((value & 0xFF000000) == 0); // can't loose significant bits
+        value = (value << 8) + NEXT_OCTET(ctx);
+
     }
+    if(length == 1)
+    {
+        // for the last octet, just shift the accumulated value enough to 
+        // accept the significant bits in the last octet and shift the last 
+        // octet down
+        VERIFY(((value & (0xFF000000 << (8 - shift)))) == 0);
+        value = (value << (8 - shift)) + (NEXT_OCTET(ctx) >> shift);
+
+    }
+    // 'Left justify' the result
+    if(inputBits > 0)
+        value <<= (32 - inputBits);
     *val = value;
     return TRUE;
 Error:

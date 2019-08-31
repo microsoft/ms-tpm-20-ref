@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Apr  2, 2019  Time: 04:06:42PM
+ *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
 #ifndef    _CRYPT_PRIME_SIEVE_FP_H_
@@ -129,26 +129,31 @@ PrimeSelectWithSieve(
 );
 #if RSA_INSTRUMENT
 
+//*** PrintTuple()
 char *
 PrintTuple(
     UINT32      *i
 );
 
+//*** RsaSimulationEnd()
 void
 RsaSimulationEnd(
     void
 );
 
+//*** GetSieveStats()
 LIB_EXPORT void
 GetSieveStats(
     uint32_t        *trials,
     uint32_t        *emptyFields,
     uint32_t        *averageBits
 );
-
 #endif
 #endif // RSA_KEY_SIEVE
 #if !RSA_INSTRUMENT
+
+//*** RsaSimulationEnd()
+// Stub for call when not doing instrumentation.
 void
 RsaSimulationEnd(
     void

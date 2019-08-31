@@ -34,13 +34,13 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Apr  2, 2019  Time: 04:26:21PM
+ *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
 #ifndef    _PLATFORM_FP_H_
 #define    _PLATFORM_FP_H_
 
-//** From Cancel.c 
+//** From Cancel.c
 
 //***_plat__IsCanceled()
 // Check if the cancel flag is set
@@ -50,23 +50,23 @@
 LIB_EXPORT int
 _plat__IsCanceled(
     void
-    );
+);
 
 // Set cancel flag.
 LIB_EXPORT void
 _plat__SetCancel(
     void
-    );
+);
 
 //***_plat__ClearCancel()
 // Clear cancel flag
 LIB_EXPORT void
 _plat__ClearCancel(
     void
-    );
+);
 
 
-//** From Clock.c 
+//** From Clock.c
 
 //***_plat__TimerReset()
 // This function sets current system clock time as t0 for counting TPM time.
@@ -75,7 +75,7 @@ _plat__ClearCancel(
 LIB_EXPORT void
 _plat__TimerReset(
     void
-    );
+);
 
 //*** _plat__TimerRestart()
 // This function should be called in order to simulate the restart of the timer
@@ -83,7 +83,7 @@ _plat__TimerReset(
 LIB_EXPORT void
 _plat__TimerRestart(
     void
-    );
+);
 
 //*** _plat__RealTime()
 // This is another, probably futile, attempt to define a portable function
@@ -109,7 +109,7 @@ _plat__RealTime(
 LIB_EXPORT uint64_t
 _plat__TimerRead(
     void
-    );
+);
 
 //*** _plat__TimerWasReset()
 // This function is used to interrogate the flag indicating if the tick timer has
@@ -120,7 +120,7 @@ _plat__TimerRead(
 LIB_EXPORT BOOL
 _plat__TimerWasReset(
    void
-    );
+);
 
 //*** _plat__TimerWasStopped()
 // This function is used to interrogate the flag indicating if the tick timer has
@@ -134,7 +134,7 @@ _plat__TimerWasReset(
 LIB_EXPORT BOOL
 _plat__TimerWasStopped(
     void
-    );
+);
 
 //***_plat__ClockAdjustRate()
 // Adjust the clock rate
@@ -142,10 +142,10 @@ LIB_EXPORT void
 _plat__ClockAdjustRate(
     int              adjust         // IN: the adjust number.  It could be positive
                                     //     or negative
-    );
+);
 
 
-//** From DebugHelpers.c 
+//** From DebugHelpers.c
 
 #if CERTIFYX509_DEBUG
 
@@ -159,11 +159,13 @@ DebugFileOpen(
     void
 );
 
+//*** DebugFileClose()
 void
 DebugFileClose(
     void
 );
 
+//*** DebugDumpBuffer()
 void
 DebugDumpBuffer(
     int             size,
@@ -173,7 +175,7 @@ DebugDumpBuffer(
 #endif // CERTIFYX509_DEBUG
 
 
-//** From Entropy.c 
+//** From Entropy.c
 
 //*** _plat__GetEntropy()
 // This function is used to get available hardware entropy. In a hardware
@@ -190,7 +192,7 @@ _plat__GetEntropy(
 );
 
 
-//** From LocalityPlat.c 
+//** From LocalityPlat.c
 
 //***_plat__LocalityGet()
 // Get the most recent command locality in locality value form.
@@ -199,17 +201,17 @@ _plat__GetEntropy(
 LIB_EXPORT unsigned char
 _plat__LocalityGet(
     void
-    );
+);
 
 //***_plat__LocalitySet()
 // Set the most recent command locality in locality value form
 LIB_EXPORT void
 _plat__LocalitySet(
     unsigned char    locality
-    );
+);
 
 
-//** From NVMem.c 
+//** From NVMem.c
 
 //*** _plat__NvErrors()
 // This function is used by the simulator to set the error flags in the NV
@@ -218,7 +220,7 @@ LIB_EXPORT void
 _plat__NvErrors(
     int              recoverable,
     int              unrecoverable
-    );
+);
 
 //***_plat__NVEnable()
 // Enable NV memory.
@@ -238,14 +240,14 @@ _plat__NvErrors(
 LIB_EXPORT int
 _plat__NVEnable(
     void            *platParameter  // IN: platform specific parameters
-    );
+);
 
 //***_plat__NVDisable()
 // Disable NV memory
 LIB_EXPORT void
 _plat__NVDisable(
     void
-    );
+);
 
 //***_plat__IsNvAvailable()
 // Check if NV is available
@@ -256,7 +258,7 @@ _plat__NVDisable(
 LIB_EXPORT int
 _plat__IsNvAvailable(
     void
-    );
+);
 
 //***_plat__NvMemoryRead()
 // Function: Read a chunk of NV memory
@@ -265,7 +267,7 @@ _plat__NvMemoryRead(
     unsigned int     startOffset,   // IN: read start
     unsigned int     size,          // IN: size of bytes to read
     void            *data           // OUT: data buffer
-    );
+);
 
 //*** _plat__NvIsDifferent()
 // This function checks to see if the NV is different from the test value. This is
@@ -278,7 +280,7 @@ _plat__NvIsDifferent(
     unsigned int     startOffset,   // IN: read start
     unsigned int     size,          // IN: size of bytes to read
     void            *data           // IN: data buffer
-    );
+);
 
 //***_plat__NvMemoryWrite()
 // This function is used to update NV memory. The "write" is to a memory copy of
@@ -292,7 +294,7 @@ _plat__NvMemoryWrite(
     unsigned int     startOffset,   // IN: write start
     unsigned int     size,          // IN: size of bytes to write
     void            *data           // OUT: data buffer
-    );
+);
 
 //***_plat__NvMemoryClear()
 // Function is used to set a range of NV memory bytes to an implementation-dependent
@@ -301,7 +303,7 @@ LIB_EXPORT void
 _plat__NvMemoryClear(
     unsigned int     start,         // IN: clear start
     unsigned int     size           // IN: number of bytes to clear
-    );
+);
 
 //***_plat__NvMemoryMove()
 // Function: Move a chunk of NV memory from source to destination
@@ -312,7 +314,7 @@ _plat__NvMemoryMove(
     unsigned int     sourceOffset,  // IN: source offset
     unsigned int     destOffset,    // IN: destination offset
     unsigned int     size           // IN: size of data being moved
-    );
+);
 
 //***_plat__NvCommit()
 // This function writes the local copy of NV to NV for permanent store. It will write
@@ -323,7 +325,7 @@ _plat__NvMemoryMove(
 LIB_EXPORT int
 _plat__NvCommit(
     void
-    );
+);
 
 //***_plat__SetNvAvail()
 // Set the current NV state to available.  This function is for testing purpose
@@ -331,7 +333,7 @@ _plat__NvCommit(
 LIB_EXPORT void
 _plat__SetNvAvail(
     void
-    );
+);
 
 //***_plat__ClearNvAvail()
 // Set the current NV state to unavailable.  This function is for testing purpose
@@ -339,7 +341,7 @@ _plat__SetNvAvail(
 LIB_EXPORT void
 _plat__ClearNvAvail(
     void
-    );
+);
 
 //*** _plat__NVNeedsManufacture()
 // This function is used by the simulator to determine when the TPM's NV state
@@ -347,16 +349,17 @@ _plat__ClearNvAvail(
 LIB_EXPORT BOOL
 _plat__NVNeedsManufacture(
     void
-    );
+);
 
-//** From PowerPlat.c 
+
+//** From PowerPlat.c
 
 //***_plat__Signal_PowerOn()
 // Signal platform power on
 LIB_EXPORT int
 _plat__Signal_PowerOn(
     void
-    );
+);
 
 //*** _plat__WasPowerLost()
 // Test whether power was lost before a _TPM_Init.
@@ -373,24 +376,24 @@ _plat__Signal_PowerOn(
 LIB_EXPORT int
 _plat__WasPowerLost(
     void
-    );
+);
 
 //*** _plat_Signal_Reset()
 // This a TPM reset without a power loss.
 LIB_EXPORT int
 _plat__Signal_Reset(
     void
-    );
+);
 
 //***_plat__Signal_PowerOff()
 // Signal platform power off
 LIB_EXPORT void
 _plat__Signal_PowerOff(
     void
-    );
+);
 
 
-//** From PPPlat.c 
+//** From PPPlat.c
 
 //***_plat__PhysicalPresenceAsserted()
 // Check if physical presence is signaled
@@ -400,24 +403,24 @@ _plat__Signal_PowerOff(
 LIB_EXPORT int
 _plat__PhysicalPresenceAsserted(
     void
-    );
+);
 
 //***_plat__Signal_PhysicalPresenceOn()
 // Signal physical presence on
 LIB_EXPORT void
 _plat__Signal_PhysicalPresenceOn(
     void
-    );
+);
 
 //***_plat__Signal_PhysicalPresenceOff()
 // Signal physical presence off
 LIB_EXPORT void
 _plat__Signal_PhysicalPresenceOff(
     void
-    );
+);
 
 
-//** From RunCommand.c 
+//** From RunCommand.c
 
 //***_plat__RunCommand()
 // This version of RunCommand will set up a jum_buf and call ExecuteCommand(). If
@@ -432,17 +435,17 @@ _plat__RunCommand(
     unsigned char   *request,       // IN: command buffer
     uint32_t        *responseSize,  // IN/OUT: response buffer size
     unsigned char   **response      // IN/OUT: response buffer
-    );
+);
 
 //***_plat__Fail()
 // This is the platform depended failure exit for the TPM.
 LIB_EXPORT NORETURN void
 _plat__Fail(
     void
-    );
+);
 
 
-//** From Unique.c 
+//** From Unique.c
 
 //** _plat__GetUnique()
 // This function is used to access the platform-specific unique value.
@@ -457,14 +460,6 @@ _plat__GetUnique(
     uint32_t             which,         // authorities (0) or details
     uint32_t             bSize,         // size of the buffer
     unsigned char       *b              // output buffer
-    );
-
-//** From EPS.c 
-
-#if (defined USE_PLATFORM_EPS) && (USE_PLATFORM_EPS != NO)
-//** _plat__GetEPS()
-// This function is used to access the platform provided EPS value.
-void _plat__GetEPS(UINT16, BYTE*);
-#endif
+);
 
 #endif  // _PLATFORM_FP_H_

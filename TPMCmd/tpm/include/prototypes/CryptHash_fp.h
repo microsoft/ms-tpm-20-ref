@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Apr  2, 2019  Time: 03:18:00PM
+ *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
 #ifndef    _CRYPT_HASH_FP_H_
@@ -49,8 +49,8 @@ CryptHashInit(
 );
 
 //*** CryptHashStartup()
-// This function is called by TPM2_Startup() in case there is work to do at startup.
-// Currently, this is a placeholder.
+// This function is called by TPM2_Startup(). It checks that the size of the
+// HashDefArray is consistent with the HASH_COUNT.
 BOOL
 CryptHashStartup(
     void

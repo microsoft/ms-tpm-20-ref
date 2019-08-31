@@ -34,20 +34,20 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Nov  2, 2018  Time: 11:14:29AM
+ *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
 #ifndef    _SIMULATOR_FP_H_
 #define    _SIMULATOR_FP_H_
 
-//** From TcpServer.c 
+//** From TcpServer.c
 
 //*** PlatformServer()
 // This function processes incoming platform requests.
 BOOL
 PlatformServer(
     SOCKET           s
-    );
+);
 
 //*** PlatformSvcRoutine()
 // This function is called to set up the socket interfaces to listen for
@@ -55,7 +55,7 @@ PlatformServer(
 DWORD WINAPI
 PlatformSvcRoutine(
     LPVOID           port
-    );
+);
 
 //*** PlatformSignalService()
 // This function starts a new thread waiting for platform signals.
@@ -64,14 +64,14 @@ PlatformSvcRoutine(
 int
 PlatformSignalService(
     int              PortNumber
-    );
+);
 
 //*** RegularCommandService()
 // This function services regular commands.
 int
 RegularCommandService(
     int              PortNumber
-    );
+);
 
 //*** StartTcpServer()
 // This is the main entry-point to the TCP server.  The server listens on port
@@ -81,7 +81,7 @@ RegularCommandService(
 int
 StartTcpServer(
     int              PortNumber
-    );
+);
 
 //*** ReadBytes()
 // This function reads the indicated number of bytes ('NumBytes') into buffer
@@ -91,7 +91,7 @@ ReadBytes(
     SOCKET           s,
     char            *buffer,
     int              NumBytes
-    );
+);
 
 //*** WriteBytes()
 // This function will send the indicated number of bytes ('NumBytes') to the
@@ -101,7 +101,7 @@ WriteBytes(
     SOCKET           s,
     char            *buffer,
     int              NumBytes
-    );
+);
 
 //*** WriteUINT32()
 // Send 4 bytes containing hton(1)
@@ -109,7 +109,7 @@ BOOL
 WriteUINT32(
     SOCKET           s,
     uint32_t         val
-    );
+);
 
 //*** ReadVarBytes()
 // Get a UINT32-length-prepended binary array.  Note that the 4-byte length is
@@ -120,7 +120,7 @@ ReadVarBytes(
     char            *buffer,
     uint32_t        *BytesReceived,
     int              MaxLen
-    );
+);
 
 //*** WriteVarBytes()
 // Send a UINT32-length-prepended binary array.  Note that the 4-byte length is
@@ -130,7 +130,7 @@ WriteVarBytes(
     SOCKET           s,
     char            *buffer,
     int              BytesToSend
-    );
+);
 
 //*** TpmServer()
 // Processing incoming TPM command requests using the protocol / interface
@@ -138,10 +138,10 @@ WriteVarBytes(
 BOOL
 TpmServer(
     SOCKET           s
-    );
+);
 
 
-//** From TPMCmdp.c 
+//** From TPMCmdp.c
 
 //*** Signal_PowerOn()
 // This function processes a power-on indication. Among other things, it
@@ -149,7 +149,7 @@ TpmServer(
 void
 _rpc__Signal_PowerOn(
     BOOL        isReset
-    );
+);
 
 //*** Signal_Restart()
 // This function processes the clock restart indication. All it does is call
@@ -157,7 +157,7 @@ _rpc__Signal_PowerOn(
 void
 _rpc__Signal_Restart(
     void
-    );
+);
 
 //***Signal_PowerOff()
 // This function processes the power off indication. Its primary function is
@@ -166,7 +166,7 @@ _rpc__Signal_Restart(
 void
 _rpc__Signal_PowerOff(
     void
-    );
+);
 
 //*** _rpc__ForceFailureMode()
 // This function is used to debug the Failure Mode logic of the TPM. It will set
@@ -175,21 +175,21 @@ _rpc__Signal_PowerOff(
 void
 _rpc__ForceFailureMode(
     void
-    );
+);
 
 //*** _rpc__Signal_PhysicalPresenceOn()
 // This function is called to simulate activation of the physical presence "pin".
 void
 _rpc__Signal_PhysicalPresenceOn(
     void
-    );
+);
 
 //*** _rpc__Signal_PhysicalPresenceOff()
 // This function is called to simulate deactivation of the physical presence "pin".
 void
 _rpc__Signal_PhysicalPresenceOff(
     void
-    );
+);
 
 //*** _rpc__Signal_Hash_Start()
 // This function is called to simulate a _TPM_Hash_Start event. It will call
@@ -197,21 +197,21 @@ _rpc__Signal_PhysicalPresenceOff(
 void
 _rpc__Signal_Hash_Start(
     void
-    );
+);
 
 //*** _rpc__Signal_Hash_Data()
 // This function is called to simulate a _TPM_Hash_Data event.
 void
 _rpc__Signal_Hash_Data(
     _IN_BUFFER       input
-    );
+);
 
 //*** _rpc__Signal_HashEnd()
 // This function is called to simulate a _TPM_Hash_End event.
 void
 _rpc__Signal_HashEnd(
     void
-    );
+);
 
 //*** _rpc__Send_Command()
 // This is the interface to the TPM code.
@@ -221,7 +221,7 @@ _rpc__Send_Command(
     unsigned char    locality,
     _IN_BUFFER       request,
     _OUT_BUFFER     *response
-    );
+);
 
 //*** _rpc__Signal_CancelOn()
 // This function is used to turn on the indication to cancel a command in process.
@@ -231,14 +231,14 @@ _rpc__Send_Command(
 void
 _rpc__Signal_CancelOn(
     void
-    );
+);
 
 //*** _rpc__Signal_CancelOff()
 // This function is used to turn off the indication to cancel a command in process.
 void
 _rpc__Signal_CancelOff(
     void
-    );
+);
 
 //*** _rpc__Signal_NvOn()
 // In a system where the NV memory used by the TPM is not within the TPM, the
@@ -247,7 +247,7 @@ _rpc__Signal_CancelOff(
 void
 _rpc__Signal_NvOn(
     void
-    );
+);
 
 //*** _rpc__Signal_NvOff()
 // This function is used to set the indication that NV memory is no
@@ -255,7 +255,7 @@ _rpc__Signal_NvOn(
 void
 _rpc__Signal_NvOff(
     void
-    );
+);
 
 //*** _rpc__RsaKeyCacheControl()
 // This function is used to enable/disable the use of the RSA key cache during
@@ -263,17 +263,10 @@ _rpc__Signal_NvOff(
 void
 _rpc__RsaKeyCacheControl(
     int              state
-    );
-
-//*** _rpc__Shutdown()
-// This function is used to stop the TPM simulator.
-void
-_rpc__Shutdown(
-    void
-    );
+);
 
 
-//** From TPMCmds.c 
+//** From TPMCmds.c
 
 //*** main()
 // This is the main entry point for the simulator.
@@ -282,6 +275,6 @@ int
 main(
     int              argc,
     char            *argv[]
-    );
+);
 
 #endif  // _SIMULATOR_FP_H_

@@ -73,9 +73,7 @@ X509AddSigningAlgorithmRSA(
                 break;
             if(ctx == NULL)
                 return 1;
-            ASN1StartMarshalContext(ctx);
-            ASN1PushOID(ctx, hashDef->PKCS1);
-            return ASN1EndEncapsulation(ctx, ASN1_CONSTRUCTED_SEQUENCE);
+            return X509PushAlgorithmIdentifierSequence(ctx, hashDef->PKCS1);
         }
         case ALG_RSAPSS_VALUE:
             // leave if this is just an implementation check
@@ -136,9 +134,11 @@ X509AddSigningAlgorithmRSA(
                             ASN1StartMarshalContext(ctx);   // SEQUENCE (2 elem) 1st
                             // Handle the 2nd Sequence (sequence (object, null))
                             {
+                                // This adds a NULL, then an OID and a SEQUENCE
+                                // wrapper.
                                 X509PushAlgorithmIdentifierSequence(ctx,
                                     hashDef->OID);
-                                // add the pkcs1-MGF OID
+                                // add the pkcs1-MGF OID 
                                 ASN1PushOID(ctx, OID_MGF1);
                             }
                             // End outer sequence

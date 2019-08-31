@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmMarshal; Version 4.1 Dec 10, 2018
- *  Date: Apr  2, 2019  Time: 11:00:48AM
+ *  Date: Aug 30, 2019  Time: 02:11:53PM
  */
 
 #include "Tpm.h"
@@ -312,6 +312,7 @@ TPM_ECC_CURVE_Unmarshal(TPM_ECC_CURVE *target, BYTE **buffer, INT32 *size)
     {
         switch(*target)
         {
+            case TPM_ECC_NONE :
             case TPM_ECC_NIST_P192 :
             case TPM_ECC_NIST_P224 :
             case TPM_ECC_NIST_P256 :
@@ -3809,65 +3810,6 @@ TPMT_KDF_SCHEME_Marshal(TPMT_KDF_SCHEME *source, BYTE **buffer, INT32 *size)
 }
 
 // Table 2:163 - Definition of TPMI_ALG_ASYM_SCHEME Type
-TPM_RC
-TPMI_ALG_ASYM_SCHEME_Unmarshal(TPMI_ALG_ASYM_SCHEME *target, BYTE **buffer, INT32 *size, BOOL flag)
-{
-    TPM_RC    result;
-    result = TPM_ALG_ID_Unmarshal((TPM_ALG_ID *)target, buffer, size);
-    if(result == TPM_RC_SUCCESS)
-    {
-        switch (*target)
-        {
-#if ALG_ECDH
-            case ALG_ECDH_VALUE:
-#endif // ALG_ECDH
-#if ALG_ECMQV
-            case ALG_ECMQV_VALUE:
-#endif // ALG_ECMQV
-#if ALG_ECDAA
-            case ALG_ECDAA_VALUE:
-#endif // ALG_ECDAA
-#if ALG_RSASSA
-            case ALG_RSASSA_VALUE:
-#endif // ALG_RSASSA
-#if ALG_RSAPSS
-            case ALG_RSAPSS_VALUE:
-#endif // ALG_RSAPSS
-#if ALG_ECDSA
-            case ALG_ECDSA_VALUE:
-#endif // ALG_ECDSA
-#if ALG_SM2
-            case ALG_SM2_VALUE:
-#endif // ALG_SM2
-#if ALG_ECSCHNORR
-            case ALG_ECSCHNORR_VALUE:
-#endif // ALG_ECSCHNORR
-#if ALG_RSAES
-            case ALG_RSAES_VALUE:
-#endif // ALG_RSAES
-#if ALG_OAEP
-            case ALG_OAEP_VALUE:
-#endif // ALG_OAEP
-                break;
-            case ALG_NULL_VALUE:
-                if(!flag)
-                    result = TPM_RC_VALUE;
-                break;
-            default:
-                result = TPM_RC_VALUE;
-                break;
-        }
-    }
-    return result;
-}
-#if !USE_MARSHALING_DEFINES
-UINT16
-TPMI_ALG_ASYM_SCHEME_Marshal(TPMI_ALG_ASYM_SCHEME *source, BYTE **buffer, INT32 *size)
-{
-    return TPM_ALG_ID_Marshal((TPM_ALG_ID *)source, buffer, size);
-}
-#endif // !USE_MARSHALING_DEFINES
-
 // Table 2:164 - Definition of TPMU_ASYM_SCHEME Union
 TPM_RC
 TPMU_ASYM_SCHEME_Unmarshal(TPMU_ASYM_SCHEME *target, BYTE **buffer, INT32 *size, UINT32 selector)
@@ -4637,53 +4579,6 @@ TPMT_SIGNATURE_Marshal(TPMT_SIGNATURE *source, BYTE **buffer, INT32 *size)
 }
 
 // Table 2:186 - Definition of TPMU_ENCRYPTED_SECRET Union
-TPM_RC
-TPMU_ENCRYPTED_SECRET_Unmarshal(TPMU_ENCRYPTED_SECRET *target, BYTE **buffer, INT32 *size, UINT32 selector)
-{
-    switch(selector) {
-#if ALG_ECC
-        case ALG_ECC_VALUE:
-            return BYTE_Array_Unmarshal((BYTE *)(target->ecc), buffer, size, (INT32)sizeof(TPMS_ECC_POINT));
-#endif // ALG_ECC
-#if ALG_RSA
-        case ALG_RSA_VALUE:
-            return BYTE_Array_Unmarshal((BYTE *)(target->rsa), buffer, size, (INT32)MAX_RSA_KEY_BYTES);
-#endif // ALG_RSA
-#if ALG_SYMCIPHER
-        case ALG_SYMCIPHER_VALUE:
-            return BYTE_Array_Unmarshal((BYTE *)(target->symmetric), buffer, size, (INT32)sizeof(TPM2B_DIGEST));
-#endif // ALG_SYMCIPHER
-#if ALG_KEYEDHASH
-        case ALG_KEYEDHASH_VALUE:
-            return BYTE_Array_Unmarshal((BYTE *)(target->keyedHash), buffer, size, (INT32)sizeof(TPM2B_DIGEST));
-#endif // ALG_KEYEDHASH
-    }
-    return TPM_RC_SELECTOR;
-}
-UINT16
-TPMU_ENCRYPTED_SECRET_Marshal(TPMU_ENCRYPTED_SECRET *source, BYTE **buffer, INT32 *size, UINT32 selector)
-{
-    switch(selector) {
-#if ALG_ECC
-        case ALG_ECC_VALUE:
-            return BYTE_Array_Marshal((BYTE *)(source->ecc), buffer, size, (INT32)sizeof(TPMS_ECC_POINT));
-#endif // ALG_ECC
-#if ALG_RSA
-        case ALG_RSA_VALUE:
-            return BYTE_Array_Marshal((BYTE *)(source->rsa), buffer, size, (INT32)MAX_RSA_KEY_BYTES);
-#endif // ALG_RSA
-#if ALG_SYMCIPHER
-        case ALG_SYMCIPHER_VALUE:
-            return BYTE_Array_Marshal((BYTE *)(source->symmetric), buffer, size, (INT32)sizeof(TPM2B_DIGEST));
-#endif // ALG_SYMCIPHER
-#if ALG_KEYEDHASH
-        case ALG_KEYEDHASH_VALUE:
-            return BYTE_Array_Marshal((BYTE *)(source->keyedHash), buffer, size, (INT32)sizeof(TPM2B_DIGEST));
-#endif // ALG_KEYEDHASH
-    }
-    return 0;
-}
-
 // Table 2:187 - Definition of TPM2B_ENCRYPTED_SECRET Structure
 TPM_RC
 TPM2B_ENCRYPTED_SECRET_Unmarshal(TPM2B_ENCRYPTED_SECRET *target, BYTE **buffer, INT32 *size)

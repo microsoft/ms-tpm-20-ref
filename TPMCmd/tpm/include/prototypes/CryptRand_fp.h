@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Apr  2, 2019  Time: 03:18:00PM
+ *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
 #ifndef    _CRYPT_RAND_FP_H_
@@ -106,7 +106,7 @@ CryptRandomGenerate(
     BYTE            *buffer
 );
 
-//**** DRBG_InstantiateSeededKdf()
+//*** DRBG_InstantiateSeededKdf()
 // This function is used to instantiate a KDF-based RNG. This is used for derivations.
 // This function always returns TRUE.
 LIB_EXPORT BOOL
@@ -120,7 +120,7 @@ DRBG_InstantiateSeededKdf(
     UINT32           limit          // IN: Maximum number of bits from the KDF
 );
 
-//**** DRBG_AdditionalData()
+//*** DRBG_AdditionalData()
 // Function to reseed the DRBG with additional entropy. This is normally called
 // before computing the protection value of a primary key in the Endorsement
 // hierarchy.
@@ -130,10 +130,12 @@ DRBG_AdditionalData(
     TPM2B           *additionalData // IN: value to incorporate
 );
 
-//**** DRBG_InstantiateSeeded()
+//*** DRBG_InstantiateSeeded()
 // This function is used to instantiate a random number generator from seed values.
 // The nominal use of this generator is to create sequences of pseudo-random
-// numbers from a seed value. This function always returns TRUE.
+// numbers from a seed value.
+// Return Type: TPM_RC
+//  TPM_RC_FAILURE      DRBG self-test failure
 LIB_EXPORT TPM_RC
 DRBG_InstantiateSeeded(
     DRBG_STATE      *drbgState,     // IN/OUT: buffer to hold the state
@@ -143,7 +145,7 @@ DRBG_InstantiateSeeded(
     const TPM2B     *additional     // IN: additional data
 );
 
-//**** CryptRandStartup()
+//*** CryptRandStartup()
 // This function is called when TPM_Startup is executed. This function always returns
 // TRUE.
 LIB_EXPORT BOOL
@@ -165,10 +167,10 @@ CryptRandInit(
 // This function generates a random sequence according SP800-90A.
 // If 'random' is not NULL, then 'randomSize' bytes of random values are generated.
 // If 'random' is NULL or 'randomSize' is zero, then the function returns
-// TRUE without generating any bits or updating the reseed counter.
-// This function returns 0 if a reseed is required. Otherwise, it returns the
-// number of bytes produced which could be less than the number requested if the
-// request is too large.
+// zero without generating any bits or updating the reseed counter.
+// This function returns the number of bytes produced which could be less than the
+// number requested if the request is too large ("too large" is implementation
+// dependent.)
 LIB_EXPORT UINT16
 DRBG_Generate(
     RAND_STATE      *state,

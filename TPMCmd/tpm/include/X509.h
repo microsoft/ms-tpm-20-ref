@@ -97,19 +97,26 @@ MAKE_OID(_KEY_USAGE_EXTENSTION);
 MAKE_OID(_TCG_TPMA_OBJECT);
 
 #ifdef _X509_SPT_
-const x509KeyUsageUnion keyUsageSign = { TPMA_X509_KEY_USAGE_INITIALIZER(
-    /* digitalsignature */ 1, /* nonrepudiation   */ 0,
-    /* keyencipherment  */ 0, /* dataencipherment */ 0,
-    /* keyagreement     */ 0, /* keycertsign      */ 1,
-    /* crlsign          */ 1, /* encipheronly     */ 0,
-    /* decipheronly     */ 0, /* bits_at_9        */ 0) };
-
-const x509KeyUsageUnion keyUsageDecrypt = { TPMA_X509_KEY_USAGE_INITIALIZER(
-    /* digitalsignature */ 0, /* nonrepudiation   */ 0,
-    /* keyencipherment  */ 1, /* dataencipherment */ 1,
-    /* keyagreement     */ 1, /* keycertsign      */ 0,
-    /* crlsign          */ 0, /* encipheronly     */ 1,
-    /* decipheronly     */ 1, /* bits_at_9        */ 0) };
+// If a bit is SET in keyUsageSign is also SET in keyUsagem then the associated key 
+// has to have 'sign' SET.
+const x509KeyUsageUnion keyUsageSign = 
+{
+    TPMA_X509_KEY_USAGE_INITIALIZER( 
+        /* bits_at_0        */ 0, /* decipheronly    */ 0,  /* encipheronly   */ 0,
+        /* crlsign          */ 1, /* keycertsign     */ 1,  /* keyagreement   */ 0,
+        /* dataencipherment */ 0, /* keyencipherment */ 0,  /* nonrepudiation */ 0,
+        /* digitalsignature */ 1)
+};
+// If a bit is SET in keyUsageDecrypt is also SET in keyUsagem then the associated key 
+// has to have 'decrypt' SET.
+const x509KeyUsageUnion keyUsageDecrypt =
+{
+    TPMA_X509_KEY_USAGE_INITIALIZER(
+        /* bits_at_0        */ 0, /* decipheronly    */ 1,  /* encipheronly   */ 1,
+        /* crlsign          */ 0, /* keycertsign     */ 0,  /* keyagreement   */ 1,
+        /* dataencipherment */ 1, /* keyencipherment */ 1,  /* nonrepudiation */ 0,
+        /* digitalsignature */ 0)
+};                                                    
 #else
 extern x509KeyUsageUnion keyUsageSign;
 extern x509KeyUsageUnion keyUsageDecrypt;
