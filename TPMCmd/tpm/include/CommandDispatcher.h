@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmDispatch; Version 4.0 July 8,2017
- *  Date: Aug 30, 2019  Time: 04:59:32PM
+ *  Date: Sep  5, 2019  Time: 06:45:32PM
  */
 
 // This macro is added just so that the code is only excessively long.
@@ -913,8 +913,8 @@ case TPM_CC_CertifyX509: {
             MemoryGetOutBuffer(sizeof(CertifyX509_Out));
     in->objectHandle = handles[0];
     in->signHandle = handles[1];
-    result = TPM2B_DATA_Unmarshal(&in->qualifyingData, paramBuffer, paramBufferSize);
-        EXIT_IF_ERROR_PLUS(RC_CertifyX509_qualifyingData);
+    result = TPM2B_DATA_Unmarshal(&in->reserved, paramBuffer, paramBufferSize);
+        EXIT_IF_ERROR_PLUS(RC_CertifyX509_reserved);
     result = TPMT_SIG_SCHEME_Unmarshal(&in->inScheme, paramBuffer, paramBufferSize, TRUE);
         EXIT_IF_ERROR_PLUS(RC_CertifyX509_inScheme);
     result = TPM2B_MAX_BUFFER_Unmarshal(&in->partialCertificate, paramBuffer, paramBufferSize);

@@ -87,6 +87,8 @@ TPM2_CertifyX509(
 #endif
 
     // Input Validation
+    if(in->reserved.b.size != 0)
+        return TPM_RC_SIZE + RC_CertifyX509_reserved;
     // signing key must be able to sign
     if(!IsSigningObject(signKey))
         return TPM_RCS_KEY + RC_CertifyX509_signHandle;

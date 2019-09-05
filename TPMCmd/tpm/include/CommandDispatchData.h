@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Aug 30, 2019  Time: 04:59:31PM
+ *  Date: Sep  5, 2019  Time: 06:45:31PM
  */
 
 // This file should only be included by CommandCodeAttibutes.c
@@ -2074,7 +2074,7 @@ CertifyX509_COMMAND_DESCRIPTOR_t _CertifyX509Data = {
     /* outSize       */     (UINT16)(sizeof(CertifyX509_Out)),
     /* offsetOfTypes */     offsetof(CertifyX509_COMMAND_DESCRIPTOR_t, types),
     /* offsets       */     {(UINT16)(offsetof(CertifyX509_In, signHandle)),
-                             (UINT16)(offsetof(CertifyX509_In, qualifyingData)),
+                             (UINT16)(offsetof(CertifyX509_In, reserved)),
                              (UINT16)(offsetof(CertifyX509_In, inScheme)),
                              (UINT16)(offsetof(CertifyX509_In, partialCertificate)),
                              (UINT16)(offsetof(CertifyX509_Out, tbsDigest)),

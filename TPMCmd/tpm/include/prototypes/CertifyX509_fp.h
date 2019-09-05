@@ -34,19 +34,19 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Apr  2, 2019  Time: 11:00:48AM
+ *  Date: Sep  5, 2019  Time: 06:45:31PM
  */
 
 #if CC_CertifyX509 // Command must be enabled
 
-#ifndef _Certify_X509_FP_H_
-#define _Certify_X509_FP_H_
+#ifndef _CERTIFYX509_FP_H_
+#define _CERTIFYX509_FP_H_
 
 // Input structure definition
 typedef struct {
     TPMI_DH_OBJECT              objectHandle;
     TPMI_DH_OBJECT              signHandle;
-    TPM2B_DATA                  qualifyingData;
+    TPM2B_DATA                  reserved;
     TPMT_SIG_SCHEME             inScheme;
     TPM2B_MAX_BUFFER            partialCertificate;
 } CertifyX509_In;
@@ -61,7 +61,7 @@ typedef struct {
 // Response code modifiers
 #define RC_CertifyX509_objectHandle (TPM_RC_H + TPM_RC_1)
 #define RC_CertifyX509_signHandle   (TPM_RC_H + TPM_RC_2)
-#define RC_CertifyX509_qualifyingData   (TPM_RC_P + TPM_RC_1)
+#define RC_CertifyX509_reserved (TPM_RC_P + TPM_RC_1)
 #define RC_CertifyX509_inScheme (TPM_RC_P + TPM_RC_2)
 #define RC_CertifyX509_partialCertificate   (TPM_RC_P + TPM_RC_3)
 
@@ -72,5 +72,5 @@ TPM2_CertifyX509(
     CertifyX509_Out             *out
 );
 
-#endif  // _Certify_X509_FP_H_
+#endif  // _CERTIFYX509_FP_H_
 #endif  // CC_CertifyX509

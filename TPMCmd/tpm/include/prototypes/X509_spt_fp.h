@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Apr  2, 2019  Time: 11:00:49AM
+ *  Date: Sep  5, 2019  Time: 12:57:48AM
  */
 
 #ifndef    _X509_SPT_FP_H_
@@ -106,6 +106,7 @@ X509AddPublicKey(
 );
 
 //*** X509PushAlgorithmIdentifierSequence()
+// The function adds the algorithm identifier sequence.
 //  Return Type: INT16
 //      > 0         number of bytes added
 //     == 0         failure
