@@ -178,7 +178,7 @@ X509ProcessExtensions(
         return TPM_RCS_VALUE;
 
     // Get the keyUsage extension. This one is required
-    if(X509FindExtensionByOID(&ctx, &extensionCtx, OID_KEY_USAGE_EXTENSTION) &&
+    if(X509FindExtensionByOID(&ctx, &extensionCtx, OID_KEY_USAGE_EXTENSION) &&
         X509GetExtensionBits(&extensionCtx, &value))
     {
         x509KeyUsageUnion   keyUsage;

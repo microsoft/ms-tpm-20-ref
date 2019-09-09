@@ -87,8 +87,8 @@ typedef union x509KeyUsageUnion {
 
 // This is the DER-encoded value for the Key Usage OID  (2.5.29.15). This is the
 // full OID, not just the numeric value
-#define OID_KEY_USAGE_EXTENSTION_VALUE  0x06, 0x03, 0x55, 0x1D, 0x0F
-MAKE_OID(_KEY_USAGE_EXTENSTION);
+#define OID_KEY_USAGE_EXTENSION_VALUE  0x06, 0x03, 0x55, 0x1D, 0x0F
+MAKE_OID(_KEY_USAGE_EXTENSION);
   
 // This is the DER-encoded value for the TCG-defined TPMA_OBJECT OID
 // (2.23.133.10.1.1.1)
