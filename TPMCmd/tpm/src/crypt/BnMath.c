@@ -556,7 +556,7 @@ BnGetRandomBits(
     {
         if(BnFrom2B(n, &large.b) != NULL)
         {
-            if(BnMaskBits(n, bits))
+            if(BnMaskBits(n, (crypt_uword_t)bits))
                 return TRUE;
         }
     }

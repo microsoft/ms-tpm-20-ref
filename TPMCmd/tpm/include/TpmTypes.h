@@ -1173,11 +1173,12 @@ typedef UINT32                                  TPMA_X509_KEY_USAGE;
              crlsign,          keycertsign,      keyagreement,                     \
              dataencipherment, keyencipherment,  nonrepudiation,                   \
              digitalsignature)                                                     \
-            {(decipheronly << 23)     + (encipheronly << 24)     +                 \
+            {(unsigned)(                                                           \
+             (decipheronly << 23)     + (encipheronly << 24)     +                 \
              (crlsign << 25)          + (keycertsign << 26)      +                 \
              (keyagreement << 27)     + (dataencipherment << 28) +                 \
              (keyencipherment << 29)  + (nonrepudiation << 30)   +                 \
-             (digitalsignature << 31)}
+             (digitalsignature << 31))}
 #endif // USE_BIT_FIELD_STRUCTURES
 
 typedef BYTE                TPMI_YES_NO;            // Table 2:40  /* Interface */
