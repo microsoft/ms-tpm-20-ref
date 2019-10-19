@@ -101,9 +101,6 @@
 #ifndef FIELD_UPGRADE_IMPLEMENTED
 #define FIELD_UPGRADE_IMPLEMENTED       NO
 #endif
-#ifndef RADIX_BITS
-#define RADIX_BITS                      32
-#endif
 #ifndef HASH_ALIGNMENT
 #define HASH_ALIGNMENT                  4
 #endif

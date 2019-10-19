@@ -98,15 +98,15 @@ TpmSizeChecks(
             }
         }
 #if TABLE_DRIVEN_MARSHAL
-        printf("sizeof(MarshalData) = %d\n", sizeof(MarshalData_st));
+        printf("sizeof(MarshalData) = %zu\n", sizeof(MarshalData_st));
 #endif
 
-        printf("Size of OBJECT = %d\n", sizeof(OBJECT));
-        printf("Size of components in TPMT_SENSITIVE = %d\n", sizeof(TPMT_SENSITIVE));
-        printf("    TPMI_ALG_PUBLIC                 %d\n", sizeof(TPMI_ALG_PUBLIC));
-        printf("    TPM2B_AUTH                      %d\n", sizeof(TPM2B_AUTH));
-        printf("    TPM2B_DIGEST                    %d\n", sizeof(TPM2B_DIGEST));
-        printf("    TPMU_SENSITIVE_COMPOSITE        %d\n",
+        printf("Size of OBJECT = %zu\n", sizeof(OBJECT));
+        printf("Size of components in TPMT_SENSITIVE = %zu\n", sizeof(TPMT_SENSITIVE));
+        printf("    TPMI_ALG_PUBLIC                 %zu\n", sizeof(TPMI_ALG_PUBLIC));
+        printf("    TPM2B_AUTH                      %zu\n", sizeof(TPM2B_AUTH));
+        printf("    TPM2B_DIGEST                    %zu\n", sizeof(TPM2B_DIGEST));
+        printf("    TPMU_SENSITIVE_COMPOSITE        %zu\n",
                sizeof(TPMU_SENSITIVE_COMPOSITE));
 
         // Make sure that the size of the context blob is large enough for the largest
