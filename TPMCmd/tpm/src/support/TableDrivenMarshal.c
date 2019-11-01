@@ -425,7 +425,7 @@ Unmarshal(
                                     buffer, size, &mask)))
             {
                 if((mask & amt->attributeMask) != 0)
-                    result = TPM_RC_ATTRIBUTES;
+                    result = TPM_RC_RESERVED_BITS;
             }
             break;
         }
