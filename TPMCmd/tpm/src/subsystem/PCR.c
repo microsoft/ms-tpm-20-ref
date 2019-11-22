@@ -78,6 +78,7 @@ static const PCR_Attributes s_initAttributes[] =
 // This function indicates if a PCR belongs to a group that requires an authValue
 // in order to modify the PCR.  If it does, 'groupIndex' is set to value of
 // the group index.  This feature of PCR is decided by the platform specification.
+//
 //  Return Type: BOOL
 //      TRUE(1)         PCR belongs an authorization group
 //      FALSE(0)        PCR does not belong an authorization group
@@ -112,9 +113,10 @@ PCRBelongsAuthGroup(
 // authorization in order to modify the PCR.  If it does, 'groupIndex' is set
 // to value of the group index.  This feature of PCR is decided by the platform
 // specification.
+//
 //  Return Type: BOOL
-//      TRUE(1)         PCR belongs a policy group
-//      FALSE(0)        PCR does not belong a policy group
+//      TRUE(1)         PCR belongs to a policy group
+//      FALSE(0)        PCR does not belong to a policy group
 BOOL
 PCRBelongsPolicyGroup(
     TPMI_DH_PCR      handle,        // IN: handle of PCR
@@ -140,9 +142,10 @@ PCRBelongsPolicyGroup(
 
 //*** PCRBelongsTCBGroup()
 // This function indicates if a PCR belongs to the TCB group.
+//
 //  Return Type: BOOL
-//      TRUE(1)         PCR belongs to TCB group
-//      FALSE(0)        PCR does not belong to TCB group
+//      TRUE(1)         PCR belongs to a TCB group
+//      FALSE(0)        PCR does not belong to a TCB group
 static BOOL
 PCRBelongsTCBGroup(
     TPMI_DH_PCR      handle         // IN: handle of PCR
@@ -162,8 +165,9 @@ PCRBelongsTCBGroup(
 
 //*** PCRPolicyIsAvailable()
 // This function indicates if a policy is available for a PCR.
+//
 //  Return Type: BOOL
-//      TRUE(1)         the PCR should be authorized by policy
+//      TRUE(1)         the PCR may be authorized by policy
 //      FALSE(0)        the PCR does not allow policy
 BOOL
 PCRPolicyIsAvailable(
@@ -268,6 +272,7 @@ PCRSimStart(
 //*** GetSavedPcrPointer()
 // This function returns the address of an array of state saved PCR based
 // on the hash algorithm.
+//
 //  Return Type: BYTE *
 //      NULL            no such algorithm
 //      != NULL         pointer to the 0th byte of the 0th PCR
@@ -348,6 +353,7 @@ PcrIsAllocated(
 //*** GetPcrPointer()
 // This function returns the address of an array of PCR based on the
 // hash algorithm.
+//
 //  Return Type: BYTE *
 //      NULL            no such algorithm
 //      != NULL         pointer to the 0th byte of the 0th PCR
@@ -399,6 +405,7 @@ GetPcrPointer(
 //*** IsPcrSelected()
 // This function indicates if an indicated PCR number is selected by the bit map in
 // 'selection'.
+//
 //  Return Type: BOOL
 //      TRUE(1)         PCR is selected
 //      FALSE(0)        PCR is not selected
@@ -511,7 +518,7 @@ PCRStartup(
 
     g_pcrReConfig = FALSE;
 
-    // Don't test for SU_RESET because that should be the default when nothing 
+    // Don't test for SU_RESET because that should be the default when nothing
     // else is selected
     if(type != SU_RESUME && type != SU_RESTART)
     {
@@ -598,7 +605,7 @@ PCRStateSave(
     UINT32           saveIndex = 0;
 
     // if state save CLEAR, nothing to be done.  Return here
-    if(type == TPM_SU_CLEAR) 
+    if(type == TPM_SU_CLEAR)
         return;
 
     // Copy PCR values to the structure that should be saved to NV
@@ -689,7 +696,7 @@ PCRIsResetAllowed(
 //*** PCRChanged()
 // This function checks a PCR handle to see if the attributes for the PCR are set
 // so that any change to the PCR causes an increment of the pcrCounter. If it does,
-// then the function increments the counter. Will also bump the counter if the 
+// then the function increments the counter. Will also bump the counter if the
 // handle is zero which means that PCR 0 can not be in the TCB group. Bump on zero
 // is used by TPM2_Clear().
 void

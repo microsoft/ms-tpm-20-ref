@@ -59,6 +59,7 @@
 //
 // Note: 'toTest' will only ever have bits set for implemented algorithms but 'alg'
 // can be anything.
+//
 //  Return Type: TPM_RC
 //      TPM_RC_CANCELED     test was canceled
 LIB_EXPORT

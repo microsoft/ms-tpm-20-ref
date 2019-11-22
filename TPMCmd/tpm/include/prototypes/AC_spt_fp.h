@@ -49,6 +49,7 @@ AcToCapabilities(
 
 //*** AcIsAccessible()
 // Function to determine if an AC handle references an actual AC
+//
 //  Return Type: BOOL
 BOOL
 AcIsAccessible(
@@ -56,7 +57,8 @@ AcIsAccessible(
 );
 
 //*** AcCapabilitiesGet()
-// This function returns a list of capabilities associated with an AC
+// This function returns a list of capabilities associated with an AC.
+//
 //  Return Type: TPMI_YES_NO
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
@@ -69,6 +71,7 @@ AcCapabilitiesGet(
 
 //*** AcSendObject()
 // Stub to handle sending of an AC object
+//
 //  Return Type: TPM_RC
 TPM_RC
 AcSendObject(

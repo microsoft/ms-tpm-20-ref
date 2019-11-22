@@ -41,14 +41,14 @@
 // deterministic values.
 //
 // A debug mode is available that allows the random numbers generated for TPM.lib
-// to be repeated during runs of the simulator. The switch for it is in 
+// to be repeated during runs of the simulator. The switch for it is in
 // TpmBuildSwitches.h. It is USE_DEBUG_RNG.
 //
 //
-// This is the implementation layer of CTR DRGB mechanism as defined in SP800-90A 
-// and the functions are organized as closely as practical to the organization in 
-// SP800-90A. It is intended to be compiled as a separate module that is linked 
-// with a secure application so that both reside inside the same boundary 
+// This is the implementation layer of CTR DRGB mechanism as defined in SP800-90A
+// and the functions are organized as closely as practical to the organization in
+// SP800-90A. It is intended to be compiled as a separate module that is linked
+// with a secure application so that both reside inside the same boundary
 // [SP 800-90A 8.5]. The secure application in particular manages the accesses
 // protected storage for the state of the DRBG instantiations, and supplies the
 // implementation functions here with a valid pointer to the working state of the
@@ -76,16 +76,16 @@
 #include    "PRNG_TestVectors.h"
 
 const BYTE DRBG_NistTestVector_Entropy[] = {DRBG_TEST_INITIATE_ENTROPY};
-const BYTE DRBG_NistTestVector_GeneratedInterm[] = 
+const BYTE DRBG_NistTestVector_GeneratedInterm[] =
                                 {DRBG_TEST_GENERATED_INTERM};
 
-const BYTE DRBG_NistTestVector_EntropyReseed[] = 
+const BYTE DRBG_NistTestVector_EntropyReseed[] =
                                 {DRBG_TEST_RESEED_ENTROPY};
 const BYTE DRBG_NistTestVector_Generated[] = {DRBG_TEST_GENERATED};
 
 //** Derivation Functions
 //*** Description
-// The functions in this section are used to reduce the personalization input values 
+// The functions in this section are used to reduce the personalization input values
 // to make them usable as input for reseeding and instantiation. The overall
 // behavior is intended to produce the same results as described in SP800-90A,
 // section 10.4.2 "Derivation Function Using a Block Cipher Algorithm
@@ -250,6 +250,7 @@ DfBuffer(
 // (DRBG_GetEntropy32()).
 // This function is only used during instantiation of the DRBG for
 // manufacturing and on each start-up after an non-orderly shutdown.
+//
 //  Return Type: BOOL
 //      TRUE(1)         requested entropy returned
 //      FALSE(0)        entropy Failure
@@ -398,7 +399,7 @@ EncryptDRBG(
 // to complete the encryption of 'providedData'. This works because
 // the IV is the last thing that gets encrypted.
 //
-static BOOL 
+static BOOL
 DRBG_Update(
     DRBG_STATE          *drbgState,     // IN:OUT state to update
     DRBG_KEY_SCHEDULE   *keySchedule,   // IN: the key schedule (optional)
@@ -443,6 +444,7 @@ DRBG_Update(
 // This function is used when reseeding of the DRBG is required. If
 // entropy is provided, it is used in lieu of using hardware entropy.
 // Note: the provided entropy must be the required size.
+//
 //  Return Type: BOOL
 //      TRUE(1)         reseed succeeded
 //      FALSE(0)        reseed failed, probably due to the entropy generation
@@ -479,7 +481,8 @@ DRBG_Reseed(
 }
 
 //*** DRBG_SelfTest()
-// This is run when the DRBG is instantiated and at startup
+// This is run when the DRBG is instantiated and at startup.
+//
 //  Return Type: BOOL
 //      TRUE(1)         test OK
 //      FALSE(0)        test failed
@@ -551,11 +554,12 @@ DRBG_SelfTest(
 //** Public Interface
 //*** Description
 // The functions in this section are the interface to the RNG. These
-// are the functions that are used by TPM.lib. 
+// are the functions that are used by TPM.lib.
 
 //*** CryptRandomStir()
 // This function is used to cause a reseed. A DRBG_SEED amount of entropy is
 // collected from the hardware and then additional data is added.
+//
 //  Return Type: TPM_RC
 //      TPM_RC_NO_RESULT        failure of the entropy generator
 LIB_EXPORT TPM_RC
@@ -564,7 +568,7 @@ CryptRandomStir(
     BYTE            *additionalData
     )
 {
-#if !USE_DEBUG_RNG 
+#if !USE_DEBUG_RNG
     DRBG_SEED        tmpBuf;
     DRBG_SEED        dfResult;
 //
@@ -578,7 +582,7 @@ CryptRandomStir(
 
     return TPM_RC_SUCCESS;
 
-#else 
+#else
     // If doing debug, use the input data as the initial setting for the RNG state
     // so that the test can be reset at any time.
     // Note: If this is called with a data size of 0 or less, nothing happens. The
@@ -587,11 +591,11 @@ CryptRandomStir(
     // inadvertent programming errors from screwing things up. This doesn't use an
     // pAssert() because the non-debug version of this function will accept these
     // parameters as meaning that there is no additionalData and only hardware
-    // entropy is used. 
+    // entropy is used.
     if((additionalDataSize > 0) && (additionalData != NULL))
     {
         memset(drbgDefault.seed.bytes, 0, sizeof(drbgDefault.seed.bytes));
-        memcpy(drbgDefault.seed.bytes, additionalData, 
+        memcpy(drbgDefault.seed.bytes, additionalData,
                MIN(additionalDataSize, sizeof(drbgDefault.seed.bytes)));
     }
     drbgDefault.reseedCounter = 1;
@@ -642,7 +646,7 @@ DRBG_InstantiateSeededKdf(
 
 //*** DRBG_AdditionalData()
 // Function to reseed the DRBG with additional entropy. This is normally called
-// before computing the protection value of a primary key in the Endorsement 
+// before computing the protection value of a primary key in the Endorsement
 // hierarchy.
 LIB_EXPORT void
 DRBG_AdditionalData(
@@ -663,6 +667,7 @@ DRBG_AdditionalData(
 // This function is used to instantiate a random number generator from seed values.
 // The nominal use of this generator is to create sequences of pseudo-random
 // numbers from a seed value.
+//
 // Return Type: TPM_RC
 //  TPM_RC_FAILURE      DRBG self-test failure
 LIB_EXPORT TPM_RC
@@ -736,6 +741,7 @@ CryptRandStartup(
 
 //**** CryptRandInit()
 // This function is called when _TPM_Init is being processed.
+//
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure
@@ -755,7 +761,7 @@ CryptRandInit(
 // If 'random' is not NULL, then 'randomSize' bytes of random values are generated.
 // If 'random' is NULL or 'randomSize' is zero, then the function returns
 // zero without generating any bits or updating the reseed counter.
-// This function returns the number of bytes produced which could be less than the 
+// This function returns the number of bytes produced which could be less than the
 // number requested if the request is too large ("too large" is implementation
 // dependent.)
 LIB_EXPORT UINT16
@@ -770,7 +776,7 @@ DRBG_Generate(
     if(random == NULL)
         return 0;
 
-    // If the caller used a KDF state, generate a sequence from the KDF not to 
+    // If the caller used a KDF state, generate a sequence from the KDF not to
     // exceed the limit.
     if(state->kdf.magic == KDF_MAGIC)
     {
@@ -778,7 +784,7 @@ DRBG_Generate(
         UINT32           counter = (UINT32)kdf->counter;
         INT32            bytesLeft = randomSize;
 //
-        // If the number of bytes to be returned would put the generator 
+        // If the number of bytes to be returned would put the generator
         // over the limit, then return 0
         if((((kdf->counter * kdf->digestSize) + randomSize) * 8) > kdf->limit)
             return 0;
@@ -794,13 +800,13 @@ DRBG_Generate(
                 // Don't use more of the residual than will fit or more than are
                 // available
                 size = MIN(kdf->residual.t.size, bytesLeft);
-                
+
                 // Copy some or all of the residual to the output. The residual is
                 // at the end of the buffer. The residual might be a full buffer.
                 MemoryCopy(random,
                            &kdf->residual.t.buffer
                            [kdf->digestSize - kdf->residual.t.size], size);
-                
+
                 // Advance the buffer pointer
                 random += size;
 
@@ -809,11 +815,11 @@ DRBG_Generate(
 
                 // And reduce the residual size appropriately
                 kdf->residual.t.size -= (UINT16)size;
-            } 
+            }
             else
             {
                 UINT16           blocks = (UINT16)(bytesLeft / kdf->digestSize);
-// 
+//
                 // Get the number of required full blocks
                 if(blocks > 0)
                 {
@@ -898,6 +904,7 @@ DRBG_Generate(
 // This is called when a the TPM DRBG is to be instantiated. This is
 // called to instantiate a DRBG used by the TPM for normal
 // operations.
+//
 //  Return Type: BOOL
 //      TRUE(1)         instantiation succeeded
 //      FALSE(0)        instantiation failed

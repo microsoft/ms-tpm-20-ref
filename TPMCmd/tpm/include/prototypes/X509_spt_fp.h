@@ -34,14 +34,14 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Sep  5, 2019  Time: 12:57:48AM
+ *  Date: Nov 14, 2019  Time: 05:57:02PM
  */
 
 #ifndef    _X509_SPT_FP_H_
 #define    _X509_SPT_FP_H_
 
-//*** X509FindExtensionOID()
-// This will search a list of X508 extensions to find an extension with the
+//*** X509FindExtensionByOID()
+// This will search a list of X509 extensions to find an extension with the
 // requested OID. If the extension is found, the output context ('ctx') is set up
 // to point to the OID in the extension.
 //  Return Type: BOOL

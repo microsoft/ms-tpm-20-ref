@@ -162,6 +162,7 @@ static const ALGORITHM    s_algorithms[] =
 //** AlgorithmCapGetImplemented()
 // This function is used by TPM2_GetCapability() to return a list of the
 // implemented algorithms.
+//
 //  Return Type: TPMI_YES_NO
 //  YES        more algorithms to report
 //  NO         no more algorithms to report

@@ -43,7 +43,7 @@
 //  Return Type: TPM_RC
 //      TPM_RC_ATTRIBUTES       'decrypt' is not SET or if 'restricted' is SET in
 //                              the key referenced by 'keyHandle'
-//      TPM_RC_BINDING          The public an private parts of the key are not
+//      TPM_RC_BINDING          The public and private parts of the key are not
 //                              properly bound
 //      TPM_RC_KEY              'keyHandle' does not reference an unrestricted
 //                              decrypt key

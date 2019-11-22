@@ -44,9 +44,10 @@
 // This function indicates if a PCR belongs to a group that requires an authValue
 // in order to modify the PCR.  If it does, 'groupIndex' is set to value of
 // the group index.  This feature of PCR is decided by the platform specification.
+//
 //  Return Type: BOOL
-//      TRUE(1)         PCR belongs an authorization group
-//      FALSE(0)        PCR does not belong an authorization group
+//      TRUE(1)         PCR belongs to an authorization group
+//      FALSE(0)        PCR does not belong to an authorization group
 BOOL
 PCRBelongsAuthGroup(
     TPMI_DH_PCR      handle,        // IN: handle of PCR
@@ -62,9 +63,10 @@ PCRBelongsAuthGroup(
 // authorization in order to modify the PCR.  If it does, 'groupIndex' is set
 // to value of the group index.  This feature of PCR is decided by the platform
 // specification.
+//
 //  Return Type: BOOL
-//      TRUE(1)         PCR belongs a policy group
-//      FALSE(0)        PCR does not belong a policy group
+//      TRUE(1)         PCR belongs to a policy group
+//      FALSE(0)        PCR does not belong to a policy group
 BOOL
 PCRBelongsPolicyGroup(
     TPMI_DH_PCR      handle,        // IN: handle of PCR
@@ -76,8 +78,9 @@ PCRBelongsPolicyGroup(
 
 //*** PCRPolicyIsAvailable()
 // This function indicates if a policy is available for a PCR.
+//
 //  Return Type: BOOL
-//      TRUE(1)         the PCR should be authorized by policy
+//      TRUE(1)         the PCR may be authorized by policy
 //      FALSE(0)        the PCR does not allow policy
 BOOL
 PCRPolicyIsAvailable(

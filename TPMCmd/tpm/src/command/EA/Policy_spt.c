@@ -70,9 +70,9 @@ PolicyParameterChecks(
         RETURN_IF_NV_IS_NOT_AVAILABLE;
 
         // if the time has already passed or the time epoch has changed then the
-        // time value is no longer good. 
-        if((authTimeout < g_time) 
-           || (session->epoch != g_timeEpoch)) 
+        // time value is no longer good.
+        if((authTimeout < g_time)
+           || (session->epoch != g_timeEpoch))
             return TPM_RCS_EXPIRED + blameExpiration;
     }
     // If the cpHash is present, then check it
@@ -95,6 +95,7 @@ PolicyParameterChecks(
 // Update policy hash
 //      Update the policyDigest in policy session by extending policyRef and
 //      objectName to it. This will also update the cpHash if it is present.
+//
 //  Return Type: void
 void
 PolicyContextUpdate(
@@ -110,10 +111,10 @@ PolicyContextUpdate(
 
     // Start hash
    CryptHashStart(&hashState, session->authHashAlg);
-    
+
 
     // policyDigest size should always be the digest size of session hash algorithm.
-    pAssert(session->u2.policyDigest.t.size 
+    pAssert(session->u2.policyDigest.t.size
             == CryptHashGetDigestSize(session->authHashAlg));
 
     // add old digest
@@ -209,10 +210,12 @@ PolicyDigestClear(
     )
 {
     session->u2.policyDigest.t.size = CryptHashGetDigestSize(session->authHashAlg);
-    MemorySet(session->u2.policyDigest.t.buffer, 0, 
+    MemorySet(session->u2.policyDigest.t.buffer, 0,
               session->u2.policyDigest.t.size);
 }
 
+//*** PolicySptCheckCondition()
+// Checks to see if the condition in the policy is satisfied.
 BOOL
 PolicySptCheckCondition(
     TPM_EO          operation,

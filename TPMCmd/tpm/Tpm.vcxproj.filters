@@ -1,0 +1,1383 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\support\TpmFail.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\events\_TPM_Hash_Data.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\events\_TPM_Hash_End.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\events\_TPM_Hash_Start.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\events\_TPM_Init.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\AlgorithmCap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\subsystem\CommandAudit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\CommandCodeAttributes.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\subsystem\DA.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\Entity.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\ExecCommand.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\Global.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\Handle.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\subsystem\Hierarchy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\IoBuffers.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\Locality.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\Manufacture.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\subsystem\NvDynamic.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\subsystem\NvReserved.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\subsystem\Object.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\subsystem\PCR.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\Power.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\subsystem\PP.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\PropertyCap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\subsystem\Session.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\SessionProcess.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\subsystem\Time.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Asymmetric\ZGen_2Phase.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Object\ActivateCredential.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Attestation\Attest_spt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Attestation\Certify.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Attestation\CertifyCreation.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Hierarchy\ChangeEPS.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Hierarchy\ChangePPS.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Hierarchy\Clear.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Hierarchy\ClearControl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\ClockTimer\ClockRateAdjust.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\ClockTimer\ClockSet.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Ecdaa\Commit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Context\Context_spt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Context\ContextLoad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Context\ContextSave.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Object\Create.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Hierarchy\CreatePrimary.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\DA\DictionaryAttackLockReset.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\DA\DictionaryAttackParameters.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Duplication\Duplicate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Asymmetric\EC_Ephemeral.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Asymmetric\ECC_Parameters.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Asymmetric\ECDH_KeyGen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Asymmetric\ECDH_ZGen.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Symmetric\EncryptDecrypt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\HashHMAC\EventSequenceComplete.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Context\EvictControl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\FieldUpgrade\FieldUpgradeData.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\FieldUpgrade\FieldUpgradeStart.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\FieldUpgrade\FirmwareRead.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Context\FlushContext.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Capability\GetCapability.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Attestation\GetCommandAuditDigest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Random\GetRandom.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Attestation\GetSessionAuditDigest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Testing\GetTestResult.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Attestation\GetTime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Symmetric\Hash.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\HashHMAC\HashSequenceStart.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Hierarchy\HierarchyChangeAuth.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Hierarchy\HierarchyControl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Symmetric\HMAC.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\HashHMAC\HMAC_Start.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Duplication\Import.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Testing\IncrementalSelfTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Object\Load.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Object\LoadExternal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Object\MakeCredential.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_Certify.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_ChangeAuth.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_DefineSpace.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_Extend.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_GlobalWriteLock.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_Increment.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_Read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_ReadLock.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_ReadPublic.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_SetBits.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_spt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_UndefineSpace.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_UndefineSpaceSpecial.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_Write.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\NVStorage\NV_WriteLock.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Object\Object_spt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Object\ObjectChangeAuth.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\PCR\PCR_Allocate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\PCR\PCR_Event.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\PCR\PCR_Extend.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\PCR\PCR_Read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\PCR\PCR_Reset.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\PCR\PCR_SetAuthPolicy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\PCR\PCR_SetAuthValue.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\Policy_spt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyAuthorize.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyAuthValue.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyCommandCode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyCounterTimer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyCpHash.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyDuplicationSelect.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyGetDigest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyLocality.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyNameHash.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyNV.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyNvWritten.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyOR.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyPassword.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyPCR.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyPhysicalPresence.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Session\PolicyRestart.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicySecret.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicySigned.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyTicket.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Misc\PP_Commands.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Attestation\Quote.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\ClockTimer\ReadClock.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Object\ReadPublic.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Duplication\Rewrap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Asymmetric\RSA_Decrypt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Asymmetric\RSA_Encrypt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Testing\SelfTest.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\HashHMAC\SequenceComplete.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\HashHMAC\SequenceUpdate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Misc\SetAlgorithmSet.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\CommandAudit\SetCommandCodeAuditStatus.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Hierarchy\SetPrimaryPolicy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Startup\Shutdown.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Signature\Sign.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Session\StartAuthSession.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Startup\Startup.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Random\StirRandom.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Capability\TestParms.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Object\Unseal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Vendor\Vendor_TCG_Test.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Signature\VerifySignature.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\Bits.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\MathOnByteBuffers.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\Memory.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyTemplate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\Response.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Object\CreateLoaded.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\BnConvert.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\BnMath.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\BnMemory.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptEccKeyExchange.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptEccMain.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptEccSignature.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptHash.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptPrime.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptRand.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptRsa.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptSelfTest.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptSym.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptUtil.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\ossl\TpmToOsslMath.c">
+      <Filter>Source Files\Crypt\ossl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\ossl\TpmToOsslSupport.c">
+      <Filter>Source Files\Crypt\ossl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\PrimeData.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\AlgorithmTests.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main\CommandDispatcher.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\RsaKeyCache.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\Marshal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptDes.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\ossl\TpmToOsslDesSupport.c">
+      <Filter>Source Files\Crypt\ossl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\ResponseCodeProcessing.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\EA\PolicyAuthorizeNV.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\Power.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Symmetric\EncryptDecrypt2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Symmetric\EncryptDecrypt_spt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\TpmSizeChecks.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptPrimeSieve.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\Ticket.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\AttachedComponent\AC_GetCapability.c">
+      <Filter>Source Files\AttachedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\AttachedComponent\AC_Send.c">
+      <Filter>Source Files\AttachedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\AttachedComponent\Policy_AC_SendSelect.c">
+      <Filter>Source Files\AttachedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\AttachedComponent\AC_spt.c">
+      <Filter>Source Files\AttachedComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Symmetric\MAC.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptSmac.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\HashHMAC\MAC_Start.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptCmac.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\CryptEccData.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Attestation\CertifyX509.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\X509\X509_spt.c">
+      <Filter>Source Files\X509</Filter>
+    </ClCompile>
+    <ClCompile Include="src\X509\X509_RSA.c">
+      <Filter>Source Files\X509</Filter>
+    </ClCompile>
+    <ClCompile Include="src\X509\X509_ECC.c">
+      <Filter>Source Files\X509</Filter>
+    </ClCompile>
+    <ClCompile Include="src\X509\TpmASN1.c">
+      <Filter>Source Files\X509</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\TableDrivenMarshal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\support\TableMarshalData.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\ClockTimer\ACT_SetTimeout.c">
+      <Filter>Source Files\ACT</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\ClockTimer\ACT_spt.c">
+      <Filter>Source Files\ACT</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\BaseTypes.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Capabilities.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Global.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GpMacros.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\InternalRoutines.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Tpm.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TPMB.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TpmBuildSwitches.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TpmError.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TpmTypes.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VendorString.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CommandAttributeData.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CommandDispatchData.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CommandDispatcher.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CompilerDependencies.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\HandleProcess.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\NV.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Commands.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CommandAttributes.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\swap.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\_TPM_Hash_Data_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\_TPM_Hash_End_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\_TPM_Hash_Start_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\_TPM_Init_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ActivateCredential_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\AlgorithmCap_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\AlgorithmTests_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Attest_spt_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Bits_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Certify_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CertifyCreation_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ChangeEPS_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ChangePPS_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Clear_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ClearControl_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ClockRateAdjust_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ClockSet_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CommandAudit_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CommandCodeAttributes_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CommandDispatcher_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CommandTiming_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Commit_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Context_spt_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ContextLoad_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ContextSave_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Create_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CreateLoaded_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CreatePrimary_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptDes_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptEccKeyExchange_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptEccMain_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptEccSignature_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptHash_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptPrime_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptPrimeSieve_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptRand_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptRsa_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptSelfTest_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptSym_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptUtil_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\DA_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\DictionaryAttackLockReset_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\DictionaryAttackParameters_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Duplicate_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\EC_Ephemeral_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ECC_Parameters_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ECDH_KeyGen_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ECDH_ZGen_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\EncryptDecrypt_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\EncryptDecrypt_spt_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\EncryptDecrypt2_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Entity_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\EventSequenceComplete_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\EvictControl_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ExecCommand_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\FieldUpgradeData_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\FieldUpgradeStart_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\FirmwareRead_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\FlushContext_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\GetCapability_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\GetCommandAuditDigest_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\GetRandom_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\GetSessionAuditDigest_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\GetTestResult_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\GetTime_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Global_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Handle_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Hash_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\HashSequenceStart_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Hierarchy_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\HierarchyChangeAuth_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\HierarchyControl_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\HMAC_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\HMAC_Start_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Import_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\IncrementalSelfTest_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\IoBuffers_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Load_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\LoadExternal_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Locality_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\MakeCredential_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Manufacture_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\MathOnByteBuffers_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Memory_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\MsBnMalloc_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_Certify_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_ChangeAuth_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_DefineSpace_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_Extend_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_GlobalWriteLock_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_Increment_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_Read_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_ReadLock_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_ReadPublic_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_SetBits_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_spt_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_UndefineSpace_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_UndefineSpaceSpecial_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_Write_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NV_WriteLock_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NvDynamic_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\NvReserved_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Object_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Object_spt_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ObjectChangeAuth_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PCR_Allocate_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PCR_Event_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PCR_Extend_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PCR_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PCR_Read_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PCR_Reset_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PCR_SetAuthPolicy_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PCR_SetAuthValue_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Policy_spt_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyAuthorize_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyAuthorizeNV_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyAuthValue_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyCommandCode_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyCounterTimer_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyCpHash_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyDuplicationSelect_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyGetDigest_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyLocality_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyNameHash_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyNV_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyNvWritten_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyOR_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyPassword_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyPCR_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyPhysicalPresence_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyRestart_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicySecret_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicySigned_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyTemplate_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PolicyTicket_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Power_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PP_Commands_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PP_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PrimeData_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\PropertyCap_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\QSEE_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Quote_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ReadClock_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ReadPublic_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Response_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ResponseCodeProcessing_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Rewrap_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\RSA_Decrypt_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\RSA_Encrypt_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\RsaKeyCache_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\SelfTest_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\SequenceComplete_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\SequenceUpdate_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Session_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\SessionProcess_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\SetAlgorithmSet_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\SetCommandCodeAuditStatus_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\SetPrimaryPolicy_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Shutdown_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Sign_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\StartAuthSession_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Startup_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\StirRandom_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TestParms_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Ticket_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Time_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmFail_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmSizeChecks_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToLtcDesSupport_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToLtcMath_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToLtcSupport_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToOsslDesSupport_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToOsslMath_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToOsslSupport_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Unseal_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Vendor_TCG_Test_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\VerifySignature_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\ZGen_2Phase_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CryptEcc.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\X509.h">
+      <Filter>Source Files\X509</Filter>
+    </ClInclude>
+    <ClInclude Include="include\X509_RSA.h">
+      <Filter>Source Files\X509</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OIDS.h">
+      <Filter>Source Files\X509</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CryptHash.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CryptRand.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CryptRsa.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CryptSym.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EccTestData.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\HashTestData.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\KdfTestData.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RsaTestData.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CryptTest.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\LibSupport.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Marshal_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PRNG_TestVectors.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SymmetricTest.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SymmetricTestData.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\BnConvert_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\BnMath_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\BnMemory_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BnValues.h">
+      <Filter>Headers\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\AC_GetCapability_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\AC_Send_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\AC_spt_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptCmac_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\CryptSmac_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\MAC_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\MAC_Start_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\Policy_AC_SendSelect_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\SMAC_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ltc\TpmToLtcSym.h">
+      <Filter>Headers\Crypt\ltc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ltc\TpmToLtcMath.h">
+      <Filter>Headers\Crypt\ltc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ltc\TpmToLtcHash.h">
+      <Filter>Headers\Crypt\ltc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ltc\LtcSettings.h">
+      <Filter>Headers\Crypt\ltc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ossl\TpmToOsslHash.h">
+      <Filter>Headers\Crypt\ossl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ossl\TpmToOsslMath.h">
+      <Filter>Headers\Crypt\ossl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ossl\TpmToOsslSym.h">
+      <Filter>Headers\Crypt\ossl</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wolf\TpmToWolfHash.h">
+      <Filter>Headers\Crypt\wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wolf\TpmToWolfMath.h">
+      <Filter>Headers\Crypt\wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wolf\TpmToWolfSym.h">
+      <Filter>Headers\Crypt\wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToWolfDesSupport_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToWolfSupport_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmToWolfMath_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TpmAlgorithmDefines.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TpmProfile.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Wolf\user_settings.h">
+      <Filter>Headers\Crypt\wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ACT.h">
+      <Filter>Source Files\ACT</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MinMax.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SupportLibraryFunctionPrototypes_fp.h">
+      <Filter>Source Files\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SelfTest.h">
+      <Filter>Source Files\Crypt</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0860d8a3-a60e-4ead-918e-79534b3c000d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Crypt">
+      <UniqueIdentifier>{0ac750c7-149f-40fc-9820-47287d744b3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Crypt\ltc">
+      <UniqueIdentifier>{be59b71d-f8f7-4132-80f5-e5f6f311614f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Crypt\ossl">
+      <UniqueIdentifier>{cdeea2ca-7d66-43fc-9431-4bb51e70e78e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{ef67ef8f-3c7e-492b-b8de-0fd83194ad1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\prototypes">
+      <UniqueIdentifier>{46a498d0-be4d-4034-b163-014a2ebcf2e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Crypt">
+      <UniqueIdentifier>{6170bedc-9916-44b4-a24b-340b04313b20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AttachedComponent">
+      <UniqueIdentifier>{c1608ff8-dc12-4101-8859-6d763377b840}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Crypt\ltc">
+      <UniqueIdentifier>{eb07d621-fe5c-415a-84f0-d0e4c68039ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Crypt\ossl">
+      <UniqueIdentifier>{1a979e04-0e58-4286-b6b0-52cb2b86d037}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Crypt\wolf">
+      <UniqueIdentifier>{17d101a1-3063-43f5-960b-b0df7b0950cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Crypt\wolf">
+      <UniqueIdentifier>{19c87ebb-c1f3-4521-a442-d9120957d238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\X509">
+      <UniqueIdentifier>{c0101f08-45d5-48bf-bc4d-a64e300da76d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ACT">
+      <UniqueIdentifier>{c4ec5a52-b2f4-4af2-a654-3116ed9da682}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 30, 2019  Time: 02:11:54PM
+ *  Date: Nov 14, 2019  Time: 05:57:02PM
  */
 
 #ifndef    _SESSION_FP_H_
@@ -66,7 +66,7 @@ SessionIsLoaded(
 // This function test a session handle references a saved session.  The handle
 // must have previously been checked to make sure that it is a valid handle for
 // an authorization session.
-// NOTE:    An password authorization does not have a session.
+// NOTE:    A password authorization does not have a session.
 //
 // This function requires that the handle be a valid session handle.
 //

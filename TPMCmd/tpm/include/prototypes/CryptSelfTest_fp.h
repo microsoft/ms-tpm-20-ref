@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Mar 28, 2019  Time: 08:25:19PM
+ *  Date: Nov 14, 2019  Time: 05:57:02PM
  */
 
 #ifndef    _CRYPT_SELF_TEST_FP_H_
@@ -79,8 +79,7 @@ CryptIncrementalSelfTest(
 
 //*** CryptInitializeToTest()
 // This function will initialize the data structures for testing all the
-// algorithms. This should not be called unless CryptAlgsSetImplemented() has
-// been called
+// algorithms.
 void
 CryptInitializeToTest(
     void

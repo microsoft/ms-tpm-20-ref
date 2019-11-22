@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Mar 28, 2019  Time: 08:25:18PM
+ *  Date: Nov 14, 2019  Time: 05:57:01PM
  */
 
 #ifndef    _OBJECT_SPT_FP_H_
@@ -88,7 +88,7 @@ CreateChecks(
 //                          with the scheme ID for keyed hash object
 //      TPM_RC_SYMMETRIC    a storage key with no symmetric algorithm specified; or
 //                          non-storage key with symmetric algorithm different from
-// ALG_NULL
+//                          TPM_ALG_NULL
 TPM_RC
 SchemeChecks(
     OBJECT          *parentObject,  // IN: parent (null if primary seed)
@@ -145,7 +145,7 @@ GetSeedForKDF(
 // It requires the sensitive data being marshaled to the outerBuffer, with the
 // leading bytes reserved for integrity hash.  If iv is used, iv space should
 // be reserved at the beginning of the buffer.  It assumes the sensitive data
-// starts at address (outerBuffer + integrity size @).
+// starts at address (outerBuffer + integrity size [+ iv size]).
 // This function performs:
 //  1. Add IV before sensitive area if required
 //  2. encrypt sensitive data, if iv is required, encrypt by iv.  otherwise,

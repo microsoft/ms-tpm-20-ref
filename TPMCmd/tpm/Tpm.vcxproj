@@ -813,6 +813,7 @@
     <ClInclude Include="include\ltc\TpmToLtcHash.h" />
     <ClInclude Include="include\ltc\TpmToLtcMath.h" />
     <ClInclude Include="include\ltc\TpmToLtcSym.h" />
+    <ClInclude Include="include\MinMax.h" />
     <ClInclude Include="include\NV.h" />
     <ClInclude Include="include\OIDS.h" />
     <ClInclude Include="include\ossl\TpmToOsslHash.h" />
