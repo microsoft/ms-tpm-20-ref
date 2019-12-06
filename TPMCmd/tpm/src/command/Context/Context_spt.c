@@ -80,15 +80,13 @@ ComputeContextProtectionKey(
 
     // Get sequence value in 2B format
     sequence2B.t.size = sizeof(contextBlob->sequence);
-    cAssert(sizeof(contextBlob->sequence) <= sizeof(sequence2B.t.buffer));
-    MemoryCopy(sequence2B.t.buffer, &contextBlob->sequence,
-               sizeof(contextBlob->sequence));
+    cAssert(sequence2B.t.size <= sizeof(sequence2B.t.buffer));
+    MemoryCopy(sequence2B.t.buffer, &contextBlob->sequence, sequence2B.t.size);
 
     // Get handle value in 2B format
     handle2B.t.size = sizeof(contextBlob->savedHandle);
-    cAssert(sizeof(contextBlob->savedHandle) <= sizeof(handle2B.t.buffer));
-    MemoryCopy(handle2B.t.buffer, &contextBlob->savedHandle,
-               sizeof(contextBlob->savedHandle));
+    cAssert(handle2B.t.size <= sizeof(handle2B.t.buffer));
+    MemoryCopy(handle2B.t.buffer, &contextBlob->savedHandle, handle2B.t.size);
 
     // Get the symmetric encryption key size
     symKey->t.size = CONTEXT_ENCRYPT_KEY_BYTES;

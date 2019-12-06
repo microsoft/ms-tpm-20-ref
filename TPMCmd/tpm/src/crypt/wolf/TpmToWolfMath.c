@@ -164,9 +164,9 @@ MathLibraryCompatibilityCheck(
     MP_INITIALIZED(wolfTemp, tpmTemp);
     (wolfTemp); // compiler warning
     // Make sure the values are consistent
-    cAssert(wolfTemp->used == (int)tpmTemp->size);
+    cAssert(wolfTemp->used * sizeof(fp_digit) == (int)tpmTemp->size * sizeof(crypt_uword_t));
     for(i = 0; i < tpmTemp->size; i++)
-        cAssert(wolfTemp->dp[i] == tpmTemp->d[i]);
+        cAssert(((crypt_uword_t*)wolfTemp->dp)[i] == tpmTemp->d[i]);
 }
 #endif
 

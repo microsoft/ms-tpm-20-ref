@@ -231,7 +231,7 @@
       <CompileAs>CompileAsC</CompileAs>
       <BrowseInformation>true</BrowseInformation>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4668;4710;4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>tpm.lib;platform.lib;Ws2_32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -262,7 +262,7 @@
       <CompileAs>CompileAsC</CompileAs>
       <BrowseInformation>true</BrowseInformation>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4668;4710;4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>tpm.lib;platform.lib;Ws2_32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -315,7 +315,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4668;4710;4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>tpm.lib;platform.lib;Ws2_32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -336,7 +336,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4668;4710;4711;4820;5045</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4668;4710;4711;4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>tpm.lib;platform.lib;Ws2_32.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>

@@ -280,7 +280,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\wolf;$(SolutionDir)..\external\wolfssl;$(SolutionDir)\wolfcrypt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LIBRARY_COMPATIBILITY_CHECK;HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COMPILER_CHECKS;LIBRARY_COMPATIBILITY_CHECK;HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -408,7 +408,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\wolf;$(SolutionDir)..\external\wolfssl;$(SolutionDir)\wolfcrypt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LIBRARY_COMPATIBILITY_CHECK;HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>COMPILER_CHECKS;LIBRARY_COMPATIBILITY_CHECK;HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
