@@ -43,7 +43,9 @@
 
 #include <openssl/evp.h>
 #include <openssl/sha.h>
+#if ALG_SM3_256
 #include <openssl/sm3.h>
+#endif
 #include <openssl/ossl_typ.h>
 
 
