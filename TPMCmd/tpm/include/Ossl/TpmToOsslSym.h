@@ -39,6 +39,8 @@
 // The support required of a library are a hash module, a block cipher module and
 // portions of a big number library.
 
+// All of the library-dependent headers should have the same guard to that only the
+// first one gets defined.
 #ifndef SYM_LIB_DEFINED
 #define SYM_LIB_DEFINED
 
@@ -46,20 +48,24 @@
 
 #include <openssl/aes.h>
 #include <openssl/des.h>
+#include <openssl/sm4.h>
+#include <openssl/camellia.h>
 #include <openssl/bn.h>
 #include <openssl/ossl_typ.h>
 
 //***************************************************************
-//** Links to the OpenSSL AES code
+//** Links to the OpenSSL symmetric algorithms.
 //***************************************************************
 
-#if ALG_SM4
-#error "SM4 is not available"
-#endif
-
-#if ALG_CAMELLIA
-#error "Camellia is not available"
-#endif
+// The Crypt functions that call the block encryption function use the parameters 
+// in the order:
+//  1) keySchedule
+//  2) in buffer
+//  3) out buffer
+// Since open SSL uses the order in encryptoCall_t above, need to swizzle the
+// values to the order required by the library.
+#define SWIZZLE(keySchedule, in, out)                                               \
+    (const BYTE *)(in), (BYTE *)(out), (void *)(keySchedule)
 
 // Define the order of parameters to the library functions that do block encryption
 // and decryption.
@@ -69,32 +75,21 @@ typedef void(*TpmCryptSetSymKeyCall_t)(
     void *keySchedule
     );
 
-// The Crypt functions that call the block encryption function use the parameters 
-// in the order:
-//  1) keySchedule
-//  2) in buffer
-//  3) out buffer
-// Since open SSL uses the order in encryptoCall_t above, need to swizzle the
-// values to the order required by the library.
-#define SWIZZLE(keySchedule, in, out)                                   \
-    (const BYTE *)(in), (BYTE *)(out), (void *)(keySchedule)
+#define SYM_ALIGNMENT   RADIX_BYTES
 
+//***************************************************************
+//** Links to the OpenSSL AES code
+//***************************************************************
 // Macros to set up the encryption/decryption key schedules
 //
 // AES:
-#define TpmCryptSetEncryptKeyAES(key, keySizeInBits, schedule)            \
+#define TpmCryptSetEncryptKeyAES(key, keySizeInBits, schedule)                      \
     AES_set_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleAES *)(schedule))
-#define TpmCryptSetDecryptKeyAES(key, keySizeInBits, schedule)            \
+#define TpmCryptSetDecryptKeyAES(key, keySizeInBits, schedule)                      \
     AES_set_decrypt_key((key), (keySizeInBits), (tpmKeyScheduleAES *)(schedule))
 
-// TDES:
-#define TpmCryptSetEncryptKeyTDES(key, keySizeInBits, schedule)            \
-    TDES_set_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES *)(schedule))
-#define TpmCryptSetDecryptKeyTDES(key, keySizeInBits, schedule)            \
-    TDES_set_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES *)(schedule))
-
 // Macros to alias encryption calls to specific algorithms. This should be used
-// sparingly. Currently, only used by CryptRand.c
+// sparingly. Currently, only used by CryptSym.c and CryptRand.c
 // 
 // When using these calls, to call the AES block encryption code, the caller 
 // should use:
@@ -104,15 +99,59 @@ typedef void(*TpmCryptSetSymKeyCall_t)(
 #define tpmKeyScheduleAES           AES_KEY
 
 
+//***************************************************************
+//** Links to the OpenSSL DES code
+//***************************************************************
+#if ALG_TDES
+#include "TpmToOsslDesSupport_fp.h"
+#endif
+
+#define TpmCryptSetEncryptKeyTDES(key, keySizeInBits, schedule)                     \
+    TDES_set_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES *)(schedule))
+#define TpmCryptSetDecryptKeyTDES(key, keySizeInBits, schedule)                     \
+    TDES_set_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES *)(schedule))
+
+// Macros to alias encryption calls to specific algorithms. This should be used
+// sparingly. Currently, only used by CryptRand.c
 #define TpmCryptEncryptTDES         TDES_encrypt
 #define TpmCryptDecryptTDES         TDES_decrypt 
 #define tpmKeyScheduleTDES          DES_key_schedule
 
-typedef union tpmCryptKeySchedule_t tpmCryptKeySchedule_t;
 
-#if ALG_TDES
-#include "TpmToOsslDesSupport_fp.h"
-#endif
+//***************************************************************
+//** Links to the OpenSSL SM4 code
+//***************************************************************
+// Macros to set up the encryption/decryption key schedules
+#define TpmCryptSetEncryptKeySM4(key, keySizeInBits, schedule)                      \
+    SM4_set_key((key), (tpmKeyScheduleSM4 *)(schedule))
+#define TpmCryptSetDecryptKeySM4(key, keySizeInBits, schedule)                      \
+    SM4_set_key((key), (tpmKeyScheduleSM4 *)(schedule))
+
+// Macros to alias encryption calls to specific algorithms. This should be used
+// sparingly.  
+#define TpmCryptEncryptSM4          SM4_encrypt
+#define TpmCryptDecryptSM4          SM4_decrypt
+#define tpmKeyScheduleSM4           SM4_KEY
+
+
+//***************************************************************
+//** Links to the OpenSSL CAMELLIA code
+//***************************************************************
+// Macros to set up the encryption/decryption key schedules
+#define TpmCryptSetEncryptKeyCAMELLIA(key, keySizeInBits, schedule)                 \
+    Camellia_set_key((key), (keySizeInBits), (tpmKeyScheduleCAMELLIA *)(schedule))
+#define TpmCryptSetDecryptKeyCAMELLIA(key, keySizeInBits, schedule)                 \
+    Camellia_set_key((key), (keySizeInBits), (tpmKeyScheduleCAMELLIA *)(schedule))
+
+// Macros to alias encryption calls to specific algorithms. This should be used
+// sparingly.  
+#define TpmCryptEncryptCAMELLIA          Camellia_encrypt
+#define TpmCryptDecryptCAMELLIA          Camellia_decrypt
+#define tpmKeyScheduleCAMELLIA           CAMELLIA_KEY
+
+// Forward reference 
+
+typedef union tpmCryptKeySchedule_t tpmCryptKeySchedule_t;
 
 // This definition would change if there were something to report
 #define SymLibSimulationEnd()

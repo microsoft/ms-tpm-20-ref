@@ -72,7 +72,7 @@ _plat__WasPowerLost(
     void
     )
 {
-    BOOL        retVal = s_powerLost;
+    int         retVal = s_powerLost;
     s_powerLost = FALSE;
     return retVal;
 }
@@ -106,7 +106,10 @@ _plat__Signal_PowerOff(
     )
 {
     // Prepare NV memory for power off
-    _plat__NVDisable();
+    _plat__NVDisable(0);
+
+    // Disable tick ACT tick processing
+    _plat__ACT_EnableTicks(FALSE);
 
     return;
 }

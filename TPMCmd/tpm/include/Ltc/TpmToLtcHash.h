@@ -47,6 +47,8 @@
 #  define LTC_NO_ASYMMETRIC
 #endif
 
+#define HASH_ALIGNMENT  RADIX_BYTES
+
 #include "LtcSettings.h"
 
 //***************************************************************

@@ -91,6 +91,15 @@ TPM2_SetPrimaryPolicy(
             NV_SYNC_PERSISTENT(lockoutPolicy);
             break;
 
+#define SET_ACT_POLICY(N)                                                           \
+        case TPM_RH_ACT_##N:                                                        \
+            go.ACT_##N.hashAlg = in->hashAlg;                                       \
+            go.ACT_##N.authPolicy = in->authPolicy;                                 \
+            g_clearOrderly = TRUE;                                                  \
+            break;
+			
+            FOR_EACH_ACT(SET_ACT_POLICY)
+
         default:
             FAIL(FATAL_ERROR_INTERNAL);
             break;

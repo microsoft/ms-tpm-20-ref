@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Mar 28, 2019  Time: 08:25:19PM
+ *  Date: Oct 24, 2019  Time: 11:37:07AM
  */
 
 #ifndef    _TPM_SIZE_CHECKS_FP_H_
@@ -47,7 +47,7 @@
 // vendor-specific values result in a consistent implementation. When possible,
 // the code contains #if to do compile-time checks. However, in some cases, the
 // values require the use of "sizeof()" and that can't be used in an #if.
-void
+BOOL
 TpmSizeChecks(
     void
 );

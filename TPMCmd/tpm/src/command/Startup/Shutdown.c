@@ -66,6 +66,9 @@ TPM2_Shutdown(
     // PCR private date state save
     PCRStateSave(in->shutdownType);
 
+    // Save the ACT state
+    ActShutdown(in->shutdownType);
+
     // Save RAM backed NV index data
     NvUpdateIndexOrderlyData();
 

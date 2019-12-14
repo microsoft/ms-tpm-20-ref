@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmDispatch; Version 4.0 July 8,2017
- *  Date: Sep  5, 2019  Time: 06:45:32PM
+ *  Date: Oct 19, 2019  Time: 11:50:10AM
  */
 
 // This macro is added just so that the code is only excessively long.
@@ -2033,6 +2033,18 @@ result = TPM2_Policy_AC_SendSelect (in);
 break;
 }
 #endif     // CC_Policy_AC_SendSelect
+#if CC_ACT_SetTimeout
+case TPM_CC_ACT_SetTimeout: {
+    ACT_SetTimeout_In *in = (ACT_SetTimeout_In *)
+            MemoryGetInBuffer(sizeof(ACT_SetTimeout_In));
+    in->actHandle = handles[0];
+    result = UINT32_Unmarshal(&in->startTimeout, paramBuffer, paramBufferSize);
+        EXIT_IF_ERROR_PLUS(RC_ACT_SetTimeout_startTimeout);
+    if(*paramBufferSize != 0) { result = TPM_RC_SIZE; goto Exit; }
+result = TPM2_ACT_SetTimeout (in);
+break;
+}
+#endif     // CC_ACT_SetTimeout
 #if CC_Vendor_TCG_Test
 case TPM_CC_Vendor_TCG_Test: {
     Vendor_TCG_Test_In *in = (Vendor_TCG_Test_In *)

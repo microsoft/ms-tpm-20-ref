@@ -35,18 +35,21 @@
 #include "Tpm.h"
 #include "CertifyX509_fp.h"
 #include "X509.h"
-#include "TpmASN1_fp.h"
+#include "TpmAsn1_fp.h"
 #include "X509_spt_fp.h"
 #include "Attest_spt_fp.h"
+#if CERTIFYX509_DEBUG
+#include "Platform_fp.h"
+#endif
 
 #if CC_CertifyX509 // Conditional expansion of this file
 
 /*(See part 3 specification)
-// Certify 
+// Certify using an X509-formatted certificate
 */
 // return type: TPM_RC
 //      TPM_RC_ATTRIBUTES       the attributes of 'objectHandle' are not compatible
-//                              with the KeyUsage or TPMA_OBJECT values in the 
+//                              with the KeyUsage or TPMA_OBJECT values in the
 //                              extensions fields
 //      TPM_RC_BINDING          the public and private portions of the key are not
 //                              properly bound.
@@ -56,7 +59,7 @@
 //                              or input scheme is not compatible with default
 //                              scheme, or the chosen scheme is not a valid
 //                              sign scheme
-//      TPM_RC_VALUE            most likely a problem with the format of 
+//      TPM_RC_VALUE            most likely a problem with the format of
 //                              'partialCertificate'
 TPM_RC
 TPM2_CertifyX509(
@@ -71,11 +74,11 @@ TPM2_CertifyX509(
     INT16                    length;        // length for a tagged element
     ASN1UnmarshalContext     ctx;
     ASN1MarshalContext       ctxOut;
-    // certTBS holds an array of pointers and lengths. Each entry references the 
-    // corresponding value in a TBSCertificate structure. For example, the 1th 
+    // certTBS holds an array of pointers and lengths. Each entry references the
+    // corresponding value in a TBSCertificate structure. For example, the 1th
     // element references the version number
     stringRef                certTBS[REF_COUNT] = {{0}};
-#define ALLOWED_SEQUENCES   (SUBJECT_PUBLIC_KEY_REF - SIGNATURE_REF) 
+#define ALLOWED_SEQUENCES   (SUBJECT_PUBLIC_KEY_REF - SIGNATURE_REF)
     stringRef                partial[ALLOWED_SEQUENCES] = {{0}};
     INT16                    countOfSequences = 0;
     INT16                    i;
@@ -112,13 +115,13 @@ TPM2_CertifyX509(
         return TPM_RCS_SIZE + RC_CertifyX509_partialCertificate;
 
     // This scans through the contents of the outermost SEQUENCE. This would be the
-    // 'issuer', 'validity', 'subject', 'issuerUniqueID' (optional), 
+    // 'issuer', 'validity', 'subject', 'issuerUniqueID' (optional),
     // 'subjectUniqueID' (optional), and 'extensions.'
     while(ctx.offset < ctx.size)
     {
         INT16           startOfElement = ctx.offset;
         //
-            // Read the next tag and length field. 
+            // Read the next tag and length field.
         length = ASN1NextTag(&ctx);
         if(length < 0)
             break;
@@ -143,7 +146,7 @@ TPM2_CertifyX509(
             return TPM_RCS_VALUE + RC_CertifyX509_partialCertificate;
     }
     // Make sure that we used all of the data and found at least the required
-    // number of elements. 
+    // number of elements.
     if((ctx.offset != ctx.size) || (countOfSequences < 3)
         || (countOfSequences > 4)
         || (certTBS[EXTENSIONS_REF].buf == NULL))
@@ -155,14 +158,14 @@ TPM2_CertifyX509(
 
     // If only three SEQUENCES, then the TPM needs to produce the signature algorithm.
     // See if it can
-    if((countOfSequences == 3) && 
+    if((countOfSequences == 3) &&
         (X509AddSigningAlgorithm(NULL, signKey, &in->inScheme) == 0))
             return TPM_RCS_SCHEME + RC_CertifyX509_signHandle;
 
     // Process the extensions
     result = X509ProcessExtensions(object, &certTBS[EXTENSIONS_REF]);
     if(result != TPM_RC_SUCCESS)
-        // If the extension has the TPMA_OBJECT extension and the attributes don't 
+        // If the extension has the TPMA_OBJECT extension and the attributes don't
         // match, then the error code will be TPM_RCS_ATTRIBUTES. Otherwise, the error
         // indicates a malformed partialCertificate.
         return result + ((result == TPM_RCS_ATTRIBUTES)
@@ -198,7 +201,7 @@ TPM2_CertifyX509(
         // The serial number size is the smaller of the digest and the vendor-defined
         // value
         digest->size = MIN(digest->size, SIZE_OF_X509_SERIAL_NUMBER);
-        // Add all the parts of the certificate other than the serial number 
+        // Add all the parts of the certificate other than the serial number
         // and version number
         for(i = SIGNATURE_REF; i < REF_COUNT; i++)
             CryptDigestUpdate(&hash, certTBS[i].len, certTBS[i].buf);
@@ -211,21 +214,21 @@ TPM2_CertifyX509(
     }
 
     // Add the serial number
-    certTBS[SERIAL_NUMBER_REF].len = 
+    certTBS[SERIAL_NUMBER_REF].len =
         ASN1PushInteger(&ctxOut, out->tbsDigest.t.size, out->tbsDigest.t.buffer);
     certTBS[SERIAL_NUMBER_REF].buf = ctxOut.buffer + ctxOut.offset;
 
     // Add the static version number
     ASN1StartMarshalContext(&ctxOut);
     ASN1PushUINT(&ctxOut, 2);
-    certTBS[VERSION_REF].len = 
+    certTBS[VERSION_REF].len =
         ASN1EndEncapsulation(&ctxOut, ASN1_APPLICAIION_SPECIFIC);
     certTBS[VERSION_REF].buf = ctxOut.buffer + ctxOut.offset;
 
-    // Create a fake tag and length for the TBS in the space used for 
+    // Create a fake tag and length for the TBS in the space used for
     // 'addedToCertificate'
     {
-        for(length = 0, i = 0; i < REF_COUNT; i++) 
+        for(length = 0, i = 0; i < REF_COUNT; i++)
             length += certTBS[i].len;
         // Put a fake tag and length into the buffer for use in the tbsDigest
         certTBS[ENCODED_SIZE_REF].len =

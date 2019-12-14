@@ -39,38 +39,38 @@
 
 /*(See part 3 of specification)
  * Create and load any type of key, including a temporary key.
- * The input template is an marshaled public area rather than an unmarshaled one as 
+ * The input template is an marshaled public area rather than an unmarshaled one as
  * used in Create and CreatePrimary. This is so that the label and context that
  * could be in the template can be processed without changing the formats for the
  * calls to Create and CreatePrimary.
 */
 //  Return Type: TPM_RC
-//      TPM_RC_ATTRIBUTES       'sensitiveDataOrigin' is CLEAR when 'sensitive.data' 
+//      TPM_RC_ATTRIBUTES       'sensitiveDataOrigin' is CLEAR when 'sensitive.data'
 //                              is an Empty Buffer;
 //                              'fixedTPM', 'fixedParent', or 'encryptedDuplication'
 //                              attributes are inconsistent between themselves or with
 //                              those of the parent object;
 //                              inconsistent 'restricted', 'decrypt' and 'sign'
 //                              attributes;
-//                              attempt to inject sensitive data for an asymmetric 
+//                              attempt to inject sensitive data for an asymmetric
 //                              key;
 //                              attempt to create a symmetric cipher key that is not
 //                              a decryption key
-//      TPM_RC_KDF              incorrect KDF specified for decrypting keyed hash 
+//      TPM_RC_KDF              incorrect KDF specified for decrypting keyed hash
 //                              object
 //      TPM_RC_KEY              the value of a provided symmetric key is not allowed
 //      TPM_RC_OBJECT_MEMORY    there is no free slot for the object
-//      TPM_RC_SCHEME           inconsistent attributes 'decrypt', 'sign', 
+//      TPM_RC_SCHEME           inconsistent attributes 'decrypt', 'sign',
 //                              'restricted' and key's scheme ID; or hash algorithm is
 //                              inconsistent with the scheme ID for keyed hash object
 //      TPM_RC_SIZE             size of public authorization policy or sensitive
 //                              authorization value does not match digest size of the
 //                              name algorithm sensitive data size for the keyed hash
 //                              object is larger than is allowed for the scheme
-//      TPM_RC_SYMMETRIC        a storage key with no symmetric algorithm specified; 
-//                              or non-storage key with symmetric algorithm different 
+//      TPM_RC_SYMMETRIC        a storage key with no symmetric algorithm specified;
+//                              or non-storage key with symmetric algorithm different
 //                              from TPM_ALG_NULL
-//      TPM_RC_TYPE             cannot create the object of the indicated type 
+//      TPM_RC_TYPE             cannot create the object of the indicated type
 //                              (usually only occurs if trying to derive an RSA key).
 TPM_RC
 TPM2_CreateLoaded(
@@ -106,7 +106,7 @@ TPM2_CreateLoaded(
     // Do this to save typing
     publicArea = &newObject->publicArea;
 
-    // Unmarshal the template into the object space. TPM2_Create() and 
+    // Unmarshal the template into the object space. TPM2_Create() and
     // TPM2_CreatePrimary() have the publicArea unmarshaled by CommandDispatcher.
     // This command is different because of an unfortunate property of the
     // unique field of an ECC key. It is a structure rather than a single TPM2B. If
@@ -114,7 +114,7 @@ TPM2_CreateLoaded(
     // unmarshaled like other public areas. Since it is not, this command needs its
     // on template that is a TPM2B that is unmarshaled as a BYTE array with a
     // its own unmarshal function.
-    result = UnmarshalToPublic(publicArea, &in->inPublic, derivation, 
+    result = UnmarshalToPublic(publicArea, &in->inPublic, derivation,
                                &labelContext);
     if(result != TPM_RC_SUCCESS)
         return result + RC_CreateLoaded_inPublic;
@@ -136,9 +136,9 @@ TPM2_CreateLoaded(
         // Don't derive RSA keys
         if(publicArea->type == ALG_RSA_VALUE)
             return TPM_RCS_TYPE + RC_CreateLoaded_inPublic;
-        // sensitiveDataOrigin has to be CLEAR in a derived object. Since this 
+        // sensitiveDataOrigin has to be CLEAR in a derived object. Since this
         // is specific to a derived object, it is checked here.
-        if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, 
+        if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT,
                         sensitiveDataOrigin))
             return TPM_RCS_ATTRIBUTES;
         // Check the reset of the attributes
@@ -151,23 +151,23 @@ TPM2_CreateLoaded(
         if(result != TPM_RC_SUCCESS)
             return result;
         // Set up the KDF for object generation
-        DRBG_InstantiateSeededKdf((KDF_STATE *)rand, 
-                                  scheme->details.xor.hashAlg, 
+        DRBG_InstantiateSeededKdf((KDF_STATE *)rand,
+                                  scheme->details.xor.hashAlg,
                                   scheme->details.xor.kdf,
-                                  &parent->sensitive.sensitive.bits.b, 
+                                  &parent->sensitive.sensitive.bits.b,
                                   &labelContext.label.b,
                                   &labelContext.context.b,
                                   TPM_MAX_DERIVATION_BITS);
-        // Clear the sensitive size so that the creation functions will not try 
+        // Clear the sensitive size so that the creation functions will not try
         // to use this value.
         in->inSensitive.sensitive.data.t.size = 0;
     }
     else
     {
-        // Check attributes in input public area. CreateChecks() checks the things 
-        // that are unique to creation and then validates the attributes and values 
+        // Check attributes in input public area. CreateChecks() checks the things
+        // that are unique to creation and then validates the attributes and values
         // that are common to create and load.
-        result = CreateChecks(parent, publicArea, 
+        result = CreateChecks(parent, publicArea,
                               in->inSensitive.sensitive.data.t.size);
         if(result != TPM_RC_SUCCESS)
             return RcSafeAddToResult(result, RC_CreateLoaded_inPublic);
@@ -183,7 +183,7 @@ TPM2_CreateLoaded(
             result = DRBG_InstantiateSeeded((DRBG_STATE *)rand,
                                    &HierarchyGetPrimarySeed(in->parentHandle)->b,
                                    PRIMARY_OBJECT_CREATION,
-                                   (TPM2B *)PublicMarshalAndComputeName(publicArea, 
+                                   (TPM2B *)PublicMarshalAndComputeName(publicArea,
                                                                         &name),
                                    &in->inSensitive.sensitive.data.b);
             if(result != TPM_RC_SUCCESS)

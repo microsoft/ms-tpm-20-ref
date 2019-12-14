@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Apr  2, 2019  Time: 03:18:00PM
+ *  Date: Oct 24, 2019  Time: 11:37:07AM
  */
 
 #ifndef    _TPM_TO_OSSL_MATH_FP_H_
@@ -68,7 +68,7 @@ BigInitialized(
 #if LIBRARY_COMPATIBILITY_CHECK
 
 //*** MathLibraryCompatibilityCheck()
-void
+BOOL
 MathLibraryCompatibilityCheck(
     void
 );

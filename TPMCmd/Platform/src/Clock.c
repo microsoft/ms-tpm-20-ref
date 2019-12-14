@@ -91,7 +91,7 @@ clock_t     debugTime;
 //*** _plat__RealTime()
 // This is another, probably futile, attempt to define a portable function 
 // that will return a 64-bit clock value that has mSec resolution.
-uint64_t
+LIB_EXPORT uint64_t
 _plat__RealTime(
     void
 )
@@ -208,12 +208,12 @@ _plat__TimerRead(
 //
 // If the resetFlag parameter is SET, then the flag will be CLEAR before the 
 // function returns.
-LIB_EXPORT BOOL
+LIB_EXPORT int 
 _plat__TimerWasReset(
    void          
     )
 {
-    BOOL         retVal = s_timerReset;
+    int          retVal = s_timerReset;
     s_timerReset = FALSE;
     return retVal;
 }
@@ -227,12 +227,12 @@ _plat__TimerWasReset(
 // is the model used here because it is the one that has the most impact on the TPM
 // code as the flag can only be accessed by one entity in the TPM. Any other
 // implementation of the hardware can be made to look like a read-once register.
-LIB_EXPORT BOOL
+LIB_EXPORT int 
 _plat__TimerWasStopped(
     void
     )
 {
-    BOOL         retVal = s_timerStopped;
+    int          retVal = s_timerStopped;
     s_timerStopped = FALSE;
     return retVal;
 }

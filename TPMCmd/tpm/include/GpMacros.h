@@ -116,6 +116,9 @@
 #define PCR_SELECT_MIN          ((PLATFORM_PCR+7)/8)
 #define PCR_SELECT_MAX          ((IMPLEMENTATION_PCR+7)/8)
 #define MAX_ORDERLY_COUNT       ((1 << ORDERLY_BITS) - 1)
+#define RSA_MAX_PRIME           (MAX_RSA_KEY_BYTES / 2)
+#define RSA_PRIVATE_SIZE        (RSA_MAX_PRIME * 5)
+
 
 //** Compile-time Checks
 // In some cases, the relationship between two values may be dependent
@@ -272,12 +275,12 @@
 // If CONTEXT_ENCRYPT_ALG is defined, then the vendor is using the old style table
 #if defined CONTEXT_ENCRYPT_ALG 
 #   undef CONTEXT_ENCRYPT_ALGORITHM
-#   if CONTEXT_ENCRYPT_ALG == ALG_AES_VALUE
-#       define CONTEXT_ENCRYPT_ALGORITHM  AES
+#   if   CONTEXT_ENCRYPT_ALG == ALG_AES_VALUE
+#       define CONTEXT_ENCRYPT_ALGORITHM    AES
 #   elif CONTEXT_ENCRYPT_ALG == ALG_SM4_VALUE
-#       define CONTEXT_ENCRYPT_ALGORITHM  SM4
+#       define CONTEXT_ENCRYPT_ALGORITHM    SM4
 #   elif CONTEXT_ENCRYPT_ALG == ALG_CAMELLIA_VALUE
-#       define CONTEXT_ENCRYPT_ALGORITHM  CAMELLIA
+#       define CONTEXT_ENCRYPT_ALGORITHM    CAMELLIA
 #   elif CONTEXT_ENCRYPT_ALG == ALG_TDES_VALUE
 #   error Are you kidding? 
 #   else
@@ -313,18 +316,18 @@
 
 // These macros are used to handle the variation in handling of bit fields. If 
 #if USE_BIT_FIELD_STRUCTURES // The default, old version, with bit fields
-#   define IS_ATTRIBUTE(a, type, b)    ((a.b) != 0)
-#   define SET_ATTRIBUTE(a, type, b)       (a.b = SET)
-#   define CLEAR_ATTRIBUTE(a, type, b)     (a.b = CLEAR)
+#   define IS_ATTRIBUTE(a, type, b)         ((a.b) != 0)
+#   define SET_ATTRIBUTE(a, type, b)        (a.b = SET)
+#   define CLEAR_ATTRIBUTE(a, type, b)      (a.b = CLEAR)
 #   define GET_ATTRIBUTE(a, type, b)        (a.b)
 #   define TPMA_ZERO_INITIALIZER()          {0}
 #else
 #   define IS_ATTRIBUTE(a, type, b)         ((a & type##_##b) != 0)
 #   define SET_ATTRIBUTE(a, type, b)        (a |= type##_##b)
 #   define CLEAR_ATTRIBUTE(a, type, b)      (a &= ~type##_##b)
-#   define GET_ATTRIBUTE(a, type, b)        \
+#   define GET_ATTRIBUTE(a, type, b)                                                \
         (type)((a & type##_##b) >> type##_##b##_SHIFT)
-#   define TPMA_ZERO_INITIALIZER()         (0)
+#   define TPMA_ZERO_INITIALIZER()          (0)
 #endif
 
 #define VERIFY(_X) if(!(_X)) goto Error 
@@ -344,7 +347,12 @@
 // This macro will create an OID. All OIDs are in DER form with a first octet of
 // 0x06 indicating an OID fallowed by an octet indicating the number of octets in the
 // rest of the OID. This allows a user of this OID to know how much/little to copy.
-#define MAKE_OID(NAME)                      \
+#define MAKE_OID(NAME)                                                              \
         EXTERN  const BYTE OID##NAME[] INITIALIZER({OID##NAME##_VALUE})
+
+// This definition is moved from TpmProfile.h because it is not actually vendor-
+// specific.  It has to be the same size as the 'sequence' parameter of a TPMS_CONTEXT
+// and that is a UINT64. So, this is an invariant value
+#define CONTEXT_COUNTER 		UINT64
 
 #endif // GP_MACROS_H

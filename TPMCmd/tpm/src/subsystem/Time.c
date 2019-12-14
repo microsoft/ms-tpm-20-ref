@@ -38,7 +38,7 @@
 //
 //** Includes
 #include "Tpm.h"
-#include "PlatformData.h"
+#include "PlatformClock.h"
 
 //** Functions
 
@@ -49,7 +49,7 @@
 // as soon as the TPM comes out of reset and doesn't have to wait until
 // TPM2_Startup() in order to begin the new time epoch. This could be significant
 // for systems that could get powered up but not run any TPM commands for some
-// period of time. 
+// period of time.
 //
 void
 TimePowerOn(
@@ -83,7 +83,7 @@ TimeNewEpoch(
 // This function updates the resetCount and restartCount components of
 // TPMS_CLOCK_INFO structure at TPM2_Startup().
 //
-// This function will deal with the deferred creation of a new epoch. 
+// This function will deal with the deferred creation of a new epoch.
 // TimeUpdateToCurrent() will not start a new epoch even if one is due when
 // TPM_Startup() has not been run. This is because the state of NV is not known
 // until startup completes. When Startup is done, then it will create the epoch

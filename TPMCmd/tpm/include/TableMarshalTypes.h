@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by NewMarshal; Version 1.4 Apr 7, 2019
- *  Date: Aug 30, 2019  Time: 02:11:53PM
+ *  Date: Oct 19, 2019  Time: 11:50:10AM
  */
 
 #ifndef _TABLE_MARSHAL_TYPES_H_
@@ -331,6 +331,15 @@ typedef const struct TPMI_RH_HIERARCHY_AUTH_mst {
     UINT32        values[4];
 } TPMI_RH_HIERARCHY_AUTH_mst;
 
+typedef const struct TPMI_RH_HIERARCHY_POLICY_mst {
+    UINT8         marshalType;
+    UINT8         modifiers;
+    UINT8         errorCode;
+    UINT8         ranges;
+    UINT8         singles;
+    UINT32        values[6];
+} TPMI_RH_HIERARCHY_POLICY_mst;
+
 typedef const struct TPMI_RH_PLATFORM_mst {
     UINT8         marshalType;
     UINT8         modifiers;
@@ -401,6 +410,13 @@ typedef const struct TPMI_RH_AC_mst {
     UINT8       errorCode;
     UINT32      values[2];
 } TPMI_RH_AC_mst;
+
+typedef const struct TPMI_RH_ACT_mst {
+    UINT8       marshalType;
+    UINT8       modifiers;
+    UINT8       errorCode;
+    UINT32      values[2];
+} TPMI_RH_ACT_mst;
 
 typedef const struct TPMI_ALG_HASH_mst {
     UINT8       marshalType;
@@ -580,13 +596,20 @@ typedef const struct TPMS_TAGGED_POLICY_mst
     UINT16    values[6];
 } TPMS_TAGGED_POLICY_mst;
 
+typedef const struct TPMS_ACT_DATA_mst
+{
+    UINT8     marshalType;
+    UINT8     elements;
+    UINT16    values[9];
+} TPMS_ACT_DATA_mst;
+
 typedef struct TPMU_CAPABILITIES_mst
 {
     BYTE            countOfselectors;
     BYTE            modifiers;
     UINT16        offsetOfUnmarshalTypes;
-    UINT32        selectors[10];
-    UINT16        marshalingTypes[10];
+    UINT32        selectors[11];
+    UINT16        marshalingTypes[11];
 } TPMU_CAPABILITIES_mst;
 
 typedef const struct TPMS_CAPABILITY_DATA_mst
@@ -734,7 +757,7 @@ typedef const struct TPMI_CAMELLIA_KEY_BITS_mst {
     UINT8         modifiers;
     UINT8         errorCode;
     UINT8         entries;
-    UINT32        values[1];
+    UINT32        values[3];
 } TPMI_CAMELLIA_KEY_BITS_mst;
 
 typedef struct TPMU_SYM_KEY_BITS_mst
@@ -1255,12 +1278,12 @@ typedef const struct Type26_mst {
     UINT32      values[2];
 } Type26_mst;
 
-typedef const struct Type28_mst {
+typedef const struct Type27_mst {
     UINT8       marshalType;
     UINT8       modifiers;
     UINT8       errorCode;
     UINT32      values[2];
-} Type28_mst;
+} Type27_mst;
 
 typedef const struct Type29_mst {
     UINT8       marshalType;
@@ -1269,12 +1292,12 @@ typedef const struct Type29_mst {
     UINT32      values[2];
 } Type29_mst;
 
-typedef const struct Type32_mst {
+typedef const struct Type30_mst {
     UINT8       marshalType;
     UINT8       modifiers;
     UINT8       errorCode;
     UINT32      values[2];
-} Type32_mst;
+} Type30_mst;
 
 typedef const struct Type33_mst {
     UINT8       marshalType;
@@ -1290,19 +1313,19 @@ typedef const struct Type34_mst {
     UINT32      values[2];
 } Type34_mst;
 
-typedef const struct Type37_mst {
+typedef const struct Type35_mst {
     UINT8       marshalType;
     UINT8       modifiers;
     UINT8       errorCode;
     UINT32      values[2];
-} Type37_mst;
+} Type35_mst;
 
-typedef const struct Type40_mst {
+typedef const struct Type38_mst {
     UINT8       marshalType;
     UINT8       modifiers;
     UINT8       errorCode;
     UINT32      values[2];
-} Type40_mst;
+} Type38_mst;
 
 typedef const struct Type41_mst {
     UINT8       marshalType;
@@ -1311,12 +1334,19 @@ typedef const struct Type41_mst {
     UINT32      values[2];
 } Type41_mst;
 
-typedef const struct Type43_mst {
+typedef const struct Type42_mst {
     UINT8       marshalType;
     UINT8       modifiers;
     UINT8       errorCode;
     UINT32      values[2];
-} Type43_mst;
+} Type42_mst;
+
+typedef const struct Type44_mst {
+    UINT8       marshalType;
+    UINT8       modifiers;
+    UINT8       errorCode;
+    UINT32      values[2];
+} Type44_mst;
 
 // This structure combines all the individual marshaling structures to build
 // something that can be referenced by offset rather than full address
@@ -1339,6 +1369,7 @@ typedef const struct MarshalData_st {
     AttributesMarshal_mst           TPMA_ALGORITHM_DATA;
     AttributesMarshal_mst           TPMA_OBJECT_DATA;
     AttributesMarshal_mst           TPMA_SESSION_DATA;
+    AttributesMarshal_mst           TPMA_ACT_DATA;
     TPMI_YES_NO_mst                 TPMI_YES_NO_DATA;
     TPMI_DH_OBJECT_mst              TPMI_DH_OBJECT_DATA;
     TPMI_DH_PARENT_mst              TPMI_DH_PARENT_DATA;
@@ -1353,6 +1384,7 @@ typedef const struct MarshalData_st {
     TPMI_RH_HIERARCHY_mst           TPMI_RH_HIERARCHY_DATA;
     TPMI_RH_ENABLES_mst             TPMI_RH_ENABLES_DATA;
     TPMI_RH_HIERARCHY_AUTH_mst      TPMI_RH_HIERARCHY_AUTH_DATA;
+    TPMI_RH_HIERARCHY_POLICY_mst    TPMI_RH_HIERARCHY_POLICY_DATA;
     TPMI_RH_PLATFORM_mst            TPMI_RH_PLATFORM_DATA;
     TPMI_RH_OWNER_mst               TPMI_RH_OWNER_DATA;
     TPMI_RH_ENDORSEMENT_mst         TPMI_RH_ENDORSEMENT_DATA;
@@ -1362,6 +1394,7 @@ typedef const struct MarshalData_st {
     TPMI_RH_LOCKOUT_mst             TPMI_RH_LOCKOUT_DATA;
     TPMI_RH_NV_INDEX_mst            TPMI_RH_NV_INDEX_DATA;
     TPMI_RH_AC_mst                  TPMI_RH_AC_DATA;
+    TPMI_RH_ACT_mst                 TPMI_RH_ACT_DATA;
     TPMI_ALG_HASH_mst               TPMI_ALG_HASH_DATA;
     TPMI_ALG_ASYM_mst               TPMI_ALG_ASYM_DATA;
     TPMI_ALG_SYM_mst                TPMI_ALG_SYM_DATA;
@@ -1396,6 +1429,7 @@ typedef const struct MarshalData_st {
     TPMS_TAGGED_PROPERTY_mst        TPMS_TAGGED_PROPERTY_DATA;
     TPMS_TAGGED_PCR_SELECT_mst      TPMS_TAGGED_PCR_SELECT_DATA;
     TPMS_TAGGED_POLICY_mst          TPMS_TAGGED_POLICY_DATA;
+    TPMS_ACT_DATA_mst               TPMS_ACT_DATA_DATA;
     ListMarshal_mst                 TPML_CC_DATA;
     ListMarshal_mst                 TPML_CCA_DATA;
     ListMarshal_mst                 TPML_ALG_DATA;
@@ -1408,6 +1442,7 @@ typedef const struct MarshalData_st {
     ListMarshal_mst                 TPML_TAGGED_PCR_PROPERTY_DATA;
     ListMarshal_mst                 TPML_ECC_CURVE_DATA;
     ListMarshal_mst                 TPML_TAGGED_POLICY_DATA;
+    ListMarshal_mst                 TPML_ACT_DATA_DATA;
     TPMU_CAPABILITIES_mst           TPMU_CAPABILITIES_DATA;
     TPMS_CAPABILITY_DATA_mst        TPMS_CAPABILITY_DATA_DATA;
     TPMS_CLOCK_INFO_mst             TPMS_CLOCK_INFO_DATA;
@@ -1526,23 +1561,24 @@ typedef const struct MarshalData_st {
     Type24_mst                      Type24_DATA;
     Type25_mst                      Type25_DATA;
     Type26_mst                      Type26_DATA;
-    MinMaxMarshal_mst               Type27_DATA;
-    Type28_mst                      Type28_DATA;
+    Type27_mst                      Type27_DATA;
+    MinMaxMarshal_mst               Type28_DATA;
     Type29_mst                      Type29_DATA;
-    MinMaxMarshal_mst               Type30_DATA;
+    Type30_mst                      Type30_DATA;
     MinMaxMarshal_mst               Type31_DATA;
-    Type32_mst                      Type32_DATA;
+    MinMaxMarshal_mst               Type32_DATA;
     Type33_mst                      Type33_DATA;
     Type34_mst                      Type34_DATA;
-    MinMaxMarshal_mst               Type35_DATA;
+    Type35_mst                      Type35_DATA;
     MinMaxMarshal_mst               Type36_DATA;
-    Type37_mst                      Type37_DATA;
-    MinMaxMarshal_mst               Type38_DATA;
+    MinMaxMarshal_mst               Type37_DATA;
+    Type38_mst                      Type38_DATA;
     MinMaxMarshal_mst               Type39_DATA;
-    Type40_mst                      Type40_DATA;
+    MinMaxMarshal_mst               Type40_DATA;
     Type41_mst                      Type41_DATA;
-    MinMaxMarshal_mst               Type42_DATA;
-    Type43_mst                      Type43_DATA;
+    Type42_mst                      Type42_DATA;
+    MinMaxMarshal_mst               Type43_DATA;
+    Type44_mst                      Type44_DATA;
 } MarshalData_st;
 
 #endif // _TABLE_MARSHAL_TYPES_H_

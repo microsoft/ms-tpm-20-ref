@@ -38,70 +38,48 @@
 #ifndef _PLATFORM_DATA_H_
 #define _PLATFORM_DATA_H_
 
-// From Cancel.c
-// This flag is initialized as FALSE to indicate that the command is not
-// being canceled
-extern int     s_isCanceled;
-
-#ifdef _MSC_VER
-#include <sys/types.h>
-#include <sys/timeb.h>
+#ifdef  _PLATFORM_DATA_C_
+#define EXTERN
 #else
-#include <sys/time.h>
-#include <time.h>
+#define EXTERN  extern
 #endif
 
+// From Cancel.c
+// Cancel flag.  It is initialized as FALSE, which indicate the command is not
+// being canceled
+EXTERN int     s_isCanceled;
 
 #ifndef HARDWARE_CLOCK
 typedef uint64_t     clock64_t;
 // This is the value returned the last time that the system clock was read. This
 // is only relevant for a simulator or virtual TPM.
-extern clock64_t       s_realTimePrevious;
+EXTERN clock64_t       s_realTimePrevious;
 
 // These values are used to try to synthesize a long lived version of clock().
-extern clock64_t        s_lastSystemTime;
-extern clock64_t        s_lastReportedTime;
+EXTERN clock64_t        s_lastSystemTime;
+EXTERN clock64_t        s_lastReportedTime;
 
 // This is the rate adjusted value that is the equivalent of what would be read from
 // a hardware register that produced rate adjusted time.
-extern clock64_t        s_tpmTime;
+EXTERN clock64_t        s_tpmTime;
 #endif // HARDWARE_CLOCK
 
 // This value indicates that the timer was reset
-extern BOOL              s_timerReset;
+EXTERN int               s_timerReset;
 // This value indicates that the timer was stopped. It causes a clock discontinuity.
-extern BOOL              s_timerStopped;
-
-// CLOCK_NOMINAL is the number of hardware ticks per mS. A value of 300000 means 
-// that the nominal clock rate used to drive the hardware clock is 30 MHz. The
-// adjustment rates are used to determine the conversion of the hardware ticks to
-// internal hardware clock value. In practice, we would expect that there would be
-// a hardware register with accumulated mS. It would be incremented by the output
-// of a prescaler. The prescaler would divide the ticks from the clock by some
-// value that would compensate for the difference between clock time and real time.
-// The code in Clock does the emulation of this function. 
-#define     CLOCK_NOMINAL           30000
-// A 1% change in rate is 300 counts
-#define     CLOCK_ADJUST_COARSE     300
-// A 0.1% change in rate is 30 counts
-#define     CLOCK_ADJUST_MEDIUM     30
-// A minimum change in rate is 1 count
-#define     CLOCK_ADJUST_FINE       1
-// The clock tolerance is +/-15% (4500 counts)
-// Allow some guard band (16.7%)
-#define     CLOCK_ADJUST_LIMIT      5000
+EXTERN int               s_timerStopped;
 
 // This variable records the time when _plat__TimerReset is called.  This mechanism
 // allow us to subtract the time when TPM is power off from the total
 // time reported by clock() function
-extern uint64_t        s_initClock;
+EXTERN uint64_t        s_initClock;
 
 // This variable records the timer adjustment factor.
-extern unsigned int         s_adjustRate;
+EXTERN unsigned int         s_adjustRate;
 
 // For LocalityPlat.c
 // Locality of current command
-extern unsigned char s_locality;
+EXTERN unsigned char s_locality;
 
 // For NVMem.c
 // Choose if the NV memory should be backed by RAM or by file.
@@ -124,20 +102,24 @@ extern unsigned char s_locality;
 #   define      FILE_BACKED_NV          YES
 #endif // SIMULATION
 
-extern unsigned char     s_NV[NV_MEMORY_SIZE];
-extern BOOL              s_NvIsAvailable;
-extern BOOL              s_NV_unrecoverable;
-extern BOOL              s_NV_recoverable;
-
+EXTERN unsigned char     s_NV[NV_MEMORY_SIZE];
+EXTERN int               s_NvIsAvailable;
+EXTERN int               s_NV_unrecoverable;
+EXTERN int               s_NV_recoverable;
 
 // For PPPlat.c
 // Physical presence.  It is initialized to FALSE
-extern BOOL     s_physicalPresence;
+EXTERN int              s_physicalPresence;
 
 // From Power
-extern BOOL        s_powerLost;
+EXTERN int              s_powerLost;
 
 // For Entropy.c
-extern uint32_t        lastEntropy;
+EXTERN uint32_t         lastEntropy;
+
+#define DEFINE_ACT(N)   EXTERN ACT_DATA ACT_##N;
+    FOR_EACH_ACT(DEFINE_ACT)
+
+EXTERN int              actTicksAllowed;
 
 #endif // _PLATFORM_DATA_H_

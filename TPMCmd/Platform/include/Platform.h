@@ -43,6 +43,8 @@
 
 #include "TpmProfile.h"
 
+#include "PlatformACT.h"
+#include "PlatformClock.h"
 #include "PlatformData.h"
 #include "Platform_fp.h"
 

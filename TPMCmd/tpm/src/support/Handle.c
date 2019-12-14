@@ -80,6 +80,12 @@ NextPermanentHandle(
 #ifdef  VENDOR_PERMANENT
             case VENDOR_PERMANENT:
 #endif
+// Each of the implemented ACT
+#define ACT_IMPLEMENTED_CASE(N)                                                     \
+            case TPM_RH_ACT_##N:
+
+            FOR_EACH_ACT(ACT_IMPLEMENTED_CASE)
+
                 return inHandle;
                 break;
             default:
@@ -117,7 +123,7 @@ PermanentCapGetHandles(
 
     // Iterate permanent handle range
     for(i = NextPermanentHandle(handle);
-    i != 0; i = NextPermanentHandle(i + 1))
+        i != 0; i = NextPermanentHandle(i + 1))
     {
         if(handleList->count < count)
         {

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 30, 2019  Time: 02:11:54PM
+ *  Date: Oct  2, 2019  Time: 01:47:20PM
  */
 
 #ifndef    _SIMULATOR_FP_H_
@@ -104,11 +104,19 @@ WriteBytes(
 );
 
 //*** WriteUINT32()
-// Send 4 bytes containing hton(1)
+// Send 4 byte integer
 BOOL
 WriteUINT32(
     SOCKET           s,
     uint32_t         val
+);
+
+//*** ReadUINT32()
+// Function to read 4 byte integer from socket.
+BOOL
+ReadUINT32(
+    SOCKET           s,
+    UINT32          *val
 );
 
 //*** ReadVarBytes()
@@ -263,6 +271,13 @@ _rpc__Signal_NvOff(
 void
 _rpc__RsaKeyCacheControl(
     int              state
+);
+
+//*** _rpc__ACT_GetSignaled()
+// This function is used to count the ACT second tick.
+BOOL
+_rpc__ACT_GetSignaled(
+    UINT32 actHandle
 );
 
 

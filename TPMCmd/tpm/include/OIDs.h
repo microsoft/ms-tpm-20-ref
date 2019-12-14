@@ -82,7 +82,7 @@
 #   define ALG_SM3_256 NO
 #endif
 #if ALG_SM3_256
-#define SM3_256_OID(NAME) MAKE_OID(NAME##SM2_256)
+#define SM3_256_OID(NAME) MAKE_OID(NAME##SM3_256)
 #else
 #define SM3_256_OID(NAME)
 #endif
@@ -150,7 +150,6 @@ SHA3_384_OID(_);
 #define OID_SHA3_512_VALUE          NIST_HASH, 10
 SHA3_512_OID(_);
 
-
 // These are used for RSA-PSS
 #if ALG_RSA
 
@@ -195,7 +194,6 @@ SHA3_256_OID(_PKCS1_);
 #define OID_PKCS1_SHA3_512_VALUE    NIST_SIG, 16
 SHA3_512_OID(_PKCS1_);
 
-
 #endif // ALG_RSA
 
 #if ALG_ECDSA
@@ -216,8 +214,9 @@ SHA384_OID(_ECDSA_);    // (1.2.840.10045.4.3.3) SHA384 digest signed by an ECDS
                                     0x03, 0x04
 SHA512_OID(_ECDSA_);    // (1.2.840.10045.4.3.4) SHA512 digest signed by an ECDSA key.
 
-#define OID_ECDSA_SM3_256_VALUE     0x00
-SM3_256_OID(_ECDSA_);
+#define OID_ECDSA_SM3_256_VALUE     0x06, 0x08, 0x2A, 0x81, 0x1C, 0xCF, 0x55, 0x01,  \
+                                    0x83, 0x75
+SM3_256_OID(_ECDSA_);   // 1.2.156.10197.1.501
 
 #define OID_ECDSA_SHA3_256_VALUE    NIST_SIG, 10
 SHA3_256_OID(_ECDSA_);
@@ -225,8 +224,6 @@ SHA3_256_OID(_ECDSA_);
 SHA3_384_OID(_ECDSA_);
 #define OID_ECDSA_SHA3_512_VALUE    NIST_SIG, 12
 SHA3_512_OID(_ECDSA_);
-
-
 
 #endif // ALG_ECDSA
 

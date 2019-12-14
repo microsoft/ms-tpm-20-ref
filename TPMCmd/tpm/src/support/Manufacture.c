@@ -49,6 +49,7 @@
 // use. This function will fail if previously called. The TPM can be re-manufactured
 // by calling TPM_Teardown() first and then calling this function again.
 //  Return Type: int
+//      -1          failure 
 //      0           success
 //      1           manufacturing process previously performed
 LIB_EXPORT int
@@ -62,11 +63,13 @@ TPM_Manufacture(
 #if RUNTIME_SIZE_CHECKS 
     // Call the function to verify the sizes of values that result from different
     // compile options.
-    TpmSizeChecks();
+    if(!TpmSizeChecks())
+        return -1;
 #endif
 #if LIBRARY_COMPATIBILITY_CHECK
 // Make sure that the attached library performs as expected.
-    MathLibraryCompatibilityCheck();
+    if(!MathLibraryCompatibilityCheck())
+        return -1;
 #endif
 
     // If TPM has been manufactured, return indication.

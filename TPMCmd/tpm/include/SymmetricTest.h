@@ -65,7 +65,8 @@ const SYMMETRIC_TEST_VECTOR   c_symTestValues[NUM_SYMS + 1] = {
     {dataOut_AES256_CTR, dataOut_AES256_OFB, dataOut_AES256_CBC,
     dataOut_AES256_CFB, dataOut_AES256_ECB}},
 #endif
-#if ALG_SM4 && SM4_128
+// There are no SM4 test values yet so...
+#if ALG_SM4 && SM4_128 && 0
     {ALG_SM4_VALUE, 128, key_SM4128, 16, sizeof(dataIn_SM4128), dataIn_SM4128,
     {dataOut_SM4128_CTR, dataOut_SM4128_OFB, dataOut_SM4128_CBC, 
      dataOut_SM4128_CFB, dataOut_AES128_ECB}},

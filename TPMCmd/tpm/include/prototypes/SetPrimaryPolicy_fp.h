@@ -34,17 +34,17 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Mar 28, 2019  Time: 08:25:17PM
+ *  Date: Oct  2, 2019  Time: 07:41:19PM
  */
 
 #if CC_SetPrimaryPolicy // Command must be enabled
 
-#ifndef _Set_Primary_Policy_FP_H_
-#define _Set_Primary_Policy_FP_H_
+#ifndef _SETPRIMARYPOLICY_FP_H_
+#define _SETPRIMARYPOLICY_FP_H_
 
 // Input structure definition
 typedef struct {
-    TPMI_RH_HIERARCHY_AUTH      authHandle;
+    TPMI_RH_HIERARCHY_POLICY    authHandle;
     TPM2B_DIGEST                authPolicy;
     TPMI_ALG_HASH               hashAlg;
 } SetPrimaryPolicy_In;
@@ -60,5 +60,5 @@ TPM2_SetPrimaryPolicy(
     SetPrimaryPolicy_In         *in
 );
 
-#endif  // _Set_Primary_Policy_FP_H_
+#endif  // _SETPRIMARYPOLICY_FP_H_
 #endif  // CC_SetPrimaryPolicy

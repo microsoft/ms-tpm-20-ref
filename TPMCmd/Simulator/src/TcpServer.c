@@ -38,7 +38,6 @@
 //
 //** Includes, Locals, Defines and Function Prototypes
 #include "TpmBuildSwitches.h"
-#include "BaseTypes.h"
 #include <stdio.h>
 
 #ifdef _MSC_VER
@@ -73,15 +72,18 @@ typedef int socklen_t;
 #   define FALSE   0
 #endif
 
-
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
 
 #include "TpmTcpProtocol.h"
 #include "Manufacture_fp.h"
+#include "TpmProfile.h"
 
 #include "Simulator_fp.h"
+#include "Platform_fp.h"
+
+typedef int         BOOL;
 
 // To access key cache control in TPM
 void RsaKeyCacheControl(int state);
@@ -230,6 +232,13 @@ PlatformServer(
                 if(!OK)
                     return TRUE;
                 break;
+            case TPM_ACT_GET_SIGNALED:
+            {
+                UINT32 actHandle;
+                OK = ReadUINT32(s, &actHandle);
+                WriteUINT32(s, _rpc__ACT_GetSignaled(actHandle));
+                break;
+            }
             default:
                 printf("Unrecognized platform interface command %d\n", 
                        (int)Command);
@@ -375,6 +384,100 @@ RegularCommandService(
     return 0;
 }
 
+#if RH_ACT_0
+
+//*** SimulatorTimeServiceRoutine()
+// This function is called to service the time 'ticks'.
+static DWORD WINAPI
+SimulatorTimeServiceRoutine(
+    LPVOID           notUsed
+)
+{
+    // All time is in ms
+    const INT64   tick = 1000;
+    UINT64  prevTime = _plat__RealTime();
+    INT64   timeout = tick;
+    
+    (void)notUsed;
+
+    while (TRUE)
+    {
+        UINT64  curTime;
+
+#if defined(_MSC_VER)
+        Sleep((DWORD)timeout);
+#else
+        struct timespec req = {timeout / 1000, (timeout % 1000) * 1000}
+                        rem;
+        nanosleep(&req, &rem);
+#endif // _MSC_VER
+        curTime = _plat__RealTime();
+
+        // May need to issue several ticks if the Sleep() took longer than asked,
+        // or no ticks at all, it Sleep() was interrupted prematurely.
+        while (prevTime < curTime - tick / 2)
+        {
+            //printf("%05lld | %05lld\n", 
+            //      prevTime % 100000, (curTime - tick / 2) % 100000);
+            _plat__ACT_Tick();
+            prevTime += (UINT64)tick;
+        }
+        // Adjust the next timeout to keep the average interval of one second
+        timeout = tick + (prevTime - curTime);
+        //prevTime = curTime;
+        //printf("%04lld | c:%05lld | p:%05llu\n", 
+        //          timeout, curTime % 100000, prevTime);
+    }
+    return 0;
+}
+
+//*** ActTimeService()
+// This function starts a new thread waiting to wait for time ticks.
+// Return Type: int
+//  ==0         success
+//  !=0         failure
+static int
+ActTimeService(
+    void
+)
+{
+    static BOOL          running = FALSE;
+    int                  ret = 0;
+    if(!running)
+    {
+#if defined(_MSC_VER)
+        HANDLE               hThr;
+        int                  ThreadId;
+    //
+        printf("Starting ACT thread...\n");
+        //  Don't allow ticks to be processed before TPM is manufactured.
+        _plat__ACT_EnableTicks(FALSE);
+
+        // Create service thread for ACT internal timer
+        hThr = CreateThread(NULL, 0,
+            (LPTHREAD_START_ROUTINE)SimulatorTimeServiceRoutine,
+                            (LPVOID)(INT_PTR)NULL, 0, (LPDWORD)&ThreadId);
+        if(hThr != NULL)
+            CloseHandle(hThr);
+        else
+            ret = -1;
+#else
+        pthread_t            thread_id;
+//
+        ret = pthread_create(&thread_id, NULL, (void*)PlatformSvcRoutine,
+            (LPVOID)(INT_PTR)NULL);
+#endif // _MSC_VER
+
+        if(ret != 0)
+            printf("ACT thread Creation failed\n");
+        else
+            running = TRUE;
+    }
+    return ret;
+}
+
+#endif // RH_ACT_0
+
 //*** StartTcpServer()
 // This is the main entry-point to the TCP server.  The server listens on port 
 // specified.
@@ -387,6 +490,16 @@ StartTcpServer(
 {
     int                  res;
 //
+#if RH_ACT_0
+    // Start the Time Service routine
+    res = ActTimeService();
+    if(res != 0)
+    {
+        printf("TimeService failed\n");
+        return res;
+    }
+#endif
+
     // Start Platform Signal Processing Service
     res = PlatformSignalService(PortNumber + 1);
     if(res != 0)
@@ -468,7 +581,7 @@ WriteBytes(
 }
 
 //*** WriteUINT32()
-// Send 4 bytes containing hton(1)
+// Send 4 byte integer
 BOOL
 WriteUINT32(
     SOCKET           s,
@@ -479,6 +592,23 @@ WriteUINT32(
 //
     return WriteBytes(s, (char*)&netVal, 4);
 }
+
+//*** ReadUINT32()
+// Function to read 4 byte integer from socket.
+BOOL
+ReadUINT32(
+    SOCKET           s,
+    UINT32          *val
+)
+{
+    UINT32 netVal;
+//
+    if (!ReadBytes(s, (char*)&netVal, 4))
+        return FALSE;
+    *val = ntohl(netVal);
+    return TRUE;
+}
+
 
 //*** ReadVarBytes()
 // Get a UINT32-length-prepended binary array.  Note that the 4-byte length is

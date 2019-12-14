@@ -266,7 +266,7 @@
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>$(ProjectDir)\lib;$(OutDir);</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib;$(OutDir)</AdditionalLibraryDirectories>
     </Lib>
     <Lib>
       <ModuleDefinitionFile>$(ProjectDir)\tpm\TPM.def</ModuleDefinitionFile>
@@ -605,6 +605,8 @@
     <ClCompile Include="src\command\Attestation\Quote.c" />
     <ClCompile Include="src\command\Capability\GetCapability.c" />
     <ClCompile Include="src\command\Capability\TestParms.c" />
+    <ClCompile Include="src\command\ClockTimer\ACT_SetTimeout.c" />
+    <ClCompile Include="src\command\ClockTimer\ACT_spt.c" />
     <ClCompile Include="src\command\ClockTimer\ClockRateAdjust.c" />
     <ClCompile Include="src\command\ClockTimer\ClockSet.c" />
     <ClCompile Include="src\command\ClockTimer\ReadClock.c" />
@@ -790,6 +792,7 @@
     <ClCompile Include="src\X509\X509_spt.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\ACT.h" />
     <ClInclude Include="include\BnValues.h" />
     <ClInclude Include="include\CommandAttributeData.h" />
     <ClInclude Include="include\CommandAttributes.h" />
@@ -815,7 +818,7 @@
     <ClInclude Include="include\ltc\TpmToLtcSym.h" />
     <ClInclude Include="include\MinMax.h" />
     <ClInclude Include="include\NV.h" />
-    <ClInclude Include="include\OIDS.h" />
+    <ClInclude Include="include\OIDs.h" />
     <ClInclude Include="include\ossl\TpmToOsslHash.h" />
     <ClInclude Include="include\ossl\TpmToOsslMath.h" />
     <ClInclude Include="include\ossl\TpmToOsslSym.h" />
@@ -992,6 +995,7 @@
     <ClInclude Include="include\prototypes\StartAuthSession_fp.h" />
     <ClInclude Include="include\prototypes\Startup_fp.h" />
     <ClInclude Include="include\prototypes\StirRandom_fp.h" />
+    <ClInclude Include="include\prototypes\TableDrivenMarshal_fp.h" />
     <ClInclude Include="include\prototypes\TestParms_fp.h" />
     <ClInclude Include="include\prototypes\Ticket_fp.h" />
     <ClInclude Include="include\prototypes\Time_fp.h" />

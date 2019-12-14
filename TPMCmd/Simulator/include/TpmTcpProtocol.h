@@ -82,6 +82,8 @@
 
 #define TPM_GET_COMMAND_RESPONSE_SIZES  25
 
+#define TPM_ACT_GET_SIGNALED        26
+
 #define TPM_TEST_FAILURE_MODE       30
 
 //** Enumerations and Structures

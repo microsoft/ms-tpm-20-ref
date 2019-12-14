@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Aug 30, 2019  Time: 04:59:31PM
+ *  Date: Oct 19, 2019  Time: 11:50:09AM
  */
 
 #ifndef _COMMANDS_H_
@@ -441,6 +441,11 @@
 #endif
 #ifdef TPM_CC_Policy_AC_SendSelect
 #include "Policy_AC_SendSelect_fp.h"
+#endif
+
+// Authenticated Countdown Timer
+#ifdef TPM_CC_ACT_SetTimeout
+#include "ACT_SetTimeout_fp.h"
 #endif
 
 // Vendor Specific

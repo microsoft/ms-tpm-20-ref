@@ -60,6 +60,9 @@ _TPM_Init(
     g_forceFailureMode = FALSE;
 #endif
 
+    // Disable the tick processing
+    _plat__ACT_EnableTicks(FALSE);
+
     // Set initialization state
     TPMInit();
 

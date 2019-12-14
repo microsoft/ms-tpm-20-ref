@@ -54,6 +54,7 @@
 #include "NvReserved_fp.h"
 #include "NvDynamic_fp.h"
 #include "NV_spt_fp.h"
+#include "ACT_spt_fp.h"
 #include "PCR_fp.h"
 #include "DA_fp.h"
 #include "TpmFail_fp.h"

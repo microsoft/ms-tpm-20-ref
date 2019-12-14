@@ -42,6 +42,8 @@
 
 #define SYM_LIB_LTC
 
+#define SYM_ALIGNMENT   RADIX_BYTES
+
 // Avoid pulling in the MPA math if not doing asymmetric with LTC
 #if !(defined MATH_LIB_LTC)
 #  define LTC_NO_ASYMMETRIC

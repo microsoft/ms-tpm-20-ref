@@ -33,7 +33,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <assert.h> 
+#include <assert.h>
 
 #include "Tpm.h"
 #include "Marshal.h"
@@ -54,9 +54,8 @@ extern struct Exernal_Structure_t MarshalData;
 
 marshalIndex_t IntegerDispatch[] = {
     UINT8_MARSHAL_REF, UINT16_MARSHAL_REF, UINT32_MARSHAL_REF, UINT64_MARSHAL_REF,
-     INT8_MARSHAL_REF,  INT16_MARSHAL_REF,  INT32_MARSHAL_REF,  INT64_MARSHAL_REF
+    INT8_MARSHAL_REF,  INT16_MARSHAL_REF,  INT32_MARSHAL_REF,  INT64_MARSHAL_REF
 };
-
 
 #if 1
 #define GetDescriptor(reference)                                                    \
@@ -75,9 +74,12 @@ static const MarshalHeader_mst *GetDescriptor(marshalIndex_t index)
     ((ArrayMarshal_mst *))ArrayLookupTable[_index_ & NULL_MASK])
 
 //*** GetUnmarshaledInteger()
-// Gets the unmarshaled value and normalizes it to a UIN32 for other 
+// Gets the unmarshaled value and normalizes it to a UIN32 for other
 // processing (comparisons and such).
-static UINT32 GetUnmarshaledInteger(marshalIndex_t type, const void *target)
+static UINT32 GetUnmarshaledInteger(
+    marshalIndex_t       type,
+    const void          *target
+)
 {
     int     size = (type & SIZE_MASK);
 //
@@ -94,18 +96,26 @@ static UINT32 GetUnmarshaledInteger(marshalIndex_t type, const void *target)
     return (UINT32)*((UINT8 *)target);
 }
 
-static UINT32 GetSelector(void *structure, const UINT16 *values, 
-                            UINT16 descriptor)
+static UINT32 GetSelector(
+    void                *structure,
+    const UINT16        *values,
+    UINT16               descriptor
+)
 {
     uint                 sel = GET_ELEMENT_NUMBER(descriptor);
     // Get the offset of the value in the unmarshaled structure
     const UINT16        *entry = &values[(sel * 3)];
 //
-    return GetUnmarshaledInteger(GET_ELEMENT_SIZE(entry[0]), 
+    return GetUnmarshaledInteger(GET_ELEMENT_SIZE(entry[0]),
                         ((UINT8 *)structure) + entry[2]);
 }
 
-static TPM_RC UnmarshalBytes(UINT8 *target, int count, UINT8 **buffer, INT32 *size)
+static TPM_RC UnmarshalBytes(
+    UINT8               *target,        // IN/OUT: place to put the bytes
+    UINT8               **buffer,       // IN/OUT: source of the input data
+    INT32               *size,          // IN/OUT: remaining bytes in the input buffer
+    int                  count          // IN: number of bytes to get
+)
 {
     if((*size -= count) >= 0)
     {
@@ -118,7 +128,12 @@ static TPM_RC UnmarshalBytes(UINT8 *target, int count, UINT8 **buffer, INT32 *si
 
 //*** MarshalBytes()
 // Marshal an array of bytes.
-static UINT16 MarshalBytes(UINT8 *source, UINT8 **buffer, INT32 *size, int32_t count)
+static UINT16 MarshalBytes(
+    UINT8               *source,
+    UINT8               **buffer,
+    INT32               *size,
+    int32_t              count
+)
 {
     if(buffer != NULL)
     {
@@ -132,15 +147,21 @@ static UINT16 MarshalBytes(UINT8 *source, UINT8 **buffer, INT32 *size, int32_t c
 
 //*** ArrayUnmarshal()
 // Unmarshal an array. The 'index' is of the form: 'type'_ARRAY_MARSHAL_INDEX.
-static TPM_RC ArrayUnmarshal(UINT16 index, UINT8 *target, 
-                           UINT8 **buffer, INT32 *size, UINT32 count)
+static TPM_RC ArrayUnmarshal(
+    UINT16               index,         // IN: the type of the array
+    UINT8               *target,        // IN: target for the data
+    UINT8               **buffer,       // IN/OUT: place to get the data
+    INT32               *size,          // IN/OUT: remaining unmarshal data
+    UINT32               count          // IN: number of values of 'index' to
+                                        //      unmarshal
+)
 {
     marshalIndex_t       which = ArrayLookupTable[index & NULL_MASK].type;
     UINT16               stride = ArrayLookupTable[index & NULL_MASK].stride;
     TPM_RC               result;
 //
     if(stride == 1) // A byte array
-        result = UnmarshalBytes(target, count, buffer, size);
+        result = UnmarshalBytes(target, buffer, size, count);
     else
     {
         which |= index & NULL_FLAG;
@@ -152,8 +173,13 @@ static TPM_RC ArrayUnmarshal(UINT16 index, UINT8 *target,
 }
 
 //*** ArrayMarshal()
-static UINT16 ArrayMarshal(UINT16 index, UINT8 *source,
-                      UINT8 **buffer, INT32 *size, UINT32 count)
+static UINT16 ArrayMarshal(
+    UINT16               index,         // IN: the type of the array
+    UINT8               *source,        // IN: source of the data
+    UINT8               **buffer,       // IN/OUT: place to put the data
+    INT32               *size,          // IN/OUT: amount of space for the data
+    UINT32               count          // IN: number of values of 'index' to marshal
+)
 {
     marshalIndex_t      which = ArrayLookupTable[index & NULL_MASK].type;
     UINT16              stride = ArrayLookupTable[index & NULL_MASK].stride;
@@ -192,7 +218,7 @@ UnmarshalUnion(
             // Get the selected thing to unmarshal
             selected = ((marshalIndex_t *)offset)[i];
             if(ut->modifiers & IS_ARRAY_UNION)
-                return UnmarshalBytes(target, selected, buffer, size);
+                return UnmarshalBytes(target, buffer, size, selected);
             else
             {
                 // Propagate NULL_FLAG if the null flag was
@@ -240,62 +266,79 @@ MarshalUnion(
 
 TPM_RC
 UnmarshalInteger(
-    int                  iSize, 
-    void                *target, 
-    UINT8               **buffer, 
-    INT32               *size, 
-    UINT32              *value
+    int                  iSize,             // IN: Number of bytes in the integer
+    void                *target,            // OUT: receives the integer
+    UINT8               **buffer,           // IN/OUT: source of the data
+    INT32               *size,              // IN/OUT: amount of data available
+    UINT32              *value              // OUT: optional copy of 'target'
 )
 {
+    // This is just to save typing
+#define _MB_ (*buffer)
+    // The size is a power of two so convert to regular integer
     int              bytes = (1 << (iSize & SIZE_MASK));
+//
+    // Check to see if there is enough data to fulfill the request
     if((*size -= bytes) >= 0)
     {
-#define mb (*buffer)
+        // The most comon size
         if(bytes == 4)
         {
-            *((UINT32 *)target) = (UINT32)((((((mb[0] << 8) | mb[1]) << 8)
-                                           | mb[2]) << 8) | mb[3]);
-            *value = *((UINT32 *)target);
+            *((UINT32 *)target) = (UINT32)((((((_MB_[0] << 8) | _MB_[1]) << 8)
+                                           | _MB_[2]) << 8) | _MB_[3]);
+            // If a copy is needed, copy it.
+            if(value != NULL)
+                *value = *((UINT32 *)target);
         }
         else if(bytes == 2)
         {
-            *((UINT16 *)target) = (UINT16)((mb[0] << 8) | mb[1]);
-            if(iSize & IS_SIGNED)
-                *value = (UINT32)(*((INT16 *)target));
-            else
-                *value = (UINT32)(*((UINT16 *)target));
+            *((UINT16 *)target) = (UINT16)((_MB_[0] << 8) | _MB_[1]);
+            // If a copy is needed, copy with the appropriate sign extension
+            if(value != NULL)
+            {
+                if(iSize & IS_SIGNED)
+                    *value = (UINT32)(*((INT16 *)target));
+                else
+                    *value = (UINT32)(*((UINT16 *)target));
+            }
         }
         else if(bytes == 1)
         {
-            *((UINT8*)target) = (UINT8)mb[0];
-            if(iSize & IS_SIGNED)
-                *value = (UINT32)(*((INT8 *)target));
-            else
-                *value = (UINT32)(*((UINT8 *)target));
+            *((UINT8*)target) = (UINT8)_MB_[0];
+            // If a copy is needed, copy with the appropriate sign extension
+            if(value != NULL)
+            {
+                if(iSize & IS_SIGNED)
+                    *value = (UINT32)(*((INT8 *)target));
+                else
+                    *value = (UINT32)(*((UINT8 *)target));
+            }
         }
         else
         {
-            *((UINT64 *)target) = (((UINT64)BYTE_ARRAY_TO_UINT32(mb)) << 32)
-                + BYTE_ARRAY_TO_UINT32(&mb[4]);
+            // There is no input type that is a 64-bit value other than a UINT64. So
+            // there is no reason to do anything other than unmarshal it.
+            *((UINT64 *)target) = BYTE_ARRAY_TO_UINT64(*buffer);
         }
         *buffer += bytes;
         return TPM_RC_SUCCESS;
-#undef mb
+#undef _MB_
     }
     return TPM_RC_INSUFFICIENT;
 }
 
 //*** Unmarshal()
 // This is the function that performs unmarshaling of different numbered types. Each
-// TPM type has a number. The number is used to lookup the address of the data 
+// TPM type has a number. The number is used to lookup the address of the data
 // structure that describes how to unmarshal that data type.
-TPM_RC 
+//
+TPM_RC
 Unmarshal(
     UINT16               typeIndex,         // IN: the thing to marshal
     void                *target,            // IN: were the data goes from
     UINT8               **buffer,           // IN/OUT: the data source buffer
     INT32               *size               // IN/OUT: the remaining size
-    )
+)
 {
     const MarshalHeader_mst     *sel;
     TPM_RC                       result;
@@ -306,40 +349,61 @@ Unmarshal(
     {
         case UINT_MTYPE:
         {
-            UINT32          dummy;
-            return UnmarshalInteger(sel->modifiers, target, 
-                                      buffer, size, &dummy);
+            // A simple signed or unsigned integer value.
+            return UnmarshalInteger(sel->modifiers, target,
+                                      buffer, size, NULL);
         }
         case VALUES_MTYPE:
         {
             // This is the general-purpose structure that can handle things like
             // TPMI_DH_PARENT that has multiple ranges, multiple singles and a
             // 'null' value. When things cover a large range with holes in the range
-            // they can be turned into multiple ranges.
-            // Unmarshal the base type 
+            // they can be turned into multiple ranges. There is no option for a bit
+            // field.
+            // The structure is:
+            //  typedef const struct ValuesMarshal_mst
+            //  {
+            //      UINT8           marshalType;        // VALUES_MTYPE
+            //      UINT8           modifiers;
+            //      UINT8           errorCode;
+            //      UINT8           ranges;
+            //      UINT8           singles;
+            //      UINT32          values[1];
+            //  } ValuesMarshal_mst;
+            // Unmarshal the base type
             UINT32                   val;
-            if(IS_SUCCESS(UnmarshalInteger(sel->modifiers, target, 
+            if(IS_SUCCESS(UnmarshalInteger(sel->modifiers, target,
                                            buffer, size, &val)))
             {
                 ValuesMarshal_mst   *vmt = ((ValuesMarshal_mst *)sel);
                 const UINT32        *check = vmt->values;
+            //
+                // if the TAKES_NULL flag is set, then the first entry in the values
+                // list is the NULL value. Iy is not included in the 'ranges' or
+                // 'singles' count.
                 if((vmt->modifiers & TAKES_NULL) && (val == *check++))
                 {
                     if((typeIndex & NULL_FLAG) == 0)
                         result = (TPM_RC)(sel->errorCode);
                 }
+                // No NULL value or input is not the NULL value
                 else
                 {
                     int               i;
+                //
+                    // Check all the min-max ranges.
                     for(i = vmt->ranges - 1; i >= 0; check = &check[2], i--)
                         if((UINT32)(val - check[0]) <= check[1])
                             break;
+                    // if the input is in a selected range, then i >= 0
                     if(i < 0)
                     {
+                        // Not in any range, so check sigles
                         for(i = vmt->singles - 1; i >= 0; i--)
                             if(val == check[i])
                                 break;
                     }
+                    // If input not in range and not in any single so return error
                     if(i < 0)
                         result = (TPM_RC)(sel->errorCode);
                 }
@@ -348,18 +412,33 @@ Unmarshal(
         }
         case TABLE_MTYPE:
         {
+            // This is a table with or without bit checking. The input is checked
+            // against each value in the table. If the value is in the table, and
+            // a bits table is present, then the bit field is checked to see if the
+            // indiated value is implemented. For example, if there is a table of
+            // allowed RSA key sises and the 2nd entry matches, then the 2nd bit in
+            // thed bit field is check to see if that allowwed size is implemented in
+            // this TPM.
+            //  typedef const struct TableMarshal_mst
+            //  {
+            //      UINT8           marshalType;        // TABLE_MTYPE
+            //      UINT8           modifiers;
+            //      UINT8           errorCode;
+            //      UINT8           singles;
+            //      UINT32          values[1];
+            //  } TableMarshal_mst;
+
             UINT32                  val;
-            // This is a table with or without bit checking. The bits will be 
-            // conditionally set by the compiler if some feature is implemented.
-            // When a value is matched in the list, the bit field can be checked to
-            // see if the feature is implemented. This is useful for things like
-            // key sizes where there sizes are optionally implemented.
-            // Unmarshal the base type 
-            if(IS_SUCCESS(UnmarshalInteger(sel->modifiers, target, 
+        //
+            // Unmarshal the base type
+            if(IS_SUCCESS(UnmarshalInteger(sel->modifiers, target,
                                             buffer, size, &val)))
             {
                 TableMarshal_mst    *tmt = ((TableMarshal_mst *)sel);
                 const UINT32        *check = tmt->values;
+            //
+                // If this type has a null value, then it is the first value in the
+                // list of values. It does not count in the count of values
                 if((tmt->modifiers & TAKES_NULL) && (val == *check++))
                 {
                     if((typeIndex & NULL_FLAG) == 0)
@@ -368,16 +447,23 @@ Unmarshal(
                 else
                 {
                     int               i;
+                //
+                    // Process the singles
                     for(i = tmt->singles - 1; i >= 0; i--)
                     {
+                        // does the input value match the value in the table
                         if(val == check[i])
                         {
+                            // If there is an associated bit table, make sure that the corresponding
+                            // bit is SET
                             if((HAS_BITS & tmt->modifiers)
                                && (!IS_BIT_SET32(i, &(check[tmt->singles]))))
+                                // if not SET, then this is a failure.
                                 i = -1;
                             break;
                         }
                     }
+                    // error if not found or bit not SET
                     if(i < 0)
                         result = (TPM_RC)(sel->errorCode);
                 }
@@ -386,19 +472,36 @@ Unmarshal(
         }
         case MIN_MAX_MTYPE:
         {
-
+            // A MIN_MAX is a range. It can have a bit field and a NULL value that is
+            // outside of the range. If the input value is in the min-max range then
+            // it is valid unless there is an associated bit field. Otherwise, it
+            // it is only valid if the corresponding value in the bit field is SET.
+            // The min value is 'values[0]' or 'values[1]' if there is a NULL value.
+            // The max value is the value after min. The max value is in the table as
+            // max minus min. This allows 'val' to be subtracted from min and then
+            // checked against max with one unsigned comparison. If present, the bit
+            // field will be the first 'values' after max.
+            //  typedef const struct MinMaxMarshal_mst
+            //  {
+            //      UINT8           marshalType;        // MIN_MAX_MTYPE
+            //      UINT8           modifiers;
+            //      UINT8           errorCode;
+            //      UINT32          values[2];
+            //  } MinMaxMarshal_mst;
             UINT32               val;
+        //
             // A min-max has a range. It can have a bit-field that is indexed to the
-            // min value (something that matches min has a bit at 0. This is useful 
+            // min value (something that matches min has a bit at 0. This is useful
             // for algorithms. The min-max define a range of algorithms to be checked
-            // and the bit field can check to see if the algorithm in that range is 
-            // allowed. 
-            if(IS_SUCCESS(UnmarshalInteger(sel->modifiers, target, 
+            // and the bit field can check to see if the algorithm in that range is
+            // allowed.
+            if(IS_SUCCESS(UnmarshalInteger(sel->modifiers, target,
                                            buffer, size, &val)))
             {
                 MinMaxMarshal_mst   *mmt = (MinMaxMarshal_mst *)sel;
                 const UINT32        *check = mmt->values;
             //
+                // If this type takes a NULL, see if it matches. This
                 if((mmt->modifiers & TAKES_NULL) && (val == *check++))
                 {
                     if((typeIndex & NULL_FLAG) == 0)
@@ -407,8 +510,8 @@ Unmarshal(
                 else
                 {
                     val -= *check;
-                    if((val > check[1]) 
-                       || ((mmt->modifiers & HAS_BITS) && 
+                    if((val > check[1])
+                       || ((mmt->modifiers & HAS_BITS) &&
                            !IS_BIT_SET32(val, &check[2])))
                         result = (TPM_RC)(mmt->errorCode);
                 }
@@ -421,7 +524,7 @@ Unmarshal(
             UINT32                   mask;
             AttributesMarshal_mst   *amt = (AttributesMarshal_mst *)sel;
         //
-            if(IS_SUCCESS(UnmarshalInteger(sel->modifiers, target, 
+            if(IS_SUCCESS(UnmarshalInteger(sel->modifiers, target,
                                     buffer, size, &mask)))
             {
                 if((mask & amt->attributeMask) != 0)
@@ -436,18 +539,18 @@ Unmarshal(
             // the type of the entry. They choices are: simple, union, or array. A
             // simple type can be a simple integer or another structure. It can also
             // be a specific "interface type." For example, when a structure entry is
-            // a value that is used define the dimension of an array, the entry of 
+            // a value that is used define the dimension of an array, the entry of
             // the structure will reference a "synthetic" interface type, most often
             // a min-max value. If the type of the entry is union or array, then the
             // first value indicates which of the previous elements provides the union
             // selector or the array dimension. That previous entry is referenced in
             // the unmarshaled structure in memory (Not the marshaled buffer). The
-            // previous entry indicates the location in the structure of the value. 
-            // The second entry of each structure entry indicated the index of the 
+            // previous entry indicates the location in the structure of the value.
+            // The second entry of each structure entry indicated the index of the
             // type associated with the entry. This is an index into the array of
-            // arrays or the union table (merged with the normal table in this 
-            // implementation). The final entry is the offset in the unmarshaled 
-            // structure where the value is located. This is the offsetof(STRUcTURE, 
+            // arrays or the union table (merged with the normal table in this
+            // implementation). The final entry is the offset in the unmarshaled
+            // structure where the value is located. This is the offsetof(STRUcTURE,
             // element). This value is added to the input 'target' or 'source' value
             // to determine where the value goes.
             StructMarshal_mst   *mst = (StructMarshal_mst *)sel;
@@ -462,7 +565,7 @@ Unmarshal(
                 marshalIndex_t   index = value[1];
                 UINT8           *offset = _target + value[2];
             //
-                index |= ((ELEMENT_PROPAGATE & descriptor) 
+                index |= ((ELEMENT_PROPAGATE & descriptor)
                             << (NULL_SHIFT - PROPAGATE_SHIFT));
                 switch(GET_ELEMENT_TYPE(descriptor))
                 {
@@ -485,7 +588,7 @@ Unmarshal(
                         UINT32            dimension;
                     //
                         dimension = GetSelector(target, mst->values, descriptor);
-                        result = ArrayUnmarshal(index, offset, buffer, 
+                        result = ArrayUnmarshal(index, offset, buffer,
                                                 size, dimension);
                         break;
                     }
@@ -502,14 +605,15 @@ Unmarshal(
             // the tag) references the synthetic 'interface' value for the size
             // parameter.
             Tpm2bMarshal_mst        *m2bt = (Tpm2bMarshal_mst *)sel;
+        //
             if(IS_SUCCESS(Unmarshal(m2bt->sizeIndex, target, buffer, size)))
-                result = UnmarshalBytes(((TPM2B *)target)->buffer, 
-                               *((UINT16 *)target), buffer, size);
+                result = UnmarshalBytes(((TPM2B *)target)->buffer,
+                               buffer, size, *((UINT16 *)target));
             break;
         }
         case TPM2BS_MTYPE:
         {
-            // This is used when a TPM2B contains a structure. 
+            // This is used when a TPM2B contains a structure.
             Tpm2bsMarshal_mst   *m2bst = (Tpm2bsMarshal_mst *)sel;
             INT32          count;
         //
@@ -525,10 +629,10 @@ Unmarshal(
                 {
                     marshalIndex_t  index = m2bst->dataIndex;
                 //
-                    index |= (m2bst->modifiers & PROPAGATE_NULL) 
+                    index |= (m2bst->modifiers & PROPAGATE_NULL)
                                     << (NULL_SHIFT - PROPAGATE_SHIFT);
                     if(IS_SUCCESS(Unmarshal(index,
-                                           _target + (m2bst->modifiers & SIGNED_MASK), 
+                                           _target + (m2bst->modifiers & SIGNED_MASK),
                                            buffer, &count)))
                     {
                         if(count != 0)
@@ -551,16 +655,48 @@ Unmarshal(
             {
                 index |= (mlt->modifiers & PROPAGATE_NULL)
                             << (NULL_SHIFT - PROPAGATE_SHIFT);
-                result = ArrayUnmarshal(index, 
-                                        _target +(mlt->modifiers & SIGNED_MASK), 
+                result = ArrayUnmarshal(index,
+                                        _target +(mlt->modifiers & SIGNED_MASK),
                                         buffer, size,
                                         *((UINT32 *)target));
             }
             break;
         }
         case NULL_MTYPE:
+        {
             result = TPM_RC_SUCCESS;
             break;
+        }
+        case COMPOSITE_MTYPE:
+        {
+            CompositeMarshal_mst    *mct = (CompositeMarshal_mst *)sel;
+            int                      i;
+            UINT8                   *buf = *buffer;
+            INT32                   sz = *size;
+        //
+            result = TPM_RC_VALUE;
+            for(i = GET_ELEMENT_COUNT(mct->modifiers) - 1; i <= 0; i--)
+            {
+                marshalIndex_t      index = mct->types[i];
+            //
+                // This type might take a null so set it in each called value, just
+                // in case it is needed in that value. Only one value in each
+                // composite should have the takes null SET.
+                index |= typeIndex & NULL_MASK;
+                result = Unmarshal(index, target, buffer, size);
+                if(result == TPM_RC_SUCCESS)
+                    break;
+                // Each of the composite values does its own unmarshaling. This
+                // has some execution overhead if it is unmarshaled multiple times
+                // but it saves code size in not having to reproduce the various
+                // unmarshaling types that can be in a composite. So, what this means
+                // is that the buffer pointer and size have to be reset for each
+                // unmarshaled value.
+                *buffer = buf;
+                *size = sz;
+            }
+            break;
+        }
         default:
         {
             result = TPM_RC_FAILURE;
@@ -571,14 +707,14 @@ Unmarshal(
 }
 
 //*** Marshal()
-// This is the function that drives marshaling of output. Because there is no 
+// This is the function that drives marshaling of output. Because there is no
 // validation of the output, there is a lot less code.
 UINT16 Marshal(
     UINT16               typeIndex,         // IN: the thing to marshal
     void                *source,            // IN: were the data comes from
     UINT8               **buffer,           // IN/OUT: the data source buffer
     INT32               *size               // IN/OUT: the remaining size
-    )
+)
 {
 #define _source  ((UINT8 *)source)
 
@@ -593,6 +729,7 @@ UINT16 Marshal(
         case TABLE_MTYPE:
         case MIN_MAX_MTYPE:
         case ATTRIBUTES_MTYPE:
+        case COMPOSITE_MTYPE:
         {
 #if BIG_ENDIAN_TPM
 #define MM16    0
@@ -661,7 +798,7 @@ UINT16 Marshal(
                 {
                     case UNION_STYPE:
                     {
-                        UINT32           choice; 
+                        UINT32           choice;
                     //
                         choice = GetSelector(source, mst->values, des);
                         retVal += MarshalUnion(index, offset, buffer, size, choice);
@@ -730,7 +867,7 @@ UINT16 Marshal(
             ListMarshal_mst *    mlt = ((ListMarshal_mst *)sel);
             UINT8               *offset = _source + (mlt->modifiers & SIGNED_MASK);
             retVal = Marshal(UINT32_MARSHAL_REF, source, buffer, size);
-            retVal += ArrayMarshal((marshalIndex_t)(mlt->arrayRef), offset, 
+            retVal += ArrayMarshal((marshalIndex_t)(mlt->arrayRef), offset,
                                    buffer, size, *((UINT32 *)source));
             break;
         }
@@ -751,5 +888,3 @@ UINT16 Marshal(
 }
 
 #endif // TABLE_DRIVEN_MARSHAL
-
-//

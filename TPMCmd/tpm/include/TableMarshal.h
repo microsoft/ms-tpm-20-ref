@@ -38,17 +38,18 @@
 
 // These are the basic unmarshaling types. This is in the first byte of
 // each structure descriptor that is passed to Marshal()/Unmarshal() for processing.
-#define UINT_MTYPE           0                          
-#define VALUES_MTYPE         (UINT_MTYPE + 1)
-#define TABLE_MTYPE          (VALUES_MTYPE + 1)
-#define MIN_MAX_MTYPE        (TABLE_MTYPE + 1)
-#define ATTRIBUTES_MTYPE     (MIN_MAX_MTYPE + 1)
-#define STRUCTURE_MTYPE      (ATTRIBUTES_MTYPE + 1)
-#define TPM2B_MTYPE          (STRUCTURE_MTYPE + 1)
-#define TPM2BS_MTYPE         (TPM2B_MTYPE + 1)
-#define LIST_MTYPE           (TPM2BS_MTYPE + 1) // TPML
-#define ERROR_MTYPE          (LIST_MTYPE + 1)
-#define NULL_MTYPE           (ERROR_MTYPE + 1)
+#define UINT_MTYPE          0                          
+#define VALUES_MTYPE        (UINT_MTYPE + 1)
+#define TABLE_MTYPE         (VALUES_MTYPE + 1)
+#define MIN_MAX_MTYPE       (TABLE_MTYPE + 1)
+#define ATTRIBUTES_MTYPE    (MIN_MAX_MTYPE + 1)
+#define STRUCTURE_MTYPE     (ATTRIBUTES_MTYPE + 1)
+#define TPM2B_MTYPE         (STRUCTURE_MTYPE + 1)
+#define TPM2BS_MTYPE        (TPM2B_MTYPE + 1)
+#define LIST_MTYPE          (TPM2BS_MTYPE + 1) // TPML
+#define ERROR_MTYPE         (LIST_MTYPE + 1)
+#define NULL_MTYPE          (ERROR_MTYPE + 1)
+#define COMPOSITE_MTYPE     (NULL_MTYPE + 1)   
 
 //*** The Marshal Index 
 // A structure is used to hold the values that guide the marshaling/unmarshaling of
@@ -82,29 +83,30 @@ typedef unsigned int        uint;
 // These are in used in anything that is an integer value. Theses would not be in
 // structure modifier bytes (they would be used in values in structures but not the
 // STRUCTURE_MTYPE header.
-#define ONE_BYTES   (0)
-#define TWO_BYTES   (1)
-#define FOUR_BYTES  (2)
-#define EIGHT_BYTES (3)
-#define SIZE_MASK   (0x3)
-#define IS_SIGNED   (1 << 2)    // when the unmarshaled type is a signed value
-#define SIGNED_MASK (SIZE_MASK | IS_SIGNED)
+#define ONE_BYTES           (0)
+#define TWO_BYTES           (1)
+#define FOUR_BYTES          (2)
+#define EIGHT_BYTES         (3)
+#define SIZE_MASK           (0x3)
+#define IS_SIGNED           (1 << 2)    // when the unmarshaled type is a signed value
+#define SIGNED_MASK         (SIZE_MASK | IS_SIGNED)
 
 // This may be used for any type except a UINT_MTYPE
-#define TAKES_NULL      (1 << 7)    // when the type takes a null
+#define TAKES_NULL          (1 << 7)    // when the type takes a null
+
 // When referencing a structure, this flag indicates if a null is to be propagated
 // to the referenced structure or type.
-#define PROPAGATE_SHIFT  7
-#define PROPAGATE_NULL  (1 << PROPAGATE_SHIFT)
+#define PROPAGATE_SHIFT     7
+#define PROPAGATE_NULL      (1 << PROPAGATE_SHIFT)
 
 // Can be used in min-max or table structures.
-#define HAS_BITS        (1 << 6)    // when bit mask is present 
+#define HAS_BITS            (1 << 6)    // when bit mask is present 
 
 // In a union, we need to know if this is a union of constant arrays.
-#define IS_ARRAY_UNION  (1 << 6)
+#define IS_ARRAY_UNION      (1 << 6)
 
 // In a TPM2BS_MTYPE
-#define SIZE_EQUAL      (1 << 6)
+#define SIZE_EQUAL          (1 << 6)
 
 // Right now, there are two spare bits in the modifiers field.
 
@@ -154,8 +156,11 @@ typedef unsigned int        uint;
 // if that key size is allowed in the implementation. The smallest bit field has 
 // 32-bits 32-bits because it is implemented as part of the 'values' array of 
 // the structures that allow bit fields.
-#define IS_BIT_SET32(bit, bits)  \
-    ((((UINT32 *)bits)[bit >> 5] & (1 << (bit & 0x1F))) != 0)
+#define IS_BIT_SET32(bit, bits)                                                     \
+                        ((((UINT32 *)bits)[bit >> 5] & (1 << (bit & 0x1F))) != 0)
 
+// For a COMPOSITE_MTYPE, the qualifiers byte has an element size and count.
+#define SET_ELEMENT_COUNT(count)    ((count & 0x1F) << 3)
+#define GET_ELEMENT_COUNT(val)      ((val  >> 3) & 0x1F)
 
 #endif // _TABLE_DRIVEN_MARSHAL_H_

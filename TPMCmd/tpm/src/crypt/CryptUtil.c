@@ -131,7 +131,6 @@ CryptGenerateKeyedHash(
 {
     TPMT_KEYEDHASH_SCHEME   *scheme;
     TPM_ALG_ID               hashAlg;
-    UINT16                   hashBlockSize;
     UINT16                   digestSize;
 
     scheme = &publicArea->parameters.keyedHashDetail.scheme;
@@ -146,7 +145,6 @@ CryptGenerateKeyedHash(
         hashAlg = scheme->details.xor.hashAlg;
     else
         hashAlg = scheme->details.hmac.hashAlg;
-    hashBlockSize = CryptHashGetBlockSize(hashAlg);
     digestSize = CryptHashGetDigestSize(hashAlg);
 
     // if this is a signing or a decryption key, then the limit
@@ -160,7 +158,7 @@ CryptGenerateKeyedHash(
         if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, decrypt)
            || IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign))
         {
-            if(sensitiveCreate->data.t.size > hashBlockSize)
+            if(sensitiveCreate->data.t.size > CryptHashGetBlockSize(hashAlg))
                 return TPM_RC_SIZE;
 #if 0   // May make this a FIPS-mode requirement
             if(sensitiveCreate->data.t.size < (digestSize / 2))

@@ -42,7 +42,7 @@
 //** Includes
 
 #include "Tpm.h"
-#include "TpmASN1.h"
+#include "TpmAsn1.h"
 
 //** Defined Constants
 
@@ -76,6 +76,7 @@ typedef struct stringRef
     INT16        len;
 } stringRef;
 
+// This is defined to avoid bit by bit comparisons within a UINT32
 typedef union x509KeyUsageUnion {
     TPMA_X509_KEY_USAGE     x509;
     UINT32                  integer;
@@ -97,29 +98,25 @@ MAKE_OID(_KEY_USAGE_EXTENSION);
 MAKE_OID(_TCG_TPMA_OBJECT);
 
 #ifdef _X509_SPT_
-// If a bit is SET in keyUsageSign is also SET in keyUsagem then the associated key 
+// If a bit is SET in KEY_USAGE_SIGN is also SET in keyUsagem then the associated key 
 // has to have 'sign' SET.
-const x509KeyUsageUnion keyUsageSign = 
-{
-    TPMA_X509_KEY_USAGE_INITIALIZER( 
-        /* bits_at_0        */ 0, /* decipheronly    */ 0,  /* encipheronly   */ 0,
-        /* crlsign          */ 1, /* keycertsign     */ 1,  /* keyagreement   */ 0,
-        /* dataencipherment */ 0, /* keyencipherment */ 0,  /* nonrepudiation */ 0,
-        /* digitalsignature */ 1)
-};
-// If a bit is SET in keyUsageDecrypt is also SET in keyUsagem then the associated key 
+const x509KeyUsageUnion KEY_USAGE_SIGN =
+{ TPMA_X509_KEY_USAGE_INITIALIZER(
+    /* bits_at_0        */ 0, /* decipheronly    */ 0,  /* encipheronly   */ 0,
+    /* crlsign          */ 1, /* keycertsign     */ 1,  /* keyagreement   */ 0,
+    /* dataencipherment */ 0, /* keyencipherment */ 0,  /* nonrepudiation */ 0,
+    /* digitalsignature */ 1) };
+// If a bit is SET in KEY_USAGE_DECRYPT is also SET in keyUsagem then the associated key
 // has to have 'decrypt' SET.
-const x509KeyUsageUnion keyUsageDecrypt =
-{
-    TPMA_X509_KEY_USAGE_INITIALIZER(
-        /* bits_at_0        */ 0, /* decipheronly    */ 1,  /* encipheronly   */ 1,
-        /* crlsign          */ 0, /* keycertsign     */ 0,  /* keyagreement   */ 1,
-        /* dataencipherment */ 1, /* keyencipherment */ 1,  /* nonrepudiation */ 0,
-        /* digitalsignature */ 0)
-};                                                    
+const x509KeyUsageUnion KEY_USAGE_DECRYPT =
+{ TPMA_X509_KEY_USAGE_INITIALIZER(
+    /* bits_at_0        */ 0, /* decipheronly    */ 1,  /* encipheronly   */ 1,
+    /* crlsign          */ 0, /* keycertsign     */ 0,  /* keyagreement   */ 1,
+    /* dataencipherment */ 1, /* keyencipherment */ 1,  /* nonrepudiation */ 0,
+    /* digitalsignature */ 0) };
 #else
-extern x509KeyUsageUnion keyUsageSign;
-extern x509KeyUsageUnion keyUsageDecrypt;
+extern x509KeyUsageUnion KEY_USAGE_SIGN;
+extern x509KeyUsageUnion KEY_USAGE_DECRYPT;
 #endif
 
 #endif // _X509_H_

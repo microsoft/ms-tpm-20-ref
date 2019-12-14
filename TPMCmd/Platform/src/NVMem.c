@@ -47,7 +47,7 @@
 #if FILE_BACKED_NV
 #   include         <stdio.h>
 FILE                *s_NvFile = NULL;
-BOOL                 s_NeedsManufacture = FALSE;
+int                  s_NeedsManufacture = FALSE;
 #endif
 
 //**Functions
@@ -221,12 +221,25 @@ _plat__NVEnable(
 // Disable NV memory
 LIB_EXPORT void
 _plat__NVDisable(
-    void
+    int              delete           // IN: If TRUE, delete the NV contents.
     )
 {
 #if  FILE_BACKED_NV
     if(NULL != s_NvFile)
+    {
         fclose(s_NvFile);    // Close NV file
+        // Alternative to deleting the file is to set its size to 0. This will not
+        // match the NV size so the TPM will need to be remanufactured.
+        if(delete)
+        {
+            // Open for writing at the start. Sets the size to zero.
+            if(NvFileOpen("w") >= 0)
+            {
+                fflush(s_NvFile);
+                fclose(s_NvFile);
+            }
+        }
+    }
     s_NvFile = NULL;        // Set file handle to NULL
 #endif
     return;
@@ -291,7 +304,7 @@ _plat__NvIsDifferent(
 // NOTE: A useful optimization would be for this code to compare the current 
 // contents of NV with the local copy and note the blocks that have changed. Then
 // only write those blocks when _plat__NvCommit() is called.
-LIB_EXPORT BOOL
+LIB_EXPORT int 
 _plat__NvMemoryWrite(
     unsigned int     startOffset,   // IN: write start
     unsigned int     size,          // IN: size of bytes to write
@@ -382,7 +395,7 @@ _plat__ClearNvAvail(
 //*** _plat__NVNeedsManufacture()
 // This function is used by the simulator to determine when the TPM's NV state
 // needs to be manufactured.
-LIB_EXPORT BOOL
+LIB_EXPORT int 
 _plat__NVNeedsManufacture(
     void
     )

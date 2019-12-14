@@ -92,16 +92,25 @@ EntityGetLoadStatus(
                         // for policy checks but not always available when authValue
                         // is being checked.
                     case TPM_RH_LOCKOUT:
+                    // Rather than have #ifdefs all over the code, 
+                    // CASE_ACT_HANDLE is defined in ACT.h. It is 'case TPM_RH_ACT_x:'
+                    // FOR_EACH_ACT(CASE_ACT_HANDLE) creates a simple
+                    // case TPM_RH_ACT_x: // for each of the implemented ACT.
+                    FOR_EACH_ACT(CASE_ACT_HANDLE)
                         break;
                     default:
-                        // handling of the manufacture_specific handles
+                        // If the implementation has a manufacturer-specific value
+                        // then test for it here. Since this implementation does
+                        // not have any, this implementation returns the same failure
+                        // that unmarshaling of a bad handle would produce.
                         if(((TPM_RH)handle >= TPM_RH_AUTH_00)
                            && ((TPM_RH)handle <= TPM_RH_AUTH_FF))
-                           // use the value that would have been returned from
-                           // unmarshaling if it did the handle filtering
+                            // if the implementation has a manufacturer-specific value
                             result = TPM_RC_VALUE;
                         else
-                            FAIL(FATAL_ERROR_INTERNAL);
+                            // The handle is in the range of reserved handles but is 
+                            // not implemented in this TPM.
+                            result = TPM_RC_VALUE;
                         break;
                 }
                 break;
@@ -215,6 +224,8 @@ EntityGetAuthValue(
                     // endorsementAuth for TPM_RH_ENDORSEMENT
                     pAuth = &gp.endorsementAuth;
                     break;
+                // The ACT use platformAuth for auth
+                FOR_EACH_ACT(CASE_ACT_HANDLE)
                 case TPM_RH_PLATFORM:
                     // platformAuth for TPM_RH_PLATFORM
                     pAuth = &gc.platformAuth;
@@ -230,7 +241,7 @@ EntityGetAuthValue(
 #ifdef  VENDOR_PERMANENT
                 case VENDOR_PERMANENT:
                     // vendor authorization value
-                    pAauth = &g_platformUniqueDetails;
+                    pAuth = &g_platformUniqueDetails;
 #endif
                 default:
                     // If any other permanent handle is present it is
@@ -331,6 +342,13 @@ EntityGetAuthPolicy(
                     *authPolicy = gp.lockoutPolicy;
                     hashAlg = gp.lockoutAlg;
                     break;
+#define ACT_GET_POLICY(N)                                                           \
+                case TPM_RH_ACT_##N:                                                \
+                    *authPolicy = go.ACT_##N.authPolicy;                            \
+                    hashAlg = go.ACT_##N.hashAlg;                                   \
+                    break;
+                    // Get the policy for each implemented ACT
+                    FOR_EACH_ACT(ACT_GET_POLICY)
                 default:
                     return TPM_ALG_ERROR;
                     break;
@@ -439,7 +457,7 @@ EntityGetHierarchy(
             // If only the platform can delete the index, then it is
             // considered to be in the platform hierarchy, otherwise it
             // is in the owner hierarchy.
-            if(IS_ATTRIBUTE(nvIndex->publicArea.attributes, TPMA_NV, 
+            if(IS_ATTRIBUTE(nvIndex->publicArea.attributes, TPMA_NV,
                             PLATFORMCREATE))
                 hierarchy = TPM_RH_PLATFORM;
             else

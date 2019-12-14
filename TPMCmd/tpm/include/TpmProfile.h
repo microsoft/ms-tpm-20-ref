@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Aug 30, 2019  Time: 02:11:52PM
+ *  Date: Dec 10, 2019  Time: 11:04:40PM
  */
 
 #ifndef _TPM_PROFILE_H_
@@ -97,15 +97,20 @@
 #define ECC_SM2_P256                    NO
 #endif
 
+// Table 0:6 - Defines for Implemented ACT
+#ifndef RH_ACT_0
+#define RH_ACT_0                        YES
+#endif
+#ifndef RH_ACT_1
+#define RH_ACT_1                        NO
+#endif
+#ifndef RH_ACT_A
+#define RH_ACT_A                        YES
+#endif
+
 // Table 0:7 - Defines for Implementation Values
 #ifndef FIELD_UPGRADE_IMPLEMENTED
 #define FIELD_UPGRADE_IMPLEMENTED       NO
-#endif
-#ifndef HASH_ALIGNMENT
-#define HASH_ALIGNMENT                  4
-#endif
-#ifndef SYMMETRIC_ALIGNMENT
-#define SYMMETRIC_ALIGNMENT             4
 #endif
 #ifndef HASH_LIB
 #define HASH_LIB                        Ossl
@@ -116,20 +121,11 @@
 #ifndef MATH_LIB
 #define MATH_LIB                        Ossl
 #endif
-#ifndef BSIZE
-#define BSIZE                           UINT16
-#endif
 #ifndef IMPLEMENTATION_PCR
 #define IMPLEMENTATION_PCR              24
 #endif
-#ifndef PCR_SELECT_MAX
-#define PCR_SELECT_MAX                  ((IMPLEMENTATION_PCR+7)/8)
-#endif
 #ifndef PLATFORM_PCR
 #define PLATFORM_PCR                    24
-#endif
-#ifndef PCR_SELECT_MIN
-#define PCR_SELECT_MIN                  ((PLATFORM_PCR+7)/8)
 #endif
 #ifndef DRTM_PCR
 #define DRTM_PCR                        17
@@ -148,9 +144,6 @@
 #endif
 #ifndef CONTEXT_SLOT
 #define CONTEXT_SLOT                    UINT16
-#endif
-#ifndef CONTEXT_COUNTER
-#define CONTEXT_COUNTER                 UINT64
 #endif
 #ifndef MAX_LOADED_SESSIONS
 #define MAX_LOADED_SESSIONS             3
@@ -236,20 +229,11 @@
 #ifndef CRT_FORMAT_RSA
 #define CRT_FORMAT_RSA                  YES
 #endif
-#ifndef VENDOR_COMMAND_COUNT
-#define VENDOR_COMMAND_COUNT            0
-#endif
 #ifndef MAX_VENDOR_BUFFER_SIZE
 #define MAX_VENDOR_BUFFER_SIZE          1024
 #endif
 #ifndef TPM_MAX_DERIVATION_BITS
 #define TPM_MAX_DERIVATION_BITS         8192
-#endif
-#ifndef RSA_MAX_PRIME
-#define RSA_MAX_PRIME                   (MAX_RSA_KEY_BYTES/2)
-#endif
-#ifndef RSA_PRIVATE_SIZE
-#define RSA_PRIVATE_SIZE                (RSA_MAX_PRIME*5)
 #endif
 #ifndef SIZE_OF_X509_SERIAL_NUMBER
 #define SIZE_OF_X509_SERIAL_NUMBER      20
@@ -263,7 +247,7 @@
 #define ALG_AES                         ALG_YES
 #endif
 #ifndef ALG_CAMELLIA
-#define ALG_CAMELLIA                    ALG_NO      /* Not specified by vendor */
+#define ALG_CAMELLIA                    ALG_YES
 #endif
 #ifndef ALG_CBC
 #define ALG_CBC                         ALG_YES
@@ -365,7 +349,7 @@
 #define ALG_SM3_256                     ALG_NO
 #endif
 #ifndef ALG_SM4
-#define ALG_SM4                         ALG_NO
+#define ALG_SM4                         ALG_YES
 #endif
 #ifndef ALG_SYMCIPHER
 #define ALG_SYMCIPHER                   ALG_YES
@@ -415,7 +399,7 @@
 #define CAMELLIA_192                    (ALG_CAMELLIA && NO)
 #endif
 #ifndef CAMELLIA_256
-#define CAMELLIA_256                    (ALG_CAMELLIA && NO)
+#define CAMELLIA_256                    (ALG_CAMELLIA && YES)
 #endif
 
 // Table 1:24 - Defines for TDES Symmetric Cipher Algorithm Constants
@@ -427,6 +411,9 @@
 #endif
 
 // Table 0:5 - Defines for Implemented Commands
+#ifndef CC_ACT_SetTimeout
+#define CC_ACT_SetTimeout                   CC_YES
+#endif
 #ifndef CC_AC_GetCapability
 #define CC_AC_GetCapability                 CC_YES
 #endif

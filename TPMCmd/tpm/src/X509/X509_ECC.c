@@ -36,7 +36,8 @@
 #include "Tpm.h"
 #include "X509.h"
 #include "OIDs.h"
-#include "TpmASN1_fp.h"
+#include "TpmAsn1_fp.h"
+#include "X509_ECC_fp.h"
 #include "X509_spt_fp.h"
 #include "CryptHash_fp.h"
 
@@ -89,7 +90,7 @@ X509AddSigningAlgorithmECC(
             // Make sure that we have an OID for this hash and ECC
             if((hashDef->ECDSA)[0] != ASN1_OBJECT_IDENTIFIER)
                 break;
-            // if this is just an implementation check, indicate that this 
+            // if this is just an implementation check, indicate that this
             // combination is supported
             if(!ctx)
                 return 1;
@@ -104,7 +105,7 @@ X509AddSigningAlgorithmECC(
 
 
 //*** X509AddPublicECC()
-// This function will add the publicKey description to the DER data. If ctx is 
+// This function will add the publicKey description to the DER data. If ctx is
 // NULL, then no data is transferred and this function will indicate if the TPM
 // has the values for DER-encoding of the public key.
 //  Return Type: INT16
@@ -128,13 +129,13 @@ X509AddPublicECC(
 //      OBJECT IDENTIFIER 1.2.840.10045.3.1.7 prime256v1 (ANSI X9.62 named curve)
 //    BIT STRING (520 bit) 000001001010000111010101010111001001101101000100000010...
 //
-    // If this is a check to see if the key can be encoded, it can. 
+    // If this is a check to see if the key can be encoded, it can.
     // Need to mark the end sequence
     if(ctx == NULL)
         return 1;
     ASN1StartMarshalContext(ctx); // SEQUENCE (2 elem) 1st
     {
-        X509PushPoint(ctx, &object->publicArea.unique.ecc); // BIT STRING 
+        X509PushPoint(ctx, &object->publicArea.unique.ecc); // BIT STRING
         ASN1StartMarshalContext(ctx); // SEQUENCE (2 elem) 2nd
         {
             ASN1PushOID(ctx, curveOid); // curve dependent

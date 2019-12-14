@@ -79,6 +79,9 @@
     <ClCompile Include="src\main\SessionProcess.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\crypt\Ticket.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\subsystem\Time.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -529,9 +532,6 @@
     <ClCompile Include="src\crypt\CryptPrimeSieve.c">
       <Filter>Source Files\Crypt</Filter>
     </ClCompile>
-    <ClCompile Include="src\crypt\Ticket.c">
-      <Filter>Source Files\Crypt</Filter>
-    </ClCompile>
     <ClCompile Include="src\command\AttachedComponent\AC_GetCapability.c">
       <Filter>Source Files\AttachedComponent</Filter>
     </ClCompile>
@@ -571,20 +571,20 @@
     <ClCompile Include="src\X509\X509_ECC.c">
       <Filter>Source Files\X509</Filter>
     </ClCompile>
-    <ClCompile Include="src\X509\TpmASN1.c">
-      <Filter>Source Files\X509</Filter>
-    </ClCompile>
     <ClCompile Include="src\support\TableDrivenMarshal.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\support\TableMarshalData.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\command\ClockTimer\ACT_SetTimeout.c">
-      <Filter>Source Files\ACT</Filter>
-    </ClCompile>
-    <ClCompile Include="src\command\ClockTimer\ACT_spt.c">
-      <Filter>Source Files\ACT</Filter>
+    <ClCompile Include="src\crypt\ltc\TpmToLtcDesSupport.c" />
+    <ClCompile Include="src\crypt\ltc\TpmToLtcMath.c" />
+    <ClCompile Include="src\crypt\ltc\TpmToLtcSupport.c" />
+    <ClCompile Include="src\crypt\wolf\TpmToWolfDesSupport.c" />
+    <ClCompile Include="src\crypt\wolf\TpmToWolfMath.c" />
+    <ClCompile Include="src\crypt\wolf\TpmToWolfSupport.c" />
+    <ClCompile Include="src\X509\TpmAsn1.c">
+      <Filter>Source Files\X509</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1322,9 +1322,6 @@
     </ClInclude>
     <ClInclude Include="include\Wolf\user_settings.h">
       <Filter>Headers\Crypt\wolf</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ACT.h">
-      <Filter>Source Files\ACT</Filter>
     </ClInclude>
     <ClInclude Include="include\MinMax.h">
       <Filter>Headers</Filter>

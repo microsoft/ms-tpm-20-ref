@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmDispatch; Version 4.0 July 8,2017
- *  Date: Aug 30, 2019  Time: 04:59:32PM
+ *  Date: Oct 19, 2019  Time: 11:50:10AM
  */
 
 #if CC_Startup
@@ -677,7 +677,7 @@ case TPM_CC_HierarchyControl:
 #if CC_SetPrimaryPolicy
 case TPM_CC_SetPrimaryPolicy:
     *handleCount = 1;
-    result = TPMI_RH_HIERARCHY_AUTH_Unmarshal(&handles[0], handleBufferStart,
+    result = TPMI_RH_HIERARCHY_POLICY_Unmarshal(&handles[0], handleBufferStart,
                                               bufferRemainingSize);
     if(TPM_RC_SUCCESS != result) return result + TPM_RC_H + TPM_RC_1;
     break;
@@ -1003,6 +1003,14 @@ case TPM_CC_Policy_AC_SendSelect:
     if(TPM_RC_SUCCESS != result) return result + TPM_RC_H + TPM_RC_1;
     break;
 #endif // CC_Policy_AC_SendSelect
+#if CC_ACT_SetTimeout
+case TPM_CC_ACT_SetTimeout:
+    *handleCount = 1;
+    result = TPMI_RH_ACT_Unmarshal(&handles[0], handleBufferStart,
+                                              bufferRemainingSize);
+    if(TPM_RC_SUCCESS != result) return result + TPM_RC_H + TPM_RC_1;
+    break;
+#endif // CC_ACT_SetTimeout
 #if CC_Vendor_TCG_Test
 case TPM_CC_Vendor_TCG_Test:
     break;

@@ -37,45 +37,5 @@
 // descriptions for these variables are in Global.h for this project.
 
 //** Includes
+#define _PLATFORM_DATA_C_
 #include    "Platform.h"
-
-// From Cancel.c
-BOOL                 s_isCanceled;
-
-// From Clock.c
-unsigned int         s_adjustRate;
-BOOL                 s_timerReset;
-BOOL                 s_timerStopped;
-
-#ifndef HARDWARE_CLOCK
-clock64_t            s_realTimePrevious;
-clock64_t            s_tpmTime;
-
-clock64_t            s_lastSystemTime;
-clock64_t            s_lastReportedTime;
-
-
-#endif
-
-
-// From LocalityPlat.c
-unsigned char        s_locality;
-
-// From Power.c
-BOOL                 s_powerLost;
-
-// From Entropy.c
-// This values is used to determine if the entropy generator is broken. If two 
-// consecutive values are the same, then the entropy generator is considered to be
-// broken.
-uint32_t             lastEntropy;
-
-
-// For NVMem.c
-unsigned char        s_NV[NV_MEMORY_SIZE];
-BOOL                 s_NvIsAvailable;
-BOOL                 s_NV_unrecoverable;
-BOOL                 s_NV_recoverable;
-
-// From PPPlat.c
-BOOL  s_physicalPresence;

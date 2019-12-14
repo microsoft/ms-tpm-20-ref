@@ -120,7 +120,9 @@ TestHash(
 #endif
 #if ALG_SM3_256
         case ALG_SM3_256_VALUE:
-            testDigest = &c_SM3_256_digest.b;
+// There are currently no test vectors for SM3
+//            testDigest = &c_SM3_256_digest.b;
+            testDigest = NULL;
             break;
 #endif
         default:
@@ -128,6 +130,10 @@ TestHash(
     }
     // Clear the to-test bits
     CLEAR_BOTH(hashAlg);
+    
+    // If there is an algorithm without test vectors, then assume that things are OK.
+    if(testDigest == NULL)
+        return TPM_RC_SUCCESS;
 
     // Set the HMAC key to twice the digest size
     digestSize = CryptHashGetDigestSize(hashAlg);

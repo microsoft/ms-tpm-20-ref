@@ -63,10 +63,6 @@ _REDUCE_WARNING_LEVEL_(2)
 #include <stddef.h>
 _NORMAL_WARNING_LEVEL_
 
-#if SIMULATION
-#undef CONTEXT_SLOT
-#  define CONTEXT_SLOT    UINT8
-#endif
 #include "Capabilities.h"
 #include "TpmTypes.h"
 #include "CommandAttributes.h"
@@ -80,6 +76,7 @@ _NORMAL_WARNING_LEVEL_
 #include "CryptTest.h"
 #include "TpmError.h"
 #include "NV.h"
+#include "ACT.h"
 
 //** Defines and Types
 
@@ -153,7 +150,7 @@ typedef struct
     unsigned            primary : 1;        //5) SET for a primary object
     unsigned            temporary : 1;      //6) SET for a temporary object
     unsigned            stClear : 1;        //7) SET for an stClear object
-    unsigned            hmacSeq : 1;        //8) SET for an HMAC or MAC sequence 
+    unsigned            hmacSeq : 1;        //8) SET for an HMAC or MAC sequence
                                             //   object
     unsigned            hashSeq : 1;        //9) SET for a hash sequence object
     unsigned            eventSeq : 1;       //10) SET for an event sequence object
@@ -175,8 +172,8 @@ typedef struct
 } OBJECT_ATTRIBUTES;
 
 #if ALG_RSA
-// There is an overload of the sensitive.rsa.t.size field of a TPMT_SENSITIVE when an 
-// RSA key is loaded. When the sensitive->sensitive contains an RSA key with all of 
+// There is an overload of the sensitive.rsa.t.size field of a TPMT_SENSITIVE when an
+// RSA key is loaded. When the sensitive->sensitive contains an RSA key with all of
 // the CRT values, then the MSB of the size field will be set to indicate that the
 // buffer contains all 5 of the CRT private key values.
 #define     RSA_prime_flag      0x8000
@@ -268,51 +265,51 @@ typedef UINT32          AUTH_ROLE;
 
 typedef struct SESSION_ATTRIBUTES
 {
-    unsigned    isPolicy : 1;           //1) SET if the session may only be used 
+    unsigned    isPolicy : 1;           //1) SET if the session may only be used
                                         //   for policy
     unsigned    isAudit : 1;            //2) SET if the session is used for audit
     unsigned    isBound : 1;            //3) SET if the session is bound to with an
-                                        //   entity. This attribute will be CLEAR 
+                                        //   entity. This attribute will be CLEAR
                                         //   if either isPolicy or isAudit is SET.
-    unsigned    isCpHashDefined : 1;    //3) SET if the cpHash has been defined 
+    unsigned    isCpHashDefined : 1;    //3) SET if the cpHash has been defined
                                         //   This attribute is not SET unless
                                         //   'isPolicy' is SET.
-    unsigned    isAuthValueNeeded : 1;  //5) SET if the authValue is required for 
-                                        //   computing the session HMAC. This 
+    unsigned    isAuthValueNeeded : 1;  //5) SET if the authValue is required for
+                                        //   computing the session HMAC. This
                                         //   attribute is not SET unless 'isPolicy'
                                         //   is SET.
     unsigned    isPasswordNeeded : 1;   //6) SET if a password authValue is required
                                         //   for authorization This attribute is not
                                         //   SET unless 'isPolicy' is SET.
     unsigned    isPPRequired : 1;       //7) SET if physical presence is required to
-                                        //   be asserted when the authorization is 
-                                        //   checked. This attribute is not SET 
+                                        //   be asserted when the authorization is
+                                        //   checked. This attribute is not SET
                                         //   unless 'isPolicy' is SET.
-    unsigned    isTrialPolicy : 1;      //8) SET if the policy session is created 
-                                        //   for trial of the policy's policyHash 
-                                        //   generation. This attribute is not SET 
+    unsigned    isTrialPolicy : 1;      //8) SET if the policy session is created
+                                        //   for trial of the policy's policyHash
+                                        //   generation. This attribute is not SET
                                         //   unless 'isPolicy' is SET.
-    unsigned    isDaBound : 1;          //9) SET if the bind entity had noDA CLEAR. 
-                                        //   If this is SET, then an authorization 
-                                        //   failure using this session will count 
-                                        //   against lockout even if the object 
+    unsigned    isDaBound : 1;          //9) SET if the bind entity had noDA CLEAR.
+                                        //   If this is SET, then an authorization
+                                        //   failure using this session will count
+                                        //   against lockout even if the object
                                         //   being authorized is exempt from DA.
-    unsigned    isLockoutBound : 1;     //10) SET if the session is bound to 
+    unsigned    isLockoutBound : 1;     //10) SET if the session is bound to
                                         //    lockoutAuth.
     unsigned    includeAuth : 1;        //11) This attribute is SET when the
                                         //    authValue of an object is to be
                                         //    included in the computation of the
-                                        //    HMAC key for the command and response 
+                                        //    HMAC key for the command and response
                                         //    computations. (was 'requestWasBound')
-    unsigned    checkNvWritten : 1;     //12) SET if the TPMA_NV_WRITTEN attribute 
+    unsigned    checkNvWritten : 1;     //12) SET if the TPMA_NV_WRITTEN attribute
                                         //    needs to be checked when the policy is
                                         //    used for authorization for NV access.
                                         //    If this is SET for any other type, the
                                         //    policy will fail.
-    unsigned    nvWrittenState : 1;     //13) SET if TPMA_NV_WRITTEN is required to 
+    unsigned    nvWrittenState : 1;     //13) SET if TPMA_NV_WRITTEN is required to
                                         //    be SET. Used when 'checkNvWritten' is
                                         //    SET
-    unsigned    isTemplateSet : 1;      //14) SET if the templateHash needs to be 
+    unsigned    isTemplateSet : 1;      //14) SET if the templateHash needs to be
                                         //    checked for Create, CreatePrimary, or
                                         //    CreateLoaded.
 } SESSION_ATTRIBUTES;
@@ -331,7 +328,7 @@ typedef struct SESSION
                                             // included (policy session)
                                             // If no PCR is included, this
                                             // value is 0.
-    UINT64              startTime;          // The value in g_time when the session 
+    UINT64              startTime;          // The value in g_time when the session
                                             // was started (policy session)
     UINT64              timeout;            // The timeout relative to g_time
                                             // There is no timeout if this value
@@ -339,7 +336,7 @@ typedef struct SESSION
     CLOCK_NONCE         epoch;              // The g_clockEpoch value when the
                                             // session was started. If g_clockEpoch
                                             // does not match this value when the
-                                            // timeout is used, then 
+                                            // timeout is used, then
                                             // then the command will fail.
     TPM_CC              commandCode;        // command code (policy session)
     TPM_ALG_ID          authHashAlg;        // session hash algorithm
@@ -539,7 +536,7 @@ EXTERN TPM_HANDLE       g_exclusiveAuditSession;
 EXTERN  UINT64          g_time;
 
 //*** g_timeEpoch
-// This value contains the current clock Epoch. It changes when there is a clock 
+// This value contains the current clock Epoch. It changes when there is a clock
 // discontinuity. It may be necessary to place this in NV should the timer be able
 // to run across a power down of the TPM but not in all cases (e.g. dead battery).
 // If the nonce is placed in NV, it should go in gp because it should be changing
@@ -549,7 +546,7 @@ EXTERN CLOCK_NONCE       g_timeEpoch;
 #else
 #define g_timeEpoch      gp.timeEpoch
 #endif
- 
+
 
 //*** g_phEnable
 // This is the platform hierarchy control and determines if the platform hierarchy
@@ -605,7 +602,7 @@ EXTERN  BOOL            g_StartupLocality3;
 // used to avoid having to change the layout of gp. The PRE_STARTUP_FLAG indicates
 // that a _TPM_Hash_Start/_Data/_End sequence was received after _TPM_Init but
 // before TPM2_StartUp(). STARTUP_LOCALITY_3 indicates that the last TPM2_Startup()
-// was received at locality 3. These flags are only  relevant if after a 
+// was received at locality 3. These flags are only  relevant if after a
 // TPM2_Shutdown(STATE).
 #define PRE_STARTUP_FLAG     0x8000
 #define STARTUP_LOCALITY_3   0x4000
@@ -627,7 +624,7 @@ EXTERN  BOOL                 g_daUsed;
 // any pending NV writes will be committed to NV.
 // UT_ORDERLY causes any RAM data to be written to the orderly space for staging
 // the write to NV.
-typedef BYTE        UPDATE_TYPE; 
+typedef BYTE        UPDATE_TYPE;
 #define UT_NONE     (UPDATE_TYPE)0
 #define UT_NV       (UPDATE_TYPE)1
 #define UT_ORDERLY  (UPDATE_TYPE)(UT_NV + 2)
@@ -637,10 +634,10 @@ EXTERN UPDATE_TYPE          g_updateNV;
 // This flag is used to indicate if the power was lost. It is SET in _TPM__Init.
 // This flag is cleared by TPM2_Startup() after all power-lost activities are
 // completed.
-// Note: When power is applied, this value can come up as anything. However, 
+// Note: When power is applied, this value can come up as anything. However,
 // _plat__WasPowerLost() will provide the proper indication in that case. So, when
 // power is actually lost, we get the correct answer. When power was not lost, but
-// the power-lost processing has not been completed before the next _TPM_Init(), 
+// the power-lost processing has not been completed before the next _TPM_Init(),
 // then the TPM still does the correct thing.
 EXTERN BOOL             g_powerWasLost;
 
@@ -886,12 +883,20 @@ typedef struct orderly_data
 
 // These values allow the accumulation of self-healing time across orderly shutdown
 // of the TPM.
-#if ACCUMULATE_SELF_HEAL_TIMER 
+#if ACCUMULATE_SELF_HEAL_TIMER
     UINT64              selfHealTimer;  // current value of s_selfHealTimer
     UINT64              lockoutTimer;   // current value of s_lockoutTimer
     UINT64              time;           // current value of g_time at shutdown
 #endif // ACCUMULATE_SELF_HEAL_TIMER
 
+// These are the ACT Timeout values. They are saved with the other timers
+#define DefineActData(N)  ACT_STATE      ACT_##N;
+    FOR_EACH_ACT(DefineActData)
+
+ // this is the 'signaled' attribute data for all the ACT. It is done this way so
+ // that they can be manipulated by ACT number rather than having to access a
+ // structure.
+    UINT32              signaledACT;
 } ORDERLY_DATA;
 
 #if ACCUMULATE_SELF_HEAL_TIMER
@@ -940,6 +945,13 @@ typedef struct state_clear_data
 // authorization. If more are required, then this structure would be changed to
 // an array.
     PCR_AUTHVALUE       pcrAuthValues;
+
+//*****************************************************************************
+//           ACT
+//*****************************************************************************
+#define DefineActPolicySpace(N)     TPMT_HA     act_##N;
+    FOR_EACH_ACT(DefineActPolicySpace)
+
 } STATE_CLEAR_DATA;
 
 EXTERN STATE_CLEAR_DATA gc;
@@ -983,11 +995,6 @@ typedef struct state_reset_data
     UINT64              objectContextID;    // This is the context ID for a saved
                                             //  object context. The default reset
                                             //  value is 0.
-#ifndef NDEBUG
-#undef  CONTEXT_SLOT
-#define CONTEXT_SLOT     BYTE
-#endif
-
     CONTEXT_SLOT        contextArray[MAX_ACTIVE_SESSIONS];    // This array contains
                                             // contains the values used to track
                                             // the version numbers of saved
@@ -1090,14 +1097,14 @@ EXTERN STATE_RESET_DATA gr;
 typedef UINT16      COMMAND_INDEX;
 #define UNIMPLEMENTED_COMMAND_INDEX     ((COMMAND_INDEX)(~0))
 
-typedef struct _COMMAND_FLAGS_ 
+typedef struct _COMMAND_FLAGS_
 {
     unsigned    trialPolicy : 1;    //1) If SET, one of the handles references a
                                     //   trial policy and authorization may be
                                     //   skipped. This is only allowed for a policy
                                     //   command.
 } COMMAND_FLAGS;
-        
+
 // This structure is used to avoid having to manage a large number of
 // parameters being passed through various levels of the command input processing.
 //
@@ -1106,14 +1113,14 @@ typedef struct _COMMAND_
     TPM_ST           tag;               // the parsed command tag
     TPM_CC           code;              // the parsed command code
     COMMAND_INDEX    index;             // the computed command index
-    UINT32           handleNum;         // the number of entity handles in the 
+    UINT32           handleNum;         // the number of entity handles in the
                                         //   handle area of the command
     TPM_HANDLE       handles[MAX_HANDLE_NUM]; // the parsed handle values
     UINT32           sessionNum;        // the number of sessions found
     INT32            parameterSize;     // starts out with the parsed command size
                                         // and is reduced and values are
-                                        // unmarshaled. Just before calling the 
-                                        // command actions, this should be zero. 
+                                        // unmarshaled. Just before calling the
+                                        // command actions, this should be zero.
                                         // After the command actions, this number
                                         // should grow as values are marshaled
                                         // in to the response buffer.
@@ -1146,7 +1153,7 @@ typedef struct _COMMAND_
 } COMMAND;
 
 // Global sting constants for consistency in KDF function calls.
-// These string constants are shared across functions to make sure that they 
+// These string constants are shared across functions to make sure that they
 // are all using consistent sting values.
 
 #define STRING_INITIALIZER(value)   {{sizeof(value), {value}}}
@@ -1385,10 +1392,10 @@ EXTERN int               s_freeSessionSlots;
 //*****************************************************************************
 #if defined IO_BUFFER_C || defined GLOBAL_C
 // Each command function is allowed a structure for the inputs to the function and
-// a structure for the outputs. The command dispatch code unmarshals the input butter 
+// a structure for the outputs. The command dispatch code unmarshals the input butter
 // to the command action input structure starting at the first byte of
-// s_actionIoBuffer. The value of s_actionIoAllocation is the number of UINT64 values 
-// allocated. It is used to set the pointer for the response structure. The command 
+// s_actionIoBuffer. The value of s_actionIoAllocation is the number of UINT64 values
+// allocated. It is used to set the pointer for the response structure. The command
 // dispatch code will marshal the response values into the final output buffer.
 EXTERN UINT64   s_actionIoBuffer[768];      // action I/O buffer
 EXTERN UINT32   s_actionIoAllocation;       // number of UIN64 allocated for the
@@ -1417,6 +1424,17 @@ EXTERN UINT32    s_failCode;            // the error code used
 EXTERN FailFunction    *LibFailCallback;
 
 #endif // TPM_FAIL_C
+
+//*****************************************************************************
+//*** From ACT_spt.c
+//*****************************************************************************
+// This value is used to indicate if an ACT has been updated since the last
+// TPM2_Startup() (one bit for each ACT). If the ACT is not updated
+// (TPM2_ACT_SetTimeout()) after a startup, then on each TPM2_Shutdown() the TPM will
+// save 1/2 of the current timer value. This prevents an attack on the ACT by saving
+// the counter and then running for a long period of time before doing a TPM Restart.
+// A quick TPM2_Shutdown() after each
+EXTERN UINT16                       s_ActUpdated;
 
 //*****************************************************************************
 //*** From CommandCodeAttributes.c

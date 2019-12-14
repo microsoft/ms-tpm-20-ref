@@ -43,26 +43,23 @@
 
 #include <openssl/evp.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/ossl_typ.h>
 
 
 //***************************************************************
-//** Links to the OpenSSL HASH code 
+//** Links to the OpenSSL HASH code
 //***************************************************************
 
 // Redefine the internal name used for each of the hash state structures to the 
 // name used by the library.
 // These defines need to be known in all parts of the TPM so that the structure
 // sizes can be properly computed when needed.
-
 #define tpmHashStateSHA1_t        SHA_CTX
 #define tpmHashStateSHA256_t      SHA256_CTX
 #define tpmHashStateSHA384_t      SHA512_CTX
 #define tpmHashStateSHA512_t      SHA512_CTX
-
-#if ALG_SM3_256
-#   error "The version of OpenSSL used by this code does not support SM3"
-#endif
+#define tpmHashStateSM3_256_t     SM3_CTX
 
 // The defines below are only needed when compiling CryptHash.c or CryptSmac.c. 
 // This isolation is primarily to avoid name space collision. However, if there 
@@ -86,6 +83,7 @@ typedef const BYTE    *PCBYTE;
 // The macro that calls the method also defines how the
 // parameters get swizzled between the default form (in CryptHash.c)and the 
 // library form.
+#define HASH_ALIGNMENT  RADIX_BYTES
 //
 // Initialize the hash context
 #define HASH_START_METHOD_DEF   void (HASH_START_METHOD)(PANY_HASH_STATE state)
@@ -169,7 +167,13 @@ typedef const BYTE    *PCBYTE;
 #define tpmHashEnd_SHA512           SHA512_Final
 #define tpmHashStateCopy_SHA512     memcpy 
 #define tpmHashStateExport_SHA512   memcpy 
-#define tpmHashStateImport_SHA512   memcpy 
+#define tpmHashStateImport_SHA_512  memcpy 
+#define tpmHashStart_SM3_256        sm3_init
+#define tpmHashData_SM3_256         sm3_update
+#define tpmHashEnd_SM3_256          sm3_final
+#define tpmHashStateCopy_SM3_256    memcpy 
+#define tpmHashStateExport_SM3_256  memcpy 
+#define tpmHashStateImport_SM3_256  memcpy 
 
 #endif // _CRYPT_HASH_C_
 

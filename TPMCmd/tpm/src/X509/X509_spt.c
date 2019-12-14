@@ -34,8 +34,8 @@
  */
 //** Includes
 #include "Tpm.h"
-#include "TpmASN1.h"
-#include "TpmASN1_fp.h"
+#include "TpmAsn1.h"
+#include "TpmAsn1_fp.h"
 #define _X509_SPT_
 #include "X509.h"
 #include "X509_spt_fp.h"
@@ -53,8 +53,8 @@
 
 //** Unmarshaling Functions
 
-//*** X509FindExtensionOID()
-// This will search a list of X508 extensions to find an extension with the
+//*** X509FindExtensionByOID()
+// This will search a list of X509 extensions to find an extension with the
 // requested OID. If the extension is found, the output context ('ctx') is set up
 // to point to the OID in the extension.
 //  Return Type: BOOL
@@ -74,8 +74,11 @@ X509FindExtensionByOID(
     // the provided context.
     if (ctx == NULL)
         ctx = ctxIn;
+    // if the provided search context is different from the context of the extension,
+    // then copy the search context to the search context.
     else if(ctx != ctxIn)
         *ctx = *ctxIn;
+    // Now, search in the extension context
     for(;ctx->size > ctx->offset; ctx->offset += length)
     {
         VERIFY((length = ASN1NextTag(ctx)) >= 0);
@@ -85,7 +88,7 @@ X509FindExtensionByOID(
         // Make sure that this entry could hold the OID
         if (length >= OID_SIZE(OID))
         {
-            // See if this is a match for the provided object identifier. 
+            // See if this is a match for the provided object identifier.
             if (MemoryEqual(OID, &(ctx->buffer[ctx->offset]), OID_SIZE(OID)))
             {
                 // Return with ' ctx' set to point to the start of the OID with the size
@@ -136,7 +139,7 @@ X509GetExtensionBits(
 // This function is used to process the TPMA_OBJECT and KeyUsage extensions. It is not
 // in the CertifyX509.c code because it makes the code harder to follow.
 // Return Type: TPM_RC
-//      TPM_RCS_ATTRIBUTES      the attributes of object are not consistent with 
+//      TPM_RCS_ATTRIBUTES      the attributes of object are not consistent with
 //                              the extension setting
 //      TPM_RC_VALUE            problem parsing the extensions
 TPM_RC
@@ -150,6 +153,7 @@ X509ProcessExtensions(
     ASN1UnmarshalContext     extensionCtx;
     INT16                    length;
     UINT32                   value;
+    TPMA_OBJECT              attributes = object->publicArea.objectAttributes;
 //
     if(!ASN1UnmarshalContextInitialize(&ctx, extension->len, extension->buf)
        || ((length = ASN1NextTag(&ctx)) < 0)
@@ -165,15 +169,12 @@ X509ProcessExtensions(
     {
         // If an keyAttributes extension was found, it must be exactly the same as the
         // attributes of the object.
-        // This cast will work because we know that a TPMA_OBJECT is in a UINT32. 
-        // Set RUNTIME_SIZE_CHECKS to YES to force a check to verify this assumption
-        // during debug. Doing this is lot easier than having to revisit the code
-        // any time a new attribute is added.
-        // NOTE: MemoryEqual() is used to avoid type-punned pointer warning/error.
-        if(!MemoryEqual(&value, &object->publicArea.objectAttributes, sizeof(value)))
+        // NOTE: MemoryEqual() is used rather than a simple UINT32 compare to avoid
+        // type-punned pointer warning/error.
+        if(!MemoryEqual(&value, &attributes, sizeof(value)))
             return TPM_RCS_ATTRIBUTES;
     }
-    // Make sure the failure to find the value wasn't because of a fatal error 
+    // Make sure the failure to find the value wasn't because of a fatal error
     else if(extensionCtx.size < 0)
         return TPM_RCS_VALUE;
 
@@ -182,24 +183,24 @@ X509ProcessExtensions(
         X509GetExtensionBits(&extensionCtx, &value))
     {
         x509KeyUsageUnion   keyUsage;
-        TPMA_OBJECT         attributes = object->publicArea.objectAttributes;
+        BOOL                bad;
     //
         keyUsage.integer = value;
         // For KeyUsage:
-        //    the 'sign' attribute is SET if Key Usage includes signing
-        if(   (   (keyUsageSign.integer & keyUsage.integer) != 0
-               && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign))
-           // OR the 'decrypt' attribute is Set if Key Usage includes decryption uses
-           || (   (keyUsageDecrypt.integer & keyUsage.integer) != 0
-               && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
-           // OR that 'fixedTPM' is SET if Key Usage is non-repudiation
-           || (   IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, nonrepudiation)
-               && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM))
-           // OR that 'restricted' is SET if Key Usage is key agreement
-           || (   IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, keyAgreement)
-               && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted))
-           )
-            return TPM_RCS_ATTRIBUTES;
+        // 1) 'sign' is SET if Key Usage includes signing
+        bad = (KEY_USAGE_SIGN.integer & keyUsage.integer) != 0
+              && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign);
+        // 2) 'decrypt' is SET if Key Usage includes decryption uses
+        bad = bad || (KEY_USAGE_DECRYPT.integer & keyUsage.integer) != 0
+                     && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt);
+        // 3) 'fixedTPM' is SET if Key Usage is non-repudiation
+        bad = bad || IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, nonrepudiation)
+                      && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM);
+        // 4)'restricted' is SET if Key Usage is for key agreement.
+        bad = bad || IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, keyAgreement)
+                     && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted);
+        if(bad)
+            return TPM_RCS_VALUE;
     }
     else
         // The KeyUsage extension is required
@@ -243,7 +244,7 @@ X509AddSigningAlgorithm(
 }
 
 //*** X509AddPublicKey()
-// This function will add the publicKey description to the DER data. If fillPtr is 
+// This function will add the publicKey description to the DER data. If fillPtr is
 // NULL, then no data is transferred and this function will indicate if the TPM
 // has the values for DER-encoding of the public key.
 //  Return Type: INT16

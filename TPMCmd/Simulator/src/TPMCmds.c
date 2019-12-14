@@ -37,7 +37,6 @@
 
 //** Includes, Defines, Data Definitions, and Function Prototypes
 #include "TpmBuildSwitches.h"
-#include "BaseTypes.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -223,7 +222,8 @@ CmdLineParser_Done(
     if (!CmdLineParser_More())
         return;
 
-    fprintf(stderr, "Command line contains unknown option%s", s_ArgsMask & (s_ArgsMask - 1) ? "s" : "");
+    fprintf(stderr, "Command line contains unknown option%s", 
+            s_ArgsMask & (s_ArgsMask - 1) ? "s" : "");
     for (i = 0, curArgBit = 1; i < s_Argc; ++i, curArgBit <<= 1)
     {
         if (s_ArgsMask & curArgBit)
@@ -284,6 +284,8 @@ main(
         }
         CmdLineParser_Done(argv[0]);
     }
+    printf("LIBRARY_COMPATIBILITY_CHECK is %s\n", 
+        (LIBRARY_COMPATIBILITY_CHECK ? "ON" : "OFF"));
     // Enable NV memory
     _plat__NVEnable(NULL);
 
@@ -292,6 +294,10 @@ main(
         printf("Manufacturing NV state...\n");
         if(TPM_Manufacture(1) != 0)
         {
+            // if the manufacture didn't work, then make sure that the NV file doesn't
+            // survive. This prevents manufacturing failures from being ignored the
+            // next time the code is run.
+            _plat__NVDisable(1);
             exit(1);
         }
         // Coverage test - repeated manufacturing attempt
@@ -307,7 +313,7 @@ main(
         }
     }
     // Disable NV memory
-    _plat__NVDisable();
+    _plat__NVDisable(0);
 
     StartTcpServer(PortNum);
     return EXIT_SUCCESS;

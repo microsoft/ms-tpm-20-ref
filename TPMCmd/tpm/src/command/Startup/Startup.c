@@ -169,6 +169,9 @@ TPM2_Startup(
     // Restore/Initialize command audit information
     OK = OK && CommandAuditStartup(startup);
 
+    // Restore the ACT
+    OK = OK && ActStartup(startup);
+
 //// The following code was moved from Time.c where it made no sense
     if(OK)
     {

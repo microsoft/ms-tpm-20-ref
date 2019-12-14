@@ -72,7 +72,6 @@
 //** Includes, Defines and Data Definitions
 #define NV_C
 #include "Tpm.h"
-#include "PlatformData.h"
 
 //** Local Functions
 

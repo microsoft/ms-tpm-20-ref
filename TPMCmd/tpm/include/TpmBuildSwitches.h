@@ -104,11 +104,11 @@
 
 // Define this to run the function that checks the compatibility between the 
 // chosen big number math library and the TPM code. Not all ports use this.
-#if !(defined LIBRARY_COMPATABILITY_CHECK)                                          \
-        || ((LIBRARY_COMPATABILITY_CHECK != NO)                                     \
-            && (LIBRARY_COMPATABILITY_CHECK != YES))
-#   undef   LIBRARY_COMPATABILITY_CHECK
-#   define  LIBRARY_COMPATABILITY_CHECK YES     // Default: Either YES or NO
+#if !(defined LIBRARY_COMPATIBILITY_CHECK)                                          \
+        || (( LIBRARY_COMPATIBILITY_CHECK != NO)                                    \
+            && (LIBRARY_COMPATIBILITY_CHECK != YES))
+#   undef   LIBRARY_COMPATIBILITY_CHECK
+#   define  LIBRARY_COMPATIBILITY_CHECK YES     // Default: Either YES or NO
 #endif
 
 #if !(defined FIPS_COMPLIANT) || ((FIPS_COMPLIANT != NO) && (FIPS_COMPLIANT != YES))
@@ -194,6 +194,12 @@
 //**********************************
 // The switches in this group can only be enabled when doing debug during simulation
 #if SIMULATION && DEBUG
+// This forces the use of a smaller context slot size. This reduction reduces the
+// range of the epoch allowing the tester to force the epoch to occur faster than
+// the normal defined in TpmProfile.h
+#   if !(defined CONTEXT_SLOT)
+#       define CONTEXT_SLOT             UINT8
+#   endif 
 // Enables use of the key cache. Default is YES
 #   if !(defined USE_RSA_KEY_CACHE)                                                 \
     || ((USE_RSA_KEY_CACHE != NO) && (USE_RSA_KEY_CACHE != YES))
@@ -312,15 +318,7 @@
 #if !(defined USE_BIT_FIELD_STRUCTURES)                                             \
     || ((USE_BIT_FIELD_STRUCTURES != NO) && (USE_BIT_FIELD_STRUCTURES != YES))
 #   undef   USE_BIT_FIELD_STRUCTURES
-#   define  USE_BIT_FIELD_STRUCTURES    DEBUG        // Default: Either YES or NO
-#endif
-
-// This define is used to enable any runtime checks of the interface between the
-// cryptographic library (e.g., OpenSSL) and the thunking layer. 
-#if !(defined LIBRARY_COMPATIBILITY_CHECK)                                          \
-    || ((LIBRARY_COMPATIBILITY_CHECK != NO) && (LIBRARY_COMPATIBILITY_CHECK != YES))
-#   undef   LIBRARY_COMPATIBILITY_CHECK
-#   define  LIBRARY_COMPATIBILITY_CHECK YES      // Default: Either YES or NO
+#   define  USE_BIT_FIELD_STRUCTURES    NO        // Default: Either YES or NO
 #endif
 
 // This define is used to control the debug for the CertifyX509 command.

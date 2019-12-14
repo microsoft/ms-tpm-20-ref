@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 30, 2019  Time: 02:11:54PM
+ *  Date: Oct  5, 2019  Time: 01:17:10PM
  */
 
 #ifndef    _PLATFORM_FP_H_
@@ -88,7 +88,7 @@ _plat__TimerRestart(
 //*** _plat__RealTime()
 // This is another, probably futile, attempt to define a portable function
 // that will return a 64-bit clock value that has mSec resolution.
-uint64_t
+LIB_EXPORT uint64_t
 _plat__RealTime(
     void
 );
@@ -117,7 +117,7 @@ _plat__TimerRead(
 //
 // If the resetFlag parameter is SET, then the flag will be CLEAR before the
 // function returns.
-LIB_EXPORT BOOL
+LIB_EXPORT int
 _plat__TimerWasReset(
    void
 );
@@ -131,7 +131,7 @@ _plat__TimerWasReset(
 // is the model used here because it is the one that has the most impact on the TPM
 // code as the flag can only be accessed by one entity in the TPM. Any other
 // implementation of the hardware can be made to look like a read-once register.
-LIB_EXPORT BOOL
+LIB_EXPORT int
 _plat__TimerWasStopped(
     void
 );
@@ -246,7 +246,7 @@ _plat__NVEnable(
 // Disable NV memory
 LIB_EXPORT void
 _plat__NVDisable(
-    void
+    int              delete           // IN: If TRUE, delete the NV contents.
 );
 
 //***_plat__IsNvAvailable()
@@ -289,7 +289,7 @@ _plat__NvIsDifferent(
 // NOTE: A useful optimization would be for this code to compare the current
 // contents of NV with the local copy and note the blocks that have changed. Then
 // only write those blocks when _plat__NvCommit() is called.
-LIB_EXPORT BOOL
+LIB_EXPORT int
 _plat__NvMemoryWrite(
     unsigned int     startOffset,   // IN: write start
     unsigned int     size,          // IN: size of bytes to write
@@ -346,8 +346,87 @@ _plat__ClearNvAvail(
 //*** _plat__NVNeedsManufacture()
 // This function is used by the simulator to determine when the TPM's NV state
 // needs to be manufactured.
-LIB_EXPORT BOOL
+LIB_EXPORT int
 _plat__NVNeedsManufacture(
+    void
+);
+
+
+//** From PlatformACT.c
+
+//*** _plat__ACT_GetImplemented()
+// This function tests to see if an ACT is implemented. It is a belt and suspenders
+// function because the TPM should not be calling to to manipulate an ACT that is not
+// implemented. However, this could help the simulator code which doesn't necessarily
+// know if an ACT is implemented or not.
+LIB_EXPORT int
+_plat__ACT_GetImplemented(
+    uint32_t            act
+);
+
+//*** _plat__ACT_GetRemaining()
+// This function returns the remaining time. If an update is pending, 'newValue' is
+// returned. Otherwise, the current counter value is returned. Note that since the
+// timers keep running, the returned value can get stale immediately. The actual count
+// value will be no greater than the returned value.
+LIB_EXPORT uint32_t
+_plat__ACT_GetRemaining(
+    uint32_t            act             //IN: the ACT selector
+);
+
+//*** _plat__ACT_GetSignaled()
+LIB_EXPORT int
+_plat__ACT_GetSignaled(
+    uint32_t            act         //IN: number of ACT to check
+);
+
+//*** _plat__ACT_SetSignaled()
+LIB_EXPORT void
+_plat__ACT_SetSignaled(
+    uint32_t            act,
+    int                 on
+);
+
+//*** _plat__ACT_GetPending()
+LIB_EXPORT int
+_plat__ACT_GetPending(
+    uint32_t            act         //IN: number of ACT to check
+);
+
+//*** _plat__ACT_UpdateCounter()
+// This function is used to write the newValue for the counter. If an update is
+// pending, then no update occurs and the function returns FALSE. If 'setSignaled'
+// is TRUE, then the ACT signaled state is SET and if 'newValue' is 0, nothing
+// is posted.
+LIB_EXPORT int
+_plat__ACT_UpdateCounter(
+    uint32_t            act,        // IN: ACT to update
+    uint32_t            newValue   // IN: the value to post
+);
+
+//***_plat__ACT_EnableTicks()
+// This enables and disables the processing of the once-per-second ticks. This should
+// be turned off ('enable' = FALSE) by _TPM_Init and turned on ('enable' = TRUE) by
+// TPM2_Startup() after all the initializations have completed.
+LIB_EXPORT void
+_plat__ACT_EnableTicks(
+    int             enable
+);
+
+//*** _plat__ACT_Tick()
+// This processes the once-per-second clock tick from the hardware. This is set up
+// for the simulator to use the control interface to send ticks to the TPM. These
+// ticks do not have to be on a per second basis. They can be as slow or as fast as
+// desired so that the simulation can be tested.
+LIB_EXPORT void
+_plat__ACT_Tick(
+    void
+);
+
+//***_plat__ACT_Initialize()
+// This function initializes the ACT hardware and data structures
+LIB_EXPORT int
+_plat__ACT_Initialize(
     void
 );
 
