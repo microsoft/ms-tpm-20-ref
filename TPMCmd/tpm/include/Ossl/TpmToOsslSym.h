@@ -47,9 +47,15 @@
 #define SYM_LIB_OSSL
 
 #include <openssl/aes.h>
+#if ALG_TDES
 #include <openssl/des.h>
+#endif
+#if ALG_SM4
 #include <openssl/sm4.h>
+#endif
+#if ALG_CAMELLIA
 #include <openssl/camellia.h>
+#endif
 #include <openssl/bn.h>
 #include <openssl/ossl_typ.h>
 
@@ -57,7 +63,7 @@
 //** Links to the OpenSSL symmetric algorithms.
 //***************************************************************
 
-// The Crypt functions that call the block encryption function use the parameters 
+// The Crypt functions that call the block encryption function use the parameters
 // in the order:
 //  1) keySchedule
 //  2) in buffer
@@ -90,8 +96,8 @@ typedef void(*TpmCryptSetSymKeyCall_t)(
 
 // Macros to alias encryption calls to specific algorithms. This should be used
 // sparingly. Currently, only used by CryptSym.c and CryptRand.c
-// 
-// When using these calls, to call the AES block encryption code, the caller 
+//
+// When using these calls, to call the AES block encryption code, the caller
 // should use:
 //      TpmCryptEncryptAES(SWIZZLE(keySchedule, in, out));
 #define TpmCryptEncryptAES          AES_encrypt
@@ -114,7 +120,7 @@ typedef void(*TpmCryptSetSymKeyCall_t)(
 // Macros to alias encryption calls to specific algorithms. This should be used
 // sparingly. Currently, only used by CryptRand.c
 #define TpmCryptEncryptTDES         TDES_encrypt
-#define TpmCryptDecryptTDES         TDES_decrypt 
+#define TpmCryptDecryptTDES         TDES_decrypt
 #define tpmKeyScheduleTDES          DES_key_schedule
 
 
@@ -128,7 +134,7 @@ typedef void(*TpmCryptSetSymKeyCall_t)(
     SM4_set_key((key), (tpmKeyScheduleSM4 *)(schedule))
 
 // Macros to alias encryption calls to specific algorithms. This should be used
-// sparingly.  
+// sparingly.
 #define TpmCryptEncryptSM4          SM4_encrypt
 #define TpmCryptDecryptSM4          SM4_decrypt
 #define tpmKeyScheduleSM4           SM4_KEY
@@ -144,12 +150,12 @@ typedef void(*TpmCryptSetSymKeyCall_t)(
     Camellia_set_key((key), (keySizeInBits), (tpmKeyScheduleCAMELLIA *)(schedule))
 
 // Macros to alias encryption calls to specific algorithms. This should be used
-// sparingly.  
+// sparingly.
 #define TpmCryptEncryptCAMELLIA          Camellia_encrypt
 #define TpmCryptDecryptCAMELLIA          Camellia_decrypt
 #define tpmKeyScheduleCAMELLIA           CAMELLIA_KEY
 
-// Forward reference 
+// Forward reference
 
 typedef union tpmCryptKeySchedule_t tpmCryptKeySchedule_t;
 

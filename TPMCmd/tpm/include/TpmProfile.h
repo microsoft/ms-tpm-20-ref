@@ -247,7 +247,7 @@
 #define ALG_AES                         ALG_YES
 #endif
 #ifndef ALG_CAMELLIA
-#define ALG_CAMELLIA                    ALG_YES
+#define ALG_CAMELLIA                    ALG_NO
 #endif
 #ifndef ALG_CBC
 #define ALG_CBC                         ALG_YES
@@ -349,7 +349,7 @@
 #define ALG_SM3_256                     ALG_NO
 #endif
 #ifndef ALG_SM4
-#define ALG_SM4                         ALG_YES
+#define ALG_SM4                         ALG_NO
 #endif
 #ifndef ALG_SYMCIPHER
 #define ALG_SYMCIPHER                   ALG_YES
