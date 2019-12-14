@@ -63,8 +63,8 @@ TPM2_Startup(
 
     // Get the flags for the current startup locality and the H-CRTM.
     // Rather than generalizing the locality setting, this code takes advantage
-    // of the fact that the PC Client specification only allows Startup() 
-    // from locality 0 and 3. To generalize this probably would require a 
+    // of the fact that the PC Client specification only allows Startup()
+    // from locality 0 and 3. To generalize this probably would require a
     // redo of the NV space and since this is a feature that is hardly ever used
     // outside of the PC Client, this code just support the PC Client needs.
 
@@ -72,7 +72,7 @@ TPM2_Startup(
     // Check that the locality is a supported value
     if(locality != 0 && locality != 3)
         return TPM_RC_LOCALITY;
-    // If there was a H-CRTM, then treat the locality as being 3 
+    // If there was a H-CRTM, then treat the locality as being 3
     // regardless of what the Startup() was. This is done to preserve the
     // H-CRTM PCR so that they don't get overwritten with the normal
     // PCR startup initialization. This basically means that g_StartupLocality3
@@ -82,7 +82,7 @@ TPM2_Startup(
     g_StartupLocality3 = (locality == 3);
 
 #if USE_DA_USED
-    // If there was no orderly shutdown, then their might have been a write to
+    // If there was no orderly shutdown, then there might have been a write to
     // failedTries that didn't get recorded but only if g_daUsed was SET in the
     // shutdown state
     g_daUsed = (gp.orderlyState == SU_DA_USED_VALUE);
@@ -92,17 +92,17 @@ TPM2_Startup(
 
     g_prevOrderlyState = gp.orderlyState;
 
-    // If there was a proper shutdown, then the startup modifiers are in the 
+    // If there was a proper shutdown, then the startup modifiers are in the
     // orderlyState. Turn them off in the copy.
     if(IS_ORDERLY(g_prevOrderlyState))
         g_prevOrderlyState &=  ~(PRE_STARTUP_FLAG | STARTUP_LOCALITY_3);
-    // If this is a Resume, 
+    // If this is a Resume,
     if(in->startupType == TPM_SU_STATE)
     {
-        // then there must have been a prior TPM2_ShutdownState(STATE) 
+        // then there must have been a prior TPM2_ShutdownState(STATE)
         if(g_prevOrderlyState != TPM_SU_STATE)
             return TPM_RCS_VALUE + RC_Startup_startupType;
-        // and the part of NV used for state save must have been recovered 
+        // and the part of NV used for state save must have been recovered
         // correctly.
         // NOTE: if this fails, then the caller will need to do Startup(CLEAR). The
         // code for Startup(Clear) cannot fail if the NV can't be read correctly
@@ -117,7 +117,7 @@ TPM2_Startup(
     }
     // Clean up the gp state
     gp.orderlyState = g_prevOrderlyState;
-    
+
 // Internal Date Update
     if((gp.orderlyState == TPM_SU_STATE) && (g_nvOk == TRUE))
     {
@@ -137,19 +137,19 @@ TPM2_Startup(
     }
     else
         // Will do a TPM reset if Shutdown(CLEAR) and Startup(CLEAR) or no shutdown
-        // or there was a failure reading the NV data. 
+        // or there was a failure reading the NV data.
         startup = SU_RESET;
     // Startup for cryptographic library. Don't do this until after the orderly
     // state has been read in from NV.
     OK = OK && CryptStartup(startup);
 
-    // When the cryptographic library has been started, indicate that a TPM2_Startup 
+    // When the cryptographic library has been started, indicate that a TPM2_Startup
     // command has been received.
     OK = OK && TPMRegisterStartup();
 
     // Read the platform unique value that is used as VENDOR_PERMANENT
     // authorization value
-    g_platformUniqueDetails.t.size 
+    g_platformUniqueDetails.t.size
         = (UINT16)_plat__GetUnique(1, sizeof(g_platformUniqueDetails.t.buffer),
                                    g_platformUniqueDetails.t.buffer);
 

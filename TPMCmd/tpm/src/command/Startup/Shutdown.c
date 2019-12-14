@@ -91,8 +91,14 @@ TPM2_Shutdown(
             gp.orderlyState = TPM_SU_STATE | PRE_STARTUP_FLAG;
         else if(g_StartupLocality3)
             gp.orderlyState = TPM_SU_STATE | STARTUP_LOCALITY_3;
+        // CLEAR g_daUsed so that any future DA-protected access will cause the
+        // shutdown to become non-orderly. Cannot invalidate the shutdown state after
+        // a DA failure because an attacker can inhibit access to NV and use the
+        // fact that an update of ‘failedTries’ as an indication of a failure.
+        g_daUsed = FALSE;
+
     }
-    // only two shutdown options. 
+    // only two shutdown options.
     else if(in->shutdownType != TPM_SU_CLEAR)
         return TPM_RCS_VALUE + RC_Shutdown_shutdownType;
 
