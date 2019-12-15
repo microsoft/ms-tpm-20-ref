@@ -40,11 +40,7 @@
 // of the testing.
 
 //** Includes and Data Definitions
-#include <stdlib.h>
-#include <stdio.h>
-#include <setjmp.h>
 #include "TpmBuildSwitches.h"
-#include "BaseTypes.h"
 
 #ifdef _MSC_VER
 #   pragma warning(push, 3)
@@ -52,17 +48,18 @@
 #   include <winsock.h>
 #   pragma warning(pop)
 #elif defined(__unix__)
+#   include "BaseTypes.h"
+#   ifndef TRUE
+#      define TRUE    1
+#   endif
+#   ifndef FALSE
+#      define FALSE   0
+#   endif
     typedef int SOCKET;
 #else
 #   error "Unsupported platform."
 #endif
 
-#ifndef TRUE
-#   define TRUE    1
-#endif
-#ifndef FALSE
-#   define FALSE   0
-#endif
 
 #include "Platform_fp.h"
 #include "ExecCommand_fp.h"

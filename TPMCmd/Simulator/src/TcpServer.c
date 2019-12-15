@@ -39,7 +39,6 @@
 //
 //** Includes, Locals, Defines and Function Prototypes
 #include "TpmBuildSwitches.h"
-#include "BaseTypes.h"
 #include <stdio.h>
 
 #ifdef _MSC_VER
@@ -47,7 +46,7 @@
 #   include <windows.h>
 #   include <winsock.h>
 #   pragma warning(pop)
-typedef int socklen_t;
+    typedef int socklen_t;
 #elif defined(__unix__)
 #   include <string.h>
 #   include <unistd.h>
@@ -56,27 +55,23 @@ typedef int socklen_t;
 #   include <netinet/in.h>
 #   include <sys/socket.h>
 #   include <pthread.h>
+#   include "BaseTypes.h"
 #   define ZeroMemory(ptr, sz) (memset((ptr), 0, (sz)))
 #   define closesocket(x) close(x)
 #   define INVALID_SOCKET (-1)
 #   define SOCKET_ERROR   (-1)
 #   define WSAGetLastError() (errno)
 #   define INT_PTR intptr_t
+#   ifndef TRUE
+#      define TRUE    1
+#   endif
+#   ifndef FALSE
+#      define FALSE   0
+#   endif
     typedef int SOCKET;
 #else
 #   error "Unsupported platform."
 #endif
-
-#ifndef TRUE
-#   define TRUE    1
-#endif
-#ifndef FALSE
-#   define FALSE   0
-#endif
-
-#include <string.h>
-#include <stdlib.h>
-#include <stdint.h>
 
 #include "TpmTcpProtocol.h"
 #include "Manufacture_fp.h"
