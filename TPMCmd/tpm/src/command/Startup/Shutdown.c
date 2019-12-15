@@ -54,14 +54,19 @@ TPM2_Shutdown(
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
 // Input Validation
-
     // If PCR bank has been reconfigured, a CLEAR state save is required
     if(g_pcrReConfig && in->shutdownType == TPM_SU_STATE)
         return TPM_RCS_TYPE + RC_Shutdown_shutdownType;
-
 // Internal Data Update
-
     gp.orderlyState = in->shutdownType;
+
+    // CLEAR g_daUsed so that any future DA-protected access will cause the
+    // shutdown to become non-orderly. It is not sufficient to invalidate the
+    // shutdown state after a DA failure because an attacker can inhibit access
+    // to NV and use the fact that an update of ‘failedTries’ was attempted as an
+    // indication of an authorization failure. By making sure that the orderly state
+    // is CLEAR before any DA attempt, this prevents the possibility of this 'attack.'
+    g_daUsed = FALSE;
 
     // PCR private date state save
     PCRStateSave(in->shutdownType);
@@ -91,12 +96,6 @@ TPM2_Shutdown(
             gp.orderlyState = TPM_SU_STATE | PRE_STARTUP_FLAG;
         else if(g_StartupLocality3)
             gp.orderlyState = TPM_SU_STATE | STARTUP_LOCALITY_3;
-        // CLEAR g_daUsed so that any future DA-protected access will cause the
-        // shutdown to become non-orderly. Cannot invalidate the shutdown state after
-        // a DA failure because an attacker can inhibit access to NV and use the
-        // fact that an update of ‘failedTries’ as an indication of a failure.
-        g_daUsed = FALSE;
-
     }
     // only two shutdown options.
     else if(in->shutdownType != TPM_SU_CLEAR)
@@ -106,5 +105,4 @@ TPM2_Shutdown(
 
     return TPM_RC_SUCCESS;
 }
-
 #endif // CC_Shutdown
