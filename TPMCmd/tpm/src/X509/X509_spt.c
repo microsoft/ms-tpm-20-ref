@@ -34,8 +34,8 @@
  */
 //** Includes
 #include "Tpm.h"
-#include "TpmAsn1.h"
-#include "TpmAsn1_fp.h"
+#include "TpmASN1.h"
+#include "TpmASN1_fp.h"
 #define _X509_SPT_
 #include "X509.h"
 #include "X509_spt_fp.h"

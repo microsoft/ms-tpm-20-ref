@@ -37,6 +37,7 @@
 
 //** Includes, Defines, Data Definitions, and Function Prototypes
 #include "TpmBuildSwitches.h"
+#include "BaseTypes.h"
 
 #include <stdlib.h>
 #include <stdio.h>

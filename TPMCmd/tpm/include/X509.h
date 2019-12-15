@@ -42,7 +42,7 @@
 //** Includes
 
 #include "Tpm.h"
-#include "TpmAsn1.h"
+#include "TpmASN1.h"
 
 //** Defined Constants
 

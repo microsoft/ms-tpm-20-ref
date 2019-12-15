@@ -1,3 +1,4 @@
+
 /* Microsoft Reference Implementation for TPM 2.0
  *
  *  The copyright in this software is being made available under the BSD License,
@@ -38,6 +39,7 @@
 //
 //** Includes, Locals, Defines and Function Prototypes
 #include "TpmBuildSwitches.h"
+#include "BaseTypes.h"
 #include <stdio.h>
 
 #ifdef _MSC_VER
@@ -407,7 +409,7 @@ SimulatorTimeServiceRoutine(
 #if defined(_MSC_VER)
         Sleep((DWORD)timeout);
 #else
-        struct timespec req = {timeout / 1000, (timeout % 1000) * 1000}
+        struct timespec req = {timeout / 1000, (timeout % 1000) * 1000},
                         rem;
         nanosleep(&req, &rem);
 #endif // _MSC_VER
@@ -464,7 +466,7 @@ ActTimeService(
 #else
         pthread_t            thread_id;
 //
-        ret = pthread_create(&thread_id, NULL, (void*)PlatformSvcRoutine,
+        ret = pthread_create(&thread_id, NULL, (void*)SimulatorTimeServiceRoutine,
             (LPVOID)(INT_PTR)NULL);
 #endif // _MSC_VER
 
