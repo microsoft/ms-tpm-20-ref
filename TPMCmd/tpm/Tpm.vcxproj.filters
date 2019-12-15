@@ -586,6 +586,12 @@
     <ClCompile Include="src\X509\TpmAsn1.c">
       <Filter>Source Files\X509</Filter>
     </ClCompile>
+    <ClCompile Include="src\command\ClockTimer\ACT_SetTimeout.c">
+      <Filter>Source Files\ACT</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\ClockTimer\ACT_spt.c">
+      <Filter>Source Files\ACT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BaseTypes.h">
@@ -1331,6 +1337,10 @@
     </ClInclude>
     <ClInclude Include="include\SelfTest.h">
       <Filter>Source Files\Crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TableDrivenMarshal_fp.h" />
+    <ClInclude Include="include\ACT.h">
+      <Filter>Source Files\ACT</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

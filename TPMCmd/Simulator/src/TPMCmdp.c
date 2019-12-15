@@ -154,7 +154,7 @@ _rpc__Signal_PhysicalPresenceOn(
     )
 {
     // If TPM power is on...
-    if(s_isPowerOn) 
+    if(s_isPowerOn)
         // ... pass physical presence on to platform
         _plat__Signal_PhysicalPresenceOn();
     return;
@@ -197,7 +197,7 @@ _rpc__Signal_Hash_Data(
     )
 {
     // If TPM power is on...
-    if(s_isPowerOn) 
+    if(s_isPowerOn)
         // ... pass _TPM_Hash_Data signal to TPM
         _TPM_Hash_Data(input.BufferSize, input.Buffer);
     return;
@@ -265,7 +265,7 @@ _rpc__Signal_CancelOff(
     void
     )
 {
-    // If TPM power is on... 
+    // If TPM power is on...
     if(s_isPowerOn)
         // ... set the platform canceling flag.
         _plat__ClearCancel();
