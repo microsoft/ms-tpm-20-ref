@@ -185,20 +185,21 @@ X509ProcessExtensions(
         x509KeyUsageUnion   keyUsage;
         BOOL                bad;
     //
+        // Extra parentheses around && below are required to shut GCC warnings.
         keyUsage.integer = value;
         // For KeyUsage:
         // 1) 'sign' is SET if Key Usage includes signing
         bad = (KEY_USAGE_SIGN.integer & keyUsage.integer) != 0
               && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign);
         // 2) 'decrypt' is SET if Key Usage includes decryption uses
-        bad = bad || (KEY_USAGE_DECRYPT.integer & keyUsage.integer) != 0
-                     && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt);
+        bad = bad || ((KEY_USAGE_DECRYPT.integer & keyUsage.integer) != 0
+                     && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt));
         // 3) 'fixedTPM' is SET if Key Usage is non-repudiation
-        bad = bad || IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, nonrepudiation)
-                      && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM);
+        bad = bad || (IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, nonrepudiation)
+                      && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM));
         // 4)'restricted' is SET if Key Usage is for key agreement.
-        bad = bad || IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, keyAgreement)
-                     && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted);
+        bad = bad || (IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, keyAgreement)
+                     && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted));
         if(bad)
             return TPM_RCS_VALUE;
     }
