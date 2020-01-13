@@ -119,7 +119,7 @@ TicketComputeVerified(
 // This function creates a TPMT_TK_AUTH ticket.
 /*(See part 2 specification)
 //  The ticket is computed as:
-//      HMAC(proof, (type || timeout || timeEpoch || cpHash 
+//      HMAC(proof, (type || timeout || timeEpoch || cpHash
 //                        || policyRef || keyName))
 //  where:
 //      HMAC()      an HMAC using the hash of proof
@@ -172,7 +172,7 @@ TicketComputeAuth(
     if(timeout != 0)
     {
             //  epoch
-        CryptDigestUpdateInt(&hmacState.hashState, sizeof(CLOCK_NONCE), 
+        CryptDigestUpdateInt(&hmacState.hashState, sizeof(CLOCK_NONCE),
                              g_timeEpoch);
             // reset count
         if(expiresOnReset)

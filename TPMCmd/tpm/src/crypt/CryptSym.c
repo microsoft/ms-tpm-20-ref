@@ -100,7 +100,7 @@ CryptGetSymmetricBlockSize(
 {
     const INT16    *sizes;
     INT16            i;
-#define ALG_CASE(SYM, sym)  case ALG_##SYM##_VALUE: sizes = sym##KeyBlockSizes; break 
+#define ALG_CASE(SYM, sym)  case ALG_##SYM##_VALUE: sizes = sym##KeyBlockSizes; break
     switch(symmetricAlg)
     {
 #if ALG_AES
@@ -124,7 +124,7 @@ CryptGetSymmetricBlockSize(
         if(*sizes == keySizeInBits)
             break;
     }
-    // If sizes is pointing at the end of the list of key sizes, then the desired 
+    // If sizes is pointing at the end of the list of key sizes, then the desired
     // key size was not found so set the block size to zero.
     if(*sizes++ < 0)
         return 0;

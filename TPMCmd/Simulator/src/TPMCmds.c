@@ -197,7 +197,7 @@ CmdLineParser_IsOptPresent(
         if (   (s_ArgsMask & curArgBit) && opt
             && (   0 == strcmp(opt, optFull)
                 || (   (opt[0] == '/' || opt[0] == '-')
-                    && CmdLineParser_IsOpt(opt + 1, optFull, optShort, 
+                    && CmdLineParser_IsOpt(opt + 1, optFull, optShort,
                                            opt[0] == '-'))))
         {
             s_ArgsMask ^= curArgBit;
@@ -221,7 +221,7 @@ CmdLineParser_Done(
     if (!CmdLineParser_More())
         return;
 
-    fprintf(stderr, "Command line contains unknown option%s", 
+    fprintf(stderr, "Command line contains unknown option%s",
             s_ArgsMask & (s_ArgsMask - 1) ? "s" : "");
     for (i = 0, curArgBit = 1; i < s_Argc; ++i, curArgBit <<= 1)
     {
@@ -236,7 +236,7 @@ CmdLineParser_Done(
 }
 
 //*** main()
-// This is the main entry point for the simulator. 
+// This is the main entry point for the simulator.
 // It registers the interface and starts listening for clients
 int
 main(
@@ -283,7 +283,7 @@ main(
         }
         CmdLineParser_Done(argv[0]);
     }
-    printf("LIBRARY_COMPATIBILITY_CHECK is %s\n", 
+    printf("LIBRARY_COMPATIBILITY_CHECK is %s\n",
         (LIBRARY_COMPATIBILITY_CHECK ? "ON" : "OFF"));
     // Enable NV memory
     _plat__NVEnable(NULL);

@@ -39,7 +39,7 @@
 //    The implementation may become more sophisticated over time.
 //
 
-//** Includes and Local 
+//** Includes and Local
 #include <stdio.h>
 #include <time.h>
 #include "Platform.h"
@@ -51,7 +51,7 @@ const char      *debugFileName = "DebugFile.txt";
 
 static FILE *
 fileOpen(
-    const char      *fn, 
+    const char      *fn,
     const char      *mode
 )
 {

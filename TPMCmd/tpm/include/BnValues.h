@@ -78,7 +78,7 @@
 #define SWAP_CRYPT_WORD(x)  REVERSE_ENDIAN_64(x)
     typedef uint64_t    crypt_uword_t;
     typedef int64_t     crypt_word_t;
-#   define TO_CRYPT_WORD_64             BIG_ENDIAN_BYTES_TO_UINT64 
+#   define TO_CRYPT_WORD_64             BIG_ENDIAN_BYTES_TO_UINT64
 #   define TO_CRYPT_WORD_32(a, b, c, d) TO_CRYPT_WORD_64(0, 0, 0, 0, a, b, c, d)
 #elif RADIX_BITS == 32
 #   define SWAP_CRYPT_WORD(x)  REVERSE_ENDIAN_32((x))
@@ -313,7 +313,7 @@ typedef struct
 #   endif
 #endif
 
-// Add implementation dependent definitions for other ECC Values and for linkages. 
+// Add implementation dependent definitions for other ECC Values and for linkages.
 #include LIB_INCLUDE(MATH_LIB, Math)
 
 

@@ -237,7 +237,7 @@
 #define TPM_CC_FIRST                        0x0000011F
 #define TPM_CC_LAST                         0x00000198
 
-   
+
 #if COMPRESSED_LISTS
 #define ADD_FILL            0
 #else

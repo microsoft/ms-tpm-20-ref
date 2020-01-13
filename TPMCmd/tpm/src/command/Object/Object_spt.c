@@ -324,8 +324,8 @@ AdjustAuthSize(
     UINT16               digestSize;
 //
     // If there is no nameAlg, then this is a LoadExternal and the authVale can
-    // be any size up to the maximum allowed by the 
-    digestSize = (nameAlg == TPM_ALG_NULL) ? sizeof(TPMU_HA) 
+    // be any size up to the maximum allowed by the
+    digestSize = (nameAlg == TPM_ALG_NULL) ? sizeof(TPMU_HA)
         : CryptHashGetDigestSize(nameAlg);
     if(digestSize < MemoryRemoveTrailingZeros(auth))
         return FALSE;
@@ -383,16 +383,16 @@ CreateChecks(
         case ALG_KEYEDHASH_VALUE:
             // if this is a data object (sign == decrypt == CLEAR) then the
             // TPM cannot be the data source.
-            if(!IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
+            if(!IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign)
                && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt)
                && IS_ATTRIBUTE(attributes, TPMA_OBJECT, sensitiveDataOrigin))
                 result = TPM_RC_ATTRIBUTES;
             // comment out the next line in order to prevent a fixedTPM derivation
             // parent
-//            break;  
+//            break;
         case ALG_SYMCIPHER_VALUE:
             // A restricted key symmetric key (SYMCIPHER and KEYEDHASH)
-            // must have sensitiveDataOrigin SET unless it has fixedParent and 
+            // must have sensitiveDataOrigin SET unless it has fixedParent and
             // fixedTPM CLEAR.
             if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted))
                 if(!IS_ATTRIBUTE(attributes, TPMA_OBJECT, sensitiveDataOrigin))
@@ -450,7 +450,7 @@ SchemeChecks(
         case ALG_KEYEDHASH_VALUE:
             scheme = parms->keyedHashDetail.scheme.scheme;
             // if both sign and decrypt
-            if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
+            if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign)
                == IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
             {
                 // if both sign and decrypt are set or clear, then need
@@ -458,7 +458,7 @@ SchemeChecks(
                 if(scheme != TPM_ALG_NULL)
                     return TPM_RCS_SCHEME;
             }
-            else if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
+            else if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign)
                     && scheme != TPM_ALG_HMAC)
                 return TPM_RCS_SCHEME;
             else if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
@@ -471,7 +471,7 @@ SchemeChecks(
                 // support additional schemes. There is no default.
                 if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted))
                 {
-                    if(parms->keyedHashDetail.scheme.details.xor.kdf 
+                    if(parms->keyedHashDetail.scheme.details.xor.kdf
                        != TPM_ALG_KDF1_SP800_108)
                         return TPM_RCS_SCHEME;
                     // Must select a digest.
@@ -487,7 +487,7 @@ SchemeChecks(
             // if the key is both sign and decrypt, then the scheme must be
             // ALG_NULL because there is no way to specify both a sign and a
             // decrypt scheme in the key.
-            if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
+            if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign)
                == IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
             {
                 // scheme must be TPM_ALG_NULL
@@ -500,7 +500,7 @@ SchemeChecks(
                 if(CryptIsAsymSignScheme(publicArea->type, scheme))
                 {
                     // if proper signing scheme then it needs a proper hash
-                    if(parms->asymDetail.scheme.details.anySig.hashAlg 
+                    if(parms->asymDetail.scheme.details.anySig.hashAlg
                        == TPM_ALG_NULL)
                         return TPM_RCS_SCHEME;
                 }
@@ -509,7 +509,7 @@ SchemeChecks(
                     // signing key that does not have a proper signing scheme.
                     // This is OK if the key is not restricted and its scheme
                     // is TPM_ALG_NULL
-                    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted) 
+                    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted)
                        || scheme != TPM_ALG_NULL)
                         return TPM_RCS_SCHEME;
                 }
@@ -518,7 +518,7 @@ SchemeChecks(
             {
                 if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted))
                 {
-                    // for a restricted decryption key (a parent), scheme 
+                    // for a restricted decryption key (a parent), scheme
                     // is required to be TPM_ALG_NULL
                     if(scheme != TPM_ALG_NULL)
                         return TPM_RCS_SCHEME;
@@ -532,7 +532,7 @@ SchemeChecks(
                         return TPM_RCS_SCHEME;
                 }
             }
-            if(!IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted) 
+            if(!IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted)
                || !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
             {
                 // For an asymmetric key that is not a parent, the symmetric
@@ -572,25 +572,25 @@ SchemeChecks(
 #endif
             break;
     }
-    // If this is a restricted decryption key with symmetric algorithms, then it 
+    // If this is a restricted decryption key with symmetric algorithms, then it
     // is an ordinary parent (not a derivation parent). It needs to specific
     // symmetric algorithms other than TPM_ALG_NULL
-    if(symAlgs != NULL 
-       && IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted) 
+    if(symAlgs != NULL
+       && IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted)
        && IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
     {
         if(symAlgs->algorithm == TPM_ALG_NULL)
             return TPM_RCS_SYMMETRIC;
 #if 0       //??
-// This next check is under investigation. Need to see if it will break Windows 
-// before it is enabled. If it does not, then it should be default because a 
+// This next check is under investigation. Need to see if it will break Windows
+// before it is enabled. If it does not, then it should be default because a
 // the mode used with a parent is always CFB and Part 2 indicates as much.
         if(symAlgs->mode.sym != TPM_ALG_CFB)
             return TPM_RCS_MODE;
 #endif
-        // If this parent is not duplicable, then the symmetric algorithms 
+        // If this parent is not duplicable, then the symmetric algorithms
         // (encryption and hash) must match those of its parent
-        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedParent) 
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedParent)
            && (parentObject != NULL))
         {
             if(publicArea->nameAlg != parentObject->publicArea.nameAlg)
@@ -605,7 +605,7 @@ SchemeChecks(
 
 //*** PublicAttributesValidation()
 // This function validates the values in the public area of an object.
-// This function is used in the processing of TPM2_Create, TPM2_CreatePrimary, 
+// This function is used in the processing of TPM2_Create, TPM2_CreatePrimary,
 // TPM2_CreateLoaded(), TPM2_Load(),  TPM2_Import(), and TPM2_LoadExternal().
 // For TPM2_Import() this is only used if the new parent has fixedTPM SET. For
 // TPM2_LoadExternal(), this is not used for a public-only key
@@ -643,10 +643,10 @@ PublicAttributesValidation(
         return TPM_RCS_SIZE;
     // If the parent is fixedTPM (including a Primary Object) the object must have
     // the same value for fixedTPM and fixedParent
-    if(parentObject == NULL 
+    if(parentObject == NULL
        || IS_ATTRIBUTE(parentAttributes, TPMA_OBJECT, fixedTPM))
     {
-        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedParent) 
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedParent)
            != IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM))
             return TPM_RCS_ATTRIBUTES;
     }
@@ -657,7 +657,7 @@ PublicAttributesValidation(
             return  TPM_RCS_ATTRIBUTES;
     }
     // See if sign and decrypt are the same
-    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign) 
+    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign)
        == IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt))
     {
         // a restricted key cannot have both SET or both CLEAR
@@ -665,22 +665,22 @@ PublicAttributesValidation(
             return TPM_RC_ATTRIBUTES;
         // only a data object may have both sign and decrypt CLEAR
         // BTW, since we know that decrypt==sign, no need to check both
-        if(publicArea->type != TPM_ALG_KEYEDHASH 
+        if(publicArea->type != TPM_ALG_KEYEDHASH
            && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign))
             return TPM_RC_ATTRIBUTES;
     }
     // If the object can't be duplicated (directly or indirectly) then there
     // is no justification for having encryptedDuplication SET
-    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM) 
+    if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM)
        && IS_ATTRIBUTE(attributes, TPMA_OBJECT, encryptedDuplication))
         return TPM_RCS_ATTRIBUTES;
     // If a parent object has fixedTPM CLEAR, the child must have the
     // same encryptedDuplication value as its parent.
     // Primary objects are considered to have a fixedTPM parent (the seeds).
-    if(parentObject != NULL 
+    if(parentObject != NULL
        && !IS_ATTRIBUTE(parentAttributes, TPMA_OBJECT, fixedTPM))
     {
-        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, encryptedDuplication) 
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, encryptedDuplication)
            != IS_ATTRIBUTE(parentAttributes, TPMA_OBJECT, encryptedDuplication))
             return TPM_RCS_ATTRIBUTES;
     }
@@ -688,7 +688,7 @@ PublicAttributesValidation(
     if((parentObject != NULL) && (parentObject->attributes.derivation == SET))
     {
         // A derived object has the same settings for fixedTPM as its parent
-        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM) 
+        if(IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM)
            != IS_ATTRIBUTE(parentAttributes, TPMA_OBJECT, fixedTPM))
             return TPM_RCS_ATTRIBUTES;
         // A derived object is required to be fixedParent
@@ -944,7 +944,7 @@ UnwrapOuter(
             }
         }
     }
-    // If no errors, decrypt private in place. Since this function uses CFB, 
+    // If no errors, decrypt private in place. Since this function uses CFB,
     // CryptSymmetricDecrypt() will not return any errors. It may fail but it will
     // not return an error.
     if(result == TPM_RC_SUCCESS)
@@ -968,7 +968,7 @@ MarshalSensitive(
     TPMI_ALG_HASH        nameAlg            // IN:
     )
 {
-    BYTE                *sizeField = buffer;    // saved so that size can be 
+    BYTE                *sizeField = buffer;    // saved so that size can be
                                                 // marshaled after it is known
     UINT16               retVal;
 //
@@ -978,7 +978,7 @@ MarshalSensitive(
 
     // Marshal the structure
 #if ALG_RSA
-    // If the sensitive size is the special case for a prime in the type 
+    // If the sensitive size is the special case for a prime in the type
     if((sensitive->sensitive.rsa.t.size & RSA_prime_flag) > 0)
     {
         UINT16               sizeSave = sensitive->sensitive.rsa.t.size;
@@ -987,7 +987,7 @@ MarshalSensitive(
         // the CRT form of the exponent.
         sensitive->sensitive.rsa.t.size &= ~(RSA_prime_flag);
         // If the parent isn't fixedTPM, then truncate the sensitive data to be
-        // the size of the prime. Otherwise, leave it at the current size which 
+        // the size of the prime. Otherwise, leave it at the current size which
         // is the full CRT size.
         if(parent == NULL
            || !IS_ATTRIBUTE(parent->publicArea.objectAttributes,
@@ -1488,7 +1488,7 @@ MemoryRemoveTrailingZeros(
 // that 'label' or 'context' can end up being an Empty Buffer.
 TPM_RC
 SetLabelAndContext(
-    TPMS_DERIVE             *labelContext,  // IN/OUT: the recovered label and 
+    TPMS_DERIVE             *labelContext,  // IN/OUT: the recovered label and
                                             //      context
     TPM2B_SENSITIVE_DATA    *sensitive      // IN: the sensitive data
     )
@@ -1555,7 +1555,7 @@ UnmarshalToPublic(
     result = TPM2B_DIGEST_Unmarshal(&tOut->authPolicy, &buffer, &size);
     if(result != TPM_RC_SUCCESS)
         return result;
-    result = TPMU_PUBLIC_PARMS_Unmarshal(&tOut->parameters, &buffer, &size, 
+    result = TPMU_PUBLIC_PARMS_Unmarshal(&tOut->parameters, &buffer, &size,
                                          tOut->type);
     if(result != TPM_RC_SUCCESS)
         return result;
@@ -1564,7 +1564,7 @@ UnmarshalToPublic(
         result = TPMS_DERIVE_Unmarshal(labelContext, &buffer, &size);
     else
         // otherwise, unmarshal a TPMU_PUBLIC_ID
-        result = TPMU_PUBLIC_ID_Unmarshal(&tOut->unique, &buffer, &size, 
+        result = TPMU_PUBLIC_ID_Unmarshal(&tOut->unique, &buffer, &size,
                                           tOut->type);
     // Make sure the template was used up
     if((result == TPM_RC_SUCCESS) && (size != 0))

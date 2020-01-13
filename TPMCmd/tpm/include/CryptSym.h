@@ -52,7 +52,7 @@ typedef union tpmCryptKeySchedule_t {
 #if ALG_CAMELLIA
     tpmKeyScheduleCAMELLIA      CAMELLIA;
 #endif
- 
+
 #if ALG_TDES
     tpmKeyScheduleTDES          TDES[3];
 #endif
@@ -64,14 +64,14 @@ typedef union tpmCryptKeySchedule_t {
 } tpmCryptKeySchedule_t;
 
 
-// Each block cipher within a library is expected to conform to the same calling 
+// Each block cipher within a library is expected to conform to the same calling
 // conventions with three parameters ('keySchedule', 'in', and 'out') in the same
-// order. That means that all algorithms would use the same order of the same 
-// parameters. The code is written assuming the ('keySchedule', 'in', and 'out') 
+// order. That means that all algorithms would use the same order of the same
+// parameters. The code is written assuming the ('keySchedule', 'in', and 'out')
 // order. However, if the library uses a different order, the order can be changed
 // with a SWIZZLE macro that puts the parameters in the correct order.
 // Note that all algorithms have to use the same order and number of parameters
-// because the code to build the calling list is common for each call to encrypt 
+// because the code to build the calling list is common for each call to encrypt
 // or decrypt with the algorithm chosen by setting a function pointer to select
 // the algorithm that is used.
 
@@ -83,7 +83,7 @@ typedef union tpmCryptKeySchedule_t {
 
 
 // Note that the macros rely on 'encrypt' as local values in the
-// functions that use these macros. Those parameters are set by the macro that 
+// functions that use these macros. Those parameters are set by the macro that
 // set the key schedule to be used for the call.
 
 
