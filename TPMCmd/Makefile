@@ -20,7 +20,10 @@ WARNINGS_NO_ERROR = empty-body expansion-to-defined parentheses \
 INCLUDES = . Platform/include Platform/include/prototypes tpm/include \
 	tpm/include/prototypes
 
+CUSTOMIZING_DEFINES = VTPM=0 SIMULATION=0 USE_KEY_CACHE_FILE=0
+
 CFLAGS = $(foreach d,$(DEFINES),-D$(d) )\
+	$(foreach c,$(CUSTOMIZING_DEFINES),-D$(c) )\
 	$(foreach f,$(FLAGS),-f$(f) )\
 	$(foreach w,$(WARNINGS),-W$(w) )\
 	$(foreach w,$(WARNINGS_NO_ERROR),-Wno-error=$(w) )\
