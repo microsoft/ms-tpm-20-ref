@@ -43,10 +43,10 @@
 //  Return Type: TPM_RC
 //      TPM_RC_LOCALITY             a Startup(STATE) does not have the same H-CRTM
 //                                  state as the previous Startup() or the locality
-//                                  of the startup is not 0 pr 3
+//                                  of the startup is not 0 or 3
 //      TPM_RC_NV_UNINITIALIZED     the saved state cannot be recovered and a
 //                                  Startup(CLEAR) is required.
-//      TPM_RC_VALUE                start up type is not compatible with previous
+//      TPM_RC_VALUE                'startup' type is not compatible with previous
 //                                  shutdown sequence
 
 TPM_RC

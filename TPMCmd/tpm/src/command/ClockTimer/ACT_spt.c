@@ -40,6 +40,7 @@
 // dependent but the reference uses a simple flag to indicate that an update is
 // pending and the only process that can clear that flag is the process that does the
 // actual update.
+
 //** Includes
 #include "Tpm.h"
 #include "ACT_spt_fp.h"
@@ -166,7 +167,7 @@ ActIsImplemented(
 )
 {
 #define CASE_ACT_
-    // This switch accounts for the TPM implements values.
+    // This switch accounts for the TPM implemented values.
     switch(act)
     {
         FOR_EACH_ACT(CASE_ACT_NUMBER)

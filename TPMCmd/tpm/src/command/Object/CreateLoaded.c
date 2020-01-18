@@ -39,7 +39,7 @@
 
 /*(See part 3 of specification)
  * Create and load any type of key, including a temporary key.
- * The input template is an marshaled public area rather than an unmarshaled one as
+ * The input template is a marshaled public area rather than an unmarshaled one as
  * used in Create and CreatePrimary. This is so that the label and context that
  * could be in the template can be processed without changing the formats for the
  * calls to Create and CreatePrimary.

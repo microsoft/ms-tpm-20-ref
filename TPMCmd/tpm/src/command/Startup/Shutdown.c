@@ -60,6 +60,7 @@ TPM2_Shutdown(
 // Internal Data Update
     gp.orderlyState = in->shutdownType;
 
+#if USE_DA_USED
     // CLEAR g_daUsed so that any future DA-protected access will cause the
     // shutdown to become non-orderly. It is not sufficient to invalidate the
     // shutdown state after a DA failure because an attacker can inhibit access
@@ -67,6 +68,7 @@ TPM2_Shutdown(
     // indication of an authorization failure. By making sure that the orderly state
     // is CLEAR before any DA attempt, this prevents the possibility of this 'attack.'
     g_daUsed = FALSE;
+#endif
 
     // PCR private date state save
     PCRStateSave(in->shutdownType);

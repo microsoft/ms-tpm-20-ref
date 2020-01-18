@@ -98,7 +98,7 @@ CryptHashInit(
 }
 
 //*** CryptHashStartup()
-// This function is called by TPM2_Startup(). It checks that the size of the 
+// This function is called by TPM2_Startup(). It checks that the size of the
 // HashDefArray is consistent with the HASH_COUNT.
 BOOL
 CryptHashStartup(
@@ -115,8 +115,8 @@ CryptHashStartup(
 
 //*** CryptGetHashDef()
 // This function accesses the hash descriptor associated with a hash a
-// algorithm. The function returns a pointer to a 'null' descriptor if hashAlg is 
-// TPM_ALG_NULL or not a defined algorithm. 
+// algorithm. The function returns a pointer to a 'null' descriptor if hashAlg is
+// TPM_ALG_NULL or not a defined algorithm.
 PHASH_DEF
 CryptGetHashDef(
     TPM_ALG_ID       hashAlg
@@ -206,7 +206,7 @@ CryptHashGetBlockSize(
 
 //*** CryptHashGetOid()
 // This function returns a pointer to DER=encoded OID for a hash algorithm. All OIDs
-// are full OID values including the Tag (0x06) and length byte. 
+// are full OID values including the Tag (0x06) and length byte.
 LIB_EXPORT const BYTE *
 CryptHashGetOid(
     TPM_ALG_ID      hashAlg
@@ -345,7 +345,7 @@ HashEnd(
     )
 {
     BYTE                temp[MAX_DIGEST_SIZE];
-    if((hashState->hashAlg == TPM_ALG_NULL) 
+    if((hashState->hashAlg == TPM_ALG_NULL)
        || (hashState->type != HASH_STATE_HASH))
         dOutSize = 0;
     if(dOutSize > 0)
@@ -422,7 +422,7 @@ CryptDigestUpdate(
             HASH_DATA(hashState, dataSize, (BYTE *)data);
 #if SMAC_IMPLEMENTED
         else if(hashState->type == HASH_STATE_SMAC)
-            (hashState->state.smac.smacMethods.data)(&hashState->state.smac.state, 
+            (hashState->state.smac.smacMethods.data)(&hashState->state.smac.state,
                                                      dataSize, data);
 #endif // SMAC_IMPLEMENTED
         else
@@ -559,7 +559,7 @@ CryptHmacStart(
         {
             // if the key is too big, reduce it to a digest of itself
             state->hmacKey.t.size = CryptHashBlock(hashAlg, keySize, key,
-                                                   hashDef->digestSize, 
+                                                   hashDef->digestSize,
                                                    state->hmacKey.t.buffer);
         }
         else
@@ -628,7 +628,6 @@ CryptHmacEnd(
         dOutSize = 0;
     else
     {
-        
     // Complete the current hash
         HashEnd(hState, hState->def->digestSize, temp);
         // Do another hash starting with the oPad
@@ -698,32 +697,23 @@ CryptMGF1(
 {
     HASH_STATE           hashState;
     PHASH_DEF            hDef = CryptGetHashDef(hashAlg);
-    UINT32               remaining;
-    UINT32               counter = 0;
-    BYTE                 swappedCounter[4];
-
+    UINT32               hLen;
+    UINT32               bytes;
+//
+    UINT32              counter = 0;
     // If there is no digest to compute return
-    if((hashAlg == TPM_ALG_NULL) || (mSize == 0))
+    if((hDef->digestSize == 0) || (mSize == 0))
         return 0;
-
-    for(remaining = mSize; ; remaining -= hDef->digestSize)
+    hLen = hDef->digestSize;
+    for(bytes = 0; bytes < mSize; bytes += hLen)
     {
-        // Because the system may be either Endian...
-        UINT32_TO_BYTE_ARRAY(counter, swappedCounter);
-
         // Start the hash and include the seed and counter
         CryptHashStart(&hashState, hashAlg);
         CryptDigestUpdate(&hashState, seedSize, seed);
-        CryptDigestUpdate(&hashState, 4, swappedCounter);
-
-        // Handling the completion depends on how much space remains in the mask
-        // buffer. If it can hold the entire digest, put it there. If not
-        // put the digest in a temp buffer and only copy the amount that
-        // will fit into the mask buffer.
-        HashEnd(&hashState, remaining, mask);
-        if(remaining <= hDef->digestSize)
-            break;
-        mask = &mask[hDef->digestSize];
+        CryptDigestUpdateInt(&hashState, 4, counter);
+        // Get as much as will fit.
+        CryptHashEnd(&hashState, MIN((mSize - bytes), hLen),
+                     &mask[bytes]);
         counter++;
     }
     return (UINT16)mSize;
@@ -776,7 +766,7 @@ CryptKDFa(
     UINT16                   digestSize = CryptHashGetDigestSize(hashAlg);
 
     pAssert(key != NULL && keyStream != NULL);
-    
+
     TEST(TPM_ALG_KDF1_SP800_108);
 
     if(digestSize == 0)
@@ -832,7 +822,7 @@ CryptKDFa(
         stream = &stream[digestSize];
     }
     // Masking in the KDF is disabled. If the calling function wants something
-    // less than even number of bytes, then the caller should do the masking 
+    // less than even number of bytes, then the caller should do the masking
     // because there is no universal way to do it here
     if(counterInOut != NULL)
         *counterInOut = counter;

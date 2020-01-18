@@ -233,10 +233,6 @@ X509AddSigningAlgorithm(
         case ALG_ECC_VALUE:
             return X509AddSigningAlgorithmECC(signKey, scheme, ctx);
 #endif // ALG_ECC
-#if ALG_SM2
-        case ALG_SM2:
-            return X509AddSigningAlgorithmSM2(signKey, scheme,ctx);
-#endif // ALG_SM2
         default:
             break;
     }

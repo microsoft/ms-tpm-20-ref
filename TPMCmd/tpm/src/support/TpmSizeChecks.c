@@ -167,7 +167,8 @@ TpmSizeChecks(
             PASS = FALSE;
         }
     }
-    // Check that the platorm implementes each of the ACT that the TPM thinks
+    // Check that the platorm implementes each of the ACT that the TPM thinks are
+	// present
     {
         uint32_t            act;
         for(act = 0; act < 16; act++)

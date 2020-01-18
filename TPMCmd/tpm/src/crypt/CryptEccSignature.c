@@ -193,7 +193,7 @@ Exit:
 //*** BnSignEcdaa()
 //
 // This function performs 's' = 'r' + 'T' * 'd' mod 'q' where
-// 1) 'r is a random, or pseudo-random value created in the commit phase
+// 1) 'r' is a random, or pseudo-random value created in the commit phase
 // 2) 'nonceK' is a TPM-generated, random value 0 < 'nonceK' < 'n'
 // 3) 'T' is mod 'q' of "Hash"('nonceK' || 'digest'), and
 // 4) 'd' is a private key.

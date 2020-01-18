@@ -43,7 +43,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>Tpm</ProjectName>
+    <ProjectName>tpm</ProjectName>
     <ProjectGuid>{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}</ProjectGuid>
     <RootNamespace>TPMCmd</RootNamespace>
     <Keyword>Win32Proj</Keyword>

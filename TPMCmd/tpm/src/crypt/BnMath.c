@@ -57,7 +57,7 @@
 // Many of these functions have no error returns and will always return TRUE. This
 // is to allow them to be used in "guarded" sequences. That is:
 //    OK = OK || BnSomething(s);
-// where the BnSomething function should not be called if OK isn't true.
+// where the BnSomething() function should not be called if OK isn't true.
 
 //** Includes
 #include "Tpm.h"
