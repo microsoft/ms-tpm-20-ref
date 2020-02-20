@@ -11,6 +11,7 @@ addons:
 
 arch:
   - amd64
+  - arm64
 
 matrix:
   include:
