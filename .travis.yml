@@ -1,28 +1,36 @@
 language: c
 dist: bionic
 compiler:
-  - gcc
   - clang
+  - gcc
 
 addons:
   apt:
     packages:
     - autoconf-archive
-    - gcc-multilib
 
-env:
-  - HOST="i686-pc-linux-gnu" CFLAGS="-m32" LDFLAGS="-m32"
-  - HOST="x86_64-pc-linux-gnu"
+arch:
+  - amd64
+
+matrix:
+  include:
+    - compiler: clang
+      env: CONF_OPT="--host=i686-pc-linux-gnu" CFLAGS="-m32" LDFLAGS="-m32"
+    - compiler: gcc
+      env: CONF_OPT="--host=i686-pc-linux-gnu" CFLAGS="-m32" LDFLAGS="-m32"
 
 before_install:
-  - sudo dpkg --add-architecture i386
-  - sudo apt-get update
-  - sudo apt-get install libssl-dev:i386
+  - |
+    if [ $LDFLAGS = "-m32" ]; then
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        sudo apt-get install gcc-multilib libssl-dev:i386
+    fi
 
 before_script:
   - cd TPMCmd
 
 script:
   - ./bootstrap
-  - ./configure --host=${HOST}
+  - ./configure ${CONF_OPT}
   - make --jobs=$(($(nproc)*3/2)) distcheck
