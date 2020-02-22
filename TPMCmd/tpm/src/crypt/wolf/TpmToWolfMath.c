@@ -147,7 +147,7 @@ MpInitialize(
 //** MathLibraryCompatibililtyCheck()
 // This function is only used during development to make sure that the library
 // that is being referenced is using the same size of data structures as the TPM.
-void
+BOOL
 MathLibraryCompatibilityCheck(
     void 
     )
@@ -164,9 +164,12 @@ MathLibraryCompatibilityCheck(
     MP_INITIALIZED(wolfTemp, tpmTemp);
     (wolfTemp); // compiler warning
     // Make sure the values are consistent
-    cAssert(wolfTemp->used * sizeof(fp_digit) == (int)tpmTemp->size * sizeof(crypt_uword_t));
+    VERIFY(wolfTemp->used * sizeof(fp_digit) == (int)tpmTemp->size * sizeof(crypt_uword_t));
     for(i = 0; i < tpmTemp->size; i++)
-        cAssert(((crypt_uword_t*)wolfTemp->dp)[i] == tpmTemp->d[i]);
+        VERIFY(((crypt_uword_t*)wolfTemp->dp)[i] == tpmTemp->d[i]);
+    return 1;
+Error:
+    return 0;
 }
 #endif
 
