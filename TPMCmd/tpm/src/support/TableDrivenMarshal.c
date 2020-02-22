@@ -71,7 +71,7 @@ static const MarshalHeader_mst *GetDescriptor(marshalIndex_t index)
 #define GetUnionDescriptor(_index_)                                                 \
     ((UnionMarshal_mst *)GetDescriptor(_index_))
 #define GetArrayDescriptor(_index_)                                                 \
-    ((ArrayMarshal_mst *))ArrayLookupTable[_index_ & NULL_MASK])
+    ((ArrayMarshal_mst *))(ArrayLookupTable[_index_ & NULL_MASK])
 
 //*** GetUnmarshaledInteger()
 // Gets the unmarshaled value and normalizes it to a UIN32 for other
@@ -415,10 +415,10 @@ Unmarshal(
             // This is a table with or without bit checking. The input is checked
             // against each value in the table. If the value is in the table, and
             // a bits table is present, then the bit field is checked to see if the
-            // indiated value is implemented. For example, if there is a table of
+            // indicated value is implemented. For example, if there is a table of
             // allowed RSA key sises and the 2nd entry matches, then the 2nd bit in
-            // thed bit field is check to see if that allowwed size is implemented in
-            // this TPM.
+            // the bit field is checked to see if that allowed size is implemented 
+			// in this TPM.
             //  typedef const struct TableMarshal_mst
             //  {
             //      UINT8           marshalType;        // TABLE_MTYPE

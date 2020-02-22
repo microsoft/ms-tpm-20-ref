@@ -577,12 +577,6 @@
     <ClCompile Include="src\support\TableMarshalData.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\crypt\ltc\TpmToLtcDesSupport.c" />
-    <ClCompile Include="src\crypt\ltc\TpmToLtcMath.c" />
-    <ClCompile Include="src\crypt\ltc\TpmToLtcSupport.c" />
-    <ClCompile Include="src\crypt\wolf\TpmToWolfDesSupport.c" />
-    <ClCompile Include="src\crypt\wolf\TpmToWolfMath.c" />
-    <ClCompile Include="src\crypt\wolf\TpmToWolfSupport.c" />
     <ClCompile Include="src\X509\TpmAsn1.c">
       <Filter>Source Files\X509</Filter>
     </ClCompile>
@@ -591,6 +585,24 @@
     </ClCompile>
     <ClCompile Include="src\command\ClockTimer\ACT_spt.c">
       <Filter>Source Files\ACT</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\wolf\TpmToWolfSupport.c">
+      <Filter>Source Files\Crypt\wolf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\wolf\TpmToWolfDesSupport.c">
+      <Filter>Source Files\Crypt\wolf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\wolf\TpmToWolfMath.c">
+      <Filter>Source Files\Crypt\wolf</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\ltc\TpmToLtcDesSupport.c">
+      <Filter>Source Files\Crypt\ltc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\ltc\TpmToLtcMath.c">
+      <Filter>Source Files\Crypt\ltc</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypt\ltc\TpmToLtcSupport.c">
+      <Filter>Source Files\Crypt\ltc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1338,9 +1350,11 @@
     <ClInclude Include="include\SelfTest.h">
       <Filter>Source Files\Crypt</Filter>
     </ClInclude>
-    <ClInclude Include="include\prototypes\TableDrivenMarshal_fp.h" />
     <ClInclude Include="include\ACT.h">
       <Filter>Source Files\ACT</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TableDrivenMarshal_fp.h">
+      <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

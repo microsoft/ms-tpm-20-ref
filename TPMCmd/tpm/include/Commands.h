@@ -42,414 +42,414 @@
 
 
 // Start-up
-#ifdef TPM_CC_Startup
+#if CC_Startup
 #include "Startup_fp.h"
 #endif
-#ifdef TPM_CC_Shutdown
+#if CC_Shutdown
 #include "Shutdown_fp.h"
 #endif
 
 // Testing
-#ifdef TPM_CC_SelfTest
+#if CC_SelfTest
 #include "SelfTest_fp.h"
 #endif
-#ifdef TPM_CC_IncrementalSelfTest
+#if CC_IncrementalSelfTest
 #include "IncrementalSelfTest_fp.h"
 #endif
-#ifdef TPM_CC_GetTestResult
+#if CC_GetTestResult
 #include "GetTestResult_fp.h"
 #endif
 
 // Session Commands
-#ifdef TPM_CC_StartAuthSession
+#if CC_StartAuthSession
 #include "StartAuthSession_fp.h"
 #endif
-#ifdef TPM_CC_PolicyRestart
+#if CC_PolicyRestart
 #include "PolicyRestart_fp.h"
 #endif
 
 // Object Commands
-#ifdef TPM_CC_Create
+#if CC_Create
 #include "Create_fp.h"
 #endif
-#ifdef TPM_CC_Load
+#if CC_Load
 #include "Load_fp.h"
 #endif
-#ifdef TPM_CC_LoadExternal
+#if CC_LoadExternal
 #include "LoadExternal_fp.h"
 #endif
-#ifdef TPM_CC_ReadPublic
+#if CC_ReadPublic
 #include "ReadPublic_fp.h"
 #endif
-#ifdef TPM_CC_ActivateCredential
+#if CC_ActivateCredential
 #include "ActivateCredential_fp.h"
 #endif
-#ifdef TPM_CC_MakeCredential
+#if CC_MakeCredential
 #include "MakeCredential_fp.h"
 #endif
-#ifdef TPM_CC_Unseal
+#if CC_Unseal
 #include "Unseal_fp.h"
 #endif
-#ifdef TPM_CC_ObjectChangeAuth
+#if CC_ObjectChangeAuth
 #include "ObjectChangeAuth_fp.h"
 #endif
-#ifdef TPM_CC_CreateLoaded
+#if CC_CreateLoaded
 #include "CreateLoaded_fp.h"
 #endif
 
 // Duplication Commands
-#ifdef TPM_CC_Duplicate
+#if CC_Duplicate
 #include "Duplicate_fp.h"
 #endif
-#ifdef TPM_CC_Rewrap
+#if CC_Rewrap
 #include "Rewrap_fp.h"
 #endif
-#ifdef TPM_CC_Import
+#if CC_Import
 #include "Import_fp.h"
 #endif
 
 // Asymmetric Primitives
-#ifdef TPM_CC_RSA_Encrypt
+#if CC_RSA_Encrypt
 #include "RSA_Encrypt_fp.h"
 #endif
-#ifdef TPM_CC_RSA_Decrypt
+#if CC_RSA_Decrypt
 #include "RSA_Decrypt_fp.h"
 #endif
-#ifdef TPM_CC_ECDH_KeyGen
+#if CC_ECDH_KeyGen
 #include "ECDH_KeyGen_fp.h"
 #endif
-#ifdef TPM_CC_ECDH_ZGen
+#if CC_ECDH_ZGen
 #include "ECDH_ZGen_fp.h"
 #endif
-#ifdef TPM_CC_ECC_Parameters
+#if CC_ECC_Parameters
 #include "ECC_Parameters_fp.h"
 #endif
-#ifdef TPM_CC_ZGen_2Phase
+#if CC_ZGen_2Phase
 #include "ZGen_2Phase_fp.h"
 #endif
 
 // Symmetric Primitives
-#ifdef TPM_CC_EncryptDecrypt
+#if CC_EncryptDecrypt
 #include "EncryptDecrypt_fp.h"
 #endif
-#ifdef TPM_CC_EncryptDecrypt2
+#if CC_EncryptDecrypt2
 #include "EncryptDecrypt2_fp.h"
 #endif
-#ifdef TPM_CC_Hash
+#if CC_Hash
 #include "Hash_fp.h"
 #endif
-#ifdef TPM_CC_HMAC
+#if CC_HMAC
 #include "HMAC_fp.h"
 #endif
-#ifdef TPM_CC_MAC
+#if CC_MAC
 #include "MAC_fp.h"
 #endif
 
 // Random Number Generator
-#ifdef TPM_CC_GetRandom
+#if CC_GetRandom
 #include "GetRandom_fp.h"
 #endif
-#ifdef TPM_CC_StirRandom
+#if CC_StirRandom
 #include "StirRandom_fp.h"
 #endif
 
 // Hash/HMAC/Event Sequences
-#ifdef TPM_CC_HMAC_Start
+#if CC_HMAC_Start
 #include "HMAC_Start_fp.h"
 #endif
-#ifdef TPM_CC_MAC_Start
+#if CC_MAC_Start
 #include "MAC_Start_fp.h"
 #endif
-#ifdef TPM_CC_HashSequenceStart
+#if CC_HashSequenceStart
 #include "HashSequenceStart_fp.h"
 #endif
-#ifdef TPM_CC_SequenceUpdate
+#if CC_SequenceUpdate
 #include "SequenceUpdate_fp.h"
 #endif
-#ifdef TPM_CC_SequenceComplete
+#if CC_SequenceComplete
 #include "SequenceComplete_fp.h"
 #endif
-#ifdef TPM_CC_EventSequenceComplete
+#if CC_EventSequenceComplete
 #include "EventSequenceComplete_fp.h"
 #endif
 
 // Attestation Commands
-#ifdef TPM_CC_Certify
+#if CC_Certify
 #include "Certify_fp.h"
 #endif
-#ifdef TPM_CC_CertifyCreation
+#if CC_CertifyCreation
 #include "CertifyCreation_fp.h"
 #endif
-#ifdef TPM_CC_Quote
+#if CC_Quote
 #include "Quote_fp.h"
 #endif
-#ifdef TPM_CC_GetSessionAuditDigest
+#if CC_GetSessionAuditDigest
 #include "GetSessionAuditDigest_fp.h"
 #endif
-#ifdef TPM_CC_GetCommandAuditDigest
+#if CC_GetCommandAuditDigest
 #include "GetCommandAuditDigest_fp.h"
 #endif
-#ifdef TPM_CC_GetTime
+#if CC_GetTime
 #include "GetTime_fp.h"
 #endif
-#ifdef TPM_CC_CertifyX509
+#if CC_CertifyX509
 #include "CertifyX509_fp.h"
 #endif
 
 // Ephemeral EC Keys
-#ifdef TPM_CC_Commit
+#if CC_Commit
 #include "Commit_fp.h"
 #endif
-#ifdef TPM_CC_EC_Ephemeral
+#if CC_EC_Ephemeral
 #include "EC_Ephemeral_fp.h"
 #endif
 
 // Signing and Signature Verification
-#ifdef TPM_CC_VerifySignature
+#if CC_VerifySignature
 #include "VerifySignature_fp.h"
 #endif
-#ifdef TPM_CC_Sign
+#if CC_Sign
 #include "Sign_fp.h"
 #endif
 
 // Command Audit
-#ifdef TPM_CC_SetCommandCodeAuditStatus
+#if CC_SetCommandCodeAuditStatus
 #include "SetCommandCodeAuditStatus_fp.h"
 #endif
 
 // Integrity Collection (PCR)
-#ifdef TPM_CC_PCR_Extend
+#if CC_PCR_Extend
 #include "PCR_Extend_fp.h"
 #endif
-#ifdef TPM_CC_PCR_Event
+#if CC_PCR_Event
 #include "PCR_Event_fp.h"
 #endif
-#ifdef TPM_CC_PCR_Read
+#if CC_PCR_Read
 #include "PCR_Read_fp.h"
 #endif
-#ifdef TPM_CC_PCR_Allocate
+#if CC_PCR_Allocate
 #include "PCR_Allocate_fp.h"
 #endif
-#ifdef TPM_CC_PCR_SetAuthPolicy
+#if CC_PCR_SetAuthPolicy
 #include "PCR_SetAuthPolicy_fp.h"
 #endif
-#ifdef TPM_CC_PCR_SetAuthValue
+#if CC_PCR_SetAuthValue
 #include "PCR_SetAuthValue_fp.h"
 #endif
-#ifdef TPM_CC_PCR_Reset
+#if CC_PCR_Reset
 #include "PCR_Reset_fp.h"
 #endif
 
 // Enhanced Authorization (EA) Commands
-#ifdef TPM_CC_PolicySigned
+#if CC_PolicySigned
 #include "PolicySigned_fp.h"
 #endif
-#ifdef TPM_CC_PolicySecret
+#if CC_PolicySecret
 #include "PolicySecret_fp.h"
 #endif
-#ifdef TPM_CC_PolicyTicket
+#if CC_PolicyTicket
 #include "PolicyTicket_fp.h"
 #endif
-#ifdef TPM_CC_PolicyOR
+#if CC_PolicyOR
 #include "PolicyOR_fp.h"
 #endif
-#ifdef TPM_CC_PolicyPCR
+#if CC_PolicyPCR
 #include "PolicyPCR_fp.h"
 #endif
-#ifdef TPM_CC_PolicyLocality
+#if CC_PolicyLocality
 #include "PolicyLocality_fp.h"
 #endif
-#ifdef TPM_CC_PolicyNV
+#if CC_PolicyNV
 #include "PolicyNV_fp.h"
 #endif
-#ifdef TPM_CC_PolicyCounterTimer
+#if CC_PolicyCounterTimer
 #include "PolicyCounterTimer_fp.h"
 #endif
-#ifdef TPM_CC_PolicyCommandCode
+#if CC_PolicyCommandCode
 #include "PolicyCommandCode_fp.h"
 #endif
-#ifdef TPM_CC_PolicyPhysicalPresence
+#if CC_PolicyPhysicalPresence
 #include "PolicyPhysicalPresence_fp.h"
 #endif
-#ifdef TPM_CC_PolicyCpHash
+#if CC_PolicyCpHash
 #include "PolicyCpHash_fp.h"
 #endif
-#ifdef TPM_CC_PolicyNameHash
+#if CC_PolicyNameHash
 #include "PolicyNameHash_fp.h"
 #endif
-#ifdef TPM_CC_PolicyDuplicationSelect
+#if CC_PolicyDuplicationSelect
 #include "PolicyDuplicationSelect_fp.h"
 #endif
-#ifdef TPM_CC_PolicyAuthorize
+#if CC_PolicyAuthorize
 #include "PolicyAuthorize_fp.h"
 #endif
-#ifdef TPM_CC_PolicyAuthValue
+#if CC_PolicyAuthValue
 #include "PolicyAuthValue_fp.h"
 #endif
-#ifdef TPM_CC_PolicyPassword
+#if CC_PolicyPassword
 #include "PolicyPassword_fp.h"
 #endif
-#ifdef TPM_CC_PolicyGetDigest
+#if CC_PolicyGetDigest
 #include "PolicyGetDigest_fp.h"
 #endif
-#ifdef TPM_CC_PolicyNvWritten
+#if CC_PolicyNvWritten
 #include "PolicyNvWritten_fp.h"
 #endif
-#ifdef TPM_CC_PolicyTemplate
+#if CC_PolicyTemplate
 #include "PolicyTemplate_fp.h"
 #endif
-#ifdef TPM_CC_PolicyAuthorizeNV
+#if CC_PolicyAuthorizeNV
 #include "PolicyAuthorizeNV_fp.h"
 #endif
 
 // Hierarchy Commands
-#ifdef TPM_CC_CreatePrimary
+#if CC_CreatePrimary
 #include "CreatePrimary_fp.h"
 #endif
-#ifdef TPM_CC_HierarchyControl
+#if CC_HierarchyControl
 #include "HierarchyControl_fp.h"
 #endif
-#ifdef TPM_CC_SetPrimaryPolicy
+#if CC_SetPrimaryPolicy
 #include "SetPrimaryPolicy_fp.h"
 #endif
-#ifdef TPM_CC_ChangePPS
+#if CC_ChangePPS
 #include "ChangePPS_fp.h"
 #endif
-#ifdef TPM_CC_ChangeEPS
+#if CC_ChangeEPS
 #include "ChangeEPS_fp.h"
 #endif
-#ifdef TPM_CC_Clear
+#if CC_Clear
 #include "Clear_fp.h"
 #endif
-#ifdef TPM_CC_ClearControl
+#if CC_ClearControl
 #include "ClearControl_fp.h"
 #endif
-#ifdef TPM_CC_HierarchyChangeAuth
+#if CC_HierarchyChangeAuth
 #include "HierarchyChangeAuth_fp.h"
 #endif
 
 // Dictionary Attack Functions
-#ifdef TPM_CC_DictionaryAttackLockReset
+#if CC_DictionaryAttackLockReset
 #include "DictionaryAttackLockReset_fp.h"
 #endif
-#ifdef TPM_CC_DictionaryAttackParameters
+#if CC_DictionaryAttackParameters
 #include "DictionaryAttackParameters_fp.h"
 #endif
 
 // Miscellaneous Management Functions
-#ifdef TPM_CC_PP_Commands
+#if CC_PP_Commands
 #include "PP_Commands_fp.h"
 #endif
-#ifdef TPM_CC_SetAlgorithmSet
+#if CC_SetAlgorithmSet
 #include "SetAlgorithmSet_fp.h"
 #endif
 
 // Field Upgrade
-#ifdef TPM_CC_FieldUpgradeStart
+#if CC_FieldUpgradeStart
 #include "FieldUpgradeStart_fp.h"
 #endif
-#ifdef TPM_CC_FieldUpgradeData
+#if CC_FieldUpgradeData
 #include "FieldUpgradeData_fp.h"
 #endif
-#ifdef TPM_CC_FirmwareRead
+#if CC_FirmwareRead
 #include "FirmwareRead_fp.h"
 #endif
 
 // Context Management
-#ifdef TPM_CC_ContextSave
+#if CC_ContextSave
 #include "ContextSave_fp.h"
 #endif
-#ifdef TPM_CC_ContextLoad
+#if CC_ContextLoad
 #include "ContextLoad_fp.h"
 #endif
-#ifdef TPM_CC_FlushContext
+#if CC_FlushContext
 #include "FlushContext_fp.h"
 #endif
-#ifdef TPM_CC_EvictControl
+#if CC_EvictControl
 #include "EvictControl_fp.h"
 #endif
 
 // Clocks and Timers
-#ifdef TPM_CC_ReadClock
+#if CC_ReadClock
 #include "ReadClock_fp.h"
 #endif
-#ifdef TPM_CC_ClockSet
+#if CC_ClockSet
 #include "ClockSet_fp.h"
 #endif
-#ifdef TPM_CC_ClockRateAdjust
+#if CC_ClockRateAdjust
 #include "ClockRateAdjust_fp.h"
 #endif
 
 // Capability Commands
-#ifdef TPM_CC_GetCapability
+#if CC_GetCapability
 #include "GetCapability_fp.h"
 #endif
-#ifdef TPM_CC_TestParms
+#if CC_TestParms
 #include "TestParms_fp.h"
 #endif
 
 // Non-volatile Storage
-#ifdef TPM_CC_NV_DefineSpace
+#if CC_NV_DefineSpace
 #include "NV_DefineSpace_fp.h"
 #endif
-#ifdef TPM_CC_NV_UndefineSpace
+#if CC_NV_UndefineSpace
 #include "NV_UndefineSpace_fp.h"
 #endif
-#ifdef TPM_CC_NV_UndefineSpaceSpecial
+#if CC_NV_UndefineSpaceSpecial
 #include "NV_UndefineSpaceSpecial_fp.h"
 #endif
-#ifdef TPM_CC_NV_ReadPublic
+#if CC_NV_ReadPublic
 #include "NV_ReadPublic_fp.h"
 #endif
-#ifdef TPM_CC_NV_Write
+#if CC_NV_Write
 #include "NV_Write_fp.h"
 #endif
-#ifdef TPM_CC_NV_Increment
+#if CC_NV_Increment
 #include "NV_Increment_fp.h"
 #endif
-#ifdef TPM_CC_NV_Extend
+#if CC_NV_Extend
 #include "NV_Extend_fp.h"
 #endif
-#ifdef TPM_CC_NV_SetBits
+#if CC_NV_SetBits
 #include "NV_SetBits_fp.h"
 #endif
-#ifdef TPM_CC_NV_WriteLock
+#if CC_NV_WriteLock
 #include "NV_WriteLock_fp.h"
 #endif
-#ifdef TPM_CC_NV_GlobalWriteLock
+#if CC_NV_GlobalWriteLock
 #include "NV_GlobalWriteLock_fp.h"
 #endif
-#ifdef TPM_CC_NV_Read
+#if CC_NV_Read
 #include "NV_Read_fp.h"
 #endif
-#ifdef TPM_CC_NV_ReadLock
+#if CC_NV_ReadLock
 #include "NV_ReadLock_fp.h"
 #endif
-#ifdef TPM_CC_NV_ChangeAuth
+#if CC_NV_ChangeAuth
 #include "NV_ChangeAuth_fp.h"
 #endif
-#ifdef TPM_CC_NV_Certify
+#if CC_NV_Certify
 #include "NV_Certify_fp.h"
 #endif
 
 // Attached Components
-#ifdef TPM_CC_AC_GetCapability
+#if CC_AC_GetCapability
 #include "AC_GetCapability_fp.h"
 #endif
-#ifdef TPM_CC_AC_Send
+#if CC_AC_Send
 #include "AC_Send_fp.h"
 #endif
-#ifdef TPM_CC_Policy_AC_SendSelect
+#if CC_Policy_AC_SendSelect
 #include "Policy_AC_SendSelect_fp.h"
 #endif
 
 // Authenticated Countdown Timer
-#ifdef TPM_CC_ACT_SetTimeout
+#if CC_ACT_SetTimeout
 #include "ACT_SetTimeout_fp.h"
 #endif
 
 // Vendor Specific
-#ifdef TPM_CC_Vendor_TCG_Test
+#if CC_Vendor_TCG_Test
 #include "Vendor_TCG_Test_fp.h"
 #endif
 

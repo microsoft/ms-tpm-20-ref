@@ -36,20 +36,20 @@
 // The functions in this file provide the low-level interface between the TPM code
 // and the big number and elliptic curve math routines in OpenSSL.
 //
-// Most math on big numbers require a context. The context contains the memory in 
-// which OpenSSL creates and manages the big number values. When a OpenSSL math 
+// Most math on big numbers require a context. The context contains the memory in
+// which OpenSSL creates and manages the big number values. When a OpenSSL math
 // function will be called that modifies a BIGNUM value, that value must be created in
 // an OpenSSL context. The first line of code in such a function must be:
-// OSSL_ENTER(); and the last operation before returning must be OSSL_LEAVE(). 
+// OSSL_ENTER(); and the last operation before returning must be OSSL_LEAVE().
 // OpenSSL variables can then be created with BnNewVariable(). Constant values to be
 // used by OpenSSL are created from the bigNum values passed to the functions in this
 // file. Space for the BIGNUM control block is allocated in the stack of the
-// function and then it is initialized by calling BigInitialized(). That function 
+// function and then it is initialized by calling BigInitialized(). That function
 // sets up the values in the BIGNUM structure and sets the data pointer to point to
 // the data in the bignum_t. This is only used when the value is known to be a
 // constant in the called function.
 //
-// Because the allocations of constants is on the local stack and the 
+// Because the allocations of constants is on the local stack and the
 // OSSL_ENTER()/OSSL_LEAVE() pair flushes everything created in OpenSSL memory, there
 // should be no chance of a memory leak.
 
@@ -64,7 +64,7 @@
 //*** OsslToTpmBn()
 // This function converts an OpenSSL BIGNUM to a TPM bignum. In this implementation
 // it is assumed that OpenSSL uses a different control structure but the same data
-// layout -- an array of native-endian words in little-endian order. 
+// layout -- an array of native-endian words in little-endian order.
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure because value will not fit or OpenSSL variable doesn't
@@ -94,7 +94,7 @@ Error:
 
 //*** BigInitialized()
 // This function initializes an OSSL BIGNUM from a TPM bigConst. Do not use this for
-// values that are passed to OpenSLL when they are not declared as const in the 
+// values that are passed to OpenSLL when they are not declared as const in the
 // function prototype. Instead, use BnNewVariable().
 BIGNUM *
 BigInitialized(
@@ -122,7 +122,7 @@ BigInitialized(
 #   define BIGNUM_PRINT(label, bn, eol) BIGNUM_print((label), (bn), (eol))
 
 //*** BIGNUM_print()
-static void 
+static void
 BIGNUM_print(
     const char      *label,
     const BIGNUM    *a,
@@ -145,7 +145,7 @@ BIGNUM_print(
     for(i = a->top, d = &a->d[i - 1]; i > 0; i--)
     {
         int         j;
-        BN_ULONG    l = *d--;                
+        BN_ULONG    l = *d--;
         for(j = BN_BITS2 - 8; j >= 0; j -= 8)
         {
             BYTE    b = (BYTE)((l >> j) & 0xFF);
@@ -185,13 +185,13 @@ BnNewVariable(
 //*** MathLibraryCompatibilityCheck()
 BOOL
 MathLibraryCompatibilityCheck(
-    void 
+    void
     )
 {
     OSSL_ENTER();
     BIGNUM              *osslTemp = BnNewVariable(CTX);
     crypt_uword_t        i;
-    BYTE                 test[] = {0x1F, 0x1E, 0x1D, 0x1C, 0x1B, 0x1A, 0x19, 0x18, 
+    BYTE                 test[] = {0x1F, 0x1E, 0x1D, 0x1C, 0x1B, 0x1A, 0x19, 0x18,
                                    0x17, 0x16, 0x15, 0x14, 0x13, 0x12, 0x11, 0x10,
                                    0x0F, 0x0E, 0x0D, 0x0C, 0x0B, 0x0A, 0x09, 0x08,
                                    0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
@@ -213,7 +213,7 @@ Error:
 #endif
 
 //*** BnModMult()
-// This function does a modular multiply. It first does a multiply and then a divide 
+// This function does a modular multiply. It first does a multiply and then a divide
 // and returns the remainder of the divide.
 //  Return Type: BOOL
 //      TRUE(1)         success
@@ -426,7 +426,7 @@ PointFromOssl(
     if(y == NULL)
         FAIL(FATAL_ERROR_ALLOCATION);
     // If this returns false, then the point is at infinity
-    OK = EC_POINT_get_affine_coordinates(E->G, pIn, x, y, E->CTX);
+    OK = EC_POINT_get_affine_coordinates_GFp(E->G, pIn, x, y, E->CTX);
     if(OK)
     {
         OsslToTpmBn(pOut->x, x);
@@ -453,10 +453,10 @@ EcPointInitialized(
     {
         BIG_INITIALIZED(bnX, initializer->x);
         BIG_INITIALIZED(bnY, initializer->y);
-        P = EC_POINT_new(E->G);
         if(E == NULL)
             FAIL(FATAL_ERROR_ALLOCATION);
-        if(!EC_POINT_set_affine_coordinates(E->G, P, bnX, bnY, E->CTX))
+        P = EC_POINT_new(E->G);
+        if(!EC_POINT_set_affine_coordinates_GFp(E->G, P, bnX, bnY, E->CTX))
             P = NULL;
     }
     return P;
@@ -465,9 +465,9 @@ EcPointInitialized(
 //*** BnCurveInitialize()
 // This function initializes the OpenSSL curve information structure. This
 // structure points to the TPM-defined values for the curve, to the context for the
-// number values in the frame, and to the OpenSSL-defined group values. 
+// number values in the frame, and to the OpenSSL-defined group values.
 //  Return Type: bigCurve *
-//      NULL        the TPM_ECC_CURVE is not valid or there was a problem in 
+//      NULL        the TPM_ECC_CURVE is not valid or there was a problem in
 //                  in initializing the curve data
 //      non-NULL    points to 'E'
 LIB_EXPORT bigCurve
@@ -508,7 +508,7 @@ BnCurveInitialize(
         VERIFY(P != NULL);
 
         // Need to use this in case Montgomery method is being used
-        VERIFY(EC_POINT_set_affine_coordinates(E->G, P, bnX, bnY, CTX));
+        VERIFY(EC_POINT_set_affine_coordinates_GFp(E->G, P, bnX, bnY, CTX));
         // Now set the generator
         VERIFY(EC_GROUP_set_generator(E->G, P, bnN, bnH));
 
@@ -569,7 +569,7 @@ BnEccModMult(
 //*** BnEccModMult2()
 // This function does a point multiply of the form R = [d]G + [u]Q
 //  Return Type: BOOL
-//      TRUE(1)         success      
+//      TRUE(1)         success
 //      FALSE(0)        failure in operation; treat as result being point at infinity
 LIB_EXPORT BOOL
 BnEccModMult2(
@@ -609,7 +609,7 @@ BnEccModMult2(
 //** BnEccAdd()
 // This function does addition of two points.
 //  Return Type: BOOL
-//      TRUE(1)         success      
+//      TRUE(1)         success
 //      FALSE(0)        failure in operation; treat as result being point at infinity
 LIB_EXPORT BOOL
 BnEccAdd(

@@ -350,7 +350,7 @@ EntityGetAuthPolicy(
                     // Get the policy for each implemented ACT
                     FOR_EACH_ACT(ACT_GET_POLICY)
                 default:
-                    return TPM_ALG_ERROR;
+                    hashAlg = TPM_ALG_ERROR;
                     break;
             }
             break;

@@ -40,13 +40,14 @@
 // The initialization of global data is in the subsystem that is the primary owner
 // of the data.
 //
-// The first part of this file has the typedefs for structures and other defines
-// used in many portions of the code. After the typedef section, is a section that
+// The first part of this file has the 'typedefs' for structures and other defines
+// used in many portions of the code. After the 'typedef' section, is a section that
 // defines global values that are only present in RAM. The next three sections
 // define the structures for the NV data areas: persistent, orderly, and state
 // save. Additional sections define the data that is used in specific modules. That
 // data is private to the module but is collected here to simplify the management
 // of the instance data.
+//
 // All the data is instanced in Global.c.
 #if !defined _TPM_H_
 #error "Should only be instanced in TPM.h"
@@ -271,7 +272,7 @@ typedef struct SESSION_ATTRIBUTES
     unsigned    isBound : 1;            //3) SET if the session is bound to with an
                                         //   entity. This attribute will be CLEAR
                                         //   if either isPolicy or isAudit is SET.
-    unsigned    isCpHashDefined : 1;    //3) SET if the cpHash has been defined
+    unsigned    isCpHashDefined : 1;    //4) SET if the cpHash has been defined
                                         //   This attribute is not SET unless
                                         //   'isPolicy' is SET.
     unsigned    isAuthValueNeeded : 1;  //5) SET if the authValue is required for
@@ -611,7 +612,7 @@ EXTERN  BOOL            g_StartupLocality3;
 //*** g_daUsed
 // This location indicates if a DA-protected value is accessed during a boot
 // cycle. If none has, then there is no need to increment 'failedTries' on the
-// next non-orderly startup. This bit is merged with gp.orderlyState when that
+// next non-orderly startup. This bit is merged with gp.orderlyState when
 // gp.orderly is set to SU_NONE_VALUE
 EXTERN  BOOL                 g_daUsed;
 #endif

@@ -42,13 +42,14 @@
 
 #define SYM_LIB_WOLF
 
+#define SYM_ALIGNMENT   RADIX_BYTES
+
 #include <wolfssl/wolfcrypt/aes.h>
 #include <wolfssl/wolfcrypt/des3.h>
 
 //***************************************************************
 //** Links to the wolfCrypt AES code
 //***************************************************************
-
 #if ALG_SM4
 #error "SM4 is not available"
 #endif
@@ -60,7 +61,7 @@
 // Define the order of parameters to the library functions that do block encryption
 // and decryption.
 typedef void(*TpmCryptSetSymKeyCall_t)(
-    void *keySchedule,
+    void        *keySchedule,
     BYTE        *out,
     const BYTE  *in
     );
