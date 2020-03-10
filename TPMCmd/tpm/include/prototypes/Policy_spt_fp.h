@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Mar 28, 2019  Time: 08:25:18PM
+ *  Date: Mar  4, 2020  Time: 02:36:44PM
  */
 
 #ifndef    _POLICY_SPT_FP_H_
@@ -60,6 +60,7 @@ PolicyParameterChecks(
 // Update policy hash
 //      Update the policyDigest in policy session by extending policyRef and
 //      objectName to it. This will also update the cpHash if it is present.
+//
 //  Return Type: void
 void
 PolicyContextUpdate(
@@ -91,6 +92,8 @@ PolicyDigestClear(
     SESSION         *session
 );
 
+//*** PolicySptCheckCondition()
+// Checks to see if the condition in the policy is satisfied.
 BOOL
 PolicySptCheckCondition(
     TPM_EO          operation,

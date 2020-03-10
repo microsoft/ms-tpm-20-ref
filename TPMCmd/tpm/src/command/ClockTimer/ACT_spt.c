@@ -75,17 +75,22 @@ ActStartup(
     // Reset all the ACT hardware
     _plat__ACT_Initialize();
 
+    // If this not a cold start, copy all the current 'signaled' settings to 
+    // 'preservedSignaled'. 
+    if (g_powerWasLost)
+        go.preservedSignaled = 0;
+    else
+        go.preservedSignaled |= go.signaledACT;
+
     // For TPM_RESET or TPM_RESTART, the ACTs will all be disabled and the output
     // de-asserted.
     if(type != SU_RESUME)
     {
         go.signaledACT = 0;
 #define CLEAR_ACT_POLICY(N)                                                         \
-        go.ACT_##N.hashAlg = TPM_ALG_NULL;                                          \
-        go.ACT_##N.authPolicy.b.size = 0;
-
+            go.ACT_##N.hashAlg = TPM_ALG_NULL;                                      \
+            go.ACT_##N.authPolicy.b.size = 0;
         FOR_EACH_ACT(CLEAR_ACT_POLICY)
-
     }
     else
     {
@@ -94,6 +99,8 @@ ActStartup(
 
         FOR_EACH_ACT(RESUME_ACT)
     }
+    // set no ACT updated since last startup. This is to enable the halving of the
+    // timeout value
     s_ActUpdated = 0;
     _plat__ACT_EnableTicks(TRUE);
     return TRUE;
@@ -166,7 +173,6 @@ ActIsImplemented(
     UINT32          act
 )
 {
-#define CASE_ACT_
     // This switch accounts for the TPM implemented values.
     switch(act)
     {
@@ -198,7 +204,8 @@ ActCounterUpdate(
         result = TPM_RC_VALUE;
     else
     {
-    // Will need to clear orderly so fail if we are orderly and NV is not available
+        // Will need to clear orderly so fail if we are orderly and NV is
+        // not available
         if(NV_IS_ORDERLY)
             RETURN_IF_NV_IS_NOT_AVAILABLE;
         // if the attempt to update the counter fails, it means that there is an 
@@ -209,6 +216,9 @@ ActCounterUpdate(
         {
             // Indicate that the ACT has been updated since last TPM2_Startup().
             s_ActUpdated |= (UINT16)(1 << act);
+
+            // Clear the preservedSignaled attribute.
+            go.preservedSignaled &= ~((UINT16)(1 << act));
 
             // Need to clear the orderly flag
             g_clearOrderly = TRUE;
@@ -258,6 +268,8 @@ ActGetCapabilityData(
                     SET_ATTRIBUTE(actData->attributes, TPMA_ACT, signaled);
                 else
                     CLEAR_ATTRIBUTE(actData->attributes, TPMA_ACT, signaled);
+                if (go.preservedSignaled & (1 << act))
+                    SET_ATTRIBUTE(actData->attributes, TPMA_ACT, preserveSignaled);
                 actList->count++;
             }
         }

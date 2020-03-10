@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Mar 28, 2019  Time: 08:25:19PM
+ *  Date: Mar  7, 2020  Time: 07:17:48PM
  */
 
 #ifndef    _SESSION_PROCESS_FP_H_
@@ -42,11 +42,11 @@
 
 //*** IsDAExempted()
 // This function indicates if a handle is exempted from DA logic.
-// A handle is exempted if it is
-//  1. a primary seed handle,
-//  2. an object with noDA bit SET,
-//  3. an NV Index with TPMA_NV_NO_DA bit SET, or
-//  4. a PCR handle.
+// A handle is exempted if it is:
+//  a) a primary seed handle;
+//  b) an object with noDA bit SET;
+//  c) an NV Index with TPMA_NV_NO_DA bit SET; or
+//  d) a PCR handle.
 //
 //  Return Type: BOOL
 //      TRUE(1)         handle is exempted from DA logic

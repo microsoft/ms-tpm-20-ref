@@ -34,13 +34,13 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Oct 19, 2019  Time: 11:50:09AM
+ *  Date: Mar  6, 2020  Time: 01:50:09PM
  */
 
 // This file should only be included by CommandCodeAttibutes.c
 #ifdef _COMMAND_TABLE_DISPATCH_
 
-
+   
 // Define the stop value
 #define END_OF_LIST     0xff
 #define ADD_FLAG        0x80
@@ -51,14 +51,12 @@
 #   define UNMARSHAL_DISPATCH(name)   (marshalIndex_t)name##_MARSHAL_REF
 #   define MARSHAL_DISPATCH(name)     (marshalIndex_t)name##_MARSHAL_REF
 #   define _UNMARSHAL_T_    marshalIndex_t
-#   define _MARSHAL_T_      marshalIndex_t
-#
+#   define _MARSHAL_T_      marshalIndex_t    
 #else
 #   define UNMARSHAL_DISPATCH(name)   (UNMARSHAL_t)name##_Unmarshal
 #   define MARSHAL_DISPATCH(name)     (MARSHAL_t)name##_Marshal
 #   define _UNMARSHAL_T_    UNMARSHAL_t
 #   define _MARSHAL_T_      MARSHAL_t
-
 #endif
 
 
@@ -227,7 +225,9 @@ const _UNMARSHAL_T_ UnmarshalArray[] = {
             UNMARSHAL_DISPATCH(TPMI_RH_ENABLES),
 #define TPMI_RH_HIERARCHY_P_UNMARSHAL           (TPMI_RH_ENABLES_P_UNMARSHAL + 1)
             UNMARSHAL_DISPATCH(TPMI_RH_HIERARCHY),
-#define TPMT_RSA_DECRYPT_P_UNMARSHAL            (TPMI_RH_HIERARCHY_P_UNMARSHAL + 1)
+#define TPMT_KDF_SCHEME_P_UNMARSHAL             (TPMI_RH_HIERARCHY_P_UNMARSHAL + 1)
+            UNMARSHAL_DISPATCH(TPMT_KDF_SCHEME),
+#define TPMT_RSA_DECRYPT_P_UNMARSHAL            (TPMT_KDF_SCHEME_P_UNMARSHAL + 1)
             UNMARSHAL_DISPATCH(TPMT_RSA_DECRYPT),
 #define TPMT_SIGNATURE_P_UNMARSHAL              (TPMT_RSA_DECRYPT_P_UNMARSHAL + 1)
             UNMARSHAL_DISPATCH(TPMT_SIGNATURE),
@@ -240,7 +240,7 @@ const _UNMARSHAL_T_ UnmarshalArray[] = {
 // PARAMETER_LAST_TYPE is the end of the command parameter list.
 #define PARAMETER_LAST_TYPE                     (TPMT_SYM_DEF_OBJECT_P_UNMARSHAL)
 };
-
+   
 // The MarshalArray contains the dispatch functions for the marshaling code.
 // The defines in this array are used to make it easier to cross reference the
 // marshaling values in the types array of each command
@@ -1314,6 +1314,90 @@ ZGen_2Phase_COMMAND_DESCRIPTOR_t _ZGen_2PhaseData = {
 #else
 #define _ZGen_2PhaseDataAddress 0
 #endif // CC_ZGen_2Phase
+
+#if CC_ECC_Encrypt
+
+#include "ECC_Encrypt_fp.h"
+
+typedef TPM_RC  (ECC_Encrypt_Entry)(
+    ECC_Encrypt_In              *in,
+    ECC_Encrypt_Out             *out
+);
+
+typedef const struct {
+    ECC_Encrypt_Entry       *entry;
+    UINT16                  inSize;
+    UINT16                  outSize;
+    UINT16                  offsetOfTypes;
+    UINT16                  paramOffsets[4];
+    BYTE                    types[8];
+} ECC_Encrypt_COMMAND_DESCRIPTOR_t;
+
+ECC_Encrypt_COMMAND_DESCRIPTOR_t _ECC_EncryptData = {
+    /* entry         */     &TPM2_ECC_Encrypt,
+    /* inSize        */     (UINT16)(sizeof(ECC_Encrypt_In)),
+    /* outSize       */     (UINT16)(sizeof(ECC_Encrypt_Out)),
+    /* offsetOfTypes */     offsetof(ECC_Encrypt_COMMAND_DESCRIPTOR_t, types),
+    /* offsets       */     {(UINT16)(offsetof(ECC_Encrypt_In, plainText)),
+                             (UINT16)(offsetof(ECC_Encrypt_In, inScheme)),
+                             (UINT16)(offsetof(ECC_Encrypt_Out, C2)),
+                             (UINT16)(offsetof(ECC_Encrypt_Out, C3))},
+    /* types         */     {TPMI_DH_OBJECT_H_UNMARSHAL,
+                             TPM2B_MAX_BUFFER_P_UNMARSHAL,
+                             TPMT_KDF_SCHEME_P_UNMARSHAL + ADD_FLAG,
+                             END_OF_LIST,
+                             TPM2B_ECC_POINT_P_MARSHAL,
+                             TPM2B_MAX_BUFFER_P_MARSHAL,
+                             TPM2B_DIGEST_P_MARSHAL,
+                             END_OF_LIST}
+};
+
+#define _ECC_EncryptDataAddress (&_ECC_EncryptData)
+#else
+#define _ECC_EncryptDataAddress 0
+#endif // CC_ECC_Encrypt
+
+#if CC_ECC_Decrypt
+
+#include "ECC_Decrypt_fp.h"
+
+typedef TPM_RC  (ECC_Decrypt_Entry)(
+    ECC_Decrypt_In              *in,
+    ECC_Decrypt_Out             *out
+);
+
+typedef const struct {
+    ECC_Decrypt_Entry       *entry;
+    UINT16                  inSize;
+    UINT16                  outSize;
+    UINT16                  offsetOfTypes;
+    UINT16                  paramOffsets[4];
+    BYTE                    types[8];
+} ECC_Decrypt_COMMAND_DESCRIPTOR_t;
+
+ECC_Decrypt_COMMAND_DESCRIPTOR_t _ECC_DecryptData = {
+    /* entry         */     &TPM2_ECC_Decrypt,
+    /* inSize        */     (UINT16)(sizeof(ECC_Decrypt_In)),
+    /* outSize       */     (UINT16)(sizeof(ECC_Decrypt_Out)),
+    /* offsetOfTypes */     offsetof(ECC_Decrypt_COMMAND_DESCRIPTOR_t, types),
+    /* offsets       */     {(UINT16)(offsetof(ECC_Decrypt_In, C1)),
+                             (UINT16)(offsetof(ECC_Decrypt_In, C2)),
+                             (UINT16)(offsetof(ECC_Decrypt_In, C3)),
+                             (UINT16)(offsetof(ECC_Decrypt_In, inScheme))},
+    /* types         */     {TPMI_DH_OBJECT_H_UNMARSHAL,
+                             TPM2B_ECC_POINT_P_UNMARSHAL,
+                             TPM2B_MAX_BUFFER_P_UNMARSHAL,
+                             TPM2B_DIGEST_P_UNMARSHAL,
+                             TPMT_KDF_SCHEME_P_UNMARSHAL + ADD_FLAG,
+                             END_OF_LIST,
+                             TPM2B_MAX_BUFFER_P_MARSHAL,
+                             END_OF_LIST}
+};
+
+#define _ECC_DecryptDataAddress (&_ECC_DecryptData)
+#else
+#define _ECC_DecryptDataAddress 0
+#endif // CC_ECC_Decrypt
 
 #if CC_EncryptDecrypt
 
@@ -5220,6 +5304,12 @@ COMMAND_DESCRIPTOR_t *s_CommandDataArray[] = {
 #if (PAD_LIST || CC_ACT_SetTimeout)
         (COMMAND_DESCRIPTOR_t *)_ACT_SetTimeoutDataAddress,
 #endif // CC_ACT_SetTimeout
+#if (PAD_LIST || CC_ECC_Encrypt)
+        (COMMAND_DESCRIPTOR_t *)_ECC_EncryptDataAddress,
+#endif // CC_ECC_Encrypt
+#if (PAD_LIST || CC_ECC_Decrypt)
+        (COMMAND_DESCRIPTOR_t *)_ECC_DecryptDataAddress,
+#endif // CC_ECC_Decrypt
 #if (PAD_LIST || CC_Vendor_TCG_Test)
         (COMMAND_DESCRIPTOR_t *)_Vendor_TCG_TestDataAddress,
 #endif // CC_Vendor_TCG_Test

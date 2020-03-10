@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Apr 17, 2019  Time: 07:31:38PM
+ *  Date: Mar  4, 2020  Time: 02:36:44PM
  */
 
 #ifndef    _TABLE_DRIVEN_MARSHAL_FP_H_
@@ -64,17 +64,18 @@ MarshalUnion(
 
 TPM_RC
 UnmarshalInteger(
-    int                  iSize,
-    void                *target,
-    UINT8               **buffer,
-    INT32               *size,
-    UINT32              *value
+    int                  iSize,             // IN: Number of bytes in the integer
+    void                *target,            // OUT: receives the integer
+    UINT8               **buffer,           // IN/OUT: source of the data
+    INT32               *size,              // IN/OUT: amount of data available
+    UINT32              *value              // OUT: optional copy of 'target'
 );
 
 //*** Unmarshal()
 // This is the function that performs unmarshaling of different numbered types. Each
 // TPM type has a number. The number is used to lookup the address of the data
 // structure that describes how to unmarshal that data type.
+//
 TPM_RC
 Unmarshal(
     UINT16               typeIndex,         // IN: the thing to marshal

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Aug 30, 2019  Time: 02:11:54PM
+ *  Date: Mar  4, 2020  Time: 02:36:44PM
  */
 
 #ifndef    _CRYPT_RAND_FP_H_
@@ -46,6 +46,7 @@
 // (DRBG_GetEntropy32()).
 // This function is only used during instantiation of the DRBG for
 // manufacturing and on each start-up after an non-orderly shutdown.
+//
 //  Return Type: BOOL
 //      TRUE(1)         requested entropy returned
 //      FALSE(0)        entropy Failure
@@ -67,6 +68,7 @@ IncrementIv(
 // This function is used when reseeding of the DRBG is required. If
 // entropy is provided, it is used in lieu of using hardware entropy.
 // Note: the provided entropy must be the required size.
+//
 //  Return Type: BOOL
 //      TRUE(1)         reseed succeeded
 //      FALSE(0)        reseed failed, probably due to the entropy generation
@@ -78,7 +80,8 @@ DRBG_Reseed(
 );
 
 //*** DRBG_SelfTest()
-// This is run when the DRBG is instantiated and at startup
+// This is run when the DRBG is instantiated and at startup.
+//
 //  Return Type: BOOL
 //      TRUE(1)         test OK
 //      FALSE(0)        test failed
@@ -90,6 +93,7 @@ DRBG_SelfTest(
 //*** CryptRandomStir()
 // This function is used to cause a reseed. A DRBG_SEED amount of entropy is
 // collected from the hardware and then additional data is added.
+//
 //  Return Type: TPM_RC
 //      TPM_RC_NO_RESULT        failure of the entropy generator
 LIB_EXPORT TPM_RC
@@ -134,6 +138,7 @@ DRBG_AdditionalData(
 // This function is used to instantiate a random number generator from seed values.
 // The nominal use of this generator is to create sequences of pseudo-random
 // numbers from a seed value.
+//
 // Return Type: TPM_RC
 //  TPM_RC_FAILURE      DRBG self-test failure
 LIB_EXPORT TPM_RC
@@ -155,6 +160,7 @@ CryptRandStartup(
 
 //**** CryptRandInit()
 // This function is called when _TPM_Init is being processed.
+//
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure
@@ -183,6 +189,7 @@ DRBG_Generate(
 // This is called when a the TPM DRBG is to be instantiated. This is
 // called to instantiate a DRBG used by the TPM for normal
 // operations.
+//
 //  Return Type: BOOL
 //      TRUE(1)         instantiation succeeded
 //      FALSE(0)        instantiation failed

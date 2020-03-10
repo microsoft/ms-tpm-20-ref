@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Nov 14, 2019  Time: 05:57:01PM
+ *  Date: Mar  7, 2020  Time: 07:06:44PM
  */
 
 #ifndef    _OBJECT_SPT_FP_H_
@@ -52,6 +52,7 @@ AdjustAuthSize(
 
 //*** AreAttributesForParent()
 // This function is called by create, load, and import functions.
+//
 // Note: The 'isParent' attribute is SET when an object is loaded and it has
 // attributes that are suitable for a parent object.
 //  Return Type: BOOL
@@ -65,9 +66,9 @@ ObjectIsParent(
 //*** CreateChecks()
 // Attribute checks that are unique to creation.
 //  Return Type: TPM_RC
-//      TPM_RC_ATTRIBUTES   sensitiveDataOrigin is not consistent with the
-//                          object type
-//  other                   returns from PublicAttributesValidation()
+//      TPM_RC_ATTRIBUTES       sensitiveDataOrigin is not consistent with the
+//                              object type
+//      other                   returns from PublicAttributesValidation()
 TPM_RC
 CreateChecks(
     OBJECT              *parentObject,
@@ -88,7 +89,7 @@ CreateChecks(
 //                          with the scheme ID for keyed hash object
 //      TPM_RC_SYMMETRIC    a storage key with no symmetric algorithm specified; or
 //                          non-storage key with symmetric algorithm different from
-//                          TPM_ALG_NULL
+// ALG_NULL
 TPM_RC
 SchemeChecks(
     OBJECT          *parentObject,  // IN: parent (null if primary seed)
@@ -145,13 +146,12 @@ GetSeedForKDF(
 // It requires the sensitive data being marshaled to the outerBuffer, with the
 // leading bytes reserved for integrity hash.  If iv is used, iv space should
 // be reserved at the beginning of the buffer.  It assumes the sensitive data
-// starts at address (outerBuffer + integrity size [+ iv size]).
-// This function performs:
-//  1. Add IV before sensitive area if required
-//  2. encrypt sensitive data, if iv is required, encrypt by iv.  otherwise,
-//     encrypted by a NULL iv
-//  3. add HMAC integrity at the beginning of the buffer
-// It returns the total size of blob with outer wrap
+// starts at address (outerBuffer + integrity size @).
+// This function:
+//  a) adds IV before sensitive area if required;
+//  b) encrypts sensitive data with IV or a NULL IV as required;
+//  c) adds HMAC integrity at the beginning of the buffer; and
+//  d) returns the total size of blob with outer wrap.
 UINT16
 ProduceOuterWrap(
     OBJECT          *protector,     // IN: The handle of the object that provides
@@ -173,9 +173,9 @@ ProduceOuterWrap(
 
 //*** UnwrapOuter()
 // This function remove the outer wrap of a blob containing sensitive data
-// This function performs:
-//  1. check integrity of outer blob
-//  2. decrypt outer blob
+// This function:
+//  a) checks integrity of outer blob; and
+//  b) decrypts the outer blob.
 //
 //  Return Type: TPM_RC
 //      TPM_RCS_INSUFFICIENT     error during sensitive data unmarshaling
@@ -203,10 +203,10 @@ UnwrapOuter(
 
 //*** SensitiveToPrivate()
 // This function prepare the private blob for off the chip storage
-// The operations in this function:
-//  1. marshal TPM2B_SENSITIVE structure into the buffer of TPM2B_PRIVATE
-//  2. apply encryption to the sensitive area.
-//  3. apply outer integrity computation.
+// This function:
+//  a) marshals TPM2B_SENSITIVE structure into the buffer of TPM2B_PRIVATE
+//  b) applies encryption to the sensitive area; and
+//  c) applies outer integrity computation.
 void
 SensitiveToPrivate(
     TPMT_SENSITIVE  *sensitive,     // IN: sensitive structure
@@ -222,10 +222,10 @@ SensitiveToPrivate(
 //*** PrivateToSensitive()
 // Unwrap a input private area.  Check the integrity, decrypt and retrieve data
 // to a sensitive structure.
-// The operations in this function:
-//  1. check the integrity HMAC of the input private area
-//  2. decrypt the private buffer
-//  3. unmarshal TPMT_SENSITIVE structure into the buffer of TPMT_SENSITIVE
+// This function:
+//  a) checks the integrity HMAC of the input private area;
+//  b) decrypts the private buffer; and
+//  c) unmarshals TPMT_SENSITIVE structure into the buffer of TPMT_SENSITIVE.
 //  Return Type: TPM_RC
 //      TPM_RCS_INTEGRITY       if the private area integrity is bad
 //      TPM_RC_SENSITIVE        unmarshal errors while unmarshaling TPMS_ENCRYPT
@@ -251,10 +251,10 @@ PrivateToSensitive(
 
 //*** SensitiveToDuplicate()
 // This function prepare the duplication blob from the sensitive area.
-// The operations in this function:
-//  1. marshal TPMT_SENSITIVE structure into the buffer of TPM2B_PRIVATE
-//  2. apply inner wrap to the sensitive area if required
-//  3. apply outer wrap if required
+// This function:
+//  a) marshals TPMT_SENSITIVE structure into the buffer of TPM2B_PRIVATE;
+//  b) applies inner wrap to the sensitive area if required; and
+//  c) applies outer wrap if required.
 void
 SensitiveToDuplicate(
     TPMT_SENSITIVE      *sensitive,     // IN: sensitive structure
@@ -281,10 +281,10 @@ SensitiveToDuplicate(
 //*** DuplicateToSensitive()
 // Unwrap a duplication blob.  Check the integrity, decrypt and retrieve data
 // to a sensitive structure.
-// The operations in this function:
-//  1. check the integrity HMAC of the input private area
-//  2. decrypt the private buffer
-//  3. unmarshal TPMT_SENSITIVE structure into the buffer of TPMT_SENSITIVE
+// This function:
+//  a) checks the integrity HMAC of the input private area;
+//  b) decrypts the private buffer; and
+//  c) unmarshals TPMT_SENSITIVE structure into the buffer of TPMT_SENSITIVE.
 //
 //  Return Type: TPM_RC
 //      TPM_RC_INSUFFICIENT      unmarshaling sensitive data from 'inPrivate' failed
@@ -311,11 +311,11 @@ DuplicateToSensitive(
 
 //*** SecretToCredential()
 // This function prepare the credential blob from a secret (a TPM2B_DIGEST)
-// The operations in this function:
-//  1. marshal TPM2B_DIGEST structure into the buffer of TPM2B_ID_OBJECT
-//  2. encrypt the private buffer, excluding the leading integrity HMAC area
-//  3. compute integrity HMAC and append to the beginning of the buffer.
-//  4. Set the total size of TPM2B_ID_OBJECT buffer
+// This function:
+//  a) marshals TPM2B_DIGEST structure into the buffer of TPM2B_ID_OBJECT;
+//  b) encrypts the private buffer, excluding the leading integrity HMAC area;
+//  c) computes integrity HMAC and append to the beginning of the buffer; and
+//  d) sets the total size of TPM2B_ID_OBJECT buffer.
 void
 SecretToCredential(
     TPM2B_DIGEST        *secret,        // IN: secret information
@@ -328,10 +328,10 @@ SecretToCredential(
 //*** CredentialToSecret()
 // Unwrap a credential.  Check the integrity, decrypt and retrieve data
 // to a TPM2B_DIGEST structure.
-// The operations in this function:
-//  1. check the integrity HMAC of the input credential area
-//  2. decrypt the credential buffer
-//  3. unmarshal TPM2B_DIGEST structure into the buffer of TPM2B_DIGEST
+// This function:
+//  a) checks the integrity HMAC of the input credential area;
+//  b) decrypts the credential buffer; and
+//  c) unmarshals TPM2B_DIGEST structure into the buffer of TPM2B_DIGEST.
 //
 //  Return Type: TPM_RC
 //      TPM_RC_INSUFFICIENT      error during credential unmarshaling
@@ -352,7 +352,8 @@ CredentialToSecret(
 // This function is used to adjust the length of an authorization value.
 // It adjusts the size of the TPM2B so that it does not include octets
 // at the end of the buffer that contain zero.
-// The function returns the number of non-zero octets in the buffer.
+//
+// This function returns the number of non-zero octets in the buffer.
 UINT16
 MemoryRemoveTrailingZeros(
     TPM2B_AUTH      *auth           // IN/OUT: value to adjust
@@ -373,6 +374,7 @@ SetLabelAndContext(
 // Input may be a TPMT_TEMPLATE and that structure does not have the same
 // size as a TPMT_PUBLIC because of the difference between the 'unique' and
 // 'seed' fields.
+//
 // If 'derive' is not NULL, then the 'seed' field is assumed to contain
 // a 'label' and 'context' that are unmarshaled into 'derive'.
 TPM_RC

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Oct 19, 2019  Time: 11:50:09AM
+ *  Date: Feb 28, 2020  Time: 03:04:47PM
  */
 
 #ifndef _COMMANDS_H_
@@ -126,6 +126,12 @@
 #endif
 #if CC_ZGen_2Phase
 #include "ZGen_2Phase_fp.h"
+#endif
+#if CC_ECC_Encrypt
+#include "ECC_Encrypt_fp.h"
+#endif
+#if CC_ECC_Decrypt
+#include "ECC_Decrypt_fp.h"
 #endif
 
 // Symmetric Primitives

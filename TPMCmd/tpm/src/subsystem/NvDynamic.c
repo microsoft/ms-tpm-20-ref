@@ -1733,9 +1733,9 @@ NvSetStartupAttributes(
 //  This function is called at TPM_Startup(). If the startup completes
 //  a TPM Resume cycle, no action is taken. If the startup is a TPM Reset
 //  or a TPM Restart, then this function will:
-//  1. clear read/write lock;
-//  2. reset NV Index data that has TPMA_NV_CLEAR_STCLEAR SET; and
-//  3. set the lower bits in orderly counters to 1 for a non-orderly startup
+//  a) clear read/write lock;
+//  b) reset NV Index data that has TPMA_NV_CLEAR_STCLEAR SET; and
+//  c) set the lower bits in orderly counters to 1 for a non-orderly startup
 //
 //  It is a prerequisite that NV be available for writing before this
 //  function is called.

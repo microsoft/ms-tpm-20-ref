@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmMarshal; Version 4.1 Dec 10, 2018
- *  Date: Oct 19, 2019  Time: 11:50:10AM
+ *  Date: Mar  6, 2020  Time: 01:50:10PM
  */
 
 #include "Tpm.h"
@@ -278,10 +278,10 @@ TPM_KEY_BITS_Marshal(TPM_KEY_BITS *source, BYTE **buffer, INT32 *size)
 #endif // !USE_MARSHALING_DEFINES
 
 // Table 2:6 - Definition of TPM_SPEC Constants
-// Table 2:7 - Definition of TPM_GENERATED Constants
+// Table 2:7 - Definition of TPM_CONSTANTS32 Constants
 #if !USE_MARSHALING_DEFINES
 UINT16
-TPM_GENERATED_Marshal(TPM_GENERATED *source, BYTE **buffer, INT32 *size)
+TPM_CONSTANTS32_Marshal(TPM_CONSTANTS32 *source, BYTE **buffer, INT32 *size)
 {
     return UINT32_Marshal((UINT32 *)source, buffer, size);
 }
@@ -2880,7 +2880,7 @@ UINT16
 TPMS_ATTEST_Marshal(TPMS_ATTEST *source, BYTE **buffer, INT32 *size)
 {
     UINT16    result = 0;
-    result = (UINT16)(result + TPM_GENERATED_Marshal((TPM_GENERATED *)&(source->magic), buffer, size));
+    result = (UINT16)(result + TPM_CONSTANTS32_Marshal((TPM_CONSTANTS32 *)&(source->magic), buffer, size));
     result = (UINT16)(result + TPMI_ST_ATTEST_Marshal((TPMI_ST_ATTEST *)&(source->type), buffer, size));
     result = (UINT16)(result + TPM2B_NAME_Marshal((TPM2B_NAME *)&(source->qualifiedSigner), buffer, size));
     result = (UINT16)(result + TPM2B_DATA_Marshal((TPM2B_DATA *)&(source->extraData), buffer, size));
@@ -3787,42 +3787,42 @@ TPMS_KEY_SCHEME_ECMQV_Marshal(TPMS_KEY_SCHEME_ECMQV *source, BYTE **buffer, INT3
 // Table 2:165 - Definition of Types for KDF Schemes
 #if !USE_MARSHALING_DEFINES
 TPM_RC
-TPMS_SCHEME_MGF1_Unmarshal(TPMS_SCHEME_MGF1 *target, BYTE **buffer, INT32 *size)
+TPMS_KDF_SCHEME_MGF1_Unmarshal(TPMS_KDF_SCHEME_MGF1 *target, BYTE **buffer, INT32 *size)
 {
     return TPMS_SCHEME_HASH_Unmarshal((TPMS_SCHEME_HASH *)target, buffer, size);
 }
 UINT16
-TPMS_SCHEME_MGF1_Marshal(TPMS_SCHEME_MGF1 *source, BYTE **buffer, INT32 *size)
+TPMS_KDF_SCHEME_MGF1_Marshal(TPMS_KDF_SCHEME_MGF1 *source, BYTE **buffer, INT32 *size)
 {
     return TPMS_SCHEME_HASH_Marshal((TPMS_SCHEME_HASH *)source, buffer, size);
 }
 TPM_RC
-TPMS_SCHEME_KDF1_SP800_56A_Unmarshal(TPMS_SCHEME_KDF1_SP800_56A *target, BYTE **buffer, INT32 *size)
+TPMS_KDF_SCHEME_KDF1_SP800_56A_Unmarshal(TPMS_KDF_SCHEME_KDF1_SP800_56A *target, BYTE **buffer, INT32 *size)
 {
     return TPMS_SCHEME_HASH_Unmarshal((TPMS_SCHEME_HASH *)target, buffer, size);
 }
 UINT16
-TPMS_SCHEME_KDF1_SP800_56A_Marshal(TPMS_SCHEME_KDF1_SP800_56A *source, BYTE **buffer, INT32 *size)
+TPMS_KDF_SCHEME_KDF1_SP800_56A_Marshal(TPMS_KDF_SCHEME_KDF1_SP800_56A *source, BYTE **buffer, INT32 *size)
 {
     return TPMS_SCHEME_HASH_Marshal((TPMS_SCHEME_HASH *)source, buffer, size);
 }
 TPM_RC
-TPMS_SCHEME_KDF2_Unmarshal(TPMS_SCHEME_KDF2 *target, BYTE **buffer, INT32 *size)
+TPMS_KDF_SCHEME_KDF2_Unmarshal(TPMS_KDF_SCHEME_KDF2 *target, BYTE **buffer, INT32 *size)
 {
     return TPMS_SCHEME_HASH_Unmarshal((TPMS_SCHEME_HASH *)target, buffer, size);
 }
 UINT16
-TPMS_SCHEME_KDF2_Marshal(TPMS_SCHEME_KDF2 *source, BYTE **buffer, INT32 *size)
+TPMS_KDF_SCHEME_KDF2_Marshal(TPMS_KDF_SCHEME_KDF2 *source, BYTE **buffer, INT32 *size)
 {
     return TPMS_SCHEME_HASH_Marshal((TPMS_SCHEME_HASH *)source, buffer, size);
 }
 TPM_RC
-TPMS_SCHEME_KDF1_SP800_108_Unmarshal(TPMS_SCHEME_KDF1_SP800_108 *target, BYTE **buffer, INT32 *size)
+TPMS_KDF_SCHEME_KDF1_SP800_108_Unmarshal(TPMS_KDF_SCHEME_KDF1_SP800_108 *target, BYTE **buffer, INT32 *size)
 {
     return TPMS_SCHEME_HASH_Unmarshal((TPMS_SCHEME_HASH *)target, buffer, size);
 }
 UINT16
-TPMS_SCHEME_KDF1_SP800_108_Marshal(TPMS_SCHEME_KDF1_SP800_108 *source, BYTE **buffer, INT32 *size)
+TPMS_KDF_SCHEME_KDF1_SP800_108_Marshal(TPMS_KDF_SCHEME_KDF1_SP800_108 *source, BYTE **buffer, INT32 *size)
 {
     return TPMS_SCHEME_HASH_Marshal((TPMS_SCHEME_HASH *)source, buffer, size);
 }
@@ -3835,19 +3835,19 @@ TPMU_KDF_SCHEME_Unmarshal(TPMU_KDF_SCHEME *target, BYTE **buffer, INT32 *size, U
     switch(selector) {
 #if ALG_MGF1
         case ALG_MGF1_VALUE:
-            return TPMS_SCHEME_MGF1_Unmarshal((TPMS_SCHEME_MGF1 *)&(target->mgf1), buffer, size);
+            return TPMS_KDF_SCHEME_MGF1_Unmarshal((TPMS_KDF_SCHEME_MGF1 *)&(target->mgf1), buffer, size);
 #endif // ALG_MGF1
 #if ALG_KDF1_SP800_56A
         case ALG_KDF1_SP800_56A_VALUE:
-            return TPMS_SCHEME_KDF1_SP800_56A_Unmarshal((TPMS_SCHEME_KDF1_SP800_56A *)&(target->kdf1_sp800_56a), buffer, size);
+            return TPMS_KDF_SCHEME_KDF1_SP800_56A_Unmarshal((TPMS_KDF_SCHEME_KDF1_SP800_56A *)&(target->kdf1_sp800_56a), buffer, size);
 #endif // ALG_KDF1_SP800_56A
 #if ALG_KDF2
         case ALG_KDF2_VALUE:
-            return TPMS_SCHEME_KDF2_Unmarshal((TPMS_SCHEME_KDF2 *)&(target->kdf2), buffer, size);
+            return TPMS_KDF_SCHEME_KDF2_Unmarshal((TPMS_KDF_SCHEME_KDF2 *)&(target->kdf2), buffer, size);
 #endif // ALG_KDF2
 #if ALG_KDF1_SP800_108
         case ALG_KDF1_SP800_108_VALUE:
-            return TPMS_SCHEME_KDF1_SP800_108_Unmarshal((TPMS_SCHEME_KDF1_SP800_108 *)&(target->kdf1_sp800_108), buffer, size);
+            return TPMS_KDF_SCHEME_KDF1_SP800_108_Unmarshal((TPMS_KDF_SCHEME_KDF1_SP800_108 *)&(target->kdf1_sp800_108), buffer, size);
 #endif // ALG_KDF1_SP800_108
         case ALG_NULL_VALUE:
             return TPM_RC_SUCCESS;
@@ -3860,19 +3860,19 @@ TPMU_KDF_SCHEME_Marshal(TPMU_KDF_SCHEME *source, BYTE **buffer, INT32 *size, UIN
     switch(selector) {
 #if ALG_MGF1
         case ALG_MGF1_VALUE:
-            return TPMS_SCHEME_MGF1_Marshal((TPMS_SCHEME_MGF1 *)&(source->mgf1), buffer, size);
+            return TPMS_KDF_SCHEME_MGF1_Marshal((TPMS_KDF_SCHEME_MGF1 *)&(source->mgf1), buffer, size);
 #endif // ALG_MGF1
 #if ALG_KDF1_SP800_56A
         case ALG_KDF1_SP800_56A_VALUE:
-            return TPMS_SCHEME_KDF1_SP800_56A_Marshal((TPMS_SCHEME_KDF1_SP800_56A *)&(source->kdf1_sp800_56a), buffer, size);
+            return TPMS_KDF_SCHEME_KDF1_SP800_56A_Marshal((TPMS_KDF_SCHEME_KDF1_SP800_56A *)&(source->kdf1_sp800_56a), buffer, size);
 #endif // ALG_KDF1_SP800_56A
 #if ALG_KDF2
         case ALG_KDF2_VALUE:
-            return TPMS_SCHEME_KDF2_Marshal((TPMS_SCHEME_KDF2 *)&(source->kdf2), buffer, size);
+            return TPMS_KDF_SCHEME_KDF2_Marshal((TPMS_KDF_SCHEME_KDF2 *)&(source->kdf2), buffer, size);
 #endif // ALG_KDF2
 #if ALG_KDF1_SP800_108
         case ALG_KDF1_SP800_108_VALUE:
-            return TPMS_SCHEME_KDF1_SP800_108_Marshal((TPMS_SCHEME_KDF1_SP800_108 *)&(source->kdf1_sp800_108), buffer, size);
+            return TPMS_KDF_SCHEME_KDF1_SP800_108_Marshal((TPMS_KDF_SCHEME_KDF1_SP800_108 *)&(source->kdf1_sp800_108), buffer, size);
 #endif // ALG_KDF1_SP800_108
         case ALG_NULL_VALUE:
             return 0;
@@ -4236,6 +4236,9 @@ TPMI_RSA_KEY_BITS_Unmarshal(TPMI_RSA_KEY_BITS *target, BYTE **buffer, INT32 *siz
 #if RSA_4096
             case 4096:
 #endif // RSA_4096
+#if RSA_16384
+            case 16384:
+#endif // RSA_16384
                 break;
             default:
                 result = TPM_RC_VALUE;
@@ -5120,6 +5123,32 @@ TPM2B_TEMPLATE_Marshal(TPM2B_TEMPLATE *source, BYTE **buffer, INT32 *size)
 }
 
 // Table 2:204 - Definition of TPM2B_PRIVATE_VENDOR_SPECIFIC Structure
+TPM_RC
+TPM2B_PRIVATE_VENDOR_SPECIFIC_Unmarshal(TPM2B_PRIVATE_VENDOR_SPECIFIC *target, BYTE **buffer, INT32 *size)
+{
+    TPM_RC    result;
+    result = UINT16_Unmarshal((UINT16 *)&(target->t.size), buffer, size);
+    if(result == TPM_RC_SUCCESS)
+    {
+        if((target->t.size) > PRIVATE_VENDOR_SPECIFIC_BYTES)
+            result = TPM_RC_SIZE;
+        else
+            result = BYTE_Array_Unmarshal((BYTE *)(target->t.buffer), buffer, size, (INT32)(target->t.size));
+    }
+    return result;
+}
+UINT16
+TPM2B_PRIVATE_VENDOR_SPECIFIC_Marshal(TPM2B_PRIVATE_VENDOR_SPECIFIC *source, BYTE **buffer, INT32 *size)
+{
+    UINT16    result = 0;
+    result = (UINT16)(result + UINT16_Marshal((UINT16 *)&(source->t.size), buffer, size));
+    // if size equal to 0, the rest of the structure is a zero buffer.  Stop processing
+    if(source->t.size == 0)
+        return result;
+    result = (UINT16)(result + BYTE_Array_Marshal((BYTE *)(source->t.buffer), buffer, size, (INT32)(source->t.size)));
+    return result;
+}
+
 // Table 2:205 - Definition of TPMU_SENSITIVE_COMPOSITE Union
 TPM_RC
 TPMU_SENSITIVE_COMPOSITE_Unmarshal(TPMU_SENSITIVE_COMPOSITE *target, BYTE **buffer, INT32 *size, UINT32 selector)

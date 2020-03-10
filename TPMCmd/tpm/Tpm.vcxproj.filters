@@ -604,6 +604,15 @@
     <ClCompile Include="src\crypt\ltc\TpmToLtcSupport.c">
       <Filter>Source Files\Crypt\ltc</Filter>
     </ClCompile>
+    <ClCompile Include="src\crypt\CryptEccCrypt.c">
+      <Filter>Source Files\Crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Asymmetric\ECC_Decrypt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\command\Asymmetric\ECC_Encrypt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BaseTypes.h">
@@ -1354,6 +1363,15 @@
       <Filter>Source Files\ACT</Filter>
     </ClInclude>
     <ClInclude Include="include\prototypes\TableDrivenMarshal_fp.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TableMarshal.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TableMarshalDefines.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TableMarshalTypes.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

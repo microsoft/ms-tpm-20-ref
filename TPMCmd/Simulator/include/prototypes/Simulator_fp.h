@@ -34,13 +34,17 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Oct  2, 2019  Time: 01:47:20PM
+ *  Date: Mar  4, 2020  Time: 02:36:45PM
  */
 
 #ifndef    _SIMULATOR_FP_H_
 #define    _SIMULATOR_FP_H_
 
 //** From TcpServer.c
+
+#ifdef _MSC_VER
+#elif defined(__unix__)
+#endif
 
 //*** PlatformServer()
 // This function processes incoming platform requests.
@@ -150,6 +154,10 @@ TpmServer(
 
 
 //** From TPMCmdp.c
+
+#ifdef _MSC_VER
+#elif defined(__unix__)
+#endif
 
 //*** Signal_PowerOn()
 // This function processes a power-on indication. Among other things, it

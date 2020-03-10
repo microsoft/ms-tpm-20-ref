@@ -185,21 +185,20 @@ X509ProcessExtensions(
         x509KeyUsageUnion   keyUsage;
         BOOL                bad;
     //
-        // Extra parentheses around && below are required to shut GCC warnings.
         keyUsage.integer = value;
         // For KeyUsage:
         // 1) 'sign' is SET if Key Usage includes signing
         bad = (KEY_USAGE_SIGN.integer & keyUsage.integer) != 0
               && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, sign);
         // 2) 'decrypt' is SET if Key Usage includes decryption uses
-        bad = bad || ((KEY_USAGE_DECRYPT.integer & keyUsage.integer) != 0
-                     && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt));
+        bad = bad || (KEY_USAGE_DECRYPT.integer & keyUsage.integer) != 0
+                     && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, decrypt);
         // 3) 'fixedTPM' is SET if Key Usage is non-repudiation
-        bad = bad || (IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, nonrepudiation)
-                      && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM));
+        bad = bad || IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, nonrepudiation)
+                      && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, fixedTPM);
         // 4)'restricted' is SET if Key Usage is for key agreement.
-        bad = bad || (IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, keyAgreement)
-                     && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted));
+        bad = bad || IS_ATTRIBUTE(keyUsage.x509, TPMA_X509_KEY_USAGE, keyAgreement)
+                     && !IS_ATTRIBUTE(attributes, TPMA_OBJECT, restricted);
         if(bad)
             return TPM_RCS_VALUE;
     }
@@ -227,13 +226,18 @@ X509AddSigningAlgorithm(
     switch(signKey->publicArea.type)
     {
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             return X509AddSigningAlgorithmRSA(signKey, scheme, ctx);
 #endif // ALG_RSA
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             return X509AddSigningAlgorithmECC(signKey, scheme, ctx);
 #endif // ALG_ECC
+#if ALG_SM2  
+        case TPM_ALG_SM2:
+            break;  // no signing algorithm for SM2 yet
+//            return X509AddSigningAlgorithmSM2(signKey, scheme, ctx);
+#endif // ALG_SM2
         default:
             break;
     }
@@ -294,5 +298,3 @@ X509PushAlgorithmIdentifierSequence(
     ASN1PushOID(ctx, OID);
     return ASN1EndEncapsulation(ctx, ASN1_CONSTRUCTED_SEQUENCE);
 }
-
-

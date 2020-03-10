@@ -137,11 +137,16 @@ TpmSizeChecks(
         // round required size up to nearest 8 byte boundary.
         biggestContext = 8 * ((biggestContext + 7) / 8);
 
-        if(MAX_CONTEXT_SIZE != biggestContext)
+        if(MAX_CONTEXT_SIZE < biggestContext)
         {
-            printf("MAX_CONTEXT_SIZE should be changed to %d (%d)\n",
+            printf("MAX_CONTEXT_SIZE needs to be increased to at least %d (%d)\n",
                    biggestContext, MAX_CONTEXT_SIZE);
             PASS = FALSE;
+        } 
+        else if (MAX_CONTEXT_SIZE > biggestContext)
+        {
+            printf("MAX_CONTEXT_SIZE can be reduced to %d (%d)\n",
+                   biggestContext, MAX_CONTEXT_SIZE);
         }
     }
     {
@@ -168,7 +173,7 @@ TpmSizeChecks(
         }
     }
     // Check that the platorm implementes each of the ACT that the TPM thinks are
-	// present
+    // present
     {
         uint32_t            act;
         for(act = 0; act < 16; act++)

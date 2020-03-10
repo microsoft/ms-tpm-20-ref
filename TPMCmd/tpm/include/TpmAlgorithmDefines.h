@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Aug 30, 2019  Time: 02:11:52PM
+ *  Date: Feb 28, 2020  Time: 03:04:46PM
  */
 
 #ifndef _TPM_ALGORITHM_DEFINES_H_
@@ -42,10 +42,6 @@
 
 // Table 2:3 - Definition of Base Types
 // Base Types are in BaseTypes.h
-
-
-
-
 
 #define ECC_CURVES                      \
             {TPM_ECC_BN_P256,   TPM_ECC_BN_P638,   TPM_ECC_NIST_P192,              \
@@ -62,7 +58,6 @@
             0))))))))
 #define MAX_ECC_KEY_BYTES               BITS_TO_BYTES(MAX_ECC_KEY_BITS)
 
-
 // Table 0:6 - Defines for PLATFORM Values
 #define PLATFORM_FAMILY         TPM_SPEC_FAMILY
 #define PLATFORM_LEVEL          TPM_SPEC_LEVEL
@@ -70,15 +65,13 @@
 #define PLATFORM_YEAR           TPM_SPEC_YEAR
 #define PLATFORM_DAY_OF_YEAR    TPM_SPEC_DAY_OF_YEAR
 
-
-
-
-
 // Table 1:3 - Defines for RSA Asymmetric Cipher Algorithm Constants
 #define RSA_KEY_SIZES_BITS          \
             (1024 * RSA_1024),  (2048 * RSA_2048), (3072 * RSA_3072),              \
-             (4096 * RSA_4096)
-#if   RSA_4096
+             (4096 * RSA_4096), (16384 * RSA_16384)
+#if   RSA_16384
+#   define RSA_MAX_KEY_SIZE_BITS    16384
+#elif RSA_4096
 #   define RSA_MAX_KEY_SIZE_BITS    4096
 #elif RSA_3072
 #   define RSA_MAX_KEY_SIZE_BITS    3072
@@ -92,47 +85,37 @@
 #define MAX_RSA_KEY_BITS            RSA_MAX_KEY_SIZE_BITS
 #define MAX_RSA_KEY_BYTES           ((RSA_MAX_KEY_SIZE_BITS + 7) / 8)
 
-
-
 // Table 1:13 - Defines for SHA1 Hash Values
 #define SHA1_DIGEST_SIZE    20
 #define SHA1_BLOCK_SIZE     64
-
 
 // Table 1:14 - Defines for SHA256 Hash Values
 #define SHA256_DIGEST_SIZE  32
 #define SHA256_BLOCK_SIZE   64
 
-
 // Table 1:15 - Defines for SHA384 Hash Values
 #define SHA384_DIGEST_SIZE  48
 #define SHA384_BLOCK_SIZE   128
-
 
 // Table 1:16 - Defines for SHA512 Hash Values
 #define SHA512_DIGEST_SIZE  64
 #define SHA512_BLOCK_SIZE   128
 
-
 // Table 1:17 - Defines for SM3_256 Hash Values
 #define SM3_256_DIGEST_SIZE     32
 #define SM3_256_BLOCK_SIZE      64
-
 
 // Table 1:18 - Defines for SHA3_256 Hash Values
 #define SHA3_256_DIGEST_SIZE    32
 #define SHA3_256_BLOCK_SIZE     136
 
-
 // Table 1:19 - Defines for SHA3_384 Hash Values
 #define SHA3_384_DIGEST_SIZE    48
 #define SHA3_384_BLOCK_SIZE     104
 
-
 // Table 1:20 - Defines for SHA3_512 Hash Values
 #define SHA3_512_DIGEST_SIZE    64
 #define SHA3_512_BLOCK_SIZE     72
-
 
 // Table 1:21 - Defines for AES Symmetric Cipher Algorithm Constants
 #define AES_KEY_SIZES_BITS          \
@@ -161,7 +144,6 @@
 #endif
 #define MAX_AES_BLOCK_SIZE_BYTES    AES_MAX_BLOCK_SIZE
 
-
 // Table 1:22 - Defines for SM4 Symmetric Cipher Algorithm Constants
 #define SM4_KEY_SIZES_BITS          (128 * SM4_128)
 #if   SM4_128
@@ -179,7 +161,6 @@
 #   define SM4_MAX_BLOCK_SIZE       0
 #endif
 #define MAX_SM4_BLOCK_SIZE_BYTES    SM4_MAX_BLOCK_SIZE
-
 
 // Table 1:23 - Defines for CAMELLIA Symmetric Cipher Algorithm Constants
 #define CAMELLIA_KEY_SIZES_BITS         \
@@ -208,7 +189,6 @@
 #endif
 #define MAX_CAMELLIA_BLOCK_SIZE_BYTES   CAMELLIA_MAX_BLOCK_SIZE
 
-
 // Table 1:24 - Defines for TDES Symmetric Cipher Algorithm Constants
 #define TDES_KEY_SIZES_BITS         (128 * TDES_128), (192 * TDES_192)
 #if   TDES_192
@@ -231,11 +211,9 @@
 #endif
 #define MAX_TDES_BLOCK_SIZE_BYTES   TDES_MAX_BLOCK_SIZE
 
-
-
 // Additional values for benefit of code
 #define TPM_CC_FIRST                        0x0000011F
-#define TPM_CC_LAST                         0x00000198
+#define TPM_CC_LAST                         0x0000019A
 
    
 #if COMPRESSED_LISTS
@@ -370,6 +348,8 @@
     + (ADD_FILL || CC_Policy_AC_SendSelect)                 /* 0x00000196 */       \
     + (ADD_FILL || CC_CertifyX509)                          /* 0x00000197 */       \
     + (ADD_FILL || CC_ACT_SetTimeout)                       /* 0x00000198 */       \
+    + (ADD_FILL || CC_ECC_Encrypt)                          /* 0x00000199 */       \
+    + (ADD_FILL || CC_ECC_Decrypt)                          /* 0x0000019A */       \
     )
 
 #define VENDOR_COMMAND_ARRAY_SIZE   (0 + CC_Vendor_TCG_Test)
@@ -401,7 +381,6 @@
              MAX(ALG_SHA512   * SHA512_DIGEST_SIZE,                                \
              MAX(ALG_SM3_256  * SM3_256_DIGEST_SIZE,                               \
              0)))))))))
-
 
 #if MAX_DIGEST_SIZE == 0 || MAX_HASH_BLOCK_SIZE == 0
 #error "Hash data not valid"

@@ -102,7 +102,7 @@ static UINT32 GetSelector(
     UINT16               descriptor
 )
 {
-    uint                 sel = GET_ELEMENT_NUMBER(descriptor);
+    unsigned             sel = GET_ELEMENT_NUMBER(descriptor);
     // Get the offset of the value in the unmarshaled structure
     const UINT16        *entry = &values[(sel * 3)];
 //
@@ -343,7 +343,6 @@ Unmarshal(
     const MarshalHeader_mst     *sel;
     TPM_RC                       result;
 //
-#define _target    ((UINT8 *)target)
     sel = GetDescriptor(typeIndex);
     switch(sel->marshalType)
     {
@@ -418,14 +417,14 @@ Unmarshal(
             // indicated value is implemented. For example, if there is a table of
             // allowed RSA key sises and the 2nd entry matches, then the 2nd bit in
             // the bit field is checked to see if that allowed size is implemented 
-			// in this TPM.
+            // in this TPM.
             //  typedef const struct TableMarshal_mst
             //  {
             //      UINT8           marshalType;        // TABLE_MTYPE
             //      UINT8           modifiers;
             //      UINT8           errorCode;
             //      UINT8           singles;
-            //      UINT32          values[1];
+            //      UINT32          values[singles + 1 if TAKES_NULL];
             //  } TableMarshal_mst;
 
             UINT32                  val;
@@ -454,8 +453,8 @@ Unmarshal(
                         // does the input value match the value in the table
                         if(val == check[i])
                         {
-                            // If there is an associated bit table, make sure that the corresponding
-                            // bit is SET
+                            // If there is an associated bit table, make sure that
+                            // the corresponding bit is SET
                             if((HAS_BITS & tmt->modifiers)
                                && (!IS_BIT_SET32(i, &(check[tmt->singles]))))
                                 // if not SET, then this is a failure.
@@ -486,7 +485,7 @@ Unmarshal(
             //      UINT8           marshalType;        // MIN_MAX_MTYPE
             //      UINT8           modifiers;
             //      UINT8           errorCode;
-            //      UINT32          values[2];
+            //      UINT32          values[2 + 1 if TAKES_NULL];
             //  } MinMaxMarshal_mst;
             UINT32               val;
         //
@@ -555,18 +554,21 @@ Unmarshal(
             // to determine where the value goes.
             StructMarshal_mst   *mst = (StructMarshal_mst *)sel;
             int                  i;
-            const UINT16        *value;
+            const UINT16        *value = mst->values;
         //
-            for(result = TPM_RC_SUCCESS, value = mst->values,  i = mst->elements
+            for(result = TPM_RC_SUCCESS, i = mst->elements
                 ; (TPM_RC_SUCCESS == result) && (i > 0)
                 ; value = &value[3], i--)
             {
                 UINT16           descriptor = value[0];
                 marshalIndex_t   index = value[1];
-                UINT8           *offset = _target + value[2];
+                // The offset of the object in the structure is in the last value in
+                // the triplet. Add that value to the start of the structure
+                UINT8           *offset = ((UINT8 *)target) + value[2];
             //
-                index |= ((ELEMENT_PROPAGATE & descriptor)
-                            << (NULL_SHIFT - PROPAGATE_SHIFT));
+                if ((ELEMENT_PROPAGATE & descriptor)
+                    && (typeIndex & NULL_FLAG))
+                    index |= NULL_FLAG;
                 switch(GET_ELEMENT_TYPE(descriptor))
                 {
                     case SIMPLE_STYPE:
@@ -619,7 +621,8 @@ Unmarshal(
         //
             if(IS_SUCCESS(Unmarshal(m2bst->sizeIndex, target, buffer, size)))
             {
-                count = (int32_t)*((UINT16 *)_target);
+                // fetch the size value and convert it to a 32-bit count value
+                count = (int32_t)*((UINT16 *)target);
                 if(count == 0)
                 {
                     if(m2bst->modifiers & SIZE_EQUAL)
@@ -629,10 +632,16 @@ Unmarshal(
                 {
                     marshalIndex_t  index = m2bst->dataIndex;
                 //
-                    index |= (m2bst->modifiers & PROPAGATE_NULL)
-                                    << (NULL_SHIFT - PROPAGATE_SHIFT);
+                    // If this type propigates a null (PROPIGATE_NULL), propigate it
+                    if ((m2bst->modifiers & PROPAGATE_NULL) 
+                        && (typeIndex & typeIndex))
+                        index |= NULL_FLAG;
+                    // The structure might not start two bytes after the start of the
+                    // size field. The offset to the start of the structure is between
+                    // 2 and 8 bytes. This is encoded into the low 4 bits of the
+                    // modifiers byte byte
                     if(IS_SUCCESS(Unmarshal(index,
-                                           _target + (m2bst->modifiers & SIGNED_MASK),
+                        ((UINT8 *)target) + (m2bst->modifiers & OFFSET_MASK),
                                            buffer, &count)))
                     {
                         if(count != 0)
@@ -653,12 +662,13 @@ Unmarshal(
         //
             if(IS_SUCCESS(Unmarshal(mlt->sizeIndex, target, buffer, size)))
             {
-                index |= (mlt->modifiers & PROPAGATE_NULL)
-                            << (NULL_SHIFT - PROPAGATE_SHIFT);
+                // If this type propigates a null (PROPIGATE_NULL), propigate it
+                if ((mlt->modifiers & PROPAGATE_NULL)
+                    && (typeIndex & NULL_FLAG))
+                    index |= NULL_FLAG;
                 result = ArrayUnmarshal(index,
-                                        _target +(mlt->modifiers & SIGNED_MASK),
-                                        buffer, size,
-                                        *((UINT32 *)target));
+                    ((UINT8 *)target) +(mlt->modifiers & OFFSET_MASK),
+                                        buffer, size, *((UINT32 *)target));
             }
             break;
         }
@@ -667,6 +677,7 @@ Unmarshal(
             result = TPM_RC_SUCCESS;
             break;
         }
+#if 0
         case COMPOSITE_MTYPE:
         {
             CompositeMarshal_mst    *mct = (CompositeMarshal_mst *)sel;
@@ -697,6 +708,7 @@ Unmarshal(
             }
             break;
         }
+#endif // 0
         default:
         {
             result = TPM_RC_FAILURE;

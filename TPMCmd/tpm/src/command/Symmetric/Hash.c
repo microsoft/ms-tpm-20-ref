@@ -68,7 +68,7 @@ TPM2_Hash(
         out->validation.hierarchy = TPM_RH_NULL;
         out->validation.digest.t.size = 0;
     }
-    else if(in->data.t.size >= sizeof(TPM_GENERATED)
+    else if(in->data.t.size >= sizeof(TPM_GENERATED_VALUE)
             && !TicketIsSafe(&in->data.b))
     {
         // Ticket is not safe

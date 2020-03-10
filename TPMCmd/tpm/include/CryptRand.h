@@ -144,8 +144,7 @@ typedef struct
 } DRBG_STATE, *pDRBG_STATE;
 #define DRBG_MAGIC   ((UINT32) 0x47425244) // "DRBG" backwards so that it displays
 
-typedef struct
-{
+typedef struct KDF_STATE {
     UINT64               counter;
     UINT32               magic;
     UINT32               limit;

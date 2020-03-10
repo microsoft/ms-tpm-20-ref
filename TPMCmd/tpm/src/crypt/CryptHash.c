@@ -678,21 +678,26 @@ CryptHmacEnd2B(
 }
 
 //** Mask and Key Generation Functions
-//*** CryptMGF1()
-// This function performs MGF1 using the selected hash. MGF1 is
-// T(n) = T(n-1) || H(seed || counter).
+//*** CryptMGF_KDF()
+// This function performs MGF1/KDF1 or KDF2 using the selected hash. KDF1 and KDF2 are
+// T('n') = T('n'-1) || H('seed' || 'counter') with the difference being that, with
+// KDF1, 'counter' starts at 0 but with KDF2, 'counter' starts at 1. The caller
+// determines which version by setting the initial value of counter to either 0 or 1.
+// Note: Any value that is not 0 is considered to be 1.
+//
 // This function returns the length of the mask produced which
 // could be zero if the digest algorithm is not supported
 //  Return Type: UINT16
 //      0       hash algorithm was TPM_ALG_NULL
 //    > 0       should be the same as 'mSize'
 LIB_EXPORT UINT16
-CryptMGF1(
+CryptMGF_KDF(
     UINT32           mSize,         // IN: length of the mask to be produced
     BYTE            *mask,          // OUT: buffer to receive the mask
     TPM_ALG_ID       hashAlg,       // IN: hash to use
     UINT32           seedSize,      // IN: size of the seed
-    BYTE            *seed           // IN: seed size
+    BYTE            *seed,          // IN: seed size
+    UINT32           counter        // IN: counter initial value
     )
 {
     HASH_STATE           hashState;
@@ -700,10 +705,11 @@ CryptMGF1(
     UINT32               hLen;
     UINT32               bytes;
 //
-    UINT32              counter = 0;
     // If there is no digest to compute return
     if((hDef->digestSize == 0) || (mSize == 0))
         return 0;
+    if(counter != 0)
+        counter = 1;
     hLen = hDef->digestSize;
     for(bytes = 0; bytes < mSize; bytes += hLen)
     {

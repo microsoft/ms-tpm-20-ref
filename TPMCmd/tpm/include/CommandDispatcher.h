@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmDispatch; Version 4.0 July 8,2017
- *  Date: Oct 19, 2019  Time: 11:50:10AM
+ *  Date: Mar  6, 2020  Time: 01:50:10PM
  */
 
 // This macro is added just so that the code is only excessively long.
@@ -125,7 +125,7 @@ case TPM_CC_StartAuthSession: {
 result = TPM2_StartAuthSession (in, out);
     rSize = sizeof(StartAuthSession_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
-;    command->handles[command->handleNum++] = out->sessionHandle;
+    command->handles[command->handleNum++] = out->sessionHandle;
     *respParmSize += TPM2B_NONCE_Marshal(&out->nonceTPM,
                                           responseBuffer, &rSize);
 break;
@@ -187,7 +187,7 @@ case TPM_CC_Load: {
 result = TPM2_Load (in, out);
     rSize = sizeof(Load_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
-;    command->handles[command->handleNum++] = out->objectHandle;
+    command->handles[command->handleNum++] = out->objectHandle;
     *respParmSize += TPM2B_NAME_Marshal(&out->name,
                                           responseBuffer, &rSize);
 break;
@@ -209,7 +209,7 @@ case TPM_CC_LoadExternal: {
 result = TPM2_LoadExternal (in, out);
     rSize = sizeof(LoadExternal_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
-;    command->handles[command->handleNum++] = out->objectHandle;
+    command->handles[command->handleNum++] = out->objectHandle;
     *respParmSize += TPM2B_NAME_Marshal(&out->name,
                                           responseBuffer, &rSize);
 break;
@@ -323,7 +323,7 @@ case TPM_CC_CreateLoaded: {
 result = TPM2_CreateLoaded (in, out);
     rSize = sizeof(CreateLoaded_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
-;    command->handles[command->handleNum++] = out->objectHandle;
+    command->handles[command->handleNum++] = out->objectHandle;
     *respParmSize += TPM2B_PRIVATE_Marshal(&out->outPrivate,
                                           responseBuffer, &rSize);
     *respParmSize += TPM2B_PUBLIC_Marshal(&out->outPublic,
@@ -523,6 +523,52 @@ result = TPM2_ZGen_2Phase (in, out);
 break;
 }
 #endif     // CC_ZGen_2Phase
+#if CC_ECC_Encrypt
+case TPM_CC_ECC_Encrypt: {
+    ECC_Encrypt_In *in = (ECC_Encrypt_In *)
+            MemoryGetInBuffer(sizeof(ECC_Encrypt_In));
+    ECC_Encrypt_Out *out = (ECC_Encrypt_Out *)
+            MemoryGetOutBuffer(sizeof(ECC_Encrypt_Out));
+    in->keyHandle = handles[0];
+    result = TPM2B_MAX_BUFFER_Unmarshal(&in->plainText, paramBuffer, paramBufferSize);
+        EXIT_IF_ERROR_PLUS(RC_ECC_Encrypt_plainText);
+    result = TPMT_KDF_SCHEME_Unmarshal(&in->inScheme, paramBuffer, paramBufferSize, TRUE);
+        EXIT_IF_ERROR_PLUS(RC_ECC_Encrypt_inScheme);
+    if(*paramBufferSize != 0) { result = TPM_RC_SIZE; goto Exit; }
+result = TPM2_ECC_Encrypt (in, out);
+    rSize = sizeof(ECC_Encrypt_Out);
+    *respParmSize += TPM2B_ECC_POINT_Marshal(&out->C1,
+                                          responseBuffer, &rSize);
+    *respParmSize += TPM2B_MAX_BUFFER_Marshal(&out->C2,
+                                          responseBuffer, &rSize);
+    *respParmSize += TPM2B_DIGEST_Marshal(&out->C3,
+                                          responseBuffer, &rSize);
+break;
+}
+#endif     // CC_ECC_Encrypt
+#if CC_ECC_Decrypt
+case TPM_CC_ECC_Decrypt: {
+    ECC_Decrypt_In *in = (ECC_Decrypt_In *)
+            MemoryGetInBuffer(sizeof(ECC_Decrypt_In));
+    ECC_Decrypt_Out *out = (ECC_Decrypt_Out *)
+            MemoryGetOutBuffer(sizeof(ECC_Decrypt_Out));
+    in->keyHandle = handles[0];
+    result = TPM2B_ECC_POINT_Unmarshal(&in->C1, paramBuffer, paramBufferSize);
+        EXIT_IF_ERROR_PLUS(RC_ECC_Decrypt_C1);
+    result = TPM2B_MAX_BUFFER_Unmarshal(&in->C2, paramBuffer, paramBufferSize);
+        EXIT_IF_ERROR_PLUS(RC_ECC_Decrypt_C2);
+    result = TPM2B_DIGEST_Unmarshal(&in->C3, paramBuffer, paramBufferSize);
+        EXIT_IF_ERROR_PLUS(RC_ECC_Decrypt_C3);
+    result = TPMT_KDF_SCHEME_Unmarshal(&in->inScheme, paramBuffer, paramBufferSize, TRUE);
+        EXIT_IF_ERROR_PLUS(RC_ECC_Decrypt_inScheme);
+    if(*paramBufferSize != 0) { result = TPM_RC_SIZE; goto Exit; }
+result = TPM2_ECC_Decrypt (in, out);
+    rSize = sizeof(ECC_Decrypt_Out);
+    *respParmSize += TPM2B_MAX_BUFFER_Marshal(&out->plainText,
+                                          responseBuffer, &rSize);
+break;
+}
+#endif     // CC_ECC_Decrypt
 #if CC_EncryptDecrypt
 case TPM_CC_EncryptDecrypt: {
     EncryptDecrypt_In *in = (EncryptDecrypt_In *)
@@ -675,7 +721,7 @@ case TPM_CC_HMAC_Start: {
 result = TPM2_HMAC_Start (in, out);
     rSize = sizeof(HMAC_Start_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
-;    command->handles[command->handleNum++] = out->sequenceHandle;
+    command->handles[command->handleNum++] = out->sequenceHandle;
 break;
 }
 #endif     // CC_HMAC_Start
@@ -694,7 +740,7 @@ case TPM_CC_MAC_Start: {
 result = TPM2_MAC_Start (in, out);
     rSize = sizeof(MAC_Start_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
-;    command->handles[command->handleNum++] = out->sequenceHandle;
+    command->handles[command->handleNum++] = out->sequenceHandle;
 break;
 }
 #endif     // CC_MAC_Start
@@ -712,7 +758,7 @@ case TPM_CC_HashSequenceStart: {
 result = TPM2_HashSequenceStart (in, out);
     rSize = sizeof(HashSequenceStart_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
-;    command->handles[command->handleNum++] = out->sequenceHandle;
+    command->handles[command->handleNum++] = out->sequenceHandle;
 break;
 }
 #endif     // CC_HashSequenceStart
@@ -1458,7 +1504,7 @@ case TPM_CC_CreatePrimary: {
 result = TPM2_CreatePrimary (in, out);
     rSize = sizeof(CreatePrimary_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
-;    command->handles[command->handleNum++] = out->objectHandle;
+    command->handles[command->handleNum++] = out->objectHandle;
     *respParmSize += TPM2B_PUBLIC_Marshal(&out->outPublic,
                                           responseBuffer, &rSize);
     *respParmSize += TPM2B_CREATION_DATA_Marshal(&out->creationData,
@@ -1682,7 +1728,7 @@ case TPM_CC_ContextLoad: {
 result = TPM2_ContextLoad (in, out);
     rSize = sizeof(ContextLoad_Out);
     if(TPM_RC_SUCCESS != result) goto Exit;
-;    command->handles[command->handleNum++] = out->loadedHandle;
+    command->handles[command->handleNum++] = out->loadedHandle;
 break;
 }
 #endif     // CC_ContextLoad

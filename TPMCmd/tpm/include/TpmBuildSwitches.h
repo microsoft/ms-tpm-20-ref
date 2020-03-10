@@ -332,7 +332,7 @@
 #if !(defined TABLE_DRIVEN_MARSHAL)                                                 \
     || ((TABLE_DRIVEN_MARSHAL != NO) && (TABLE_DRIVEN_MARSHAL != YES))
 #   undef   TABLE_DRIVEN_MARSHAL
-#   define  TABLE_DRIVEN_MARSHAL YES    // Default: Either YES or NO
+#   define  TABLE_DRIVEN_MARSHAL NO  // Default: Either YES or NO
 #endif
 
 // Change these definitions to turn all algorithms or commands ON or OFF. That is,

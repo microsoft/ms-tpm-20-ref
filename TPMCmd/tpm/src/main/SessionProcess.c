@@ -51,11 +51,11 @@
 
 //*** IsDAExempted()
 // This function indicates if a handle is exempted from DA logic.
-// A handle is exempted if it is
-//  1. a primary seed handle,
-//  2. an object with noDA bit SET,
-//  3. an NV Index with TPMA_NV_NO_DA bit SET, or
-//  4. a PCR handle.
+// A handle is exempted if it is:
+//  a) a primary seed handle;
+//  b) an object with noDA bit SET;
+//  c) an NV Index with TPMA_NV_NO_DA bit SET; or
+//  d) a PCR handle.
 //
 //  Return Type: BOOL
 //      TRUE(1)         handle is exempted from DA logic
@@ -213,13 +213,13 @@ IsSessionBindEntity(
 // is created that requires multiple ADMIN role authorizations, then it will
 // have to be special-cased in this function.
 // A policy session is required if:
-//      1. the command requires the DUP role,
-//      2. the command requires the ADMIN role and the authorized entity
-//         is an object and its adminWithPolicy bit is SET, or
-//      3. the command requires the ADMIN role and the authorized entity
-//         is a permanent handle or an NV Index.
-//      4. The authorized entity is a PCR belonging to a policy group, and
-//         has its policy initialized
+// a) the command requires the DUP role;
+// b) the command requires the ADMIN role and the authorized entity
+//    is an object and its adminWithPolicy bit is SET;
+// c) the command requires the ADMIN role and the authorized entity
+//    is a permanent handle or an NV Index; or
+// d) the authorized entity is a PCR belonging to a policy group, and
+//    has its policy initialized
 //  Return Type: BOOL
 //      TRUE(1)         policy session is required
 //      FALSE(0)        policy session is not required
@@ -346,8 +346,8 @@ IsAuthValueAvailable(
             }
             // authValue is available for an object if it has its sensitive
             // portion loaded and
-            //  1. userWithAuth bit is SET, or
-            //  2. ADMIN role is required
+            //  a) userWithAuth bit is SET, or
+            //  b) ADMIN role is required
             if(object->attributes.publicOnly == CLEAR
                && (IS_ATTRIBUTE(attributes, TPMA_OBJECT, userWithAuth)
                    || (CommandAuthRole(commandIndex, sessionIndex) == AUTH_ADMIN
@@ -989,12 +989,12 @@ CheckSessionHMAC(
 //  This function is used to validate the authorization in a policy session.
 //  This function performs the following comparisons to see if a policy
 //  authorization is properly provided. The check are:
-//  1. compare policyDigest in session with authPolicy associated with
+//  a) compare policyDigest in session with authPolicy associated with
 //     the entity to be authorized;
-//  2. compare timeout if applicable;
-//  3. compare commandCode if applicable;
-//  4. compare cpHash if applicable; and
-//  5. see if PCR values have changed since computed.
+//  b) compare timeout if applicable;
+//  c) compare commandCode if applicable;
+//  d) compare cpHash if applicable; and
+//  e) see if PCR values have changed since computed.
 //
 // If all the above checks succeed, the handle is authorized.
 // The order of these comparisons is not important because any failure will
@@ -1893,12 +1893,12 @@ CommandAudit(
 #endif
 
 //*** UpdateAuditSessionStatus()
-// Function to update the internal audit related states of a session. It
-//  1. initializes the session as audit session and sets it to be exclusive if this
+// This function updates the internal audit related states of a session. It will:
+//  a) initialize the session as audit session and set it to be exclusive if this
 //     is the first time it is used for audit or audit reset was requested;
-//  2. reports exclusive audit session;
-//  3. extends audit log; and
-//  4. clears exclusive audit session if no audit session found in the command.
+//  b) report exclusive audit session;
+//  c) extend audit log; and
+//  d) clear exclusive audit session if no audit session found in the command.
 static void
 UpdateAuditSessionStatus(
     COMMAND         *command        // IN: primary control structure
@@ -2060,9 +2060,9 @@ ComputeResponseHMAC(
 }
 
 //*** UpdateInternalSession()
-// Updates internal sessions:
-//      1. Restarts session time.
-//      2. Clears a policy session since nonce is rolling.
+// This function updates internal sessions by:
+// a) restarting session time; and
+// b) clearing a policy session since nonce is rolling.
 static void
 UpdateInternalSession(
     SESSION         *session,       // IN: the session structure

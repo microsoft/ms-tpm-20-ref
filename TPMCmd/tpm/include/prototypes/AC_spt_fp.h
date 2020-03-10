@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Mar 28, 2019  Time: 08:25:18PM
+ *  Date: Mar  4, 2020  Time: 02:36:44PM
  */
 
 #ifndef    _AC_SPT_FP_H_
@@ -49,7 +49,6 @@ AcToCapabilities(
 
 //*** AcIsAccessible()
 // Function to determine if an AC handle references an actual AC
-//
 //  Return Type: BOOL
 BOOL
 AcIsAccessible(
@@ -57,8 +56,7 @@ AcIsAccessible(
 );
 
 //*** AcCapabilitiesGet()
-// This function returns a list of capabilities associated with an AC.
-//
+// This function returns a list of capabilities associated with an AC
 //  Return Type: TPMI_YES_NO
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
@@ -71,7 +69,6 @@ AcCapabilitiesGet(
 
 //*** AcSendObject()
 // Stub to handle sending of an AC object
-//
 //  Return Type: TPM_RC
 TPM_RC
 AcSendObject(

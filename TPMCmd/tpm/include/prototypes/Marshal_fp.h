@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmMarshal; Version 4.1 Dec 10, 2018
- *  Date: Oct 19, 2019  Time: 11:50:10AM
+ *  Date: Mar  6, 2020  Time: 01:50:10PM
  */
 
 #ifndef _MARSHAL_FP_H_
@@ -238,12 +238,12 @@ TPM_KEY_BITS_Marshal(TPM_KEY_BITS *source, BYTE **buffer, INT32 *size);
 #endif // !USE_MARSHALING_DEFINES
 
 // Table 2:6 - Definition of TPM_SPEC Constants
-// Table 2:7 - Definition of TPM_GENERATED Constants
+// Table 2:7 - Definition of TPM_CONSTANTS32 Constants
 #if !USE_MARSHALING_DEFINES
 UINT16
-TPM_GENERATED_Marshal(TPM_GENERATED *source, BYTE **buffer, INT32 *size);
+TPM_CONSTANTS32_Marshal(TPM_CONSTANTS32 *source, BYTE **buffer, INT32 *size);
 #else
-#define TPM_GENERATED_Marshal(source, buffer, size)                                \
+#define TPM_CONSTANTS32_Marshal(source, buffer, size)                              \
             UINT32_Marshal((UINT32 *)(source), (buffer), (size))
 #endif // !USE_MARSHALING_DEFINES
 
@@ -1690,76 +1690,80 @@ TPMS_KEY_SCHEME_ECMQV_Marshal(TPMS_KEY_SCHEME_ECMQV *source,
 // Table 2:165 - Definition of Types for KDF Schemes
 #if !USE_MARSHALING_DEFINES
 TPM_RC
-TPMS_SCHEME_MGF1_Unmarshal(TPMS_SCHEME_MGF1 *target, BYTE **buffer, INT32 *size);
+TPMS_KDF_SCHEME_MGF1_Unmarshal(TPMS_KDF_SCHEME_MGF1 *target,
+            BYTE **buffer, INT32 *size);
 #else
-#define TPMS_SCHEME_MGF1_Unmarshal(target, buffer, size)                           \
+#define TPMS_KDF_SCHEME_MGF1_Unmarshal(target, buffer, size)                       \
             TPMS_SCHEME_HASH_Unmarshal((TPMS_SCHEME_HASH *)(target),               \
             (buffer),                                                              \
             (size))
 #endif // !USE_MARSHALING_DEFINES
 #if !USE_MARSHALING_DEFINES
 UINT16
-TPMS_SCHEME_MGF1_Marshal(TPMS_SCHEME_MGF1 *source, BYTE **buffer, INT32 *size);
+TPMS_KDF_SCHEME_MGF1_Marshal(TPMS_KDF_SCHEME_MGF1 *source,
+            BYTE **buffer, INT32 *size);
 #else
-#define TPMS_SCHEME_MGF1_Marshal(source, buffer, size)                             \
+#define TPMS_KDF_SCHEME_MGF1_Marshal(source, buffer, size)                         \
             TPMS_SCHEME_HASH_Marshal((TPMS_SCHEME_HASH *)(source),                 \
             (buffer),                                                              \
             (size))
 #endif // !USE_MARSHALING_DEFINES
 #if !USE_MARSHALING_DEFINES
 TPM_RC
-TPMS_SCHEME_KDF1_SP800_56A_Unmarshal(TPMS_SCHEME_KDF1_SP800_56A *target,
+TPMS_KDF_SCHEME_KDF1_SP800_56A_Unmarshal(TPMS_KDF_SCHEME_KDF1_SP800_56A *target,
             BYTE **buffer, INT32 *size);
 #else
-#define TPMS_SCHEME_KDF1_SP800_56A_Unmarshal(target, buffer, size)                 \
+#define TPMS_KDF_SCHEME_KDF1_SP800_56A_Unmarshal(target, buffer, size)             \
             TPMS_SCHEME_HASH_Unmarshal((TPMS_SCHEME_HASH *)(target),               \
             (buffer),                                                              \
             (size))
 #endif // !USE_MARSHALING_DEFINES
 #if !USE_MARSHALING_DEFINES
 UINT16
-TPMS_SCHEME_KDF1_SP800_56A_Marshal(TPMS_SCHEME_KDF1_SP800_56A *source,
+TPMS_KDF_SCHEME_KDF1_SP800_56A_Marshal(TPMS_KDF_SCHEME_KDF1_SP800_56A *source,
             BYTE **buffer, INT32 *size);
 #else
-#define TPMS_SCHEME_KDF1_SP800_56A_Marshal(source, buffer, size)                   \
+#define TPMS_KDF_SCHEME_KDF1_SP800_56A_Marshal(source, buffer, size)               \
             TPMS_SCHEME_HASH_Marshal((TPMS_SCHEME_HASH *)(source),                 \
             (buffer),                                                              \
             (size))
 #endif // !USE_MARSHALING_DEFINES
 #if !USE_MARSHALING_DEFINES
 TPM_RC
-TPMS_SCHEME_KDF2_Unmarshal(TPMS_SCHEME_KDF2 *target, BYTE **buffer, INT32 *size);
+TPMS_KDF_SCHEME_KDF2_Unmarshal(TPMS_KDF_SCHEME_KDF2 *target,
+            BYTE **buffer, INT32 *size);
 #else
-#define TPMS_SCHEME_KDF2_Unmarshal(target, buffer, size)                           \
+#define TPMS_KDF_SCHEME_KDF2_Unmarshal(target, buffer, size)                       \
             TPMS_SCHEME_HASH_Unmarshal((TPMS_SCHEME_HASH *)(target),               \
             (buffer),                                                              \
             (size))
 #endif // !USE_MARSHALING_DEFINES
 #if !USE_MARSHALING_DEFINES
 UINT16
-TPMS_SCHEME_KDF2_Marshal(TPMS_SCHEME_KDF2 *source, BYTE **buffer, INT32 *size);
+TPMS_KDF_SCHEME_KDF2_Marshal(TPMS_KDF_SCHEME_KDF2 *source,
+            BYTE **buffer, INT32 *size);
 #else
-#define TPMS_SCHEME_KDF2_Marshal(source, buffer, size)                             \
+#define TPMS_KDF_SCHEME_KDF2_Marshal(source, buffer, size)                         \
             TPMS_SCHEME_HASH_Marshal((TPMS_SCHEME_HASH *)(source),                 \
             (buffer),                                                              \
             (size))
 #endif // !USE_MARSHALING_DEFINES
 #if !USE_MARSHALING_DEFINES
 TPM_RC
-TPMS_SCHEME_KDF1_SP800_108_Unmarshal(TPMS_SCHEME_KDF1_SP800_108 *target,
+TPMS_KDF_SCHEME_KDF1_SP800_108_Unmarshal(TPMS_KDF_SCHEME_KDF1_SP800_108 *target,
             BYTE **buffer, INT32 *size);
 #else
-#define TPMS_SCHEME_KDF1_SP800_108_Unmarshal(target, buffer, size)                 \
+#define TPMS_KDF_SCHEME_KDF1_SP800_108_Unmarshal(target, buffer, size)             \
             TPMS_SCHEME_HASH_Unmarshal((TPMS_SCHEME_HASH *)(target),               \
             (buffer),                                                              \
             (size))
 #endif // !USE_MARSHALING_DEFINES
 #if !USE_MARSHALING_DEFINES
 UINT16
-TPMS_SCHEME_KDF1_SP800_108_Marshal(TPMS_SCHEME_KDF1_SP800_108 *source,
+TPMS_KDF_SCHEME_KDF1_SP800_108_Marshal(TPMS_KDF_SCHEME_KDF1_SP800_108 *source,
             BYTE **buffer, INT32 *size);
 #else
-#define TPMS_SCHEME_KDF1_SP800_108_Marshal(source, buffer, size)                   \
+#define TPMS_KDF_SCHEME_KDF1_SP800_108_Marshal(source, buffer, size)               \
             TPMS_SCHEME_HASH_Marshal((TPMS_SCHEME_HASH *)(source),                 \
             (buffer),                                                              \
             (size))
@@ -2204,6 +2208,13 @@ UINT16
 TPM2B_TEMPLATE_Marshal(TPM2B_TEMPLATE *source, BYTE **buffer, INT32 *size);
 
 // Table 2:204 - Definition of TPM2B_PRIVATE_VENDOR_SPECIFIC Structure
+TPM_RC
+TPM2B_PRIVATE_VENDOR_SPECIFIC_Unmarshal(TPM2B_PRIVATE_VENDOR_SPECIFIC *target,
+            BYTE **buffer, INT32 *size);
+UINT16
+TPM2B_PRIVATE_VENDOR_SPECIFIC_Marshal(TPM2B_PRIVATE_VENDOR_SPECIFIC *source,
+            BYTE **buffer, INT32 *size);
+
 // Table 2:205 - Definition of TPMU_SENSITIVE_COMPOSITE Union
 TPM_RC
 TPMU_SENSITIVE_COMPOSITE_Unmarshal(TPMU_SENSITIVE_COMPOSITE *target,

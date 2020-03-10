@@ -48,6 +48,8 @@
 #endif
 #include <openssl/ossl_typ.h>
 
+#define HASH_ALIGNMENT  RADIX_BYTES
+
 
 //***************************************************************
 //** Links to the OpenSSL HASH code

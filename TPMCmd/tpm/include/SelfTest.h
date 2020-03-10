@@ -54,11 +54,11 @@
 typedef UINT32      SYM_INDEX;
 
 // These two defines deal with the fact that the TPM_ALG_ID table does not delimit
-// the symmetric mode values with a TPM_SYM_MODE_FIRST and TPM_SYM_MODE_LAST
-#define TPM_SYM_MODE_FIRST       ALG_CTR_VALUE
-#define TPM_SYM_MODE_LAST        ALG_ECB_VALUE
+// the symmetric mode values with a SYM_MODE_FIRST and SYM_MODE_LAST
+#define SYM_MODE_FIRST       ALG_CTR_VALUE
+#define SYM_MODE_LAST        ALG_ECB_VALUE
 
-#define NUM_SYM_MODES   (TPM_SYM_MODE_LAST - TPM_SYM_MODE_FIRST + 1)
+#define NUM_SYM_MODES   (SYM_MODE_LAST - SYM_MODE_FIRST + 1)
 
 // Define a type to hold a bit vector for the modes.
 #if NUM_SYM_MODES <= 0

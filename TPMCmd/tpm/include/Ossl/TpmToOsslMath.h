@@ -47,6 +47,8 @@
 #include <openssl/evp.h>
 #include <openssl/ec.h>
 
+#define SYMMETRIC_ALIGNMENT RADIX_BYTES
+
 #if OPENSSL_VERSION_NUMBER >= 0x10200000L
     // Check the bignum_st definition in crypto/bn/bn_lcl.h and either update the
     // version check or provide the new definition for this version.

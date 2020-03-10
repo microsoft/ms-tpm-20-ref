@@ -110,6 +110,7 @@
 #include "CryptEccMain_fp.h"
 #include "CryptEccSignature_fp.h"
 #include "CryptEccKeyExchange_fp.h"
+#include "CryptEccCrypt_fp.h"
 #endif
 
 #if CC_MAC || CC_MAC_Start

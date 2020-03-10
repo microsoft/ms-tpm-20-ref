@@ -38,7 +38,11 @@
 //** Includes, Defines, Data Definitions, and Function Prototypes
 #include "TpmBuildSwitches.h"
 
+#include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
+#include <ctype.h>
+#include <string.h>
 
 #ifdef _MSC_VER
 #   pragma warning(push, 3)
@@ -46,20 +50,17 @@
 #   include <winsock.h>
 #   pragma warning(pop)
 #elif defined(__unix__)
-#   include <stdlib.h>
-#   include <stdint.h>
-#   include <string.h>
-#   include "BaseTypes.h"
 #   define _strcmpi strcasecmp
-#   ifndef TRUE
-#      define TRUE    1
-#   endif
-#   ifndef FALSE
-#      define FALSE   0
-#   endif
     typedef int SOCKET;
 #else
 #   error "Unsupported platform."
+#endif
+
+#ifndef TRUE
+#   define TRUE    1
+#endif
+#ifndef FALSE
+#   define FALSE   0
 #endif
 
 #include "TpmTcpProtocol.h"

@@ -43,7 +43,7 @@
 
 // These macros allow OIDs to be defined (or not) depending on whether the associated
 // hash algorithm is implemented.
-// NOTE: When one of these macros is used, the NAME needs '_" on each side. The 
+// NOTE: When one of these macros is used, the NAME needs '_" on each side. The
 // exception is when the macro is used for the hash OID when only a single '_' is
 // used.
 #ifndef ALG_SHA1
@@ -68,7 +68,7 @@
 #if ALG_SHA384
 #define SHA384_OID(NAME)  MAKE_OID(NAME##SHA384)
 #else
-#define SHA#84_OID(NAME)
+#define SHA384_OID(NAME)
 #endif
 #ifndef ALG_SHA512
 #   define ALG_SHA512 NO
@@ -106,26 +106,29 @@
 #   define ALG_SHA3_512 NO
 #endif
 #if ALG_SHA3_512
-#define SSHA3_512_OID(NAME) MAKE_OID(NAME##SHA3_512)
+#define SHA3_512_OID(NAME) MAKE_OID(NAME##SHA3_512)
 #else
 #define SHA3_512_OID(NAME)
 #endif
- 
+
 // These are encoded to take one additional byte of algorithm selector
 #define NIST_HASH       0x06, 0x09, 0x60, 0x86, 0x48, 1, 101, 3, 4, 2
 #define NIST_SIG        0x06, 0x09, 0x60, 0x86, 0x48, 1, 101, 3, 4, 3
 
 // These hash OIDs used in a lot of places.
 #define OID_SHA1_VALUE              0x06, 0x05, 0x2B, 0x0E, 0x03, 0x02, 0x1A
-SHA1_OID(_);        // Expands to
-                    //      MAKE_OID(_SHA1)
+SHA1_OID(_);        // Expands to:
+                    //     MAKE_OID(_SHA1)
                     // which expands to:
-                    //      extern BYTE     OID_SHA1[]
+                    //     EXTERN  const BYTE OID_SHA1[] INITIALIZER({OID_SHA1_VALUE})
+                    // which, depending on the setting of EXTERN and
+                    // INITIALIZER, expands to either:
+                    //      extern const BYTE    OID_SHA1[]
                     // or
-                    //      const BYTE      OID_SHA1[] = {OID_SHA1_VALUE}
+                    //      const BYTE           OID_SHA1[] = {OID_SHA1_VALUE}
                     // which is:
-                    //      const BYTE      OID_SHA1[] = {0x06, 0x05, 0x2B, 0x0E, 
-                    //                                    0x03, 0x02, 0x1A}
+                    //      const BYTE           OID_SHA1[] = {0x06, 0x05, 0x2B, 0x0E, 
+                    //                                         0x03, 0x02, 0x1A}
 
 
 #define OID_SHA256_VALUE            NIST_HASH, 1
@@ -188,9 +191,9 @@ SHA512_OID(_PKCS1_);    //(1.2.840.113549.1.1.13)
 SM3_256_OID(_PKCS1_);   // 1.2.156.10197.1.504
 
 #define OID_PKCS1_SHA3_256_VALUE    NIST_SIG, 14
-SHA3_256_OID(_PKCS1_); 
-#define OID_PKCS1_SHA3_384_VALUE    NIST_SIG, 15
 SHA3_256_OID(_PKCS1_);
+#define OID_PKCS1_SHA3_384_VALUE    NIST_SIG, 15
+SHA3_384_OID(_PKCS1_);
 #define OID_PKCS1_SHA3_512_VALUE    NIST_SIG, 16
 SHA3_512_OID(_PKCS1_);
 

@@ -275,6 +275,10 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <PreBuildEvent>
+      <Command>del $(SolutionDir)Simulator\NVChip
+del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='WolfDebug|Win32'">
     <ClCompile>
@@ -584,6 +588,8 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\command\Asymmetric\ECC_Decrypt.c" />
+    <ClCompile Include="src\command\Asymmetric\ECC_Encrypt.c" />
     <ClCompile Include="src\command\Asymmetric\ECC_Parameters.c" />
     <ClCompile Include="src\command\Asymmetric\ECDH_KeyGen.c" />
     <ClCompile Include="src\command\Asymmetric\ECDH_ZGen.c" />
@@ -718,6 +724,7 @@
     <ClCompile Include="src\crypt\BnMemory.c" />
     <ClCompile Include="src\crypt\CryptCmac.c" />
     <ClCompile Include="src\crypt\CryptDes.c" />
+    <ClCompile Include="src\crypt\CryptEccCrypt.c" />
     <ClCompile Include="src\crypt\CryptEccData.c" />
     <ClCompile Include="src\crypt\CryptPrime.c" />
     <ClCompile Include="src\crypt\CryptPrimeSieve.c" />
@@ -1024,6 +1031,9 @@
     <ClInclude Include="include\swap.h" />
     <ClInclude Include="include\SymmetricTest.h" />
     <ClInclude Include="include\SymmetricTestData.h" />
+    <ClInclude Include="include\TableMarshal.h" />
+    <ClInclude Include="include\TableMarshalDefines.h" />
+    <ClInclude Include="include\TableMarshalTypes.h" />
     <ClInclude Include="include\TpmAlgorithmDefines.h" />
     <ClInclude Include="include\TpmError.h" />
     <ClInclude Include="include\BaseTypes.h" />

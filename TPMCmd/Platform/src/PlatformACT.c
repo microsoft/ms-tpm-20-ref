@@ -144,7 +144,7 @@ ActGetDataPointer(
 
 //*** _plat__ACT_GetImplemented()
 // This function tests to see if an ACT is implemented. It is a belt and suspenders
-// function because the TPM should not be calling to to manipulate an ACT that is not
+// function because the TPM should not be calling to manipulate an ACT that is not
 // implemented. However, this could help the simulator code which doesn't necessarily
 // know if an ACT is implemented or not.
 LIB_EXPORT int 

@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmDispatch; Version 4.0 July 8,2017
- *  Date: Oct 19, 2019  Time: 11:50:10AM
+ *  Date: Feb 28, 2020  Time: 03:04:48PM
  */
 
 #if CC_Startup
@@ -224,6 +224,22 @@ case TPM_CC_ZGen_2Phase:
     if(TPM_RC_SUCCESS != result) return result + TPM_RC_H + TPM_RC_1;
     break;
 #endif // CC_ZGen_2Phase
+#if CC_ECC_Encrypt
+case TPM_CC_ECC_Encrypt:
+    *handleCount = 1;
+    result = TPMI_DH_OBJECT_Unmarshal(&handles[0], handleBufferStart,
+                                              bufferRemainingSize, FALSE);
+    if(TPM_RC_SUCCESS != result) return result + TPM_RC_H + TPM_RC_1;
+    break;
+#endif // CC_ECC_Encrypt
+#if CC_ECC_Decrypt
+case TPM_CC_ECC_Decrypt:
+    *handleCount = 1;
+    result = TPMI_DH_OBJECT_Unmarshal(&handles[0], handleBufferStart,
+                                              bufferRemainingSize, FALSE);
+    if(TPM_RC_SUCCESS != result) return result + TPM_RC_H + TPM_RC_1;
+    break;
+#endif // CC_ECC_Decrypt
 #if CC_EncryptDecrypt
 case TPM_CC_EncryptDecrypt:
     *handleCount = 1;

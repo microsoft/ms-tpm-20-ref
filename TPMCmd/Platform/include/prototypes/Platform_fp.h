@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Oct  5, 2019  Time: 01:17:10PM
+ *  Date: Mar  6, 2020  Time: 01:50:11PM
  */
 
 #ifndef    _PLATFORM_FP_H_
@@ -356,7 +356,7 @@ _plat__NVNeedsManufacture(
 
 //*** _plat__ACT_GetImplemented()
 // This function tests to see if an ACT is implemented. It is a belt and suspenders
-// function because the TPM should not be calling to to manipulate an ACT that is not
+// function because the TPM should not be calling to manipulate an ACT that is not
 // implemented. However, this could help the simulator code which doesn't necessarily
 // know if an ACT is implemented or not.
 LIB_EXPORT int

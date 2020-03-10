@@ -84,8 +84,8 @@
 #   define SWAP_CRYPT_WORD(x)  REVERSE_ENDIAN_32((x))
     typedef uint32_t    crypt_uword_t;
     typedef int32_t     crypt_word_t;
-#   define TO_CRYPT_WORD_64(a, b, c, d, e, f, g, h)                                \
-        BIG_ENDIAN_BYTES_TO_UINT32(e, f, g, h),                                    \
+#   define TO_CRYPT_WORD_64(a, b, c, d, e, f, g, h)                                 \
+        BIG_ENDIAN_BYTES_TO_UINT32(e, f, g, h),                                     \
         BIG_ENDIAN_BYTES_TO_UINT32(a, b, c, d)
 #endif
 
@@ -135,7 +135,7 @@ extern const bignum_t   BnConstZero;
 #define BnEqualZero(bn)   (BnGetSize(bn) == 0)
 
 // Test to see if a bignum_t is equal to a word type
-#define BnEqualWord(bn, word)                         \
+#define BnEqualWord(bn, word)                                                       \
             ((BnGetSize(bn) == 1) && (BnGetWord(bn, 0) == (crypt_uword_t)word))
 
 // Determine if a BIGNUM is even. A zero is even. Although the
@@ -149,8 +149,8 @@ extern const bignum_t   BnConstZero;
 
 // This will call the initialization function for a defined bignum_t.
 // This sets the allocated and used fields and clears the words of 'n'.
-#define BN_INIT(name)                                           \
-    (bigNum)BnInit((bigNum)&(name),                             \
+#define BN_INIT(name)                                                               \
+    (bigNum)BnInit((bigNum)&(name),                                                 \
                 BYTES_TO_CRYPT_WORDS(sizeof(name.d)))
 
 // In some cases, a function will need the address of the structure
@@ -161,32 +161,43 @@ extern const bignum_t   BnConstZero;
 // to is 'name_'
 #define BN_ADDRESS(name) (bigNum)&name##_
 
+
+
+#define BN_CONST(name, words, initializer)                                          \
+typedef const struct name##_type {                                                  \
+    crypt_uword_t       allocated;                                                  \
+    crypt_uword_t       size;                                                       \
+    crypt_uword_t       d[words < 1 ? 1 : words];                                   \
+    } name##_type;                                                                  \
+name##_type name = {(words < 1 ? 1 : words), words, {initializer}};
+
+
 #define BN_STRUCT_ALLOCATION(bits) (BITS_TO_CRYPT_WORDS(bits) + 1)
 
 // Create a structure of the correct size.
-#define BN_STRUCT(bits)                                         \
+#define BN_STRUCT(bits)                                                             \
     BN_STRUCT_DEF(BN_STRUCT_ALLOCATION(bits))
 
 // Define a BIGNUM type with a specific allocation
-#define BN_TYPE(name, bits)                                     \
+#define BN_TYPE(name, bits)                                                         \
     typedef BN_STRUCT(bits) bn_##name##_t
 
 // This creates a local BIGNUM variable of a specific size and
 // initializes it from a TPM2B input parameter.
-#define BN_INITIALIZED(name, bits, initializer)                 \
-    BN_STRUCT(bits)  name##_;                                   \
-    bigNum           name = BnFrom2B(BN_INIT(name##_),          \
+#define BN_INITIALIZED(name, bits, initializer)                                     \
+    BN_STRUCT(bits)  name##_;                                                       \
+    bigNum           name = BnFrom2B(BN_INIT(name##_),                              \
                                     (const TPM2B *)initializer)
 
 // Create a local variable that can hold a number with 'bits'
-#define BN_VAR(name, bits)                                      \
-    BN_STRUCT(bits)  _##name;                                    \
+#define BN_VAR(name, bits)                                                          \
+    BN_STRUCT(bits)  _##name;                                                       \
     bigNum           name = BN_INIT(_##name)
 
 // Create a type that can hold the largest number defined by the
 // implementation.
 #define BN_MAX(name)   BN_VAR(name, LARGEST_NUMBER_BITS)
-#define BN_MAX_INITIALIZED(name, initializer)                   \
+#define BN_MAX_INITIALIZED(name, initializer)                                       \
     BN_INITIALIZED(name, LARGEST_NUMBER_BITS, initializer)
 
 // A word size value is useful
@@ -194,9 +205,9 @@ extern const bignum_t   BnConstZero;
 
 // This is used to created a word-size BIGNUM and initialize it with
 // an input parameter to a function.
-#define BN_WORD_INITIALIZED(name, initial)                              \
-    BN_STRUCT(RADIX_BITS)  name##_;                                     \
-    bigNum                 name = BnInitializeWord((bigNum)&name##_,    \
+#define BN_WORD_INITIALIZED(name, initial)                                          \
+    BN_STRUCT(RADIX_BITS)  name##_;                                                 \
+    bigNum                 name = BnInitializeWord((bigNum)&name##_,                \
                                 BN_STRUCT_ALLOCATION(RADIX_BITS), initial)
 
 // ECC-Specific Values
@@ -228,30 +239,30 @@ typedef struct constant_point_t
 #define ECC_BITS    (MAX_ECC_KEY_BYTES * 8)
 BN_TYPE(ecc, ECC_BITS);
 #define ECC_NUM(name)       BN_VAR(name, ECC_BITS)
-#define ECC_INITIALIZED(name, initializer)                          \
+#define ECC_INITIALIZED(name, initializer)                                          \
     BN_INITIALIZED(name, ECC_BITS, initializer)
 
-#define POINT_INSTANCE(name, bits)                                  \
-    BN_STRUCT (bits)    name##_x =                                  \
-                {BITS_TO_CRYPT_WORDS ( bits ), 0,{0}};              \
-    BN_STRUCT ( bits )    name##_y =                                \
-                {BITS_TO_CRYPT_WORDS ( bits ), 0,{0}};              \
-    BN_STRUCT ( bits )    name##_z =                                \
-                {BITS_TO_CRYPT_WORDS ( bits ), 0,{0}};              \
+#define POINT_INSTANCE(name, bits)                                                  \
+    BN_STRUCT (bits)    name##_x =                                                  \
+                {BITS_TO_CRYPT_WORDS ( bits ), 0,{0}};                              \
+    BN_STRUCT ( bits )    name##_y =                                                \
+                {BITS_TO_CRYPT_WORDS ( bits ), 0,{0}};                              \
+    BN_STRUCT ( bits )    name##_z =                                                \
+                {BITS_TO_CRYPT_WORDS ( bits ), 0,{0}};                              \
     bn_point_t name##_
 
-#define POINT_INITIALIZER(name)                                      \
-    BnInitializePoint(&name##_, (bigNum)&name##_x,                  \
+#define POINT_INITIALIZER(name)                                                     \
+    BnInitializePoint(&name##_, (bigNum)&name##_x,                                  \
                     (bigNum)&name##_y, (bigNum)&name##_z)
 
-#define POINT_INITIALIZED(name, initValue)                         \
-    POINT_INSTANCE(name, MAX_ECC_KEY_BITS);                         \
-    bigPoint             name = BnPointFrom2B(                      \
-                                    POINT_INITIALIZER(name),        \
+#define POINT_INITIALIZED(name, initValue)                                          \
+    POINT_INSTANCE(name, MAX_ECC_KEY_BITS);                                         \
+    bigPoint             name = BnPointFrom2B(                                      \
+                                    POINT_INITIALIZER(name),                        \
                                     initValue)
 
-#define POINT_VAR(name, bits)                                       \
-    POINT_INSTANCE (name, bits);                                  \
+#define POINT_VAR(name, bits)                                                       \
+    POINT_INSTANCE (name, bits);                                                    \
     bigPoint            name = POINT_INITIALIZER(name)
 
 #define POINT(name)      POINT_VAR(name, MAX_ECC_KEY_BITS)
@@ -283,24 +294,24 @@ typedef struct
 #define CurveGetGy(C)       ((C)->base.y)
 
 
-// Convert bytes in initializers according to the endianess of the system.
+// Convert bytes in initializers 
 // This is used for CryptEccData.c.
-#define     BIG_ENDIAN_BYTES_TO_UINT32(a, b, c, d)                      \
-            (    ((UINT32)(a) << 24)                                    \
-            +    ((UINT32)(b) << 16)                                    \
-            +    ((UINT32)(c) << 8)                                     \
-            +    ((UINT32)(d))                                          \
+#define     BIG_ENDIAN_BYTES_TO_UINT32(a, b, c, d)                                  \
+            (    ((UINT32)(a) << 24)                                                \
+            +    ((UINT32)(b) << 16)                                                \
+            +    ((UINT32)(c) << 8)                                                 \
+            +    ((UINT32)(d))                                                      \
             )
 
-#define     BIG_ENDIAN_BYTES_TO_UINT64(a, b, c, d, e, f, g, h)          \
-            (    ((UINT64)(a) << 56)                                    \
-            +    ((UINT64)(b) << 48)                                    \
-            +    ((UINT64)(c) << 40)                                    \
-            +    ((UINT64)(d) << 32)                                    \
-            +    ((UINT64)(e) << 24)                                    \
-            +    ((UINT64)(f) << 16)                                    \
-            +    ((UINT64)(g) << 8)                                     \
-            +    ((UINT64)(h))                                          \
+#define     BIG_ENDIAN_BYTES_TO_UINT64(a, b, c, d, e, f, g, h)                      \
+            (    ((UINT64)(a) << 56)                                                \
+            +    ((UINT64)(b) << 48)                                                \
+            +    ((UINT64)(c) << 40)                                                \
+            +    ((UINT64)(d) << 32)                                                \
+            +    ((UINT64)(e) << 24)                                                \
+            +    ((UINT64)(f) << 16)                                                \
+            +    ((UINT64)(g) << 8)                                                 \
+            +    ((UINT64)(h))                                                      \
             )
 
 #ifndef RADIX_BYTES
@@ -311,6 +322,42 @@ typedef struct
 #   else
 #       error "RADIX_BITS must either be 32 or 64"
 #   endif
+#endif
+
+// These macros are used for data initialization of big number ECC constants
+// These two macros combine a macro for data definition with a macro for 
+// structure initilization. The 'a' parameter is a macro that gives numbers to 
+// each of the bytes of the initializer and defines where each of the numberd
+// bytes will show up in the final structure. The 'b' value is a structure that
+// contains the requisite number of bytes in big endian order. S, the MJOIN 
+// and JOIND macros will combine a macro defining a data layout with a macro defining
+// the data to be places. Generally, these macros will only need expansion when
+// CryptEccData.c gets compiled. 
+#define JOINED(a,b) a b
+#define MJOIN(a,b) a b
+
+#define B4_TO_BN(a, b, c, d)  (((((a << 8) + b) << 8) + c) + d)
+#if RADIX_BYTES == 64
+#define B8_TO_BN(a, b, c, d, e, f, g, h)                                    \
+    (UINT64)(((((((((((((((a) << 8) | b) << 8) | c) << 8) | d) << 8)        \
+                           e) << 8) | f) << 8) | g) << 8) | h)
+#define B1_TO_BN(a)                     B8_TO_BN(0, 0, 0, 0, 0, 0, 0, a)
+#define B2_TO_BN(a, b)                  B8_TO_BN(0, 0, 0, 0, 0, 0, a, b)
+#define B3_TO_BN(a, b, c)               B8_TO_BN(0, 0, 0, 0, 0, a, b, c)
+#define B4_TO_BN(a, b, c, d)            B8_TO_BN(0, 0, 0, 0, a, b, c, d)
+#define B5_TO_BN(a, b, c, d, e)         B8_TO_BN(0, 0, 0, a, b, c, d, e)
+#define B6_TO_BN(a, b, c, d, e, f)      B8_TO_BN(0, 0, a, b, c, d, e, f)
+#define B7_TO_BN(a, b, c, d, e, f, g)   B8_TO_BN(0, a, b, c, d, e, f, g)
+#else
+#define B1_TO_BN(a)                 B4_TO_BN(0, 0, 0, a)
+#define B2_TO_BN(a, b)              B4_TO_BN(0, 0, a, b)
+#define B3_TO_BN(a, b, c)           B4_TO_BN(0, a, b, c)
+#define B4_TO_BN(a, b, c, d)        (((((a << 8) + b) << 8) + c) + d)
+#define B5_TO_BN(a, b, c, d, e)          B4_TO_BN(b, c, d, e), B1_TO_BN(a)
+#define B6_TO_BN(a, b, c, d, e, f)       B4_TO_BN(c, d, e, f), B2_TO_BN(a, b)
+#define B7_TO_BN(a, b, c, d, e, f, g)    B4_TO_BN(d, e, f, g), B3_TO_BN(a, b, c)
+#define B8_TO_BN(a, b, c, d, e, f, g, h) B4_TO_BN(e, f, g, h), B4_TO_BN(a, b, c, d)
+
 #endif
 
 // Add implementation dependent definitions for other ECC Values and for linkages. 

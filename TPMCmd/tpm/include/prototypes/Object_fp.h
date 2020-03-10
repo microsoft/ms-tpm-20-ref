@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Nov 14, 2019  Time: 05:57:02PM
+ *  Date: Mar  4, 2020  Time: 02:36:44PM
  */
 
 #ifndef    _OBJECT_FP_H_
@@ -133,7 +133,7 @@ ObjectGetHierarchy(
 //*** GetHeriarchy()
 // This function returns the handle of the hierarchy to which a handle belongs.
 // This function is similar to ObjectGetHierarchy() but this routine takes
-// a handle while ObjectGetHierarchy() takes an pointer to an object.
+// a handle but ObjectGetHierarchy() takes an pointer to an object.
 //
 // This function requires that 'handle' references a loaded object.
 TPMI_RH_HIERARCHY

@@ -112,10 +112,10 @@ typedef union
     SMAC_STATE                 smac;
 #endif
     // to force structure alignment to be no worse than HASH_ALIGNMENT
-#if HASH_ALIGNMENT == 4
-    uint32_t             align;
-#else
+#if HASH_ALIGNMENT == 8
     uint64_t             align;
+#else
+    uint32_t             align;
 #endif
 } ANY_HASH_STATE;
 

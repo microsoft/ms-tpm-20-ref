@@ -19,8 +19,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tpm", "tpm\TPM.vcxproj", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crypt", "Crypt", "{26AD7978-27E2-46E7-9F8C-36CDB1B5AB01}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wolfssl", "tpm\src\crypt\wolf\wolfssl.vcxproj", "{73973223-5EE8-41CA-8E88-1D60E89A237B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

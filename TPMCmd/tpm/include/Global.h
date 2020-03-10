@@ -235,8 +235,8 @@ typedef struct HASH_OBJECT
 typedef BYTE  HASH_OBJECT_BUFFER[sizeof(HASH_OBJECT)];
 
 //*** ANY_OBJECT
-// This is the union for holding either a sequence object or a regular object.
-// for ContextSave and ContextLoad
+// This is the union for holding either a sequence object or a regular object
+// for ContextSave and ContextLoad.
 typedef union ANY_OBJECT
 {
     OBJECT              entity;
@@ -897,7 +897,8 @@ typedef struct orderly_data
  // this is the 'signaled' attribute data for all the ACT. It is done this way so
  // that they can be manipulated by ACT number rather than having to access a
  // structure.
-    UINT32              signaledACT;
+    UINT16              signaledACT;
+    UINT16              preservedSignaled;
 } ORDERLY_DATA;
 
 #if ACCUMULATE_SELF_HEAL_TIMER
@@ -1382,7 +1383,7 @@ EXTERN UINT32            s_oldestSavedSession;
 
 // The number of available session slot openings.  When this is 1,
 // a session can't be created or loaded if the GAP is maxed out.
-// The exception is that the oldest saved session context can always
+// The exception is that theACToldest saved session context can always
 // be loaded (assuming that there is a space in memory to put it)
 EXTERN int               s_freeSessionSlots;
 

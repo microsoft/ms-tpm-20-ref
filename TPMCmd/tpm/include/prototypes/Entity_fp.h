@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Mar 28, 2019  Time: 08:25:19PM
+ *  Date: Mar  7, 2020  Time: 07:19:36PM
  */
 
 #ifndef    _ENTITY_FP_H_
@@ -96,10 +96,10 @@ EntityGetName(
 
 //*** EntityGetHierarchy()
 // This function returns the hierarchy handle associated with an entity.
-//      1. A handle that is a hierarchy handle is associated with itself.
-//      2. An NV index belongs to TPM_RH_PLATFORM if TPMA_NV_PLATFORMCREATE,
-//         is SET, otherwise it belongs to TPM_RH_OWNER
-//      3. An object handle belongs to its hierarchy.
+// a) A handle that is a hierarchy handle is associated with itself.
+// b) An NV index belongs to TPM_RH_PLATFORM if TPMA_NV_PLATFORMCREATE,
+//    is SET, otherwise it belongs to TPM_RH_OWNER
+// c) An object handle belongs to its hierarchy.
 TPMI_RH_HIERARCHY
 EntityGetHierarchy(
     TPMI_DH_ENTITY   handle         // IN :handle of entity

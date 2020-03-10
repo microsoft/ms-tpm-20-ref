@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Dec 10, 2019  Time: 11:04:40PM
+ *  Date: Mar  4, 2020  Time: 02:36:43PM
  */
 
 #ifndef _TPM_PROFILE_H_
@@ -94,7 +94,7 @@
 #define ECC_BN_P638                     NO
 #endif
 #ifndef ECC_SM2_P256
-#define ECC_SM2_P256                    NO
+#define ECC_SM2_P256                    YES
 #endif
 
 // Table 0:6 - Defines for Implemented ACT
@@ -164,7 +164,7 @@
 #define NUM_AUTHVALUE_PCR_GROUP         1
 #endif
 #ifndef MAX_CONTEXT_SIZE
-#define MAX_CONTEXT_SIZE                1264
+#define MAX_CONTEXT_SIZE                1344
 #endif
 #ifndef MAX_DIGEST_BUFFER
 #define MAX_DIGEST_BUFFER               1024
@@ -229,11 +229,11 @@
 #ifndef CRT_FORMAT_RSA
 #define CRT_FORMAT_RSA                  YES
 #endif
+#ifndef VENDOR_COMMAND_COUNT
+#define VENDOR_COMMAND_COUNT            0
+#endif
 #ifndef MAX_VENDOR_BUFFER_SIZE
 #define MAX_VENDOR_BUFFER_SIZE          1024
-#endif
-#ifndef TPM_MAX_DERIVATION_BITS
-#define TPM_MAX_DERIVATION_BITS         8192
 #endif
 #ifndef SIZE_OF_X509_SERIAL_NUMBER
 #define SIZE_OF_X509_SERIAL_NUMBER      20
@@ -247,7 +247,7 @@
 #define ALG_AES                         ALG_YES
 #endif
 #ifndef ALG_CAMELLIA
-#define ALG_CAMELLIA                    ALG_NO
+#define ALG_CAMELLIA                    ALG_YES
 #endif
 #ifndef ALG_CBC
 #define ALG_CBC                         ALG_YES
@@ -292,7 +292,7 @@
 #define ALG_KDF1_SP800_56A              (ALG_YES && ALG_ECC)
 #endif
 #ifndef ALG_KDF2
-#define ALG_KDF2                        ALG_NO
+#define ALG_KDF2                        ALG_YES
 #endif
 #ifndef ALG_KEYEDHASH
 #define ALG_KEYEDHASH                   ALG_YES
@@ -343,13 +343,13 @@
 #define ALG_SHA512                      ALG_NO
 #endif
 #ifndef ALG_SM2
-#define ALG_SM2                         (ALG_NO && ALG_ECC)
+#define ALG_SM2                         (ALG_YES && ALG_ECC)
 #endif
 #ifndef ALG_SM3_256
-#define ALG_SM3_256                     ALG_NO
+#define ALG_SM3_256                     ALG_YES
 #endif
 #ifndef ALG_SM4
-#define ALG_SM4                         ALG_NO
+#define ALG_SM4                         ALG_YES
 #endif
 #ifndef ALG_SYMCIPHER
 #define ALG_SYMCIPHER                   ALG_YES
@@ -373,6 +373,9 @@
 #endif
 #ifndef RSA_4096
 #define RSA_4096                    (ALG_RSA && NO)
+#endif
+#ifndef RSA_16384
+#define RSA_16384                   (ALG_RSA && NO)
 #endif
 
 // Table 1:21 - Defines for AES Symmetric Cipher Algorithm Constants
@@ -476,6 +479,12 @@
 #endif
 #ifndef CC_Duplicate
 #define CC_Duplicate                        CC_YES
+#endif
+#ifndef CC_ECC_Decrypt
+#define CC_ECC_Decrypt                      (CC_YES && ALG_ECC)
+#endif
+#ifndef CC_ECC_Encrypt
+#define CC_ECC_Encrypt                      (CC_YES && ALG_ECC)
 #endif
 #ifndef CC_ECC_Parameters
 #define CC_ECC_Parameters                   (CC_YES && ALG_ECC)

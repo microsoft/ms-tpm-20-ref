@@ -55,7 +55,7 @@ TicketIsSafe(
     TPM2B           *buffer
     )
 {
-    TPM_GENERATED   valueToCompare = TPM_GENERATED_VALUE;
+    TPM_CONSTANTS32 valueToCompare = TPM_GENERATED_VALUE;
     BYTE            bufferToCompare[sizeof(valueToCompare)];
     BYTE            *marshalBuffer;
 //
@@ -64,7 +64,7 @@ TicketIsSafe(
     if(buffer->size < sizeof(valueToCompare))
         return FALSE;
     marshalBuffer = bufferToCompare;
-    TPM_GENERATED_Marshal(&valueToCompare, &marshalBuffer, NULL);
+    TPM_CONSTANTS32_Marshal(&valueToCompare, &marshalBuffer, NULL);
     if(MemoryEqual(buffer->buffer, bufferToCompare, sizeof(valueToCompare)))
         return FALSE;
     else
@@ -119,7 +119,7 @@ TicketComputeVerified(
 // This function creates a TPMT_TK_AUTH ticket.
 /*(See part 2 specification)
 //  The ticket is computed as:
-//      HMAC(proof, (type || timeout || timeEpoch || cpHash 
+//      HMAC(proof, (type || timeout || timeEpoch || cpHash
 //                        || policyRef || keyName))
 //  where:
 //      HMAC()      an HMAC using the hash of proof
@@ -172,7 +172,7 @@ TicketComputeAuth(
     if(timeout != 0)
     {
             //  epoch
-        CryptDigestUpdateInt(&hmacState.hashState, sizeof(CLOCK_NONCE), 
+        CryptDigestUpdateInt(&hmacState.hashState, sizeof(CLOCK_NONCE),
                              g_timeEpoch);
             // reset count
         if(expiresOnReset)

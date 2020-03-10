@@ -60,7 +60,6 @@
 #   error "Unsupported platform."
 #endif
 
-
 #include "Platform_fp.h"
 #include "ExecCommand_fp.h"
 #include "Manufacture_fp.h"

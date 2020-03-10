@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmPrototypes; Version 3.0 July 18, 2017
- *  Date: Apr  2, 2019  Time: 04:23:27PM
+ *  Date: Mar  4, 2020  Time: 02:36:44PM
  */
 
 #ifndef    _PCR_FP_H_
@@ -46,8 +46,8 @@
 // the group index.  This feature of PCR is decided by the platform specification.
 //
 //  Return Type: BOOL
-//      TRUE(1)         PCR belongs to an authorization group
-//      FALSE(0)        PCR does not belong to an authorization group
+//      TRUE(1)         PCR belongs an authorization group
+//      FALSE(0)        PCR does not belong an authorization group
 BOOL
 PCRBelongsAuthGroup(
     TPMI_DH_PCR      handle,        // IN: handle of PCR

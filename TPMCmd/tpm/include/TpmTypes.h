@@ -34,7 +34,7 @@
  */
 /*(Auto-generated)
  *  Created by TpmStructures; Version 4.4 Mar 26, 2019
- *  Date: Dec 10, 2019  Time: 11:06:03PM
+ *  Date: Mar  6, 2020  Time: 01:50:09PM
  */
 
 #ifndef _TPM_TYPES_H_
@@ -266,6 +266,8 @@ typedef UINT32                              TPM_CC;
 #define TPM_CC_Policy_AC_SendSelect         (TPM_CC)(0x00000196)
 #define TPM_CC_CertifyX509                  (TPM_CC)(0x00000197)
 #define TPM_CC_ACT_SetTimeout               (TPM_CC)(0x00000198)
+#define TPM_CC_ECC_Encrypt                  (TPM_CC)(0x00000199)
+#define TPM_CC_ECC_Decrypt                  (TPM_CC)(0x0000019A)
 #define CC_VEND                             0x20000000
 #define TPM_CC_Vendor_TCG_Test              (TPM_CC)(0x20000000)
 
@@ -290,17 +292,18 @@ typedef UINT32                  TPM_SPEC;
 #define TPM_SPEC_FAMILY         (TPM_SPEC)(SPEC_FAMILY)
 #define SPEC_LEVEL              00
 #define TPM_SPEC_LEVEL          (TPM_SPEC)(SPEC_LEVEL)
-#define SPEC_VERSION            157
+#define SPEC_VERSION            162
 #define TPM_SPEC_VERSION        (TPM_SPEC)(SPEC_VERSION)
-#define SPEC_YEAR               2019
+#define SPEC_YEAR               2020
 #define TPM_SPEC_YEAR           (TPM_SPEC)(SPEC_YEAR)
-#define SPEC_DAY_OF_YEAR        283
+#define SPEC_DAY_OF_YEAR        53
 #define TPM_SPEC_DAY_OF_YEAR    (TPM_SPEC)(SPEC_DAY_OF_YEAR)
 
-// Table 2:7 - Definition of TPM_GENERATED Constants
-typedef UINT32                  TPM_GENERATED;
-#define TYPE_OF_TPM_GENERATED   UINT32
-#define TPM_GENERATED_VALUE     (TPM_GENERATED)(0xFF544347)
+// Table 2:7 - Definition of TPM_CONSTANTS32 Constants
+typedef UINT32                      TPM_CONSTANTS32;
+#define TYPE_OF_TPM_CONSTANTS32     UINT32
+#define TPM_GENERATED_VALUE         (TPM_CONSTANTS32)(0xFF544347)
+#define TPM_MAX_DERIVATION_BITS     (TPM_CONSTANTS32)(8192)
 
 // Table 2:16 - Definition of TPM_RC Constants
 typedef UINT32                      TPM_RC;
@@ -1629,7 +1632,7 @@ typedef union {                                             // Table 2:132
 } TPMU_ATTEST;                                              /* Structure */
 
 typedef struct {                                    // Table 2:133
-    TPM_GENERATED           magic;
+    TPM_CONSTANTS32         magic;
     TPMI_ST_ATTEST          type;
     TPM2B_NAME              qualifiedSigner;
     TPM2B_DATA              extraData;
@@ -1852,25 +1855,26 @@ typedef TPMS_SCHEME_HASH    TPMS_KEY_SCHEME_ECDH;
 typedef TPMS_SCHEME_HASH    TPMS_KEY_SCHEME_ECMQV;
 
 // Table 2:165 - Definition of Types for KDF Schemes
-typedef TPMS_SCHEME_HASH    TPMS_SCHEME_MGF1;
-typedef TPMS_SCHEME_HASH    TPMS_SCHEME_KDF1_SP800_56A;
-typedef TPMS_SCHEME_HASH    TPMS_SCHEME_KDF2;
-typedef TPMS_SCHEME_HASH    TPMS_SCHEME_KDF1_SP800_108;
+typedef TPMS_SCHEME_HASH    TPMS_KDF_SCHEME_MGF1;
+typedef TPMS_SCHEME_HASH    TPMS_KDF_SCHEME_KDF1_SP800_56A;
+typedef TPMS_SCHEME_HASH    TPMS_KDF_SCHEME_KDF2;
+typedef TPMS_SCHEME_HASH    TPMS_KDF_SCHEME_KDF1_SP800_108;
 
-typedef union {                                     // Table 2:166
+typedef union {                                             // Table 2:166
 #if ALG_MGF1
-    TPMS_SCHEME_MGF1                mgf1;
+    TPMS_KDF_SCHEME_MGF1                mgf1;
 #endif // ALG_MGF1
 #if ALG_KDF1_SP800_56A
-    TPMS_SCHEME_KDF1_SP800_56A      kdf1_sp800_56a;
+    TPMS_KDF_SCHEME_KDF1_SP800_56A      kdf1_sp800_56a;
 #endif // ALG_KDF1_SP800_56A
 #if ALG_KDF2
-    TPMS_SCHEME_KDF2                kdf2;
+    TPMS_KDF_SCHEME_KDF2                kdf2;
 #endif // ALG_KDF2
 #if ALG_KDF1_SP800_108
-    TPMS_SCHEME_KDF1_SP800_108      kdf1_sp800_108;
+    TPMS_KDF_SCHEME_KDF1_SP800_108      kdf1_sp800_108;
 #endif // ALG_KDF1_SP800_108
-} TPMU_KDF_SCHEME;                                  /* Structure */
+    TPMS_SCHEME_HASH                    anyKdf;
+} TPMU_KDF_SCHEME;                                          /* Structure */
 
 typedef struct {                                    // Table 2:167
     TPMI_ALG_KDF            scheme;

@@ -55,13 +55,13 @@
 #   include <netinet/in.h>
 #   include <sys/socket.h>
 #   include <pthread.h>
-#   include "BaseTypes.h"
 #   define ZeroMemory(ptr, sz) (memset((ptr), 0, (sz)))
 #   define closesocket(x) close(x)
 #   define INVALID_SOCKET (-1)
 #   define SOCKET_ERROR   (-1)
 #   define WSAGetLastError() (errno)
 #   define INT_PTR intptr_t
+
 #   ifndef TRUE
 #      define TRUE    1
 #   endif
@@ -487,7 +487,7 @@ StartTcpServer(
 {
     int                  res;
 //
-#if RH_ACT_0
+#ifdef RH_ACT_0
     // Start the Time Service routine
     res = ActTimeService();
     if(res != 0)

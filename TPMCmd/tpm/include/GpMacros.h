@@ -55,7 +55,7 @@
 // to test a hash with that value, don't do it.
 #   define     TEST_HASH(alg)                                                       \
             if(TEST_BIT(alg, g_toTest)                                              \
-                &&  (alg != ALG_NULL_VALUE))                                        \
+                &&  (alg != TPM_ALG_NULL))                                          \
                 CryptTestAlgorithm(alg, NULL)
 #else
 #   define TEST(alg)
@@ -351,7 +351,7 @@
         EXTERN  const BYTE OID##NAME[] INITIALIZER({OID##NAME##_VALUE})
 
 // This definition is moved from TpmProfile.h because it is not actually vendor-
-// specific.  It has to be the same size as the 'sequence' parameter of a TPMS_CONTEXT
+// specific. It has to be the same size as the 'sequence' parameter of a TPMS_CONTEXT
 // and that is a UINT64. So, this is an invariant value
 #define CONTEXT_COUNTER 		UINT64
 

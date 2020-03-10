@@ -38,10 +38,10 @@
 #define _CRYPT_TEST_H
 
 // This is the definition of a bit array with one bit per algorithm. 
-// NOTE: Since bit numbering starts at zero, when ALG_LAST_VALUE is a multiple of 8, 
+// NOTE: Since bit numbering starts at zero, when TPM_ALG_LAST is a multiple of 8, 
 // ALGORITHM_VECTOR will need to have byte for the single bit in the last byte. So, 
-// for example, when ALG_LAST_VECTOR is 8, ALGORITHM_VECTOR will need 2 bytes.
-#define ALGORITHM_VECTOR_BYTES  ((ALG_LAST_VALUE + 8) / 8) 
+// for example, when TPM_ALG_LAST is 8, ALGORITHM_VECTOR will need 2 bytes.
+#define ALGORITHM_VECTOR_BYTES  ((TPM_ALG_LAST + 8) / 8) 
 typedef BYTE    ALGORITHM_VECTOR[ALGORITHM_VECTOR_BYTES];
 
 #ifdef  TEST_SELF_TEST

@@ -32,7 +32,8 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-//** Includes and Typedefs
+
+//* Includes and Typedefs
 #include "Tpm.h"
 #include "Marshal.h"
 
@@ -62,25 +63,25 @@ typedef union COMMAND_t
 // This structure is used by ParseHandleBuffer() and CommandDispatcher(). The
 // parameters in this structure are unique for each command. The parameters are:
 // command      holds the address of the command processing function that is called
-//              by Command Dispatcher.
-// inSize       this is the size of the command-dependent input structure. The
+//              by Command Dispatcher
+// inSize       This is the size of the command-dependent input structure. The
 //              input structure holds the unmarshaled handles and command
 //              parameters. If the command takes no arguments (handles or
 //              parameters) then inSize will have a value of 0.
-// outSize      this is the size of the command-dependent output structure. The
+// outSize      This is the size of the command-dependent output structure. The
 //              output structure holds the results of the command in an unmarshaled
 //              form. When command processing is completed, these values are
 //              marshaled into the output buffer. It is always the case that the
 //              unmarshaled version of an output structure is larger then the
 //              marshaled version. This is because the marshaled version contains
 //              the exact same number of significant bytes but with padding removed.
-// typesOffsets    this parameter points to the list of data types that are to be
+// typesOffsets    This parameter points to the list of data types that are to be
 //              marshaled or unmarshaled. The list of types follows the 'offsets'
 //              array. The offsets array is variable sized so the typesOffset filed
 //              is necessary for the handle and command processing to be able to
 //              find the types that are being handled. The 'offsets' array may be
-//              empty. The types structure is described below.
-// offsets      this is an array of offsets of each of the parameters in the
+//              empty. The 'types' structure is described below.
+// offsets      This is an array of offsets of each of the parameters in the
 //              command or response. When processing the command parameters (not
 //              handles) the list contains the offset of the next parameter. For
 //              example, if the first command parameter has a size of 4 and there is
@@ -140,9 +141,9 @@ typedef struct COMMAND_DESCRIPTOR_t
 
 #endif
 
-//** Marshal/Unmarshal Functions
+//* Marshal/Unmarshal Functions
 
-//*** ParseHandleBuffer()
+//** ParseHandleBuffer()
 // This is the table-driven version of the handle buffer unmarshaling code
 TPM_RC
 ParseHandleBuffer(
@@ -235,7 +236,7 @@ ParseHandleBuffer(
     return TPM_RC_SUCCESS;
 }
 
-//*** CommandDispatcher()
+//** CommandDispatcher()
 // Function to unmarshal the command parameters, call the selected action code, and
 // marshal the response parameters.
 TPM_RC
