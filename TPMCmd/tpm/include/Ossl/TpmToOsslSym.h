@@ -47,15 +47,37 @@
 #define SYM_LIB_OSSL
 
 #include <openssl/aes.h>
+
 #if ALG_TDES
 #include <openssl/des.h>
 #endif
+
 #if ALG_SM4
-#include <openssl/sm4.h>
-#endif
+#   if defined(OPENSSL_NO_SM3) || OPENSSL_VERSION_NUMBER < 0x10101010L
+#       undef ALG_SM4
+#       define ALG_SM4  ALG_NO
+#   elif OPENSSL_VERSION_NUMBER >= 0x10200000L
+#       include <openssl/sm4.h>
+#   else
+        // OpenSSL 1.1.1 keeps smX.h headers in the include/crypto directory,
+        // and they do not get installed as part of the libssl package
+
+#       define SM4_KEY_SCHEDULE  32
+
+        typedef struct SM4_KEY_st {
+            uint32_t rk[SM4_KEY_SCHEDULE];
+        } SM4_KEY;
+
+        int SM4_set_key(const uint8_t *key, SM4_KEY *ks);
+        void SM4_encrypt(const uint8_t *in, uint8_t *out, const SM4_KEY *ks);
+        void SM4_decrypt(const uint8_t *in, uint8_t *out, const SM4_KEY *ks);
+#   endif // OpenSSL < 1.2
+#endif // ALG_SM4
+
 #if ALG_CAMELLIA
 #include <openssl/camellia.h>
 #endif
+
 #include <openssl/bn.h>
 #include <openssl/ossl_typ.h>
 
