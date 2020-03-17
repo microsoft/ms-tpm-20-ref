@@ -53,7 +53,7 @@
 #endif
 
 #if ALG_SM4
-#   if defined(OPENSSL_NO_SM3) || OPENSSL_VERSION_NUMBER < 0x10101010L
+#   if defined(OPENSSL_NO_SM4) || OPENSSL_VERSION_NUMBER < 0x10101010L
 #       undef ALG_SM4
 #       define ALG_SM4  ALG_NO
 #   elif OPENSSL_VERSION_NUMBER >= 0x10200000L
