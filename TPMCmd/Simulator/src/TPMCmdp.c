@@ -40,6 +40,7 @@
 // of the testing.
 
 //** Includes and Data Definitions
+#include <stdbool.h>
 #include "TpmBuildSwitches.h"
 
 #ifdef _MSC_VER
@@ -48,13 +49,7 @@
 #   include <winsock.h>
 #   pragma warning(pop)
 #elif defined(__unix__)
-#   include "BaseTypes.h"
-#   ifndef TRUE
-#      define TRUE    1
-#   endif
-#   ifndef FALSE
-#      define FALSE   0
-#   endif
+#   include "BaseTypes.h"   // on behalf of TpmFail_fp.h
     typedef int SOCKET;
 #else
 #   error "Unsupported platform."
@@ -72,7 +67,7 @@
 #include "TpmTcpProtocol.h"
 #include "Simulator_fp.h"
 
-static BOOL     s_isPowerOn = FALSE;
+static bool     s_isPowerOn = false;
 
 //** Functions
 
@@ -81,7 +76,7 @@ static BOOL     s_isPowerOn = FALSE;
 // calls the _TPM_Init() handler.
 void
 _rpc__Signal_PowerOn(
-    BOOL        isReset
+    bool        isReset
     )
 {
     // if power is on and this is not a call to do TPM reset then return
@@ -97,7 +92,7 @@ _rpc__Signal_PowerOn(
     _plat__Signal_Reset();
 
     // Set state as power on
-    s_isPowerOn = TRUE;
+    s_isPowerOn = true;
 }
 
 //*** Signal_Restart()
@@ -124,7 +119,7 @@ _rpc__Signal_PowerOff(
         // Pass power off signal to platform
         _plat__Signal_PowerOff();
     // This could be redundant, but...
-    s_isPowerOn = FALSE;
+    s_isPowerOn = false;
 
     return;
 }
@@ -321,15 +316,15 @@ _rpc__RsaKeyCacheControl(
 
 //*** _rpc__ACT_GetSignaled()
 // This function is used to count the ACT second tick.
-BOOL
+bool
 _rpc__ACT_GetSignaled(
-    UINT32 actHandle
+    uint32_t actHandle
 )
 {
     // If TPM power is on...
     if (s_isPowerOn)
         // ... query the platform
         return _plat__ACT_GetSignaled(actHandle - TPM_RH_ACT_0);
-    return FALSE;
+    return false;
 }
 

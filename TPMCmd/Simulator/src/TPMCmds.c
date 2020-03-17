@@ -41,6 +41,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
 
@@ -56,12 +57,6 @@
 #   error "Unsupported platform."
 #endif
 
-#ifndef TRUE
-#   define TRUE    1
-#endif
-#ifndef FALSE
-#   define FALSE   0
-#endif
 
 #include "TpmTcpProtocol.h"
 #include "Manufacture_fp.h"
@@ -87,7 +82,7 @@ static const char **s_Argv = NULL;
 // This function implements a run-time assertion.
 // Computation of its parameters must not result in any side effects, as these
 // computations will be stripped from the release builds.
-static void Assert (BOOL cond, const char* msg)
+static void Assert (bool cond, const char* msg)
 {
     if (cond)
         return;
@@ -120,7 +115,7 @@ Usage(
 
 //*** CmdLineParser_Init()
 // This function initializes command line option parser.
-static BOOL
+static bool
 CmdLineParser_Init(
     int argc,
     char *argv[],
@@ -128,7 +123,7 @@ CmdLineParser_Init(
     )
 {
     if (argc == 1)
-        return FALSE;
+        return false;
 
     if (maxOpts && (argc - 1) > maxOpts)
     {
@@ -139,12 +134,12 @@ CmdLineParser_Init(
     s_Argc = argc - 1;
     s_Argv = (const char**)(argv + 1);
     s_ArgsMask = (1 << s_Argc) - 1;
-    return TRUE;
+    return true;
 }
 
 //*** CmdLineParser_More()
 // Returns true if there are unparsed options still.
-static BOOL
+static bool
 CmdLineParser_More(
     void
 )
@@ -155,12 +150,12 @@ CmdLineParser_More(
 //*** CmdLineParser_IsOpt()
 // This function determines if the given command line parameter represents a valid
 // option.
-static BOOL
+static bool
 CmdLineParser_IsOpt(
     const char* opt,        // Command line parameter to check
     const char* optFull,    // Expected full name
     const char* optShort,   // Expected short (single letter) name
-    BOOL dashed             // The parameter is preceded by a single dash
+    bool dashed             // The parameter is preceded by a single dash
     )
 {
     return 0 == strcmp(opt, optFull)
@@ -171,7 +166,7 @@ CmdLineParser_IsOpt(
 //*** CmdLineParser_IsOptPresent()
 // This function determines if the given command line parameter represents a valid
 // option.
-static BOOL
+static bool
 CmdLineParser_IsOptPresent(
     const char* optFull,
     const char* optShort
@@ -190,7 +185,7 @@ CmdLineParser_IsOptPresent(
         "of a single letter only.\n");
 
     if (!CmdLineParser_More())
-        return FALSE;
+        return false;
 
     for (i = 0, curArgBit = 1; i < s_Argc; ++i, curArgBit <<= 1)
     {
@@ -202,10 +197,10 @@ CmdLineParser_IsOptPresent(
                                            opt[0] == '-'))))
         {
             s_ArgsMask ^= curArgBit;
-            return TRUE;
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 //*** CmdLineParser_IsOptPresent()
@@ -245,7 +240,7 @@ main(
     char            *argv[]
     )
 {
-    BOOL    manufacture = FALSE;
+    bool    manufacture = false;
     int     PortNum = DEFAULT_TPM_PORT;
 
     // Parse command line options
@@ -259,7 +254,7 @@ main(
         }
         if (CmdLineParser_IsOptPresent("manufacture", "m"))
         {
-            manufacture = TRUE;
+            manufacture = true;
         }
         if (CmdLineParser_More())
         {

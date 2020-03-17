@@ -48,7 +48,7 @@
 
 //*** PlatformServer()
 // This function processes incoming platform requests.
-BOOL
+bool
 PlatformServer(
     SOCKET           s
 );
@@ -90,7 +90,7 @@ StartTcpServer(
 //*** ReadBytes()
 // This function reads the indicated number of bytes ('NumBytes') into buffer
 // from the indicated socket.
-BOOL
+bool
 ReadBytes(
     SOCKET           s,
     char            *buffer,
@@ -100,7 +100,7 @@ ReadBytes(
 //*** WriteBytes()
 // This function will send the indicated number of bytes ('NumBytes') to the
 // indicated socket
-BOOL
+bool
 WriteBytes(
     SOCKET           s,
     char            *buffer,
@@ -109,7 +109,7 @@ WriteBytes(
 
 //*** WriteUINT32()
 // Send 4 byte integer
-BOOL
+bool
 WriteUINT32(
     SOCKET           s,
     uint32_t         val
@@ -117,16 +117,16 @@ WriteUINT32(
 
 //*** ReadUINT32()
 // Function to read 4 byte integer from socket.
-BOOL
+bool
 ReadUINT32(
     SOCKET           s,
-    UINT32          *val
+    uint32_t        *val
 );
 
 //*** ReadVarBytes()
-// Get a UINT32-length-prepended binary array.  Note that the 4-byte length is
+// Get a uint32-length-prepended binary array.  Note that the 4-byte length is
 // in network byte order (big-endian).
-BOOL
+bool
 ReadVarBytes(
     SOCKET           s,
     char            *buffer,
@@ -137,7 +137,7 @@ ReadVarBytes(
 //*** WriteVarBytes()
 // Send a UINT32-length-prepended binary array.  Note that the 4-byte length is
 // in network byte order (big-endian).
-BOOL
+bool
 WriteVarBytes(
     SOCKET           s,
     char            *buffer,
@@ -147,7 +147,7 @@ WriteVarBytes(
 //*** TpmServer()
 // Processing incoming TPM command requests using the protocol / interface
 // defined above.
-BOOL
+bool
 TpmServer(
     SOCKET           s
 );
@@ -164,7 +164,7 @@ TpmServer(
 // calls the _TPM_Init() handler.
 void
 _rpc__Signal_PowerOn(
-    BOOL        isReset
+    bool        isReset
 );
 
 //*** Signal_Restart()
@@ -283,9 +283,9 @@ _rpc__RsaKeyCacheControl(
 
 //*** _rpc__ACT_GetSignaled()
 // This function is used to count the ACT second tick.
-BOOL
+bool
 _rpc__ACT_GetSignaled(
-    UINT32 actHandle
+    uint32_t actHandle
 );
 
 

@@ -40,6 +40,7 @@
 //** Includes, Locals, Defines and Function Prototypes
 #include "TpmBuildSwitches.h"
 #include <stdio.h>
+#include <stdbool.h>
 
 #ifdef _MSC_VER
 #   pragma warning(push, 3)
@@ -62,12 +63,6 @@
 #   define WSAGetLastError() (errno)
 #   define INT_PTR intptr_t
 
-#   ifndef TRUE
-#      define TRUE    1
-#   endif
-#   ifndef FALSE
-#      define FALSE   0
-#   endif
     typedef int SOCKET;
 #else
 #   error "Unsupported platform."
@@ -79,8 +74,6 @@
 
 #include "Simulator_fp.h"
 #include "Platform_fp.h"
-
-typedef int         BOOL;
 
 // To access key cache control in TPM
 void RsaKeyCacheControl(int state);
@@ -157,12 +150,12 @@ CreateSocket(
 
 //*** PlatformServer()
 // This function processes incoming platform requests.
-BOOL
+bool
 PlatformServer(
     SOCKET           s
     )
 {
-    BOOL                 OK = TRUE;
+    bool                 OK = true;
     uint32_t             Command;
 //
     for(;;)
@@ -172,18 +165,18 @@ PlatformServer(
         // and return to our caller who can stop the server or listen for another
         // connection.
         if(!OK)
-            return TRUE;
+            return true;
         Command = ntohl(Command);
         switch(Command)
         {
             case TPM_SIGNAL_POWER_ON:
-                _rpc__Signal_PowerOn(FALSE);
+                _rpc__Signal_PowerOn(false);
                 break;
             case TPM_SIGNAL_POWER_OFF:
                 _rpc__Signal_PowerOff();
                 break;
             case TPM_SIGNAL_RESET:
-                _rpc__Signal_PowerOn(TRUE);
+                _rpc__Signal_PowerOn(true);
                 break;
             case TPM_SIGNAL_RESTART:
                 _rpc__Signal_Restart();
@@ -207,18 +200,18 @@ PlatformServer(
                 _rpc__Signal_NvOff();
                 break;
             case TPM_SIGNAL_KEY_CACHE_ON:
-                _rpc__RsaKeyCacheControl(TRUE);
+                _rpc__RsaKeyCacheControl(true);
                 break;
             case TPM_SIGNAL_KEY_CACHE_OFF:
-                _rpc__RsaKeyCacheControl(FALSE);
+                _rpc__RsaKeyCacheControl(false);
                 break;
             case TPM_SESSION_END:
                 // Client signaled end-of-session
                 TpmEndSimulation();
-                return TRUE;
+                return true;
             case TPM_STOP:
                 // Client requested the simulator to exit
-                return FALSE;
+                return false;
             case TPM_TEST_FAILURE_MODE:
                 _rpc__ForceFailureMode();
                 break;
@@ -227,11 +220,11 @@ PlatformServer(
                                    sizeof(CommandResponseSizes));
                 memset(&CommandResponseSizes, 0, sizeof(CommandResponseSizes));
                 if(!OK)
-                    return TRUE;
+                    return true;
                 break;
             case TPM_ACT_GET_SIGNALED:
             {
-                UINT32 actHandle;
+                uint32_t actHandle;
                 OK = ReadUINT32(s, &actHandle);
                 WriteUINT32(s, _rpc__ACT_GetSignaled(actHandle));
                 break;
@@ -240,7 +233,7 @@ PlatformServer(
                 printf("Unrecognized platform interface command %d\n", 
                        (int)Command);
                 WriteUINT32(s, 1);
-                return TRUE;
+                return true;
         }
         WriteUINT32(s, 0);
     }
@@ -259,7 +252,7 @@ PlatformSvcRoutine(
     struct               sockaddr_in HerAddress;
     int                  res;
     socklen_t            length;
-    BOOL                 continueServing;
+    bool                 continueServing;
 //
     res = CreateSocket(PortNumber, &listenSocket);
     if(res != 0)
@@ -346,7 +339,7 @@ RegularCommandService(
     struct               sockaddr_in HerAddress;
     int                  res;
     socklen_t            length;
-    BOOL                 continueServing;
+    bool                 continueServing;
 //
     res = CreateSocket(PortNumber, &listenSocket);
     if(res != 0)
@@ -391,15 +384,15 @@ SimulatorTimeServiceRoutine(
 )
 {
     // All time is in ms
-    const INT64   tick = 1000;
-    UINT64  prevTime = _plat__RealTime();
-    INT64   timeout = tick;
+    const int64_t   tick = 1000;
+    uint64_t    prevTime = _plat__RealTime();
+    int64_t     timeout = tick;
     
     (void)notUsed;
 
-    while (TRUE)
+    while (true)
     {
-        UINT64  curTime;
+        uint64_t  curTime;
 
 #if defined(_MSC_VER)
         Sleep((DWORD)timeout);
@@ -417,7 +410,7 @@ SimulatorTimeServiceRoutine(
             //printf("%05lld | %05lld\n", 
             //      prevTime % 100000, (curTime - tick / 2) % 100000);
             _plat__ACT_Tick();
-            prevTime += (UINT64)tick;
+            prevTime += (uint64_t)tick;
         }
         // Adjust the next timeout to keep the average interval of one second
         timeout = tick + (prevTime - curTime);
@@ -438,7 +431,7 @@ ActTimeService(
     void
 )
 {
-    static BOOL          running = FALSE;
+    static bool          running = false;
     int                  ret = 0;
     if(!running)
     {
@@ -448,7 +441,7 @@ ActTimeService(
     //
         printf("Starting ACT thread...\n");
         //  Don't allow ticks to be processed before TPM is manufactured.
-        _plat__ACT_EnableTicks(FALSE);
+        _plat__ACT_EnableTicks(false);
 
         // Create service thread for ACT internal timer
         hThr = CreateThread(NULL, 0,
@@ -468,7 +461,7 @@ ActTimeService(
         if(ret != 0)
             printf("ACT thread Creation failed\n");
         else
-            running = TRUE;
+            running = true;
     }
     return ret;
 }
@@ -517,7 +510,7 @@ StartTcpServer(
 //*** ReadBytes()
 // This function reads the indicated number of bytes ('NumBytes') into buffer
 // from the indicated socket.
-BOOL
+bool
 ReadBytes(
     SOCKET           s,
     char            *buffer,
@@ -533,21 +526,21 @@ ReadBytes(
         if(res == -1)
         {
             printf("Receive error.  Error is 0x%x\n", WSAGetLastError());
-            return FALSE;
+            return false;
         }
         if(res == 0)
         {
-            return FALSE;
+            return false;
         }
         numGot += res;
     }
-    return TRUE;
+    return true;
 }
 
 //*** WriteBytes()
 // This function will send the indicated number of bytes ('NumBytes') to the
 // indicated socket
-BOOL
+bool
 WriteBytes(
     SOCKET           s,
     char            *buffer,
@@ -570,47 +563,47 @@ WriteBytes(
             {
                 printf("Send error.  Error is 0x%x\n", WSAGetLastError());
             }
-            return FALSE;
+            return false;
         }
         numSent += res;
     }
-    return TRUE;
+    return true;
 }
 
 //*** WriteUINT32()
 // Send 4 byte integer
-BOOL
+bool
 WriteUINT32(
     SOCKET           s,
     uint32_t         val
     )
 {
-    UINT32 netVal = htonl(val);
+    uint32_t netVal = htonl(val);
 //
     return WriteBytes(s, (char*)&netVal, 4);
 }
 
 //*** ReadUINT32()
 // Function to read 4 byte integer from socket.
-BOOL
+bool
 ReadUINT32(
     SOCKET           s,
-    UINT32          *val
+    uint32_t        *val
 )
 {
-    UINT32 netVal;
+    uint32_t netVal;
 //
     if (!ReadBytes(s, (char*)&netVal, 4))
-        return FALSE;
+        return false;
     *val = ntohl(netVal);
-    return TRUE;
+    return true;
 }
 
 
 //*** ReadVarBytes()
-// Get a UINT32-length-prepended binary array.  Note that the 4-byte length is
+// Get a uint32-length-prepended binary array.  Note that the 4-byte length is
 // in network byte order (big-endian).
-BOOL
+bool
 ReadVarBytes(
     SOCKET           s,
     char            *buffer,
@@ -619,7 +612,7 @@ ReadVarBytes(
     )
 {
     int                  length;
-    BOOL                 res;
+    bool                 res;
 //
     res = ReadBytes(s, (char*)&length, 4);
     if(!res) return res;
@@ -628,18 +621,18 @@ ReadVarBytes(
     if(length > MaxLen)
     {
         printf("Buffer too big.  Client says %d\n", length);
-        return FALSE;
+        return false;
     }
-    if(length == 0) return TRUE;
+    if(length == 0) return true;
     res = ReadBytes(s, buffer, length);
     if(!res) return res;
-    return TRUE;
+    return true;
 }
 
 //*** WriteVarBytes()
-// Send a UINT32-length-prepended binary array.  Note that the 4-byte length is
+// Send a uint32-length-prepended binary array.  Note that the 4-byte length is
 // in network byte order (big-endian).
-BOOL
+bool
 WriteVarBytes(
     SOCKET           s,
     char            *buffer,
@@ -647,7 +640,7 @@ WriteVarBytes(
     )
 {
     uint32_t             netLength = htonl(BytesToSend);
-    BOOL res;
+    bool res;
 //
     res = WriteBytes(s, (char*)&netLength, 4);
     if(!res) 
@@ -655,21 +648,21 @@ WriteVarBytes(
     res = WriteBytes(s, buffer, BytesToSend);
     if(!res) 
         return res;
-    return TRUE;
+    return true;
 }
 
 //*** TpmServer()
 // Processing incoming TPM command requests using the protocol / interface
 // defined above.
-BOOL
+bool
 TpmServer(
     SOCKET           s
     )
 {
     uint32_t             length;
     uint32_t             Command;
-    BYTE                 locality;
-    BOOL                 OK;
+    uint8_t              locality;
+    bool                 OK;
     int                  result;
     int                  clientVersion;
     _IN_BUFFER           InBuffer;
@@ -682,7 +675,7 @@ TpmServer(
         // and return to our caller who can stop the server or listen for another
         // connection.
         if(!OK)
-            return TRUE;
+            return true;
         Command = ntohl(Command);
         switch(Command)
         {
@@ -694,19 +687,19 @@ TpmServer(
                 break;
             case TPM_SIGNAL_HASH_DATA:
                 OK = ReadVarBytes(s, InputBuffer, &length, MAX_BUFFER);
-                if(!OK) return TRUE;
-                InBuffer.Buffer = (BYTE*)InputBuffer;
+                if(!OK) return true;
+                InBuffer.Buffer = (uint8_t*)InputBuffer;
                 InBuffer.BufferSize = length;
                 _rpc__Signal_Hash_Data(InBuffer);
                 break;
             case TPM_SEND_COMMAND:
                 OK = ReadBytes(s, (char*)&locality, 1);
                 if(!OK)
-                    return TRUE;
+                    return true;
                 OK = ReadVarBytes(s, InputBuffer, &length, MAX_BUFFER);
                 if(!OK)
-                    return TRUE;
-                InBuffer.Buffer = (BYTE*)InputBuffer;
+                    return true;
+                InBuffer.Buffer = (uint8_t*)InputBuffer;
                 InBuffer.BufferSize = length;
                 OutBuffer.BufferSize = MAX_BUFFER;
                 OutBuffer.Buffer = (_OUTPUT_BUFFER)OutputBuffer;
@@ -716,7 +709,7 @@ TpmServer(
                 {
                     CommandResponseSizes.largestCommandSize = InBuffer.BufferSize;
                     memcpy(&CommandResponseSizes.largestCommand,
-                           &InputBuffer[6], sizeof(UINT32));
+                           &InputBuffer[6], sizeof(uint32_t));
                 }
                 _rpc__Send_Command(locality, InBuffer, &OutBuffer);
                 // record the number of bytes in the response if it is the largest
@@ -726,22 +719,22 @@ TpmServer(
                     CommandResponseSizes.largestResponseSize
                         = OutBuffer.BufferSize;
                     memcpy(&CommandResponseSizes.largestResponse,
-                           &OutputBuffer[6], sizeof(UINT32));
+                           &OutputBuffer[6], sizeof(uint32_t));
                 }
                 OK = WriteVarBytes(s,
                                    (char*)OutBuffer.Buffer,
                                    OutBuffer.BufferSize);
                 if(!OK)
-                    return TRUE;
+                    return true;
                 break;
             case TPM_REMOTE_HANDSHAKE:
                 OK = ReadBytes(s, (char*)&clientVersion, 4);
                 if(!OK)
-                    return TRUE;
+                    return true;
                 if(clientVersion == 0)
                 {
                     printf("Unsupported client version (0).\n");
-                    return TRUE;
+                    return true;
                 }
                 OK &= WriteUINT32(s, ServerVersion);
                 OK &= WriteUINT32(s, tpmInRawMode 
@@ -750,21 +743,21 @@ TpmServer(
             case TPM_SET_ALTERNATIVE_RESULT:
                 OK = ReadBytes(s, (char*)&result, 4);
                 if(!OK)
-                    return TRUE;
+                    return true;
                 // Alternative result is not applicable to the simulator.
                 break;
             case TPM_SESSION_END:
                 // Client signaled end-of-session
-                return TRUE;
+                return true;
             case TPM_STOP:
                 // Client requested the simulator to exit
-                return FALSE;
+                return false;
             default:
                 printf("Unrecognized TPM interface command %d\n", (int)Command);
-                return TRUE;
+                return true;
         }
         OK = WriteUINT32(s, 0);
         if(!OK)
-            return TRUE;
+            return true;
     }
 }
