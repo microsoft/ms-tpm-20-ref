@@ -19,11 +19,11 @@ Before building the Visual Studio solution:
 
 ### OpenSSL library ###
 
-1. Create `TPMCmd/lib` folder and place a static OpenSSL library (`libeay32.lib` or `libcrypto.lib`) there. This may be either complete static library, or import library accompanying the corresponding DLL. In the latter case you'll need to copy the OpenSSL DLL into the standard Windows search path, so that it is available when you run the simulator executable (e.g. copy it into the same folder where simulator.exe is located).
+1. Create `TPMCmd/lib` folder and place a static OpenSSL library (`libcrypto.lib`) built for the `x86` architecture there. For the `x64` architecture use the `TPMCmd/lib/x64` folder.
 
-    If you use `libcrypto.lib`, you'll need to either update `Linker|Input|Additional Dependencies` property of the Tpm project in the simulator solution or, alternatively, rename `libcrypto.lib` to `libeay32.lib`.  
-   
-    Recommended version of OpenSSL is 1.0.2d or higher.
+    The static libs can be either static libraries proper, or import libraries accompanying the corresponding DLLs. In the latter case you'll need to ensure that ther is a matching copy of the OpenSSL DLL in the standard Windows search path, so that it is available when you run the simulator executable (e.g. copy it into the same folder where `simulator.exe` is located).
+
+    Recommended version of OpenSSL is `1.1.1d`.
 
 2. Create `TPMCmd/OsslInclude/openssl` folder and copy there the contents of the `openssl/include/openssl` folder of the OpenSSL source tree used to build the static library used on the step 2).
 

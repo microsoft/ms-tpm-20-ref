@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1062
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simulator", "simulator\simulator.vcxproj", "{AAB9FA21-8671-4792-B000-B40A526058AD}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -11,13 +11,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simulator", "simulator\simu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Platform", "Platform\platform.vcxproj", "{A9249F05-0DF5-4D06-9873-FBBE61B6768B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tpm", "tpm\TPM.vcxproj", "{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tpm", "tpm\TPM.vcxproj", "{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A9249F05-0DF5-4D06-9873-FBBE61B6768B} = {A9249F05-0DF5-4D06-9873-FBBE61B6768B}
-		{73973223-5EE8-41CA-8E88-1D60E89A237B} = {73973223-5EE8-41CA-8E88-1D60E89A237B}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crypt", "Crypt", "{26AD7978-27E2-46E7-9F8C-36CDB1B5AB01}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3587DA28-BEC1-44AE-8F4F-D24ECB719905}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,30 +99,9 @@ Global
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfRelease|Win32.Build.0 = WolfRelease|Win32
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfRelease|x64.ActiveCfg = WolfRelease|x64
 		{B7456491-A2ED-4B1C-B59E-41C7B32B7E3B}.WolfRelease|x64.Build.0 = WolfRelease|x64
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Debug|Win32.ActiveCfg = WolfDebug|Win32
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Debug|x64.ActiveCfg = WolfDebug|x64
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Release|Win32.ActiveCfg = WolfRelease|Win32
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Release|x64.ActiveCfg = WolfRelease|x64
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Static|Win32.ActiveCfg = WolfRelease|Win32
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Static|Win32.Deploy.0 = WolfRelease|Win32
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Static|x64.ActiveCfg = WolfRelease|x64
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.Static|x64.Deploy.0 = WolfRelease|x64
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfDebug|Win32.ActiveCfg = WolfDebug|Win32
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfDebug|Win32.Build.0 = WolfDebug|Win32
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfDebug|x64.ActiveCfg = WolfDebug|x64
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfDebug|x64.Build.0 = WolfDebug|x64
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|Win32.ActiveCfg = WolfRelease|Win32
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|Win32.Build.0 = WolfRelease|Win32
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|Win32.Deploy.0 = WolfRelease|Win32
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|x64.ActiveCfg = WolfRelease|x64
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|x64.Build.0 = WolfRelease|x64
-		{73973223-5EE8-41CA-8E88-1D60E89A237B}.WolfRelease|x64.Deploy.0 = WolfRelease|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{73973223-5EE8-41CA-8E88-1D60E89A237B} = {26AD7978-27E2-46E7-9F8C-36CDB1B5AB01}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C15EF5ED-F2C1-4785-A9C2-A2D213A367F7}
