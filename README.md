@@ -46,4 +46,4 @@ Before building the Visual Studio solution:
 
 Follows the common `./bootstrap && ./configure && make` convention.
 
-Note that autotools scripts require the following prerequisite packages: `autoconf-archive`, `pkg-config`. Their absence is not automatically detected. The build also requires `libssl-dev` package to be installed.
+Note that autotools scripts require the following prerequisite packages: `autoconf-archive`, `pkg-config`, and sometimes `build-essential` and `automake`. Their absence is not automatically detected. The build also needs `gcc` and `libssl-dev` packages.
