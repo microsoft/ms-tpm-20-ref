@@ -142,7 +142,7 @@ DAStartup(
 }
 
 //*** DARegisterFailure()
-// This function is called when a authorization failure occurs on an entity
+// This function is called when an authorization failure occurs on an entity
 // that is subject to dictionary-attack protection. When a DA failure is
 // triggered, register the failure by resetting the relevant self-healing
 // timer to the current time.

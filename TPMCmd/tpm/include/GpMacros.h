@@ -124,7 +124,7 @@
 // In some cases, the relationship between two values may be dependent
 // on things that change based on various selections like the chosen cryptographic
 // libraries. It is possible that these selections will result in incompatible
-// settings. These are often detectable by the compiler but it isn't always 
+// settings. These are often detectable by the compiler but it is not always 
 // possible to do the check in the preprocessor code. For example, when the
 // check requires use of "sizeof" then the preprocessor can't do the comparison.
 // For these cases, we include a special macro that, depending on the compiler
@@ -191,10 +191,16 @@
 // table. Otherwise, pick the "strongest" implemented hash algorithm as the context
 // hash.
 #ifndef CONTEXT_HASH_ALGORITHM
-#   if defined ALG_SHA512 && ALG_SHA512 == YES
+#   if defined ALG_SHA3_512 && ALG_SHA3_512 == YES
+#       define CONTEXT_HASH_ALGORITHM   SHA3_512
+#   elif defined ALG_SHA512 && ALG_SHA512 == YES
 #       define CONTEXT_HASH_ALGORITHM    SHA512
+#   elif defined ALG_SHA3_384 && ALG_SHA3_384 == YES
+#       define CONTEXT_HASH_ALGORITHM    SHA3_384
 #   elif defined ALG_SHA384 && ALG_SHA384 == YES
 #       define CONTEXT_HASH_ALGORITHM    SHA384
+#   elif defined ALG_SHA3_256 && ALG_SHA3_256 == YES
+#       define CONTEXT_HASH_ALGORITHM    SHA3_256
 #   elif defined ALG_SHA256 && ALG_SHA256 == YES
 #       define CONTEXT_HASH_ALGORITHM    SHA256
 #   elif defined ALG_SM3_256 && ALG_SM3_256 == YES

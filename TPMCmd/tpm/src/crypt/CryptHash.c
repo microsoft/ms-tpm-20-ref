@@ -44,43 +44,19 @@
 #include "CryptHash.h"
 #include "OIDs.h"
 
-#define HASH_TABLE_SIZE     (HASH_COUNT + 1)
-
-#if     ALG_SHA1
-HASH_DEF_TEMPLATE(SHA1, Sha1);
-#endif
-#if     ALG_SHA256
-HASH_DEF_TEMPLATE(SHA256, Sha256);
-#endif
-#if     ALG_SHA384
-HASH_DEF_TEMPLATE(SHA384, Sha384);
-#endif
-#if     ALG_SHA512
-HASH_DEF_TEMPLATE(SHA512, Sha512);
-#endif
-#if ALG_SM3_256
-HASH_DEF_TEMPLATE(SM3_256, Sm3_256);
-#endif
+// Instance each of the hash descriptors based on the implemented algorithms
+FOR_EACH_HASH(HASH_DEF_TEMPLATE)
+// Instance a 'null' def.
 HASH_DEF NULL_Def = {{0}};
 
+// Create a table of pointers to the defined hash definitions
+#define HASH_DEF_ENTRY(HASH, Hash)     &Hash##_Def,
 PHASH_DEF       HashDefArray[] = {
-#if ALG_SHA1
-    &Sha1_Def,
-#endif
-#if ALG_SHA256
-    &Sha256_Def,
-#endif
-#if ALG_SHA384
-    &Sha384_Def,
-#endif
-#if ALG_SHA512
-    &Sha512_Def,
-#endif
-#if ALG_SM3_256
-    &Sm3_256_Def,
-#endif
+    // for each implemented HASH, expands to: &HASH_Def,
+    FOR_EACH_HASH(HASH_DEF_ENTRY)
     &NULL_Def
 };
+#undef HASH_DEF_ENTRY
 
 
 //** Obligatory Initialization Functions
@@ -122,15 +98,14 @@ CryptGetHashDef(
     TPM_ALG_ID       hashAlg
     )
 {
-    size_t           i;
-#define HASHES  (sizeof(HashDefArray) / sizeof(PHASH_DEF))
-    for(i = 0; i < HASHES; i++)
+#define GET_DEF(HASH, Hash) case ALG_##HASH##_VALUE: return &Hash##_Def;
+    switch(hashAlg)
     {
-        PHASH_DEF p = HashDefArray[i];
-        if(p->hashAlg == hashAlg)
-            return p;
+        FOR_EACH_HASH(GET_DEF)
+    default:
+        return &NULL_Def;
     }
-    return &NULL_Def;
+#undef GET_DEF
 }
 
 //*** CryptHashIsValidAlg()

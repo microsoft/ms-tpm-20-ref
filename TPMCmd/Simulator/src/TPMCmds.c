@@ -203,7 +203,7 @@ CmdLineParser_IsOptPresent(
     return false;
 }
 
-//*** CmdLineParser_IsOptPresent()
+//*** CmdLineParser_Done()
 // This function notifies the parser that no more options are needed.
 static void
 CmdLineParser_Done(

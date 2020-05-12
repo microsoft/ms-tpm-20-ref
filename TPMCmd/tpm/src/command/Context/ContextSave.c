@@ -209,7 +209,7 @@ TPM2_ContextSave(
     // Encrypt context blob
     CryptSymmetricEncrypt(out->context.contextBlob.t.buffer + integritySize,
                           CONTEXT_ENCRYPT_ALG, CONTEXT_ENCRYPT_KEY_BITS,
-                          symKey.t.buffer, &iv, ALG_CFB_VALUE,
+                          symKey.t.buffer, &iv, TPM_ALG_CFB,
                           out->context.contextBlob.t.size - integritySize,
                           out->context.contextBlob.t.buffer + integritySize);
 

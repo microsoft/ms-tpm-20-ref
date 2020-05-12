@@ -84,7 +84,7 @@ TPM2_CertifyX509(
     INT16                    i;
     //
 #if CERTIFYX509_DEBUG
-    DebugFileOpen();
+    DebugFileInit();
     DebugDumpBuffer(in->partialCertificate.t.size, in->partialCertificate.t.buffer,
         "partialCertificate");
 #endif

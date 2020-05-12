@@ -112,7 +112,7 @@ MemoryCopy2B(
 }
 
 //*** MemoryConcat2B()
-// This function will concatenate the buffer contents of a TPM2B to an
+// This function will concatenate the buffer contents of a TPM2B to
 // the buffer contents of another TPM2B and adjust the size accordingly
 //      ('a' := ('a' | 'b')).
 void

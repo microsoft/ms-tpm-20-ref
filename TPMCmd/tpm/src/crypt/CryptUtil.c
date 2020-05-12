@@ -87,15 +87,15 @@ CryptHMACVerifySignature(
     TPMT_KEYEDHASH_SCHEME   *keyScheme = 
                          &signKey->publicArea.parameters.keyedHashDetail.scheme;
 //
-    if((signature->sigAlg != ALG_HMAC_VALUE)
-       || (signature->signature.hmac.hashAlg == ALG_NULL_VALUE))
+    if((signature->sigAlg != TPM_ALG_HMAC)
+       || (signature->signature.hmac.hashAlg == TPM_ALG_NULL))
         return TPM_RC_SCHEME;
     // This check is not really needed for verification purposes. However, it does
     // prevent someone from trying to validate a signature using a weaker hash 
     // algorithm than otherwise allowed by the key. That is, a key with a scheme
     // other than TMP_ALG_NULL can only be used to validate signatures that have
     // a matching scheme.
-    if((keyScheme->scheme != ALG_NULL_VALUE)
+    if((keyScheme->scheme != TPM_ALG_NULL)
        && ((keyScheme->scheme != signature->sigAlg)
            || (keyScheme->details.hmac.hashAlg 
                != signature->signature.any.hashAlg)))
@@ -135,13 +135,13 @@ CryptGenerateKeyedHash(
 
     scheme = &publicArea->parameters.keyedHashDetail.scheme;
 
-    if(publicArea->type != ALG_KEYEDHASH_VALUE)
+    if(publicArea->type != TPM_ALG_KEYEDHASH)
         return TPM_RC_FAILURE;
 
     // Pick the limiting hash algorithm
-    if(scheme->scheme == ALG_NULL_VALUE)
+    if(scheme->scheme == TPM_ALG_NULL)
         hashAlg = publicArea->nameAlg;
-    else if(scheme->scheme == ALG_XOR_VALUE)
+    else if(scheme->scheme == TPM_ALG_XOR)
         hashAlg = scheme->details.xor.hashAlg;
     else
         hashAlg = scheme->details.hmac.hashAlg;
@@ -191,7 +191,7 @@ CryptIsSchemeAnonymous(
     TPM_ALG_ID       scheme         // IN: the scheme algorithm to test
     )
 {
-    return scheme == ALG_ECDAA_VALUE;
+    return scheme == TPM_ALG_ECDAA;
 }
 
 //**** ************************************************************************
@@ -243,7 +243,7 @@ ParmDecryptSym(
         MemoryCopy(iv.t.buffer, &symParmString[keySize], iv.t.size);
 
         CryptSymmetricDecrypt(data, symAlg, keySizeInBits, symParmString,
-                              &iv, ALG_CFB_VALUE, dataSize, data);
+                              &iv, TPM_ALG_CFB, dataSize, data);
     }
     return;
 }
@@ -293,7 +293,7 @@ ParmEncryptSym(
         MemoryCopy(iv.t.buffer, &symParmString[keySize], iv.t.size);
 
         CryptSymmetricEncrypt(data, symAlg, keySizeInBits, symParmString, &iv,
-                              ALG_CFB_VALUE, dataSize, data);
+                              TPM_ALG_CFB, dataSize, data);
     }
     return;
 }
@@ -331,7 +331,7 @@ CryptGenerateKeySymmetric(
                          sizeof(sensitive->sensitive.sym.t.buffer));
     } 
 #if ALG_TDES
-    else if(publicArea->parameters.symDetail.sym.algorithm == ALG_TDES_VALUE)
+    else if(publicArea->parameters.symDetail.sym.algorithm == TPM_ALG_TDES)
     {
         result = CryptGenerateKeyDes(publicArea, sensitive, rand);
     }
@@ -494,10 +494,10 @@ CryptIsAsymAlgorithm(
     switch(algID)
     {
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
 #endif
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
 #endif
             return TRUE;
             break;
@@ -536,7 +536,7 @@ CryptSecretEncrypt(
     // The output secret value has the size of the digest produced by the nameAlg.
     data->t.size = CryptHashGetDigestSize(encryptKey->publicArea.nameAlg);
     // The encryption scheme is OAEP using the nameAlg of the encrypt key.
-    scheme.scheme = ALG_OAEP_VALUE;
+    scheme.scheme = TPM_ALG_OAEP;
     scheme.details.anySig.hashAlg = encryptKey->publicArea.nameAlg;
 
     if(!IS_ATTRIBUTE(encryptKey->publicArea.objectAttributes, TPMA_OBJECT, decrypt))
@@ -544,7 +544,7 @@ CryptSecretEncrypt(
     switch(encryptKey->publicArea.type)
     {
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
         {
             // Create secret data from RNG
             CryptRandomGenerate(data->t.size, data->t.buffer);
@@ -557,7 +557,7 @@ CryptSecretEncrypt(
 #endif // ALG_RSA
 
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
         {
             TPMS_ECC_POINT      eccPublic;
             TPM2B_ECC_PARAMETER eccPrivate;
@@ -663,7 +663,7 @@ CryptSecretDecrypt(
     switch(decryptKey->publicArea.type)
     {
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
         {
             TPMT_RSA_DECRYPT        scheme;
             TPMT_RSA_SCHEME         *keyScheme
@@ -671,12 +671,12 @@ CryptSecretDecrypt(
             UINT16                   digestSize;
 
             scheme = *(TPMT_RSA_DECRYPT *)keyScheme;
-            // If the key scheme is ALG_NULL_VALUE, set the scheme to OAEP and
+            // If the key scheme is TPM_ALG_NULL, set the scheme to OAEP and
             // set the algorithm to the name algorithm.
-            if(scheme.scheme == ALG_NULL_VALUE)
+            if(scheme.scheme == TPM_ALG_NULL)
             {
                 // Use OAEP scheme
-                scheme.scheme = ALG_OAEP_VALUE;
+                scheme.scheme = TPM_ALG_OAEP;
                 scheme.details.oaep.hashAlg = decryptKey->publicArea.nameAlg;
             }
             // use the digestSize as an indicator of whether or not the scheme
@@ -688,7 +688,7 @@ CryptSecretDecrypt(
             // is no point in doing the decryption if the size is going to be
             // 'wrong' anyway.
             digestSize = CryptHashGetDigestSize(scheme.details.oaep.hashAlg);
-            if(scheme.scheme != ALG_OAEP_VALUE || digestSize == 0)
+            if(scheme.scheme != TPM_ALG_OAEP || digestSize == 0)
                 return TPM_RC_SCHEME;
 
             // Set the output buffer capacity
@@ -703,7 +703,7 @@ CryptSecretDecrypt(
         break;
 #endif // ALG_RSA
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
         {
             TPMS_ECC_POINT       eccPublic;
             TPMS_ECC_POINT       eccSecret;
@@ -750,7 +750,7 @@ CryptSecretDecrypt(
 #if     !ALG_KEYEDHASH
 #   error   "KEYEDHASH support is required"
 #endif
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             // The seed size can not be bigger than the digest size of nameAlg
             if(secret->t.size >
                CryptHashGetDigestSize(decryptKey->publicArea.nameAlg))
@@ -776,7 +776,7 @@ CryptSecretDecrypt(
                 MemoryCopy2B(&data->b, &secret->b, sizeof(data->t.buffer));
             }
             break;
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
         {
             TPM2B_IV                iv = {{0}};
             TPMT_SYM_DEF_OBJECT     *symDef;
@@ -810,7 +810,7 @@ CryptSecretDecrypt(
                 CryptSymmetricDecrypt(data->t.buffer, symDef->algorithm,
                                       symDef->keyBits.sym,
                                       decryptKey->sensitive.sensitive.sym.t.buffer,
-                                      &iv, ALG_CFB_VALUE, secret->t.size,
+                                      &iv, TPM_ALG_CFB, secret->t.size,
                                       secret->t.secret);
             }
         }
@@ -868,7 +868,7 @@ CryptParameterEncryption(
     MemoryCopy2B(&key.b, &session->sessionKey.b, sizeof(key.t.buffer));
     MemoryConcat2B(&key.b, &extraKey->b, sizeof(key.t.buffer));
 
-    if(session->symmetric.algorithm == ALG_XOR_VALUE)
+    if(session->symmetric.algorithm == TPM_ALG_XOR)
 
         // XOR parameter encryption formulation:
         //    XOR(parameter, hash, sessionAuth, nonceNewer, nonceOlder)
@@ -935,7 +935,7 @@ CryptParameterDecryption(
     MemoryCopy2B(&key.b, &session->sessionKey.b, sizeof(key.t.buffer));
     MemoryConcat2B(&key.b, &extraKey->b, sizeof(key.t.buffer));
 
-    if(session->symmetric.algorithm == ALG_XOR_VALUE)
+    if(session->symmetric.algorithm == TPM_ALG_XOR)
         // XOR parameter decryption formulation:
         //    XOR(parameter, hash, sessionAuth, nonceNewer, nonceOlder)
         // Call XOR obfuscation function
@@ -1051,7 +1051,7 @@ CryptCreateObject(
     {
 #if ALG_RSA
         // Create RSA key
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             // RSA uses full object so that it has a place to put the private
             // exponent
             result = CryptRsaGenerateKey(publicArea, sensitive, rand);
@@ -1060,15 +1060,15 @@ CryptCreateObject(
 
 #if ALG_ECC
         // Create ECC key
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             result = CryptEccGenerateKey(publicArea, sensitive, rand);
             break;
 #endif // ALG_ECC
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
             result = CryptGenerateKeySymmetric(publicArea, sensitive,
                                                sensitiveCreate, rand);
             break;
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             result = CryptGenerateKeyedHash(publicArea, sensitive,
                                             sensitiveCreate, rand);
             break;
@@ -1096,8 +1096,8 @@ CryptCreateObject(
     else if(sensitive->seedValue.t.size == 0)
         return TPM_RC_NO_RESULT;
     // For symmetric objects, need to compute the unique value for the public area
-    if(publicArea->type == ALG_SYMCIPHER_VALUE
-       || publicArea->type == ALG_KEYEDHASH_VALUE)
+    if(publicArea->type == TPM_ALG_SYMCIPHER
+       || publicArea->type == TPM_ALG_KEYEDHASH)
     {
         CryptComputeSymmetricUnique(publicArea, sensitive, &publicArea->unique.sym);
     }
@@ -1123,7 +1123,7 @@ CryptGetSignHashAlg(
     TPMT_SIGNATURE  *auth           // IN: signature
     )
 {
-    if(auth->sigAlg == ALG_NULL_VALUE)
+    if(auth->sigAlg == TPM_ALG_NULL)
         FAIL(FATAL_ERROR_INTERNAL);
 
     // Get authHash algorithm based on signing scheme
@@ -1131,12 +1131,12 @@ CryptGetSignHashAlg(
     {
 #if ALG_RSA
     // If RSA is supported, both RSASSA and RSAPSS are required
-#   if !defined ALG_RSASSA_VALUE || !defined ALG_RSAPSS_VALUE
+#   if !defined TPM_ALG_RSASSA || !defined TPM_ALG_RSAPSS
 #       error "RSASSA and RSAPSS are required for RSA"
 #   endif
-        case ALG_RSASSA_VALUE:
+        case TPM_ALG_RSASSA:
             return auth->signature.rsassa.hash;
-        case ALG_RSAPSS_VALUE:
+        case TPM_ALG_RSAPSS:
             return auth->signature.rsapss.hash;
 #endif // ALG_RSA
 
@@ -1145,33 +1145,33 @@ CryptGetSignHashAlg(
 #   if !ALG_ECDSA
 #       error "ECDSA is requried for ECC"
 #   endif
-        case ALG_ECDSA_VALUE:
+        case TPM_ALG_ECDSA:
     // SM2 and ECSCHNORR are optional
 
 #   if      ALG_SM2
-        case ALG_SM2_VALUE:
+        case TPM_ALG_SM2:
 #   endif
 #   if  ALG_ECSCHNORR
-        case ALG_ECSCHNORR_VALUE:
+        case TPM_ALG_ECSCHNORR:
 #   endif
         //all ECC signatures look the same
             return auth->signature.ecdsa.hash;
 
 #   if  ALG_ECDAA
         // Don't know how to verify an ECDAA signature
-        case ALG_ECDAA_VALUE:
+        case TPM_ALG_ECDAA:
             break;
 #   endif
 
 #endif // ALG_ECC
 
-        case ALG_HMAC_VALUE:
+        case TPM_ALG_HMAC:
             return auth->signature.hmac.hashAlg;
 
         default:
             break;
     }
-    return ALG_NULL_VALUE;
+    return TPM_ALG_NULL;
 }
 
 //*** CryptIsSplitSign()
@@ -1186,7 +1186,7 @@ CryptIsSplitSign(
     switch(scheme)
     {
 #   if  ALG_ECDAA
-        case ALG_ECDAA_VALUE:
+        case TPM_ALG_ECDAA:
             return TRUE;
             break;
 #   endif   // ALG_ECDAA
@@ -1209,14 +1209,14 @@ CryptIsAsymSignScheme(
     switch(publicType)
     {
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             switch(scheme)
             {
 #   if !ALG_RSASSA  || !ALG_RSAPSS
 #       error "RSASSA and PSAPSS required if RSA used."
 #   endif
-                case ALG_RSASSA_VALUE:
-                case ALG_RSAPSS_VALUE:
+                case TPM_ALG_RSASSA:
+                case TPM_ALG_RSAPSS:
                     break;
                 default:
                     isSignScheme = FALSE;
@@ -1227,19 +1227,19 @@ CryptIsAsymSignScheme(
 
 #if ALG_ECC
         // If ECC is implemented ECDSA is required
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             switch(scheme)
             {
                 // Support for ECDSA is required for ECC
-                case ALG_ECDSA_VALUE:
+                case TPM_ALG_ECDSA:
 #if ALG_ECDAA // ECDAA is optional
-                case ALG_ECDAA_VALUE:
+                case TPM_ALG_ECDAA:
 #endif
 #if ALG_ECSCHNORR // Schnorr is also optional
-                case ALG_ECSCHNORR_VALUE:
+                case TPM_ALG_ECSCHNORR:
 #endif
 #if ALG_SM2 // SM2 is optional
-                case ALG_SM2_VALUE:
+                case TPM_ALG_SM2:
 #endif
                     break;
                 default:
@@ -1268,11 +1268,11 @@ CryptIsAsymDecryptScheme(
     switch(publicType)
     {
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             switch(scheme)
             {
-                case ALG_RSAES_VALUE:
-                case ALG_OAEP_VALUE:
+                case TPM_ALG_RSAES:
+                case TPM_ALG_OAEP:
                     break;
                 default:
                     isDecryptScheme = FALSE;
@@ -1283,18 +1283,18 @@ CryptIsAsymDecryptScheme(
 
 #if ALG_ECC
         // If ECC is implemented ECDH is required
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             switch(scheme)
             {
 #if  !ALG_ECDH
 #   error "ECDH is required for ECC"
 #endif
-                case ALG_ECDH_VALUE:
+                case TPM_ALG_ECDH:
 #if ALG_SM2
-                case ALG_SM2_VALUE:
+                case TPM_ALG_SM2:
 #endif
 #if ALG_ECMQV
-                case ALG_ECMQV_VALUE:
+                case TPM_ALG_ECMQV:
 #endif
                     break;
                 default:
@@ -1344,8 +1344,8 @@ CryptSelectSignScheme(
     if(signObject == NULL)
     {
         OK = TRUE;
-        scheme->scheme = ALG_NULL_VALUE;
-        scheme->details.any.hashAlg = ALG_NULL_VALUE;
+        scheme->scheme = TPM_ALG_NULL;
+        scheme->details.any.hashAlg = TPM_ALG_NULL;
     }
     else
     {
@@ -1354,7 +1354,7 @@ CryptSelectSignScheme(
 
         // A symmetric cipher can be used to encrypt and decrypt but it can't
         // be used for signing
-        if(publicArea->type == ALG_SYMCIPHER_VALUE)
+        if(publicArea->type == TPM_ALG_SYMCIPHER)
             return FALSE;
         // Point to the scheme object
         if(CryptIsAsymAlgorithm(publicArea->type))
@@ -1366,14 +1366,14 @@ CryptSelectSignScheme(
 
     // If the object doesn't have a default scheme, then use the
     // input scheme.
-        if(objectScheme->scheme == ALG_NULL_VALUE)
+        if(objectScheme->scheme == TPM_ALG_NULL)
         {
             // Input and default can't both be NULL
-            OK = (scheme->scheme != ALG_NULL_VALUE);
+            OK = (scheme->scheme != TPM_ALG_NULL);
             // Assume that the scheme is compatible with the key. If not,
             // an error will be generated in the signing operation.
         }
-        else if(scheme->scheme == ALG_NULL_VALUE)
+        else if(scheme->scheme == TPM_ALG_NULL)
         {
             // input scheme is NULL so use default
 
@@ -1434,7 +1434,7 @@ CryptSign(
 
     // If the signature algorithm is TPM_ALG_NULL or the signing key is NULL,
     // then we are done
-    if((signature->sigAlg == ALG_NULL_VALUE) || (signKey == NULL))
+    if((signature->sigAlg == TPM_ALG_NULL) || (signKey == NULL))
         return TPM_RC_SUCCESS;
 
     // Initialize signature hash
@@ -1446,12 +1446,12 @@ CryptSign(
     switch(signKey->publicArea.type)
     {
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             result = CryptRsaSign(signature, signKey, digest, NULL);
             break;
 #endif // ALG_RSA
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             // The reason that signScheme is passed to CryptEccSign but not to the
             // other signing methods is that the signing for ECC may be split and
             // need the 'r' value that is in the scheme but not in the signature.
@@ -1459,7 +1459,7 @@ CryptSign(
                                   (TPMT_ECC_SCHEME *)signScheme, NULL);
             break;
 #endif // ALG_ECC
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             result = CryptHmacSign(signature, signKey, digest);
             break;
         default:
@@ -1500,13 +1500,13 @@ CryptValidateSignature(
 
     // The input unmarshaling should prevent any input signature from being
     // a NULL signature, but just in case
-    if(signature->sigAlg == ALG_NULL_VALUE)
+    if(signature->sigAlg == TPM_ALG_NULL)
         return TPM_RC_SIGNATURE;
 
     switch(publicArea->type)
     {
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
         {
     //
             // Call RSA code to verify signature
@@ -1516,12 +1516,12 @@ CryptValidateSignature(
 #endif // ALG_RSA
 
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             result = CryptEccValidateSignature(signature, signObject, digest);
             break;
 #endif // ALG_ECC
 
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             if(signObject->attributes.publicOnly)
                 result = TPM_RCS_HANDLE;
             else
@@ -1594,7 +1594,7 @@ CryptValidateKeys(
     switch(publicArea->type)
     {
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             keySizeInBytes = BITS_TO_BYTES(params->rsaDetail.keyBits);
 
             // Regardless of whether there is a sensitive area, the public modulus
@@ -1621,7 +1621,7 @@ CryptValidateKeys(
             break;
 #endif
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
         {
             TPMI_ECC_CURVE      curveId;
             curveId = params->eccDetail.curveID;
@@ -1632,7 +1632,7 @@ CryptValidateKeys(
                 if(unique->ecc.x.t.size != keySizeInBytes
                    || unique->ecc.y.t.size != keySizeInBytes)
                     return TPM_RCS_KEY + blamePublic;
-                if(publicArea->nameAlg != ALG_NULL_VALUE)
+                if(publicArea->nameAlg != TPM_ALG_NULL)
                 {
                     if(!CryptEccIsPointOnCurve(curveId, &unique->ecc))
                         return TPM_RCS_ECC_POINT + blamePublic;
@@ -1645,7 +1645,7 @@ CryptValidateKeys(
                 if(!CryptEccIsValidPrivateKey(&sensitive->sensitive.ecc,
                                                   curveId))
                         return TPM_RCS_KEY_SIZE;
-                if(publicArea->nameAlg != ALG_NULL_VALUE)
+                if(publicArea->nameAlg != TPM_ALG_NULL)
                 {
                 // Full key load, verify that the public point belongs to the
                 // private key.
@@ -1688,7 +1688,7 @@ CryptValidateKeys(
             else
             {
                 // Make sure that the key size in the sensitive area is consistent.
-                if(publicArea->type == ALG_SYMCIPHER_VALUE)
+                if(publicArea->type == TPM_ALG_SYMCIPHER)
                 {
                     result = CryptSymKeyValidate(&params->symDetail.sym, 
                                                 &sensitive->sensitive.sym);
@@ -1706,15 +1706,15 @@ CryptValidateKeys(
                     TPMT_KEYEDHASH_SCHEME       *scheme;
                     UINT16                       maxSize;
                     scheme = &params->keyedHashDetail.scheme;
-                    if(scheme->scheme == ALG_XOR_VALUE)
+                    if(scheme->scheme == TPM_ALG_XOR)
                     {
                         maxSize = CryptHashGetBlockSize(scheme->details.xor.hashAlg);
                     }
-                    else if(scheme->scheme == ALG_HMAC_VALUE)
+                    else if(scheme->scheme == TPM_ALG_HMAC)
                     {
                         maxSize = CryptHashGetBlockSize(scheme->details.hmac.hashAlg);
                     }
-                    else if(scheme->scheme == ALG_NULL_VALUE)
+                    else if(scheme->scheme == TPM_ALG_NULL)
                     {
                         // Not signing or xor so must be a data block
                         maxSize = 128;
@@ -1725,7 +1725,7 @@ CryptValidateKeys(
                         return TPM_RCS_KEY_SIZE + blameSensitive;
                 }
                 // If there is a nameAlg, check the binding
-                if(publicArea->nameAlg != ALG_NULL_VALUE)
+                if(publicArea->nameAlg != TPM_ALG_NULL)
                 {
                     TPM2B_DIGEST            compare;
                     if(sensitive->seedValue.t.size != digestSize)
@@ -1743,7 +1743,7 @@ CryptValidateKeys(
     if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, restricted)
        && IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, decrypt)
        && sensitive != NULL
-       && publicArea->nameAlg != ALG_NULL_VALUE)
+       && publicArea->nameAlg != TPM_ALG_NULL)
     {
         if((sensitive->seedValue.t.size < (digestSize / 2))
            || (sensitive->seedValue.t.size > digestSize))
@@ -1765,25 +1765,25 @@ CryptSelectMac(
     TPMI_ALG_MAC_SCHEME     *inMac
 )
 {
-    TPM_ALG_ID              macAlg = ALG_NULL_VALUE;
+    TPM_ALG_ID              macAlg = TPM_ALG_NULL;
     switch(publicArea->type)
     {
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
         {
             // Local value to keep lines from getting too long
             TPMT_KEYEDHASH_SCHEME   *scheme;
             scheme = &publicArea->parameters.keyedHashDetail.scheme;
             // Expect that the scheme is either HMAC or NULL
-            if(scheme->scheme != ALG_NULL_VALUE)
+            if(scheme->scheme != TPM_ALG_NULL)
                 macAlg = scheme->details.hmac.hashAlg;
             break;
         }
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
         {
             TPMT_SYM_DEF_OBJECT     *scheme;
             scheme = &publicArea->parameters.symDetail.sym;
             // Expect that the scheme is either valid symmetric cipher or NULL
-            if(scheme->algorithm != ALG_NULL_VALUE)
+            if(scheme->algorithm != TPM_ALG_NULL)
                 macAlg = scheme->mode.sym;
             break;
         }
@@ -1791,18 +1791,18 @@ CryptSelectMac(
             return TPM_RCS_TYPE;
     }
     // If the input value is not TPM_ALG_NULL ...
-    if(*inMac != ALG_NULL_VALUE) 
+    if(*inMac != TPM_ALG_NULL) 
     {
         // ... then either the scheme in the key must be TPM_ALG_NULL or the input
         // value must match
-        if((macAlg != ALG_NULL_VALUE) && (*inMac != macAlg))
+        if((macAlg != TPM_ALG_NULL) && (*inMac != macAlg))
             return TPM_RCS_VALUE;
     }
     else
     {
         // Since the input value is TPM_ALG_NULL, then the key value can't be
         // TPM_ALG_NULL
-        if(macAlg == ALG_NULL_VALUE)
+        if(macAlg == TPM_ALG_NULL)
             return TPM_RCS_VALUE;
         *inMac = macAlg;
     }
@@ -1822,10 +1822,10 @@ CryptMacIsValidForKey(
 {
     switch(keyType)
     {
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             return CryptHashIsValidAlg(macAlg, flag);
             break;
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
             return CryptSmacIsValidAlg(macAlg, flag);
             break;
         default:
@@ -1846,11 +1846,11 @@ CryptSmacIsValidAlg(
     switch (alg)
     {
 #if ALG_CMAC
-        case ALG_CMAC_VALUE:
+        case TPM_ALG_CMAC:
             return TRUE;
             break;
 #endif
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return FLAG;
             break;
         default:
@@ -1871,22 +1871,22 @@ CryptSymModeIsValid(
     switch(mode)
     {
 #if ALG_CTR
-        case ALG_CTR_VALUE:
+        case TPM_ALG_CTR:
 #endif // ALG_CTR
 #if ALG_OFB
-        case ALG_OFB_VALUE:
+        case TPM_ALG_OFB:
 #endif // ALG_OFB
 #if ALG_CBC
-        case ALG_CBC_VALUE:
+        case TPM_ALG_CBC:
 #endif // ALG_CBC
 #if ALG_CFB
-        case ALG_CFB_VALUE:
+        case TPM_ALG_CFB:
 #endif // ALG_CFB
 #if ALG_ECB
-        case ALG_ECB_VALUE:
+        case TPM_ALG_ECB:
 #endif // ALG_ECB
             return TRUE;
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return flag;
             break;
         default:

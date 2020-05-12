@@ -1006,6 +1006,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     <ClInclude Include="include\prototypes\TestParms_fp.h" />
     <ClInclude Include="include\prototypes\Ticket_fp.h" />
     <ClInclude Include="include\prototypes\Time_fp.h" />
+    <ClInclude Include="include\prototypes\TpmASN1_fp.h" />
     <ClInclude Include="include\prototypes\TpmFail_fp.h" />
     <ClInclude Include="include\prototypes\TpmSizeChecks_fp.h" />
     <ClInclude Include="include\prototypes\TpmToLtcDesSupport_fp.h" />
@@ -1035,6 +1036,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     <ClInclude Include="include\TableMarshalDefines.h" />
     <ClInclude Include="include\TableMarshalTypes.h" />
     <ClInclude Include="include\TpmAlgorithmDefines.h" />
+    <ClInclude Include="include\TpmASN1.h" />
     <ClInclude Include="include\TpmError.h" />
     <ClInclude Include="include\BaseTypes.h" />
     <ClInclude Include="include\Capabilities.h" />

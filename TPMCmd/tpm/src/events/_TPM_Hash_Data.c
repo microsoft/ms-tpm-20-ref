@@ -46,9 +46,9 @@ _TPM_Hash_Data(
     TPMI_DH_PCR      pcrHandle = TPMIsStarted()
         ? PCR_FIRST + DRTM_PCR : PCR_FIRST + HCRTM_PCR;
 
-// If there is no DRTM sequence object, then _TPM_Hash_Start
-// was not called so this function returns without doing
-// anything.
+    // If there is no DRTM sequence object, then _TPM_Hash_Start
+    // was not called so this function returns without doing
+    // anything.
     if(g_DRTMHandle == TPM_RH_UNASSIGNED)
         return;
 
@@ -61,8 +61,8 @@ _TPM_Hash_Data(
     {
         // make sure that the PCR is implemented for this algorithm
         if(PcrIsAllocated(pcrHandle,
-                          hashObject->state.hashState[i].hashAlg))
-          // Update sequence object
+           hashObject->state.hashState[i].hashAlg))
+            // Update sequence object
             CryptDigestUpdate(&hashObject->state.hashState[i], dataSize, data);
     }
 

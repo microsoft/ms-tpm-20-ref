@@ -415,7 +415,7 @@ Unmarshal(
             // against each value in the table. If the value is in the table, and
             // a bits table is present, then the bit field is checked to see if the
             // indicated value is implemented. For example, if there is a table of
-            // allowed RSA key sises and the 2nd entry matches, then the 2nd bit in
+            // allowed RSA key sizes and the 2nd entry matches, then the 2nd bit in
             // the bit field is checked to see if that allowed size is implemented 
             // in this TPM.
             //  typedef const struct TableMarshal_mst
@@ -859,7 +859,7 @@ UINT16 Marshal(
             // marshal the size (checks the space and advanced the pointer)
             retVal = Marshal(UINT16_MARSHAL_REF, source, buffer, size);
 
-            // This gets the offsetof the structure to marshal. It was placed in the
+            // This gets the 'offsetof' the structure to marshal. It was placed in the
             // modifiers byte because the offset from the start of the TPM2B to the
             // start of the structure is going to be less than 8 and the modifiers
             // byte isn't needed for anything else.

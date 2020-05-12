@@ -42,7 +42,7 @@
 // selected or a new parent selected for a specific object.
 */
 //  Return Type: TPM_RC
-//      TPM_RC_COMMAND_CODE   'commandCode' of 'policySession; is not empty
+//      TPM_RC_COMMAND_CODE   'commandCode' of 'policySession' is not empty
 //      TPM_RC_CPHASH         'cpHash' of 'policySession' is not empty
 TPM_RC
 TPM2_PolicyDuplicationSelect(

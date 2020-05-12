@@ -134,7 +134,7 @@ TPM2_CreateLoaded(
         pAssert(scheme->details.xor.hashAlg != TPM_ALG_NULL
                 && scheme->details.xor.kdf == TPM_ALG_KDF1_SP800_108);
         // Don't derive RSA keys
-        if(publicArea->type == ALG_RSA_VALUE)
+        if(publicArea->type == TPM_ALG_RSA)
             return TPM_RCS_TYPE + RC_CreateLoaded_inPublic;
         // sensitiveDataOrigin has to be CLEAR in a derived object. Since this
         // is specific to a derived object, it is checked here.

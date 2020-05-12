@@ -45,7 +45,7 @@
 // both a public and sensitive area
 */
 //  Return Type: TPM_RC
-//      TPM_RC_ATTRIBUTES       'fixedParent", 'fixedTPM', and 'restricted' must 
+//      TPM_RC_ATTRIBUTES       'fixedParent', 'fixedTPM', and 'restricted' must 
 //                              be CLEAR if sensitive portion of an object is loaded
 //      TPM_RC_BINDING          the 'inPublic' and 'inPrivate' structures are not
 //                              cryptographically bound

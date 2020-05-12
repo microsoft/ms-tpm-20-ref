@@ -46,8 +46,8 @@
 #include "Platform.h"
 #if FILE_BACKED_NV
 #   include         <stdio.h>
-FILE                *s_NvFile = NULL;
-int                  s_NeedsManufacture = FALSE;
+static FILE         *s_NvFile = NULL;
+static int           s_NeedsManufacture = FALSE;
 #endif
 
 //**Functions
@@ -107,7 +107,7 @@ NvFileCommit(
 }
 
 //*** NvFileSize()
-// This function gets the size of the NV file and puts the file pointer were desired
+// This function gets the size of the NV file and puts the file pointer where desired
 // using the seek method values. SEEK_SET => beginning; SEEK_CUR => current position 
 // and SEEK_END => to the end of the file.
 static long
@@ -120,8 +120,9 @@ NvFileSize(
 //
     assert(NULL != s_NvFile);
 
-    fseek(s_NvFile, 0, SEEK_END);
+    assert(fseek(s_NvFile, 0, SEEK_END) == 0);
     fileSize = ftell(s_NvFile);
+    assert(fileSize >= 0);
     switch(leaveAt)
     {
         case SEEK_SET:

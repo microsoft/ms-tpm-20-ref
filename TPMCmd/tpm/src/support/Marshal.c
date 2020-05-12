@@ -1386,31 +1386,31 @@ TPMI_ALG_HASH_Unmarshal(TPMI_ALG_HASH *target, BYTE **buffer, INT32 *size, BOOL 
         switch (*target)
         {
 #if ALG_SHA1
-            case ALG_SHA1_VALUE:
+            case TPM_ALG_SHA1:
 #endif // ALG_SHA1
 #if ALG_SHA256
-            case ALG_SHA256_VALUE:
+            case TPM_ALG_SHA256:
 #endif // ALG_SHA256
 #if ALG_SHA384
-            case ALG_SHA384_VALUE:
+            case TPM_ALG_SHA384:
 #endif // ALG_SHA384
 #if ALG_SHA512
-            case ALG_SHA512_VALUE:
+            case TPM_ALG_SHA512:
 #endif // ALG_SHA512
 #if ALG_SM3_256
-            case ALG_SM3_256_VALUE:
+            case TPM_ALG_SM3_256:
 #endif // ALG_SM3_256
 #if ALG_SHA3_256
-            case ALG_SHA3_256_VALUE:
+            case TPM_ALG_SHA3_256:
 #endif // ALG_SHA3_256
 #if ALG_SHA3_384
-            case ALG_SHA3_384_VALUE:
+            case TPM_ALG_SHA3_384:
 #endif // ALG_SHA3_384
 #if ALG_SHA3_512
-            case ALG_SHA3_512_VALUE:
+            case TPM_ALG_SHA3_512:
 #endif // ALG_SHA3_512
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_HASH;
                 break;
@@ -1440,13 +1440,13 @@ TPMI_ALG_ASYM_Unmarshal(TPMI_ALG_ASYM *target, BYTE **buffer, INT32 *size, BOOL 
         switch (*target)
         {
 #if ALG_RSA
-            case ALG_RSA_VALUE:
+            case TPM_ALG_RSA:
 #endif // ALG_RSA
 #if ALG_ECC
-            case ALG_ECC_VALUE:
+            case TPM_ALG_ECC:
 #endif // ALG_ECC
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_ASYMMETRIC;
                 break;
@@ -1476,22 +1476,22 @@ TPMI_ALG_SYM_Unmarshal(TPMI_ALG_SYM *target, BYTE **buffer, INT32 *size, BOOL fl
         switch (*target)
         {
 #if ALG_TDES
-            case ALG_TDES_VALUE:
+            case TPM_ALG_TDES:
 #endif // ALG_TDES
 #if ALG_AES
-            case ALG_AES_VALUE:
+            case TPM_ALG_AES:
 #endif // ALG_AES
 #if ALG_SM4
-            case ALG_SM4_VALUE:
+            case TPM_ALG_SM4:
 #endif // ALG_SM4
 #if ALG_CAMELLIA
-            case ALG_CAMELLIA_VALUE:
+            case TPM_ALG_CAMELLIA:
 #endif // ALG_CAMELLIA
 #if ALG_XOR
-            case ALG_XOR_VALUE:
+            case TPM_ALG_XOR:
 #endif // ALG_XOR
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_SYMMETRIC;
                 break;
@@ -1521,19 +1521,19 @@ TPMI_ALG_SYM_OBJECT_Unmarshal(TPMI_ALG_SYM_OBJECT *target, BYTE **buffer, INT32 
         switch (*target)
         {
 #if ALG_TDES
-            case ALG_TDES_VALUE:
+            case TPM_ALG_TDES:
 #endif // ALG_TDES
 #if ALG_AES
-            case ALG_AES_VALUE:
+            case TPM_ALG_AES:
 #endif // ALG_AES
 #if ALG_SM4
-            case ALG_SM4_VALUE:
+            case TPM_ALG_SM4:
 #endif // ALG_SM4
 #if ALG_CAMELLIA
-            case ALG_CAMELLIA_VALUE:
+            case TPM_ALG_CAMELLIA:
 #endif // ALG_CAMELLIA
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_SYMMETRIC;
                 break;
@@ -1563,25 +1563,25 @@ TPMI_ALG_SYM_MODE_Unmarshal(TPMI_ALG_SYM_MODE *target, BYTE **buffer, INT32 *siz
         switch (*target)
         {
 #if ALG_CTR
-            case ALG_CTR_VALUE:
+            case TPM_ALG_CTR:
 #endif // ALG_CTR
 #if ALG_OFB
-            case ALG_OFB_VALUE:
+            case TPM_ALG_OFB:
 #endif // ALG_OFB
 #if ALG_CBC
-            case ALG_CBC_VALUE:
+            case TPM_ALG_CBC:
 #endif // ALG_CBC
 #if ALG_CFB
-            case ALG_CFB_VALUE:
+            case TPM_ALG_CFB:
 #endif // ALG_CFB
 #if ALG_ECB
-            case ALG_ECB_VALUE:
+            case TPM_ALG_ECB:
 #endif // ALG_ECB
 #if ALG_CMAC
-            case ALG_CMAC_VALUE:
+            case TPM_ALG_CMAC:
 #endif // ALG_CMAC
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_MODE;
                 break;
@@ -1611,19 +1611,19 @@ TPMI_ALG_KDF_Unmarshal(TPMI_ALG_KDF *target, BYTE **buffer, INT32 *size, BOOL fl
         switch (*target)
         {
 #if ALG_MGF1
-            case ALG_MGF1_VALUE:
+            case TPM_ALG_MGF1:
 #endif // ALG_MGF1
 #if ALG_KDF1_SP800_56A
-            case ALG_KDF1_SP800_56A_VALUE:
+            case TPM_ALG_KDF1_SP800_56A:
 #endif // ALG_KDF1_SP800_56A
 #if ALG_KDF2
-            case ALG_KDF2_VALUE:
+            case TPM_ALG_KDF2:
 #endif // ALG_KDF2
 #if ALG_KDF1_SP800_108
-            case ALG_KDF1_SP800_108_VALUE:
+            case TPM_ALG_KDF1_SP800_108:
 #endif // ALG_KDF1_SP800_108
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_KDF;
                 break;
@@ -1653,28 +1653,28 @@ TPMI_ALG_SIG_SCHEME_Unmarshal(TPMI_ALG_SIG_SCHEME *target, BYTE **buffer, INT32 
         switch (*target)
         {
 #if ALG_ECDAA
-            case ALG_ECDAA_VALUE:
+            case TPM_ALG_ECDAA:
 #endif // ALG_ECDAA
 #if ALG_RSASSA
-            case ALG_RSASSA_VALUE:
+            case TPM_ALG_RSASSA:
 #endif // ALG_RSASSA
 #if ALG_RSAPSS
-            case ALG_RSAPSS_VALUE:
+            case TPM_ALG_RSAPSS:
 #endif // ALG_RSAPSS
 #if ALG_ECDSA
-            case ALG_ECDSA_VALUE:
+            case TPM_ALG_ECDSA:
 #endif // ALG_ECDSA
 #if ALG_SM2
-            case ALG_SM2_VALUE:
+            case TPM_ALG_SM2:
 #endif // ALG_SM2
 #if ALG_ECSCHNORR
-            case ALG_ECSCHNORR_VALUE:
+            case TPM_ALG_ECSCHNORR:
 #endif // ALG_ECSCHNORR
 #if ALG_HMAC
-            case ALG_HMAC_VALUE:
+            case TPM_ALG_HMAC:
 #endif // ALG_HMAC
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_SCHEME;
                 break;
@@ -1705,16 +1705,16 @@ TPMI_ECC_KEY_EXCHANGE_Unmarshal(TPMI_ECC_KEY_EXCHANGE *target, BYTE **buffer, IN
         switch (*target)
         {
 #if ALG_ECDH
-            case ALG_ECDH_VALUE:
+            case TPM_ALG_ECDH:
 #endif // ALG_ECDH
 #if ALG_ECMQV
-            case ALG_ECMQV_VALUE:
+            case TPM_ALG_ECMQV:
 #endif // ALG_ECMQV
 #if ALG_SM2
-            case ALG_SM2_VALUE:
+            case TPM_ALG_SM2:
 #endif // ALG_SM2
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_SCHEME;
                 break;
@@ -1773,34 +1773,34 @@ TPMI_ALG_MAC_SCHEME_Unmarshal(TPMI_ALG_MAC_SCHEME *target, BYTE **buffer, INT32 
         switch (*target)
         {
 #if ALG_CMAC
-            case ALG_CMAC_VALUE:
+            case TPM_ALG_CMAC:
 #endif // ALG_CMAC
 #if ALG_SHA1
-            case ALG_SHA1_VALUE:
+            case TPM_ALG_SHA1:
 #endif // ALG_SHA1
 #if ALG_SHA256
-            case ALG_SHA256_VALUE:
+            case TPM_ALG_SHA256:
 #endif // ALG_SHA256
 #if ALG_SHA384
-            case ALG_SHA384_VALUE:
+            case TPM_ALG_SHA384:
 #endif // ALG_SHA384
 #if ALG_SHA512
-            case ALG_SHA512_VALUE:
+            case TPM_ALG_SHA512:
 #endif // ALG_SHA512
 #if ALG_SM3_256
-            case ALG_SM3_256_VALUE:
+            case TPM_ALG_SM3_256:
 #endif // ALG_SM3_256
 #if ALG_SHA3_256
-            case ALG_SHA3_256_VALUE:
+            case TPM_ALG_SHA3_256:
 #endif // ALG_SHA3_256
 #if ALG_SHA3_384
-            case ALG_SHA3_384_VALUE:
+            case TPM_ALG_SHA3_384:
 #endif // ALG_SHA3_384
 #if ALG_SHA3_512
-            case ALG_SHA3_512_VALUE:
+            case TPM_ALG_SHA3_512:
 #endif // ALG_SHA3_512
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_SYMMETRIC;
                 break;
@@ -1830,22 +1830,22 @@ TPMI_ALG_CIPHER_MODE_Unmarshal(TPMI_ALG_CIPHER_MODE *target, BYTE **buffer, INT3
         switch (*target)
         {
 #if ALG_CTR
-            case ALG_CTR_VALUE:
+            case TPM_ALG_CTR:
 #endif // ALG_CTR
 #if ALG_OFB
-            case ALG_OFB_VALUE:
+            case TPM_ALG_OFB:
 #endif // ALG_OFB
 #if ALG_CBC
-            case ALG_CBC_VALUE:
+            case TPM_ALG_CBC:
 #endif // ALG_CBC
 #if ALG_CFB
-            case ALG_CFB_VALUE:
+            case TPM_ALG_CFB:
 #endif // ALG_CFB
 #if ALG_ECB
-            case ALG_ECB_VALUE:
+            case TPM_ALG_ECB:
 #endif // ALG_ECB
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_MODE;
                 break;
@@ -1900,38 +1900,38 @@ TPMU_HA_Unmarshal(TPMU_HA *target, BYTE **buffer, INT32 *size, UINT32 selector)
 {
     switch(selector) {
 #if ALG_SHA1
-        case ALG_SHA1_VALUE:
+        case TPM_ALG_SHA1:
             return BYTE_Array_Unmarshal((BYTE *)(target->sha1), buffer, size, (INT32)SHA1_DIGEST_SIZE);
 #endif // ALG_SHA1
 #if ALG_SHA256
-        case ALG_SHA256_VALUE:
+        case TPM_ALG_SHA256:
             return BYTE_Array_Unmarshal((BYTE *)(target->sha256), buffer, size, (INT32)SHA256_DIGEST_SIZE);
 #endif // ALG_SHA256
 #if ALG_SHA384
-        case ALG_SHA384_VALUE:
+        case TPM_ALG_SHA384:
             return BYTE_Array_Unmarshal((BYTE *)(target->sha384), buffer, size, (INT32)SHA384_DIGEST_SIZE);
 #endif // ALG_SHA384
 #if ALG_SHA512
-        case ALG_SHA512_VALUE:
+        case TPM_ALG_SHA512:
             return BYTE_Array_Unmarshal((BYTE *)(target->sha512), buffer, size, (INT32)SHA512_DIGEST_SIZE);
 #endif // ALG_SHA512
 #if ALG_SM3_256
-        case ALG_SM3_256_VALUE:
+        case TPM_ALG_SM3_256:
             return BYTE_Array_Unmarshal((BYTE *)(target->sm3_256), buffer, size, (INT32)SM3_256_DIGEST_SIZE);
 #endif // ALG_SM3_256
 #if ALG_SHA3_256
-        case ALG_SHA3_256_VALUE:
+        case TPM_ALG_SHA3_256:
             return BYTE_Array_Unmarshal((BYTE *)(target->sha3_256), buffer, size, (INT32)SHA3_256_DIGEST_SIZE);
 #endif // ALG_SHA3_256
 #if ALG_SHA3_384
-        case ALG_SHA3_384_VALUE:
+        case TPM_ALG_SHA3_384:
             return BYTE_Array_Unmarshal((BYTE *)(target->sha3_384), buffer, size, (INT32)SHA3_384_DIGEST_SIZE);
 #endif // ALG_SHA3_384
 #if ALG_SHA3_512
-        case ALG_SHA3_512_VALUE:
+        case TPM_ALG_SHA3_512:
             return BYTE_Array_Unmarshal((BYTE *)(target->sha3_512), buffer, size, (INT32)SHA3_512_DIGEST_SIZE);
 #endif // ALG_SHA3_512
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return TPM_RC_SUCCESS;
     }
     return TPM_RC_SELECTOR;
@@ -1941,38 +1941,38 @@ TPMU_HA_Marshal(TPMU_HA *source, BYTE **buffer, INT32 *size, UINT32 selector)
 {
     switch(selector) {
 #if ALG_SHA1
-        case ALG_SHA1_VALUE:
+        case TPM_ALG_SHA1:
             return BYTE_Array_Marshal((BYTE *)(source->sha1), buffer, size, (INT32)SHA1_DIGEST_SIZE);
 #endif // ALG_SHA1
 #if ALG_SHA256
-        case ALG_SHA256_VALUE:
+        case TPM_ALG_SHA256:
             return BYTE_Array_Marshal((BYTE *)(source->sha256), buffer, size, (INT32)SHA256_DIGEST_SIZE);
 #endif // ALG_SHA256
 #if ALG_SHA384
-        case ALG_SHA384_VALUE:
+        case TPM_ALG_SHA384:
             return BYTE_Array_Marshal((BYTE *)(source->sha384), buffer, size, (INT32)SHA384_DIGEST_SIZE);
 #endif // ALG_SHA384
 #if ALG_SHA512
-        case ALG_SHA512_VALUE:
+        case TPM_ALG_SHA512:
             return BYTE_Array_Marshal((BYTE *)(source->sha512), buffer, size, (INT32)SHA512_DIGEST_SIZE);
 #endif // ALG_SHA512
 #if ALG_SM3_256
-        case ALG_SM3_256_VALUE:
+        case TPM_ALG_SM3_256:
             return BYTE_Array_Marshal((BYTE *)(source->sm3_256), buffer, size, (INT32)SM3_256_DIGEST_SIZE);
 #endif // ALG_SM3_256
 #if ALG_SHA3_256
-        case ALG_SHA3_256_VALUE:
+        case TPM_ALG_SHA3_256:
             return BYTE_Array_Marshal((BYTE *)(source->sha3_256), buffer, size, (INT32)SHA3_256_DIGEST_SIZE);
 #endif // ALG_SHA3_256
 #if ALG_SHA3_384
-        case ALG_SHA3_384_VALUE:
+        case TPM_ALG_SHA3_384:
             return BYTE_Array_Marshal((BYTE *)(source->sha3_384), buffer, size, (INT32)SHA3_384_DIGEST_SIZE);
 #endif // ALG_SHA3_384
 #if ALG_SHA3_512
-        case ALG_SHA3_512_VALUE:
+        case TPM_ALG_SHA3_512:
             return BYTE_Array_Marshal((BYTE *)(source->sha3_512), buffer, size, (INT32)SHA3_512_DIGEST_SIZE);
 #endif // ALG_SHA3_512
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return 0;
     }
     return 0;
@@ -3074,26 +3074,26 @@ TPMU_SYM_KEY_BITS_Unmarshal(TPMU_SYM_KEY_BITS *target, BYTE **buffer, INT32 *siz
 {
     switch(selector) {
 #if ALG_TDES
-        case ALG_TDES_VALUE:
+        case TPM_ALG_TDES:
             return TPMI_TDES_KEY_BITS_Unmarshal((TPMI_TDES_KEY_BITS *)&(target->tdes), buffer, size);
 #endif // ALG_TDES
 #if ALG_AES
-        case ALG_AES_VALUE:
+        case TPM_ALG_AES:
             return TPMI_AES_KEY_BITS_Unmarshal((TPMI_AES_KEY_BITS *)&(target->aes), buffer, size);
 #endif // ALG_AES
 #if ALG_SM4
-        case ALG_SM4_VALUE:
+        case TPM_ALG_SM4:
             return TPMI_SM4_KEY_BITS_Unmarshal((TPMI_SM4_KEY_BITS *)&(target->sm4), buffer, size);
 #endif // ALG_SM4
 #if ALG_CAMELLIA
-        case ALG_CAMELLIA_VALUE:
+        case TPM_ALG_CAMELLIA:
             return TPMI_CAMELLIA_KEY_BITS_Unmarshal((TPMI_CAMELLIA_KEY_BITS *)&(target->camellia), buffer, size);
 #endif // ALG_CAMELLIA
 #if ALG_XOR
-        case ALG_XOR_VALUE:
+        case TPM_ALG_XOR:
             return TPMI_ALG_HASH_Unmarshal((TPMI_ALG_HASH *)&(target->xor), buffer, size, 0);
 #endif // ALG_XOR
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return TPM_RC_SUCCESS;
     }
     return TPM_RC_SELECTOR;
@@ -3103,26 +3103,26 @@ TPMU_SYM_KEY_BITS_Marshal(TPMU_SYM_KEY_BITS *source, BYTE **buffer, INT32 *size,
 {
     switch(selector) {
 #if ALG_TDES
-        case ALG_TDES_VALUE:
+        case TPM_ALG_TDES:
             return TPMI_TDES_KEY_BITS_Marshal((TPMI_TDES_KEY_BITS *)&(source->tdes), buffer, size);
 #endif // ALG_TDES
 #if ALG_AES
-        case ALG_AES_VALUE:
+        case TPM_ALG_AES:
             return TPMI_AES_KEY_BITS_Marshal((TPMI_AES_KEY_BITS *)&(source->aes), buffer, size);
 #endif // ALG_AES
 #if ALG_SM4
-        case ALG_SM4_VALUE:
+        case TPM_ALG_SM4:
             return TPMI_SM4_KEY_BITS_Marshal((TPMI_SM4_KEY_BITS *)&(source->sm4), buffer, size);
 #endif // ALG_SM4
 #if ALG_CAMELLIA
-        case ALG_CAMELLIA_VALUE:
+        case TPM_ALG_CAMELLIA:
             return TPMI_CAMELLIA_KEY_BITS_Marshal((TPMI_CAMELLIA_KEY_BITS *)&(source->camellia), buffer, size);
 #endif // ALG_CAMELLIA
 #if ALG_XOR
-        case ALG_XOR_VALUE:
+        case TPM_ALG_XOR:
             return TPMI_ALG_HASH_Marshal((TPMI_ALG_HASH *)&(source->xor), buffer, size);
 #endif // ALG_XOR
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return 0;
     }
     return 0;
@@ -3134,26 +3134,26 @@ TPMU_SYM_MODE_Unmarshal(TPMU_SYM_MODE *target, BYTE **buffer, INT32 *size, UINT3
 {
     switch(selector) {
 #if ALG_TDES
-        case ALG_TDES_VALUE:
+        case TPM_ALG_TDES:
             return TPMI_ALG_SYM_MODE_Unmarshal((TPMI_ALG_SYM_MODE *)&(target->tdes), buffer, size, 1);
 #endif // ALG_TDES
 #if ALG_AES
-        case ALG_AES_VALUE:
+        case TPM_ALG_AES:
             return TPMI_ALG_SYM_MODE_Unmarshal((TPMI_ALG_SYM_MODE *)&(target->aes), buffer, size, 1);
 #endif // ALG_AES
 #if ALG_SM4
-        case ALG_SM4_VALUE:
+        case TPM_ALG_SM4:
             return TPMI_ALG_SYM_MODE_Unmarshal((TPMI_ALG_SYM_MODE *)&(target->sm4), buffer, size, 1);
 #endif // ALG_SM4
 #if ALG_CAMELLIA
-        case ALG_CAMELLIA_VALUE:
+        case TPM_ALG_CAMELLIA:
             return TPMI_ALG_SYM_MODE_Unmarshal((TPMI_ALG_SYM_MODE *)&(target->camellia), buffer, size, 1);
 #endif // ALG_CAMELLIA
 #if ALG_XOR
-        case ALG_XOR_VALUE:
+        case TPM_ALG_XOR:
             return TPM_RC_SUCCESS;
 #endif // ALG_XOR
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return TPM_RC_SUCCESS;
     }
     return TPM_RC_SELECTOR;
@@ -3163,26 +3163,26 @@ TPMU_SYM_MODE_Marshal(TPMU_SYM_MODE *source, BYTE **buffer, INT32 *size, UINT32 
 {
     switch(selector) {
 #if ALG_TDES
-        case ALG_TDES_VALUE:
+        case TPM_ALG_TDES:
             return TPMI_ALG_SYM_MODE_Marshal((TPMI_ALG_SYM_MODE *)&(source->tdes), buffer, size);
 #endif // ALG_TDES
 #if ALG_AES
-        case ALG_AES_VALUE:
+        case TPM_ALG_AES:
             return TPMI_ALG_SYM_MODE_Marshal((TPMI_ALG_SYM_MODE *)&(source->aes), buffer, size);
 #endif // ALG_AES
 #if ALG_SM4
-        case ALG_SM4_VALUE:
+        case TPM_ALG_SM4:
             return TPMI_ALG_SYM_MODE_Marshal((TPMI_ALG_SYM_MODE *)&(source->sm4), buffer, size);
 #endif // ALG_SM4
 #if ALG_CAMELLIA
-        case ALG_CAMELLIA_VALUE:
+        case TPM_ALG_CAMELLIA:
             return TPMI_ALG_SYM_MODE_Marshal((TPMI_ALG_SYM_MODE *)&(source->camellia), buffer, size);
 #endif // ALG_CAMELLIA
 #if ALG_XOR
-        case ALG_XOR_VALUE:
+        case TPM_ALG_XOR:
             return 0;
 #endif // ALG_XOR
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return 0;
     }
     return 0;
@@ -3452,13 +3452,13 @@ TPMI_ALG_KEYEDHASH_SCHEME_Unmarshal(TPMI_ALG_KEYEDHASH_SCHEME *target, BYTE **bu
         switch (*target)
         {
 #if ALG_HMAC
-            case ALG_HMAC_VALUE:
+            case TPM_ALG_HMAC:
 #endif // ALG_HMAC
 #if ALG_XOR
-            case ALG_XOR_VALUE:
+            case TPM_ALG_XOR:
 #endif // ALG_XOR
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_VALUE;
                 break;
@@ -3516,14 +3516,14 @@ TPMU_SCHEME_KEYEDHASH_Unmarshal(TPMU_SCHEME_KEYEDHASH *target, BYTE **buffer, IN
 {
     switch(selector) {
 #if ALG_HMAC
-        case ALG_HMAC_VALUE:
+        case TPM_ALG_HMAC:
             return TPMS_SCHEME_HMAC_Unmarshal((TPMS_SCHEME_HMAC *)&(target->hmac), buffer, size);
 #endif // ALG_HMAC
 #if ALG_XOR
-        case ALG_XOR_VALUE:
+        case TPM_ALG_XOR:
             return TPMS_SCHEME_XOR_Unmarshal((TPMS_SCHEME_XOR *)&(target->xor), buffer, size);
 #endif // ALG_XOR
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return TPM_RC_SUCCESS;
     }
     return TPM_RC_SELECTOR;
@@ -3533,14 +3533,14 @@ TPMU_SCHEME_KEYEDHASH_Marshal(TPMU_SCHEME_KEYEDHASH *source, BYTE **buffer, INT3
 {
     switch(selector) {
 #if ALG_HMAC
-        case ALG_HMAC_VALUE:
+        case TPM_ALG_HMAC:
             return TPMS_SCHEME_HMAC_Marshal((TPMS_SCHEME_HMAC *)&(source->hmac), buffer, size);
 #endif // ALG_HMAC
 #if ALG_XOR
-        case ALG_XOR_VALUE:
+        case TPM_ALG_XOR:
             return TPMS_SCHEME_XOR_Marshal((TPMS_SCHEME_XOR *)&(source->xor), buffer, size);
 #endif // ALG_XOR
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return 0;
     }
     return 0;
@@ -3643,34 +3643,34 @@ TPMU_SIG_SCHEME_Unmarshal(TPMU_SIG_SCHEME *target, BYTE **buffer, INT32 *size, U
 {
     switch(selector) {
 #if ALG_ECDAA
-        case ALG_ECDAA_VALUE:
+        case TPM_ALG_ECDAA:
             return TPMS_SIG_SCHEME_ECDAA_Unmarshal((TPMS_SIG_SCHEME_ECDAA *)&(target->ecdaa), buffer, size);
 #endif // ALG_ECDAA
 #if ALG_RSASSA
-        case ALG_RSASSA_VALUE:
+        case TPM_ALG_RSASSA:
             return TPMS_SIG_SCHEME_RSASSA_Unmarshal((TPMS_SIG_SCHEME_RSASSA *)&(target->rsassa), buffer, size);
 #endif // ALG_RSASSA
 #if ALG_RSAPSS
-        case ALG_RSAPSS_VALUE:
+        case TPM_ALG_RSAPSS:
             return TPMS_SIG_SCHEME_RSAPSS_Unmarshal((TPMS_SIG_SCHEME_RSAPSS *)&(target->rsapss), buffer, size);
 #endif // ALG_RSAPSS
 #if ALG_ECDSA
-        case ALG_ECDSA_VALUE:
+        case TPM_ALG_ECDSA:
             return TPMS_SIG_SCHEME_ECDSA_Unmarshal((TPMS_SIG_SCHEME_ECDSA *)&(target->ecdsa), buffer, size);
 #endif // ALG_ECDSA
 #if ALG_SM2
-        case ALG_SM2_VALUE:
+        case TPM_ALG_SM2:
             return TPMS_SIG_SCHEME_SM2_Unmarshal((TPMS_SIG_SCHEME_SM2 *)&(target->sm2), buffer, size);
 #endif // ALG_SM2
 #if ALG_ECSCHNORR
-        case ALG_ECSCHNORR_VALUE:
+        case TPM_ALG_ECSCHNORR:
             return TPMS_SIG_SCHEME_ECSCHNORR_Unmarshal((TPMS_SIG_SCHEME_ECSCHNORR *)&(target->ecschnorr), buffer, size);
 #endif // ALG_ECSCHNORR
 #if ALG_HMAC
-        case ALG_HMAC_VALUE:
+        case TPM_ALG_HMAC:
             return TPMS_SCHEME_HMAC_Unmarshal((TPMS_SCHEME_HMAC *)&(target->hmac), buffer, size);
 #endif // ALG_HMAC
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return TPM_RC_SUCCESS;
     }
     return TPM_RC_SELECTOR;
@@ -3680,34 +3680,34 @@ TPMU_SIG_SCHEME_Marshal(TPMU_SIG_SCHEME *source, BYTE **buffer, INT32 *size, UIN
 {
     switch(selector) {
 #if ALG_ECDAA
-        case ALG_ECDAA_VALUE:
+        case TPM_ALG_ECDAA:
             return TPMS_SIG_SCHEME_ECDAA_Marshal((TPMS_SIG_SCHEME_ECDAA *)&(source->ecdaa), buffer, size);
 #endif // ALG_ECDAA
 #if ALG_RSASSA
-        case ALG_RSASSA_VALUE:
+        case TPM_ALG_RSASSA:
             return TPMS_SIG_SCHEME_RSASSA_Marshal((TPMS_SIG_SCHEME_RSASSA *)&(source->rsassa), buffer, size);
 #endif // ALG_RSASSA
 #if ALG_RSAPSS
-        case ALG_RSAPSS_VALUE:
+        case TPM_ALG_RSAPSS:
             return TPMS_SIG_SCHEME_RSAPSS_Marshal((TPMS_SIG_SCHEME_RSAPSS *)&(source->rsapss), buffer, size);
 #endif // ALG_RSAPSS
 #if ALG_ECDSA
-        case ALG_ECDSA_VALUE:
+        case TPM_ALG_ECDSA:
             return TPMS_SIG_SCHEME_ECDSA_Marshal((TPMS_SIG_SCHEME_ECDSA *)&(source->ecdsa), buffer, size);
 #endif // ALG_ECDSA
 #if ALG_SM2
-        case ALG_SM2_VALUE:
+        case TPM_ALG_SM2:
             return TPMS_SIG_SCHEME_SM2_Marshal((TPMS_SIG_SCHEME_SM2 *)&(source->sm2), buffer, size);
 #endif // ALG_SM2
 #if ALG_ECSCHNORR
-        case ALG_ECSCHNORR_VALUE:
+        case TPM_ALG_ECSCHNORR:
             return TPMS_SIG_SCHEME_ECSCHNORR_Marshal((TPMS_SIG_SCHEME_ECSCHNORR *)&(source->ecschnorr), buffer, size);
 #endif // ALG_ECSCHNORR
 #if ALG_HMAC
-        case ALG_HMAC_VALUE:
+        case TPM_ALG_HMAC:
             return TPMS_SCHEME_HMAC_Marshal((TPMS_SCHEME_HMAC *)&(source->hmac), buffer, size);
 #endif // ALG_HMAC
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return 0;
     }
     return 0;
@@ -3834,22 +3834,22 @@ TPMU_KDF_SCHEME_Unmarshal(TPMU_KDF_SCHEME *target, BYTE **buffer, INT32 *size, U
 {
     switch(selector) {
 #if ALG_MGF1
-        case ALG_MGF1_VALUE:
+        case TPM_ALG_MGF1:
             return TPMS_KDF_SCHEME_MGF1_Unmarshal((TPMS_KDF_SCHEME_MGF1 *)&(target->mgf1), buffer, size);
 #endif // ALG_MGF1
 #if ALG_KDF1_SP800_56A
-        case ALG_KDF1_SP800_56A_VALUE:
+        case TPM_ALG_KDF1_SP800_56A:
             return TPMS_KDF_SCHEME_KDF1_SP800_56A_Unmarshal((TPMS_KDF_SCHEME_KDF1_SP800_56A *)&(target->kdf1_sp800_56a), buffer, size);
 #endif // ALG_KDF1_SP800_56A
 #if ALG_KDF2
-        case ALG_KDF2_VALUE:
+        case TPM_ALG_KDF2:
             return TPMS_KDF_SCHEME_KDF2_Unmarshal((TPMS_KDF_SCHEME_KDF2 *)&(target->kdf2), buffer, size);
 #endif // ALG_KDF2
 #if ALG_KDF1_SP800_108
-        case ALG_KDF1_SP800_108_VALUE:
+        case TPM_ALG_KDF1_SP800_108:
             return TPMS_KDF_SCHEME_KDF1_SP800_108_Unmarshal((TPMS_KDF_SCHEME_KDF1_SP800_108 *)&(target->kdf1_sp800_108), buffer, size);
 #endif // ALG_KDF1_SP800_108
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return TPM_RC_SUCCESS;
     }
     return TPM_RC_SELECTOR;
@@ -3859,22 +3859,22 @@ TPMU_KDF_SCHEME_Marshal(TPMU_KDF_SCHEME *source, BYTE **buffer, INT32 *size, UIN
 {
     switch(selector) {
 #if ALG_MGF1
-        case ALG_MGF1_VALUE:
+        case TPM_ALG_MGF1:
             return TPMS_KDF_SCHEME_MGF1_Marshal((TPMS_KDF_SCHEME_MGF1 *)&(source->mgf1), buffer, size);
 #endif // ALG_MGF1
 #if ALG_KDF1_SP800_56A
-        case ALG_KDF1_SP800_56A_VALUE:
+        case TPM_ALG_KDF1_SP800_56A:
             return TPMS_KDF_SCHEME_KDF1_SP800_56A_Marshal((TPMS_KDF_SCHEME_KDF1_SP800_56A *)&(source->kdf1_sp800_56a), buffer, size);
 #endif // ALG_KDF1_SP800_56A
 #if ALG_KDF2
-        case ALG_KDF2_VALUE:
+        case TPM_ALG_KDF2:
             return TPMS_KDF_SCHEME_KDF2_Marshal((TPMS_KDF_SCHEME_KDF2 *)&(source->kdf2), buffer, size);
 #endif // ALG_KDF2
 #if ALG_KDF1_SP800_108
-        case ALG_KDF1_SP800_108_VALUE:
+        case TPM_ALG_KDF1_SP800_108:
             return TPMS_KDF_SCHEME_KDF1_SP800_108_Marshal((TPMS_KDF_SCHEME_KDF1_SP800_108 *)&(source->kdf1_sp800_108), buffer, size);
 #endif // ALG_KDF1_SP800_108
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return 0;
     }
     return 0;
@@ -3910,37 +3910,37 @@ TPMI_ALG_ASYM_SCHEME_Unmarshal(TPMI_ALG_ASYM_SCHEME *target, BYTE **buffer, INT3
         switch (*target)
         {
 #if ALG_ECDH
-            case ALG_ECDH_VALUE:
+            case TPM_ALG_ECDH:
 #endif // ALG_ECDH
 #if ALG_ECMQV
-            case ALG_ECMQV_VALUE:
+            case TPM_ALG_ECMQV:
 #endif // ALG_ECMQV
 #if ALG_ECDAA
-            case ALG_ECDAA_VALUE:
+            case TPM_ALG_ECDAA:
 #endif // ALG_ECDAA
 #if ALG_RSASSA
-            case ALG_RSASSA_VALUE:
+            case TPM_ALG_RSASSA:
 #endif // ALG_RSASSA
 #if ALG_RSAPSS
-            case ALG_RSAPSS_VALUE:
+            case TPM_ALG_RSAPSS:
 #endif // ALG_RSAPSS
 #if ALG_ECDSA
-            case ALG_ECDSA_VALUE:
+            case TPM_ALG_ECDSA:
 #endif // ALG_ECDSA
 #if ALG_SM2
-            case ALG_SM2_VALUE:
+            case TPM_ALG_SM2:
 #endif // ALG_SM2
 #if ALG_ECSCHNORR
-            case ALG_ECSCHNORR_VALUE:
+            case TPM_ALG_ECSCHNORR:
 #endif // ALG_ECSCHNORR
 #if ALG_RSAES
-            case ALG_RSAES_VALUE:
+            case TPM_ALG_RSAES:
 #endif // ALG_RSAES
 #if ALG_OAEP
-            case ALG_OAEP_VALUE:
+            case TPM_ALG_OAEP:
 #endif // ALG_OAEP
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_VALUE;
                 break;
@@ -3965,46 +3965,46 @@ TPMU_ASYM_SCHEME_Unmarshal(TPMU_ASYM_SCHEME *target, BYTE **buffer, INT32 *size,
 {
     switch(selector) {
 #if ALG_ECDH
-        case ALG_ECDH_VALUE:
+        case TPM_ALG_ECDH:
             return TPMS_KEY_SCHEME_ECDH_Unmarshal((TPMS_KEY_SCHEME_ECDH *)&(target->ecdh), buffer, size);
 #endif // ALG_ECDH
 #if ALG_ECMQV
-        case ALG_ECMQV_VALUE:
+        case TPM_ALG_ECMQV:
             return TPMS_KEY_SCHEME_ECMQV_Unmarshal((TPMS_KEY_SCHEME_ECMQV *)&(target->ecmqv), buffer, size);
 #endif // ALG_ECMQV
 #if ALG_ECDAA
-        case ALG_ECDAA_VALUE:
+        case TPM_ALG_ECDAA:
             return TPMS_SIG_SCHEME_ECDAA_Unmarshal((TPMS_SIG_SCHEME_ECDAA *)&(target->ecdaa), buffer, size);
 #endif // ALG_ECDAA
 #if ALG_RSASSA
-        case ALG_RSASSA_VALUE:
+        case TPM_ALG_RSASSA:
             return TPMS_SIG_SCHEME_RSASSA_Unmarshal((TPMS_SIG_SCHEME_RSASSA *)&(target->rsassa), buffer, size);
 #endif // ALG_RSASSA
 #if ALG_RSAPSS
-        case ALG_RSAPSS_VALUE:
+        case TPM_ALG_RSAPSS:
             return TPMS_SIG_SCHEME_RSAPSS_Unmarshal((TPMS_SIG_SCHEME_RSAPSS *)&(target->rsapss), buffer, size);
 #endif // ALG_RSAPSS
 #if ALG_ECDSA
-        case ALG_ECDSA_VALUE:
+        case TPM_ALG_ECDSA:
             return TPMS_SIG_SCHEME_ECDSA_Unmarshal((TPMS_SIG_SCHEME_ECDSA *)&(target->ecdsa), buffer, size);
 #endif // ALG_ECDSA
 #if ALG_SM2
-        case ALG_SM2_VALUE:
+        case TPM_ALG_SM2:
             return TPMS_SIG_SCHEME_SM2_Unmarshal((TPMS_SIG_SCHEME_SM2 *)&(target->sm2), buffer, size);
 #endif // ALG_SM2
 #if ALG_ECSCHNORR
-        case ALG_ECSCHNORR_VALUE:
+        case TPM_ALG_ECSCHNORR:
             return TPMS_SIG_SCHEME_ECSCHNORR_Unmarshal((TPMS_SIG_SCHEME_ECSCHNORR *)&(target->ecschnorr), buffer, size);
 #endif // ALG_ECSCHNORR
 #if ALG_RSAES
-        case ALG_RSAES_VALUE:
+        case TPM_ALG_RSAES:
             return TPMS_ENC_SCHEME_RSAES_Unmarshal((TPMS_ENC_SCHEME_RSAES *)&(target->rsaes), buffer, size);
 #endif // ALG_RSAES
 #if ALG_OAEP
-        case ALG_OAEP_VALUE:
+        case TPM_ALG_OAEP:
             return TPMS_ENC_SCHEME_OAEP_Unmarshal((TPMS_ENC_SCHEME_OAEP *)&(target->oaep), buffer, size);
 #endif // ALG_OAEP
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return TPM_RC_SUCCESS;
     }
     return TPM_RC_SELECTOR;
@@ -4014,46 +4014,46 @@ TPMU_ASYM_SCHEME_Marshal(TPMU_ASYM_SCHEME *source, BYTE **buffer, INT32 *size, U
 {
     switch(selector) {
 #if ALG_ECDH
-        case ALG_ECDH_VALUE:
+        case TPM_ALG_ECDH:
             return TPMS_KEY_SCHEME_ECDH_Marshal((TPMS_KEY_SCHEME_ECDH *)&(source->ecdh), buffer, size);
 #endif // ALG_ECDH
 #if ALG_ECMQV
-        case ALG_ECMQV_VALUE:
+        case TPM_ALG_ECMQV:
             return TPMS_KEY_SCHEME_ECMQV_Marshal((TPMS_KEY_SCHEME_ECMQV *)&(source->ecmqv), buffer, size);
 #endif // ALG_ECMQV
 #if ALG_ECDAA
-        case ALG_ECDAA_VALUE:
+        case TPM_ALG_ECDAA:
             return TPMS_SIG_SCHEME_ECDAA_Marshal((TPMS_SIG_SCHEME_ECDAA *)&(source->ecdaa), buffer, size);
 #endif // ALG_ECDAA
 #if ALG_RSASSA
-        case ALG_RSASSA_VALUE:
+        case TPM_ALG_RSASSA:
             return TPMS_SIG_SCHEME_RSASSA_Marshal((TPMS_SIG_SCHEME_RSASSA *)&(source->rsassa), buffer, size);
 #endif // ALG_RSASSA
 #if ALG_RSAPSS
-        case ALG_RSAPSS_VALUE:
+        case TPM_ALG_RSAPSS:
             return TPMS_SIG_SCHEME_RSAPSS_Marshal((TPMS_SIG_SCHEME_RSAPSS *)&(source->rsapss), buffer, size);
 #endif // ALG_RSAPSS
 #if ALG_ECDSA
-        case ALG_ECDSA_VALUE:
+        case TPM_ALG_ECDSA:
             return TPMS_SIG_SCHEME_ECDSA_Marshal((TPMS_SIG_SCHEME_ECDSA *)&(source->ecdsa), buffer, size);
 #endif // ALG_ECDSA
 #if ALG_SM2
-        case ALG_SM2_VALUE:
+        case TPM_ALG_SM2:
             return TPMS_SIG_SCHEME_SM2_Marshal((TPMS_SIG_SCHEME_SM2 *)&(source->sm2), buffer, size);
 #endif // ALG_SM2
 #if ALG_ECSCHNORR
-        case ALG_ECSCHNORR_VALUE:
+        case TPM_ALG_ECSCHNORR:
             return TPMS_SIG_SCHEME_ECSCHNORR_Marshal((TPMS_SIG_SCHEME_ECSCHNORR *)&(source->ecschnorr), buffer, size);
 #endif // ALG_ECSCHNORR
 #if ALG_RSAES
-        case ALG_RSAES_VALUE:
+        case TPM_ALG_RSAES:
             return TPMS_ENC_SCHEME_RSAES_Marshal((TPMS_ENC_SCHEME_RSAES *)&(source->rsaes), buffer, size);
 #endif // ALG_RSAES
 #if ALG_OAEP
-        case ALG_OAEP_VALUE:
+        case TPM_ALG_OAEP:
             return TPMS_ENC_SCHEME_OAEP_Marshal((TPMS_ENC_SCHEME_OAEP *)&(source->oaep), buffer, size);
 #endif // ALG_OAEP
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return 0;
     }
     return 0;
@@ -4072,19 +4072,19 @@ TPMI_ALG_RSA_SCHEME_Unmarshal(TPMI_ALG_RSA_SCHEME *target, BYTE **buffer, INT32 
         switch (*target)
         {
 #if ALG_RSAES
-            case ALG_RSAES_VALUE:
+            case TPM_ALG_RSAES:
 #endif // ALG_RSAES
 #if ALG_OAEP
-            case ALG_OAEP_VALUE:
+            case TPM_ALG_OAEP:
 #endif // ALG_OAEP
 #if ALG_RSASSA
-            case ALG_RSASSA_VALUE:
+            case TPM_ALG_RSASSA:
 #endif // ALG_RSASSA
 #if ALG_RSAPSS
-            case ALG_RSAPSS_VALUE:
+            case TPM_ALG_RSAPSS:
 #endif // ALG_RSAPSS
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_VALUE;
                 break;
@@ -4137,13 +4137,13 @@ TPMI_ALG_RSA_DECRYPT_Unmarshal(TPMI_ALG_RSA_DECRYPT *target, BYTE **buffer, INT3
         switch (*target)
         {
 #if ALG_RSAES
-            case ALG_RSAES_VALUE:
+            case TPM_ALG_RSAES:
 #endif // ALG_RSAES
 #if ALG_OAEP
-            case ALG_OAEP_VALUE:
+            case TPM_ALG_OAEP:
 #endif // ALG_OAEP
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_VALUE;
                 break;
@@ -4386,25 +4386,25 @@ TPMI_ALG_ECC_SCHEME_Unmarshal(TPMI_ALG_ECC_SCHEME *target, BYTE **buffer, INT32 
         switch (*target)
         {
 #if ALG_ECDAA
-            case ALG_ECDAA_VALUE:
+            case TPM_ALG_ECDAA:
 #endif // ALG_ECDAA
 #if ALG_ECDSA
-            case ALG_ECDSA_VALUE:
+            case TPM_ALG_ECDSA:
 #endif // ALG_ECDSA
 #if ALG_SM2
-            case ALG_SM2_VALUE:
+            case TPM_ALG_SM2:
 #endif // ALG_SM2
 #if ALG_ECSCHNORR
-            case ALG_ECSCHNORR_VALUE:
+            case TPM_ALG_ECSCHNORR:
 #endif // ALG_ECSCHNORR
 #if ALG_ECDH
-            case ALG_ECDH_VALUE:
+            case TPM_ALG_ECDH:
 #endif // ALG_ECDH
 #if ALG_ECMQV
-            case ALG_ECMQV_VALUE:
+            case TPM_ALG_ECMQV:
 #endif // ALG_ECMQV
                 break;
-            case ALG_NULL_VALUE:
+            case TPM_ALG_NULL:
                 if(!flag)
                     result = TPM_RC_SCHEME;
                 break;
@@ -4641,34 +4641,34 @@ TPMU_SIGNATURE_Unmarshal(TPMU_SIGNATURE *target, BYTE **buffer, INT32 *size, UIN
 {
     switch(selector) {
 #if ALG_ECDAA
-        case ALG_ECDAA_VALUE:
+        case TPM_ALG_ECDAA:
             return TPMS_SIGNATURE_ECDAA_Unmarshal((TPMS_SIGNATURE_ECDAA *)&(target->ecdaa), buffer, size);
 #endif // ALG_ECDAA
 #if ALG_RSASSA
-        case ALG_RSASSA_VALUE:
+        case TPM_ALG_RSASSA:
             return TPMS_SIGNATURE_RSASSA_Unmarshal((TPMS_SIGNATURE_RSASSA *)&(target->rsassa), buffer, size);
 #endif // ALG_RSASSA
 #if ALG_RSAPSS
-        case ALG_RSAPSS_VALUE:
+        case TPM_ALG_RSAPSS:
             return TPMS_SIGNATURE_RSAPSS_Unmarshal((TPMS_SIGNATURE_RSAPSS *)&(target->rsapss), buffer, size);
 #endif // ALG_RSAPSS
 #if ALG_ECDSA
-        case ALG_ECDSA_VALUE:
+        case TPM_ALG_ECDSA:
             return TPMS_SIGNATURE_ECDSA_Unmarshal((TPMS_SIGNATURE_ECDSA *)&(target->ecdsa), buffer, size);
 #endif // ALG_ECDSA
 #if ALG_SM2
-        case ALG_SM2_VALUE:
+        case TPM_ALG_SM2:
             return TPMS_SIGNATURE_SM2_Unmarshal((TPMS_SIGNATURE_SM2 *)&(target->sm2), buffer, size);
 #endif // ALG_SM2
 #if ALG_ECSCHNORR
-        case ALG_ECSCHNORR_VALUE:
+        case TPM_ALG_ECSCHNORR:
             return TPMS_SIGNATURE_ECSCHNORR_Unmarshal((TPMS_SIGNATURE_ECSCHNORR *)&(target->ecschnorr), buffer, size);
 #endif // ALG_ECSCHNORR
 #if ALG_HMAC
-        case ALG_HMAC_VALUE:
+        case TPM_ALG_HMAC:
             return TPMT_HA_Unmarshal((TPMT_HA *)&(target->hmac), buffer, size, 0);
 #endif // ALG_HMAC
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return TPM_RC_SUCCESS;
     }
     return TPM_RC_SELECTOR;
@@ -4678,34 +4678,34 @@ TPMU_SIGNATURE_Marshal(TPMU_SIGNATURE *source, BYTE **buffer, INT32 *size, UINT3
 {
     switch(selector) {
 #if ALG_ECDAA
-        case ALG_ECDAA_VALUE:
+        case TPM_ALG_ECDAA:
             return TPMS_SIGNATURE_ECDAA_Marshal((TPMS_SIGNATURE_ECDAA *)&(source->ecdaa), buffer, size);
 #endif // ALG_ECDAA
 #if ALG_RSASSA
-        case ALG_RSASSA_VALUE:
+        case TPM_ALG_RSASSA:
             return TPMS_SIGNATURE_RSASSA_Marshal((TPMS_SIGNATURE_RSASSA *)&(source->rsassa), buffer, size);
 #endif // ALG_RSASSA
 #if ALG_RSAPSS
-        case ALG_RSAPSS_VALUE:
+        case TPM_ALG_RSAPSS:
             return TPMS_SIGNATURE_RSAPSS_Marshal((TPMS_SIGNATURE_RSAPSS *)&(source->rsapss), buffer, size);
 #endif // ALG_RSAPSS
 #if ALG_ECDSA
-        case ALG_ECDSA_VALUE:
+        case TPM_ALG_ECDSA:
             return TPMS_SIGNATURE_ECDSA_Marshal((TPMS_SIGNATURE_ECDSA *)&(source->ecdsa), buffer, size);
 #endif // ALG_ECDSA
 #if ALG_SM2
-        case ALG_SM2_VALUE:
+        case TPM_ALG_SM2:
             return TPMS_SIGNATURE_SM2_Marshal((TPMS_SIGNATURE_SM2 *)&(source->sm2), buffer, size);
 #endif // ALG_SM2
 #if ALG_ECSCHNORR
-        case ALG_ECSCHNORR_VALUE:
+        case TPM_ALG_ECSCHNORR:
             return TPMS_SIGNATURE_ECSCHNORR_Marshal((TPMS_SIGNATURE_ECSCHNORR *)&(source->ecschnorr), buffer, size);
 #endif // ALG_ECSCHNORR
 #if ALG_HMAC
-        case ALG_HMAC_VALUE:
+        case TPM_ALG_HMAC:
             return TPMT_HA_Marshal((TPMT_HA *)&(source->hmac), buffer, size);
 #endif // ALG_HMAC
-        case ALG_NULL_VALUE:
+        case TPM_ALG_NULL:
             return 0;
     }
     return 0;
@@ -4736,19 +4736,19 @@ TPMU_ENCRYPTED_SECRET_Unmarshal(TPMU_ENCRYPTED_SECRET *target, BYTE **buffer, IN
 {
     switch(selector) {
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             return BYTE_Array_Unmarshal((BYTE *)(target->ecc), buffer, size, (INT32)sizeof(TPMS_ECC_POINT));
 #endif // ALG_ECC
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             return BYTE_Array_Unmarshal((BYTE *)(target->rsa), buffer, size, (INT32)MAX_RSA_KEY_BYTES);
 #endif // ALG_RSA
 #if ALG_SYMCIPHER
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
             return BYTE_Array_Unmarshal((BYTE *)(target->symmetric), buffer, size, (INT32)sizeof(TPM2B_DIGEST));
 #endif // ALG_SYMCIPHER
 #if ALG_KEYEDHASH
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             return BYTE_Array_Unmarshal((BYTE *)(target->keyedHash), buffer, size, (INT32)sizeof(TPM2B_DIGEST));
 #endif // ALG_KEYEDHASH
     }
@@ -4759,19 +4759,19 @@ TPMU_ENCRYPTED_SECRET_Marshal(TPMU_ENCRYPTED_SECRET *source, BYTE **buffer, INT3
 {
     switch(selector) {
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             return BYTE_Array_Marshal((BYTE *)(source->ecc), buffer, size, (INT32)sizeof(TPMS_ECC_POINT));
 #endif // ALG_ECC
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             return BYTE_Array_Marshal((BYTE *)(source->rsa), buffer, size, (INT32)MAX_RSA_KEY_BYTES);
 #endif // ALG_RSA
 #if ALG_SYMCIPHER
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
             return BYTE_Array_Marshal((BYTE *)(source->symmetric), buffer, size, (INT32)sizeof(TPM2B_DIGEST));
 #endif // ALG_SYMCIPHER
 #if ALG_KEYEDHASH
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             return BYTE_Array_Marshal((BYTE *)(source->keyedHash), buffer, size, (INT32)sizeof(TPM2B_DIGEST));
 #endif // ALG_KEYEDHASH
     }
@@ -4816,16 +4816,16 @@ TPMI_ALG_PUBLIC_Unmarshal(TPMI_ALG_PUBLIC *target, BYTE **buffer, INT32 *size)
         switch (*target)
         {
 #if ALG_RSA
-            case ALG_RSA_VALUE:
+            case TPM_ALG_RSA:
 #endif // ALG_RSA
 #if ALG_ECC
-            case ALG_ECC_VALUE:
+            case TPM_ALG_ECC:
 #endif // ALG_ECC
 #if ALG_KEYEDHASH
-            case ALG_KEYEDHASH_VALUE:
+            case TPM_ALG_KEYEDHASH:
 #endif // ALG_KEYEDHASH
 #if ALG_SYMCIPHER
-            case ALG_SYMCIPHER_VALUE:
+            case TPM_ALG_SYMCIPHER:
 #endif // ALG_SYMCIPHER
                 break;
             default:
@@ -4849,19 +4849,19 @@ TPMU_PUBLIC_ID_Unmarshal(TPMU_PUBLIC_ID *target, BYTE **buffer, INT32 *size, UIN
 {
     switch(selector) {
 #if ALG_KEYEDHASH
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             return TPM2B_DIGEST_Unmarshal((TPM2B_DIGEST *)&(target->keyedHash), buffer, size);
 #endif // ALG_KEYEDHASH
 #if ALG_SYMCIPHER
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
             return TPM2B_DIGEST_Unmarshal((TPM2B_DIGEST *)&(target->sym), buffer, size);
 #endif // ALG_SYMCIPHER
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             return TPM2B_PUBLIC_KEY_RSA_Unmarshal((TPM2B_PUBLIC_KEY_RSA *)&(target->rsa), buffer, size);
 #endif // ALG_RSA
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             return TPMS_ECC_POINT_Unmarshal((TPMS_ECC_POINT *)&(target->ecc), buffer, size);
 #endif // ALG_ECC
     }
@@ -4872,19 +4872,19 @@ TPMU_PUBLIC_ID_Marshal(TPMU_PUBLIC_ID *source, BYTE **buffer, INT32 *size, UINT3
 {
     switch(selector) {
 #if ALG_KEYEDHASH
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             return TPM2B_DIGEST_Marshal((TPM2B_DIGEST *)&(source->keyedHash), buffer, size);
 #endif // ALG_KEYEDHASH
 #if ALG_SYMCIPHER
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
             return TPM2B_DIGEST_Marshal((TPM2B_DIGEST *)&(source->sym), buffer, size);
 #endif // ALG_SYMCIPHER
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             return TPM2B_PUBLIC_KEY_RSA_Marshal((TPM2B_PUBLIC_KEY_RSA *)&(source->rsa), buffer, size);
 #endif // ALG_RSA
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             return TPMS_ECC_POINT_Marshal((TPMS_ECC_POINT *)&(source->ecc), buffer, size);
 #endif // ALG_ECC
     }
@@ -4964,19 +4964,19 @@ TPMU_PUBLIC_PARMS_Unmarshal(TPMU_PUBLIC_PARMS *target, BYTE **buffer, INT32 *siz
 {
     switch(selector) {
 #if ALG_KEYEDHASH
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             return TPMS_KEYEDHASH_PARMS_Unmarshal((TPMS_KEYEDHASH_PARMS *)&(target->keyedHashDetail), buffer, size);
 #endif // ALG_KEYEDHASH
 #if ALG_SYMCIPHER
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
             return TPMS_SYMCIPHER_PARMS_Unmarshal((TPMS_SYMCIPHER_PARMS *)&(target->symDetail), buffer, size);
 #endif // ALG_SYMCIPHER
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             return TPMS_RSA_PARMS_Unmarshal((TPMS_RSA_PARMS *)&(target->rsaDetail), buffer, size);
 #endif // ALG_RSA
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             return TPMS_ECC_PARMS_Unmarshal((TPMS_ECC_PARMS *)&(target->eccDetail), buffer, size);
 #endif // ALG_ECC
     }
@@ -4987,19 +4987,19 @@ TPMU_PUBLIC_PARMS_Marshal(TPMU_PUBLIC_PARMS *source, BYTE **buffer, INT32 *size,
 {
     switch(selector) {
 #if ALG_KEYEDHASH
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             return TPMS_KEYEDHASH_PARMS_Marshal((TPMS_KEYEDHASH_PARMS *)&(source->keyedHashDetail), buffer, size);
 #endif // ALG_KEYEDHASH
 #if ALG_SYMCIPHER
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
             return TPMS_SYMCIPHER_PARMS_Marshal((TPMS_SYMCIPHER_PARMS *)&(source->symDetail), buffer, size);
 #endif // ALG_SYMCIPHER
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             return TPMS_RSA_PARMS_Marshal((TPMS_RSA_PARMS *)&(source->rsaDetail), buffer, size);
 #endif // ALG_RSA
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             return TPMS_ECC_PARMS_Marshal((TPMS_ECC_PARMS *)&(source->eccDetail), buffer, size);
 #endif // ALG_ECC
     }
@@ -5155,19 +5155,19 @@ TPMU_SENSITIVE_COMPOSITE_Unmarshal(TPMU_SENSITIVE_COMPOSITE *target, BYTE **buff
 {
     switch(selector) {
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             return TPM2B_PRIVATE_KEY_RSA_Unmarshal((TPM2B_PRIVATE_KEY_RSA *)&(target->rsa), buffer, size);
 #endif // ALG_RSA
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             return TPM2B_ECC_PARAMETER_Unmarshal((TPM2B_ECC_PARAMETER *)&(target->ecc), buffer, size);
 #endif // ALG_ECC
 #if ALG_KEYEDHASH
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             return TPM2B_SENSITIVE_DATA_Unmarshal((TPM2B_SENSITIVE_DATA *)&(target->bits), buffer, size);
 #endif // ALG_KEYEDHASH
 #if ALG_SYMCIPHER
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
             return TPM2B_SYM_KEY_Unmarshal((TPM2B_SYM_KEY *)&(target->sym), buffer, size);
 #endif // ALG_SYMCIPHER
     }
@@ -5178,19 +5178,19 @@ TPMU_SENSITIVE_COMPOSITE_Marshal(TPMU_SENSITIVE_COMPOSITE *source, BYTE **buffer
 {
     switch(selector) {
 #if ALG_RSA
-        case ALG_RSA_VALUE:
+        case TPM_ALG_RSA:
             return TPM2B_PRIVATE_KEY_RSA_Marshal((TPM2B_PRIVATE_KEY_RSA *)&(source->rsa), buffer, size);
 #endif // ALG_RSA
 #if ALG_ECC
-        case ALG_ECC_VALUE:
+        case TPM_ALG_ECC:
             return TPM2B_ECC_PARAMETER_Marshal((TPM2B_ECC_PARAMETER *)&(source->ecc), buffer, size);
 #endif // ALG_ECC
 #if ALG_KEYEDHASH
-        case ALG_KEYEDHASH_VALUE:
+        case TPM_ALG_KEYEDHASH:
             return TPM2B_SENSITIVE_DATA_Marshal((TPM2B_SENSITIVE_DATA *)&(source->bits), buffer, size);
 #endif // ALG_KEYEDHASH
 #if ALG_SYMCIPHER
-        case ALG_SYMCIPHER_VALUE:
+        case TPM_ALG_SYMCIPHER:
             return TPM2B_SYM_KEY_Marshal((TPM2B_SYM_KEY *)&(source->sym), buffer, size);
 #endif // ALG_SYMCIPHER
     }

@@ -101,7 +101,13 @@ CryptCmacData(
     tpmCryptKeySchedule_t    keySchedule;
     TpmCryptSetSymKeyCall_t  encrypt;
 //
-    SELECT(ENCRYPT);
+    // Set up the encryption values based on the algorithm
+    switch (algorithm)
+    {
+        FOR_EACH_SYM(ENCRYPT_CASE)
+        default:
+            FAIL(FATAL_ERROR_INTERNAL);
+    }
     while(size > 0)
     {
         if(cmacState->bcount == cmacState->iv.t.size)
@@ -141,7 +147,13 @@ CryptCmacEnd(
 
     subkey.t.size = cState->iv.t.size;
     // Encrypt a block of zero
-    SELECT(ENCRYPT);
+    // Set up the encryption values based on the algorithm
+    switch (algorithm)
+    {
+        FOR_EACH_SYM(ENCRYPT_CASE)
+        default:
+            return 0;
+    }
     ENCRYPT(&keySchedule, subkey.t.buffer, subkey.t.buffer);
 
     // shift left by 1 and XOR with 0x0...87 if the MSb was 0

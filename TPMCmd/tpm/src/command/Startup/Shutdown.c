@@ -42,7 +42,7 @@
 */
 //  Return Type: TPM_RC
 //      TPM_RC_TYPE             if PCR bank has been re-configured, a
-//                              CLEAR StateSave is required
+//                              Shutdown(CLEAR) is required
 TPM_RC
 TPM2_Shutdown(
     Shutdown_In     *in             // IN: input parameter list

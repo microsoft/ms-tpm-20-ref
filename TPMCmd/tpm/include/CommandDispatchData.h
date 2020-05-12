@@ -60,11 +60,11 @@
 #endif
 
 
-// The UnmarshalArray contains the dispatch functions for the unmarshaling code.
+// The unmarshalArray contains the dispatch functions for the unmarshaling code.
 // The defines in this array are used to make it easier to cross reference the
 // unmarshaling values in the types array of each command
 
-const _UNMARSHAL_T_ UnmarshalArray[] = {
+const _UNMARSHAL_T_ unmarshalArray[] = {
 #define TPMI_DH_CONTEXT_H_UNMARSHAL             0
             UNMARSHAL_DISPATCH(TPMI_DH_CONTEXT),
 #define TPMI_RH_AC_H_UNMARSHAL                  (TPMI_DH_CONTEXT_H_UNMARSHAL + 1)
@@ -241,10 +241,10 @@ const _UNMARSHAL_T_ UnmarshalArray[] = {
 #define PARAMETER_LAST_TYPE                     (TPMT_SYM_DEF_OBJECT_P_UNMARSHAL)
 };
    
-// The MarshalArray contains the dispatch functions for the marshaling code.
+// The marshalArray contains the dispatch functions for the marshaling code.
 // The defines in this array are used to make it easier to cross reference the
 // marshaling values in the types array of each command
-const _MARSHAL_T_ MarshalArray[] = {
+const _MARSHAL_T_ marshalArray[] = {
 
 #define UINT32_H_MARSHAL                        0
             MARSHAL_DISPATCH(UINT32),

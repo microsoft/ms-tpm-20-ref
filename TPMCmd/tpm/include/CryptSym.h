@@ -42,20 +42,39 @@
 #ifndef CRYPT_SYM_H
 #define CRYPT_SYM_H
 
-typedef union tpmCryptKeySchedule_t {
 #if ALG_AES
-    tpmKeyScheduleAES           AES;
+#   define IF_IMPLEMENTED_AES(op)    op(AES, aes)
+#else
+#   define IF_IMPLEMENTED_AES(op)
 #endif
 #if ALG_SM4
-    tpmKeyScheduleSM4           SM4;
+#   define IF_IMPLEMENTED_SM4(op)    op(SM4, sm4)
+#else
+#   define IF_IMPLEMENTED_SM4(op)
 #endif
 #if ALG_CAMELLIA
-    tpmKeyScheduleCAMELLIA      CAMELLIA;
+#   define IF_IMPLEMENTED_CAMELLIA(op)    op(CAMELLIA, camellia)
+#else
+#   define IF_IMPLEMENTED_CAMELLIA(op)
 #endif
- 
 #if ALG_TDES
-    tpmKeyScheduleTDES          TDES[3];
+#   define IF_IMPLEMENTED_TDES(op)    op(TDES, tdes)
+#else
+#   define IF_IMPLEMENTED_TDES(op)
 #endif
+
+#define FOR_EACH_SYM(op)        \
+    IF_IMPLEMENTED_AES(op)      \
+    IF_IMPLEMENTED_SM4(op)      \
+    IF_IMPLEMENTED_CAMELLIA(op) \
+    IF_IMPLEMENTED_TDES(op)     
+
+// Macros for creating the key schedule union
+#define     KEY_SCHEDULE(SYM, sym)      tpmKeySchedule##SYM sym;
+#define     TDES    DES[3]
+typedef union tpmCryptKeySchedule_t {
+    FOR_EACH_SYM(KEY_SCHEDULE)
+ 
 #if SYMMETRIC_ALIGNMENT == 8
     uint64_t            alignment;
 #else
@@ -81,63 +100,19 @@ typedef union tpmCryptKeySchedule_t {
 #   define DECRYPT(keySchedule, in, out)                                            \
       decrypt(SWIZZLE(keySchedule, in, out))
 
-
 // Note that the macros rely on 'encrypt' as local values in the
 // functions that use these macros. Those parameters are set by the macro that 
 // set the key schedule to be used for the call.
 
-
-#define ENCRYPT_CASE(ALG)                                                   \
-    case TPM_ALG_##ALG:                                                     \
-        TpmCryptSetEncryptKey##ALG(key, keySizeInBits, &keySchedule.ALG);   \
-        encrypt = (TpmCryptSetSymKeyCall_t)TpmCryptEncrypt##ALG;            \
+#define ENCRYPT_CASE(ALG, alg)                                                      \
+    case TPM_ALG_##ALG:                                                             \
+        TpmCryptSetEncryptKey##ALG(key, keySizeInBits, &keySchedule.alg);           \
+        encrypt = (TpmCryptSetSymKeyCall_t)TpmCryptEncrypt##ALG;                    \
         break;
-#define DECRYPT_CASE(ALG)                                                   \
-    case TPM_ALG_##ALG:                                                     \
-        TpmCryptSetDecryptKey##ALG(key, keySizeInBits, &keySchedule.ALG);   \
-        decrypt = (TpmCryptSetSymKeyCall_t)TpmCryptDecrypt##ALG;            \
+#define DECRYPT_CASE(ALG, alg)                                                      \
+    case TPM_ALG_##ALG:                                                             \
+        TpmCryptSetDecryptKey##ALG(key, keySizeInBits, &keySchedule.alg);           \
+        decrypt = (TpmCryptSetSymKeyCall_t)TpmCryptDecrypt##ALG;                    \
         break;
-
-#if ALG_AES
-#define ENCRYPT_CASE_AES    ENCRYPT_CASE(AES)
-#define DECRYPT_CASE_AES    DECRYPT_CASE(AES)
-#else
-#define ENCRYPT_CASE_AES
-#define DECRYPT_CASE_AES
-#endif
-#if ALG_SM4
-#define ENCRYPT_CASE_SM4    ENCRYPT_CASE(SM4)
-#define DECRYPT_CASE_SM4    DECRYPT_CASE(SM4)
-#else
-#define ENCRYPT_CASE_SM4
-#define DECRYPT_CASE_SM4
-#endif
-#if ALG_CAMELLIA
-#define ENCRYPT_CASE_CAMELLIA    ENCRYPT_CASE(CAMELLIA)
-#define DECRYPT_CASE_CAMELLIA    DECRYPT_CASE(CAMELLIA)
-#else
-#define ENCRYPT_CASE_CAMELLIA
-#define DECRYPT_CASE_CAMELLIA
-#endif
-#if ALG_TDES
-#define ENCRYPT_CASE_TDES    ENCRYPT_CASE(TDES)
-#define DECRYPT_CASE_TDES    DECRYPT_CASE(TDES)
-#else
-#define ENCRYPT_CASE_TDES
-#define DECRYPT_CASE_TDES
-#endif
-
-// For each algorithm the case will either be defined or null.
-#define     SELECT(direction)                               \
-    switch(algorithm)                                       \
-    {                                                       \
-        direction##_CASE_AES                                \
-        direction##_CASE_SM4                                \
-        direction##_CASE_CAMELLIA                           \
-        direction##_CASE_TDES                               \
-        default:                                            \
-            FAIL(FATAL_ERROR_INTERNAL);                     \
-    }
-
 
 #endif // CRYPT_SYM_H
