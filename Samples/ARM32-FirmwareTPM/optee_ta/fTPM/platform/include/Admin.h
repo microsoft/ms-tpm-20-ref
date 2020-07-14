@@ -45,7 +45,7 @@
 #include <stdint.h>
 #include <trace.h>
 #include "swap.h"
-#include "Implementation.h"
+#include "TpmProfile.h"
 #include "TpmSal.h"
 #include "TpmError.h"
 

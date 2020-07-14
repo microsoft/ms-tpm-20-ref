@@ -39,7 +39,7 @@
 #define _PLATFORM_DATA_H_
 
 
-#include      "Implementation.h"
+#include      "TpmProfile.h"
 
 // From Cancel.c
 // Cancel flag.  It is initialized as FALSE, which indicate the command is not
