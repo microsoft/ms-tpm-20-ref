@@ -129,13 +129,13 @@ NvNext(
 //      != 0            the next entry of the indicated type
 static NV_REF
 NvNextByType(
-    TPM_HANDLE      *handle,        // OUT: the handle of the found type
+    TPM_HANDLE      *handle,        // OUT: the handle of the found type or 0 
     NV_REF          *iter,          // IN: the iterator
     TPM_HT           type           // IN: the handle type to look for
     )
 {
     NV_REF           addr;
-    TPM_HANDLE       nvHandle;
+    TPM_HANDLE       nvHandle = 0;
 //
     while((addr = NvNext(iter, &nvHandle)) != 0)
     {
