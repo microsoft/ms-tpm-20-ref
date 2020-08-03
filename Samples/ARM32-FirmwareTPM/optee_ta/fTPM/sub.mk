@@ -1,7 +1,9 @@
 WARNS 			:= 0
 NOWERROR 		:= 0
-CFG_TA_DEBUG 		:= 0
-CFG_TEE_TA_LOG_LEVEL 	:= 0
+CFG_TA_MEASURED_BOOT	?= n
+CFG_TA_DEBUG 		?= n
+CFG_TEE_TA_LOG_LEVEL 	?= 0
+CFG_TA_EVENT_LOG_SIZE	?= 1024
 
 cflags-y +=	-DTHIRTY_TWO_BIT				\
 		-DCFG_TEE_TA_LOG_LEVEL=$(CFG_TEE_TA_LOG_LEVEL)	\
@@ -11,6 +13,11 @@ cflags-y +=	-DTHIRTY_TWO_BIT				\
 		-mcpu=$(TA_CPU)					\
 		-fstack-protector				\
 		-Wstack-protector
+
+ifeq ($(CFG_TA_MEASURED_BOOT),y)
+cflags-y += -DEVENT_LOG_SIZE=$(CFG_TA_EVENT_LOG_SIZE)
+cflags-y += -DMEASURED_BOOT
+endif
 
 ifeq ($(CFG_ARM64_ta_arm64),y)
 cflags-y += -mstrict-align
@@ -23,6 +30,7 @@ cflags-y += -DfTPMDebug=1
 cflags-y += -DDBG=1
 cflags-y += -O0
 cflags-y += -DDEBUG
+cflags-y += -DTRACE_LEVEL=$(CFG_TA_EVENT_LOG_SIZE)
 else
 cflags-y += -Os
 cflags-y += -DNDEBUG
@@ -58,5 +66,12 @@ srcs-y += platform/Unique.c
 srcs-y += platform/EPS.c
 srcs-y += platform/PlatformACT.c
 srcs-y += reference/RuntimeSupport.c
+srcs-y += platform/fTPM_helpers.c
 
 srcs-y += fTPM.c
+
+ifeq ($(CFG_TA_MEASURED_BOOT),y)
+# Support for Trusted Firmware Measured Boot.
+srcs-y += platform/fTPM_event_log.c
+srcs-y += platform/EventLogPrint.c
+endif

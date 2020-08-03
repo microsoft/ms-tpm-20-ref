@@ -6,6 +6,7 @@
  *  under this license.
  *
  *  Copyright (c) Microsoft Corporation
+ *  Copyright (c) Arm Limited.
  *
  *  All rights reserved.
  *
@@ -38,6 +39,9 @@
 #include <tee_internal_api.h>
 #include <tee_internal_api_extensions.h>
 #include <string.h>
+#include <pta_system.h>
+#include <fTPM_helpers.h>
+#include <fTPM_event_log.h>
 
 #include "fTPM.h"
 
@@ -67,25 +71,6 @@ typedef uint32_t TPM_RC;
 #define TPM_RC_FAILURE      (TPM_RC) (RC_VER1+0x001)
 
 //
-// Helper functions for byte ordering of TPM commands/responses
-//
-static uint16_t SwapBytes16(uint16_t Value)
-{
-    return (uint16_t)((Value << 8) | (Value >> 8));
-}
-
-static uint32_t SwapBytes32(uint32_t Value)
-{
-    uint32_t  LowerBytes;
-    uint32_t  HigherBytes;
-
-    LowerBytes = (uint32_t)SwapBytes16((uint16_t)Value);
-    HigherBytes = (uint32_t)SwapBytes16((uint16_t)(Value >> 16));
-
-    return (LowerBytes << 16 | HigherBytes);
-}
-
-//
 // Helper function to read response codes from TPM responses
 //
 static uint32_t fTPMResponseCode(uint32_t ResponseSize, 
@@ -111,9 +96,42 @@ static uint32_t fTPMResponseCode(uint32_t ResponseSize,
     return ResponseCode;
 }
 
-// 
+#ifdef MEASURED_BOOT
+static TEE_Result get_tpm_event_log(unsigned char *buf, size_t *len)
+{
+    const TEE_UUID system_uuid = PTA_SYSTEM_UUID;
+    TEE_TASessionHandle session = TEE_HANDLE_NULL;
+    TEE_Result res = TEE_ERROR_GENERIC;
+    uint32_t ret_origin = 0;
+    const uint32_t param_types = TEE_PARAM_TYPES(TEE_PARAM_TYPE_MEMREF_OUTPUT,
+                                                 TEE_PARAM_TYPE_NONE,
+                                                 TEE_PARAM_TYPE_NONE,
+                                                 TEE_PARAM_TYPE_NONE);
+    TEE_Param params[TEE_NUM_PARAMS] = {0};
+
+    res = TEE_OpenTASession(&system_uuid, TEE_TIMEOUT_INFINITE,
+                            0, NULL, &session, &ret_origin);
+    if (res != TEE_SUCCESS)
+        return res;
+
+    params[0].memref.buffer = (void *)buf;
+    params[0].memref.size = *len;
+
+    res = TEE_InvokeTACommand(session, TEE_TIMEOUT_INFINITE,
+                              PTA_SYSTEM_GET_TPM_EVENT_LOG,
+                              param_types, params, &ret_origin);
+
+    *len = params[0].memref.size;
+
+    TEE_CloseTASession(session);
+
+    return res;
+}
+#endif // MEASURED_BOOT
+
+//
 // Called when TA instance is created. This is the first call to the TA.
-// 
+//
 TEE_Result TA_CreateEntryPoint(void)
 {
     #define STARTUP_SIZE 0x0C
@@ -124,6 +142,10 @@ TEE_Result TA_CreateEntryPoint(void)
                                            0x00, 0x00, 0x01, 0x44, 0x00, 0x01 };
     uint32_t respLen;
     uint8_t *respBuf;
+#ifdef MEASURED_BOOT
+    unsigned char tpm_event_log_buf[EVENT_LOG_SIZE];
+    size_t tpm_event_log_len = EVENT_LOG_SIZE;
+#endif
 
 #ifdef fTPMDebug
     DMSG("Entry Point\n");
@@ -131,7 +153,7 @@ TEE_Result TA_CreateEntryPoint(void)
 
     // If we've been here before, don't init again.
     if (fTPMInitialized) {
-        // We may have had TA_DestroyEntryPoint called but we didn't 
+        // We may have had TA_DestroyEntryPoint called but we didn't
         // actually get torn down. Re-NVEnable, just in case.
         if (_plat__NVEnable(NULL) == 0) {
             TEE_Panic(TEE_ERROR_BAD_STATE);
@@ -208,6 +230,24 @@ Exit:
 
     // Initialization complete
     fTPMInitialized = true;
+
+#ifdef MEASURED_BOOT
+    // Extend existing TPM Event Log.
+    if (get_tpm_event_log(tpm_event_log_buf,
+                          &tpm_event_log_len) == TEE_SUCCESS)
+    {
+
+#ifdef fTPMDebug
+        // Dump the event log
+        unsigned char* buff = tpm_event_log_buf;
+        size_t buff_len = tpm_event_log_len;
+        MSG("Preparing to extend the following TPM Event Log:");
+        dump_event_log(tpm_event_log_buf, tpm_event_log_len);
+#endif
+        process_eventlog(tpm_event_log_buf, tpm_event_log_len);
+
+    }
+#endif
 
     return TEE_SUCCESS;
 }

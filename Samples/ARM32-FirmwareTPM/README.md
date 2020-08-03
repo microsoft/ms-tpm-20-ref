@@ -30,7 +30,7 @@ See the [optee_os documentation](https://github.com/OP-TEE/optee_os/blob/master/
 See instructions [here](https://docs.microsoft.com/en-us/windows/wsl/install-win10):
 
 #### 2. Launch Bash
-Search for "bash" in the start menu, OR press Windows key + 'R', then type bash.  
+Search for "bash" in the start menu, OR press Windows key + 'R', then type bash.
 Update if needed.
 
 In WSL:
@@ -98,4 +98,15 @@ Debugging options you may want to add:
 `CFG_TEE_TA_LOG_LEVEL=3` 1 is fatal errors only, other values increase debug tracing output.
 
 `CFG_TA_DEBUG=y` Turns on debug output from the TAs, and enables extra correctness checks in the fTPM TA.
+
+#### 2. Measured Boot support
+The fTPM Trusted Application includes support for Measured Boot. This feature allows the TA to read a TPM Event Log compatible with the specification in Section 5 of the
+[TCG EFI Protocol Specification](https://trustedcomputinggroup.org/wp-content/uploads/EFI-Protocol-Specification-rev13-160330final.pdf). The event log is read and extended during the TA initialization.
+
+Measure Boot support requires OpTEE System Call ```PTA_SYSTEM_GET_TPM_EVENT_LOG```, available since [OpTEE 3.10.0](https://github.com/OP-TEE/optee_os/tree/3.10.0).
+
+Flags related to Measured Boot support:
+
+`CFG_TA_MEASURED_BOOT`: Controls whether Measured Boot is enabled (`CFG_TA_MEASURED_BOOT=y`) or disabled (by default).
+`CFG_TA_EVENT_LOG_SIZE`: Maximum size in bytes allowed for the Event Log. Defaults to 1024 bytes.
 
