@@ -230,7 +230,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;%(PreprocessorDefinitions); </PreprocessorDefinitions>
+      <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;%(PreprocessorDefinitions); </PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -284,7 +284,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\wolf;$(SolutionDir)..\external\wolfssl;$(SolutionDir)\wolfcrypt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>COMPILER_CHECKS;LIBRARY_COMPATIBILITY_CHECK;HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;COMPILER_CHECKS;LIBRARY_COMPATIBILITY_CHECK;HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -293,7 +293,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
       <CallingConvention>Cdecl</CallingConvention>
       <CompileAs>CompileAsC</CompileAs>
       <StructMemberAlignment>Default</StructMemberAlignment>
-      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
       <BrowseInformation>true</BrowseInformation>
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -334,7 +334,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_4;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_4;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -384,7 +384,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -412,7 +412,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\wolf;$(SolutionDir)..\external\wolfssl;$(SolutionDir)\wolfcrypt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>COMPILER_CHECKS;LIBRARY_COMPATIBILITY_CHECK;HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;COMPILER_CHECKS;LIBRARY_COMPATIBILITY_CHECK;HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -420,7 +420,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
       </PrecompiledHeader>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -440,7 +440,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -466,7 +466,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_4;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_4;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -494,14 +494,14 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\wolf;$(SolutionDir)..\external\wolfssl;$(SolutionDir)\wolfcrypt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;CRYPTO_ALIGN_4;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;CRYPTO_ALIGN_4;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -525,7 +525,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;NDEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;NDEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -560,7 +560,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)include\wolf;$(SolutionDir)..\external\wolfssl;$(SolutionDir)\wolfcrypt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Wolf;SYM_LIB=Wolf;MATH_LIB=Wolf;WOLFSSL_USER_SETTINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -569,7 +569,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4127;4255;4668; 4710;4711; 4820;5045</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
