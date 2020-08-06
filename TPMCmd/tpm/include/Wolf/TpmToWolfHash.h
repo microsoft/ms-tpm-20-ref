@@ -52,6 +52,12 @@
 #define WOLFSSL_SHA512
 #endif
 
+#if ALG_SM3_256
+#undef ALG_SM3_256
+#define ALG_SM3_256 ALG_NO
+//#error "SM3 is not available"
+#endif
+
 #include <wolfssl/wolfcrypt/sha.h>
 #include <wolfssl/wolfcrypt/sha256.h>
 #include <wolfssl/wolfcrypt/sha512.h>

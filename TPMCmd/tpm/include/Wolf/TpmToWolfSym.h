@@ -51,11 +51,15 @@
 //** Links to the wolfCrypt AES code
 //***************************************************************
 #if ALG_SM4
-#error "SM4 is not available"
+#undef ALG_SM4
+#define ALG_SM4 ALG_NO
+//#error "SM4 is not available"
 #endif
 
 #if ALG_CAMELLIA
-#error "Camellia is not available"
+#undef ALG_CAMELLIA
+#define ALG_CAMELLIA ALG_NO
+//#error "Camellia is not available"
 #endif
 
 // Define the order of parameters to the library functions that do block encryption
