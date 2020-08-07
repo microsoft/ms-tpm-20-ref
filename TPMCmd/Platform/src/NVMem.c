@@ -120,7 +120,9 @@ NvFileSize(
 //
     assert(NULL != s_NvFile);
 
-    assert(fseek(s_NvFile, 0, SEEK_END) == 0);
+    int fseek_result = fseek(s_NvFile, 0, SEEK_END);
+    NOT_REFERENCED(fseek_result); // Fix compiler warning for NDEBUG
+    assert(fseek_result == 0);
     fileSize = ftell(s_NvFile);
     assert(fileSize >= 0);
     switch(leaveAt)
