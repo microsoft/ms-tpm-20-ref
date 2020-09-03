@@ -563,7 +563,7 @@ RSAES_Decode(
     // Make sure that pSize has not gone over the end and that there are at least 8
     // bytes of pad data.
     fail = (pSize > coded->size) | fail;
-    fail = ((pSize - 2) < 8) | fail;
+    fail = ((pSize - 2) <= 8) | fail;
     if((message->size < (UINT16)(coded->size - pSize)) || fail)
         return TPM_RC_VALUE;
     message->size = coded->size - pSize;
