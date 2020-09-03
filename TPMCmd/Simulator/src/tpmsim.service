@@ -1,0 +1,18 @@
+[Unit]
+Description=TPM 2.0 Simulator
+#ConditionPathExists=!/dev/tpm0
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/etc/tpmsim
+ExecStart=/src/ms-tpm-20-ref/TPMCmd/Simulator/src/tpm2-simulator
+ExecStartPost=/bin/sleep 1s
+ExecStartPost=/bin/tpm2_startup -T mssim:host=localhost,port=2321 -c
+KillMode=SIGKILL
+ExecStop=/bin/tpm2_shutdown -T mssim:host=localhost,port=2321 -c
+ExecStop=/bin/kill $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+

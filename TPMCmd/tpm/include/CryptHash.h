@@ -88,25 +88,61 @@ typedef struct SMAC_STATE {
     SMAC_STATES             state;
 } SMAC_STATE;
 
-
-typedef union
-{
 #if ALG_SHA1
-    tpmHashStateSHA1_t         Sha1;
+#   define  IF_IMPLEMENTED_SHA1(op)     op(SHA1, Sha1)
+#else
+#   define  IF_IMPLEMENTED_SHA1(op)
 #endif
 #if ALG_SHA256
-    tpmHashStateSHA256_t       Sha256;
+#   define  IF_IMPLEMENTED_SHA256(op)     op(SHA256, Sha256)
+#else
+#   define  IF_IMPLEMENTED_SHA256(op)
 #endif
 #if ALG_SHA384
-    tpmHashStateSHA384_t       Sha384;
+#   define  IF_IMPLEMENTED_SHA384(op)     op(SHA384, Sha384)
+#else
+#   define  IF_IMPLEMENTED_SHA384(op)
 #endif
 #if ALG_SHA512
-    tpmHashStateSHA512_t       Sha512;
+#   define  IF_IMPLEMENTED_SHA512(op)     op(SHA512, Sha512)
+#else
+#   define  IF_IMPLEMENTED_SHA512(op)
 #endif
 #if ALG_SM3_256
-    tpmHashStateSM3_256_t      Sm3_256;
+#   define  IF_IMPLEMENTED_SM3_256(op)     op(SM3_256, Sm3_256)
+#else
+#   define  IF_IMPLEMENTED_SM3_256(op)
+#endif
+#if ALG_SHA3_256
+#   define  IF_IMPLEMENTED_SHA3_256(op)     op(SHA3_256, Sha3_256)
+#else
+#   define  IF_IMPLEMENTED_SHA3_256(op)
+#endif
+#if ALG_SHA3_384
+#   define  IF_IMPLEMENTED_SHA3_384(op)     op(SHA3_384, Sha3_384)
+#else
+#   define  IF_IMPLEMENTED_SHA3_384(op)
+#endif
+#if ALG_SHA3_512
+#   define  IF_IMPLEMENTED_SHA3_512(op)     op(SHA3_512, Sha3_512)
+#else
+#   define  IF_IMPLEMENTED_SHA3_512(op)
 #endif
 
+#define FOR_EACH_HASH(op)           \
+        IF_IMPLEMENTED_SHA1(op)     \
+        IF_IMPLEMENTED_SHA256(op)   \
+        IF_IMPLEMENTED_SHA384(op)   \
+        IF_IMPLEMENTED_SM3_256(op)  \
+        IF_IMPLEMENTED_SHA3_256(op) \
+        IF_IMPLEMENTED_SHA3_384(op) \
+        IF_IMPLEMENTED_SHA3_512(op) 
+
+
+#define HASH_TYPE(HASH, Hash)   tpmHashState##HASH##_t  Hash;
+typedef union
+{
+    FOR_EACH_HASH(HASH_TYPE)
 // Additions for symmetric block cipher MAC
 #if SMAC_IMPLEMENTED
     SMAC_STATE                 smac;
@@ -180,21 +216,9 @@ typedef struct _HASH_METHODS
                                             // context
 } HASH_METHODS, *PHASH_METHODS;
 
-#if ALG_SHA1
-    TPM2B_TYPE(SHA1_DIGEST, SHA1_DIGEST_SIZE);
-#endif
-#if ALG_SHA256
-    TPM2B_TYPE(SHA256_DIGEST, SHA256_DIGEST_SIZE);
-#endif
-#if ALG_SHA384
-    TPM2B_TYPE(SHA384_DIGEST, SHA384_DIGEST_SIZE);
-#endif
-#if ALG_SHA512
-    TPM2B_TYPE(SHA512_DIGEST, SHA512_DIGEST_SIZE);
-#endif
-#if ALG_SM3_256
-    TPM2B_TYPE(SM3_256_DIGEST, SM3_256_DIGEST_SIZE);
-#endif
+#define HASH_TPM2B(HASH, Hash)  TPM2B_TYPE(HASH##_DIGEST, HASH##_DIGEST_SIZE);
+
+FOR_EACH_HASH(HASH_TPM2B)
 
 // When the TPM implements RSA, the hash-dependent OID pointers are part of the
 // HASH_DEF. These macros conditionally add the OID reference to the HASH_DEF and the

@@ -34,7 +34,7 @@
  */
 //** Introduction
 
-// The NV memory is divided into two area: dynamic space for user defined NV
+// The NV memory is divided into two areas: dynamic space for user defined NV
 // indexes and evict objects, and reserved space for TPM persistent and state save
 // data.
 //
@@ -63,10 +63,10 @@
 // matches the layout of RAM. In normal operation. The RAM data is also copied on
 // any orderly shutdown. In normal operation, the only other reason for writing
 // to the backing store for RAM is when a counter is first written (TPMA_NV_WRITTEN
-// changes from CLEAR to SET) or when a counter "rolls over."
+// changes from CLEAR to SET) or when a counter ""rolls over"".
 //
 // Static space contains items that are individually modifiable. The values are in
-// the 'gp' PERSISTEND_DATA structure in RAM and mapped to locations in NV.
+// the 'gp' PERSISTENT_DATA structure in RAM and mapped to locations in NV.
 //
 
 //** Includes, Defines and Data Definitions
@@ -85,7 +85,7 @@
 //  value in 'iter' would be adjusted pointing to the next element in
 //  traversal.  If there is no next element, 'iter' value would be 0.
 //  This function returns the address of the 'data entry' pointed by the
-//  'iter'.  If there is no more element in the set, a 0 value is returned
+//  'iter'.  If there are no more elements in the set, a 0 value is returned
 //  indicating the end of traversal.
 //
 static NV_REF
@@ -129,13 +129,13 @@ NvNext(
 //      != 0            the next entry of the indicated type
 static NV_REF
 NvNextByType(
-    TPM_HANDLE      *handle,        // OUT: the handle of the found type
+    TPM_HANDLE      *handle,        // OUT: the handle of the found type or 0 
     NV_REF          *iter,          // IN: the iterator
     TPM_HT           type           // IN: the handle type to look for
     )
 {
     NV_REF           addr;
-    TPM_HANDLE       nvHandle;
+    TPM_HANDLE       nvHandle = 0;
 //
     while((addr = NvNext(iter, &nvHandle)) != 0)
     {
@@ -736,7 +736,6 @@ NvWriteRamIndexAttributes(
 // range belonging to the platform.
 //  Return Type: BOOL
 //      TRUE(1)         handle references a platform persistent object
-//                      and may reference an owner persistent object either
 //      FALSE(0)        handle does not reference platform persistent object
 BOOL
 NvIsPlatformPersistentHandle(
@@ -1869,7 +1868,7 @@ NvFindHandle(
 // previously deleted index. This insures that it is not possible to roll back an
 // index.
 //
-// The highest counter value is keep in NV in a special end-of-list marker. This
+// The highest counter value is kept in NV in a special end-of-list marker. This
 // marker is only updated when an index is deleted. Otherwise it just moves.
 //
 // When the TPM starts up, it searches NV for the end of list marker and initializes

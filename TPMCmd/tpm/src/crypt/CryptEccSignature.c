@@ -525,25 +525,25 @@ CryptEccSign(
     TEST(signature->sigAlg);
     switch(signature->sigAlg)
     {
-        case ALG_ECDSA_VALUE:
+        case TPM_ALG_ECDSA:
             retVal = BnSignEcdsa(bnR, bnS, E, bnD, digest, rand);
             break;
 #if ALG_ECDAA
-        case ALG_ECDAA_VALUE:
+        case TPM_ALG_ECDAA:
             retVal = BnSignEcdaa(&signature->signature.ecdaa.signatureR, bnS, E, 
                                  bnD, digest, scheme, signKey, rand);
             bnR = NULL;
             break;
 #endif
 #if ALG_ECSCHNORR
-        case ALG_ECSCHNORR_VALUE:
+        case TPM_ALG_ECSCHNORR:
             retVal = BnSignEcSchnorr(bnR, bnS, E, bnD, digest,
                                      signature->signature.ecschnorr.hash,
                                      rand);
             break;
 #endif
 #if ALG_SM2
-        case ALG_SM2_VALUE:
+        case TPM_ALG_SM2:
             retVal = BnSignEcSm2(bnR, bnS, E, bnD, digest, rand);
             break;
 #endif
@@ -778,12 +778,12 @@ CryptEccValidateSignature(
 //    // Make sure that the scheme is valid
     switch(signature->sigAlg)
     {
-        case ALG_ECDSA_VALUE:
+        case TPM_ALG_ECDSA:
 #if ALG_ECSCHNORR
-        case ALG_ECSCHNORR_VALUE:
+        case TPM_ALG_ECSCHNORR:
 #endif
 #if ALG_SM2
-        case ALG_SM2_VALUE:
+        case TPM_ALG_SM2:
 #endif
             break;
         default:
@@ -805,19 +805,19 @@ CryptEccValidateSignature(
 
     switch(signature->sigAlg)
     {
-        case ALG_ECDSA_VALUE:
+        case TPM_ALG_ECDSA:
             retVal = BnValidateSignatureEcdsa(bnR, bnS, E, ecQ, digest);
             break;
 
 #if ALG_ECSCHNORR
-        case ALG_ECSCHNORR_VALUE:
+        case TPM_ALG_ECSCHNORR:
             retVal = BnValidateSignatureEcSchnorr(bnR, bnS,
                                                   signature->signature.any.hashAlg, 
                                                   E, ecQ, digest);
             break;
 #endif
 #if ALG_SM2
-        case ALG_SM2_VALUE:
+        case TPM_ALG_SM2:
             retVal = BnValidateSignatureEcSm2(bnR, bnS, E, ecQ, digest);
             break;
 #endif

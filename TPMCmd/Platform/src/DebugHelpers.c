@@ -46,9 +46,10 @@
 
 #if CERTIFYX509_DEBUG
 
-FILE            *fDebug = NULL;
 const char      *debugFileName = "DebugFile.txt";
 
+//*** fileOpen()
+// This exists to allow use of the 'safe' version of fopen() with a MS runtime.
 static FILE *
 fileOpen(
     const char      *fn, 
@@ -60,22 +61,24 @@ fileOpen(
     if(fopen_s(&f, fn, mode) != 0)
         f = NULL;
 #   else
-    f = fopen(fn, "w");
+    f = fopen(fn, mode);
 #   endif
     return f;
 }
 
-//*** DebugFileOpen()
-// This function opens the file used to hold the debug data.
+//*** DebugFileInit()
+// This function initializes the file containing the debug data with the time of the
+// file creation.
 //  Return Type: int
-//   0        success
-//  != 0          error
+//   0              success
+//  != 0            error
 int
-DebugFileOpen(
+DebugFileInit(
     void
 )
 {
-    time_t                  t = time(NULL);
+    FILE            *f = NULL;
+    time_t           t = time(NULL);
 //
     // Get current date and time.
 #   if defined _MSC_VER
@@ -86,24 +89,15 @@ DebugFileOpen(
     timeString = ctime(&t);
 #   endif
     // Try to open the debug file
-    fDebug = fileOpen(debugFileName, "w");
-    if(fDebug)
+    f = fileOpen(debugFileName, "w");
+    if(f)
     {
-        fprintf(fDebug, "%s\n", timeString);
-        fclose(fDebug);
+        // Initialize the contents with the time.
+        fprintf(f, "%s\n", timeString);
+        fclose(f);
         return 0;
     }
     return -1;
-}
-
-//*** DebugFileClose()
-void
-DebugFileClose(
-    void
-)
-{
-    if(fDebug)
-        fclose(fDebug);
 }
 
 //*** DebugDumpBuffer()
@@ -114,23 +108,23 @@ DebugDumpBuffer(
     const char      *identifier
 )
 {
-    int             i;
+    int              i;
 //
     FILE *f = fileOpen(debugFileName, "a");
     if(!f)
         return;
     if(identifier)
-        fprintf(fDebug, "%s\n", identifier);
+        fprintf(f, "%s\n", identifier);
     if(buf)
     {
         for(i = 0; i < size; i++)
         {
             if(((i % 16) == 0) && (i))
-                fprintf(fDebug, "\n");
-            fprintf(fDebug, " %02X", buf[i]);
+                fprintf(f, "\n");
+            fprintf(f, " %02X", buf[i]);
         }
         if((size % 16) != 0)
-            fprintf(fDebug, "\n");
+            fprintf(f, "\n");
     }
     fclose(f);
 }

@@ -43,7 +43,7 @@
 //  Return Type: TPM_RC
 //      TPM_RC_SIZE                     'newAuth' size is larger than the digest
 //                                      size of the Name algorithm for the Index
-//                                      referenced by 'nvIndex
+//                                      referenced by 'nvIndex'
 TPM_RC
 TPM2_NV_ChangeAuth(
     NV_ChangeAuth_In    *in             // IN: input parameter list

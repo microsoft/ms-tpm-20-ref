@@ -44,20 +44,20 @@
 */
 //  Return Type: TPM_RC
 //      TPM_RC_ATTRIBUTES       'newParent' is not a decryption key
-//      TPM_RC_HANDLE           'oldParent' does not consistent with inSymSeed
+//      TPM_RC_HANDLE           'oldParent' is not consistent with inSymSeed
 //      TPM_RC_INTEGRITY        the integrity check of 'inDuplicate' failed
 //      TPM_RC_KEY              for an ECC key, the public key is not on the curve
 //                              of the curve ID
 //      TPM_RC_KEY_SIZE         the decrypted input symmetric key size
-//                              does not matches the symmetric algorithm
+//                              does not match the symmetric algorithm 
 //                              key size of 'oldParent'
-//      TPM_RC_TYPE             'oldParent' is not a storage key, or 'newParent
+//      TPM_RC_TYPE             'oldParent' is not a storage key, or 'newParent'
 //                              is not a storage key
-//      TPM_RC_VALUE            for an 'oldParent; RSA key, the data to be decrypted
+//      TPM_RC_VALUE            for an 'oldParent'; RSA key, the data to be decrypted
 //                              is greater than the public exponent
 //      Unmarshal errors        errors during unmarshaling the input
 //                              encrypted buffer to a ECC public key, or
-//                              unmarshal the private buffer to sensitive
+//                              unmarshal the private buffer to 'sensitive'
 TPM_RC
 TPM2_Rewrap(
     Rewrap_In       *in,            // IN: input parameter list

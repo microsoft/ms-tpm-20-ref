@@ -236,14 +236,14 @@ ObjectGetHierarchy(
     }
 }
 
-//*** GetHeriarchy()
+//*** GetHierarchy()
 // This function returns the handle of the hierarchy to which a handle belongs.
 // This function is similar to ObjectGetHierarchy() but this routine takes
 // a handle but ObjectGetHierarchy() takes an pointer to an object.
 //
 // This function requires that 'handle' references a loaded object.
 TPMI_RH_HIERARCHY
-GetHeriarchy(
+GetHierarchy(
     TPMI_DH_OBJECT   handle         // IN :object handle
     )
 {
@@ -893,8 +893,8 @@ ObjectIsStorage(
             && IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, restricted)
             && IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, decrypt)
             && !IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign)
-            && (object->publicArea.type == ALG_RSA_VALUE
-                || object->publicArea.type == ALG_ECC_VALUE));
+            && (object->publicArea.type == TPM_ALG_RSA
+                || object->publicArea.type == TPM_ALG_ECC));
 }
 
 //*** ObjectCapGetLoaded()

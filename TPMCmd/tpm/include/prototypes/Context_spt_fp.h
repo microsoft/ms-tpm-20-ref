@@ -63,7 +63,7 @@ ComputeContextIntegrity(
     TPM2B_DIGEST    *integrity      // OUT: integrity
 );
 
-//*** SequenceDataExport();
+//*** SequenceDataExport()
 // This function is used scan through the sequence object and
 // either modify the hash state data for export (contextSave) or to
 // import it into the internal format (contextLoad).
@@ -78,7 +78,7 @@ SequenceDataExport(
     HASH_OBJECT_BUFFER  *exportObject   // OUT: a sequence context in a buffer
 );
 
-//*** SequenceDataImport();
+//*** SequenceDataImport()
 // This function is used scan through the sequence object and
 // either modify the hash state data for export (contextSave) or to
 // import it into the internal format (contextLoad).

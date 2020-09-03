@@ -75,13 +75,14 @@
 
 // When looking up the value to marshal, the upper bit of the marshal index is
 // masked to yield the actual index. The MSb is the flag bit that indicates if a
-// null flag is set. Code does not veify that the bit is clear when the called object
+// null flag is set. Code does not verify that the bit is clear when the called object
 // does not take a flag as this is a benign error.
 
 // the modifier byte as used by each MTYPE shown as a structure. They are expressed
 // as a bit maps below. However, the code uses masking and not bit fields. The types
 // show below are just to help in understanding.
-// NOTE: LSb0 bit numbering is assumed in these typedefs
+// NOTE: LSb0 bit numbering is assumed in these typedefs.
+//
 // When used in an UINT_MTYPE
 typedef struct integerModifier {
     unsigned            size : 2;
@@ -122,9 +123,7 @@ typedef struct attributesModifier {
     unsigned            unused : 5;
 } attributesModifier;
 
-// the modifier byte is not present in a STRUCTURE_MTYPE
-
-// the modifier byte is not present in a TPM2B_MTYPE 
+// the modifier byte is not present in a STRUCTURE_MTYPE or an TPM2B_MTYPE
 
 // the modifier byte for a TPM2BS_MTYPE
 typedef struct tpm2bsModifier {
@@ -198,6 +197,7 @@ typedef struct listModifier {
 // When this is not a reference, it is a simple type and it could be used as an array
 // value or a union selector. When a simple value, this field contains the size
 // of the associated value (ONE_BYTES, TWO_BYTES ...)
+//
 // The entry size/number is 6 bits (13:8).
 #define GET_ELEMENT_NUMBER(val)     (((val) >> 8) & 0x3F)
 #define SET_ELEMENT_NUMBER(val)     (((val) & 0x3F) << 8)
@@ -218,8 +218,8 @@ typedef struct listModifier {
 // value in a table. For example, if checking the key sizes, there is a list of
 // possible key sizes allowed by the algorithm registry and a bit field to indicate 
 // if that key size is allowed in the implementation. The smallest bit field has 
-// 32-bits 32-bits because it is implemented as part of the 'values' array of 
-// the structures that allow bit fields.
+// 32-bits because it is implemented as part of the 'values' array in structures 
+// that allow bit fields.
 #define IS_BIT_SET32(bit, bits)                                                     \
                         ((((UINT32 *)bits)[bit >> 5] & (1 << (bit & 0x1F))) != 0)
 

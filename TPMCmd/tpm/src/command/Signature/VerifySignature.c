@@ -70,7 +70,7 @@ TPM2_VerifySignature(
 
 // Command Output
 
-    hierarchy = GetHeriarchy(in->keyHandle);
+    hierarchy = GetHierarchy(in->keyHandle);
     if(hierarchy == TPM_RH_NULL
        || signObject->publicArea.nameAlg == TPM_ALG_NULL)
     {

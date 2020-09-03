@@ -43,9 +43,9 @@
 // to the default value. The default can either be YES or NO as indicated on each line
 // where the default is selected.
 //
-// A caution. Do not try to test these macros by inserting #defines in this file. For
+// A caution: do not try to test these macros by inserting #defines in this file. For
 // some curious reason, a variable set on the command line with no setting will have a
-// value of 1. An #if SOME_VARIABLE will work if the variable is not defined or is
+// value of 1. An "#if SOME_VARIABLE" will work if the variable is not defined or is
 // defined on the command line with no initial setting. However, a
 // "#define SOME_VARIABLE" is a null string and when used in "#if SOME_VARIABLE" will
 // not be a proper expression If you want to test various switches, either use the
@@ -66,7 +66,7 @@
 #   include PROFILE_INCLUDE(PROFILE)
 #endif
 
-// Need an unambiguous definition for DEBUG. Don't change this
+// Need an unambiguous definition for DEBUG. Do not change this
 #ifndef DEBUG
 #   ifdef NDEBUG
 #       define  DEBUG   NO
@@ -228,7 +228,7 @@
 #       define  USE_DEBUG_RNG           YES     // Default: Either YES or NO
 #   endif
 
-// Don't change these. They are the settings needed when not doing a simulation and
+// Do not change these. They are the settings needed when not doing a simulation and
 // not doing debug. Can't use the key cache except during debug. Otherwise, all of the
 // key values end up being the same
 #else
@@ -242,9 +242,9 @@
 // In some cases, the relationship between two values may be dependent
 // on things that change based on various selections like the chosen cryptographic
 // libraries. It is possible that these selections will result in incompatible
-// settings. These are often detectable by the compiler but it isn't always
+// settings. These are often detectable by the compiler but it is not always
 // possible to do the check in the preprocessor code. For example, when the
-// check requires use of 'sizeof()' then the preprocessor can't do the comparison.
+// check requires use of 'sizeof'() then the preprocessor can't do the comparison.
 // For these cases, we include a special macro that, depending on the compiler
 // will generate a warning to indicate if the check always passes or always fails
 // because it involves fixed constants. To run these checks, define COMPILER_CHECKS.

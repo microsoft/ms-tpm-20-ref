@@ -45,7 +45,7 @@
 //** TpmSizeChecks()
 // This function is used during the development process to make sure that the
 // vendor-specific values result in a consistent implementation. When possible,
-// the code contains #if to do compile-time checks. However, in some cases, the
+// the code contains "#if" to do compile-time checks. However, in some cases, the
 // values require the use of "sizeof()" and that can't be used in an #if.
 BOOL
 TpmSizeChecks(

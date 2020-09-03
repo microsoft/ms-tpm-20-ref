@@ -382,23 +382,11 @@ typedef BYTE        SESSION_BUF[sizeof(SESSION)];
 // DRTM and resettable PCR are not saved. The number of static and resettable PCR
 // is determined by the platform-specific specification to which the TPM is built.
 
+#define PCR_SAVE_SPACE(HASH, Hash)  BYTE Hash[NUM_STATIC_PCR][HASH##_DIGEST_SIZE];
+
 typedef struct PCR_SAVE
 {
-#if     ALG_SHA1
-    BYTE                sha1[NUM_STATIC_PCR][SHA1_DIGEST_SIZE];
-#endif
-#if     ALG_SHA256
-    BYTE                sha256[NUM_STATIC_PCR][SHA256_DIGEST_SIZE];
-#endif
-#if     ALG_SHA384
-    BYTE                sha384[NUM_STATIC_PCR][SHA384_DIGEST_SIZE];
-#endif
-#if     ALG_SHA512
-    BYTE                sha512[NUM_STATIC_PCR][SHA512_DIGEST_SIZE];
-#endif
-#if     ALG_SM3_256
-    BYTE                sm3_256[NUM_STATIC_PCR][SM3_256_DIGEST_SIZE];
-#endif
+    FOR_EACH_HASH(PCR_SAVE_SPACE)
 
     // This counter increments whenever the PCR are updated.
     // NOTE: A platform-specific specification may designate
@@ -547,7 +535,6 @@ EXTERN CLOCK_NONCE       g_timeEpoch;
 #else
 #define g_timeEpoch      gp.timeEpoch
 #endif
-
 
 //*** g_phEnable
 // This is the platform hierarchy control and determines if the platform hierarchy
@@ -1110,7 +1097,14 @@ typedef struct _COMMAND_FLAGS_
 // This structure is used to avoid having to manage a large number of
 // parameters being passed through various levels of the command input processing.
 //
-typedef struct _COMMAND_
+
+// The following macros are used to define the space for the CP and RP hashes. Space,
+// is provided for each implemented hash algorithm because it is not known what the
+// caller may use.
+#define CP_HASH(HASH, Hash)           TPM2B_##HASH##_DIGEST   Hash##CpHash;
+#define RP_HASH(HASH, Hash)           TPM2B_##HASH##_DIGEST   Hash##RpHash;
+
+typedef struct COMMAND
 {
     TPM_ST           tag;               // the parsed command tag
     TPM_CC           code;              // the parsed command code
@@ -1132,31 +1126,13 @@ typedef struct _COMMAND_
                                         // parsed.
     BYTE            *parameterBuffer;   // input to ExecuteCommand
     BYTE            *responseBuffer;    // input to ExecuteCommand
-#if ALG_SHA1
-    TPM2B_SHA1_DIGEST   sha1CpHash;
-    TPM2B_SHA1_DIGEST   sha1RpHash;
-#endif
-#if ALG_SHA256
-    TPM2B_SHA256_DIGEST sha256CpHash;
-    TPM2B_SHA256_DIGEST sha256RpHash;
-#endif
-#if ALG_SHA384
-    TPM2B_SHA384_DIGEST sha384CpHash;
-    TPM2B_SHA384_DIGEST sha384RpHash;
-#endif
-#if ALG_SHA512
-    TPM2B_SHA512_DIGEST sha512CpHash;
-    TPM2B_SHA512_DIGEST sha512RpHash;
-#endif
-#if ALG_SM3_256
-    TPM2B_SM3_256_DIGEST sm3_256CpHash;
-    TPM2B_SM3_256_DIGEST sm3_256RpHash;
-#endif
+    FOR_EACH_HASH(CP_HASH)              // space for the CP hashes
+    FOR_EACH_HASH(RP_HASH)              // space for the RP hashes
 } COMMAND;
 
-// Global sting constants for consistency in KDF function calls.
+// Global string constants for consistency in KDF function calls.
 // These string constants are shared across functions to make sure that they
-// are all using consistent sting values.
+// are all using consistent string values.
 
 #define STRING_INITIALIZER(value)   {{sizeof(value), {value}}}
 #define TPM2B_STRING(name, value)                                                   \
@@ -1325,28 +1301,13 @@ EXTERN OBJECT           s_objects[MAX_LOADED_OBJECTS];
 //*** From PCR.c
 //*****************************************************************************
 #if defined PCR_C || defined GLOBAL_C
+// The following macro is used to define the per-implemented-hash space. This 
+// implementation reserves space for all implemented hashes.
+#define PCR_ALL_HASH(HASH, Hash)    BYTE    Hash##Pcr[HASH##_DIGEST_SIZE];
+
 typedef struct
 {
-#if     ALG_SHA1
-    // SHA1 PCR
-    BYTE    sha1Pcr[SHA1_DIGEST_SIZE];
-#endif
-#if     ALG_SHA256
-    // SHA256 PCR
-    BYTE    sha256Pcr[SHA256_DIGEST_SIZE];
-#endif
-#if     ALG_SHA384
-    // SHA384 PCR
-    BYTE    sha384Pcr[SHA384_DIGEST_SIZE];
-#endif
-#if     ALG_SHA512
-    // SHA512 PCR
-    BYTE    sha512Pcr[SHA512_DIGEST_SIZE];
-#endif
-#if     ALG_SM3_256
-    // SHA256 PCR
-    BYTE    sm3_256Pcr[SM3_256_DIGEST_SIZE];
-#endif
+    FOR_EACH_HASH(PCR_ALL_HASH)
 } PCR;
 
 typedef struct
@@ -1383,7 +1344,7 @@ EXTERN UINT32            s_oldestSavedSession;
 
 // The number of available session slot openings.  When this is 1,
 // a session can't be created or loaded if the GAP is maxed out.
-// The exception is that theACToldest saved session context can always
+// The exception is that the oldest saved session context can always
 // be loaded (assuming that there is a space in memory to put it)
 EXTERN int               s_freeSessionSlots;
 
@@ -1408,7 +1369,7 @@ EXTERN UINT32   s_actionIoAllocation;       // number of UIN64 allocated for the
 //*** From TPMFail.c
 //*****************************************************************************
 // This value holds the address of the string containing the name of the function
-// in which the failure occurred. This address value isn't useful for anything
+// in which the failure occurred. This address value is not useful for anything
 // other than helping the vendor to know in which file the failure  occurred.
 EXTERN BOOL      g_inFailureMode;       // Indicates that the TPM is in failure mode
 #if SIMULATION

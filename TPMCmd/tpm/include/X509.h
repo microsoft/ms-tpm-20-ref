@@ -98,16 +98,16 @@ MAKE_OID(_KEY_USAGE_EXTENSION);
 MAKE_OID(_TCG_TPMA_OBJECT);
 
 #ifdef _X509_SPT_
-// If a bit is SET in KEY_USAGE_SIGN is also SET in keyUsagem then the associated key 
-// has to have 'sign' SET.
+// If a bit is SET in KEY_USAGE_SIGN is also SET in keyUsage then
+// the associated key has to have 'sign' SET.
 const x509KeyUsageUnion KEY_USAGE_SIGN =
 { TPMA_X509_KEY_USAGE_INITIALIZER(
     /* bits_at_0        */ 0, /* decipheronly    */ 0,  /* encipheronly   */ 0,
     /* crlsign          */ 1, /* keycertsign     */ 1,  /* keyagreement   */ 0,
     /* dataencipherment */ 0, /* keyencipherment */ 0,  /* nonrepudiation */ 0,
     /* digitalsignature */ 1) };
-// If a bit is SET in KEY_USAGE_DECRYPT is also SET in keyUsagem then the associated key
-// has to have 'decrypt' SET.
+// If a bit is SET in KEY_USAGE_DECRYPT is also SET in keyUsage then
+// the associated key has to have 'decrypt' SET.
 const x509KeyUsageUnion KEY_USAGE_DECRYPT =
 { TPMA_X509_KEY_USAGE_INITIALIZER(
     /* bits_at_0        */ 0, /* decipheronly    */ 1,  /* encipheronly   */ 1,

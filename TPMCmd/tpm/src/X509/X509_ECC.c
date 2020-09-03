@@ -86,7 +86,8 @@ X509AddSigningAlgorithmECC(
 
     switch(scheme->scheme)
     {
-        case ALG_ECDSA_VALUE:
+#if ALG_ECDSA
+        case TPM_ALG_ECDSA:
             // Make sure that we have an OID for this hash and ECC
             if((hashDef->ECDSA)[0] != ASN1_OBJECT_IDENTIFIER)
                 break;
@@ -97,6 +98,7 @@ X509AddSigningAlgorithmECC(
             ASN1StartMarshalContext(ctx);
             ASN1PushOID(ctx, hashDef->ECDSA);
             return ASN1EndEncapsulation(ctx, ASN1_CONSTRUCTED_SEQUENCE);
+#endif //  ALG_ECDSA
         default:
             break;
     }

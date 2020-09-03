@@ -1374,6 +1374,12 @@
     <ClInclude Include="include\TableMarshalTypes.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="include\TpmASN1.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\prototypes\TpmASN1_fp.h">
+      <Filter>Headers\prototypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

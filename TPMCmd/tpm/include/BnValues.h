@@ -100,7 +100,7 @@
 #define MAX_ECC_PARAMETER_BYTES (MAX_ECC_KEY_BYTES * ALG_ECC)
 
 // These are the basic big number formats. This is convertible to the library-
-// specific format without to much difficulty. For the math performed using
+// specific format without too much difficulty. For the math performed using
 // these numbers, the value is always positive.
 #define BN_STRUCT_DEF(count) struct {       \
     crypt_uword_t       allocated;          \
@@ -139,7 +139,7 @@ extern const bignum_t   BnConstZero;
             ((BnGetSize(bn) == 1) && (BnGetWord(bn, 0) == (crypt_uword_t)word))
 
 // Determine if a BIGNUM is even. A zero is even. Although the
-// indication that a number is zero is that it's size is zero,
+// indication that a number is zero is that its size is zero,
 // all words of the number are 0 so this test works on zero.
 #define BnIsEven(n)     ((BnGetWord(n, 0) & 1) == 0)
 
@@ -161,8 +161,6 @@ extern const bignum_t   BnConstZero;
 // to is 'name_'
 #define BN_ADDRESS(name) (bigNum)&name##_
 
-
-
 #define BN_CONST(name, words, initializer)                                          \
 typedef const struct name##_type {                                                  \
     crypt_uword_t       allocated;                                                  \
@@ -170,7 +168,6 @@ typedef const struct name##_type {                                              
     crypt_uword_t       d[words < 1 ? 1 : words];                                   \
     } name##_type;                                                                  \
 name##_type name = {(words < 1 ? 1 : words), words, {initializer}};
-
 
 #define BN_STRUCT_ALLOCATION(bits) (BITS_TO_CRYPT_WORDS(bits) + 1)
 
@@ -203,7 +200,7 @@ name##_type name = {(words < 1 ? 1 : words), words, {initializer}};
 // A word size value is useful
 #define BN_WORD(name)      BN_VAR(name, RADIX_BITS)
 
-// This is used to created a word-size BIGNUM and initialize it with
+// This is used to create a word-size BIGNUM and initialize it with
 // an input parameter to a function.
 #define BN_WORD_INITIALIZED(name, initial)                                          \
     BN_STRUCT(RADIX_BITS)  name##_;                                                 \
@@ -283,7 +280,7 @@ typedef struct
 // to an ECC_CURVE_DATA structure. In some libraries, the curve structure contains
 // a pointer to an ECC_CURVE_DATA structure as well as some other bits. For those
 // cases, the AccessCurveData macro is used in the code to first get the pointer
-// to the ECC_CURVE_DATA for access. In some cases, the macro does noting.
+// to the ECC_CURVE_DATA for access. In some cases, the macro does nothing.
 #define CurveGetPrime(C)    ((C)->prime)
 #define CurveGetOrder(C)    ((C)->order)
 #define CurveGetCofactor(C) ((C)->h)

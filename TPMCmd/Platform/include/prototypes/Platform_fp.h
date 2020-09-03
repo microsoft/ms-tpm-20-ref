@@ -149,19 +149,13 @@ _plat__ClockAdjustRate(
 
 #if CERTIFYX509_DEBUG
 
-//*** DebugFileOpen()
+//*** DebugFileInit()
 // This function opens the file used to hold the debug data.
 //  Return Type: int
 //   0        success
 //  != 0          error
 int
-DebugFileOpen(
-    void
-);
-
-//*** DebugFileClose()
-void
-DebugFileClose(
+DebugFileInit(
     void
 );
 

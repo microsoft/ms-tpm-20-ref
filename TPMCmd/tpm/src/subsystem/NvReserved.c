@@ -73,7 +73,7 @@
 // changes from CLEAR to SET) or when a counter "rolls over."
 //
 // Static space contains items that are individually modifiable. The values are in
-// the 'gp' PERSISTEND_DATA structure in RAM and mapped to locations in NV.
+// the 'gp' PERSISTENT_DATA structure in RAM and mapped to locations in NV.
 //
 
 //** Includes, Defines

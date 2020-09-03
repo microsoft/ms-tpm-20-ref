@@ -378,15 +378,15 @@ RegularCommandService(
 
 //*** SimulatorTimeServiceRoutine()
 // This function is called to service the time 'ticks'.
-static DWORD WINAPI
+static unsigned long WINAPI
 SimulatorTimeServiceRoutine(
     LPVOID           notUsed
 )
 {
     // All time is in ms
     const int64_t   tick = 1000;
-    uint64_t    prevTime = _plat__RealTime();
-    int64_t     timeout = tick;
+    uint64_t        prevTime = _plat__RealTime();
+    int64_t         timeout = tick;
     
     (void)notUsed;
 
@@ -397,8 +397,8 @@ SimulatorTimeServiceRoutine(
 #if defined(_MSC_VER)
         Sleep((DWORD)timeout);
 #else
-        struct timespec req = {timeout / 1000, (timeout % 1000) * 1000},
-                        rem;
+        struct timespec     req = { timeout / 1000, (timeout % 1000) * 1000 };
+        struct timespec     rem;
         nanosleep(&req, &rem);
 #endif // _MSC_VER
         curTime = _plat__RealTime();

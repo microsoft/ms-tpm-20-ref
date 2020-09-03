@@ -48,7 +48,7 @@
 //      TPM_RC_BINDING          'inPrivate' and 'inPublic' are not
 //                              cryptographically bound
 //      TPM_RC_HASH             incorrect hash selection for signing key or
-//                              the 'nameAlg' for 'inPubic is not valid
+//                              the 'nameAlg' for 'inPubic' is not valid
 //      TPM_RC_INTEGRITY        HMAC on 'inPrivate' was not valid
 //      TPM_RC_KDF              KDF selection not allowed
 //      TPM_RC_KEY              the size of the object's 'unique' field is not

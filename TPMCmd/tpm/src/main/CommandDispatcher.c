@@ -182,7 +182,7 @@ ParseHandleBuffer(
     {
 #if TABLE_DRIVEN_MARSHAL
         marshalIndex_t      index;
-        index = UnmarshalArray[dType] | ((type & 0x80) ? NULL_FLAG : 0);
+        index = unmarshalArray[dType] | ((type & 0x80) ? NULL_FLAG : 0);
         result = Unmarshal(index, &(command->handles[command->handleNum]),
                            &command->parameterBuffer, &command->parameterSize);
 
@@ -191,7 +191,7 @@ ParseHandleBuffer(
         if(dType < HANDLE_FIRST_FLAG_TYPE)
         {
             // Look up the function to do the unmarshaling
-            NoFlagFunction  *f = (NoFlagFunction *)UnmarshalArray[dType];
+            NoFlagFunction  *f = (NoFlagFunction *)unmarshalArray[dType];
             // call it
             result = f(&(command->handles[command->handleNum]),
                        &command->parameterBuffer,
@@ -200,7 +200,7 @@ ParseHandleBuffer(
         else
         {
             //  Look up the function
-            FlagFunction    *f = UnmarshalArray[dType];
+            FlagFunction    *f = unmarshalArray[dType];
 
             // Call it setting the flag to the appropriate value
             result = f(&(command->handles[command->handleNum]),
@@ -342,7 +342,7 @@ Exit:
         pNum++;
 #if TABLE_DRIVEN_MARSHAL
         {
-            marshalIndex_t      index = UnmarshalArray[dType];
+            marshalIndex_t      index = unmarshalArray[dType];
             index |= (type & 0x80) ? NULL_FLAG : 0;
             result = Unmarshal(index, &commandIn[offset], &command->parameterBuffer, 
                                &command->parameterSize);
@@ -350,13 +350,13 @@ Exit:
 #else
         if(dType < PARAMETER_FIRST_FLAG_TYPE)
         {
-            NoFlagFunction      *f = (NoFlagFunction *)UnmarshalArray[dType];
+            NoFlagFunction      *f = (NoFlagFunction *)unmarshalArray[dType];
             result = f(&commandIn[offset], &command->parameterBuffer,
                        &command->parameterSize);
         }
         else
         {
-            FlagFunction        *f = UnmarshalArray[dType];
+            FlagFunction        *f = unmarshalArray[dType];
             result = f(&commandIn[offset], &command->parameterBuffer,
                        &command->parameterSize,
                        (type & 0x80) != 0);
@@ -435,12 +435,12 @@ Exit:
         && !g_inFailureMode; type = *types++)
     {
 #if TABLE_DRIVEN_MARSHAL
-        marshalIndex_t      index = MarshalArray[dType];
+        marshalIndex_t      index = marshalArray[dType];
         command->parameterSize += Marshal(index, &commandOut[offset], 
                                           &command->responseBuffer,
                                           &maxOutSize);
 #else
-        const MARSHAL_t     f = MarshalArray[dType];
+        const MARSHAL_t     f = marshalArray[dType];
 
         command->parameterSize += f(&commandOut[offset], 
                                     &command->responseBuffer,

@@ -47,18 +47,7 @@
 static const INT16       alg##KeyBlockSizes[] = {                                   \
                                 ALG##_KEY_SIZES_BITS, -1, ALG##_BLOCK_SIZES };
 
-#if ALG_AES
-    KEY_BLOCK_SIZES(AES, aes);
-#endif // ALG_AES
-#if ALG_SM4
-    KEY_BLOCK_SIZES(SM4, sm4);
-#endif
-#if ALG_CAMELLIA
-    KEY_BLOCK_SIZES(CAMELLIA, camellia);
-#endif
-#if ALG_TDES
-    KEY_BLOCK_SIZES(TDES, tdes);
-#endif
+FOR_EACH_SYM(KEY_BLOCK_SIZES)
 
 //** Initialization and Data Access Functions
 //
@@ -103,18 +92,13 @@ CryptGetSymmetricBlockSize(
 #define ALG_CASE(SYM, sym)  case TPM_ALG_##SYM: sizes = sym##KeyBlockSizes; break 
     switch(symmetricAlg)
     {
-#if ALG_AES
-        ALG_CASE(AES, aes);
-#endif
-#if ALG_SM4
-        ALG_CASE(SM4, sm4);
-#endif
-#if ALG_CAMELLIA
-        ALG_CASE(CAMELLIA, camellia);
-#endif
-#if ALG_TDES
-        ALG_CASE(TDES, tdes);
-#endif
+#define GET_KEY_BLOCK_POINTER(SYM, sym)                                             \
+        case TPM_ALG_##SYM:                                                         \
+            sizes =  sym##KeyBlockSizes;                                            \
+            break;
+        // Get the pointer to the block size array
+        FOR_EACH_SYM(GET_KEY_BLOCK_POINTER);
+
         default:
             return 0;
     }
@@ -176,7 +160,7 @@ CryptSymmetricEncrypt(
     // If the iv is provided, then it is expected to be block sized. In some cases,
     // the caller is providing an array of 0's that is equal to [MAX_SYM_BLOCK_SIZE]
     // with no knowledge of the actual block size. This function will set it.
-    if((ivInOut != NULL) && (mode != ALG_ECB_VALUE))
+    if((ivInOut != NULL) && (mode != TPM_ALG_ECB))
     {
         ivInOut->t.size = blockSize;
         iv = ivInOut->t.buffer;
@@ -186,13 +170,17 @@ CryptSymmetricEncrypt(
     pIv = iv;
 
     // Create encrypt key schedule and set the encryption function pointer.
+    switch (algorithm)
+    {
+        FOR_EACH_SYM(ENCRYPT_CASE)
 
-    SELECT(ENCRYPT);
-
+        default:
+            return TPM_RC_SYMMETRIC;
+    }
     switch(mode)
     {
 #if ALG_CTR
-        case ALG_CTR_VALUE:
+        case TPM_ALG_CTR:
             for(; dSize > 0; dSize -= blockSize)
             {
                 // Encrypt the current value of the IV(counter)
@@ -210,7 +198,7 @@ CryptSymmetricEncrypt(
             break;
 #endif
 #if ALG_OFB
-        case ALG_OFB_VALUE:
+        case TPM_ALG_OFB:
             // This is written so that dIn and dOut may be the same
             for(; dSize > 0; dSize -= blockSize)
             {
@@ -225,7 +213,7 @@ CryptSymmetricEncrypt(
             break;
 #endif
 #if ALG_CBC
-        case ALG_CBC_VALUE:
+        case TPM_ALG_CBC:
             // For CBC the data size must be an even multiple of the
             // cipher block size
             if((dSize % blockSize) != 0)
@@ -245,7 +233,7 @@ CryptSymmetricEncrypt(
             break;
 #endif
         // CFB is not optional
-        case ALG_CFB_VALUE:
+        case TPM_ALG_CFB:
             // Encrypt the IV into the IV, XOR in the data, and copy to output
             for(; dSize > 0; dSize -= blockSize)
             {
@@ -265,7 +253,7 @@ CryptSymmetricEncrypt(
                 *pIv++ = 0;
             break;
 #if ALG_ECB
-        case ALG_ECB_VALUE:
+        case TPM_ALG_ECB:
             // For ECB the data size must be an even multiple of the
             // cipher block size
             if((dSize % blockSize) != 0)
@@ -334,7 +322,7 @@ CryptSymmetricDecrypt(
     // If the iv is provided, then it is expected to be block sized. In some cases,
     // the caller is providing an array of 0's that is equal to [MAX_SYM_BLOCK_SIZE]
     // with no knowledge of the actual block size. This function will set it.
-    if((ivInOut != NULL) && (mode != ALG_ECB_VALUE))
+    if((ivInOut != NULL) && (mode != TPM_ALG_ECB))
     {
         ivInOut->t.size = blockSize;
         iv = ivInOut->t.buffer;
@@ -349,25 +337,34 @@ CryptSymmetricDecrypt(
     switch(mode)
     {
 #if ALG_CBC || ALG_ECB
-        case ALG_CBC_VALUE: // decrypt = decrypt
-        case ALG_ECB_VALUE:
+        case TPM_ALG_CBC: // decrypt = decrypt
+        case TPM_ALG_ECB:
             // For ECB and CBC, the data size must be an even multiple of the
             // cipher block size
             if((dSize % blockSize) != 0)
                 return TPM_RC_SIZE;
-            SELECT(DECRYPT);
+            switch (algorithm)
+            {
+                FOR_EACH_SYM(DECRYPT_CASE)
+                default:
+                    return TPM_RC_SYMMETRIC;
+            }
             break;
 #endif
         default:
             // For the remaining stream ciphers, use encryption to decrypt
-            SELECT(ENCRYPT);
-            break;
+            switch (algorithm)
+            {
+                FOR_EACH_SYM(ENCRYPT_CASE)
+                default:
+                    return TPM_RC_SYMMETRIC;
+            }
     }
     // Now do the mode-dependent decryption
     switch(mode)
     {
 #if ALG_CBC
-        case ALG_CBC_VALUE:
+        case TPM_ALG_CBC:
             // Copy the input data to a temp buffer, decrypt the buffer into the
             // output, XOR in the IV, and copy the temp buffer to the IV and repeat.
             for(; dSize > 0; dSize -= blockSize)
@@ -386,7 +383,7 @@ CryptSymmetricDecrypt(
             }
             break;
 #endif
-        case ALG_CFB_VALUE:
+        case TPM_ALG_CFB:
             for(; dSize > 0; dSize -= blockSize)
             {
                 // Encrypt the IV into the temp buffer
@@ -407,7 +404,7 @@ CryptSymmetricDecrypt(
 
             break;
 #if ALG_CTR
-        case ALG_CTR_VALUE:
+        case TPM_ALG_CTR:
             for(; dSize > 0; dSize -= blockSize)
             {
                 // Encrypt the current value of the IV(counter)
@@ -425,7 +422,7 @@ CryptSymmetricDecrypt(
             break;
 #endif
 #if ALG_ECB
-        case ALG_ECB_VALUE:
+        case TPM_ALG_ECB:
             for(; dSize > 0; dSize -= blockSize)
             {
                 DECRYPT(&keySchedule, dIn, dOut);
@@ -435,7 +432,7 @@ CryptSymmetricDecrypt(
             break;
 #endif
 #if ALG_OFB
-        case ALG_OFB_VALUE:
+        case TPM_ALG_OFB:
             // This is written so that dIn and dOut may be the same
             for(; dSize > 0; dSize -= blockSize)
             {

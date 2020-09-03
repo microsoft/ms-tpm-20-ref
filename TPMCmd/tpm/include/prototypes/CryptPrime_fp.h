@@ -100,7 +100,7 @@ RsaCheckPrime(
     RAND_STATE      *rand
 );
 
-//*** AdjustPrimeCandiate()
+//*** RsaAdjustPrimeCandiate()
 // For this math, we assume that the RSA numbers are fixed-point numbers with
 // the decimal point to the "left" of the most significant bit. This approach helps
 // make it clear what is happening with the MSb of the values.

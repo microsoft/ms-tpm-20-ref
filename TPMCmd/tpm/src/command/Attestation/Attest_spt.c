@@ -50,7 +50,7 @@ FillInAttestInfo(
 {
     OBJECT              *signObject = HandleToObject(signHandle);
 
-        // Magic number
+    // Magic number
     attest->magic = TPM_GENERATED_VALUE;
 
     if(signObject == NULL)

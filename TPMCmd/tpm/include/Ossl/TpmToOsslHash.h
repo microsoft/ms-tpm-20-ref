@@ -109,7 +109,6 @@ typedef const BYTE    *PCBYTE;
 // The macro that calls the method also defines how the
 // parameters get swizzled between the default form (in CryptHash.c)and the 
 // library form.
-#define HASH_ALIGNMENT  RADIX_BYTES
 //
 // Initialize the hash context
 #define HASH_START_METHOD_DEF   void (HASH_START_METHOD)(PANY_HASH_STATE state)
