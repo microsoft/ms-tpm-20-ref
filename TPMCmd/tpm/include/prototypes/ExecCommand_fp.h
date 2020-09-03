@@ -57,7 +57,7 @@
 //      3)  marshal the responses into the response buffer.
 //  f)  If any error occurs in any of the steps above create the error response
 //      and return.
-//  g)  Calls BuildResponseSessions() to:
+//  g)  Calls BuildResponseSession() to:
 //      1)  when necessary, encrypt a parameter
 //      2)  build the response authorization sessions
 //      3)  update the audit sessions and nonces

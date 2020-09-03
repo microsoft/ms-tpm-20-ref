@@ -77,9 +77,9 @@ TPM2_CertifyX509(
     // certTBS holds an array of pointers and lengths. Each entry references the
     // corresponding value in a TBSCertificate structure. For example, the 1th
     // element references the version number
-    stringRef                certTBS[REF_COUNT] = {{0}};
+    stringRef                certTBS[REF_COUNT] = {0};
 #define ALLOWED_SEQUENCES   (SUBJECT_PUBLIC_KEY_REF - SIGNATURE_REF)
-    stringRef                partial[ALLOWED_SEQUENCES] = {{0}};
+    stringRef                partial[ALLOWED_SEQUENCES] = {0};
     INT16                    countOfSequences = 0;
     INT16                    i;
     //
@@ -149,7 +149,7 @@ TPM2_CertifyX509(
     // number of elements.
     if((ctx.offset != ctx.size) || (countOfSequences < 3)
         || (countOfSequences > 4)
-        || (certTBS[EXTENSIONS_REF].buf == NULL))
+        || (certTBS[EXTENSIONS_REF].buf == 0))
         return TPM_RCS_VALUE + RC_CertifyX509_partialCertificate;
     // Now that we know how many sequences there were, we can put them where they
     // belong

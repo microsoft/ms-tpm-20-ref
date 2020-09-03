@@ -126,11 +126,11 @@ TestHash(
             break;
 #endif
         default:
-            FAIL(FATAL_ERROR_INTERNAL); 
+            FAIL(FATAL_ERROR_INTERNAL);
     }
     // Clear the to-test bits
     CLEAR_BOTH(hashAlg);
-    
+
     // If there is an algorithm without test vectors, then assume that things are OK.
     if(testDigest == NULL)
         return TPM_RC_SUCCESS;
@@ -212,7 +212,8 @@ TestSymmetricAlgorithm(
 
 //*** AllSymsAreDone()
 // Checks if both symmetric algorithms have been tested. This is put here
-// so that addition of a symmetric algorithm will be relatively easy to handle
+// so that addition of a symmetric algorithm will be relatively easy to handle.
+//
 //  Return Type: BOOL
 //      TRUE(1)         all symmetric algorithms tested
 //      FALSE(0)        not all symmetric algorithms tested
@@ -811,7 +812,7 @@ TestAlgorithm(
     // algorithm or just clear a bit if there is no test for the algorithm. So,
     // either this loop will be executed once for the selected algorithm or once for
     // each of the possible algorithms. If it is executed more than once ('alg' ==
-    // ALG_ERROR), then no test will be run but bits will be cleared for 
+    // ALG_ERROR), then no test will be run but bits will be cleared for
     // unimplemented algorithms. This was done this way so that there is only one
     // case statement with all of the algorithms. It was easier to have one case
     // statement than to have multiple ones to manage whenever an algorithm ID is
@@ -829,7 +830,7 @@ TestAlgorithm(
         }
         // Process whatever is left.
         // NOTE: since this switch will only be called if the algorithm is
-        // implemented, it is not necessary to modify this list except to comment 
+        // implemented, it is not necessary to modify this list except to comment
         // out the algorithms for which there is no test
         switch(alg)
         {
