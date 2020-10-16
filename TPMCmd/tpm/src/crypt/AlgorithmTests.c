@@ -104,7 +104,7 @@ TestHash(
         FOR_EACH_HASH(HASH_CASE_FOR_TEST)
 
         default:
-            FAIL(FATAL_ERROR_INTERNAL); 
+            FAIL(FATAL_ERROR_INTERNAL);
     }
     // Clear the to-test bits
     CLEAR_BOTH(hashAlg);
