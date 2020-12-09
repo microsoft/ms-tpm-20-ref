@@ -343,13 +343,13 @@
 #define ALG_SHA512                      ALG_NO
 #endif
 #ifndef ALG_SM2
-#define ALG_SM2                         (ALG_YES && ALG_ECC)
+#define ALG_SM2                         (ALG_NO && ALG_ECC)
 #endif
 #ifndef ALG_SM3_256
-#define ALG_SM3_256                     ALG_YES
+#define ALG_SM3_256                     ALG_NO
 #endif
 #ifndef ALG_SM4
-#define ALG_SM4                         ALG_YES
+#define ALG_SM4                         ALG_NO
 #endif
 #ifndef ALG_SYMCIPHER
 #define ALG_SYMCIPHER                   ALG_YES

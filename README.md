@@ -8,9 +8,9 @@ See the definition of the `SPEC_VERSION`, `SPEC_YEAR` and `SPEC_DAY_OF_YEAR` val
 
 The reference implementation can be directly used via the [TPM 2.0 simulator](TPMCmd/Simulator) that emulates a TPM 2.0 device and can be accessed via a custom TCP based protocol. The simplest way to work with the simulator is to use a [TSS library](https://github.com/Microsoft/TSS.MSR) for the programming language of your choice - C#/.Net, C++, Java, Python, JavaScript/Node.js are currently supported. The C language TSS implementing the TCG's TSS API specifiaction is available [here](https://github.com/tpm2-software/tpm2-tss).
 
-## Visual Studio build ##
+## Windows build ##
 
-Before building the Visual Studio solution:
+Windows build is implemented as a Visual Studio 2017 solution. Before building it:
 
 * Setup one or both of the following underlying cryptographic libraries:
 
@@ -24,7 +24,7 @@ Before building the Visual Studio solution:
 
    2. Create `TPMCmd/OsslInclude/openssl` folder and copy there the contents of the `openssl/include/openssl` folder in the OpenSSL source tree used to build the OpenSSL library.
 
-      If you do not disable SM{2,3,4} algorithms support either while building OpenSSL or in the simulator (see the Linux section below), the build may fail because of missing SM{2,3,4}.h headers, which is the result of an apparent bug/misconfiguration in the OpenSSL build tree/scrips. In this case you may also need to copy over the SM{2,3,4}.h headers from OpenSSL’s `include/crypt` folder.
+      If you enable SM{2,3,4} algorithms in `TpmProfile.h`, the build may fail because of missing `SM{2,3,4}.h` headers. In this case you will need to manually copy them over from OpenSSL’s `include/crypt` folder.
 
    3. Build the solution with either Debug or Release as the active configuration.
 
@@ -49,7 +49,4 @@ Follows the common `./bootstrap && ./configure && make` convention.
 
 Note that autotools scripts require the following prerequisite packages: `autoconf-archive`, `pkg-config`, and sometimes `build-essential` and `automake`. Their absence is not automatically detected. The build also needs `gcc` and `libssl-dev` packages.
 
-In some Linux configurations linking may fail because of SM{2,3,4} routines missing in the the OpenSSL library. This is a bug in the OpenSSL configuration, as it is supposed to support SM algs since its initial 1.1.1 revision, and when it is built without them, its `opensslconf.h` has to define OPENSSL_NO_SM{2,3,4} macros. However, these macros are (or were) not defined in many official OpenSSL packages (such as libssl-dev). If you have this issue then several options exist:
-- Disable SM algorithms in `TpmProfile.h`  (set `ALG_SM2`, `ALG_SM3_256`, `ALG_SM4` to `ALG_NO`);
-- Manually define `OPENSSL_NO_SM2`, `OPENSSL_NO_SM3`, `OPENSSL_NO_SM4` in `opensslconf.h`;
-- Use a custom buit OpenSSL library.
+Similarly to the Windows build, if you enable SM{2,3,4} algorithms in `TpmProfile.h`, the build may fail because of missing `SM{2,3,4}.h` headers. In this case you will need to manually copy them over from OpenSSL’s `include/crypt` folder.
