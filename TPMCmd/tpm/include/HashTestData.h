@@ -120,4 +120,3 @@ TPM2B_EMPTY c_SHA3_384_digest = {{0, {0}}};
 #if ALG_SHA3_512 == YES
 TPM2B_EMPTY c_SHA3_512_digest = {{0, {0}}};
 #endif
-

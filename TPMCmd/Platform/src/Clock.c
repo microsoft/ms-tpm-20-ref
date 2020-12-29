@@ -279,4 +279,3 @@ _plat__ClockAdjustRate(
 
     return;
 }
-

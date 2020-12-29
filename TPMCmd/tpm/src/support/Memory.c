@@ -262,8 +262,3 @@ ByteArrayToUint64(
 {
     return (((UINT64)BYTE_ARRAY_TO_UINT32(a)) << 32) + BYTE_ARRAY_TO_UINT32(&a[4]);
 }
-
-
-
-
-

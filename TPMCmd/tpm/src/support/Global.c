@@ -60,4 +60,3 @@
 #if CC_CertifyX509
 #   include "X509.h"
 #endif // CC_CertifyX509
-

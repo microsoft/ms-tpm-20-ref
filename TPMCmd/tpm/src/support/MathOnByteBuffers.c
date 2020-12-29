@@ -262,4 +262,3 @@ ShiftLeft(
     }
     return value;
 }
-

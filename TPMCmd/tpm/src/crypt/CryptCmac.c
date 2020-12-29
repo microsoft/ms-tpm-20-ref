@@ -185,4 +185,3 @@ CryptCmacEnd(
     return i;
 }
 #endif
-

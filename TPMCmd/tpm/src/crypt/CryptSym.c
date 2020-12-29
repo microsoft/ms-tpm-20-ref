@@ -471,5 +471,3 @@ CryptSymKeyValidate(
 #endif // ALG_TDES
     return TPM_RC_SUCCESS;
 }
-
-

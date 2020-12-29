@@ -1894,6 +1894,3 @@ CryptSymModeIsValid(
     }
     return FALSE;
 }
-
-
-

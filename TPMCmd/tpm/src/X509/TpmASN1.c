@@ -515,5 +515,3 @@ ASN1PushOID(
     ctx->offset = -1;
     return 0;
 }
-
-

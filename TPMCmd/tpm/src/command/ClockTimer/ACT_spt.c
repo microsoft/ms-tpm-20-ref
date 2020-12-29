@@ -283,6 +283,3 @@ ActGetCapabilityData(
     // was filled and there are no more ACT values to return
     return NO;
 }
-
-
-
