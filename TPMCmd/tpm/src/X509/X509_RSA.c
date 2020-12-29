@@ -198,7 +198,7 @@ X509AddPublicRSA(
         NULL
       BIT STRING (1 elem)
         SEQUENCE (2 elem) 3rd
-          INTEGER (2048 bit) 2197304513741227955725834199357401…
+          INTEGER (2048 bit) 2197304513741227955725834199357401
           INTEGER 65537
 */
     // If this is a check to see if the key can be encoded, it can. 
