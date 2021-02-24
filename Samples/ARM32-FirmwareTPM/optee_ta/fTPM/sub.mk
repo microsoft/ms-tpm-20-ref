@@ -1,9 +1,16 @@
-WARNS ?= 1
-NOWERROR ?= 1
-CFG_TA_DEBUG ?= 1
-CFG_TEE_TA_LOG_LEVEL ?= 1
+WARNS 			:= 0
+NOWERROR 		:= 0
+CFG_TA_DEBUG 		:= 0
+CFG_TEE_TA_LOG_LEVEL 	:= 0
 
-cflags-y += -DTHIRTY_TWO_BIT -DCFG_TEE_TA_LOG_LEVEL=$(CFG_TEE_TA_LOG_LEVEL) -D_ARM_ -w -Wno-strict-prototypes -mcpu=$(TA_CPU) -fstack-protector -Wstack-protector
+cflags-y +=	-DTHIRTY_TWO_BIT				\
+		-DCFG_TEE_TA_LOG_LEVEL=$(CFG_TEE_TA_LOG_LEVEL)	\
+		-D_ARM_						\
+		-w						\
+		-Wno-strict-prototypes				\
+		-mcpu=$(TA_CPU)					\
+		-fstack-protector				\
+		-Wstack-protector
 
 ifeq ($(CFG_ARM64_ta_arm64),y)
 cflags-y += -mstrict-align
@@ -32,6 +39,7 @@ clean: clean_lib_symlinks
 subdirs-y += lib
 
 global-incdirs-y += include
+global-incdirs-y += include/Wolf
 global-incdirs-y += reference/include
 global-incdirs-y += platform/include
 
@@ -48,6 +56,7 @@ srcs-y += platform/PPPlat.c
 srcs-y += platform/RunCommand.c
 srcs-y += platform/Unique.c
 srcs-y += platform/EPS.c
+srcs-y += platform/PlatformACT.c
 srcs-y += reference/RuntimeSupport.c
 
 srcs-y += fTPM.c

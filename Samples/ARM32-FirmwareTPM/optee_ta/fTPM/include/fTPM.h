@@ -36,7 +36,7 @@
 #ifndef FTPM_TA_H
 #define FTPM_TA_H
 
-#include <Implementation.h>
+#include <TpmProfile.h>
 
 /* This UUID is generated with uuidgen */
 #define TA_FTPM_UUID { 0xBC50D971, 0xD4C9, 0x42C4, \
@@ -47,7 +47,7 @@
 #define TA_FTPM_EMULATE_PPI     (1)
 
 //
-// These must match values from reference/TPM/include/Implementation.h
+// These must match values from reference/TPM/include/TpmProfile.h
 //
 #define  MAX_COMMAND_SIZE       4096
 #define  MAX_RESPONSE_SIZE      4096

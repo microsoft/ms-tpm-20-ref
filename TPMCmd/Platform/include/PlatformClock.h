@@ -38,6 +38,7 @@
 #ifndef _PLATFORM_CLOCK_H_
 #define _PLATFORM_CLOCK_H_
 
+#ifndef _ARM_
 #ifdef _MSC_VER
 #include <sys/types.h>
 #include <sys/timeb.h>
@@ -45,7 +46,7 @@
 #include <sys/time.h>
 #include <time.h>
 #endif
-
+#endif
 // CLOCK_NOMINAL is the number of hardware ticks per mS. A value of 300000 means 
 // that the nominal clock rate used to drive the hardware clock is 30 MHz. The
 // adjustment rates are used to determine the conversion of the hardware ticks to

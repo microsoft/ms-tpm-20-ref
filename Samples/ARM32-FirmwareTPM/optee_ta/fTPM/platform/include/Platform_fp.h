@@ -45,7 +45,7 @@
 LIB_EXPORT void
 _plat__GetEPS(UINT16 Size, uint8_t *EndorsementSeed);
 
-//** From Cancel.c 
+//** From Cancel.c
 
 //***_plat__IsCanceled()
 // Check if the cancel flag is set
@@ -71,7 +71,7 @@ _plat__ClearCancel(
     );
 
 
-//** From Clock.c 
+//** From Clock.c
 
 //***_plat__TimerReset()
 // This function sets current system clock time as t0 for counting TPM time.
@@ -150,7 +150,7 @@ _plat__ClockAdjustRate(
     );
 
 
-//** From Entropy.c 
+//** From Entropy.c
 
 //** _plat__GetEntropy()
 // This function is used to get available hardware entropy. In a hardware
@@ -167,7 +167,7 @@ _plat__GetEntropy(
     );
 
 
-//** From LocalityPlat.c 
+//** From LocalityPlat.c
 
 //***_plat__LocalityGet()
 // Get the most recent command locality in locality value form.
@@ -186,7 +186,7 @@ _plat__LocalitySet(
     );
 
 
-//** From NVMem.c 
+//** From NVMem.c
 
 //*** _plat__NvErrors()
 // This function is used by the simulator to set the error flags in the NV
@@ -264,7 +264,7 @@ _plat__NvIsDifferent(
 // NOTE: A useful optimization would be for this code to compare the current
 // contents of NV with the local copy and note the blocks that have changed. Then
 // only write those blocks when _plat__NvCommit() is called.
-LIB_EXPORT void
+LIB_EXPORT int
 _plat__NvMemoryWrite(
     unsigned int     startOffset,   // IN: write start
     unsigned int     size,          // IN: size of bytes to write
@@ -319,7 +319,7 @@ _plat__ClearNvAvail(
     );
 
 
-//** From PowerPlat.c 
+//** From PowerPlat.c
 
 //***_plat__Signal_PowerOn()
 // Signal platform power on
@@ -360,7 +360,7 @@ _plat__Signal_PowerOff(
     );
 
 
-//** From PPPlat.c 
+//** From PPPlat.c
 
 //***_plat__PhysicalPresenceAsserted()
 // Check if physical presence is signaled
@@ -387,7 +387,67 @@ _plat__Signal_PhysicalPresenceOff(
     );
 
 
-//** From RunCommand.c 
+//*** _plat__ACT_UpdateCounter()
+// This function is used to write the newValue for the counter. If an update is
+// pending, then no update occurs and the function returns FALSE. If 'setSignaled'
+// is TRUE, then the ACT signaled state is SET and if 'newValue' is 0, nothing
+// is posted.
+LIB_EXPORT int
+_plat__ACT_UpdateCounter(
+    uint32_t            act,        // IN: ACT to update
+    uint32_t            newValue   // IN: the value to post
+);
+
+//*** _plat__ACT_SetSignaled()
+LIB_EXPORT void
+_plat__ACT_SetSignaled(
+    uint32_t            act,
+    int                 on
+);
+
+//***_plat__ACT_Initialize()
+// This function initializes the ACT hardware and data structures
+LIB_EXPORT int
+_plat__ACT_Initialize(
+    void
+);
+
+//***_plat__ACT_EnableTicks()
+// This enables and disables the processing of the once-per-second ticks. This should
+// be turned off ('enable' = FALSE) by _TPM_Init and turned on ('enable' = TRUE) by
+// TPM2_Startup() after all the initializations have completed.
+LIB_EXPORT void
+_plat__ACT_EnableTicks(
+    int             enable
+);
+
+//*** _plat__ACT_GetRemaining()
+// This function returns the remaining time. If an update is pending, 'newValue' is
+// returned. Otherwise, the current counter value is returned. Note that since the
+// timers keep running, the returned value can get stale immediately. The actual count
+// value will be no greater than the returned value.
+LIB_EXPORT uint32_t
+_plat__ACT_GetRemaining(
+    uint32_t            act             //IN: the ACT selector
+);
+
+//*** _plat__ACT_GetSignaled()
+LIB_EXPORT int
+_plat__ACT_GetSignaled(
+    uint32_t            act         //IN: number of ACT to check
+);
+
+//*** _plat__ACT_GetImplemented()
+// This function tests to see if an ACT is implemented. It is a belt and suspenders
+// function because the TPM should not be calling to manipulate an ACT that is not
+// implemented. However, this could help the simulator code which doesn't necessarily
+// know if an ACT is implemented or not.
+LIB_EXPORT int
+_plat__ACT_GetImplemented(
+    uint32_t            act
+);
+
+//** From RunCommand.c
 
 //***_plat__RunCommand()
 // This version of RunCommand will set up a jum_buf and call ExecuteCommand(). If
@@ -412,7 +472,7 @@ _plat__Fail(
     );
 
 
-//** From Unique.c 
+//** From Unique.c
 
 //** _plat__GetUnique()
 // This function is used to access the platform-specific unique value.

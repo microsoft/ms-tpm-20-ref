@@ -33,52 +33,20 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <TpmProfile.h>
+#ifndef    _PLATFORM_H_
+#define    _PLATFORM_H_
 
-/**
- * Implementation of tolower() commonly found in ctype.h
- * Returns an ASCII character, changing to lowercase if the character is
- * in the range 'A'-'Z'.
- */
+#include "TpmBuildSwitches.h"
+#include "BaseTypes.h"
+#include "TPMB.h"
+#include "MinMax.h"
 
-int tolower (int c)
-{
-    if(c >= 'A' && c <= 'Z')
-    {
-        c -= ('A' - 'a');
-    }
-    return c;
-}
+#include "TpmProfile.h"
 
-int toupper (int c)
-{
-    if(c >= 'a' && c <= 'z')
-    {
-        c += ('A' - 'a');
-    }
-    return c;
-}
+#include "PlatformACT.h"
+#include "PlatformClock.h"
+#include "PlatformData.h"
+#include "Platform_fp.h"
 
-int strncasecmp(const char *str1, const char *str2, size_t n)
-{
-    size_t i = 0;
-    for(i = 0; i < n && str1[i] && str2[i]; i++)
-    {
-        char delta = tolower(str1[i]) - tolower(str2[i]);
-        if (delta != 0)
-        {
-            return delta;
-        }
-    }
-    return 0;
-}
 
-#ifdef CUSTOM_RAND_GENERATE_BLOCK
-#include <tee_internal_api.h>
-int wolfRand(unsigned char* output, unsigned int sz)
-{
-    TEE_GenerateRandom((void *)output, (uint32_t)sz);
-    
-    return 0;
-}
-#endif
+#endif  // _PLATFORM_H_

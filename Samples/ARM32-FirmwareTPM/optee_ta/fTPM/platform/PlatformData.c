@@ -37,7 +37,7 @@
 // descriptions for these variables are in Global.h for this project.
 
 //** Includes
-#include    "Implementation.h"
+#include    "TpmProfile.h"
 #include    "PlatformData.h"
 
 // From Cancel.c
