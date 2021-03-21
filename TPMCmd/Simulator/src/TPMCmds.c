@@ -50,7 +50,7 @@
 #   include <windows.h>
 #   include <winsock.h>
 #   pragma warning(pop)
-#elif defined(__unix__)
+#elif defined(__unix__) || defined(__APPLE__)
 #   define _strcmpi strcasecmp
     typedef int SOCKET;
 #else

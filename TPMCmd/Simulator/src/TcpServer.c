@@ -48,7 +48,7 @@
 #   include <winsock.h>
 #   pragma warning(pop)
     typedef int socklen_t;
-#elif defined(__unix__)
+#elif defined(__unix__) || defined(__APPLE__)
 #   include <string.h>
 #   include <unistd.h>
 #   include <errno.h>

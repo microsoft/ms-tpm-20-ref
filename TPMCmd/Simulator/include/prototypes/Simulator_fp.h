@@ -43,7 +43,7 @@
 //** From TcpServer.c
 
 #ifdef _MSC_VER
-#elif defined(__unix__)
+#elif defined(__unix__) || defined(__APPLE__)
 #endif
 
 //*** PlatformServer()
@@ -156,7 +156,7 @@ TpmServer(
 //** From TPMCmdp.c
 
 #ifdef _MSC_VER
-#elif defined(__unix__)
+#elif defined(__unix__) || defined(__APPLE__)
 #endif
 
 //*** Signal_PowerOn()
