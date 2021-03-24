@@ -48,7 +48,7 @@
 #   include <windows.h>
 #   include <winsock.h>
 #   pragma warning(pop)
-#elif defined(__unix__)
+#elif defined(__unix__) || defined(__APPLE__)
 #   include "BaseTypes.h"   // on behalf of TpmFail_fp.h
     typedef int SOCKET;
 #else

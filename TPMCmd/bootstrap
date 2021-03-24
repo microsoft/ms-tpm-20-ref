@@ -60,7 +60,7 @@ ${AUTORECONF} --install --sym
 # A freshly checked out source tree will not build. VendorString.h must have
 # these symbols defined to build.
 echo "Setting default vendor strings"
-sed -i 's&^\/\/\(#define[[:space:]]\+FIRMWARE_V1.*\)&\1&;
+sed -i.bak 's&^\/\/\(#define[[:space:]]\+FIRMWARE_V1.*\)&\1&;
         s&^\/\/\(#define[[:space:]]\+MANUFACTURER.*\)&\1&;
         s&^\/\/\(#define[[:space:]]\+VENDOR_STRING_1.*\)&\1&' \
-       tpm/include/VendorString.h
+       tpm/include/VendorString.h && rm tpm/include/VendorString.h.bak

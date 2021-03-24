@@ -50,3 +50,18 @@ Follows the common `./bootstrap && ./configure && make` convention.
 Note that autotools scripts require the following prerequisite packages: `autoconf-archive`, `pkg-config`, and sometimes `build-essential` and `automake`. Their absence is not automatically detected. The build also needs `gcc` and `libssl-dev` packages.
 
 Similarly to the Windows build, if you enable SM{2,3,4} algorithms in `TpmProfile.h`, the build may fail because of missing `SM{2,3,4}.h` headers. In this case you will need to manually copy them over from OpenSSL’s `include/crypt` folder.
+
+## Mac OS X build
+
+As with the Linux build, use `./bootstrap`, `./configure`, and `make`.
+If you used Homebrew to install OpenSSL, you may need to include its path in `PKG_CONFIG_PATH`.
+OS X compilers treat uninitialized global variables as
+[common symbols](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/MachOTopics/1-Articles/executing_files.html),
+which can be eliminated with the `-fno-common` compiler option.
+Future updates to the autotools configurations may automate one or both of these steps.
+
+```
+./bootstrap
+PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig" EXTRA_CFLAGS=-fno-common ./configure
+make
+```
