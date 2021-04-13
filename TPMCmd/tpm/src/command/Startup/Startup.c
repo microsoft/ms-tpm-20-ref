@@ -186,6 +186,7 @@ TPM2_Startup(
                 gr.clearCount++;
                 gr.restartCount++;
                 break;
+            case SU_RESET:
             default:
                 // Reset object context ID to 0
                 gr.objectContextID = 0;
