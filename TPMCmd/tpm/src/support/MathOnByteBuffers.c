@@ -101,12 +101,9 @@ SignedCompareB(
     {
         return signA - signB;
     }
-    if(signA == 1)
-        // do unsigned compare function
-        return UnsignedCompareB(aSize, a, bSize, b);
-    else
-        // do unsigned compare the other way
-        return 0 - UnsignedCompareB(aSize, a, bSize, b);
+    // Twos-complement arithmetic is the same as unsigned arithmetic if the
+    // sign bits are the same.
+    return UnsignedCompareB(aSize, a, bSize, b);
 }
 
 //*** ModExpB
