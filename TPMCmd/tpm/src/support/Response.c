@@ -39,6 +39,7 @@
 
 //** Includes and Defines
 #include "Tpm.h"
+#include "Marshal.h"
 
 //** BuildResponseHeader()
 // Adds the response header to the response. It will update command->parameterSize 

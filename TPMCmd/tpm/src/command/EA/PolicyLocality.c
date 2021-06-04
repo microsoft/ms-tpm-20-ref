@@ -34,6 +34,7 @@
  */
 #include "Tpm.h"
 #include "PolicyLocality_fp.h"
+#include "Marshal.h"
 
 
 #if CC_PolicyLocality  // Conditional expansion of this file

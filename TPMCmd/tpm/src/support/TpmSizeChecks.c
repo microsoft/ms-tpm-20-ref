@@ -36,12 +36,10 @@
 #include    "Tpm.h"
 #include    <stdio.h>
 #include    <assert.h>
+#include    "Marshal.h"
 
 #if RUNTIME_SIZE_CHECKS
 
-#if TABLE_DRIVEN_MARSHAL
-extern uint32_t    MarshalDataSize;
-#endif
 
 static      int once = 0;
 
@@ -56,10 +54,20 @@ TpmSizeChecks(
     )
 {
     BOOL        PASS = TRUE;
+
 #if DEBUG
 //
     if(once++ != 0)
         return 1;
+
+#if ALG_ECC
+    {
+        // This is just to allow simple access to the ecc curve data during debug
+        const ECC_CURVE   *ecc = CryptEccGetParametersByCurveId(3);
+        if (ecc == NULL)
+            ecc = NULL;
+    }
+#endif // ALG_ECC
     {
         UINT32      maxAsymSecurityStrength = MAX_ASYM_SECURITY_STRENGTH;
         UINT32      maxHashSecurityStrength = MAX_HASH_SECURITY_STRENGTH;
@@ -190,6 +198,16 @@ TpmSizeChecks(
                 default:
                     break;
             }
+        }
+    }
+    {
+        // Had a problem with the macros coming up with some bad values. Make sure 
+        // the size is rational
+        int t = MAX_DIGEST_SIZE;
+        if (t < 20)
+        {
+            printf("Check the MAX_DIGEST_SIZE computation (%d)", MAX_DIGEST_SIZE);
+            PASS = FALSE;
         }
     }
 #endif // DEBUG

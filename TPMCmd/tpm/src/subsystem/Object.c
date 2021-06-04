@@ -39,6 +39,7 @@
 #define OBJECT_C
 
 #include "Tpm.h"
+#include "Marshal.h"
 
 //** Functions
 

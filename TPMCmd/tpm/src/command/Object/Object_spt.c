@@ -35,6 +35,7 @@
 //** Includes
 #include "Tpm.h"
 #include "Object_spt_fp.h"
+#include "Marshal.h"
 
 //** Local Functions
 
@@ -1075,6 +1076,7 @@ SensitiveToPrivate(
 //  1. check the integrity HMAC of the input private area
 //  2. decrypt the private buffer
 //  3. unmarshal TPMT_SENSITIVE structure into the buffer of TPMT_SENSITIVE
+//
 //  Return Type: TPM_RC
 //      TPM_RCS_INTEGRITY       if the private area integrity is bad
 //      TPM_RC_SENSITIVE        unmarshal errors while unmarshaling TPMS_ENCRYPT

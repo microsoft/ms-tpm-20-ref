@@ -35,8 +35,10 @@
 #include "Tpm.h"
 
 #if CC_PolicyAuthorizeNV  // Conditional expansion of this file
+
 #include "PolicyAuthorizeNV_fp.h"
 #include "Policy_spt_fp.h"
+#include "Marshal.h"
 
 /*(See part 3 specification)
 // Change policy by a signature from authority
@@ -83,7 +85,7 @@ TPM2_PolicyAuthorizeNV(
         size = MIN(nvIndex->publicArea.dataSize, sizeof(TPMT_HA));
         NvGetIndexData(nvIndex, locator, 0, (UINT16)size, nvTemp);
 
-        // Unmarshal the contents of the buffer into the internal format of a 
+        // Unmarshal the contents of the buffer into the internal format of a
         // TPMT_HA so that the hash and digest elements can be accessed from the
         // structure rather than the byte array that is in the Index (written by
         // user of the Index).
@@ -94,8 +96,8 @@ TPM2_PolicyAuthorizeNV(
         // Verify that the hash is the same
         if(policyInNv.hashAlg != session->authHashAlg)
             return TPM_RC_HASH;
-        
-        // See if the contents of the digest in the Index matches the value 
+
+        // See if the contents of the digest in the Index matches the value
         // in the policy
         if(!MemoryEqual(&policyInNv.digest, &session->u2.policyDigest.t.buffer,
                         session->u2.policyDigest.t.size))
@@ -108,7 +110,7 @@ TPM2_PolicyAuthorizeNV(
     PolicyDigestClear(session);
 
     // Update policyDigest
-    PolicyContextUpdate(TPM_CC_PolicyAuthorizeNV, EntityGetName(in->nvIndex, &name), 
+    PolicyContextUpdate(TPM_CC_PolicyAuthorizeNV, EntityGetName(in->nvIndex, &name),
                         NULL, NULL, 0, session);
 
     return TPM_RC_SUCCESS;

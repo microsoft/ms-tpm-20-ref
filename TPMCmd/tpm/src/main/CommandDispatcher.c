@@ -37,7 +37,7 @@
 #include "Tpm.h"
 #include "Marshal.h"
 
-#if TABLE_DRIVEN_DISPATCH
+#if TABLE_DRIVEN_DISPATCH || TABLE_DRIVEN_MARSHAL
 
 typedef TPM_RC(NoFlagFunction)(void *target, BYTE **buffer, INT32 *size);
 typedef TPM_RC(FlagFunction)(void *target, BYTE **buffer, INT32 *size, BOOL flag);
@@ -151,7 +151,7 @@ ParseHandleBuffer(
     )
 {
     TPM_RC                   result;
-#if TABLE_DRIVEN_DISPATCH
+#if TABLE_DRIVEN_DISPATCH || TABLE_DRIVEN_MARSHAL
     COMMAND_DESCRIPTOR_t    *desc;
     BYTE                    *types;
     BYTE                     type;
@@ -244,7 +244,7 @@ CommandDispatcher(
     COMMAND                 *command
     )
 {
-#if !TABLE_DRIVEN_DISPATCH
+#if !TABLE_DRIVEN_DISPATCH || TABLE_DRIVEN_MARSHAL
     TPM_RC       result;
     BYTE        **paramBuffer = &command->parameterBuffer;
     INT32       *paramBufferSize = &command->parameterSize;

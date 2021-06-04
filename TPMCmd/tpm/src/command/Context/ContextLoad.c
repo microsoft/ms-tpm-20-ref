@@ -33,10 +33,12 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "Tpm.h"
-#include "ContextLoad_fp.h"
+
 
 #if CC_ContextLoad  // Conditional expansion of this file
 
+#include "ContextLoad_fp.h"
+#include "Marshal.h"
 #include "Context_spt_fp.h"
 
 /*(See part 3 specification)

@@ -112,4 +112,4 @@ TPM2_Policy_AC_SendSelect(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyDuplicationSelect
+#endif // CC_Policy_AC_SendSelect

@@ -76,7 +76,7 @@ _TPM_Init(
     g_nvOk = NvPowerOn();
     
     // Initialize cryptographic functions
-    g_inFailureMode = (CryptInit() == FALSE);
+    g_inFailureMode = (g_nvOk == FALSE) || (CryptInit() == FALSE);
     if(!g_inFailureMode)
     {
         // Load the persistent data

@@ -78,7 +78,7 @@
 #define SWAP_CRYPT_WORD(x)  REVERSE_ENDIAN_64(x)
     typedef uint64_t    crypt_uword_t;
     typedef int64_t     crypt_word_t;
-#   define TO_CRYPT_WORD_64             BIG_ENDIAN_BYTES_TO_UINT64 
+#   define TO_CRYPT_WORD_64             BIG_ENDIAN_BYTES_TO_UINT64
 #   define TO_CRYPT_WORD_32(a, b, c, d) TO_CRYPT_WORD_64(0, 0, 0, 0, a, b, c, d)
 #elif RADIX_BITS == 32
 #   define SWAP_CRYPT_WORD(x)  REVERSE_ENDIAN_32((x))
@@ -161,13 +161,15 @@ extern const bignum_t   BnConstZero;
 // to is 'name_'
 #define BN_ADDRESS(name) (bigNum)&name##_
 
-#define BN_CONST(name, words, initializer)                                          \
+#define CRYPT_WORDS(bytes)  BYTES_TO_CRYPT_WORDS(bytes)
+#define MIN_ALLOC(bytes)    (CRYPT_WORDS(bytes) < 1 ? 1 : CRYPT_WORDS(bytes))
+#define BN_CONST(name, bytes, initializer)                                          \
 typedef const struct name##_type {                                                  \
     crypt_uword_t       allocated;                                                  \
     crypt_uword_t       size;                                                       \
-    crypt_uword_t       d[words < 1 ? 1 : words];                                   \
+    crypt_uword_t       d[MIN_ALLOC(bytes)];                                        \
     } name##_type;                                                                  \
-name##_type name = {(words < 1 ? 1 : words), words, {initializer}};
+name##_type name = {MIN_ALLOC(bytes), CRYPT_WORDS(bytes), {initializer}};
 
 #define BN_STRUCT_ALLOCATION(bits) (BITS_TO_CRYPT_WORDS(bits) + 1)
 
@@ -291,7 +293,7 @@ typedef struct
 #define CurveGetGy(C)       ((C)->base.y)
 
 
-// Convert bytes in initializers 
+// Convert bytes in initializers
 // This is used for CryptEccData.c.
 #define     BIG_ENDIAN_BYTES_TO_UINT32(a, b, c, d)                                  \
             (    ((UINT32)(a) << 24)                                                \
@@ -322,22 +324,22 @@ typedef struct
 #endif
 
 // These macros are used for data initialization of big number ECC constants
-// These two macros combine a macro for data definition with a macro for 
-// structure initilization. The 'a' parameter is a macro that gives numbers to 
+// These two macros combine a macro for data definition with a macro for
+// structure initialization. The 'a' parameter is a macro that gives numbers to
 // each of the bytes of the initializer and defines where each of the numberd
 // bytes will show up in the final structure. The 'b' value is a structure that
-// contains the requisite number of bytes in big endian order. S, the MJOIN 
+// contains the requisite number of bytes in big endian order. S, the MJOIN
 // and JOIND macros will combine a macro defining a data layout with a macro defining
 // the data to be places. Generally, these macros will only need expansion when
-// CryptEccData.c gets compiled. 
+// CryptEccData.c gets compiled.
 #define JOINED(a,b) a b
 #define MJOIN(a,b) a b
 
-#define B4_TO_BN(a, b, c, d)  (((((a << 8) + b) << 8) + c) + d)
 #if RADIX_BYTES == 64
-#define B8_TO_BN(a, b, c, d, e, f, g, h)                                    \
-    (UINT64)(((((((((((((((a) << 8) | b) << 8) | c) << 8) | d) << 8)        \
-                           e) << 8) | f) << 8) | g) << 8) | h)
+#define B8_TO_BN(a, b, c, d, e, f, g, h)                                            \
+        ((((((((((((((((UINT64)a) << 8) | (UINT64)b) << 8) | (UINT64)c) << 8)       \
+                     | (UINT64)d) << 8) | (UINT64)e) << 8) | (UINT64)f) << 8)       \
+                     | (UINT64)g) << 8) | (UINT64)h)
 #define B1_TO_BN(a)                     B8_TO_BN(0, 0, 0, 0, 0, 0, 0, a)
 #define B2_TO_BN(a, b)                  B8_TO_BN(0, 0, 0, 0, 0, 0, a, b)
 #define B3_TO_BN(a, b, c)               B8_TO_BN(0, 0, 0, 0, 0, a, b, c)
@@ -346,10 +348,11 @@ typedef struct
 #define B6_TO_BN(a, b, c, d, e, f)      B8_TO_BN(0, 0, a, b, c, d, e, f)
 #define B7_TO_BN(a, b, c, d, e, f, g)   B8_TO_BN(0, a, b, c, d, e, f, g)
 #else
-#define B1_TO_BN(a)                 B4_TO_BN(0, 0, 0, a)
-#define B2_TO_BN(a, b)              B4_TO_BN(0, 0, a, b)
-#define B3_TO_BN(a, b, c)           B4_TO_BN(0, a, b, c)
-#define B4_TO_BN(a, b, c, d)        (((((a << 8) + b) << 8) + c) + d)
+#define B1_TO_BN(a)                     B4_TO_BN(0, 0, 0, a)
+#define B2_TO_BN(a, b)                  B4_TO_BN(0, 0, a, b)
+#define B3_TO_BN(a, b, c)               B4_TO_BN(0, a, b, c)
+#define B4_TO_BN(a, b, c, d)            \
+    (((((((UINT32)a << 8) | (UINT32)b) << 8) | (UINT32)c) << 8) | (UINT32)d)
 #define B5_TO_BN(a, b, c, d, e)          B4_TO_BN(b, c, d, e), B1_TO_BN(a)
 #define B6_TO_BN(a, b, c, d, e, f)       B4_TO_BN(c, d, e, f), B2_TO_BN(a, b)
 #define B7_TO_BN(a, b, c, d, e, f, g)    B4_TO_BN(d, e, f, g), B3_TO_BN(a, b, c)
@@ -357,7 +360,7 @@ typedef struct
 
 #endif
 
-// Add implementation dependent definitions for other ECC Values and for linkages. 
+// Add implementation dependent definitions for other ECC Values and for linkages.
 #include LIB_INCLUDE(MATH_LIB, Math)
 
 

@@ -32,12 +32,18 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+//** Introduction
+// This code in this clause is provided for testing of the TPM's command interface. 
+// The implementation of Attached Components is not expected to be as shown in this
+// code.
+
 //** Includes
 #include "Tpm.h"
 #include "AC_spt_fp.h"
 
 
-#if 1 // This is the simulated AC data. 
+#if 1           // This is the simulated AC data. This should be present in an actual
+                // implementation.
 
 typedef struct {
     TPMI_RH_AC               ac;
@@ -54,6 +60,8 @@ acCapabilities  ac[1] = { {0x0001, &acData0001} };
 #define NUM_AC  (sizeof(ac) / sizeof(acCapabilities))
 
 #endif // 1 The simulated AC data
+
+//** Functions
 
 //*** AcToCapabilities()
 // This function returns a pointer to a list of AC capabilities.
@@ -92,19 +100,24 @@ AcIsAccessible(
 //      NO          all the available handles has been returned
 TPMI_YES_NO
 AcCapabilitiesGet(
-    TPMI_RH_AC               component,     // IN: the component 
+    TPMI_RH_AC               component,     // IN: the component
     TPM_AT                   type,          // IN: start capability type
+    UINT32                   count,         // IN: requested number
     TPML_AC_CAPABILITIES    *capabilityList // OUT: list of handle
 )
 {
     TPMI_YES_NO              more = NO;
     UINT32                   i;
-    TPML_AC_CAPABILITIES    *capabilities = AcToCapabilities(component);
+    // Get the list of capabilities and their values associated with the AC
+    TPML_AC_CAPABILITIES    *capabilities;
 
     pAssert(HandleGetType(component) == TPM_HT_AC);
+    capabilities = AcToCapabilities(component);
 
     // Initialize output handle list
     capabilityList->count = 0;
+    if(count > MAX_AC_CAPABILITIES)
+        count = MAX_AC_CAPABILITIES;
 
     if(capabilities != NULL)
     {
@@ -114,7 +127,7 @@ AcCapabilitiesGet(
             if(capabilities->acCapabilities[i].tag >= type)
             {
                 // copy the capabilities until we run out or fill the list
-                for(; (capabilityList->count < MAX_AC_CAPABILITIES)
+                for(; (capabilityList->count < count)
                     && (i < capabilities->count); i++)
                 {
                     capabilityList->acCapabilities[capabilityList->count]
@@ -135,7 +148,7 @@ AcCapabilitiesGet(
 TPM_RC
 AcSendObject(
     TPM_HANDLE           acHandle,      // IN: Handle of AC receiving object
-    OBJECT              *object,        // IN: object structure to send 
+    OBJECT              *object,        // IN: object structure to send
     TPMS_AC_OUTPUT      *acDataOut      // OUT: results of operation
 )
 {

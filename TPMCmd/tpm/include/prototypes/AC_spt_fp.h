@@ -64,6 +64,7 @@ TPMI_YES_NO
 AcCapabilitiesGet(
     TPMI_RH_AC               component,     // IN: the component
     TPM_AT                   type,          // IN: start capability type
+    UINT32                   count,         // IN: requested number
     TPML_AC_CAPABILITIES    *capabilityList // OUT: list of handle
 );
 

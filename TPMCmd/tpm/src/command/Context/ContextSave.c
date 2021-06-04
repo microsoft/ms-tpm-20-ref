@@ -33,10 +33,11 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "Tpm.h"
-#include "ContextSave_fp.h"
 
 #if CC_ContextSave  // Conditional expansion of this file
 
+#include "ContextSave_fp.h"
+#include "Marshal.h"
 #include "Context_spt_fp.h"
 
 /*(See part 3 specification)

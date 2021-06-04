@@ -35,6 +35,7 @@
 //** Includes
 #include "Tpm.h"
 #include "Attest_spt_fp.h"
+#include "Marshal.h"
 
 //** Functions
 

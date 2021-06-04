@@ -40,6 +40,7 @@
 
 //** Includes
 #include "Tpm.h"
+#include "Marshal.h"
 
 //****************************************************************************/
 //**     Hash/HMAC Functions

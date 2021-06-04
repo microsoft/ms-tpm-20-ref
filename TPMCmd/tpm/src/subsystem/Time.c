@@ -39,6 +39,7 @@
 //** Includes
 #include "Tpm.h"
 #include "PlatformClock.h"
+#include "Marshal.h"
 
 //** Functions
 

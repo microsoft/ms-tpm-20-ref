@@ -33,9 +33,12 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "Tpm.h"
-#include "PolicyPCR_fp.h"
 
 #if CC_PolicyPCR  // Conditional expansion of this file
+
+#include "PolicyPCR_fp.h"
+#include "Marshal.h"
+
 
 /*(See part 3 specification)
 // Add a PCR gate for a policy session
@@ -65,7 +68,7 @@ TPM2_PolicyPCR(
 
     // Compute current PCR digest
     PCRComputeCurrentDigest(session->authHashAlg, &in->pcrs, &pcrDigest);
-    
+
     // Do validation for non trial session
     if(session->attributes.isTrialPolicy == CLEAR)
     {
@@ -84,7 +87,7 @@ TPM2_PolicyPCR(
     else
     {
         // For trial session, just use the input PCR digest if one provided
-        // Note: It can't be too big because it is a TPM2B_DIGEST and the size 
+        // Note: It can't be too big because it is a TPM2B_DIGEST and the size
         // would have been checked during unmarshaling
         if(in->pcrDigest.t.size != 0)
             pcrDigest = in->pcrDigest;

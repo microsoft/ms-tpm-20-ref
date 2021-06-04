@@ -39,6 +39,7 @@
 
 //** Includes
 #include "Tpm.h"
+#include "Marshal.h"
 
 //** Functions
 

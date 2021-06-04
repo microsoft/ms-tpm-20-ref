@@ -89,7 +89,7 @@ CreateChecks(
 //                          with the scheme ID for keyed hash object
 //      TPM_RC_SYMMETRIC    a storage key with no symmetric algorithm specified; or
 //                          non-storage key with symmetric algorithm different from
-// ALG_NULL
+//                          TPM_ALG_NULL
 TPM_RC
 SchemeChecks(
     OBJECT          *parentObject,  // IN: parent (null if primary seed)

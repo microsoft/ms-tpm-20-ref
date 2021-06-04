@@ -40,6 +40,7 @@
 //** Includes
 
 #include "Tpm.h"
+#include "Marshal.h"
 #include "ExecCommand_fp.h"
 
 // Uncomment this next #include if doing static command/response buffer sizing
