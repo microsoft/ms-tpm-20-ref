@@ -12,8 +12,8 @@ extern RTC_HandleTypeDef hrtc;
 typedef unsigned char DEVICE_UNIQUE_ID_T[12];
 #define DEVICE_UNIQUE_ID (*(DEVICE_UNIQUE_ID_T*)(UID_BASE))
 #define DEVICE_FLASH_SIZE (*(uint16_t *)(FLASHSIZE_BASE))
-#define DEVICE_TYPE (*(uint16_t *) (DBGMCU->IDCODE & 0x00000fff))
-#define DEVICE_REV (*(uint16_t *) (DBGMCU->IDCODE >> 16))
+#define DEVICE_TYPE ((DBGMCU->IDCODE & DBGMCU_IDCODE_DEV_ID_Msk) >> DBGMCU_IDCODE_DEV_ID_Pos)
+#define DEVICE_REV ((DBGMCU->IDCODE & DBGMCU_IDCODE_REV_ID_Msk) >> DBGMCU_IDCODE_REV_ID_Pos)
 char __attribute__((section (".ram2"))) logStampStr[40] = {0};
 void* __attribute__((section (".ram2"))) g_itm[ITMCHANNELS] = {0};
 
