@@ -30,7 +30,7 @@ cflags-y += -DfTPMDebug=1
 cflags-y += -DDBG=1
 cflags-y += -O0
 cflags-y += -DDEBUG
-cflags-y += -DTRACE_LEVEL=$(CFG_TA_EVENT_LOG_SIZE)
+cflags-y += -DTRACE_LEVEL=$(CFG_TEE_TA_LOG_LEVEL)
 else
 cflags-y += -Os
 cflags-y += -DNDEBUG
