@@ -1490,7 +1490,7 @@ CheckAuthSession(
     return result;
 }
 
-#ifdef  TPM_CC_GetCommandAuditDigest
+#if  CC_GetCommandAuditDigest
 //*** CheckCommandAudit()
 // This function is called before the command is processed if audit is enabled
 // for the command. It will check to see if the audit can be performed and
@@ -1636,7 +1636,7 @@ ParseSessionBuffer(
                 return RcSafeAddToResult(result, errorIndex);
         }
     }
-#ifdef  TPM_CC_GetCommandAuditDigest
+#if  CC_GetCommandAuditDigest
     // Check if the command should be audited. Need to do this before any parameter
     // encryption so that the cpHash for the audit is correct
     if(CommandAuditIsRequired(command->index))
@@ -1692,7 +1692,9 @@ CheckAuthNoSession(
     )
 {
     UINT32 i;
+#if  CC_GetCommandAuditDigest
     TPM_RC           result = TPM_RC_SUCCESS;
+#endif
 //
     // Check if the command requires authorization
     for(i = 0; i < command->handleNum; i++)
@@ -1700,7 +1702,7 @@ CheckAuthNoSession(
         if(CommandAuthRole(command->index, i) != AUTH_NONE)
             return TPM_RC_AUTH_MISSING;
     }
-#ifdef  TPM_CC_GetCommandAuditDigest
+#if  CC_GetCommandAuditDigest
     // Check if the command should be audited.
     if(CommandAuditIsRequired(command->index))
     {
@@ -1818,7 +1820,7 @@ Audit(
     return;
 }
 
-#ifdef  TPM_CC_GetCommandAuditDigest
+#if  CC_GetCommandAuditDigest
 //*** CommandAudit()
 // This function updates the command audit digest.
 static void

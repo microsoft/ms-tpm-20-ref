@@ -93,7 +93,9 @@ __pragma(warning(pop))
 #ifndef WINAPI
 #   define WINAPI
 #endif
+#ifndef __pragma
 #   define __pragma(x)
+#endif
 #   define REVERSE_ENDIAN_16(_Number) __builtin_bswap16(_Number)
 #   define REVERSE_ENDIAN_32(_Number) __builtin_bswap32(_Number)
 #   define REVERSE_ENDIAN_64(_Number) __builtin_bswap64(_Number)
