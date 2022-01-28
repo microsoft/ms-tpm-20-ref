@@ -133,6 +133,7 @@ typedef struct SMAC_STATE {
         IF_IMPLEMENTED_SHA1(op)     \
         IF_IMPLEMENTED_SHA256(op)   \
         IF_IMPLEMENTED_SHA384(op)   \
+        IF_IMPLEMENTED_SHA512(op)   \
         IF_IMPLEMENTED_SM3_256(op)  \
         IF_IMPLEMENTED_SHA3_256(op) \
         IF_IMPLEMENTED_SHA3_384(op) \
