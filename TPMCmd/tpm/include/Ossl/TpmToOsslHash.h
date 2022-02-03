@@ -192,7 +192,7 @@ typedef const BYTE    *PCBYTE;
 #define tpmHashEnd_SHA512           SHA512_Final
 #define tpmHashStateCopy_SHA512     memcpy 
 #define tpmHashStateExport_SHA512   memcpy 
-#define tpmHashStateImport_SHA_512  memcpy 
+#define tpmHashStateImport_SHA512   memcpy 
 #define tpmHashStart_SM3_256        sm3_init
 #define tpmHashData_SM3_256         sm3_update
 #define tpmHashEnd_SM3_256          sm3_final
