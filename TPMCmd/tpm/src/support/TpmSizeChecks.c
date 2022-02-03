@@ -41,7 +41,9 @@
 #if RUNTIME_SIZE_CHECKS
 
 
+#if DEBUG
 static      int once = 0;
+#endif
 
 //** TpmSizeChecks()
 // This function is used during the development process to make sure that the

@@ -1223,7 +1223,7 @@ EXTERN UINT32           s_decryptSessionIndex;
 EXTERN UINT32           s_auditSessionIndex;
 
 // The cpHash for command audit
-#ifdef  TPM_CC_GetCommandAuditDigest
+#if  CC_GetCommandAuditDigest
 EXTERN TPM2B_DIGEST    s_cpHashForCommandAudit;
 #endif
 
