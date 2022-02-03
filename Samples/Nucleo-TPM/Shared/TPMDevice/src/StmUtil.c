@@ -61,6 +61,11 @@ void ITM_Out(uint32_t port, uint8_t ch)
     while(ITM->PORT[port].u32 == 0);
     ITM->PORT[port].u8 = ch;
 }
+#else
+void InitializeITM()
+{
+
+}
 #endif
 
 void SetDutyCycleIndicator(bool on)
