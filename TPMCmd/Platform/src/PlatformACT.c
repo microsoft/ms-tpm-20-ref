@@ -337,4 +337,3 @@ _plat__ACT_Initialize(
 
     return TRUE;
 }
-
