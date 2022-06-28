@@ -24,7 +24,7 @@ Windows build is implemented as a Visual Studio 2017 solution. Before building i
 
    2. Create `TPMCmd/OsslInclude/openssl` folder and copy there the contents of the `openssl/include/openssl` folder in the OpenSSL source tree used to build the OpenSSL library.
 
-      If you enable SM{2,3,4} algorithms in `TpmProfile.h`, the build may fail because of missing `SM{2,3,4}.h` headers. In this case you will need to manually copy them over from OpenSSL’s `include/crypt` folder.
+      If you enable SM{2,3,4} algorithms in `TpmProfile.h`, the build may fail because of missing `SM{2,3,4}.h` headers. In this case you will need to manually copy them over from OpenSSL's `include/crypt` folder.
 
    3. Build the solution with either Debug or Release as the active configuration.
 
@@ -49,7 +49,7 @@ Follows the common `./bootstrap && ./configure && make` convention.
 
 Note that autotools scripts require the following prerequisite packages: `autoconf-archive`, `pkg-config`, and sometimes `build-essential` and `automake`. Their absence is not automatically detected. The build also needs `gcc` and `libssl-dev` packages.
 
-Similarly to the Windows build, if you enable SM{2,3,4} algorithms in `TpmProfile.h`, the build may fail because of missing `SM{2,3,4}.h` headers. In this case you will need to manually copy them over from OpenSSL’s `include/crypt` folder.
+Similarly to the Windows build, if you enable SM{2,3,4} algorithms in `TpmProfile.h`, the build may fail because of missing `SM{2,3,4}.h` headers. In this case you will need to manually copy them over from OpenSSL's `include/crypt` folder.
 
 ## Mac OS X build
 
