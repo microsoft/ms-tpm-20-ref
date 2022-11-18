@@ -49,6 +49,12 @@
 #include <tee_internal_api.h>
 #include <tee_internal_api_extensions.h>
 
+#ifdef CFG_TA_FTPM_RPMB_STORAGE
+#define CHOOSEN_TEE_STORAGE	TEE_STORAGE_PRIVATE_RPMB
+#else
+#define CHOOSEN_TEE_STORAGE	TEE_STORAGE_PRIVATE
+#endif
+
 //
 // Overall size of NV, not just the TPM's NV storage
 //
@@ -157,7 +163,7 @@ _plat__NvInitFromStorage()
 		objID = s_StorageObjectID + i;
 
 		// Attempt to open TEE persistent storage object.
-		Result = TEE_OpenPersistentObject(TEE_STORAGE_PRIVATE,
+		Result = TEE_OpenPersistentObject(CHOOSEN_TEE_STORAGE,
 									      (void *)&objID,
 									      sizeof(objID),
 									      TA_STORAGE_FLAGS,
@@ -175,7 +181,7 @@ _plat__NvInitFromStorage()
 			}
 
 			// Storage object was not found, create it.
-			Result = TEE_CreatePersistentObject(TEE_STORAGE_PRIVATE,
+			Result = TEE_CreatePersistentObject(CHOOSEN_TEE_STORAGE,
 										        (void *)&objID,
 										        sizeof(objID),
 										        TA_STORAGE_FLAGS,
@@ -313,7 +319,7 @@ _plat__NvWriteBack()
 			// Force storage stack to update its backing store
             TEE_CloseObject(s_NVStore[i]);
             
-            Result = TEE_OpenPersistentObject(TEE_STORAGE_PRIVATE,
+            Result = TEE_OpenPersistentObject(CHOOSEN_TEE_STORAGE,
                                               (void *)&objID,
                                               sizeof(objID),
                                               TA_STORAGE_FLAGS,
