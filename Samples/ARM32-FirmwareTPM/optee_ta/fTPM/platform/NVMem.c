@@ -49,6 +49,12 @@
 #include <tee_internal_api.h>
 #include <tee_internal_api_extensions.h>
 
+#ifdef CFG_TA_FTPM_RPMB_STORAGE
+#define CHOOSEN_TEE_STORAGE	TEE_STORAGE_PRIVATE_RPMB
+#else
+#define CHOOSEN_TEE_STORAGE	TEE_STORAGE_PRIVATE
+#endif
+
 //
 // Overall size of NV, not just the TPM's NV storage
 //
@@ -157,7 +163,7 @@ _plat__NvInitFromStorage()
 		objID = s_StorageObjectID + i;
 
 		// Attempt to open TEE persistent storage object.
-		Result = TEE_OpenPersistentObject(TEE_STORAGE_PRIVATE,
+		Result = TEE_OpenPersistentObject(CHOOSEN_TEE_STORAGE,
 									      (void *)&objID,
 									      sizeof(objID),
 									      TA_STORAGE_FLAGS,
@@ -175,7 +181,7 @@ _plat__NvInitFromStorage()
 			}
 
 			// Storage object was not found, create it.
-			Result = TEE_CreatePersistentObject(TEE_STORAGE_PRIVATE,
+			Result = TEE_CreatePersistentObject(CHOOSEN_TEE_STORAGE,
 										        (void *)&objID,
 										        sizeof(objID),
 										        TA_STORAGE_FLAGS,
@@ -226,6 +232,10 @@ _plat__NvInitFromStorage()
 				i, bytesRead, objID, s_NVStore[i]);
 #endif
 		}
+
+            /* Close object now, it will be opened back upon update */
+            TEE_CloseObject(s_NVStore[i]);
+	    s_NVStore[i] = TEE_HANDLE_NULL;
 	}
 
 	// Storage objects are open and valid, next validate revision
@@ -296,13 +306,22 @@ _plat__NvWriteBack()
 			// Form storage object ID for this block.
 			objID = s_StorageObjectID + i;
             
-			// Move data position associated with handle to start of block.
+            // Open TEE persistent storage object: shall not fail
+            Result = TEE_OpenPersistentObject(CHOOSEN_TEE_STORAGE,
+                                              (void *)&objID, sizeof(objID),
+                                              TA_STORAGE_FLAGS,
+                                              &s_NVStore[i]);
+            if (Result != TEE_SUCCESS) {
+                goto Error;
+            }
+
+            // Move data position associated with handle to start of block.
             Result = TEE_SeekObjectData(s_NVStore[i], 0, TEE_DATA_SEEK_SET);
 			if (Result != TEE_SUCCESS) {
 				goto Error;
 			}
 
-			// Write out this block.
+            // Write out this block.
             Result = TEE_WriteObjectData(s_NVStore[i],
 									     (void *)&(s_NV[i * NV_BLOCK_SIZE]),
                                          NV_BLOCK_SIZE);
@@ -310,18 +329,10 @@ _plat__NvWriteBack()
 				goto Error;
 			}
             
-			// Force storage stack to update its backing store
+
+            // Close file to not waste secure resource in the dear TEE
             TEE_CloseObject(s_NVStore[i]);
-            
-            Result = TEE_OpenPersistentObject(TEE_STORAGE_PRIVATE,
-                                              (void *)&objID,
-                                              sizeof(objID),
-                                              TA_STORAGE_FLAGS,
-                                              &s_NVStore[i]);
-			// Success?
-			if (Result != TEE_SUCCESS) {
-				goto Error;
-			}
+	    s_NVStore[i] = TEE_HANDLE_NULL;
 
 			// Clear dirty bit.
             s_blockMap &= ~(0x1ULL << i);

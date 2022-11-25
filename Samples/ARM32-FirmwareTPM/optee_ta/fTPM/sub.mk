@@ -4,6 +4,7 @@ CFG_TA_MEASURED_BOOT	?= n
 CFG_TA_DEBUG 		?= n
 CFG_TEE_TA_LOG_LEVEL 	?= 0
 CFG_TA_EVENT_LOG_SIZE	?= 1024
+CFG_TA_FTPM_RPMB_STORAGE ?= n
 
 cflags-y +=	-DTHIRTY_TWO_BIT				\
 		-DCFG_TEE_TA_LOG_LEVEL=$(CFG_TEE_TA_LOG_LEVEL)	\
@@ -13,6 +14,8 @@ cflags-y +=	-DTHIRTY_TWO_BIT				\
 		-mcpu=$(TA_CPU)					\
 		-fstack-protector				\
 		-Wstack-protector
+
+cflags-$(CFG_TA_FTPM_RPMB_STORAGE) += -DCFG_TA_FTPM_RPMB_STORAGE
 
 ifeq ($(CFG_TA_MEASURED_BOOT),y)
 cflags-y += -DEVENT_LOG_SIZE=$(CFG_TA_EVENT_LOG_SIZE)

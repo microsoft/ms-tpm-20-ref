@@ -333,6 +333,7 @@ static unsigned int process_event(unsigned int buf_index,
                                &resplen, &response);
 
 #ifdef fTPMDebug
+    {
     uint16_t ret_tag;
     uint32_t resp_size;
     uint32_t tpm_rc;
@@ -345,6 +346,7 @@ static unsigned int process_event(unsigned int buf_index,
     MSG("TPM2_PCR_EXTEND_COMMAND returned value:\n");
     MSG("\tret_tag = 0x%.4x, size = 0x%.8x, rc = 0x%.8x\n",
          SwapBytes16(ret_tag), SwapBytes32(resp_size), SwapBytes32(tpm_rc));
+    }
 #endif
 
     free(response);
