@@ -93,14 +93,24 @@ ASN1DecodeLength(
             value = (INT16)NEXT_OCTET(ctx);
             // Make sure that the result will fit in an INT16
             VERIFY(value < 0x0080);
+            // Make sure that the encoding is minimal length
+            VERIFY(value > 0);
             // Shift up and add next octet
             value = (value << 8) + NEXT_OCTET(ctx);
         }
         else if(first == 0x81)
+        {
+            // One octet of size
+            // get the next value
             value = NEXT_OCTET(ctx);
-        // Sizes larger than will fit in a INT16 are an error 
+            // Make sure that the encoding is minimal length
+            VERIFY(value >= 0x0080);
+        }
         else
+        {
+            // Sizes larger than will fit in a INT16 are an error 
             goto Error;
+        }
     }
     else
         value = first;
@@ -131,6 +141,8 @@ ASN1NextTag(
     ctx->tag = NEXT_OCTET(ctx);
     // Make sure that it is not an extended tag
     VERIFY((ctx->tag & 0x1F) != 0x1F);
+    // Make sure that indefinite length encoding is not used
+    VERIFY(ctx->tag != 0);
     // Get the length field and return that
     return ASN1DecodeLength(ctx);
     
@@ -162,15 +174,15 @@ ASN1GetBitStringValue(
     int                  inputBits;
 //
     length = ASN1NextTag(ctx);
-    VERIFY(length >= 1);
+    VERIFY((length >= 1) && (length <= 5));
     VERIFY(ctx->tag == ASN1_BITSTRING);
     // Get the shift value for the bit field (how many bits to lop off of the end)
     shift = NEXT_OCTET(ctx);
     length--;
+    // the shift count has to make sense
+    VERIFY((shift < 8) && (shift >= 0) && ((length > 0) || (shift == 0)));
     // Get the number of bits in the input
     inputBits = (8 * length) - shift;
-    // the shift count has to make sense
-    VERIFY((shift < 8) && ((length > 0) || (shift == 0)));
     // if there are any bytes left
     for(; length > 1; length--)
     {
@@ -182,11 +194,16 @@ ASN1GetBitStringValue(
     }
     if(length == 1)
     {
+        UINT8 next = NEXT_OCTET(ctx);
+        UINT8 shifted = next >> shift;
+        // Verify that shifted-out bits are zero
+        VERIFY((shifted << shift) == next);
+        // Verify that the no overflow will occur
+        VERIFY(value <= (0xFFFFFFFF >> (8 - shift)));
         // for the last octet, just shift the accumulated value enough to 
         // accept the significant bits in the last octet and shift the last 
         // octet down
-        VERIFY(((value & (0xFF000000 << (8 - shift)))) == 0);
-        value = (value << (8 - shift)) + (NEXT_OCTET(ctx) >> shift);
+        value = (value << (8 - shift)) + shifted;
 
     }
     // 'Left justify' the result
@@ -348,13 +365,13 @@ ASN1PushBytes(
     const BYTE                  *buffer
 )
 {
-    // make sure that count is not negative which would mess up the math; and that 
+    // make sure that count is not negative (which would mess up the math) and that 
     // if there is a count, there is a buffer
     VERIFY((count >= 0) && ((buffer != NULL) || (count == 0)));
+    // can't go negative
+    VERIFY(ctx->offset >= count);
     // back up the offset to determine where the new octets will get pushed
     ctx->offset -= count;
-    // can't go negative
-    VERIFY(ctx->offset >= 0);
     // if there are buffers, move the data, otherwise, assume that this is just a
     // test. 
     if(count && buffer && ctx->buffer)
@@ -481,15 +498,26 @@ ASN1PushInteger(
     BYTE                *integer        // IN: big-endian integer
 )
 {
+    if (iLen <= 0)
+        return 0;
+ 
     // no leading 0's
-    while((*integer == 0) && (--iLen > 0))
+    while((ilen > 1) && (*integer == 0))
+    {
         integer++;
+        ilen--;
+    }
     // Move the bytes to the buffer
-    ASN1PushBytes(ctx, iLen, integer);
+    if (ASN1PushBytes(ctx, iLen, integer) == 0)
+        return 0;
     // if needed, add a leading byte of 0 to make the number positive
     if(*integer & 0x80)
+    {
+        if (iLen >= INT16_MAX)
+            return 0;
         iLen += (INT16)ASN1PushByte(ctx, 0);
-    // PushTagAndLenght just tells how many octets it added so the total size of this
+    }
+    // PushTagAndLength just tells how many octets it added so the total size of this
     // element is the sum of those octets and the adjusted input size.
     iLen +=  ASN1PushTagAndLength(ctx, ASN1_INTEGER, iLen);
     return iLen;
