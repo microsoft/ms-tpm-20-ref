@@ -498,6 +498,8 @@ ASN1PushInteger(
     BYTE                *integer        // IN: big-endian integer
 )
 {
+    INT16 tmp;
+
     if (iLen <= 0)
         return 0;
  
@@ -508,19 +510,21 @@ ASN1PushInteger(
         ilen--;
     }
     // Move the bytes to the buffer
-    if (ASN1PushBytes(ctx, iLen, integer) == 0)
+    if (!ASN1PushBytes(ctx, iLen, integer))
         return 0;
     // if needed, add a leading byte of 0 to make the number positive
     if(*integer & 0x80)
     {
-        if (iLen >= INT16_MAX)
+        if (iLen >= INT16_MAX || !ASN1PushByte(ctx, 0))
             return 0;
-        iLen += (INT16)ASN1PushByte(ctx, 0);
+        iLen++;
     }
     // PushTagAndLength just tells how many octets it added so the total size of this
     // element is the sum of those octets and the adjusted input size.
-    iLen +=  ASN1PushTagAndLength(ctx, ASN1_INTEGER, iLen);
-    return iLen;
+    tmp = ASN1PushTagAndLength(ctx, ASN1_INTEGER, iLen);
+    if (tmp <= 0 || INT16_MAX - tmp < iLen)
+        return 0;
+    return iLen + tmp;
 }
 
 //*** ASN1PushOID()
