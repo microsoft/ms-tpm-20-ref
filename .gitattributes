@@ -1,0 +1,20 @@
+*           text=auto
+*.json      text eol=lf
+*.md        text eol=lf
+*.c         text eol=lf
+*.h         text eol=lf
+*.py        text eol=lf
+*.ps1       text eol=lf
+*.yml       text eol=lf
+*.sh        text eol=lf
+# VS & CMD prefer CRLF
+*.vcproj    text eol=crlf
+*.cmd       text eol=crlf
+
+###############################################################################
+# behavior for image files
+###############################################################################
+*.drawio    binary
+*.jpg       binary
+*.png       binary
+*.gif       binary
