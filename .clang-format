@@ -1,0 +1,97 @@
+---
+Language:        Cpp
+BasedOnStyle:  Microsoft
+AccessModifierOffset: -4
+# AlwaysBreak & BlockIndent are buggy
+# AlwaysBreak: https://github.com/llvm/llvm-project/issues/57241
+# BlockIndent: https://github.com/llvm/llvm-project/issues/57250
+# Align is widely the default and seems to work more reasonably.
+AlignAfterOpenBracket: Align
+AlignConsecutiveMacros: Consecutive
+AlignConsecutiveAssignments: AcrossEmptyLines
+AlignConsecutiveBitFields: AcrossEmptyLines
+AlignConsecutiveDeclarations: AcrossEmptyLines
+AlignEscapedNewlines: Left
+AlignOperands: Align
+BreakBeforeBinaryOperators: NonAssignment
+# style Microsoft is actually for C# but TPM code base historically uses ~80 chars
+ColumnLimit: 86
+# don't break after return types, though clang-format seems to have some issues
+# with this and still breaks after TPM_RC and some other types.
+# open issue with LLVM, no confirmation or workaround identified yet.
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+# we prefer one parameter per line since many parameters have comments
+# and binpacking will create extra inconsistency
+BinPackArguments: false
+BinPackParameters: false
+# Microsft standard C/C++ braces
+BreakBeforeBraces: Allman
+IncludeBlocks:   Preserve
+IndentCaseLabels: true
+IndentCaseBlocks: false
+IndentGotoLabels: false
+# Before hash can misalign comments when IndentWidth and PPIndentWidth differ.
+IndentPPDirectives: AfterHash
+IndentWidth: 4
+PPIndentWidth: 2
+# resist line-length excursions
+PenaltyExcessCharacter: 100000
+# prefer not to break after '='' and '(' for function calls
+# can still happen based on length of components
+PenaltyBreakAssignment: 10
+PenaltyBreakBeforeFirstCallParameter: 1000
+# prefer to break a string constant rather than wrap the entire set of
+# array brackets and equal sign.  If this is too high, can produce this:
+# const char somereallylongvariablename
+#        [] = "...."
+# which is really weird.
+PenaltyBreakString: 10
+PenaltyBreakOpenParenthesis: 1
+# really dislike breaking after bare return type, wastes vertical space.
+PenaltyReturnTypeOnItsOwnLine: 100000000
+# FOO* bar, not FOO *bar
+PointerAlignment: Left
+# don't touch comments that might have MD tables or other
+# complex snippets
+ReflowComments:  false
+# don't sort includes because we can't be sure includes are order-agnostic.
+SortIncludes:    false
+SpaceAroundPointerQualifiers: Default
+SpacesBeforeTrailingComments: 2
+SpacesInConditionalStatement: false
+# current code is inconsistent, but a simple search for "if (" and "if("
+# shows false to be most consistent with existing TPM code by
+# about 2-to-1
+SpaceBeforeParens: false
+StatementMacros:
+  - _Acquires_exclusive_lock_
+  - _Acquires_lock_
+  - _Function_class_
+  - _IRQL_requires_
+  - _Must_inspect_result_
+  - _No_competing_thread_
+  - _Post_same_lock_
+  - _Post_writable_byte_size_
+  - _Pre_satisfies_
+  - _Releases_lock_
+  - _Requires_exclusive_lock_held_
+  - _Requires_lock_held_
+  - _Requires_lock_not_held_
+  - _Requires_shared_lock_held_
+  - _Ret_maybenull_
+  - _Success_
+  - _Use_decl_annotations_
+  - "DLPENTRY\n"
+TabWidth: 4
+TypenameMacros:
+  - BN_STRUCT_DEF
+DeriveLineEnding: false
+UseCRLF:         false
+UseTab:          Never
+WhitespaceSensitiveMacros:
+  - STRINGIZE
+  - LIB_QUOTE
+  - LIB_INCLUDE2
+  - PROFILE_QUOTE
+...
