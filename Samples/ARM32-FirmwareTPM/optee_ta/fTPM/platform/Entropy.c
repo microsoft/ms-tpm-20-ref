@@ -110,8 +110,8 @@ _plat__GetEntropy(
         {
             lastEntropy = rndNum;
             // Each process will have its random number generator initialized according
-            // to the process id and the initialization time. This is not a lot of 
-            // entropy so, to add a bit more, XOR the current time value into the 
+            // to the process id and the initialization time. This is not a lot of
+            // entropy so, to add a bit more, XOR the current time value into the
             // returned entropy value.
             // NOTE: the reason for including the time here rather than have it in
             // in the value assigned to lastEntropy is that rand() could be broken and

@@ -233,7 +233,7 @@ _plat__ACT_UpdateCounter(
     P_ACT_DATA          actData = ActGetDataPointer(act);
  //
     if(actData == NULL)
-        // actData doesn't exist but pretend update is pending rather than indicate 
+        // actData doesn't exist but pretend update is pending rather than indicate
         // that a retry is necessary.
         return TRUE;
     // if an update is pending then return FALSE so that there will be a retry

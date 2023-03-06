@@ -87,7 +87,7 @@ _plat__TimerRestart(
 // appropriated hardware functions.
 
 //***_plat__TimerRead()
-// This function provides access to the tick timer of the platform. The TPM code 
+// This function provides access to the tick timer of the platform. The TPM code
 // uses this value to drive the TPM Clock.
 //
 // The tick timer is supposed to run when power is applied to the device. This timer
@@ -112,7 +112,7 @@ _plat__TimerRead(
 #else
 #define BILLION     1000000000
 #define MILLION     1000000
-#define THOUSAND    1000  
+#define THOUSAND    1000
     clock_t         timeDiff;
     uint64_t        adjusted;
 
@@ -124,7 +124,7 @@ _plat__TimerRead(
     // it is possible that we can put back more than we take out. That is, we could
     // take out 1000 mSec, rate adjust it and put back 1001 mS. This means that
     // on a subsequent call, time may not have caught up. Rather than trying
-    // to rate adjust this, just stop time. This only occurs in a simulation so 
+    // to rate adjust this, just stop time. This only occurs in a simulation so
     // time for more than one command being the same should not be an issue.
     if(timeDiff >= s_realTimePrevious)
     {
@@ -135,7 +135,7 @@ _plat__TimerRead(
     timeDiff = s_realTimePrevious - timeDiff;
 
     // Do the time rate adjustment and conversion from CLOCKS_PER_SEC to mSec
-    adjusted = (((uint64_t)timeDiff * (THOUSAND * CLOCK_NOMINAL)) 
+    adjusted = (((uint64_t)timeDiff * (THOUSAND * CLOCK_NOMINAL))
                 / ((uint64_t)s_adjustRate * CLOCKS_PER_SEC));
 
     s_tpmTime += (clock_t)adjusted;
@@ -143,7 +143,7 @@ _plat__TimerRead(
     // Might have some rounding error that would loose CLOCKS. See what is not
     // being used. As mentioned above, this could result in putting back more than
     // is taken out
-    adjusted = (adjusted * ((uint64_t)s_adjustRate * CLOCKS_PER_SEC)) 
+    adjusted = (adjusted * ((uint64_t)s_adjustRate * CLOCKS_PER_SEC))
         / (THOUSAND * CLOCK_NOMINAL);
 
     // If adjusted is not the same as timeDiff, then there is some rounding
@@ -167,14 +167,14 @@ _plat__TimerRead(
 
 
 //*** _plat__TimerWasReset()
-// This function is used to interrogate the flag indicating if the tick timer has 
+// This function is used to interrogate the flag indicating if the tick timer has
 // been reset.
 //
-// If the resetFlag parameter is SET, then the flag will be CLEAR before the 
+// If the resetFlag parameter is SET, then the flag will be CLEAR before the
 // function returns.
 LIB_EXPORT BOOL
 _plat__TimerWasReset(
-   void          
+   void
     )
 {
     BOOL         retVal = s_timerReset;
@@ -183,7 +183,7 @@ _plat__TimerWasReset(
 }
 
 //*** _plat__TimerWasStopped()
-// This function is used to interrogate the flag indicating if the tick timer has 
+// This function is used to interrogate the flag indicating if the tick timer has
 // been stopped. If so, this is typically a reason to roll the nonce.
 //
 // This function will CLEAR the s_timerStopped flag before returning. This provides

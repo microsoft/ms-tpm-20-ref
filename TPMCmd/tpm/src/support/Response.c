@@ -42,7 +42,7 @@
 #include "Marshal.h"
 
 //** BuildResponseHeader()
-// Adds the response header to the response. It will update command->parameterSize 
+// Adds the response header to the response. It will update command->parameterSize
 // to indicate the total size of the response.
 void
 BuildResponseHeader(

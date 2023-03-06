@@ -106,7 +106,7 @@ IsDAExempted(
 //
 //  Return Type: TPM_RC
 //      TPM_RC_AUTH_FAIL    authorization failure that caused DA lockout to increment
-//      TPM_RC_BAD_AUTH     authorization failure did not cause DA lockout to 
+//      TPM_RC_BAD_AUTH     authorization failure did not cause DA lockout to
 //                          increment
 static TPM_RC
 IncrementLockout(
@@ -245,7 +245,7 @@ IsPolicySessionRequired(
         {
             OBJECT      *object = HandleToObject(s_associatedHandles[sessionIndex]);
 
-            if(!IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, 
+            if(!IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT,
                              adminWithPolicy))
                 return FALSE;
         }
@@ -337,7 +337,7 @@ IsAuthValueAvailable(
             attributes = object->publicArea.objectAttributes;
 
             // authValue is always available for a sequence object.
-            // An alternative for this is to 
+            // An alternative for this is to
             // SET_ATTRIBUTE(object->publicArea, TPMA_OBJECT, userWithAuth) when the
             // sequence is started.
             if(ObjectIsSequence(object))
@@ -364,7 +364,7 @@ IsAuthValueAvailable(
             TPMA_NV          nvAttributes;
 //
             pAssert(nvIndex != 0);
-            
+
             nvAttributes = nvIndex->publicArea.attributes;
 
             if(IsWriteOperation(commandIndex))
@@ -449,7 +449,7 @@ IsAuthPolicyAvailable(
                     if(go.ACT_##N.authPolicy.t.size != 0)                           \
                         result = TRUE;                                              \
                     break;
-					
+
                 FOR_EACH_ACT(ACT_GET_POLICY)
 
                 case TPM_RH_LOCKOUT:
@@ -524,7 +524,7 @@ ClearCpRpHashes(
     COMMAND         *command
     )
 {
-    // The macros expand according to the implemented hash algorithms. An IDE may 
+    // The macros expand according to the implemented hash algorithms. An IDE may
     // complain that COMMAND does not contain SHA1CpHash or SHA1RpHash because of the
     // complexity of the macro expansion where the data space is defined; but, if SHA1
     // is implemented, it actually does  and the compiler is happy.
@@ -554,7 +554,7 @@ GetCpHashPointer(
 
     switch(hashAlg)
     {
-        // For each implemented hash, this will expand as defined above 
+        // For each implemented hash, this will expand as defined above
         // by GET_CP_HASH_POINTER. Your IDE may complain that
         // 'struct "COMMAND" has no field "SHA1CpHash"' but the compiler says
         // it does, so...
@@ -585,7 +585,7 @@ GetRpHashPointer(
 
     switch(hashAlg)
     {
-        // For each implemented hash, this will expand as defined above 
+        // For each implemented hash, this will expand as defined above
         // by GET_RP_HASH_POINTER. Your IDE may complain that
         // 'struct "COMMAND" has no field 'SHA1RpHash'" but the compiler says
         // it does, so...
@@ -629,7 +629,7 @@ ComputeCpHash(
             CryptDigestUpdate2B(&hashState, &EntityGetName(command->handles[i],
                                                            &name)->b);
             //  Add the parameters.
-        CryptDigestUpdate(&hashState, command->parameterSize, 
+        CryptDigestUpdate(&hashState, command->parameterSize,
                           command->parameterBuffer);
             //  Complete the hash.
         CryptHashEnd2B(&hashState, &cpHash->b);
@@ -699,7 +699,7 @@ CompareTemplateHash(
     if(size > pSize)
         return FALSE;
     // Hash the template data
-    tHash.t.size = CryptHashBlock(session->authHashAlg, size, pBuffer, 
+    tHash.t.size = CryptHashBlock(session->authHashAlg, size, pBuffer,
                                   sizeof(tHash.t.buffer), tHash.t.buffer);
     return(MemoryEqual2B(&session->u1.templateHash.b, &tHash.b));
 }
@@ -1412,7 +1412,7 @@ CheckAuthSession(
         // See if entity is subject to lockout.
         if(!IsDAExempted(associatedHandle))
         {
-            // See if in lockout 
+            // See if in lockout
             result = CheckLockedOut(associatedHandle == TPM_RH_LOCKOUT);
             if(result != TPM_RC_SUCCESS)
                 return result;
@@ -1658,7 +1658,7 @@ ParseSessionBuffer(
         // generation of the decryption key
         if(s_associatedHandles[s_decryptSessionIndex] != TPM_RH_UNASSIGNED)
         {
-            EntityGetAuthValue(s_associatedHandles[s_decryptSessionIndex], 
+            EntityGetAuthValue(s_associatedHandles[s_decryptSessionIndex],
                                &extraKey);
         }
         else
@@ -1747,7 +1747,7 @@ ComputeRpHash(
         // Add hash constituents.
         CryptDigestUpdateInt(&hashState, sizeof(TPM_RC), TPM_RC_SUCCESS);
         CryptDigestUpdateInt(&hashState, sizeof(TPM_CC), command->code);
-        CryptDigestUpdate(&hashState, command->parameterSize, 
+        CryptDigestUpdate(&hashState, command->parameterSize,
                           command->parameterBuffer);
         // Complete hash computation.
         CryptHashEnd2B(&hashState, &rpHash->b);
@@ -1798,7 +1798,7 @@ UpdateAuditDigest(
     digest->t.size = CryptHashStart(&hashState, hashAlg);
         // Add old digest.
     CryptDigestUpdate2B(&hashState, &digest->b);
-        // Add cpHash 
+        // Add cpHash
     CryptDigestUpdate2B(&hashState, &cpHash->b);
         // Add rpHash
     CryptDigestUpdate2B(&hashState, &rpHash->b);
@@ -2103,7 +2103,7 @@ UpdateAllNonceTPM(
 // to the end of command->responseBuffer. The size of the authorization area is
 // accumulated in command->authSize.
 // When this is called, command->responseBuffer is pointing at the next location
-// in the response buffer to be filled. This is where the authorization sessions 
+// in the response buffer to be filled. This is where the authorization sessions
 // will go, if any. command->parameterSize is the number of bytes that have been
 // marshaled as parameters in the output buffer.
 void
@@ -2141,7 +2141,7 @@ BuildResponseSession(
             // generation of the encryption key
             if(s_associatedHandles[s_encryptSessionIndex] != TPM_RH_UNASSIGNED)
             {
-                EntityGetAuthValue(s_associatedHandles[s_encryptSessionIndex], 
+                EntityGetAuthValue(s_associatedHandles[s_encryptSessionIndex],
                                    &extraKey);
             }
             size = EncryptSize(command->index);
@@ -2180,7 +2180,7 @@ BuildResponseSession(
             {
                 SET_ATTRIBUTE(s_attributes[i], TPMA_SESSION, continueSession);
                 responseAuth.t.size = 0;
-                nonceTPM = (TPM2B_NONCE *)&responseAuth;                
+                nonceTPM = (TPM2B_NONCE *)&responseAuth;
             }
             else
             {

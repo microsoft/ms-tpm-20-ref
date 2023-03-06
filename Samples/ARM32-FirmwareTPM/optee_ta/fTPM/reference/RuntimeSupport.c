@@ -78,7 +78,7 @@ int strncasecmp(const char *str1, const char *str2, size_t n)
 int wolfRand(unsigned char* output, unsigned int sz)
 {
     TEE_GenerateRandom((void *)output, (uint32_t)sz);
-    
+
     return 0;
 }
 #endif

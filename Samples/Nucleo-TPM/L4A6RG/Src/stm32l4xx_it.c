@@ -43,7 +43,7 @@
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /******************************************************************************/
-/*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
+/*            Cortex-M4 Processor Interruption and Exception Handlers         */
 /******************************************************************************/
 
 /**

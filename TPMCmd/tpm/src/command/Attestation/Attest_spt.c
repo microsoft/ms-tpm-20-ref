@@ -193,7 +193,7 @@ IsSigningObject(
     OBJECT          *object         // IN:
     )
 {
-    return ((object == NULL) 
+    return ((object == NULL)
             || ((IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, sign)
                && object->publicArea.type != TPM_ALG_SYMCIPHER)));
 }
