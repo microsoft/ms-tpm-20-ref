@@ -406,7 +406,7 @@ _plat__NvIsDifferent(
 // This function is used to update NV memory. The "write" is to a memory copy of
 // NV. At the end of the current command, any changes are written to
 // the actual NV memory.
-// NOTE: A useful optimization would be for this code to compare the current 
+// NOTE: A useful optimization would be for this code to compare the current
 // contents of NV with the local copy and note the blocks that have changed. Then
 // only write those blocks when _plat__NvCommit() is called.
 LIB_EXPORT void

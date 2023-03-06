@@ -38,7 +38,7 @@
 #include <memory.h>
 #include <time.h>
 #include <unistd.h>
-#include <net/if.h> 
+#include <net/if.h>
 #include <sys/ioctl.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -177,7 +177,7 @@ static int GetDiskSerialNumber()
             while (NULL != entry)
             {
                 if (0 == strcmp(udev_list_entry_get_name(entry),
-                    "ID_SERIAL")) 
+                    "ID_SERIAL"))
                 {
                     break;
                 }
@@ -218,8 +218,8 @@ Cleanup:
 #if defined(SIMULATION) && (SIMULATION == YES)
 // Get device id from hardware parameters.
 // CAUTION: Primary seeds derived from device unique IDs are guaranteed to remain the same as long as the reference
-//  implementation manufactures its NV state on the same device. Since this implementation of GetDeviceID() relies 
-//  solely on publicly accessible values (storage device serial numbers and networking card MAC address), it can 
+//  implementation manufactures its NV state on the same device. Since this implementation of GetDeviceID() relies
+//  solely on publicly accessible values (storage device serial numbers and networking card MAC address), it can
 //  only be used for the simulation purposes, as it cannot be used to produce a secret value.
 // pre-requisites - assumes that MAC address or disk device (i.e. /dev/sda or /dev/mmcblk0) present on the device.
 TPM_RC GetDeviceID()
@@ -256,7 +256,7 @@ void GetSeed(UINT16 size, uint8_t *seed, const TPM2B *purpose)
         LOG_FAILURE(FATAL_ERROR_INTERNAL);
         return;
     }
-    
+
     result = DRBG_InstantiateSeeded(&rand.drbg, &deviceID.b, purpose, NULL, NULL);
     if(result != TPM_RC_SUCCESS)
     {

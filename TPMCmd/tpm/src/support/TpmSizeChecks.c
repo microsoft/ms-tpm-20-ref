@@ -152,7 +152,7 @@ TpmSizeChecks(
             printf("MAX_CONTEXT_SIZE needs to be increased to at least %d (%d)\n",
                    biggestContext, MAX_CONTEXT_SIZE);
             PASS = FALSE;
-        } 
+        }
         else if (MAX_CONTEXT_SIZE > biggestContext)
         {
             printf("MAX_CONTEXT_SIZE can be reduced to %d (%d)\n",
@@ -203,7 +203,7 @@ TpmSizeChecks(
         }
     }
     {
-        // Had a problem with the macros coming up with some bad values. Make sure 
+        // Had a problem with the macros coming up with some bad values. Make sure
         // the size is rational
         int t = MAX_DIGEST_SIZE;
         if (t < 20)

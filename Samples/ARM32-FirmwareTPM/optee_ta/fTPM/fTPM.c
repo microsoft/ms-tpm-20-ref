@@ -73,7 +73,7 @@ typedef uint32_t TPM_RC;
 //
 // Helper function to read response codes from TPM responses
 //
-static uint32_t fTPMResponseCode(uint32_t ResponseSize, 
+static uint32_t fTPMResponseCode(uint32_t ResponseSize,
                                  uint8_t *ResponseBuffer)
 {
     uint32_t ResponseCode;
@@ -253,9 +253,9 @@ Exit:
 }
 
 
-// 
+//
 // Called when TA instance destroyed.  This is the last call in the TA.
-// 
+//
 void TA_DestroyEntryPoint(void)
 {
     // We should only see this called after the OS has shutdown and there
@@ -267,9 +267,9 @@ void TA_DestroyEntryPoint(void)
 }
 
 
-// 
+//
 // Called when a new session is opened to the TA.
-// 
+//
 TEE_Result TA_OpenSessionEntryPoint(uint32_t    param_types,
                                     TEE_Param   params[4],
                                     void        **sess_ctx)
@@ -450,9 +450,9 @@ static TEE_Result fTPM_Emulate_PPI(uint32_t  param_types,
     return TEE_SUCCESS;
 }
 
-// 
+//
 // Called when a TA is invoked. Note, paramters come from normal world.
-// 
+//
 TEE_Result TA_InvokeCommandEntryPoint(void      *sess_ctx,
                                       uint32_t  cmd_id,
                                       uint32_t  param_types,

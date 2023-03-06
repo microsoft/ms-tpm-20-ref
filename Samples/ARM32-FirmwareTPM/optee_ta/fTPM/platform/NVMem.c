@@ -295,7 +295,7 @@ _plat__NvWriteBack()
 
 			// Form storage object ID for this block.
 			objID = s_StorageObjectID + i;
-            
+
 			// Move data position associated with handle to start of block.
             Result = TEE_SeekObjectData(s_NVStore[i], 0, TEE_DATA_SEEK_SET);
 			if (Result != TEE_SUCCESS) {
@@ -309,10 +309,10 @@ _plat__NvWriteBack()
 			if (Result != TEE_SUCCESS) {
 				goto Error;
 			}
-            
+
 			// Force storage stack to update its backing store
             TEE_CloseObject(s_NVStore[i]);
-            
+
             Result = TEE_OpenPersistentObject(TEE_STORAGE_PRIVATE,
                                               (void *)&objID,
                                               sizeof(objID),
@@ -400,7 +400,7 @@ _plat__NVEnable(
     if (!s_NVInitialized) {
         // Arriving here means one of two things: Either there existed no
         // NV state before we came along and we just (re)initialized our
-        // storage. Or there is an error condition preventing us from 
+        // storage. Or there is an error condition preventing us from
         // accessing storage.  Check which is the case.
         if (s_NVChipFileNeedsManufacture == FALSE) {
             // This condition means we cannot access storage. However, it
@@ -530,9 +530,9 @@ _plat__MarkDirtyBlocks (
 )
 {
 	unsigned int blockEnd;
-	unsigned int blockStart;	
+	unsigned int blockStart;
 	unsigned int i;
-	
+
 	//
 	// Integer math will round down to the start of the block.
 	// blockEnd is actually the last block + 1.
@@ -553,7 +553,7 @@ _plat__MarkDirtyBlocks (
 // This function is used to update NV memory. The "write" is to a memory copy of
 // NV. At the end of the current command, any changes are written to
 // the actual NV memory.
-// NOTE: A useful optimization would be for this code to compare the current 
+// NOTE: A useful optimization would be for this code to compare the current
 // contents of NV with the local copy and note the blocks that have changed. Then
 // only write those blocks when _plat__NvCommit() is called.
 LIB_EXPORT void

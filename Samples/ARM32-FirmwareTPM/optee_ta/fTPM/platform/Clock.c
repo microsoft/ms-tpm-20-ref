@@ -101,7 +101,7 @@ _plat__TimerRestart(
 TEE_Time     debugTime;
 
 //*** _plat__RealTime()
-// This is another, probably futile, attempt to define a portable function 
+// This is another, probably futile, attempt to define a portable function
 // that will return a 64-bit clock value that has mSec resolution.
 uint64_t
 _plat__RealTime(
@@ -136,7 +136,7 @@ _plat__RealTime(
 }
 
 //***_plat__TimerRead()
-// This function provides access to the tick timer of the platform. The TPM code 
+// This function provides access to the tick timer of the platform. The TPM code
 // uses this value to drive the TPM Clock.
 //
 // The tick timer is supposed to run when power is applied to the device. This timer
@@ -173,7 +173,7 @@ _plat__TimerRead(
         s_lastReportedTime = 0;
         s_realTimePrevious = 0;
     }
-    // The system time can bounce around and that's OK as long as we don't allow 
+    // The system time can bounce around and that's OK as long as we don't allow
     // time to go backwards. When the time does appear to go backwards, set
     // lastSystemTime to be the new value and then update the reported time.
     if(timeNow < s_lastReportedTime)
@@ -201,7 +201,7 @@ _plat__TimerRead(
     // Might have some rounding error that would loose CLOCKS. See what is not
     // being used. As mentioned above, this could result in putting back more than
     // is taken out. Here, we are trying to recreate timeDiff.
-    readjustedTimeDiff = (adjustedTimeDiff * (uint64_t)s_adjustRate ) 
+    readjustedTimeDiff = (adjustedTimeDiff * (uint64_t)s_adjustRate )
                                 / CLOCK_NOMINAL;
 
     // adjusted is now converted back to being the amount we should advance the
@@ -223,14 +223,14 @@ _plat__TimerRead(
 
 
 //*** _plat__TimerWasReset()
-// This function is used to interrogate the flag indicating if the tick timer has 
+// This function is used to interrogate the flag indicating if the tick timer has
 // been reset.
 //
-// If the resetFlag parameter is SET, then the flag will be CLEAR before the 
+// If the resetFlag parameter is SET, then the flag will be CLEAR before the
 // function returns.
 LIB_EXPORT BOOL
 _plat__TimerWasReset(
-   void          
+   void
     )
 {
     BOOL         retVal = s_timerReset;
@@ -239,7 +239,7 @@ _plat__TimerWasReset(
 }
 
 //*** _plat__TimerWasStopped()
-// This function is used to interrogate the flag indicating if the tick timer has 
+// This function is used to interrogate the flag indicating if the tick timer has
 // been stopped. If so, this is typically a reason to roll the nonce.
 //
 // This function will CLEAR the s_timerStopped flag before returning. This provides

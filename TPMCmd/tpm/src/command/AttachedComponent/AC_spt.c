@@ -33,7 +33,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 //** Introduction
-// This code in this clause is provided for testing of the TPM's command interface. 
+// This code in this clause is provided for testing of the TPM's command interface.
 // The implementation of Attached Components is not expected to be as shown in this
 // code.
 
@@ -52,7 +52,7 @@ typedef struct {
 } acCapabilities;
 
 
-TPML_AC_CAPABILITIES acData0001 = {1, 
+TPML_AC_CAPABILITIES acData0001 = {1,
         {{TPM_AT_PV1, 0x01234567}}};
 
 acCapabilities  ac[1] = { {0x0001, &acData0001} };
@@ -154,7 +154,7 @@ AcSendObject(
 {
     NOT_REFERENCED(object);
     NOT_REFERENCED(acHandle);
-    acDataOut->tag = TPM_AT_ERROR;  // indicate that the response contains an 
+    acDataOut->tag = TPM_AT_ERROR;  // indicate that the response contains an
                                     // error code
     acDataOut->data = TPM_AE_NONE;  // but there is no error.
 

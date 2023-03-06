@@ -48,7 +48,7 @@ TPM2_AC_GetCapability(
     )
 {
 // Command Output
-    out->moreData = AcCapabilitiesGet(in->ac, in->capability, in->count, 
+    out->moreData = AcCapabilitiesGet(in->ac, in->capability, in->count,
                                       &out->capabilitiesData);
 
     return TPM_RC_SUCCESS;

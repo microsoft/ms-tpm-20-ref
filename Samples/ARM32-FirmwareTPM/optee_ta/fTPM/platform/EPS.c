@@ -64,7 +64,7 @@ _plat__GetEPS(UINT16 Size, uint8_t *EndorsementSeed)
 
     if ((EPSLen < Size) || (Result != TEE_SUCCESS)) {
         // We failed to access the property. We can't continue without it
-        // and we can't just fail to manufacture, so randomize EPS and 
+        // and we can't just fail to manufacture, so randomize EPS and
         // continue. If necessary, fTPM TA storage can be cleared, or the
         // TA updated, and we can trigger remanufacture and try again.
         _plat__GetEntropy(EndorsementSeed, TEE_EPS_SIZE);

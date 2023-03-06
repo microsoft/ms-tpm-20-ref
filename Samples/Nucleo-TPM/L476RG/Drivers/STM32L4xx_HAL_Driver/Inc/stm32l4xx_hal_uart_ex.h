@@ -91,7 +91,7 @@ typedef struct
 /**
   * @}
   */
-  
+
 /** @defgroup UARTEx_WakeUp_Address_Length UARTEx WakeUp Address Length
   * @{
   */
@@ -114,7 +114,7 @@ typedef struct
 
 #if defined(USART_CR1_FIFOEN)
 /** @defgroup UARTEx_TXFIFO_threshold_level UARTEx TXFIFO threshold level
-  * @brief    UART TXFIFO level 
+  * @brief    UART TXFIFO level
   * @{
   */
 #define UART_TXFIFO_THRESHOLD_1_8   0x00000000U                               /*!< TXFIFO reaches 1/8 of its depth */
@@ -126,9 +126,9 @@ typedef struct
 /**
   * @}
   */
-   
+
 /** @defgroup UARTEx_RXFIFO_threshold_level UARTEx RXFIFO threshold level
-  * @brief    UART RXFIFO level 
+  * @brief    UART RXFIFO level
   * @{
   */
 #define UART_RXFIFO_THRESHOLD_1_8   0x00000000U                               /*!< RXFIFO FIFO reaches 1/8 of its depth */
@@ -174,7 +174,7 @@ void HAL_UARTEx_WakeupCallback(UART_HandleTypeDef *huart);
 void HAL_UARTEx_RxFifoFullCallback(UART_HandleTypeDef *huart);
 void HAL_UARTEx_TxFifoEmptyCallback(UART_HandleTypeDef *huart);
 #endif
-  
+
 /**
   * @}
   */
@@ -645,7 +645,7 @@ HAL_StatusTypeDef HAL_UARTEx_SetRxFifoThreshold(UART_HandleTypeDef *huart, uint3
           break;                                              \
        }                                                      \
     }                                                         \
-  } while(0)  
+  } while(0)
 #endif
 
 /** @brief  Report the UART mask to apply to retrieve the received data
@@ -697,7 +697,7 @@ HAL_StatusTypeDef HAL_UARTEx_SetRxFifoThreshold(UART_HandleTypeDef *huart, uint3
 
 /**
   * @brief Ensure that UART frame length is valid.
-  * @param __LENGTH__ UART frame length. 
+  * @param __LENGTH__ UART frame length.
   * @retval SET (__LENGTH__ is valid) or RESET (__LENGTH__ is invalid)
   */
 #define IS_UART_WORD_LENGTH(__LENGTH__) (((__LENGTH__) == UART_WORDLENGTH_7B) || \
@@ -706,7 +706,7 @@ HAL_StatusTypeDef HAL_UARTEx_SetRxFifoThreshold(UART_HandleTypeDef *huart, uint3
 
 /**
   * @brief Ensure that UART wake-up address length is valid.
-  * @param __ADDRESS__ UART wake-up address length. 
+  * @param __ADDRESS__ UART wake-up address length.
   * @retval SET (__ADDRESS__ is valid) or RESET (__ADDRESS__ is invalid)
   */
 #define IS_UART_ADDRESSLENGTH_DETECT(__ADDRESS__) (((__ADDRESS__) == UART_ADDRESS_DETECT_4B) || \
@@ -715,7 +715,7 @@ HAL_StatusTypeDef HAL_UARTEx_SetRxFifoThreshold(UART_HandleTypeDef *huart, uint3
 #if defined(USART_CR2_SLVEN)
 /**
   * @brief Ensure that UART Negative Slave Select (NSS) pin management is valid.
-  * @param __NSS__ UART Negative Slave Select pin management. 
+  * @param __NSS__ UART Negative Slave Select pin management.
   * @retval SET (__NSS__ is valid) or RESET (__NSS__ is invalid)
   */
 #define IS_UART_NSS(__NSS__) (((__NSS__) == UART_NSS_HARD) || \
@@ -725,7 +725,7 @@ HAL_StatusTypeDef HAL_UARTEx_SetRxFifoThreshold(UART_HandleTypeDef *huart, uint3
 #if defined(USART_CR1_FIFOEN)
 /**
   * @brief Ensure that UART TXFIFO threshold level is valid.
-  * @param __THRESHOLD__ UART TXFIFO threshold level. 
+  * @param __THRESHOLD__ UART TXFIFO threshold level.
   * @retval SET (__THRESHOLD__ is valid) or RESET (__THRESHOLD__ is invalid)
   */
 #define IS_UART_TXFIFO_THRESHOLD(__THRESHOLD__)  (((__THRESHOLD__) == UART_TXFIFO_THRESHOLD_1_8)  || \
@@ -733,11 +733,11 @@ HAL_StatusTypeDef HAL_UARTEx_SetRxFifoThreshold(UART_HandleTypeDef *huart, uint3
                                                   ((__THRESHOLD__) == UART_TXFIFO_THRESHOLD_1_2)  || \
                                                   ((__THRESHOLD__) == UART_TXFIFO_THRESHOLD_3_4)  || \
                                                   ((__THRESHOLD__) == UART_TXFIFO_THRESHOLD_7_8)  || \
-                                                  ((__THRESHOLD__) == UART_TXFIFO_THRESHOLD_8_8))                                          
+                                                  ((__THRESHOLD__) == UART_TXFIFO_THRESHOLD_8_8))
 
 /**
   * @brief Ensure that USART RXFIFO threshold level is valid.
-  * @param __THRESHOLD__ USART RXFIFO threshold level. 
+  * @param __THRESHOLD__ USART RXFIFO threshold level.
   * @retval SET (__THRESHOLD__ is valid) or RESET (__THRESHOLD__ is invalid)
   */
 #define IS_UART_RXFIFO_THRESHOLD(__THRESHOLD__)  (((__THRESHOLD__) == UART_RXFIFO_THRESHOLD_1_8)  || \
