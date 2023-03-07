@@ -862,6 +862,7 @@ CryptSecretDecrypt(OBJECT*      decryptKey,   // IN: decrypt key
 void CryptParameterEncryption(
     TPM_HANDLE handle,             // IN: encrypt session handle
     TPM2B*     nonceCaller,        // IN: nonce caller
+    INT32      bufferSize,         // IN: size of parameter buffer
     UINT16     leadingSizeInByte,  // IN: the size of the leading size field in
                                    //     bytes
     TPM2B_AUTH* extraKey,          // IN: additional key material other than
@@ -872,30 +873,33 @@ void CryptParameterEncryption(
     SESSION* session = SessionGet(handle);  // encrypt session
     TPM2B_TYPE(TEMP_KEY,
                (sizeof(extraKey->t.buffer) + sizeof(session->sessionKey.t.buffer)));
-    TPM2B_TEMP_KEY key;             // encryption key
-    UINT32         cipherSize = 0;  // size of cipher text
-                                    //
-    // Retrieve encrypted data size.
-    if(leadingSizeInByte == 2)
-    {
-        // Extract the first two bytes as the size field as the data size
-        // encrypt
-        cipherSize = (UINT32)BYTE_ARRAY_TO_UINT16(buffer);
-        // advance the buffer
-        buffer = &buffer[2];
-    }
-#ifdef TPM4B
-    else if(leadingSizeInByte == 4)
-    {
-        // use the first four bytes to indicate the number of bytes to encrypt
-        cipherSize = BYTE_ARRAY_TO_UINT32(buffer);
-        //advance pointer
-        buffer = &buffer[4];
-    }
-#endif
-    else
+    TPM2B_TEMP_KEY key;                 // encryption key
+    UINT16         cipherSize = 0;      // size of cipher text
+
+    if(bufferSize < leadingSizeInByte)
     {
         FAIL(FATAL_ERROR_INTERNAL);
+        return;
+    }
+
+    // Parameter encryption for a non-2B is not supported.
+    if(leadingSizeInByte != 2)
+    {
+        FAIL(FATAL_ERROR_INTERNAL);
+        return;
+    }
+
+    // Retrieve encrypted data size.
+    if(UINT16_Unmarshal(&cipherSize, &buffer, &bufferSize) != TPM_RC_SUCCESS)
+    {
+        FAIL(FATAL_ERROR_INTERNAL);
+        return;
+    }
+
+    if(cipherSize > bufferSize)
+    {
+        FAIL(FATAL_ERROR_INTERNAL);
+        return;
     }
 
     // Compute encryption key by concatenating sessionKey with extra key
@@ -910,7 +914,7 @@ void CryptParameterEncryption(
                             &(key.b),
                             &(session->nonceTPM.b),
                             nonceCaller,
-                            cipherSize,
+                            (UINT32)cipherSize,
                             buffer);
     else
         ParmEncryptSym(session->symmetric.algorithm,
@@ -919,7 +923,7 @@ void CryptParameterEncryption(
                        &(key.b),
                        nonceCaller,
                        &(session->nonceTPM.b),
-                       cipherSize,
+                       (UINT32)cipherSize,
                        buffer);
     return;
 }
@@ -933,7 +937,7 @@ TPM_RC
 CryptParameterDecryption(
     TPM_HANDLE handle,             // IN: encrypted session handle
     TPM2B*     nonceCaller,        // IN: nonce caller
-    UINT32     bufferSize,         // IN: size of parameter buffer
+    INT32      bufferSize,         // IN: size of parameter buffer
     UINT16     leadingSizeInByte,  // IN: the size of the leading size field in
                                    //     byte
     TPM2B_AUTH* extraKey,          // IN: the authValue
@@ -946,31 +950,31 @@ CryptParameterDecryption(
     // is the size of the buffer which can contain a TPMT_HA.
     TPM2B_TYPE(HMAC_KEY,
                (sizeof(extraKey->t.buffer) + sizeof(session->sessionKey.t.buffer)));
-    TPM2B_HMAC_KEY key;             // decryption key
-    UINT32         cipherSize = 0;  // size of cipher text
-                                    //
-    // Retrieve encrypted data size.
-    if(leadingSizeInByte == 2)
+    TPM2B_HMAC_KEY key;                 // decryption key
+    UINT16         cipherSize = 0;      // size of ciphertext
+
+    if(bufferSize < leadingSizeInByte)
     {
-        // The first two bytes of the buffer are the size of the
-        // data to be decrypted
-        cipherSize = (UINT32)BYTE_ARRAY_TO_UINT16(buffer);
-        buffer     = &buffer[2];  // advance the buffer
+        return TPM_RC_INSUFFICIENT;
     }
-#ifdef TPM4B
-    else if(leadingSizeInByte == 4)
-    {
-        // the leading size is four bytes so get the four byte size field
-        cipherSize = BYTE_ARRAY_TO_UINT32(buffer);
-        buffer     = &buffer[4];  //advance pointer
-    }
-#endif
-    else
+
+    // Parameter encryption for a non-2B is not supported.
+    if(leadingSizeInByte != 2)
     {
         FAIL(FATAL_ERROR_INTERNAL);
+        return TPM_RC_FAILURE;
     }
+
+    // Retrieve encrypted data size.
+    if(UINT16_Unmarshal(&cipherSize, &buffer, &bufferSize) != TPM_RC_SUCCESS)
+    {
+        return TPM_RC_INSUFFICIENT;
+    }
+
     if(cipherSize > bufferSize)
+    {
         return TPM_RC_SIZE;
+    }
 
     // Compute decryption key by concatenating sessionAuth with extra input key
     MemoryCopy2B(&key.b, &session->sessionKey.b, sizeof(key.t.buffer));
@@ -984,7 +988,7 @@ CryptParameterDecryption(
                             &key.b,
                             nonceCaller,
                             &(session->nonceTPM.b),
-                            cipherSize,
+                            (UINT32)cipherSize,
                             buffer);
     else
         // Assume that it is one of the symmetric block ciphers.
@@ -994,7 +998,7 @@ CryptParameterDecryption(
                        &key.b,
                        nonceCaller,
                        &session->nonceTPM.b,
-                       cipherSize,
+                       (UINT32)cipherSize,
                        buffer);
 
     return TPM_RC_SUCCESS;

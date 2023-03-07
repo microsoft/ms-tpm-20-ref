@@ -266,7 +266,11 @@ LIB_EXPORT void ExecuteCommand(
         goto Cleanup;
 
     // Build the session area at the end of the parameter area.
-    BuildResponseSession(&command);
+    result = BuildResponseSession(&command);
+    if(result != TPM_RC_SUCCESS)
+    {
+        goto Cleanup;
+    }
 
 Cleanup:
     if(g_clearOrderly == TRUE && NV_IS_ORDERLY)

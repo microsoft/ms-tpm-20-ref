@@ -2022,10 +2022,13 @@ static void UpdateAllNonceTPM(COMMAND* command  // IN: controlling structure
 // in the response buffer to be filled. This is where the authorization sessions
 // will go, if any. command->parameterSize is the number of bytes that have been
 // marshaled as parameters in the output buffer.
-void BuildResponseSession(COMMAND* command  // IN: structure that has relevant command
-                                            //     information
+TPM_RC
+BuildResponseSession(COMMAND* command  // IN: structure that has relevant command
+                                       //     information
 )
 {
+    TPM_RC result = TPM_RC_SUCCESS;
+
     pAssert(command->authSize == 0);
 
     // Reset the parameter buffer to point to the start of the parameters so that
@@ -2059,11 +2062,22 @@ void BuildResponseSession(COMMAND* command  // IN: structure that has relevant c
                                    &extraKey);
             }
             size = EncryptSize(command->index);
+            // This function operates on internally-generated data that is
+            // expected to be well-formed for parameter encryption.
+            // In the event that there is a bug elsewhere in the code and the
+            // input data is not well-formed, CryptParameterEncryption will
+            // put the TPM into failure mode.
             CryptParameterEncryption(s_sessionHandles[s_encryptSessionIndex],
                                      &s_nonceCaller[s_encryptSessionIndex].b,
+                                     command->parameterSize,
                                      (UINT16)size,
                                      &extraKey,
                                      command->parameterBuffer);
+            if(g_inFailureMode)
+            {
+                result = TPM_RC_FAILURE;
+                goto Cleanup;
+            }
         }
     }
     // Audit sessions should be processed regardless of the tag because
@@ -2112,7 +2126,9 @@ void BuildResponseSession(COMMAND* command  // IN: structure that has relevant c
                 SessionFlush(s_sessionHandles[i]);
         }
     }
-    return;
+
+Cleanup:
+    return result;
 }
 
 //*** SessionRemoveAssociationToHandle()

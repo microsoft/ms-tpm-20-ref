@@ -96,8 +96,9 @@ CheckAuthNoSession(COMMAND* command  // IN: command parsing structure
 // in the response buffer to be filled. This is where the authorization sessions
 // will go, if any. command->parameterSize is the number of bytes that have been
 // marshaled as parameters in the output buffer.
-void BuildResponseSession(COMMAND* command  // IN: structure that has relevant command
-                                            //     information
+TPM_RC
+BuildResponseSession(COMMAND* command  // IN: structure that has relevant command
+                                       //     information
 );
 
 //*** SessionRemoveAssociationToHandle()
