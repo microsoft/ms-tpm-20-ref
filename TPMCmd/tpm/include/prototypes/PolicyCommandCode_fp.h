@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PolicyCommandCode // Command must be enabled
+#if CC_PolicyCommandCode  // Command must be enabled
 
-#ifndef _Policy_Command_Code_FP_H_
-#define _Policy_Command_Code_FP_H_
+#  ifndef _Policy_Command_Code_FP_H_
+#    define _Policy_Command_Code_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_SH_POLICY                  policySession;
-    TPM_CC                          code;
+typedef struct
+{
+    TPMI_SH_POLICY policySession;
+    TPM_CC         code;
 } PolicyCommandCode_In;
 
 // Response code modifiers
-#define RC_PolicyCommandCode_policySession  (TPM_RC_H + TPM_RC_1)
-#define RC_PolicyCommandCode_code   (TPM_RC_P + TPM_RC_1)
+#    define RC_PolicyCommandCode_policySession (TPM_RC_H + TPM_RC_1)
+#    define RC_PolicyCommandCode_code          (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_PolicyCommandCode(
-    PolicyCommandCode_In            *in
-);
+TPM2_PolicyCommandCode(PolicyCommandCode_In* in);
 
-#endif  // _Policy_Command_Code_FP_H_
-#endif  // CC_PolicyCommandCode
+#  endif  // _Policy_Command_Code_FP_H_
+#endif    // CC_PolicyCommandCode

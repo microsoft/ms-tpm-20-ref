@@ -37,28 +37,27 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_NV_Extend // Command must be enabled
+#if CC_NV_Extend  // Command must be enabled
 
-#ifndef _NV_Extend_FP_H_
-#define _NV_Extend_FP_H_
+#  ifndef _NV_Extend_FP_H_
+#    define _NV_Extend_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_NV_AUTH             authHandle;
-    TPMI_RH_NV_INDEX            nvIndex;
-    TPM2B_MAX_NV_BUFFER         data;
+typedef struct
+{
+    TPMI_RH_NV_AUTH     authHandle;
+    TPMI_RH_NV_INDEX    nvIndex;
+    TPM2B_MAX_NV_BUFFER data;
 } NV_Extend_In;
 
 // Response code modifiers
-#define RC_NV_Extend_authHandle (TPM_RC_H + TPM_RC_1)
-#define RC_NV_Extend_nvIndex    (TPM_RC_H + TPM_RC_2)
-#define RC_NV_Extend_data       (TPM_RC_P + TPM_RC_1)
+#    define RC_NV_Extend_authHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_NV_Extend_nvIndex    (TPM_RC_H + TPM_RC_2)
+#    define RC_NV_Extend_data       (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_NV_Extend(
-    NV_Extend_In                *in
-);
+TPM2_NV_Extend(NV_Extend_In* in);
 
-#endif  // _NV_Extend_FP_H_
-#endif  // CC_NV_Extend
+#  endif  // _NV_Extend_FP_H_
+#endif    // CC_NV_Extend

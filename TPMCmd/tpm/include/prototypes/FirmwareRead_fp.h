@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_FirmwareRead // Command must be enabled
+#if CC_FirmwareRead  // Command must be enabled
 
-#ifndef _Firmware_Read_FP_H_
-#define _Firmware_Read_FP_H_
+#  ifndef _Firmware_Read_FP_H_
+#    define _Firmware_Read_FP_H_
 
 // Input structure definition
-typedef struct {
-    UINT32                      sequenceNumber;
+typedef struct
+{
+    UINT32 sequenceNumber;
 } FirmwareRead_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_MAX_BUFFER            fuData;
+typedef struct
+{
+    TPM2B_MAX_BUFFER fuData;
 } FirmwareRead_Out;
 
 // Response code modifiers
-#define RC_FirmwareRead_sequenceNumber  (TPM_RC_P + TPM_RC_1)
+#    define RC_FirmwareRead_sequenceNumber (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_FirmwareRead(
-    FirmwareRead_In             *in,
-    FirmwareRead_Out            *out
-);
+TPM2_FirmwareRead(FirmwareRead_In* in, FirmwareRead_Out* out);
 
-#endif  // _Firmware_Read_FP_H_
-#endif  // CC_FirmwareRead
+#  endif  // _Firmware_Read_FP_H_
+#endif    // CC_FirmwareRead

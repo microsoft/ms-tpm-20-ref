@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_NV_GlobalWriteLock // Command must be enabled
+#if CC_NV_GlobalWriteLock  // Command must be enabled
 
-#ifndef _NV_Global_Write_Lock_FP_H_
-#define _NV_Global_Write_Lock_FP_H_
+#  ifndef _NV_Global_Write_Lock_FP_H_
+#    define _NV_Global_Write_Lock_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PROVISION               authHandle;
+typedef struct
+{
+    TPMI_RH_PROVISION authHandle;
 } NV_GlobalWriteLock_In;
 
 // Response code modifiers
-#define RC_NV_GlobalWriteLock_authHandle    (TPM_RC_H + TPM_RC_1)
+#    define RC_NV_GlobalWriteLock_authHandle (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_NV_GlobalWriteLock(
-    NV_GlobalWriteLock_In           *in
-);
+TPM2_NV_GlobalWriteLock(NV_GlobalWriteLock_In* in);
 
-#endif  // _NV_Global_Write_Lock_FP_H_
-#endif  // CC_NV_GlobalWriteLock
+#  endif  // _NV_Global_Write_Lock_FP_H_
+#endif    // CC_NV_GlobalWriteLock

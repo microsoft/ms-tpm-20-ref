@@ -37,8 +37,8 @@
  *  Date: Nov 14, 2019  Time: 05:57:02PM
  */
 
-#ifndef    _X509_SPT_FP_H_
-#define    _X509_SPT_FP_H_
+#ifndef _X509_SPT_FP_H_
+#define _X509_SPT_FP_H_
 
 //*** X509FindExtensionByOID()
 // This will search a list of X509 extensions to find an extension with the
@@ -47,11 +47,9 @@
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure (could be catastrophic)
-BOOL
-X509FindExtensionByOID(
-    ASN1UnmarshalContext    *ctxIn,         // IN: the context to search
-    ASN1UnmarshalContext    *ctx,           // OUT: the extension context
-    const BYTE              *OID            // IN: oid to search for
+BOOL X509FindExtensionByOID(ASN1UnmarshalContext* ctxIn,  // IN: the context to search
+                            ASN1UnmarshalContext* ctx,  // OUT: the extension context
+                            const BYTE*           OID   // IN: oid to search for
 );
 
 //*** X509GetExtensionBits()
@@ -61,10 +59,7 @@ X509FindExtensionByOID(
 //  TRUE(1)         success
 //  FALSE(0)        failure
 UINT32
-X509GetExtensionBits(
-    ASN1UnmarshalContext            *ctx,
-    UINT32                          *value
-);
+X509GetExtensionBits(ASN1UnmarshalContext* ctx, UINT32* value);
 
 //***X509ProcessExtensions()
 // This function is used to process the TPMA_OBJECT and KeyUsage extensions. It is not
@@ -75,9 +70,9 @@ X509GetExtensionBits(
 //      TPM_RC_VALUE            problem parsing the extensions
 TPM_RC
 X509ProcessExtensions(
-    OBJECT              *object,        // IN: The object with the attributes to
-                                        //      check
-    stringRef           *extension      // IN: The start and length of the extensions
+    OBJECT* object,       // IN: The object with the attributes to
+                          //      check
+    stringRef* extension  // IN: The start and length of the extensions
 );
 
 //*** X509AddSigningAlgorithm()
@@ -87,10 +82,7 @@ X509ProcessExtensions(
 // <= 0                 failure
 INT16
 X509AddSigningAlgorithm(
-    ASN1MarshalContext  *ctx,
-    OBJECT              *signKey,
-    TPMT_SIG_SCHEME     *scheme
-);
+    ASN1MarshalContext* ctx, OBJECT* signKey, TPMT_SIG_SCHEME* scheme);
 
 //*** X509AddPublicKey()
 // This function will add the publicKey description to the DER data. If fillPtr is
@@ -100,10 +92,7 @@ X509AddSigningAlgorithm(
 //      > 0         number of octets added
 //      == 0        failure
 INT16
-X509AddPublicKey(
-    ASN1MarshalContext  *ctx,
-    OBJECT              *object
-);
+X509AddPublicKey(ASN1MarshalContext* ctx, OBJECT* object);
 
 //*** X509PushAlgorithmIdentifierSequence()
 // The function adds the algorithm identifier sequence.
@@ -111,9 +100,6 @@ X509AddPublicKey(
 //      > 0         number of bytes added
 //     == 0         failure
 INT16
-X509PushAlgorithmIdentifierSequence(
-    ASN1MarshalContext          *ctx,
-    const BYTE                  *OID
-);
+X509PushAlgorithmIdentifierSequence(ASN1MarshalContext* ctx, const BYTE* OID);
 
 #endif  // _X509_SPT_FP_H_

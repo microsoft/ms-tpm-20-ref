@@ -37,39 +37,39 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_GetSessionAuditDigest // Command must be enabled
+#if CC_GetSessionAuditDigest  // Command must be enabled
 
-#ifndef _Get_Session_Audit_Digest_FP_H_
-#define _Get_Session_Audit_Digest_FP_H_
+#  ifndef _Get_Session_Audit_Digest_FP_H_
+#    define _Get_Session_Audit_Digest_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_ENDORSEMENT                 privacyAdminHandle;
-    TPMI_DH_OBJECT                      signHandle;
-    TPMI_SH_HMAC                        sessionHandle;
-    TPM2B_DATA                          qualifyingData;
-    TPMT_SIG_SCHEME                     inScheme;
+typedef struct
+{
+    TPMI_RH_ENDORSEMENT privacyAdminHandle;
+    TPMI_DH_OBJECT      signHandle;
+    TPMI_SH_HMAC        sessionHandle;
+    TPM2B_DATA          qualifyingData;
+    TPMT_SIG_SCHEME     inScheme;
 } GetSessionAuditDigest_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_ATTEST                        auditInfo;
-    TPMT_SIGNATURE                      signature;
+typedef struct
+{
+    TPM2B_ATTEST   auditInfo;
+    TPMT_SIGNATURE signature;
 } GetSessionAuditDigest_Out;
 
 // Response code modifiers
-#define RC_GetSessionAuditDigest_privacyAdminHandle (TPM_RC_H + TPM_RC_1)
-#define RC_GetSessionAuditDigest_signHandle (TPM_RC_H + TPM_RC_2)
-#define RC_GetSessionAuditDigest_sessionHandle  (TPM_RC_H + TPM_RC_3)
-#define RC_GetSessionAuditDigest_qualifyingData (TPM_RC_P + TPM_RC_1)
-#define RC_GetSessionAuditDigest_inScheme   (TPM_RC_P + TPM_RC_2)
+#    define RC_GetSessionAuditDigest_privacyAdminHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_GetSessionAuditDigest_signHandle         (TPM_RC_H + TPM_RC_2)
+#    define RC_GetSessionAuditDigest_sessionHandle      (TPM_RC_H + TPM_RC_3)
+#    define RC_GetSessionAuditDigest_qualifyingData     (TPM_RC_P + TPM_RC_1)
+#    define RC_GetSessionAuditDigest_inScheme           (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_GetSessionAuditDigest(
-    GetSessionAuditDigest_In            *in,
-    GetSessionAuditDigest_Out           *out
-);
+TPM2_GetSessionAuditDigest(GetSessionAuditDigest_In*  in,
+                           GetSessionAuditDigest_Out* out);
 
-#endif  // _Get_Session_Audit_Digest_FP_H_
-#endif  // CC_GetSessionAuditDigest
+#  endif  // _Get_Session_Audit_Digest_FP_H_
+#endif    // CC_GetSessionAuditDigest

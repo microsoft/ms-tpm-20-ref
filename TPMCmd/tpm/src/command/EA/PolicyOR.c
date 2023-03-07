@@ -37,7 +37,7 @@
 
 #if CC_PolicyOR  // Conditional expansion of this file
 
-#include "Policy_spt_fp.h"
+#  include "Policy_spt_fp.h"
 
 /*(See part 3 specification)
 // PolicyOR command
@@ -46,14 +46,13 @@
 //      TPM_RC_VALUE            no digest in 'pHashList' matched the current
 //                              value of policyDigest for 'policySession'
 TPM_RC
-TPM2_PolicyOR(
-    PolicyOR_In     *in             // IN: input parameter list
-    )
+TPM2_PolicyOR(PolicyOR_In* in  // IN: input parameter list
+)
 {
-    SESSION     *session;
-    UINT32       i;
+    SESSION* session;
+    UINT32   i;
 
-// Input Validation and Update
+    // Input Validation and Update
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -66,14 +65,15 @@ TPM2_PolicyOR(
                              &in->pHashList.digests[i].b)))
         {
             // Found a match
-            HASH_STATE      hashState;
-            TPM_CC          commandCode = TPM_CC_PolicyOR;
+            HASH_STATE hashState;
+            TPM_CC     commandCode = TPM_CC_PolicyOR;
 
             // Start hash
-            session->u2.policyDigest.t.size
-                = CryptHashStart(&hashState, session->authHashAlg);
+            session->u2.policyDigest.t.size =
+                CryptHashStart(&hashState, session->authHashAlg);
             // Set policyDigest to 0 string and add it to hash
-            MemorySet(session->u2.policyDigest.t.buffer, 0,
+            MemorySet(session->u2.policyDigest.t.buffer,
+                      0,
                       session->u2.policyDigest.t.size);
             CryptDigestUpdate2B(&hashState, &session->u2.policyDigest.b);
 
@@ -96,4 +96,4 @@ TPM2_PolicyOR(
     return TPM_RCS_VALUE + RC_PolicyOR_pHashList;
 }
 
-#endif // CC_PolicyOR
+#endif  // CC_PolicyOR

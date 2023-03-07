@@ -37,35 +37,34 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_MakeCredential // Command must be enabled
+#if CC_MakeCredential  // Command must be enabled
 
-#ifndef _Make_Credential_FP_H_
-#define _Make_Credential_FP_H_
+#  ifndef _Make_Credential_FP_H_
+#    define _Make_Credential_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              handle;
-    TPM2B_DIGEST                credential;
-    TPM2B_NAME                  objectName;
+typedef struct
+{
+    TPMI_DH_OBJECT handle;
+    TPM2B_DIGEST   credential;
+    TPM2B_NAME     objectName;
 } MakeCredential_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_ID_OBJECT             credentialBlob;
-    TPM2B_ENCRYPTED_SECRET      secret;
+typedef struct
+{
+    TPM2B_ID_OBJECT        credentialBlob;
+    TPM2B_ENCRYPTED_SECRET secret;
 } MakeCredential_Out;
 
 // Response code modifiers
-#define RC_MakeCredential_handle    (TPM_RC_H + TPM_RC_1)
-#define RC_MakeCredential_credential    (TPM_RC_P + TPM_RC_1)
-#define RC_MakeCredential_objectName    (TPM_RC_P + TPM_RC_2)
+#    define RC_MakeCredential_handle     (TPM_RC_H + TPM_RC_1)
+#    define RC_MakeCredential_credential (TPM_RC_P + TPM_RC_1)
+#    define RC_MakeCredential_objectName (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_MakeCredential(
-    MakeCredential_In           *in,
-    MakeCredential_Out          *out
-);
+TPM2_MakeCredential(MakeCredential_In* in, MakeCredential_Out* out);
 
-#endif  // _Make_Credential_FP_H_
-#endif  // CC_MakeCredential
+#  endif  // _Make_Credential_FP_H_
+#endif    // CC_MakeCredential

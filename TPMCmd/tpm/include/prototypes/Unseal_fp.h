@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_Unseal // Command must be enabled
+#if CC_Unseal  // Command must be enabled
 
-#ifndef _Unseal_FP_H_
-#define _Unseal_FP_H_
+#  ifndef _Unseal_FP_H_
+#    define _Unseal_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              itemHandle;
+typedef struct
+{
+    TPMI_DH_OBJECT itemHandle;
 } Unseal_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_SENSITIVE_DATA        outData;
+typedef struct
+{
+    TPM2B_SENSITIVE_DATA outData;
 } Unseal_Out;
 
 // Response code modifiers
-#define RC_Unseal_itemHandle    (TPM_RC_H + TPM_RC_1)
+#    define RC_Unseal_itemHandle (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_Unseal(
-    Unseal_In                   *in,
-    Unseal_Out                  *out
-);
+TPM2_Unseal(Unseal_In* in, Unseal_Out* out);
 
-#endif  // _Unseal_FP_H_
-#endif  // CC_Unseal
+#  endif  // _Unseal_FP_H_
+#endif    // CC_Unseal

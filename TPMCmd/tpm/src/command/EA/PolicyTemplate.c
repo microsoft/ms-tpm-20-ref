@@ -47,15 +47,14 @@
 //                              by the hash algorithm associated with
 //                              'policySession'
 TPM_RC
-TPM2_PolicyTemplate(
-    PolicyTemplate_In     *in             // IN: input parameter list
-    )
+TPM2_PolicyTemplate(PolicyTemplate_In* in  // IN: input parameter list
+)
 {
-    SESSION     *session;
-    TPM_CC      commandCode = TPM_CC_PolicyTemplate;
-    HASH_STATE  hashState;
+    SESSION*   session;
+    TPM_CC     commandCode = TPM_CC_PolicyTemplate;
+    HASH_STATE hashState;
 
-// Input Validation
+    // Input Validation
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -74,7 +73,7 @@ TPM2_PolicyTemplate(
     if(in->templateHash.t.size != CryptHashGetDigestSize(session->authHashAlg))
         return TPM_RCS_SIZE + RC_PolicyTemplate_templateHash;
 
-// Internal Data Update
+    // Internal Data Update
     // Update policy hash
     // policyDigestnew = hash(policyDigestold || TPM_CC_PolicyCpHash
     //  || cpHashA.buffer)
@@ -94,10 +93,10 @@ TPM2_PolicyTemplate(
     CryptHashEnd2B(&hashState, &session->u2.policyDigest.b);
 
     // update cpHash in session context
-    session->u1.templateHash = in->templateHash;
+    session->u1.templateHash          = in->templateHash;
     session->attributes.isTemplateSet = SET;
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyTemplateHash
+#endif  // CC_PolicyTemplateHash

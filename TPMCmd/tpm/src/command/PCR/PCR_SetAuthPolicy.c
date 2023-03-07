@@ -46,18 +46,17 @@
 //      TPM_RC_VALUE                PCR referenced by 'pcrNum' is not a member
 //                                  of a PCR policy group
 TPM_RC
-TPM2_PCR_SetAuthPolicy(
-    PCR_SetAuthPolicy_In    *in             // IN: input parameter list
-    )
+TPM2_PCR_SetAuthPolicy(PCR_SetAuthPolicy_In* in  // IN: input parameter list
+)
 {
-    UINT32      groupIndex;
+    UINT32 groupIndex;
 
     // The command needs NV update.  Check if NV is available.
     // A TPM_RC_NV_UNAVAILABLE or TPM_RC_NV_RATE error may be returned at
     // this point
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
-// Input Validation:
+    // Input Validation:
 
     // Check the authPolicy consistent with hash algorithm
     if(in->authPolicy.t.size != CryptHashGetDigestSize(in->hashAlg))
@@ -67,11 +66,11 @@ TPM2_PCR_SetAuthPolicy(
     if(!PCRBelongsPolicyGroup(in->pcrNum, &groupIndex))
         return TPM_RCS_VALUE + RC_PCR_SetAuthPolicy_pcrNum;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Set PCR policy
     gp.pcrPolicies.hashAlg[groupIndex] = in->hashAlg;
-    gp.pcrPolicies.policy[groupIndex] = in->authPolicy;
+    gp.pcrPolicies.policy[groupIndex]  = in->authPolicy;
 
     // Save new policy to NV
     NV_SYNC_PERSISTENT(pcrPolicies);
@@ -79,4 +78,4 @@ TPM2_PCR_SetAuthPolicy(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PCR_SetAuthPolicy
+#endif  // CC_PCR_SetAuthPolicy

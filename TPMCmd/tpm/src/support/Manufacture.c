@@ -52,13 +52,12 @@
 //      -1          failure
 //      0           success
 //      1           manufacturing process previously performed
-LIB_EXPORT int
-TPM_Manufacture(
-    int             firstTime       // IN: indicates if this is the first call from
-                                    //     main()
-    )
+LIB_EXPORT int TPM_Manufacture(
+    int firstTime  // IN: indicates if this is the first call from
+                   //     main()
+)
 {
-    TPM_SU          orderlyShutdown;
+    TPM_SU orderlyShutdown;
 
 #if RUNTIME_SIZE_CHECKS
     // Call the function to verify the sizes of values that result from different
@@ -67,7 +66,7 @@ TPM_Manufacture(
         return -1;
 #endif
 #if LIBRARY_COMPATIBILITY_CHECK
-// Make sure that the attached library performs as expected.
+    // Make sure that the attached library performs as expected.
     if(!MathLibraryCompatibilityCheck())
         return -1;
 #endif
@@ -125,7 +124,7 @@ TPM_Manufacture(
     NV_SYNC_PERSISTENT(totalResetCount);
 
     // initialize the clock stuff
-    go.clock = 0;
+    go.clock     = 0;
     go.clockSafe = YES;
 
     NvWrite(NV_ORDERLY_DATA, sizeof(ORDERLY_DATA), &go);
@@ -152,33 +151,26 @@ TPM_Manufacture(
 //  Return Type: int
 //      0        success
 //      1        TPM not previously manufactured
-LIB_EXPORT int
-TPM_TearDown(
-    void
-    )
+LIB_EXPORT int TPM_TearDown(void)
 {
     g_manufactured = FALSE;
     return 0;
 }
 
-
 //*** TpmEndSimulation()
 // This function is called at the end of the simulation run. It is used to provoke
 // printing of any statistics that might be needed.
-LIB_EXPORT void
-TpmEndSimulation(
-    void
-    )
+LIB_EXPORT void TpmEndSimulation(void)
 {
 #if SIMULATION
     HashLibSimulationEnd();
     SymLibSimulationEnd();
     MathLibSimulationEnd();
-#if ALG_RSA
+#  if ALG_RSA
     RsaSimulationEnd();
-#endif
-#if ALG_ECC
+#  endif
+#  if ALG_ECC
     EccSimulationEnd();
-#endif
-#endif // SIMULATION
+#  endif
+#endif  // SIMULATION
 }

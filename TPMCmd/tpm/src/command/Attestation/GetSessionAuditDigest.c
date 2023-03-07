@@ -55,14 +55,14 @@
 //                          (for an ECC key)
 TPM_RC
 TPM2_GetSessionAuditDigest(
-    GetSessionAuditDigest_In    *in,            // IN: input parameter list
-    GetSessionAuditDigest_Out   *out            // OUT: output parameter list
-    )
+    GetSessionAuditDigest_In*  in,  // IN: input parameter list
+    GetSessionAuditDigest_Out* out  // OUT: output parameter list
+)
 {
-    SESSION                 *session = SessionGet(in->sessionHandle);
-    TPMS_ATTEST              auditInfo;
-    OBJECT                 *signObject = HandleToObject(in->signHandle);
-// Input Validation
+    SESSION*    session = SessionGet(in->sessionHandle);
+    TPMS_ATTEST auditInfo;
+    OBJECT*     signObject = HandleToObject(in->signHandle);
+    // Input Validation
     if(!IsSigningObject(signObject))
         return TPM_RCS_KEY + RC_GetSessionAuditDigest_signHandle;
     if(!CryptSelectSignScheme(signObject, &in->inScheme))
@@ -72,24 +72,26 @@ TPM2_GetSessionAuditDigest(
     if(session->attributes.isAudit == CLEAR)
         return TPM_RCS_TYPE + RC_GetSessionAuditDigest_sessionHandle;
 
-// Command Output
+    // Command Output
     // Fill in attest information common fields
-    FillInAttestInfo(in->signHandle, &in->inScheme, &in->qualifyingData,
-                     &auditInfo);
+    FillInAttestInfo(in->signHandle, &in->inScheme, &in->qualifyingData, &auditInfo);
 
     // SessionAuditDigest specific fields
-    auditInfo.type = TPM_ST_ATTEST_SESSION_AUDIT;
+    auditInfo.type                                = TPM_ST_ATTEST_SESSION_AUDIT;
     auditInfo.attested.sessionAudit.sessionDigest = session->u2.auditDigest;
 
     // Exclusive audit session
-    auditInfo.attested.sessionAudit.exclusiveSession
-        = (g_exclusiveAuditSession == in->sessionHandle);
+    auditInfo.attested.sessionAudit.exclusiveSession =
+        (g_exclusiveAuditSession == in->sessionHandle);
 
     // Sign attestation structure.  A NULL signature will be returned if
     // signObject is NULL.
-    return SignAttestInfo(signObject, &in->inScheme, &auditInfo,
-                          &in->qualifyingData, &out->auditInfo,
+    return SignAttestInfo(signObject,
+                          &in->inScheme,
+                          &auditInfo,
+                          &in->qualifyingData,
+                          &out->auditInfo,
                           &out->signature);
 }
 
-#endif // CC_GetSessionAuditDigest
+#endif  // CC_GetSessionAuditDigest

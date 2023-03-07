@@ -37,36 +37,35 @@
  *  Date: Feb 28, 2020  Time: 03:04:47PM
  */
 
-#if CC_ECC_Encrypt // Command must be enabled
+#if CC_ECC_Encrypt  // Command must be enabled
 
-#ifndef _ECC_ENCRYPT_FP_H_
-#define _ECC_ENCRYPT_FP_H_
+#  ifndef _ECC_ENCRYPT_FP_H_
+#    define _ECC_ENCRYPT_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              keyHandle;
-    TPM2B_MAX_BUFFER            plainText;
-    TPMT_KDF_SCHEME             inScheme;
+typedef struct
+{
+    TPMI_DH_OBJECT   keyHandle;
+    TPM2B_MAX_BUFFER plainText;
+    TPMT_KDF_SCHEME  inScheme;
 } ECC_Encrypt_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_ECC_POINT             C1;
-    TPM2B_MAX_BUFFER            C2;
-    TPM2B_DIGEST                C3;
+typedef struct
+{
+    TPM2B_ECC_POINT  C1;
+    TPM2B_MAX_BUFFER C2;
+    TPM2B_DIGEST     C3;
 } ECC_Encrypt_Out;
 
 // Response code modifiers
-#define RC_ECC_Encrypt_keyHandle    (TPM_RC_H + TPM_RC_1)
-#define RC_ECC_Encrypt_plainText    (TPM_RC_P + TPM_RC_1)
-#define RC_ECC_Encrypt_inScheme (TPM_RC_P + TPM_RC_2)
+#    define RC_ECC_Encrypt_keyHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_ECC_Encrypt_plainText (TPM_RC_P + TPM_RC_1)
+#    define RC_ECC_Encrypt_inScheme  (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_ECC_Encrypt(
-    ECC_Encrypt_In              *in,
-    ECC_Encrypt_Out             *out
-);
+TPM2_ECC_Encrypt(ECC_Encrypt_In* in, ECC_Encrypt_Out* out);
 
-#endif  // _ECC_ENCRYPT_FP_H_
-#endif  // CC_ECC_Encrypt
+#  endif  // _ECC_ENCRYPT_FP_H_
+#endif    // CC_ECC_Encrypt

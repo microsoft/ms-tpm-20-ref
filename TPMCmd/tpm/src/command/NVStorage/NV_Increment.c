@@ -45,22 +45,20 @@
 //      TPM_RC_NV_AUTHORIZATION         authorization failure
 //      TPM_RC_NV_LOCKED                Index is write locked
 TPM_RC
-TPM2_NV_Increment(
-    NV_Increment_In     *in             // IN: input parameter list
-    )
+TPM2_NV_Increment(NV_Increment_In* in  // IN: input parameter list
+)
 {
-    TPM_RC           result;
-    NV_REF           locator;
-    NV_INDEX        *nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
-    UINT64           countValue;
+    TPM_RC    result;
+    NV_REF    locator;
+    NV_INDEX* nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
+    UINT64    countValue;
 
-// Input Validation
+    // Input Validation
 
     // Common access checks, NvWriteAccessCheck() may return TPM_RC_NV_AUTHORIZATION
     // or TPM_RC_NV_LOCKED
-    result = NvWriteAccessChecks(in->authHandle,
-                                 in->nvIndex,
-                                 nvIndex->publicArea.attributes);
+    result = NvWriteAccessChecks(
+        in->authHandle, in->nvIndex, nvIndex->publicArea.attributes);
     if(result != TPM_RC_SUCCESS)
         return result;
 
@@ -68,7 +66,7 @@ TPM2_NV_Increment(
     if(!IsNvCounterIndex(nvIndex->publicArea.attributes))
         return TPM_RCS_ATTRIBUTES + RC_NV_Increment_nvIndex;
 
-// Internal Data Update
+    // Internal Data Update
 
     // If counter index is not been written, initialize it
     if(!IS_ATTRIBUTE(nvIndex->publicArea.attributes, TPMA_NV, WRITTEN))
@@ -90,7 +88,7 @@ TPM2_NV_Increment(
         // Note, if this is an orderly counter, then the write-back needs to be
         // forced, for other counters, the write-back will happen anyway
         if(IS_ATTRIBUTE(nvIndex->publicArea.attributes, TPMA_NV, ORDERLY)
-           && (countValue & MAX_ORDERLY_COUNT) == 0 )
+           && (countValue & MAX_ORDERLY_COUNT) == 0)
         {
             // Need to force an NV update of orderly data
             SET_NV_UPDATE(UT_ORDERLY);
@@ -99,4 +97,4 @@ TPM2_NV_Increment(
     return result;
 }
 
-#endif // CC_NV_Increment
+#endif  // CC_NV_Increment

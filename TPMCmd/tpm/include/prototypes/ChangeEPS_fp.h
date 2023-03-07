@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ChangeEPS // Command must be enabled
+#if CC_ChangeEPS  // Command must be enabled
 
-#ifndef _Change_EPS_FP_H_
-#define _Change_EPS_FP_H_
+#  ifndef _Change_EPS_FP_H_
+#    define _Change_EPS_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PLATFORM            authHandle;
+typedef struct
+{
+    TPMI_RH_PLATFORM authHandle;
 } ChangeEPS_In;
 
 // Response code modifiers
-#define RC_ChangeEPS_authHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_ChangeEPS_authHandle (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_ChangeEPS(
-    ChangeEPS_In                *in
-);
+TPM2_ChangeEPS(ChangeEPS_In* in);
 
-#endif  // _Change_EPS_FP_H_
-#endif  // CC_ChangeEPS
+#  endif  // _Change_EPS_FP_H_
+#endif    // CC_ChangeEPS

@@ -37,36 +37,35 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_RSA_Encrypt // Command must be enabled
+#if CC_RSA_Encrypt  // Command must be enabled
 
-#ifndef _RSA_Encrypt_FP_H_
-#define _RSA_Encrypt_FP_H_
+#  ifndef _RSA_Encrypt_FP_H_
+#    define _RSA_Encrypt_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              keyHandle;
-    TPM2B_PUBLIC_KEY_RSA        message;
-    TPMT_RSA_DECRYPT            inScheme;
-    TPM2B_DATA                  label;
+typedef struct
+{
+    TPMI_DH_OBJECT       keyHandle;
+    TPM2B_PUBLIC_KEY_RSA message;
+    TPMT_RSA_DECRYPT     inScheme;
+    TPM2B_DATA           label;
 } RSA_Encrypt_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_PUBLIC_KEY_RSA        outData;
+typedef struct
+{
+    TPM2B_PUBLIC_KEY_RSA outData;
 } RSA_Encrypt_Out;
 
 // Response code modifiers
-#define RC_RSA_Encrypt_keyHandle    (TPM_RC_H + TPM_RC_1)
-#define RC_RSA_Encrypt_message  (TPM_RC_P + TPM_RC_1)
-#define RC_RSA_Encrypt_inScheme (TPM_RC_P + TPM_RC_2)
-#define RC_RSA_Encrypt_label    (TPM_RC_P + TPM_RC_3)
+#    define RC_RSA_Encrypt_keyHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_RSA_Encrypt_message   (TPM_RC_P + TPM_RC_1)
+#    define RC_RSA_Encrypt_inScheme  (TPM_RC_P + TPM_RC_2)
+#    define RC_RSA_Encrypt_label     (TPM_RC_P + TPM_RC_3)
 
 // Function prototype
 TPM_RC
-TPM2_RSA_Encrypt(
-    RSA_Encrypt_In              *in,
-    RSA_Encrypt_Out             *out
-);
+TPM2_RSA_Encrypt(RSA_Encrypt_In* in, RSA_Encrypt_Out* out);
 
-#endif  // _RSA_Encrypt_FP_H_
-#endif  // CC_RSA_Encrypt
+#  endif  // _RSA_Encrypt_FP_H_
+#endif    // CC_RSA_Encrypt

@@ -45,12 +45,11 @@
 //      TPM_RC_NV_UNAVAILABLE   NV is not accessible
 //      TPM_RC_NV_RATE          NV is in a rate-limiting mode
 TPM_RC
-TPM2_PCR_Allocate(
-    PCR_Allocate_In     *in,            // IN: input parameter list
-    PCR_Allocate_Out    *out            // OUT: output parameter list
-    )
+TPM2_PCR_Allocate(PCR_Allocate_In*  in,  // IN: input parameter list
+                  PCR_Allocate_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC      result;
+    TPM_RC result;
 
     // The command needs NV update.  Check if NV is available.
     // A TPM_RC_NV_UNAVAILABLE or TPM_RC_NV_RATE error may be returned at
@@ -61,11 +60,11 @@ TPM2_PCR_Allocate(
     // are described in the Response Code section of Part 3.
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
-// Command Output
+    // Command Output
 
     // Call PCR Allocation function.
-    result = PCRAllocate(&in->pcrAllocation, &out->maxPCR,
-                         &out->sizeNeeded, &out->sizeAvailable);
+    result = PCRAllocate(
+        &in->pcrAllocation, &out->maxPCR, &out->sizeNeeded, &out->sizeAvailable);
     if(result == TPM_RC_PCR)
         return result;
 
@@ -80,4 +79,4 @@ TPM2_PCR_Allocate(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PCR_Allocate
+#endif  // CC_PCR_Allocate

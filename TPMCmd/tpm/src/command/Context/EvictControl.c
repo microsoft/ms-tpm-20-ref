@@ -52,14 +52,13 @@
 //      TPM_RC_RANGE        'persistentHandle' is not in the range corresponding to
 //                          the hierarchy of 'evictObject'
 TPM_RC
-TPM2_EvictControl(
-    EvictControl_In     *in             // IN: input parameter list
-    )
+TPM2_EvictControl(EvictControl_In* in  // IN: input parameter list
+)
 {
-    TPM_RC      result;
-    OBJECT      *evictObject;
+    TPM_RC  result;
+    OBJECT* evictObject;
 
-// Input Validation
+    // Input Validation
 
     // Get internal object pointer
     evictObject = HandleToObject(in->objectHandle);
@@ -109,7 +108,7 @@ TPM2_EvictControl(
         // filtered out in unmarshal process
         FAIL(FATAL_ERROR_INTERNAL);
     }
-// Internal Data Update
+    // Internal Data Update
     // Change evict state
     if(evictObject->attributes.evict == CLEAR)
     {
@@ -128,4 +127,4 @@ TPM2_EvictControl(
     return result;
 }
 
-#endif // CC_EvictControl
+#endif  // CC_EvictControl

@@ -37,34 +37,34 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_EventSequenceComplete // Command must be enabled
+#if CC_EventSequenceComplete  // Command must be enabled
 
-#ifndef _Event_Sequence_Complete_FP_H_
-#define _Event_Sequence_Complete_FP_H_
+#  ifndef _Event_Sequence_Complete_FP_H_
+#    define _Event_Sequence_Complete_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_PCR                         pcrHandle;
-    TPMI_DH_OBJECT                      sequenceHandle;
-    TPM2B_MAX_BUFFER                    buffer;
+typedef struct
+{
+    TPMI_DH_PCR      pcrHandle;
+    TPMI_DH_OBJECT   sequenceHandle;
+    TPM2B_MAX_BUFFER buffer;
 } EventSequenceComplete_In;
 
 // Output structure definition
-typedef struct {
-    TPML_DIGEST_VALUES                  results;
+typedef struct
+{
+    TPML_DIGEST_VALUES results;
 } EventSequenceComplete_Out;
 
 // Response code modifiers
-#define RC_EventSequenceComplete_pcrHandle  (TPM_RC_H + TPM_RC_1)
-#define RC_EventSequenceComplete_sequenceHandle (TPM_RC_H + TPM_RC_2)
-#define RC_EventSequenceComplete_buffer (TPM_RC_P + TPM_RC_1)
+#    define RC_EventSequenceComplete_pcrHandle      (TPM_RC_H + TPM_RC_1)
+#    define RC_EventSequenceComplete_sequenceHandle (TPM_RC_H + TPM_RC_2)
+#    define RC_EventSequenceComplete_buffer         (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_EventSequenceComplete(
-    EventSequenceComplete_In            *in,
-    EventSequenceComplete_Out           *out
-);
+TPM2_EventSequenceComplete(EventSequenceComplete_In*  in,
+                           EventSequenceComplete_Out* out);
 
-#endif  // _Event_Sequence_Complete_FP_H_
-#endif  // CC_EventSequenceComplete
+#  endif  // _Event_Sequence_Complete_FP_H_
+#endif    // CC_EventSequenceComplete

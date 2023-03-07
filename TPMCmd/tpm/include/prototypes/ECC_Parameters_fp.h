@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ECC_Parameters // Command must be enabled
+#if CC_ECC_Parameters  // Command must be enabled
 
-#ifndef _ECC_Parameters_FP_H_
-#define _ECC_Parameters_FP_H_
+#  ifndef _ECC_Parameters_FP_H_
+#    define _ECC_Parameters_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_ECC_CURVE              curveID;
+typedef struct
+{
+    TPMI_ECC_CURVE curveID;
 } ECC_Parameters_In;
 
 // Output structure definition
-typedef struct {
-    TPMS_ALGORITHM_DETAIL_ECC   parameters;
+typedef struct
+{
+    TPMS_ALGORITHM_DETAIL_ECC parameters;
 } ECC_Parameters_Out;
 
 // Response code modifiers
-#define RC_ECC_Parameters_curveID   (TPM_RC_P + TPM_RC_1)
+#    define RC_ECC_Parameters_curveID (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_ECC_Parameters(
-    ECC_Parameters_In           *in,
-    ECC_Parameters_Out          *out
-);
+TPM2_ECC_Parameters(ECC_Parameters_In* in, ECC_Parameters_Out* out);
 
-#endif  // _ECC_Parameters_FP_H_
-#endif  // CC_ECC_Parameters
+#  endif  // _ECC_Parameters_FP_H_
+#endif    // CC_ECC_Parameters

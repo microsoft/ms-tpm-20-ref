@@ -58,22 +58,20 @@
                     the context encryption
 */
 //  Return Type: void
-void
-ComputeContextProtectionKey(
-    TPMS_CONTEXT    *contextBlob,   // IN: context blob
-    TPM2B_SYM_KEY   *symKey,        // OUT: the symmetric key
-    TPM2B_IV        *iv             // OUT: the IV.
-    )
+void ComputeContextProtectionKey(TPMS_CONTEXT*  contextBlob,  // IN: context blob
+                                 TPM2B_SYM_KEY* symKey,  // OUT: the symmetric key
+                                 TPM2B_IV*      iv       // OUT: the IV.
+)
 {
-    UINT16           symKeyBits;    // number of bits in the parent's
-                                    //   symmetric key
-    TPM2B_PROOF     *proof = NULL;  // the proof value to use. Is null for
-                                    //   everything but a primary object in
-                                    //   the Endorsement Hierarchy
+    UINT16 symKeyBits;          // number of bits in the parent's
+                                //   symmetric key
+    TPM2B_PROOF* proof = NULL;  // the proof value to use. Is null for
+                                //   everything but a primary object in
+                                //   the Endorsement Hierarchy
 
-    BYTE             kdfResult[sizeof(TPMU_HA) * 2];// Value produced by the KDF
+    BYTE       kdfResult[sizeof(TPMU_HA) * 2];  // Value produced by the KDF
 
-    TPM2B_DATA       sequence2B, handle2B;
+    TPM2B_DATA sequence2B, handle2B;
 
     // Get proof value
     proof = HierarchyGetProof(contextBlob->hierarchy);
@@ -90,16 +88,22 @@ ComputeContextProtectionKey(
 
     // Get the symmetric encryption key size
     symKey->t.size = CONTEXT_ENCRYPT_KEY_BYTES;
-    symKeyBits = CONTEXT_ENCRYPT_KEY_BITS;
+    symKeyBits     = CONTEXT_ENCRYPT_KEY_BITS;
     // Get the size of the IV for the algorithm
     iv->t.size = CryptGetSymmetricBlockSize(CONTEXT_ENCRYPT_ALG, symKeyBits);
 
     // KDFa to generate symmetric key and IV value
-    CryptKDFa(CONTEXT_INTEGRITY_HASH_ALG, &proof->b, CONTEXT_KEY, &sequence2B.b,
-              &handle2B.b, (symKey->t.size + iv->t.size) * 8, kdfResult, NULL,
+    CryptKDFa(CONTEXT_INTEGRITY_HASH_ALG,
+              &proof->b,
+              CONTEXT_KEY,
+              &sequence2B.b,
+              &handle2B.b,
+              (symKey->t.size + iv->t.size) * 8,
+              kdfResult,
+              NULL,
               FALSE);
 
-         // Copy part of the returned value as the key
+    // Copy part of the returned value as the key
     pAssert(symKey->t.size <= sizeof(symKey->t.buffer));
     MemoryCopy(symKey->t.buffer, kdfResult, symKey->t.size);
 
@@ -134,44 +138,43 @@ ComputeContextProtectionKey(
     encContext          the encrypted context blob
 */
 //  Return Type: void
-void
-ComputeContextIntegrity(
-    TPMS_CONTEXT    *contextBlob,   // IN: context blob
-    TPM2B_DIGEST    *integrity      // OUT: integrity
-    )
+void ComputeContextIntegrity(TPMS_CONTEXT* contextBlob,  // IN: context blob
+                             TPM2B_DIGEST* integrity     // OUT: integrity
+)
 {
-    HMAC_STATE          hmacState;
-    TPM2B_PROOF        *proof;
-    UINT16              integritySize;
+    HMAC_STATE   hmacState;
+    TPM2B_PROOF* proof;
+    UINT16       integritySize;
 
     // Get proof value
     proof = HierarchyGetProof(contextBlob->hierarchy);
 
     // Start HMAC
-    integrity->t.size = CryptHmacStart2B(&hmacState, CONTEXT_INTEGRITY_HASH_ALG,
-                                         &proof->b);
+    integrity->t.size =
+        CryptHmacStart2B(&hmacState, CONTEXT_INTEGRITY_HASH_ALG, &proof->b);
 
     // Compute integrity size at the beginning of context blob
     integritySize = sizeof(integrity->t.size) + integrity->t.size;
 
     // Adding total reset counter so that the context cannot be
     // used after a TPM Reset
-    CryptDigestUpdateInt(&hmacState.hashState, sizeof(gp.totalResetCount),
-                         gp.totalResetCount);
+    CryptDigestUpdateInt(
+        &hmacState.hashState, sizeof(gp.totalResetCount), gp.totalResetCount);
 
     // If this is a ST_CLEAR object, add the clear count
     // so that this contest cannot be loaded after a TPM Restart
     if(contextBlob->savedHandle == 0x80000002)
-        CryptDigestUpdateInt(&hmacState.hashState, sizeof(gr.clearCount),
-                             gr.clearCount);
+        CryptDigestUpdateInt(
+            &hmacState.hashState, sizeof(gr.clearCount), gr.clearCount);
 
     // Adding sequence number to the HMAC to make sure that it doesn't
     // get changed
-    CryptDigestUpdateInt(&hmacState.hashState, sizeof(contextBlob->sequence),
-                         contextBlob->sequence);
+    CryptDigestUpdateInt(
+        &hmacState.hashState, sizeof(contextBlob->sequence), contextBlob->sequence);
 
     // Protect the handle
-    CryptDigestUpdateInt(&hmacState.hashState, sizeof(contextBlob->savedHandle),
+    CryptDigestUpdateInt(&hmacState.hashState,
+                         sizeof(contextBlob->savedHandle),
                          contextBlob->savedHandle);
 
     // Adding sensitive contextData, skip the leading integrity area
@@ -194,22 +197,21 @@ ComputeContextIntegrity(
 // object. The presumption is that the context buffer version of the data is the
 // same size as the internal representation so nothing outsize of the hash context
 // area gets modified.
-void
-SequenceDataExport(
-    HASH_OBJECT         *object,        // IN: an internal hash object
-    HASH_OBJECT_BUFFER  *exportObject   // OUT: a sequence context in a buffer
-    )
+void SequenceDataExport(
+    HASH_OBJECT*        object,       // IN: an internal hash object
+    HASH_OBJECT_BUFFER* exportObject  // OUT: a sequence context in a buffer
+)
 {
     // If the hash object is not an event, then only one hash context is needed
-    int                   count = (object->attributes.eventSeq) ? HASH_COUNT : 1;
+    int count = (object->attributes.eventSeq) ? HASH_COUNT : 1;
 
     for(count--; count >= 0; count--)
     {
-        HASH_STATE          *hash = &object->state.hashState[count];
-        size_t               offset = (BYTE *)hash - (BYTE *)object;
-        BYTE                *exportHash = &((BYTE *)exportObject)[offset];
+        HASH_STATE* hash       = &object->state.hashState[count];
+        size_t      offset     = (BYTE*)hash - (BYTE*)object;
+        BYTE*       exportHash = &((BYTE*)exportObject)[offset];
 
-        CryptHashExportState(hash, (EXPORT_HASH_STATE *)exportHash);
+        CryptHashExportState(hash, (EXPORT_HASH_STATE*)exportHash);
     }
 }
 
@@ -222,21 +224,20 @@ SequenceDataExport(
 // object. The presumption is that the context buffer version of the data is the
 // same size as the internal representation so nothing outsize of the hash context
 // area gets modified.
-void
-SequenceDataImport(
-    HASH_OBJECT         *object,        // IN/OUT: an internal hash object
-    HASH_OBJECT_BUFFER  *exportObject   // IN/OUT: a sequence context in a buffer
-    )
+void SequenceDataImport(
+    HASH_OBJECT*        object,       // IN/OUT: an internal hash object
+    HASH_OBJECT_BUFFER* exportObject  // IN/OUT: a sequence context in a buffer
+)
 {
     // If the hash object is not an event, then only one hash context is needed
-    int                   count = (object->attributes.eventSeq) ? HASH_COUNT : 1;
+    int count = (object->attributes.eventSeq) ? HASH_COUNT : 1;
 
     for(count--; count >= 0; count--)
     {
-        HASH_STATE          *hash = &object->state.hashState[count];
-        size_t               offset = (BYTE *)hash - (BYTE *)object;
-        BYTE                *importHash = &((BYTE *)exportObject)[offset];
-//
-        CryptHashImportState(hash, (EXPORT_HASH_STATE *)importHash);
+        HASH_STATE* hash       = &object->state.hashState[count];
+        size_t      offset     = (BYTE*)hash - (BYTE*)object;
+        BYTE*       importHash = &((BYTE*)exportObject)[offset];
+        //
+        CryptHashImportState(hash, (EXPORT_HASH_STATE*)importHash);
     }
 }

@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_SetAlgorithmSet // Command must be enabled
+#if CC_SetAlgorithmSet  // Command must be enabled
 
-#ifndef _Set_Algorithm_Set_FP_H_
-#define _Set_Algorithm_Set_FP_H_
+#  ifndef _Set_Algorithm_Set_FP_H_
+#    define _Set_Algorithm_Set_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PLATFORM            authHandle;
-    UINT32                      algorithmSet;
+typedef struct
+{
+    TPMI_RH_PLATFORM authHandle;
+    UINT32           algorithmSet;
 } SetAlgorithmSet_In;
 
 // Response code modifiers
-#define RC_SetAlgorithmSet_authHandle   (TPM_RC_H + TPM_RC_1)
-#define RC_SetAlgorithmSet_algorithmSet (TPM_RC_P + TPM_RC_1)
+#    define RC_SetAlgorithmSet_authHandle   (TPM_RC_H + TPM_RC_1)
+#    define RC_SetAlgorithmSet_algorithmSet (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_SetAlgorithmSet(
-    SetAlgorithmSet_In          *in
-);
+TPM2_SetAlgorithmSet(SetAlgorithmSet_In* in);
 
-#endif  // _Set_Algorithm_Set_FP_H_
-#endif  // CC_SetAlgorithmSet
+#  endif  // _Set_Algorithm_Set_FP_H_
+#endif    // CC_SetAlgorithmSet

@@ -41,11 +41,10 @@
 // Reset current PPS value
 */
 TPM_RC
-TPM2_ChangePPS(
-    ChangePPS_In    *in             // IN: input parameter list
-    )
+TPM2_ChangePPS(ChangePPS_In* in  // IN: input parameter list
+)
 {
-    UINT32          i;
+    UINT32 i;
 
     // Check if NV is available.  A TPM_RC_NV_UNAVAILABLE or TPM_RC_NV_RATE
     // error may be returned at this point
@@ -54,7 +53,7 @@ TPM2_ChangePPS(
     // Input parameter is not reference in command action
     NOT_REFERENCED(in);
 
-// Internal Data Update
+    // Internal Data Update
 
     // Reset platform hierarchy seed from RNG
     CryptRandomGenerate(sizeof(gp.PPSeed.t.buffer), gp.PPSeed.t.buffer);
@@ -64,7 +63,7 @@ TPM2_ChangePPS(
     CryptRandomGenerate(sizeof(gp.phProof.t.buffer), gp.phProof.t.buffer);
 
     // Set platform authPolicy to null
-    gc.platformAlg = TPM_ALG_NULL;
+    gc.platformAlg           = TPM_ALG_NULL;
     gc.platformPolicy.t.size = 0;
 
     // Flush loaded object in platform hierarchy
@@ -78,14 +77,14 @@ TPM2_ChangePPS(
     NV_SYNC_PERSISTENT(phProof);
 
     // Re-initialize PCR policies
-#if defined NUM_POLICY_PCR_GROUP && NUM_POLICY_PCR_GROUP > 0
+#  if defined NUM_POLICY_PCR_GROUP && NUM_POLICY_PCR_GROUP > 0
     for(i = 0; i < NUM_POLICY_PCR_GROUP; i++)
     {
-        gp.pcrPolicies.hashAlg[i] = TPM_ALG_NULL;
+        gp.pcrPolicies.hashAlg[i]       = TPM_ALG_NULL;
         gp.pcrPolicies.policy[i].t.size = 0;
     }
     NV_SYNC_PERSISTENT(pcrPolicies);
-#endif
+#  endif
 
     // orderly state should be cleared because of the update to state clear data
     g_clearOrderly = TRUE;
@@ -93,4 +92,4 @@ TPM2_ChangePPS(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_ChangePPS
+#endif  // CC_ChangePPS

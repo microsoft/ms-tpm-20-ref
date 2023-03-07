@@ -56,28 +56,24 @@
 //                                      beyond the limits of the Index
 //
 TPM_RC
-TPM2_NV_Write(
-    NV_Write_In     *in             // IN: input parameter list
-    )
+TPM2_NV_Write(NV_Write_In* in  // IN: input parameter list
+)
 {
-    NV_INDEX        *nvIndex = NvGetIndexInfo(in->nvIndex, NULL);
-    TPMA_NV          attributes = nvIndex->publicArea.attributes;
-    TPM_RC           result;
+    NV_INDEX* nvIndex    = NvGetIndexInfo(in->nvIndex, NULL);
+    TPMA_NV   attributes = nvIndex->publicArea.attributes;
+    TPM_RC    result;
 
-// Input Validation
+    // Input Validation
 
     // Common access checks, NvWriteAccessCheck() may return TPM_RC_NV_AUTHORIZATION
     // or TPM_RC_NV_LOCKED
-    result = NvWriteAccessChecks(in->authHandle,
-                                 in->nvIndex,
-                                 attributes);
+    result = NvWriteAccessChecks(in->authHandle, in->nvIndex, attributes);
     if(result != TPM_RC_SUCCESS)
         return result;
 
     // Bits index, extend index or counter index may not be updated by
     // TPM2_NV_Write
-    if(IsNvCounterIndex(attributes)
-       || IsNvBitsIndex(attributes)
+    if(IsNvCounterIndex(attributes) || IsNvBitsIndex(attributes)
        || IsNvExtendIndex(attributes))
         return TPM_RC_ATTRIBUTES;
 
@@ -97,13 +93,12 @@ TPM2_NV_Write(
        && in->data.t.size < nvIndex->publicArea.dataSize)
         return TPM_RC_NV_RANGE;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Perform the write.  This called routine will SET the TPMA_NV_WRITTEN
     // attribute if it has not already been SET. If NV isn't available, an error
     // will be returned.
-    return NvWriteIndexData(nvIndex, in->offset, in->data.t.size,
-                            in->data.t.buffer);
+    return NvWriteIndexData(nvIndex, in->offset, in->data.t.size, in->data.t.buffer);
 }
 
-#endif // CC_NV_Write
+#endif  // CC_NV_Write

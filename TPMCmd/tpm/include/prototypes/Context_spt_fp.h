@@ -37,19 +37,17 @@
  *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _CONTEXT_SPT_FP_H_
-#define    _CONTEXT_SPT_FP_H_
+#ifndef _CONTEXT_SPT_FP_H_
+#define _CONTEXT_SPT_FP_H_
 
 //*** ComputeContextProtectionKey()
 // This function retrieves the symmetric protection key for context encryption
 // It is used by TPM2_ConextSave and TPM2_ContextLoad to create the symmetric
 // encryption key and iv
 //  Return Type: void
-void
-ComputeContextProtectionKey(
-    TPMS_CONTEXT    *contextBlob,   // IN: context blob
-    TPM2B_SYM_KEY   *symKey,        // OUT: the symmetric key
-    TPM2B_IV        *iv             // OUT: the IV.
+void ComputeContextProtectionKey(TPMS_CONTEXT*  contextBlob,  // IN: context blob
+                                 TPM2B_SYM_KEY* symKey,  // OUT: the symmetric key
+                                 TPM2B_IV*      iv       // OUT: the IV.
 );
 
 //*** ComputeContextIntegrity()
@@ -57,10 +55,8 @@ ComputeContextProtectionKey(
 //       It is used by TPM2_ContextSave to create an integrity hash
 //       and by TPM2_ContextLoad to compare an integrity hash
 //  Return Type: void
-void
-ComputeContextIntegrity(
-    TPMS_CONTEXT    *contextBlob,   // IN: context blob
-    TPM2B_DIGEST    *integrity      // OUT: integrity
+void ComputeContextIntegrity(TPMS_CONTEXT* contextBlob,  // IN: context blob
+                             TPM2B_DIGEST* integrity     // OUT: integrity
 );
 
 //*** SequenceDataExport()
@@ -72,10 +68,9 @@ ComputeContextIntegrity(
 // object. The presumption is that the context buffer version of the data is the
 // same size as the internal representation so nothing outsize of the hash context
 // area gets modified.
-void
-SequenceDataExport(
-    HASH_OBJECT         *object,        // IN: an internal hash object
-    HASH_OBJECT_BUFFER  *exportObject   // OUT: a sequence context in a buffer
+void SequenceDataExport(
+    HASH_OBJECT*        object,       // IN: an internal hash object
+    HASH_OBJECT_BUFFER* exportObject  // OUT: a sequence context in a buffer
 );
 
 //*** SequenceDataImport()
@@ -87,10 +82,9 @@ SequenceDataExport(
 // object. The presumption is that the context buffer version of the data is the
 // same size as the internal representation so nothing outsize of the hash context
 // area gets modified.
-void
-SequenceDataImport(
-    HASH_OBJECT         *object,        // IN/OUT: an internal hash object
-    HASH_OBJECT_BUFFER  *exportObject   // IN/OUT: a sequence context in a buffer
+void SequenceDataImport(
+    HASH_OBJECT*        object,       // IN/OUT: an internal hash object
+    HASH_OBJECT_BUFFER* exportObject  // IN/OUT: a sequence context in a buffer
 );
 
 #endif  // _CONTEXT_SPT_FP_H_

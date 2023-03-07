@@ -37,8 +37,8 @@
  *  Date: Apr  2, 2019  Time: 11:00:49AM
  */
 
-#ifndef    _X509_RSA_FP_H_
-#define    _X509_RSA_FP_H_
+#ifndef _X509_RSA_FP_H_
+#define _X509_RSA_FP_H_
 
 #if ALG_RSA
 
@@ -49,10 +49,7 @@
 //     == 0         failure
 INT16
 X509AddSigningAlgorithmRSA(
-    OBJECT              *signKey,
-    TPMT_SIG_SCHEME     *scheme,
-    ASN1MarshalContext  *ctx
-);
+    OBJECT* signKey, TPMT_SIG_SCHEME* scheme, ASN1MarshalContext* ctx);
 
 //*** X509AddPublicRSA()
 // This function will add the publicKey description to the DER data. If fillPtr is
@@ -62,10 +59,7 @@ X509AddSigningAlgorithmRSA(
 //      > 0         number of bytes added
 //     == 0         failure
 INT16
-X509AddPublicRSA(
-    OBJECT                  *object,
-    ASN1MarshalContext    *ctx
-);
-#endif // ALG_RSA
+X509AddPublicRSA(OBJECT* object, ASN1MarshalContext* ctx);
+#endif  // ALG_RSA
 
 #endif  // _X509_RSA_FP_H_

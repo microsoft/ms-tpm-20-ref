@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_GetRandom // Command must be enabled
+#if CC_GetRandom  // Command must be enabled
 
-#ifndef _Get_Random_FP_H_
-#define _Get_Random_FP_H_
+#  ifndef _Get_Random_FP_H_
+#    define _Get_Random_FP_H_
 
 // Input structure definition
-typedef struct {
-    UINT16                      bytesRequested;
+typedef struct
+{
+    UINT16 bytesRequested;
 } GetRandom_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_DIGEST                randomBytes;
+typedef struct
+{
+    TPM2B_DIGEST randomBytes;
 } GetRandom_Out;
 
 // Response code modifiers
-#define RC_GetRandom_bytesRequested (TPM_RC_P + TPM_RC_1)
+#    define RC_GetRandom_bytesRequested (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_GetRandom(
-    GetRandom_In                *in,
-    GetRandom_Out               *out
-);
+TPM2_GetRandom(GetRandom_In* in, GetRandom_Out* out);
 
-#endif  // _Get_Random_FP_H_
-#endif  // CC_GetRandom
+#  endif  // _Get_Random_FP_H_
+#endif    // CC_GetRandom

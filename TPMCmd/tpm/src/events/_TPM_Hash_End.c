@@ -35,15 +35,12 @@
 #include "Tpm.h"
 
 // This function is called to process a _TPM_Hash_End indication.
-LIB_EXPORT void
-_TPM_Hash_End(
-    void
-    )
+LIB_EXPORT void _TPM_Hash_End(void)
 {
-    UINT32          i;
-    TPM2B_DIGEST    digest;
-    HASH_OBJECT    *hashObject;
-    TPMI_DH_PCR     pcrHandle;
+    UINT32       i;
+    TPM2B_DIGEST digest;
+    HASH_OBJECT* hashObject;
+    TPMI_DH_PCR  pcrHandle;
 
     // If the DRTM handle is not being used, then either _TPM_Hash_Start has not
     // been called, _TPM_Hash_End was previously called, or some other command
@@ -52,7 +49,7 @@ _TPM_Hash_End(
         return;
 
     // Get DRTM sequence object
-    hashObject = (HASH_OBJECT *)HandleToObject(g_DRTMHandle);
+    hashObject = (HASH_OBJECT*)HandleToObject(g_DRTMHandle);
 
     // Is this _TPM_Hash_End after Startup or before
     if(TPMIsStarted())
@@ -70,7 +67,7 @@ _TPM_Hash_End(
     }
     else
     {
-        pcrHandle = PCR_FIRST + HCRTM_PCR;
+        pcrHandle        = PCR_FIRST + HCRTM_PCR;
         g_DrtmPreStartup = TRUE;
     }
 
@@ -79,10 +76,9 @@ _TPM_Hash_End(
     // extend the H-CRTM data
     for(i = 0; i < HASH_COUNT; i++)
     {
-        TPMI_ALG_HASH       hash = CryptHashGetAlgByIndex(i);
+        TPMI_ALG_HASH hash = CryptHashGetAlgByIndex(i);
         // make sure that the PCR is implemented for this algorithm
-        if(PcrIsAllocated(pcrHandle,
-                          hashObject->state.hashState[i].hashAlg))
+        if(PcrIsAllocated(pcrHandle, hashObject->state.hashState[i].hashAlg))
         {
             // Complete hash
             digest.t.size = CryptHashGetDigestSize(hash);
@@ -96,7 +92,6 @@ _TPM_Hash_End(
     FlushObject(g_DRTMHandle);
 
     g_DRTMHandle = TPM_RH_UNASSIGNED;
-
 
     return;
 }

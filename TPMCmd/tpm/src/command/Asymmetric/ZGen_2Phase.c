@@ -49,17 +49,16 @@
 //                                      is not TPM_ALG_NULL, TPM_ALG_ECDH,
 //                                      TPM_ALG_ECMQV or TPM_ALG_SM2
 TPM_RC
-TPM2_ZGen_2Phase(
-    ZGen_2Phase_In      *in,            // IN: input parameter list
-    ZGen_2Phase_Out     *out            // OUT: output parameter list
-    )
+TPM2_ZGen_2Phase(ZGen_2Phase_In*  in,  // IN: input parameter list
+                 ZGen_2Phase_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                   result;
-    OBJECT                  *eccKey;
-    TPM2B_ECC_PARAMETER      r;
-    TPM_ALG_ID               scheme;
+    TPM_RC              result;
+    OBJECT*             eccKey;
+    TPM2B_ECC_PARAMETER r;
+    TPM_ALG_ID          scheme;
 
-// Input Validation
+    // Input Validation
 
     eccKey = HandleToObject(in->keyA);
 
@@ -94,12 +93,11 @@ TPM2_ZGen_2Phase(
                                &in->inQeB.point))
         return TPM_RCS_ECC_POINT + RC_ZGen_2Phase_inQeB;
 
-    if(!CryptGenerateR(&r, &in->counter,
-                       eccKey->publicArea.parameters.eccDetail.curveID,
-                       NULL))
+    if(!CryptGenerateR(
+           &r, &in->counter, eccKey->publicArea.parameters.eccDetail.curveID, NULL))
         return TPM_RCS_VALUE + RC_ZGen_2Phase_counter;
 
-// Command Output
+    // Command Output
 
     result =
         CryptEcc2PhaseKeyExchange(&out->outZ1.point,
@@ -118,4 +116,4 @@ TPM2_ZGen_2Phase(
 
     return result;
 }
-#endif // CC_ZGen_2Phase
+#endif  // CC_ZGen_2Phase

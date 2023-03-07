@@ -41,48 +41,47 @@
 // Hash a data buffer
 */
 TPM_RC
-TPM2_Hash(
-    Hash_In         *in,            // IN: input parameter list
-    Hash_Out        *out            // OUT: output parameter list
-    )
+TPM2_Hash(Hash_In*  in,  // IN: input parameter list
+          Hash_Out* out  // OUT: output parameter list
+)
 {
-    HASH_STATE          hashState;
+    HASH_STATE hashState;
 
-// Command Output
+    // Command Output
 
     // Output hash
-        // Start hash stack
+    // Start hash stack
     out->outHash.t.size = CryptHashStart(&hashState, in->hashAlg);
-        // Adding hash data
+    // Adding hash data
     CryptDigestUpdate2B(&hashState, &in->data.b);
-        // Complete hash
+    // Complete hash
     CryptHashEnd2B(&hashState, &out->outHash.b);
 
     // Output ticket
-    out->validation.tag = TPM_ST_HASHCHECK;
+    out->validation.tag       = TPM_ST_HASHCHECK;
     out->validation.hierarchy = in->hierarchy;
 
     if(in->hierarchy == TPM_RH_NULL)
     {
         // Ticket is not required
-        out->validation.hierarchy = TPM_RH_NULL;
+        out->validation.hierarchy     = TPM_RH_NULL;
         out->validation.digest.t.size = 0;
     }
-    else if(in->data.t.size >= sizeof(TPM_GENERATED_VALUE)
-            && !TicketIsSafe(&in->data.b))
+    else if(
+        in->data.t.size >= sizeof(TPM_GENERATED_VALUE) && !TicketIsSafe(&in->data.b))
     {
         // Ticket is not safe
-        out->validation.hierarchy = TPM_RH_NULL;
+        out->validation.hierarchy     = TPM_RH_NULL;
         out->validation.digest.t.size = 0;
     }
     else
     {
         // Compute ticket
-        TicketComputeHashCheck(in->hierarchy, in->hashAlg,
-                               &out->outHash, &out->validation);
+        TicketComputeHashCheck(
+            in->hierarchy, in->hashAlg, &out->outHash, &out->validation);
     }
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_Hash
+#endif  // CC_Hash

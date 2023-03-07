@@ -37,37 +37,36 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_CreateLoaded // Command must be enabled
+#if CC_CreateLoaded  // Command must be enabled
 
-#ifndef _Create_Loaded_FP_H_
-#define _Create_Loaded_FP_H_
+#  ifndef _Create_Loaded_FP_H_
+#    define _Create_Loaded_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_PARENT              parentHandle;
-    TPM2B_SENSITIVE_CREATE      inSensitive;
-    TPM2B_TEMPLATE              inPublic;
+typedef struct
+{
+    TPMI_DH_PARENT         parentHandle;
+    TPM2B_SENSITIVE_CREATE inSensitive;
+    TPM2B_TEMPLATE         inPublic;
 } CreateLoaded_In;
 
 // Output structure definition
-typedef struct {
-    TPM_HANDLE                  objectHandle;
-    TPM2B_PRIVATE               outPrivate;
-    TPM2B_PUBLIC                outPublic;
-    TPM2B_NAME                  name;
+typedef struct
+{
+    TPM_HANDLE    objectHandle;
+    TPM2B_PRIVATE outPrivate;
+    TPM2B_PUBLIC  outPublic;
+    TPM2B_NAME    name;
 } CreateLoaded_Out;
 
 // Response code modifiers
-#define RC_CreateLoaded_parentHandle    (TPM_RC_H + TPM_RC_1)
-#define RC_CreateLoaded_inSensitive (TPM_RC_P + TPM_RC_1)
-#define RC_CreateLoaded_inPublic    (TPM_RC_P + TPM_RC_2)
+#    define RC_CreateLoaded_parentHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_CreateLoaded_inSensitive  (TPM_RC_P + TPM_RC_1)
+#    define RC_CreateLoaded_inPublic     (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_CreateLoaded(
-    CreateLoaded_In             *in,
-    CreateLoaded_Out            *out
-);
+TPM2_CreateLoaded(CreateLoaded_In* in, CreateLoaded_Out* out);
 
-#endif  // _Create_Loaded_FP_H_
-#endif  // CC_CreateLoaded
+#  endif  // _Create_Loaded_FP_H_
+#endif    // CC_CreateLoaded

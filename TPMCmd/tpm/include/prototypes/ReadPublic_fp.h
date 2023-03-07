@@ -37,32 +37,31 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ReadPublic // Command must be enabled
+#if CC_ReadPublic  // Command must be enabled
 
-#ifndef _Read_Public_FP_H_
-#define _Read_Public_FP_H_
+#  ifndef _Read_Public_FP_H_
+#    define _Read_Public_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              objectHandle;
+typedef struct
+{
+    TPMI_DH_OBJECT objectHandle;
 } ReadPublic_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_PUBLIC                outPublic;
-    TPM2B_NAME                  name;
-    TPM2B_NAME                  qualifiedName;
+typedef struct
+{
+    TPM2B_PUBLIC outPublic;
+    TPM2B_NAME   name;
+    TPM2B_NAME   qualifiedName;
 } ReadPublic_Out;
 
 // Response code modifiers
-#define RC_ReadPublic_objectHandle  (TPM_RC_H + TPM_RC_1)
+#    define RC_ReadPublic_objectHandle (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_ReadPublic(
-    ReadPublic_In               *in,
-    ReadPublic_Out              *out
-);
+TPM2_ReadPublic(ReadPublic_In* in, ReadPublic_Out* out);
 
-#endif  // _Read_Public_FP_H_
-#endif  // CC_ReadPublic
+#  endif  // _Read_Public_FP_H_
+#endif    // CC_ReadPublic

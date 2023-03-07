@@ -44,11 +44,10 @@
 //      TPM_RC_LOCALITY             current command locality is not allowed to
 //                                  reset the PCR referenced by 'pcrHandle'
 TPM_RC
-TPM2_PCR_Reset(
-    PCR_Reset_In    *in             // IN: input parameter list
-    )
+TPM2_PCR_Reset(PCR_Reset_In* in  // IN: input parameter list
+)
 {
-// Input Validation
+    // Input Validation
 
     // Check if the reset operation is allowed by the current command locality
     if(!PCRIsResetAllowed(in->pcrHandle))
@@ -59,7 +58,7 @@ TPM2_PCR_Reset(
     if(PCRIsStateSaved(in->pcrHandle))
         RETURN_IF_ORDERLY;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Reset selected PCR in all banks to 0
     PCRSetValue(in->pcrHandle, 0);
@@ -71,4 +70,4 @@ TPM2_PCR_Reset(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PCR_Reset
+#endif  // CC_PCR_Reset

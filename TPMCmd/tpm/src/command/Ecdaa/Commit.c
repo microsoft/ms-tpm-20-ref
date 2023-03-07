@@ -54,24 +54,23 @@
 //      TPM_RC_SIZE             's2' is empty but 'y2' is not or 's2' provided but
 //                              'y2' is not
 TPM_RC
-TPM2_Commit(
-    Commit_In       *in,            // IN: input parameter list
-    Commit_Out      *out            // OUT: output parameter list
-    )
+TPM2_Commit(Commit_In*  in,  // IN: input parameter list
+            Commit_Out* out  // OUT: output parameter list
+)
 {
-    OBJECT                  *eccKey;
-    TPMS_ECC_POINT           P2;
-    TPMS_ECC_POINT          *pP2 = NULL;
-    TPMS_ECC_POINT          *pP1 = NULL;
-    TPM2B_ECC_PARAMETER      r;
-    TPM2B_ECC_PARAMETER      p;
-    TPM_RC                   result;
-    TPMS_ECC_PARMS          *parms;
+    OBJECT*             eccKey;
+    TPMS_ECC_POINT      P2;
+    TPMS_ECC_POINT*     pP2 = NULL;
+    TPMS_ECC_POINT*     pP1 = NULL;
+    TPM2B_ECC_PARAMETER r;
+    TPM2B_ECC_PARAMETER p;
+    TPM_RC              result;
+    TPMS_ECC_PARMS*     parms;
 
-// Input Validation
+    // Input Validation
 
     eccKey = HandleToObject(in->signHandle);
-    parms = &eccKey->publicArea.parameters.eccDetail;
+    parms  = &eccKey->publicArea.parameters.eccDetail;
 
     // Input key must be an ECC key
     if(eccKey->publicArea.type != TPM_ALG_ECC)
@@ -85,7 +84,7 @@ TPM2_Commit(
     if(!CryptIsSchemeAnonymous(parms->scheme.scheme))
         return TPM_RCS_SCHEME + RC_Commit_signHandle;
 
-// Make sure that both parts of P2 are present if either is present
+    // Make sure that both parts of P2 are present if either is present
     if((in->s2.t.size == 0) != (in->y2.t.size == 0))
         return TPM_RCS_SIZE + RC_Commit_y2;
 
@@ -102,7 +101,7 @@ TPM2_Commit(
     // Set up P2 if s2 and Y2 are provided
     if(in->s2.t.size != 0)
     {
-        TPM2B_DIGEST             x2;
+        TPM2B_DIGEST x2;
 
         pP2 = &P2;
 
@@ -112,10 +111,10 @@ TPM2_Commit(
         // Compute x2  HnameAlg(s2) mod p
         //      do the hash operation on s2 with the size of curve 'p'
         x2.t.size = CryptHashBlock(eccKey->publicArea.nameAlg,
-                                     in->s2.t.size,
-                                     in->s2.t.buffer,
-                                     sizeof(x2.t.buffer),
-                                     x2.t.buffer);
+                                   in->s2.t.size,
+                                   in->s2.t.buffer,
+                                   sizeof(x2.t.buffer),
+                                   x2.t.buffer);
 
         // If there were error returns in the hash routine, indicate a problem
         // with the hash algorithm selection
@@ -166,4 +165,4 @@ TPM2_Commit(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_Commit
+#endif  // CC_Commit

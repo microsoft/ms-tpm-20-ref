@@ -43,14 +43,13 @@
 //  Return Type: TPM_RC
 // TPM_RC_NO_RESULT             the TPM is not able to generate an 'r' value
 TPM_RC
-TPM2_EC_Ephemeral(
-    EC_Ephemeral_In     *in,            // IN: input parameter list
-    EC_Ephemeral_Out    *out            // OUT: output parameter list
-    )
+TPM2_EC_Ephemeral(EC_Ephemeral_In*  in,  // IN: input parameter list
+                  EC_Ephemeral_Out* out  // OUT: output parameter list
+)
 {
-    TPM2B_ECC_PARAMETER      r;
-    TPM_RC                   result;
-//
+    TPM2B_ECC_PARAMETER r;
+    TPM_RC              result;
+    //
     do
     {
         // Get the random value that will be used in the point multiplications
@@ -58,8 +57,8 @@ TPM2_EC_Ephemeral(
         if(!CryptGenerateR(&r, NULL, in->curveID, NULL))
             return TPM_RC_NO_RESULT;
         // do a point multiply
-        result = CryptEccPointMultiply(&out->Q.point, in->curveID, NULL, &r,
-                                       NULL, NULL);
+        result =
+            CryptEccPointMultiply(&out->Q.point, in->curveID, NULL, &r, NULL, NULL);
         // commit the count value if either the r value results in the point at
         // infinity or if the value is good. The commit on the r value for infinity
         // is so that the r value will be skipped.
@@ -70,4 +69,4 @@ TPM2_EC_Ephemeral(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_EC_Ephemeral
+#endif  // CC_EC_Ephemeral

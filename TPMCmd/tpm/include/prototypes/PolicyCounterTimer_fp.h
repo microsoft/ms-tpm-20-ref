@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PolicyCounterTimer // Command must be enabled
+#if CC_PolicyCounterTimer  // Command must be enabled
 
-#ifndef _Policy_Counter_Timer_FP_H_
-#define _Policy_Counter_Timer_FP_H_
+#  ifndef _Policy_Counter_Timer_FP_H_
+#    define _Policy_Counter_Timer_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_SH_POLICY                  policySession;
-    TPM2B_OPERAND                   operandB;
-    UINT16                          offset;
-    TPM_EO                          operation;
+typedef struct
+{
+    TPMI_SH_POLICY policySession;
+    TPM2B_OPERAND  operandB;
+    UINT16         offset;
+    TPM_EO         operation;
 } PolicyCounterTimer_In;
 
 // Response code modifiers
-#define RC_PolicyCounterTimer_policySession (TPM_RC_H + TPM_RC_1)
-#define RC_PolicyCounterTimer_operandB  (TPM_RC_P + TPM_RC_1)
-#define RC_PolicyCounterTimer_offset    (TPM_RC_P + TPM_RC_2)
-#define RC_PolicyCounterTimer_operation (TPM_RC_P + TPM_RC_3)
+#    define RC_PolicyCounterTimer_policySession (TPM_RC_H + TPM_RC_1)
+#    define RC_PolicyCounterTimer_operandB      (TPM_RC_P + TPM_RC_1)
+#    define RC_PolicyCounterTimer_offset        (TPM_RC_P + TPM_RC_2)
+#    define RC_PolicyCounterTimer_operation     (TPM_RC_P + TPM_RC_3)
 
 // Function prototype
 TPM_RC
-TPM2_PolicyCounterTimer(
-    PolicyCounterTimer_In           *in
-);
+TPM2_PolicyCounterTimer(PolicyCounterTimer_In* in);
 
-#endif  // _Policy_Counter_Timer_FP_H_
-#endif  // CC_PolicyCounterTimer
+#  endif  // _Policy_Counter_Timer_FP_H_
+#endif    // CC_PolicyCounterTimer

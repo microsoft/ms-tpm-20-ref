@@ -37,40 +37,39 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_Import // Command must be enabled
+#if CC_Import  // Command must be enabled
 
-#ifndef _Import_FP_H_
-#define _Import_FP_H_
+#  ifndef _Import_FP_H_
+#    define _Import_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              parentHandle;
-    TPM2B_DATA                  encryptionKey;
-    TPM2B_PUBLIC                objectPublic;
-    TPM2B_PRIVATE               duplicate;
-    TPM2B_ENCRYPTED_SECRET      inSymSeed;
-    TPMT_SYM_DEF_OBJECT         symmetricAlg;
+typedef struct
+{
+    TPMI_DH_OBJECT         parentHandle;
+    TPM2B_DATA             encryptionKey;
+    TPM2B_PUBLIC           objectPublic;
+    TPM2B_PRIVATE          duplicate;
+    TPM2B_ENCRYPTED_SECRET inSymSeed;
+    TPMT_SYM_DEF_OBJECT    symmetricAlg;
 } Import_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_PRIVATE               outPrivate;
+typedef struct
+{
+    TPM2B_PRIVATE outPrivate;
 } Import_Out;
 
 // Response code modifiers
-#define RC_Import_parentHandle  (TPM_RC_H + TPM_RC_1)
-#define RC_Import_encryptionKey (TPM_RC_P + TPM_RC_1)
-#define RC_Import_objectPublic  (TPM_RC_P + TPM_RC_2)
-#define RC_Import_duplicate     (TPM_RC_P + TPM_RC_3)
-#define RC_Import_inSymSeed     (TPM_RC_P + TPM_RC_4)
-#define RC_Import_symmetricAlg  (TPM_RC_P + TPM_RC_5)
+#    define RC_Import_parentHandle  (TPM_RC_H + TPM_RC_1)
+#    define RC_Import_encryptionKey (TPM_RC_P + TPM_RC_1)
+#    define RC_Import_objectPublic  (TPM_RC_P + TPM_RC_2)
+#    define RC_Import_duplicate     (TPM_RC_P + TPM_RC_3)
+#    define RC_Import_inSymSeed     (TPM_RC_P + TPM_RC_4)
+#    define RC_Import_symmetricAlg  (TPM_RC_P + TPM_RC_5)
 
 // Function prototype
 TPM_RC
-TPM2_Import(
-    Import_In                   *in,
-    Import_Out                  *out
-);
+TPM2_Import(Import_In* in, Import_Out* out);
 
-#endif  // _Import_FP_H_
-#endif  // CC_Import
+#  endif  // _Import_FP_H_
+#endif    // CC_Import

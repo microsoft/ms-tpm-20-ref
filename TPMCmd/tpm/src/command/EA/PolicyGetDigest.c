@@ -41,21 +41,20 @@
 // returns the current policyDigest of the session
 */
 TPM_RC
-TPM2_PolicyGetDigest(
-    PolicyGetDigest_In      *in,            // IN: input parameter list
-    PolicyGetDigest_Out     *out            // OUT: output parameter list
-    )
+TPM2_PolicyGetDigest(PolicyGetDigest_In*  in,  // IN: input parameter list
+                     PolicyGetDigest_Out* out  // OUT: output parameter list
+)
 {
-    SESSION     *session;
+    SESSION* session;
 
-// Command Output
+    // Command Output
 
     // Get pointer to the session structure
-    session = SessionGet(in->policySession);
+    session           = SessionGet(in->policySession);
 
     out->policyDigest = session->u2.policyDigest;
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyGetDigest
+#endif  // CC_PolicyGetDigest

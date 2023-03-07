@@ -37,7 +37,7 @@
 
 #if CC_PolicyAuthorize  // Conditional expansion of this file
 
-#include "Policy_spt_fp.h"
+#  include "Policy_spt_fp.h"
 
 /*(See part 3 specification)
 // Change policy by a signature from authority
@@ -49,18 +49,17 @@
 //                          match 'approvedPolicy'; or 'checkTicket' doesn't match
 //                          the provided values
 TPM_RC
-TPM2_PolicyAuthorize(
-    PolicyAuthorize_In  *in             // IN: input parameter list
-    )
+TPM2_PolicyAuthorize(PolicyAuthorize_In* in  // IN: input parameter list
+)
 {
-    SESSION                 *session;
-    TPM2B_DIGEST             authHash;
-    HASH_STATE               hashState;
-    TPMT_TK_VERIFIED         ticket;
-    TPM_ALG_ID               hashAlg;
-    UINT16                   digestSize;
+    SESSION*         session;
+    TPM2B_DIGEST     authHash;
+    HASH_STATE       hashState;
+    TPMT_TK_VERIFIED ticket;
+    TPM_ALG_ID       hashAlg;
+    UINT16           digestSize;
 
-// Input Validation
+    // Input Validation
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -82,8 +81,7 @@ TPM2_PolicyAuthorize(
     {
         // Check that "approvedPolicy" matches the current value of the
         // policyDigest in policy session
-        if(!MemoryEqual2B(&session->u2.policyDigest.b,
-                          &in->approvedPolicy.b))
+        if(!MemoryEqual2B(&session->u2.policyDigest.b, &in->approvedPolicy.b))
             return TPM_RCS_VALUE + RC_PolicyAuthorize_approvedPolicy;
 
         // Validate ticket TPMT_TK_VERIFIED
@@ -102,24 +100,24 @@ TPM2_PolicyAuthorize(
         CryptHashEnd2B(&hashState, &authHash.b);
 
         // re-compute TPMT_TK_VERIFIED
-        TicketComputeVerified(in->checkTicket.hierarchy, &authHash,
-                              &in->keySign, &ticket);
+        TicketComputeVerified(
+            in->checkTicket.hierarchy, &authHash, &in->keySign, &ticket);
 
         // Compare ticket digest.  If not match, return error
         if(!MemoryEqual2B(&in->checkTicket.digest.b, &ticket.digest.b))
             return TPM_RCS_VALUE + RC_PolicyAuthorize_checkTicket;
     }
 
-// Internal Data Update
+    // Internal Data Update
 
     // Set policyDigest to zero digest
     PolicyDigestClear(session);
 
     // Update policyDigest
-    PolicyContextUpdate(TPM_CC_PolicyAuthorize, &in->keySign, &in->policyRef,
-                        NULL, 0, session);
+    PolicyContextUpdate(
+        TPM_CC_PolicyAuthorize, &in->keySign, &in->policyRef, NULL, 0, session);
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyAuthorize
+#endif  // CC_PolicyAuthorize

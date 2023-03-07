@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PCR_Extend // Command must be enabled
+#if CC_PCR_Extend  // Command must be enabled
 
-#ifndef _PCR_Extend_FP_H_
-#define _PCR_Extend_FP_H_
+#  ifndef _PCR_Extend_FP_H_
+#    define _PCR_Extend_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_PCR                 pcrHandle;
-    TPML_DIGEST_VALUES          digests;
+typedef struct
+{
+    TPMI_DH_PCR        pcrHandle;
+    TPML_DIGEST_VALUES digests;
 } PCR_Extend_In;
 
 // Response code modifiers
-#define RC_PCR_Extend_pcrHandle (TPM_RC_H + TPM_RC_1)
-#define RC_PCR_Extend_digests   (TPM_RC_P + TPM_RC_1)
+#    define RC_PCR_Extend_pcrHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_PCR_Extend_digests   (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_PCR_Extend(
-    PCR_Extend_In               *in
-);
+TPM2_PCR_Extend(PCR_Extend_In* in);
 
-#endif  // _PCR_Extend_FP_H_
-#endif  // CC_PCR_Extend
+#  endif  // _PCR_Extend_FP_H_
+#endif    // CC_PCR_Extend

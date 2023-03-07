@@ -41,9 +41,8 @@
 // Reset current EPS value
 */
 TPM_RC
-TPM2_ChangeEPS(
-    ChangeEPS_In    *in             // IN: input parameter list
-    )
+TPM2_ChangeEPS(ChangeEPS_In* in  // IN: input parameter list
+)
 {
     // The command needs NV update.  Check if NV is available.
     // A TPM_RC_NV_UNAVAILABLE or TPM_RC_NV_RATE error may be returned at
@@ -53,7 +52,7 @@ TPM2_ChangeEPS(
     // Input parameter is not reference in command action
     NOT_REFERENCED(in);
 
-// Internal Data Update
+    // Internal Data Update
 
     // Reset endorsement hierarchy seed from RNG
     CryptRandomGenerate(sizeof(gp.EPSeed.t.buffer), gp.EPSeed.t.buffer);
@@ -70,7 +69,7 @@ TPM2_ChangeEPS(
     gp.endorsementAuth.t.size = 0;
 
     // Set endorsement authPolicy to null
-    gp.endorsementAlg = TPM_ALG_NULL;
+    gp.endorsementAlg           = TPM_ALG_NULL;
     gp.endorsementPolicy.t.size = 0;
 
     // Flush loaded object in endorsement hierarchy
@@ -92,4 +91,4 @@ TPM2_ChangeEPS(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_ChangeEPS
+#endif  // CC_ChangeEPS

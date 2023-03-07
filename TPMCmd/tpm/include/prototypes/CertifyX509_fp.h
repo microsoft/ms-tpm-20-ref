@@ -37,40 +37,39 @@
  *  Date: Sep  5, 2019  Time: 06:45:31PM
  */
 
-#if CC_CertifyX509 // Command must be enabled
+#if CC_CertifyX509  // Command must be enabled
 
-#ifndef _CERTIFYX509_FP_H_
-#define _CERTIFYX509_FP_H_
+#  ifndef _CERTIFYX509_FP_H_
+#    define _CERTIFYX509_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              objectHandle;
-    TPMI_DH_OBJECT              signHandle;
-    TPM2B_DATA                  reserved;
-    TPMT_SIG_SCHEME             inScheme;
-    TPM2B_MAX_BUFFER            partialCertificate;
+typedef struct
+{
+    TPMI_DH_OBJECT   objectHandle;
+    TPMI_DH_OBJECT   signHandle;
+    TPM2B_DATA       reserved;
+    TPMT_SIG_SCHEME  inScheme;
+    TPM2B_MAX_BUFFER partialCertificate;
 } CertifyX509_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_MAX_BUFFER            addedToCertificate;
-    TPM2B_DIGEST                tbsDigest;
-    TPMT_SIGNATURE              signature;
+typedef struct
+{
+    TPM2B_MAX_BUFFER addedToCertificate;
+    TPM2B_DIGEST     tbsDigest;
+    TPMT_SIGNATURE   signature;
 } CertifyX509_Out;
 
 // Response code modifiers
-#define RC_CertifyX509_objectHandle (TPM_RC_H + TPM_RC_1)
-#define RC_CertifyX509_signHandle   (TPM_RC_H + TPM_RC_2)
-#define RC_CertifyX509_reserved (TPM_RC_P + TPM_RC_1)
-#define RC_CertifyX509_inScheme (TPM_RC_P + TPM_RC_2)
-#define RC_CertifyX509_partialCertificate   (TPM_RC_P + TPM_RC_3)
+#    define RC_CertifyX509_objectHandle       (TPM_RC_H + TPM_RC_1)
+#    define RC_CertifyX509_signHandle         (TPM_RC_H + TPM_RC_2)
+#    define RC_CertifyX509_reserved           (TPM_RC_P + TPM_RC_1)
+#    define RC_CertifyX509_inScheme           (TPM_RC_P + TPM_RC_2)
+#    define RC_CertifyX509_partialCertificate (TPM_RC_P + TPM_RC_3)
 
 // Function prototype
 TPM_RC
-TPM2_CertifyX509(
-    CertifyX509_In              *in,
-    CertifyX509_Out             *out
-);
+TPM2_CertifyX509(CertifyX509_In* in, CertifyX509_Out* out);
 
-#endif  // _CERTIFYX509_FP_H_
-#endif  // CC_CertifyX509
+#  endif  // _CERTIFYX509_FP_H_
+#endif    // CC_CertifyX509

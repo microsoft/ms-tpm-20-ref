@@ -37,28 +37,27 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PolicyPCR // Command must be enabled
+#if CC_PolicyPCR  // Command must be enabled
 
-#ifndef _Policy_PCR_FP_H_
-#define _Policy_PCR_FP_H_
+#  ifndef _Policy_PCR_FP_H_
+#    define _Policy_PCR_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_SH_POLICY              policySession;
-    TPM2B_DIGEST                pcrDigest;
-    TPML_PCR_SELECTION          pcrs;
+typedef struct
+{
+    TPMI_SH_POLICY     policySession;
+    TPM2B_DIGEST       pcrDigest;
+    TPML_PCR_SELECTION pcrs;
 } PolicyPCR_In;
 
 // Response code modifiers
-#define RC_PolicyPCR_policySession  (TPM_RC_H + TPM_RC_1)
-#define RC_PolicyPCR_pcrDigest  (TPM_RC_P + TPM_RC_1)
-#define RC_PolicyPCR_pcrs       (TPM_RC_P + TPM_RC_2)
+#    define RC_PolicyPCR_policySession (TPM_RC_H + TPM_RC_1)
+#    define RC_PolicyPCR_pcrDigest     (TPM_RC_P + TPM_RC_1)
+#    define RC_PolicyPCR_pcrs          (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_PolicyPCR(
-    PolicyPCR_In                *in
-);
+TPM2_PolicyPCR(PolicyPCR_In* in);
 
-#endif  // _Policy_PCR_FP_H_
-#endif  // CC_PolicyPCR
+#  endif  // _Policy_PCR_FP_H_
+#endif    // CC_PolicyPCR

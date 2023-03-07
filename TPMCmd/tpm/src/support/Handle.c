@@ -43,9 +43,8 @@
 //*** HandleGetType()
 // This function returns the type of a handle which is the MSO of the handle.
 TPM_HT
-HandleGetType(
-    TPM_HANDLE       handle         // IN: a handle to be checked
-    )
+HandleGetType(TPM_HANDLE handle  // IN: a handle to be checked
+)
 {
     // return the upper bytes of input data
     return (TPM_HT)((handle & HR_RANGE_MASK) >> HR_SHIFT);
@@ -56,9 +55,8 @@ HandleGetType(
 // is the next higher value. If there is no handle with the input value and there
 // is no next higher value, it returns 0:
 TPM_HANDLE
-NextPermanentHandle(
-    TPM_HANDLE       inHandle       // IN: the handle to check
-    )
+NextPermanentHandle(TPM_HANDLE inHandle  // IN: the handle to check
+)
 {
     // If inHandle is below the start of the range of permanent handles
     // set it to the start and scan from there
@@ -77,14 +75,13 @@ NextPermanentHandle(
             case TPM_RH_ENDORSEMENT:
             case TPM_RH_PLATFORM:
             case TPM_RH_PLATFORM_NV:
-#ifdef  VENDOR_PERMANENT
+#ifdef VENDOR_PERMANENT
             case VENDOR_PERMANENT:
 #endif
 // Each of the implemented ACT
-#define ACT_IMPLEMENTED_CASE(N)                                                     \
-            case TPM_RH_ACT_##N:
+#define ACT_IMPLEMENTED_CASE(N) case TPM_RH_ACT_##N:
 
-            FOR_EACH_ACT(ACT_IMPLEMENTED_CASE)
+                FOR_EACH_ACT(ACT_IMPLEMENTED_CASE)
 
                 return inHandle;
                 break;
@@ -104,14 +101,13 @@ NextPermanentHandle(
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO
-PermanentCapGetHandles(
-    TPM_HANDLE       handle,        // IN: start handle
-    UINT32           count,         // IN: count of returned handles
-    TPML_HANDLE     *handleList     // OUT: list of handle
-    )
+PermanentCapGetHandles(TPM_HANDLE   handle,     // IN: start handle
+                       UINT32       count,      // IN: count of returned handles
+                       TPML_HANDLE* handleList  // OUT: list of handle
+)
 {
-    TPMI_YES_NO     more = NO;
-    UINT32          i;
+    TPMI_YES_NO more = NO;
+    UINT32      i;
 
     pAssert(HandleGetType(handle) == TPM_HT_PERMANENT);
 
@@ -119,11 +115,11 @@ PermanentCapGetHandles(
     handleList->count = 0;
 
     // The maximum count of handles we may return is MAX_CAP_HANDLES
-    if(count > MAX_CAP_HANDLES) count = MAX_CAP_HANDLES;
+    if(count > MAX_CAP_HANDLES)
+        count = MAX_CAP_HANDLES;
 
     // Iterate permanent handle range
-    for(i = NextPermanentHandle(handle);
-        i != 0; i = NextPermanentHandle(i + 1))
+    for(i = NextPermanentHandle(handle); i != 0; i = NextPermanentHandle(i + 1))
     {
         if(handleList->count < count)
         {
@@ -151,13 +147,12 @@ PermanentCapGetHandles(
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO
-PermanentHandleGetPolicy(
-    TPM_HANDLE           handle,        // IN: start handle
-    UINT32               count,         // IN: max count of returned handles
-    TPML_TAGGED_POLICY  *policyList     // OUT: list of handle
-    )
+PermanentHandleGetPolicy(TPM_HANDLE handle,  // IN: start handle
+                         UINT32     count,   // IN: max count of returned handles
+                         TPML_TAGGED_POLICY* policyList  // OUT: list of handle
+)
 {
-    TPMI_YES_NO     more = NO;
+    TPMI_YES_NO more = NO;
 
     pAssert(HandleGetType(handle) == TPM_HT_PERMANENT);
 
@@ -169,24 +164,24 @@ PermanentHandleGetPolicy(
         count = MAX_TAGGED_POLICIES;
 
     // Iterate permanent handle range
-    for(handle = NextPermanentHandle(handle);
-        handle != 0;
+    for(handle = NextPermanentHandle(handle); handle != 0;
         handle = NextPermanentHandle(handle + 1))
     {
-        TPM2B_DIGEST    policyDigest;
-        TPM_ALG_ID      policyAlg;
+        TPM2B_DIGEST policyDigest;
+        TPM_ALG_ID   policyAlg;
         // Check to see if this permanent handle has a policy
         policyAlg = EntityGetAuthPolicy(handle, &policyDigest);
         if(policyAlg == TPM_ALG_ERROR)
-           continue;
+            continue;
         if(policyList->count < count)
         {
             // If we have not filled up the return list, add this
             // policy to the list;
-            policyList->policies[policyList->count].handle = handle;
+            policyList->policies[policyList->count].handle             = handle;
             policyList->policies[policyList->count].policyHash.hashAlg = policyAlg;
             MemoryCopy(&policyList->policies[policyList->count].policyHash.digest,
-                       policyDigest.t.buffer, policyDigest.t.size);
+                       policyDigest.t.buffer,
+                       policyDigest.t.size);
             policyList->count++;
         }
         else

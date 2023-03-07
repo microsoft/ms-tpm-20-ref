@@ -51,15 +51,14 @@
 //                                  'keyHandle', or 'label' is not a null-terminated
 //                                  string
 TPM_RC
-TPM2_RSA_Encrypt(
-    RSA_Encrypt_In      *in,            // IN: input parameter list
-    RSA_Encrypt_Out     *out            // OUT: output parameter list
-    )
+TPM2_RSA_Encrypt(RSA_Encrypt_In*  in,  // IN: input parameter list
+                 RSA_Encrypt_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                  result;
-    OBJECT                  *rsaKey;
-    TPMT_RSA_DECRYPT        *scheme;
-// Input Validation
+    TPM_RC            result;
+    OBJECT*           rsaKey;
+    TPMT_RSA_DECRYPT* scheme;
+    // Input Validation
     rsaKey = HandleToObject(in->keyHandle);
 
     // selected key must be an RSA key
@@ -72,7 +71,7 @@ TPM2_RSA_Encrypt(
     // Is there a label?
     if(!IsLabelProperlyFormatted(&in->label.b))
         return TPM_RCS_VALUE + RC_RSA_Encrypt_label;
-// Command Output
+    // Command Output
     // Select a scheme for encryption
     scheme = CryptRsaSelectScheme(in->keyHandle, &in->inScheme);
     if(scheme == NULL)
@@ -82,9 +81,9 @@ TPM2_RSA_Encrypt(
     // CryptEncyptRSA.
     out->outData.t.size = sizeof(out->outData.t.buffer);
 
-    result = CryptRsaEncrypt(&out->outData, &in->message.b, rsaKey, scheme,
-                             &in->label.b, NULL);
+    result              = CryptRsaEncrypt(
+        &out->outData, &in->message.b, rsaKey, scheme, &in->label.b, NULL);
     return result;
 }
 
-#endif // CC_RSA_Encrypt
+#endif  // CC_RSA_Encrypt

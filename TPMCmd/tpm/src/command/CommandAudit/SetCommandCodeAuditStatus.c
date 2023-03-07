@@ -43,8 +43,8 @@
 */
 TPM_RC
 TPM2_SetCommandCodeAuditStatus(
-    SetCommandCodeAuditStatus_In    *in             // IN: input parameter list
-    )
+    SetCommandCodeAuditStatus_In* in  // IN: input parameter list
+)
 {
 
     // The command needs NV update.  Check if NV is available.
@@ -52,7 +52,7 @@ TPM2_SetCommandCodeAuditStatus(
     // this point
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Update hash algorithm
     if(in->auditAlg != TPM_ALG_NULL && in->auditAlg != gp.auditHashAlg)
@@ -75,8 +75,8 @@ TPM2_SetCommandCodeAuditStatus(
     }
     else
     {
-        UINT32          i;
-        BOOL            changed = FALSE;
+        UINT32 i;
+        BOOL   changed = FALSE;
 
         // Process set list
         for(i = 0; i < in->setList.count; i++)
@@ -100,4 +100,4 @@ TPM2_SetCommandCodeAuditStatus(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_SetCommandCodeAuditStatus
+#endif  // CC_SetCommandCodeAuditStatus

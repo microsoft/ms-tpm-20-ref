@@ -41,12 +41,11 @@
 // random number generator
 */
 TPM_RC
-TPM2_GetRandom(
-    GetRandom_In    *in,            // IN: input parameter list
-    GetRandom_Out   *out            // OUT: output parameter list
-    )
+TPM2_GetRandom(GetRandom_In*  in,  // IN: input parameter list
+               GetRandom_Out* out  // OUT: output parameter list
+)
 {
-// Command Output
+    // Command Output
 
     // if the requested bytes exceed the output buffer size, generates the
     // maximum bytes that the output buffer allows
@@ -60,4 +59,4 @@ TPM2_GetRandom(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_GetRandom
+#endif  // CC_GetRandom

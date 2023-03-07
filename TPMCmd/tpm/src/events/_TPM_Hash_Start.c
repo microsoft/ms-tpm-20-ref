@@ -35,13 +35,10 @@
 #include "Tpm.h"
 
 // This function is called to process a _TPM_Hash_Start indication.
-LIB_EXPORT void
-_TPM_Hash_Start(
-    void
-    )
+LIB_EXPORT void _TPM_Hash_Start(void)
 {
-    TPM_RC              result;
-    TPMI_DH_OBJECT      handle;
+    TPM_RC         result;
+    TPMI_DH_OBJECT handle;
 
     // If a DRTM sequence object exists, free it up
     if(g_DRTMHandle != TPM_RH_UNASSIGNED)

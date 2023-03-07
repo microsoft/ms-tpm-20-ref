@@ -37,7 +37,7 @@
 
 #if CC_Duplicate  // Conditional expansion of this file
 
-#include "Object_spt_fp.h"
+#  include "Object_spt_fp.h"
 
 /*(See part 3 specification)
 // Duplicate a loaded object
@@ -59,21 +59,20 @@
 //      TPM_RC_VALUE        for an RSA newParent, the sizes of the digest and
 //                          the encryption key are too large to be OAEP encoded
 TPM_RC
-TPM2_Duplicate(
-    Duplicate_In    *in,            // IN: input parameter list
-    Duplicate_Out   *out            // OUT: output parameter list
-    )
+TPM2_Duplicate(Duplicate_In*  in,  // IN: input parameter list
+               Duplicate_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                  result = TPM_RC_SUCCESS;
-    TPMT_SENSITIVE          sensitive;
+    TPM_RC         result = TPM_RC_SUCCESS;
+    TPMT_SENSITIVE sensitive;
 
-    UINT16                  innerKeySize = 0; // encrypt key size for inner wrap
+    UINT16         innerKeySize = 0;  // encrypt key size for inner wrap
 
-    OBJECT                  *object;
-    OBJECT                  *newParent;
-    TPM2B_DATA              data;
+    OBJECT*        object;
+    OBJECT*        newParent;
+    TPM2B_DATA     data;
 
-// Input Validation
+    // Input Validation
 
     // Get duplicate object pointer
     object = HandleToObject(in->objectHandle);
@@ -89,14 +88,13 @@ TPM2_Duplicate(
         return TPM_RCS_TYPE + RC_Duplicate_objectHandle;
 
     // new parent key must be a storage object or TPM_RH_NULL
-    if(in->newParentHandle != TPM_RH_NULL
-       && !ObjectIsStorage(in->newParentHandle))
+    if(in->newParentHandle != TPM_RH_NULL && !ObjectIsStorage(in->newParentHandle))
         return TPM_RCS_TYPE + RC_Duplicate_newParentHandle;
 
     // If the duplicated object has encryptedDuplication SET, then there must be
     // an inner wrapper and the new parent may not be TPM_RH_NULL
-    if(IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT,
-                    encryptedDuplication))
+    if(IS_ATTRIBUTE(
+           object->publicArea.objectAttributes, TPMA_OBJECT, encryptedDuplication))
     {
         if(in->symmetricAlg.algorithm == TPM_ALG_NULL)
             return TPM_RCS_SYMMETRIC + RC_Duplicate_symmetricAlg;
@@ -121,22 +119,22 @@ TPM2_Duplicate(
             return TPM_RCS_SIZE + RC_Duplicate_encryptionKeyIn;
     }
 
-// Command Output
+    // Command Output
 
     if(in->newParentHandle != TPM_RH_NULL)
     {
         // Make encrypt key and its associated secret structure.  A TPM_RC_KEY
         // error may be returned at this point
         out->outSymSeed.t.size = sizeof(out->outSymSeed.t.secret);
-        result = CryptSecretEncrypt(newParent, DUPLICATE_STRING, &data,
-                                    &out->outSymSeed);
+        result =
+            CryptSecretEncrypt(newParent, DUPLICATE_STRING, &data, &out->outSymSeed);
         if(result != TPM_RC_SUCCESS)
             return result;
     }
     else
     {
         // Do not apply outer wrapper
-        data.t.size = 0;
+        data.t.size            = 0;
         out->outSymSeed.t.size = 0;
     }
 
@@ -147,9 +145,13 @@ TPM2_Duplicate(
     // Note: If there is no encryption key, one will be provided by
     // SensitiveToDuplicate(). This is why the assignment of encryptionKeyIn to
     // encryptionKeyOut will work properly and is not conditional.
-    SensitiveToDuplicate(&sensitive, &object->name.b, newParent,
-                         object->publicArea.nameAlg, &data.b,
-                         &in->symmetricAlg, &in->encryptionKeyIn,
+    SensitiveToDuplicate(&sensitive,
+                         &object->name.b,
+                         newParent,
+                         object->publicArea.nameAlg,
+                         &data.b,
+                         &in->symmetricAlg,
+                         &in->encryptionKeyIn,
                          &out->duplicate);
 
     out->encryptionKeyOut = in->encryptionKeyIn;
@@ -157,4 +159,4 @@ TPM2_Duplicate(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_Duplicate
+#endif  // CC_Duplicate

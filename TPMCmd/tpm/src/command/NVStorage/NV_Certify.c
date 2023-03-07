@@ -58,17 +58,16 @@
 //      TPM_RC_SCHEME                   'inScheme' is not an allowed value for the
 //                                      key definition
 TPM_RC
-TPM2_NV_Certify(
-    NV_Certify_In   *in,            // IN: input parameter list
-    NV_Certify_Out  *out            // OUT: output parameter list
-    )
+TPM2_NV_Certify(NV_Certify_In*  in,  // IN: input parameter list
+                NV_Certify_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                   result;
-    NV_REF                   locator;
-    NV_INDEX                *nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
-    TPMS_ATTEST              certifyInfo;
-    OBJECT                  *signObject = HandleToObject(in->signHandle);
-// Input Validation
+    TPM_RC      result;
+    NV_REF      locator;
+    NV_INDEX*   nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
+    TPMS_ATTEST certifyInfo;
+    OBJECT*     signObject = HandleToObject(in->signHandle);
+    // Input Validation
     if(!IsSigningObject(signObject))
         return TPM_RCS_KEY + RC_NV_Certify_signHandle;
     if(!CryptSelectSignScheme(signObject, &in->inScheme))
@@ -76,8 +75,8 @@ TPM2_NV_Certify(
 
     // Common access checks, NvWriteAccessCheck() may return TPM_RC_NV_AUTHORIZATION
     // or TPM_RC_NV_LOCKED
-    result = NvReadAccessChecks(in->authHandle, in->nvIndex,
-                                nvIndex->publicArea.attributes);
+    result = NvReadAccessChecks(
+        in->authHandle, in->nvIndex, nvIndex->publicArea.attributes);
     if(result != TPM_RC_SUCCESS)
         return result;
 
@@ -93,17 +92,17 @@ TPM2_NV_Certify(
     if(in->size > MAX_NV_BUFFER_SIZE)
         return TPM_RCS_VALUE + RC_NV_Certify_size;
 
-// Command Output
+    // Command Output
 
     // Fill in attest information common fields
-    FillInAttestInfo(in->signHandle, &in->inScheme, &in->qualifyingData,
-                     &certifyInfo);
+    FillInAttestInfo(
+        in->signHandle, &in->inScheme, &in->qualifyingData, &certifyInfo);
 
     // Get the name of the index
     NvGetIndexName(nvIndex, &certifyInfo.attested.nv.indexName);
 
     // See if this is old format or new format
-    if ((in->size != 0) || (in->offset != 0))
+    if((in->size != 0) || (in->offset != 0))
     {
         // NV certify specific fields
         // Attestation type
@@ -116,26 +115,33 @@ TPM2_NV_Certify(
         certifyInfo.attested.nv.offset = in->offset;
 
         // Perform the read
-        NvGetIndexData(nvIndex, locator, in->offset, in->size,
-            certifyInfo.attested.nv.nvContents.t.buffer);
+        NvGetIndexData(nvIndex,
+                       locator,
+                       in->offset,
+                       in->size,
+                       certifyInfo.attested.nv.nvContents.t.buffer);
     }
     else
     {
-        HASH_STATE                  hashState;
+        HASH_STATE hashState;
         // This is to sign a digest of the data
         certifyInfo.type = TPM_ST_ATTEST_NV_DIGEST;
         // Initialize the hash before calling the function to add the Index data to
         // the hash.
         certifyInfo.attested.nvDigest.nvDigest.t.size =
             CryptHashStart(&hashState, in->inScheme.details.any.hashAlg);
-        NvHashIndexData(&hashState, nvIndex, locator, 0,
-            nvIndex->publicArea.dataSize);
+        NvHashIndexData(
+            &hashState, nvIndex, locator, 0, nvIndex->publicArea.dataSize);
         CryptHashEnd2B(&hashState, &certifyInfo.attested.nvDigest.nvDigest.b);
     }
     // Sign attestation structure.  A NULL signature will be returned if
     // signObject is NULL.
-    return SignAttestInfo(signObject, &in->inScheme, &certifyInfo,
-                          &in->qualifyingData, &out->certifyInfo, &out->signature);
+    return SignAttestInfo(signObject,
+                          &in->inScheme,
+                          &certifyInfo,
+                          &in->qualifyingData,
+                          &out->certifyInfo,
+                          &out->signature);
 }
 
-#endif // CC_NV_Certify
+#endif  // CC_NV_Certify

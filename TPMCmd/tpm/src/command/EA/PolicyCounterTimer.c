@@ -37,7 +37,7 @@
 
 #if CC_PolicyCounterTimer  // Conditional expansion of this file
 
-#include "Policy_spt_fp.h"
+#  include "Policy_spt_fp.h"
 
 /*(See part 3 specification)
 // Add a conditional gating of a policy based on the contents of the
@@ -49,19 +49,18 @@
 //      TPM_RC_RANGE            'offset' + 'size' exceed size of TPMS_TIME_INFO
 //                              structure
 TPM_RC
-TPM2_PolicyCounterTimer(
-    PolicyCounterTimer_In   *in             // IN: input parameter list
-    )
+TPM2_PolicyCounterTimer(PolicyCounterTimer_In* in  // IN: input parameter list
+)
 {
-    SESSION             *session;
-    TIME_INFO            infoData;          // data buffer of  TPMS_TIME_INFO
-    BYTE                *pInfoData = (BYTE *)&infoData;
-    UINT16               infoDataSize;
-    TPM_CC               commandCode = TPM_CC_PolicyCounterTimer;
-    HASH_STATE           hashState;
-    TPM2B_DIGEST         argHash;
+    SESSION*     session;
+    TIME_INFO    infoData;  // data buffer of  TPMS_TIME_INFO
+    BYTE*        pInfoData = (BYTE*)&infoData;
+    UINT16       infoDataSize;
+    TPM_CC       commandCode = TPM_CC_PolicyCounterTimer;
+    HASH_STATE   hashState;
+    TPM2B_DIGEST argHash;
 
-// Input Validation
+    // Input Validation
     // Get a marshaled time structure
     infoDataSize = TimeGetMarshaled(&infoData);
     // Make sure that the referenced stays within the bounds of the structure.
@@ -89,13 +88,15 @@ TPM2_PolicyCounterTimer(
             RETURN_IF_NV_IS_NOT_AVAILABLE;
         }
         // offset to the starting position
-        pInfoData = (BYTE *)infoData;
+        pInfoData = (BYTE*)infoData;
         // Check to see if the condition is valid
-        if(!PolicySptCheckCondition(in->operation, pInfoData + in->offset,
-                                    in->operandB.t.buffer, in->operandB.t.size))
+        if(!PolicySptCheckCondition(in->operation,
+                                    pInfoData + in->offset,
+                                    in->operandB.t.buffer,
+                                    in->operandB.t.size))
             return TPM_RC_POLICY;
     }
-// Internal Data Update
+    // Internal Data Update
     // Start argument list hash
     argHash.t.size = CryptHashStart(&hashState, session->authHashAlg);
     //  add operandB
@@ -126,4 +127,4 @@ TPM2_PolicyCounterTimer(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyCounterTimer
+#endif  // CC_PolicyCounterTimer

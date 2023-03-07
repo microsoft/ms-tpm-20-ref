@@ -36,7 +36,6 @@
 #include "AC_Send_fp.h"
 #include "AC_spt_fp.h"
 
-
 #if CC_AC_Send  // Conditional expansion of this file
 
 /*(See part 3 specification)
@@ -59,24 +58,23 @@
 //      TPM_RC_VALUE        for an RSA newParent, the sizes of the digest and
 //                          the encryption key are too large to be OAEP encoded
 TPM_RC
-TPM2_AC_Send(
-    AC_Send_In    *in,              // IN: input parameter list
-    AC_Send_Out   *out              // OUT: output parameter list
+TPM2_AC_Send(AC_Send_In*  in,  // IN: input parameter list
+             AC_Send_Out* out  // OUT: output parameter list
 )
 {
-    NV_REF           locator;
-    TPM_HANDLE       nvAlias = ((in->ac - AC_FIRST) + NV_AC_FIRST);
-    NV_INDEX        *nvIndex = NvGetIndexInfo(nvAlias, &locator);
-    OBJECT          *object = HandleToObject(in->sendObject);
-    TPM_RC           result;
-// Input validation
+    NV_REF     locator;
+    TPM_HANDLE nvAlias = ((in->ac - AC_FIRST) + NV_AC_FIRST);
+    NV_INDEX*  nvIndex = NvGetIndexInfo(nvAlias, &locator);
+    OBJECT*    object  = HandleToObject(in->sendObject);
+    TPM_RC     result;
+    // Input validation
     // If there is an NV alias, then the index must allow the authorization provided
     if(nvIndex != NULL)
     {
         // Common access checks, NvWriteAccessCheck() may return
         // TPM_RC_NV_AUTHORIZATION or TPM_RC_NV_LOCKED
-        result = NvWriteAccessChecks(in->authHandle, nvAlias,
-                                     nvIndex->publicArea.attributes);
+        result = NvWriteAccessChecks(
+            in->authHandle, nvAlias, nvIndex->publicArea.attributes);
         if(result != TPM_RC_SUCCESS)
             return result;
     }
@@ -88,15 +86,14 @@ TPM2_AC_Send(
     else if(HandleGetType(in->authHandle) != TPM_HT_PERMANENT)
         return TPM_RCS_HANDLE + RC_AC_Send_authHandle;
     // Make sure that the object to be duplicated has the right attributes
-    if(IS_ATTRIBUTE(object->publicArea.objectAttributes,
-                    TPMA_OBJECT, encryptedDuplication)
-       || IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT,
-                       fixedParent)
+    if(IS_ATTRIBUTE(
+           object->publicArea.objectAttributes, TPMA_OBJECT, encryptedDuplication)
+       || IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, fixedParent)
        || IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, fixedTPM))
         return TPM_RCS_ATTRIBUTES + RC_AC_Send_sendObject;
-// Command output
+    // Command output
     // Do the implementation dependent send
     return AcSendObject(in->ac, object, &out->acDataOut);
 }
 
-#endif // TPM_CC_AC_Send
+#endif  // TPM_CC_AC_Send

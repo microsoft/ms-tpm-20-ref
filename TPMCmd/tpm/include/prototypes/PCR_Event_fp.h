@@ -37,32 +37,31 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PCR_Event // Command must be enabled
+#if CC_PCR_Event  // Command must be enabled
 
-#ifndef _PCR_Event_FP_H_
-#define _PCR_Event_FP_H_
+#  ifndef _PCR_Event_FP_H_
+#    define _PCR_Event_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_PCR                 pcrHandle;
-    TPM2B_EVENT                 eventData;
+typedef struct
+{
+    TPMI_DH_PCR pcrHandle;
+    TPM2B_EVENT eventData;
 } PCR_Event_In;
 
 // Output structure definition
-typedef struct {
-    TPML_DIGEST_VALUES          digests;
+typedef struct
+{
+    TPML_DIGEST_VALUES digests;
 } PCR_Event_Out;
 
 // Response code modifiers
-#define RC_PCR_Event_pcrHandle  (TPM_RC_H + TPM_RC_1)
-#define RC_PCR_Event_eventData  (TPM_RC_P + TPM_RC_1)
+#    define RC_PCR_Event_pcrHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_PCR_Event_eventData (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_PCR_Event(
-    PCR_Event_In                *in,
-    PCR_Event_Out               *out
-);
+TPM2_PCR_Event(PCR_Event_In* in, PCR_Event_Out* out);
 
-#endif  // _PCR_Event_FP_H_
-#endif  // CC_PCR_Event
+#  endif  // _PCR_Event_FP_H_
+#endif    // CC_PCR_Event

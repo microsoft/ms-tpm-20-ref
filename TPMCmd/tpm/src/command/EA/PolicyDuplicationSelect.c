@@ -46,14 +46,14 @@
 //      TPM_RC_CPHASH         'cpHash' of 'policySession' is not empty
 TPM_RC
 TPM2_PolicyDuplicationSelect(
-    PolicyDuplicationSelect_In  *in             // IN: input parameter list
-    )
+    PolicyDuplicationSelect_In* in  // IN: input parameter list
+)
 {
-    SESSION         *session;
-    HASH_STATE      hashState;
-    TPM_CC          commandCode = TPM_CC_PolicyDuplicationSelect;
+    SESSION*   session;
+    HASH_STATE hashState;
+    TPM_CC     commandCode = TPM_CC_PolicyDuplicationSelect;
 
-// Input Validation
+    // Input Validation
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -66,7 +66,7 @@ TPM2_PolicyDuplicationSelect(
     if(session->commandCode != 0)
         return TPM_RC_COMMAND_CODE;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Update name hash
     session->u1.cpHash.t.size = CryptHashStart(&hashState, session->authHashAlg);
@@ -83,9 +83,9 @@ TPM2_PolicyDuplicationSelect(
     // update policy hash
     // Old policyDigest size should be the same as the new policyDigest size since
     // they are using the same hash algorithm
-    session->u2.policyDigest.t.size
-        = CryptHashStart(&hashState, session->authHashAlg);
-//  add old policy
+    session->u2.policyDigest.t.size =
+        CryptHashStart(&hashState, session->authHashAlg);
+    //  add old policy
     CryptDigestUpdate2B(&hashState, &session->u2.policyDigest.b);
 
     //  add command code
@@ -110,4 +110,4 @@ TPM2_PolicyDuplicationSelect(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyDuplicationSelect
+#endif  // CC_PolicyDuplicationSelect

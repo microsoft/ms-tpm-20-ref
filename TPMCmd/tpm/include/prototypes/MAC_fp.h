@@ -37,34 +37,33 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_MAC // Command must be enabled
+#if CC_MAC  // Command must be enabled
 
-#ifndef _MAC_FP_H_
-#define _MAC_FP_H_
+#  ifndef _MAC_FP_H_
+#    define _MAC_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              handle;
-    TPM2B_MAX_BUFFER            buffer;
-    TPMI_ALG_MAC_SCHEME         inScheme;
+typedef struct
+{
+    TPMI_DH_OBJECT      handle;
+    TPM2B_MAX_BUFFER    buffer;
+    TPMI_ALG_MAC_SCHEME inScheme;
 } MAC_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_DIGEST                outMAC;
+typedef struct
+{
+    TPM2B_DIGEST outMAC;
 } MAC_Out;
 
 // Response code modifiers
-#define RC_MAC_handle           (TPM_RC_H + TPM_RC_1)
-#define RC_MAC_buffer           (TPM_RC_P + TPM_RC_1)
-#define RC_MAC_inScheme         (TPM_RC_P + TPM_RC_2)
+#    define RC_MAC_handle   (TPM_RC_H + TPM_RC_1)
+#    define RC_MAC_buffer   (TPM_RC_P + TPM_RC_1)
+#    define RC_MAC_inScheme (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_MAC(
-    MAC_In                      *in,
-    MAC_Out                     *out
-);
+TPM2_MAC(MAC_In* in, MAC_Out* out);
 
-#endif  // _MAC_FP_H_
-#endif  // CC_MAC
+#  endif  // _MAC_FP_H_
+#endif    // CC_MAC

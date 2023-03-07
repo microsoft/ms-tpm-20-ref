@@ -50,14 +50,13 @@
 //                                  shutdown sequence
 
 TPM_RC
-TPM2_Startup(
-    Startup_In      *in             // IN: input parameter list
-    )
+TPM2_Startup(Startup_In* in  // IN: input parameter list
+)
 {
-    STARTUP_TYPE         startup;
-    BYTE                 locality = _plat__LocalityGet();
-    BOOL                 OK = TRUE;
-//
+    STARTUP_TYPE startup;
+    BYTE         locality = _plat__LocalityGet();
+    BOOL         OK       = TRUE;
+    //
     // The command needs NV update.
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
@@ -68,7 +67,7 @@ TPM2_Startup(
     // redo of the NV space and since this is a feature that is hardly ever used
     // outside of the PC Client, this code just support the PC Client needs.
 
-// Input Validation
+    // Input Validation
     // Check that the locality is a supported value
     if(locality != 0 && locality != 3)
         return TPM_RC_LOCALITY;
@@ -81,21 +80,21 @@ TPM2_Startup(
         locality = 0;
     g_StartupLocality3 = (locality == 3);
 
-#if USE_DA_USED
+#  if USE_DA_USED
     // If there was no orderly shutdown, then there might have been a write to
     // failedTries that didn't get recorded but only if g_daUsed was SET in the
     // shutdown state
     g_daUsed = (gp.orderlyState == SU_DA_USED_VALUE);
     if(g_daUsed)
         gp.orderlyState = SU_NONE_VALUE;
-#endif
+#  endif
 
     g_prevOrderlyState = gp.orderlyState;
 
     // If there was a proper shutdown, then the startup modifiers are in the
     // orderlyState. Turn them off in the copy.
     if(IS_ORDERLY(g_prevOrderlyState))
-        g_prevOrderlyState &=  ~(PRE_STARTUP_FLAG | STARTUP_LOCALITY_3);
+        g_prevOrderlyState &= ~(PRE_STARTUP_FLAG | STARTUP_LOCALITY_3);
     // If this is a Resume,
     if(in->startupType == TPM_SU_STATE)
     {
@@ -118,7 +117,7 @@ TPM2_Startup(
     // Clean up the gp state
     gp.orderlyState = g_prevOrderlyState;
 
-// Internal Date Update
+    // Internal Date Update
     if((gp.orderlyState == TPM_SU_STATE) && (g_nvOk == TRUE))
     {
         // Always read the data that is only cleared on a Reset because this is not
@@ -149,11 +148,12 @@ TPM2_Startup(
 
     // Read the platform unique value that is used as VENDOR_PERMANENT
     // authorization value
-    g_platformUniqueDetails.t.size
-        = (UINT16)_plat__GetUnique(1, sizeof(g_platformUniqueDetails.t.buffer),
-                                   g_platformUniqueDetails.t.buffer);
+    g_platformUniqueDetails.t.size =
+        (UINT16)_plat__GetUnique(1,
+                                 sizeof(g_platformUniqueDetails.t.buffer),
+                                 g_platformUniqueDetails.t.buffer);
 
-// Start up subsystems
+    // Start up subsystems
     // Start set the safe flag
     OK = OK && TimeStartup(startup);
 
@@ -172,7 +172,7 @@ TPM2_Startup(
     // Restore the ACT
     OK = OK && ActStartup(startup);
 
-//// The following code was moved from Time.c where it made no sense
+    //// The following code was moved from Time.c where it made no sense
     if(OK)
     {
         switch(startup)
@@ -233,7 +233,7 @@ TPM2_Startup(
     // Initialize the orderly shut down flag for this cycle to SU_NONE_VALUE.
     gp.orderlyState = SU_NONE_VALUE;
 
-    OK = OK && NV_SYNC_PERSISTENT(orderlyState);
+    OK              = OK && NV_SYNC_PERSISTENT(orderlyState);
 
     // This can be reset after the first completion of a TPM2_Startup() after
     // a power loss. It can probably be reset earlier but this is an OK place.
@@ -243,4 +243,4 @@ TPM2_Startup(
     return (OK) ? TPM_RC_SUCCESS : TPM_RC_FAILURE;
 }
 
-#endif // CC_Startup
+#endif  // CC_Startup

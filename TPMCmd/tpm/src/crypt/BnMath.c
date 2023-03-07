@@ -63,7 +63,7 @@
 #include "Tpm.h"
 
 // A constant value of zero as a stand in for NULL bigNum values
-const bignum_t   BnConstZero = {1, 0, {0}};
+const bignum_t BnConstZero = {1, 0, {0}};
 
 //** Functions
 
@@ -77,22 +77,19 @@ const bignum_t   BnConstZero = {1, 0, {0}};
 //  Return Type: int
 //      0           no carry out
 //      1           carry out
-static BOOL
-AddSame(
-    crypt_uword_t           *result,
-    const crypt_uword_t     *op1,
-    const crypt_uword_t     *op2,
-    int                      count
-    )
+static BOOL AddSame(crypt_uword_t*       result,
+                    const crypt_uword_t* op1,
+                    const crypt_uword_t* op2,
+                    int                  count)
 {
-    int         carry = 0;
-    int         i;
+    int carry = 0;
+    int i;
 
     for(i = 0; i < count; i++)
     {
-        crypt_uword_t        a = op1[i];
-        crypt_uword_t        sum = a + op2[i];
-        result[i] = sum + carry;
+        crypt_uword_t a   = op1[i];
+        crypt_uword_t sum = a + op2[i];
+        result[i]         = sum + carry;
         // generate a carry if the sum is less than either of the inputs
         // propagate a carry if there was a carry and the sum + carry is zero
         // do this using bit operations rather than logical operations so that
@@ -105,25 +102,15 @@ AddSame(
 
 //*** CarryProp()
 // Propagate a carry
-static int
-CarryProp(
-    crypt_uword_t           *result,
-    const crypt_uword_t     *op,
-    int                      count,
-    int                      carry
-    )
+static int CarryProp(
+    crypt_uword_t* result, const crypt_uword_t* op, int count, int carry)
 {
     for(; count; count--)
         carry = ((*result++ = *op++ + carry) == 0) & carry;
     return carry;
 }
 
-static void
-CarryResolve(
-    bigNum          result,
-    int             stop,
-    int             carry
-    )
+static void CarryResolve(bigNum result, int stop, int carry)
 {
     if(carry)
     {
@@ -135,44 +122,35 @@ CarryResolve(
 
 //*** BnAdd()
 // This function adds two bigNum values. This function always returns TRUE.
-LIB_EXPORT BOOL
-BnAdd(
-    bigNum           result,
-    bigConst         op1,
-    bigConst         op2
-    )
+LIB_EXPORT BOOL BnAdd(bigNum result, bigConst op1, bigConst op2)
 {
-    crypt_uword_t    stop;
-    int              carry;
-    const bignum_t   *n1 = op1;
-    const bignum_t   *n2 = op2;
+    crypt_uword_t   stop;
+    int             carry;
+    const bignum_t* n1 = op1;
+    const bignum_t* n2 = op2;
 
-//
+    //
     if(n2->size > n1->size)
     {
         n1 = op2;
         n2 = op1;
     }
     pAssert(result->allocated >= n1->size);
-    stop = MIN(n1->size, n2->allocated);
+    stop  = MIN(n1->size, n2->allocated);
     carry = (int)AddSame(result->d, n1->d, n2->d, (int)stop);
     if(n1->size > stop)
-        carry = CarryProp(&result->d[stop], &n1->d[stop], (int)(n1->size - stop), carry);
+        carry =
+            CarryProp(&result->d[stop], &n1->d[stop], (int)(n1->size - stop), carry);
     CarryResolve(result, (int)n1->size, carry);
     return TRUE;
 }
 
 //*** BnAddWord()
 // This function adds a word value to a bigNum. This function always returns TRUE.
-LIB_EXPORT BOOL
-BnAddWord(
-    bigNum           result,
-    bigConst         op,
-    crypt_uword_t    word
-    )
+LIB_EXPORT BOOL BnAddWord(bigNum result, bigConst op, crypt_uword_t word)
 {
-    int              carry;
-//
+    int carry;
+    //
     carry = (result->d[0] = op->d[0] + word) < word;
     carry = CarryProp(&result->d[1], &op->d[1], (int)(op->size - 1), carry);
     CarryResolve(result, (int)op->size, carry);
@@ -181,21 +159,18 @@ BnAddWord(
 
 //*** SubSame()
 // This function subtracts two values that have the same size.
-static int
-SubSame(
-    crypt_uword_t           *result,
-    const crypt_uword_t     *op1,
-    const crypt_uword_t     *op2,
-    int                      count
-    )
+static int SubSame(crypt_uword_t*       result,
+                   const crypt_uword_t* op1,
+                   const crypt_uword_t* op2,
+                   int                  count)
 {
-    int                  borrow = 0;
-    int                  i;
+    int borrow = 0;
+    int i;
     for(i = 0; i < count; i++)
     {
-        crypt_uword_t    a = op1[i];
-        crypt_uword_t    diff = a - op2[i];
-        result[i] = diff - borrow;
+        crypt_uword_t a    = op1[i];
+        crypt_uword_t diff = a - op2[i];
+        result[i]          = diff - borrow;
         //       generate   |      propagate
         borrow = (diff > a) | ((diff == 0) & borrow);
     }
@@ -209,13 +184,8 @@ SubSame(
 // This design choice was made because our only bigNum computations
 // are on large positive numbers (primes) or on fields.
 // Propagate a borrow.
-static int
-BorrowProp(
-    crypt_uword_t           *result,
-    const crypt_uword_t     *op,
-    int                      size,
-    int                      borrow
-    )
+static int BorrowProp(
+    crypt_uword_t* result, const crypt_uword_t* op, int size, int borrow)
 {
     for(; size > 0; size--)
         borrow = ((*result++ = *op++ - borrow) == MAX_CRYPT_UWORD) && borrow;
@@ -226,22 +196,17 @@ BorrowProp(
 // This function does subtraction of two bigNum values and returns result = op1 - op2
 // when op1 is greater than op2. If op2 is greater than op1, then a fault is
 // generated. This function always returns TRUE.
-LIB_EXPORT BOOL
-BnSub(
-    bigNum           result,
-    bigConst         op1,
-    bigConst         op2
-    )
+LIB_EXPORT BOOL BnSub(bigNum result, bigConst op1, bigConst op2)
 {
-    int             borrow;
-    int             stop = (int)MIN(op1->size, op2->allocated);
-//
+    int borrow;
+    int stop = (int)MIN(op1->size, op2->allocated);
+    //
     // Make sure that op2 is not obviously larger than op1
     pAssert(op1->size >= op2->size);
     borrow = SubSame(result->d, op1->d, op2->d, stop);
     if(op1->size > (crypt_uword_t)stop)
-        borrow = BorrowProp(&result->d[stop], &op1->d[stop], (int)(op1->size - stop),
-                            borrow);
+        borrow = BorrowProp(
+            &result->d[stop], &op1->d[stop], (int)(op1->size - stop), borrow);
     pAssert(!borrow);
     BnSetTop(result, op1->size);
     return TRUE;
@@ -250,19 +215,14 @@ BnSub(
 //*** BnSubWord()
 // This function subtracts a word value from a bigNum. This function always
 // returns TRUE.
-LIB_EXPORT BOOL
-BnSubWord(
-    bigNum           result,
-    bigConst         op,
-    crypt_uword_t    word
-    )
+LIB_EXPORT BOOL BnSubWord(bigNum result, bigConst op, crypt_uword_t word)
 {
-    int             borrow;
-//
+    int borrow;
+    //
     pAssert(op->size > 1 || word <= op->d[0]);
-    borrow = word > op->d[0];
+    borrow       = word > op->d[0];
     result->d[0] = op->d[0] - word;
-    borrow = BorrowProp(&result->d[1], &op->d[1], (int)(op->size - 1), borrow);
+    borrow       = BorrowProp(&result->d[1], &op->d[1], (int)(op->size - 1), borrow);
     pAssert(!borrow);
     BnSetTop(result, op->size);
     return TRUE;
@@ -276,23 +236,19 @@ BnSubWord(
 //      < 0             op1 is less than op2
 //      0               op1 is equal to op2
 //      > 0             op1 is greater than op2
-LIB_EXPORT int
-BnUnsignedCmp(
-    bigConst               op1,
-    bigConst               op2
-    )
+LIB_EXPORT int BnUnsignedCmp(bigConst op1, bigConst op2)
 {
-    int             retVal;
-    int             diff;
-    int             i;
-//
+    int retVal;
+    int diff;
+    int i;
+    //
     pAssert((op1 != NULL) && (op2 != NULL));
     retVal = (int)(op1->size - op2->size);
     if(retVal == 0)
     {
         for(i = (int)(op1->size - 1); i >= 0; i--)
         {
-            diff = (op1->d[i] < op2->d[i]) ? -1 : (op1->d[i] != op2->d[i]);
+            diff   = (op1->d[i] < op2->d[i]) ? -1 : (op1->d[i] != op2->d[i]);
             retVal = retVal == 0 ? diff : retVal;
         }
     }
@@ -307,17 +263,13 @@ BnUnsignedCmp(
 //      -1              op1 is less that word
 //      0               op1 is equal to word
 //      1               op1 is greater than word
-LIB_EXPORT int
-BnUnsignedCmpWord(
-    bigConst             op1,
-    crypt_uword_t        word
-    )
+LIB_EXPORT int BnUnsignedCmpWord(bigConst op1, crypt_uword_t word)
 {
     if(op1->size > 1)
         return 1;
     else if(op1->size == 1)
         return (op1->d[0] < word) ? -1 : (op1->d[0] > word);
-    else // op1 is zero
+    else  // op1 is zero
         // equal if word is zero
         return (word == 0) ? 0 : -1;
 }
@@ -325,15 +277,11 @@ BnUnsignedCmpWord(
 //*** BnModWord()
 // This function does modular division of a big number when the modulus is a
 // word value.
-LIB_EXPORT crypt_word_t
-BnModWord(
-    bigConst         numerator,
-    crypt_word_t     modulus
-    )
+LIB_EXPORT crypt_word_t BnModWord(bigConst numerator, crypt_word_t modulus)
 {
     BN_MAX(remainder);
     BN_VAR(mod, RADIX_BITS);
-//
+    //
     mod->d[0] = modulus;
     mod->size = (modulus != 0);
     BnDiv(NULL, remainder, numerator, mod);
@@ -347,21 +295,42 @@ BnModWord(
 //  Return Type: int
 //      -1              the word was zero
 //      n               the bit number of the most significant bit in the word
-LIB_EXPORT int
-Msb(
-    crypt_uword_t           word
-    )
+LIB_EXPORT int Msb(crypt_uword_t word)
 {
-    int             retVal = -1;
+    int retVal = -1;
 //
 #if RADIX_BITS == 64
-    if(word & 0xffffffff00000000) { retVal += 32; word >>= 32; }
+    if(word & 0xffffffff00000000)
+    {
+        retVal += 32;
+        word >>= 32;
+    }
 #endif
-    if(word & 0xffff0000) { retVal += 16; word >>= 16; }
-    if(word & 0x0000ff00) { retVal += 8; word >>= 8; }
-    if(word & 0x000000f0) { retVal += 4; word >>= 4; }
-    if(word & 0x0000000c) { retVal += 2; word >>= 2; }
-    if(word & 0x00000002) { retVal += 1; word >>= 1; }
+    if(word & 0xffff0000)
+    {
+        retVal += 16;
+        word >>= 16;
+    }
+    if(word & 0x0000ff00)
+    {
+        retVal += 8;
+        word >>= 8;
+    }
+    if(word & 0x000000f0)
+    {
+        retVal += 4;
+        word >>= 4;
+    }
+    if(word & 0x0000000c)
+    {
+        retVal += 2;
+        word >>= 2;
+    }
+    if(word & 0x00000002)
+    {
+        retVal += 1;
+        word >>= 1;
+    }
     return retVal + (int)word;
 }
 
@@ -370,15 +339,12 @@ Msb(
 //  Return Type: int
 //      -1              the word was zero or 'bn' was NULL
 //      n               the bit number of the most significant bit in the word
-LIB_EXPORT int
-BnMsb(
-    bigConst            bn
-    )
+LIB_EXPORT int BnMsb(bigConst bn)
 {
     // If the value is NULL, or the size is zero then treat as zero and return -1
     if(bn != NULL && bn->size > 0)
     {
-        int         retVal = Msb(bn->d[bn->size - 1]);
+        int retVal = Msb(bn->d[bn->size - 1]);
         retVal += (int)(bn->size - 1) * RADIX_BITS;
         return retVal;
     }
@@ -390,23 +356,16 @@ BnMsb(
 // This function returns the number of bits required to hold a number. It is one
 // greater than the Msb.
 //
-LIB_EXPORT unsigned
-BnSizeInBits(
-    bigConst                 n
-    )
+LIB_EXPORT unsigned BnSizeInBits(bigConst n)
 {
-    int     bits = BnMsb(n) + 1;
-//
-    return bits < 0? 0 : (unsigned)bits;
+    int bits = BnMsb(n) + 1;
+    //
+    return bits < 0 ? 0 : (unsigned)bits;
 }
 
 //*** BnSetWord()
 // Change the value of a bignum_t to a word value.
-LIB_EXPORT bigNum
-BnSetWord(
-    bigNum               n,
-    crypt_uword_t        w
-    )
+LIB_EXPORT bigNum BnSetWord(bigNum n, crypt_uword_t w)
 {
     if(n != NULL)
     {
@@ -420,13 +379,11 @@ BnSetWord(
 //*** BnSetBit()
 // This function will SET a bit in a bigNum. Bit 0 is the least-significant bit in
 // the 0th digit_t. The function always return TRUE
-LIB_EXPORT BOOL
-BnSetBit(
-    bigNum           bn,        // IN/OUT: big number to modify
-    unsigned int     bitNum     // IN: Bit number to SET
-    )
+LIB_EXPORT BOOL BnSetBit(bigNum       bn,     // IN/OUT: big number to modify
+                         unsigned int bitNum  // IN: Bit number to SET
+)
 {
-    crypt_uword_t            offset = bitNum / RADIX_BITS;
+    crypt_uword_t offset = bitNum / RADIX_BITS;
     pAssert(bn->allocated * RADIX_BITS >= bitNum);
     // Grow the number if necessary to set the bit.
     while(bn->size <= offset)
@@ -441,14 +398,12 @@ BnSetBit(
 //  Return Type: BOOL
 //      TRUE(1)         the bit is set
 //      FALSE(0)        the bit is not set or the number is out of range
-LIB_EXPORT BOOL
-BnTestBit(
-    bigNum               bn,        // IN: number to check
-    unsigned int         bitNum     // IN: bit to test
-    )
+LIB_EXPORT BOOL BnTestBit(bigNum       bn,     // IN: number to check
+                          unsigned int bitNum  // IN: bit to test
+)
 {
-    crypt_uword_t         offset = RADIX_DIV(bitNum);
-//
+    crypt_uword_t offset = RADIX_DIV(bitNum);
+    //
     if(bn->size > offset)
         return ((bn->d[offset] & (((crypt_uword_t)1) << RADIX_MOD(bitNum))) != 0);
     else
@@ -463,20 +418,18 @@ BnTestBit(
 //  Return Type: BOOL
 //      TRUE(1)         result masked
 //      FALSE(0)        the input was not as large as the mask
-LIB_EXPORT BOOL
-BnMaskBits(
-    bigNum           bn,        // IN/OUT: number to mask
-    crypt_uword_t    maskBit    // IN: the bit number for the mask.
-    )
+LIB_EXPORT BOOL BnMaskBits(bigNum        bn,      // IN/OUT: number to mask
+                           crypt_uword_t maskBit  // IN: the bit number for the mask.
+)
 {
-    crypt_uword_t    finalSize;
-    BOOL             retVal;
+    crypt_uword_t finalSize;
+    BOOL          retVal;
 
     finalSize = BITS_TO_CRYPT_WORDS(maskBit);
-    retVal = (finalSize <= bn->allocated);
+    retVal    = (finalSize <= bn->allocated);
     if(retVal && (finalSize > 0))
     {
-        crypt_uword_t   mask;
+        crypt_uword_t mask;
         mask = ~((crypt_uword_t)0) >> RADIX_MOD(maskBit);
         bn->d[finalSize - 1] &= mask;
     }
@@ -487,20 +440,15 @@ BnMaskBits(
 //*** BnShiftRight()
 // This function will shift a bigNum to the right by the shiftAmount.
 // This function always returns TRUE.
-LIB_EXPORT BOOL
-BnShiftRight(
-    bigNum           result,
-    bigConst         toShift,
-    uint32_t         shiftAmount
-    )
+LIB_EXPORT BOOL BnShiftRight(bigNum result, bigConst toShift, uint32_t shiftAmount)
 {
-    uint32_t         offset = (shiftAmount >> RADIX_LOG2);
-    uint32_t         i;
-    uint32_t         shiftIn;
-    crypt_uword_t    finalSize;
-//
+    uint32_t      offset = (shiftAmount >> RADIX_LOG2);
+    uint32_t      i;
+    uint32_t      shiftIn;
+    crypt_uword_t finalSize;
+    //
     shiftAmount = shiftAmount & RADIX_MASK;
-    shiftIn = RADIX_BITS - shiftAmount;
+    shiftIn     = RADIX_BITS - shiftAmount;
 
     // The end size is toShift->size - offset less one additional
     // word if the shiftAmount would make the upper word == 0
@@ -518,7 +466,7 @@ BnShiftRight(
         for(i = 0; i < finalSize; i++)
         {
             result->d[i] = (toShift->d[i + offset] >> shiftAmount)
-                | (toShift->d[i + offset + 1] << shiftIn);
+                           | (toShift->d[i + offset + 1] << shiftIn);
         }
         if(offset == 0)
             result->d[i] = toShift->d[i] >> shiftAmount;
@@ -539,18 +487,13 @@ BnShiftRight(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure
-LIB_EXPORT BOOL
-BnGetRandomBits(
-    bigNum           n,
-    size_t           bits,
-    RAND_STATE      *rand
-)
+LIB_EXPORT BOOL BnGetRandomBits(bigNum n, size_t bits, RAND_STATE* rand)
 {
     // Since this could be used for ECC key generation using the extra bits method,
     // make sure that the value is large enough
     TPM2B_TYPE(LARGEST, LARGEST_NUMBER + 8);
-    TPM2B_LARGEST    large;
-//
+    TPM2B_LARGEST large;
+    //
     large.b.size = (UINT16)BITS_TO_BYTES(bits);
     if(DRBG_Generate(rand, large.t.buffer, large.t.size) == large.t.size)
     {
@@ -574,15 +517,10 @@ BnGetRandomBits(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure ('limit' is too small)
-LIB_EXPORT BOOL
-BnGenerateRandomInRange(
-    bigNum           dest,
-    bigConst         limit,
-    RAND_STATE      *rand
-    )
+LIB_EXPORT BOOL BnGenerateRandomInRange(bigNum dest, bigConst limit, RAND_STATE* rand)
 {
-    size_t   bits = BnSizeInBits(limit);
-//
+    size_t bits = BnSizeInBits(limit);
+    //
     if(bits < 2)
     {
         BnSetWord(dest, 0);
@@ -591,7 +529,8 @@ BnGenerateRandomInRange(
     else
     {
         while(BnGetRandomBits(dest, bits, rand)
-              && (BnEqualZero(dest) || (BnUnsignedCmp(dest, limit) >= 0)));
+              && (BnEqualZero(dest) || (BnUnsignedCmp(dest, limit) >= 0)))
+            ;
     }
     return !g_inFailureMode;
 }

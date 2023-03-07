@@ -53,36 +53,39 @@
 //                          invalid commit status or failed to generate "r" value
 //                          (for an ECC key)
 TPM_RC
-TPM2_GetTime(
-    GetTime_In      *in,            // IN: input parameter list
-    GetTime_Out     *out            // OUT: output parameter list
-    )
+TPM2_GetTime(GetTime_In*  in,  // IN: input parameter list
+             GetTime_Out* out  // OUT: output parameter list
+)
 {
-    TPMS_ATTEST             timeInfo;
-    OBJECT                 *signObject = HandleToObject(in->signHandle);
-// Input Validation
+    TPMS_ATTEST timeInfo;
+    OBJECT*     signObject = HandleToObject(in->signHandle);
+    // Input Validation
     if(!IsSigningObject(signObject))
         return TPM_RCS_KEY + RC_GetTime_signHandle;
     if(!CryptSelectSignScheme(signObject, &in->inScheme))
         return TPM_RCS_SCHEME + RC_GetTime_inScheme;
 
-// Command Output
+    // Command Output
     // Fill in attest common fields
     FillInAttestInfo(in->signHandle, &in->inScheme, &in->qualifyingData, &timeInfo);
 
     // GetClock specific fields
-    timeInfo.type = TPM_ST_ATTEST_TIME;
+    timeInfo.type                    = TPM_ST_ATTEST_TIME;
     timeInfo.attested.time.time.time = g_time;
     TimeFillInfo(&timeInfo.attested.time.time.clockInfo);
 
     // Firmware version in plain text
-    timeInfo.attested.time.firmwareVersion
-        = (((UINT64)gp.firmwareV1) << 32) + gp.firmwareV2;
+    timeInfo.attested.time.firmwareVersion =
+        (((UINT64)gp.firmwareV1) << 32) + gp.firmwareV2;
 
     // Sign attestation structure.  A NULL signature will be returned if
     // signObject is NULL.
-    return SignAttestInfo(signObject, &in->inScheme, &timeInfo, &in->qualifyingData,
-                          &out->timeInfo, &out->signature);
+    return SignAttestInfo(signObject,
+                          &in->inScheme,
+                          &timeInfo,
+                          &in->qualifyingData,
+                          &out->timeInfo,
+                          &out->signature);
 }
 
-#endif // CC_GetTime
+#endif  // CC_GetTime

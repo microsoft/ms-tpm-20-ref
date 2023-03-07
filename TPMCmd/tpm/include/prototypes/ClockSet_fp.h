@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ClockSet // Command must be enabled
+#if CC_ClockSet  // Command must be enabled
 
-#ifndef _Clock_Set_FP_H_
-#define _Clock_Set_FP_H_
+#  ifndef _Clock_Set_FP_H_
+#    define _Clock_Set_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PROVISION           auth;
-    UINT64                      newTime;
+typedef struct
+{
+    TPMI_RH_PROVISION auth;
+    UINT64            newTime;
 } ClockSet_In;
 
 // Response code modifiers
-#define RC_ClockSet_auth        (TPM_RC_H + TPM_RC_1)
-#define RC_ClockSet_newTime     (TPM_RC_P + TPM_RC_1)
+#    define RC_ClockSet_auth    (TPM_RC_H + TPM_RC_1)
+#    define RC_ClockSet_newTime (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_ClockSet(
-    ClockSet_In                 *in
-);
+TPM2_ClockSet(ClockSet_In* in);
 
-#endif  // _Clock_Set_FP_H_
-#endif  // CC_ClockSet
+#  endif  // _Clock_Set_FP_H_
+#endif    // CC_ClockSet

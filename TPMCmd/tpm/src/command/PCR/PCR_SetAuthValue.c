@@ -44,12 +44,11 @@
 //      TPM_RC_VALUE                PCR referenced by 'pcrHandle' is not a member
 //                                  of a PCR authorization group
 TPM_RC
-TPM2_PCR_SetAuthValue(
-    PCR_SetAuthValue_In     *in             // IN: input parameter list
-    )
+TPM2_PCR_SetAuthValue(PCR_SetAuthValue_In* in  // IN: input parameter list
+)
 {
-    UINT32      groupIndex;
-// Input Validation:
+    UINT32 groupIndex;
+    // Input Validation:
 
     // If PCR does not belong to an auth group, return TPM_RC_VALUE
     if(!PCRBelongsAuthGroup(in->pcrHandle, &groupIndex))
@@ -61,7 +60,7 @@ TPM2_PCR_SetAuthValue(
     // this point
     RETURN_IF_ORDERLY;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Set PCR authValue
     MemoryRemoveTrailingZeros(&in->auth);
@@ -70,4 +69,4 @@ TPM2_PCR_SetAuthValue(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PCR_SetAuthValue
+#endif  // CC_PCR_SetAuthValue

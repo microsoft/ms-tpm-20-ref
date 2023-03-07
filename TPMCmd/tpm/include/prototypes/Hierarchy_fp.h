@@ -37,40 +37,31 @@
  *  Date: Apr  2, 2019  Time: 04:23:27PM
  */
 
-#ifndef    _HIERARCHY_FP_H_
-#define    _HIERARCHY_FP_H_
+#ifndef _HIERARCHY_FP_H_
+#define _HIERARCHY_FP_H_
 
 //*** HierarchyPreInstall()
 // This function performs the initialization functions for the hierarchy
 // when the TPM is simulated. This function should not be called if the
 // TPM is not in a manufacturing mode at the manufacturer, or in a simulated
 // environment.
-void
-HierarchyPreInstall_Init(
-    void
-);
+void HierarchyPreInstall_Init(void);
 
 //*** HierarchyStartup()
 // This function is called at TPM2_Startup() to initialize the hierarchy
 // related values.
-BOOL
-HierarchyStartup(
-    STARTUP_TYPE     type           // IN: start up type
+BOOL HierarchyStartup(STARTUP_TYPE type  // IN: start up type
 );
 
 //*** HierarchyGetProof()
 // This function finds the proof value associated with a hierarchy.It returns a
 // pointer to the proof value.
-TPM2B_PROOF *
-HierarchyGetProof(
-    TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy constant
+TPM2B_PROOF* HierarchyGetProof(TPMI_RH_HIERARCHY hierarchy  // IN: hierarchy constant
 );
 
 //*** HierarchyGetPrimarySeed()
 // This function returns the primary seed of a hierarchy.
-TPM2B_SEED *
-HierarchyGetPrimarySeed(
-    TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy
+TPM2B_SEED* HierarchyGetPrimarySeed(TPMI_RH_HIERARCHY hierarchy  // IN: hierarchy
 );
 
 //*** HierarchyIsEnabled()
@@ -79,9 +70,7 @@ HierarchyGetPrimarySeed(
 //  Return Type: BOOL
 //      TRUE(1)         hierarchy is enabled
 //      FALSE(0)        hierarchy is disabled
-BOOL
-HierarchyIsEnabled(
-    TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy
+BOOL HierarchyIsEnabled(TPMI_RH_HIERARCHY hierarchy  // IN: hierarchy
 );
 
 #endif  // _HIERARCHY_FP_H_

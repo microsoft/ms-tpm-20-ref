@@ -36,7 +36,6 @@
 #include "PolicyLocality_fp.h"
 #include "Marshal.h"
 
-
 #if CC_PolicyLocality  // Conditional expansion of this file
 
 //  Return Type: TPM_RC
@@ -44,42 +43,41 @@
 //                            'locality' have been disabled
 //                            by previous TPM2_PolicyLocality() calls.
 TPM_RC
-TPM2_PolicyLocality(
-    PolicyLocality_In   *in             // IN: input parameter list
-    )
+TPM2_PolicyLocality(PolicyLocality_In* in  // IN: input parameter list
+)
 {
-    SESSION     *session;
-    BYTE         marshalBuffer[sizeof(TPMA_LOCALITY)];
-    BYTE         prevSetting[sizeof(TPMA_LOCALITY)];
-    UINT32       marshalSize;
-    BYTE        *buffer;
-    TPM_CC       commandCode = TPM_CC_PolicyLocality;
-    HASH_STATE   hashState;
+    SESSION*   session;
+    BYTE       marshalBuffer[sizeof(TPMA_LOCALITY)];
+    BYTE       prevSetting[sizeof(TPMA_LOCALITY)];
+    UINT32     marshalSize;
+    BYTE*      buffer;
+    TPM_CC     commandCode = TPM_CC_PolicyLocality;
+    HASH_STATE hashState;
 
-// Input Validation
+    // Input Validation
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
 
     // Get new locality setting in canonical form
-    marshalBuffer[0] = 0;   // Code analysis says that this is not initialized
-    buffer = marshalBuffer;
-    marshalSize = TPMA_LOCALITY_Marshal(&in->locality, &buffer, NULL);
+    marshalBuffer[0] = 0;  // Code analysis says that this is not initialized
+    buffer           = marshalBuffer;
+    marshalSize      = TPMA_LOCALITY_Marshal(&in->locality, &buffer, NULL);
 
     // Its an error if the locality parameter is zero
     if(marshalBuffer[0] == 0)
         return TPM_RCS_RANGE + RC_PolicyLocality_locality;
 
     // Get existing locality setting in canonical form
-    prevSetting[0] = 0;     // Code analysis says that this is not initialized
-    buffer = prevSetting;
+    prevSetting[0] = 0;  // Code analysis says that this is not initialized
+    buffer         = prevSetting;
     TPMA_LOCALITY_Marshal(&session->commandLocality, &buffer, NULL);
 
     // If the locality has previously been set
     if(prevSetting[0] != 0
-        // then the current locality setting and the requested have to be the same
-        // type (that is, either both normal or both extended
-        && ((prevSetting[0] < 32) != (marshalBuffer[0] < 32)))
+       // then the current locality setting and the requested have to be the same
+       // type (that is, either both normal or both extended
+       && ((prevSetting[0] < 32) != (marshalBuffer[0] < 32)))
         return TPM_RCS_RANGE + RC_PolicyLocality_locality;
 
     // See if the input is a regular or extended locality
@@ -108,7 +106,7 @@ TPM2_PolicyLocality(
         prevSetting[0] = marshalBuffer[0];
     }
 
-// Internal Data Update
+    // Internal Data Update
 
     // Update policy hash
     // policyDigestnew = hash(policyDigestold || TPM_CC_PolicyLocality || locality)
@@ -130,10 +128,9 @@ TPM2_PolicyLocality(
     // update session locality by unmarshal function.  The function must succeed
     // because both input and existing locality setting have been validated.
     buffer = prevSetting;
-    TPMA_LOCALITY_Unmarshal(&session->commandLocality, &buffer,
-                            (INT32 *)&marshalSize);
+    TPMA_LOCALITY_Unmarshal(&session->commandLocality, &buffer, (INT32*)&marshalSize);
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyLocality
+#endif  // CC_PolicyLocality

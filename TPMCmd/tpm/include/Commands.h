@@ -40,423 +40,422 @@
 #ifndef _COMMANDS_H_
 #define _COMMANDS_H_
 
-
 // Start-up
 #if CC_Startup
-#include "Startup_fp.h"
+#  include "Startup_fp.h"
 #endif
 #if CC_Shutdown
-#include "Shutdown_fp.h"
+#  include "Shutdown_fp.h"
 #endif
 
 // Testing
 #if CC_SelfTest
-#include "SelfTest_fp.h"
+#  include "SelfTest_fp.h"
 #endif
 #if CC_IncrementalSelfTest
-#include "IncrementalSelfTest_fp.h"
+#  include "IncrementalSelfTest_fp.h"
 #endif
 #if CC_GetTestResult
-#include "GetTestResult_fp.h"
+#  include "GetTestResult_fp.h"
 #endif
 
 // Session Commands
 #if CC_StartAuthSession
-#include "StartAuthSession_fp.h"
+#  include "StartAuthSession_fp.h"
 #endif
 #if CC_PolicyRestart
-#include "PolicyRestart_fp.h"
+#  include "PolicyRestart_fp.h"
 #endif
 
 // Object Commands
 #if CC_Create
-#include "Create_fp.h"
+#  include "Create_fp.h"
 #endif
 #if CC_Load
-#include "Load_fp.h"
+#  include "Load_fp.h"
 #endif
 #if CC_LoadExternal
-#include "LoadExternal_fp.h"
+#  include "LoadExternal_fp.h"
 #endif
 #if CC_ReadPublic
-#include "ReadPublic_fp.h"
+#  include "ReadPublic_fp.h"
 #endif
 #if CC_ActivateCredential
-#include "ActivateCredential_fp.h"
+#  include "ActivateCredential_fp.h"
 #endif
 #if CC_MakeCredential
-#include "MakeCredential_fp.h"
+#  include "MakeCredential_fp.h"
 #endif
 #if CC_Unseal
-#include "Unseal_fp.h"
+#  include "Unseal_fp.h"
 #endif
 #if CC_ObjectChangeAuth
-#include "ObjectChangeAuth_fp.h"
+#  include "ObjectChangeAuth_fp.h"
 #endif
 #if CC_CreateLoaded
-#include "CreateLoaded_fp.h"
+#  include "CreateLoaded_fp.h"
 #endif
 
 // Duplication Commands
 #if CC_Duplicate
-#include "Duplicate_fp.h"
+#  include "Duplicate_fp.h"
 #endif
 #if CC_Rewrap
-#include "Rewrap_fp.h"
+#  include "Rewrap_fp.h"
 #endif
 #if CC_Import
-#include "Import_fp.h"
+#  include "Import_fp.h"
 #endif
 
 // Asymmetric Primitives
 #if CC_RSA_Encrypt
-#include "RSA_Encrypt_fp.h"
+#  include "RSA_Encrypt_fp.h"
 #endif
 #if CC_RSA_Decrypt
-#include "RSA_Decrypt_fp.h"
+#  include "RSA_Decrypt_fp.h"
 #endif
 #if CC_ECDH_KeyGen
-#include "ECDH_KeyGen_fp.h"
+#  include "ECDH_KeyGen_fp.h"
 #endif
 #if CC_ECDH_ZGen
-#include "ECDH_ZGen_fp.h"
+#  include "ECDH_ZGen_fp.h"
 #endif
 #if CC_ECC_Parameters
-#include "ECC_Parameters_fp.h"
+#  include "ECC_Parameters_fp.h"
 #endif
 #if CC_ZGen_2Phase
-#include "ZGen_2Phase_fp.h"
+#  include "ZGen_2Phase_fp.h"
 #endif
 #if CC_ECC_Encrypt
-#include "ECC_Encrypt_fp.h"
+#  include "ECC_Encrypt_fp.h"
 #endif
 #if CC_ECC_Decrypt
-#include "ECC_Decrypt_fp.h"
+#  include "ECC_Decrypt_fp.h"
 #endif
 
 // Symmetric Primitives
 #if CC_EncryptDecrypt
-#include "EncryptDecrypt_fp.h"
+#  include "EncryptDecrypt_fp.h"
 #endif
 #if CC_EncryptDecrypt2
-#include "EncryptDecrypt2_fp.h"
+#  include "EncryptDecrypt2_fp.h"
 #endif
 #if CC_Hash
-#include "Hash_fp.h"
+#  include "Hash_fp.h"
 #endif
 #if CC_HMAC
-#include "HMAC_fp.h"
+#  include "HMAC_fp.h"
 #endif
 #if CC_MAC
-#include "MAC_fp.h"
+#  include "MAC_fp.h"
 #endif
 
 // Random Number Generator
 #if CC_GetRandom
-#include "GetRandom_fp.h"
+#  include "GetRandom_fp.h"
 #endif
 #if CC_StirRandom
-#include "StirRandom_fp.h"
+#  include "StirRandom_fp.h"
 #endif
 
 // Hash/HMAC/Event Sequences
 #if CC_HMAC_Start
-#include "HMAC_Start_fp.h"
+#  include "HMAC_Start_fp.h"
 #endif
 #if CC_MAC_Start
-#include "MAC_Start_fp.h"
+#  include "MAC_Start_fp.h"
 #endif
 #if CC_HashSequenceStart
-#include "HashSequenceStart_fp.h"
+#  include "HashSequenceStart_fp.h"
 #endif
 #if CC_SequenceUpdate
-#include "SequenceUpdate_fp.h"
+#  include "SequenceUpdate_fp.h"
 #endif
 #if CC_SequenceComplete
-#include "SequenceComplete_fp.h"
+#  include "SequenceComplete_fp.h"
 #endif
 #if CC_EventSequenceComplete
-#include "EventSequenceComplete_fp.h"
+#  include "EventSequenceComplete_fp.h"
 #endif
 
 // Attestation Commands
 #if CC_Certify
-#include "Certify_fp.h"
+#  include "Certify_fp.h"
 #endif
 #if CC_CertifyCreation
-#include "CertifyCreation_fp.h"
+#  include "CertifyCreation_fp.h"
 #endif
 #if CC_Quote
-#include "Quote_fp.h"
+#  include "Quote_fp.h"
 #endif
 #if CC_GetSessionAuditDigest
-#include "GetSessionAuditDigest_fp.h"
+#  include "GetSessionAuditDigest_fp.h"
 #endif
 #if CC_GetCommandAuditDigest
-#include "GetCommandAuditDigest_fp.h"
+#  include "GetCommandAuditDigest_fp.h"
 #endif
 #if CC_GetTime
-#include "GetTime_fp.h"
+#  include "GetTime_fp.h"
 #endif
 #if CC_CertifyX509
-#include "CertifyX509_fp.h"
+#  include "CertifyX509_fp.h"
 #endif
 
 // Ephemeral EC Keys
 #if CC_Commit
-#include "Commit_fp.h"
+#  include "Commit_fp.h"
 #endif
 #if CC_EC_Ephemeral
-#include "EC_Ephemeral_fp.h"
+#  include "EC_Ephemeral_fp.h"
 #endif
 
 // Signing and Signature Verification
 #if CC_VerifySignature
-#include "VerifySignature_fp.h"
+#  include "VerifySignature_fp.h"
 #endif
 #if CC_Sign
-#include "Sign_fp.h"
+#  include "Sign_fp.h"
 #endif
 
 // Command Audit
 #if CC_SetCommandCodeAuditStatus
-#include "SetCommandCodeAuditStatus_fp.h"
+#  include "SetCommandCodeAuditStatus_fp.h"
 #endif
 
 // Integrity Collection (PCR)
 #if CC_PCR_Extend
-#include "PCR_Extend_fp.h"
+#  include "PCR_Extend_fp.h"
 #endif
 #if CC_PCR_Event
-#include "PCR_Event_fp.h"
+#  include "PCR_Event_fp.h"
 #endif
 #if CC_PCR_Read
-#include "PCR_Read_fp.h"
+#  include "PCR_Read_fp.h"
 #endif
 #if CC_PCR_Allocate
-#include "PCR_Allocate_fp.h"
+#  include "PCR_Allocate_fp.h"
 #endif
 #if CC_PCR_SetAuthPolicy
-#include "PCR_SetAuthPolicy_fp.h"
+#  include "PCR_SetAuthPolicy_fp.h"
 #endif
 #if CC_PCR_SetAuthValue
-#include "PCR_SetAuthValue_fp.h"
+#  include "PCR_SetAuthValue_fp.h"
 #endif
 #if CC_PCR_Reset
-#include "PCR_Reset_fp.h"
+#  include "PCR_Reset_fp.h"
 #endif
 
 // Enhanced Authorization (EA) Commands
 #if CC_PolicySigned
-#include "PolicySigned_fp.h"
+#  include "PolicySigned_fp.h"
 #endif
 #if CC_PolicySecret
-#include "PolicySecret_fp.h"
+#  include "PolicySecret_fp.h"
 #endif
 #if CC_PolicyTicket
-#include "PolicyTicket_fp.h"
+#  include "PolicyTicket_fp.h"
 #endif
 #if CC_PolicyOR
-#include "PolicyOR_fp.h"
+#  include "PolicyOR_fp.h"
 #endif
 #if CC_PolicyPCR
-#include "PolicyPCR_fp.h"
+#  include "PolicyPCR_fp.h"
 #endif
 #if CC_PolicyLocality
-#include "PolicyLocality_fp.h"
+#  include "PolicyLocality_fp.h"
 #endif
 #if CC_PolicyNV
-#include "PolicyNV_fp.h"
+#  include "PolicyNV_fp.h"
 #endif
 #if CC_PolicyCounterTimer
-#include "PolicyCounterTimer_fp.h"
+#  include "PolicyCounterTimer_fp.h"
 #endif
 #if CC_PolicyCommandCode
-#include "PolicyCommandCode_fp.h"
+#  include "PolicyCommandCode_fp.h"
 #endif
 #if CC_PolicyPhysicalPresence
-#include "PolicyPhysicalPresence_fp.h"
+#  include "PolicyPhysicalPresence_fp.h"
 #endif
 #if CC_PolicyCpHash
-#include "PolicyCpHash_fp.h"
+#  include "PolicyCpHash_fp.h"
 #endif
 #if CC_PolicyNameHash
-#include "PolicyNameHash_fp.h"
+#  include "PolicyNameHash_fp.h"
 #endif
 #if CC_PolicyDuplicationSelect
-#include "PolicyDuplicationSelect_fp.h"
+#  include "PolicyDuplicationSelect_fp.h"
 #endif
 #if CC_PolicyAuthorize
-#include "PolicyAuthorize_fp.h"
+#  include "PolicyAuthorize_fp.h"
 #endif
 #if CC_PolicyAuthValue
-#include "PolicyAuthValue_fp.h"
+#  include "PolicyAuthValue_fp.h"
 #endif
 #if CC_PolicyPassword
-#include "PolicyPassword_fp.h"
+#  include "PolicyPassword_fp.h"
 #endif
 #if CC_PolicyGetDigest
-#include "PolicyGetDigest_fp.h"
+#  include "PolicyGetDigest_fp.h"
 #endif
 #if CC_PolicyNvWritten
-#include "PolicyNvWritten_fp.h"
+#  include "PolicyNvWritten_fp.h"
 #endif
 #if CC_PolicyTemplate
-#include "PolicyTemplate_fp.h"
+#  include "PolicyTemplate_fp.h"
 #endif
 #if CC_PolicyAuthorizeNV
-#include "PolicyAuthorizeNV_fp.h"
+#  include "PolicyAuthorizeNV_fp.h"
 #endif
 
 // Hierarchy Commands
 #if CC_CreatePrimary
-#include "CreatePrimary_fp.h"
+#  include "CreatePrimary_fp.h"
 #endif
 #if CC_HierarchyControl
-#include "HierarchyControl_fp.h"
+#  include "HierarchyControl_fp.h"
 #endif
 #if CC_SetPrimaryPolicy
-#include "SetPrimaryPolicy_fp.h"
+#  include "SetPrimaryPolicy_fp.h"
 #endif
 #if CC_ChangePPS
-#include "ChangePPS_fp.h"
+#  include "ChangePPS_fp.h"
 #endif
 #if CC_ChangeEPS
-#include "ChangeEPS_fp.h"
+#  include "ChangeEPS_fp.h"
 #endif
 #if CC_Clear
-#include "Clear_fp.h"
+#  include "Clear_fp.h"
 #endif
 #if CC_ClearControl
-#include "ClearControl_fp.h"
+#  include "ClearControl_fp.h"
 #endif
 #if CC_HierarchyChangeAuth
-#include "HierarchyChangeAuth_fp.h"
+#  include "HierarchyChangeAuth_fp.h"
 #endif
 
 // Dictionary Attack Functions
 #if CC_DictionaryAttackLockReset
-#include "DictionaryAttackLockReset_fp.h"
+#  include "DictionaryAttackLockReset_fp.h"
 #endif
 #if CC_DictionaryAttackParameters
-#include "DictionaryAttackParameters_fp.h"
+#  include "DictionaryAttackParameters_fp.h"
 #endif
 
 // Miscellaneous Management Functions
 #if CC_PP_Commands
-#include "PP_Commands_fp.h"
+#  include "PP_Commands_fp.h"
 #endif
 #if CC_SetAlgorithmSet
-#include "SetAlgorithmSet_fp.h"
+#  include "SetAlgorithmSet_fp.h"
 #endif
 
 // Field Upgrade
 #if CC_FieldUpgradeStart
-#include "FieldUpgradeStart_fp.h"
+#  include "FieldUpgradeStart_fp.h"
 #endif
 #if CC_FieldUpgradeData
-#include "FieldUpgradeData_fp.h"
+#  include "FieldUpgradeData_fp.h"
 #endif
 #if CC_FirmwareRead
-#include "FirmwareRead_fp.h"
+#  include "FirmwareRead_fp.h"
 #endif
 
 // Context Management
 #if CC_ContextSave
-#include "ContextSave_fp.h"
+#  include "ContextSave_fp.h"
 #endif
 #if CC_ContextLoad
-#include "ContextLoad_fp.h"
+#  include "ContextLoad_fp.h"
 #endif
 #if CC_FlushContext
-#include "FlushContext_fp.h"
+#  include "FlushContext_fp.h"
 #endif
 #if CC_EvictControl
-#include "EvictControl_fp.h"
+#  include "EvictControl_fp.h"
 #endif
 
 // Clocks and Timers
 #if CC_ReadClock
-#include "ReadClock_fp.h"
+#  include "ReadClock_fp.h"
 #endif
 #if CC_ClockSet
-#include "ClockSet_fp.h"
+#  include "ClockSet_fp.h"
 #endif
 #if CC_ClockRateAdjust
-#include "ClockRateAdjust_fp.h"
+#  include "ClockRateAdjust_fp.h"
 #endif
 
 // Capability Commands
 #if CC_GetCapability
-#include "GetCapability_fp.h"
+#  include "GetCapability_fp.h"
 #endif
 #if CC_TestParms
-#include "TestParms_fp.h"
+#  include "TestParms_fp.h"
 #endif
 
 // Non-volatile Storage
 #if CC_NV_DefineSpace
-#include "NV_DefineSpace_fp.h"
+#  include "NV_DefineSpace_fp.h"
 #endif
 #if CC_NV_UndefineSpace
-#include "NV_UndefineSpace_fp.h"
+#  include "NV_UndefineSpace_fp.h"
 #endif
 #if CC_NV_UndefineSpaceSpecial
-#include "NV_UndefineSpaceSpecial_fp.h"
+#  include "NV_UndefineSpaceSpecial_fp.h"
 #endif
 #if CC_NV_ReadPublic
-#include "NV_ReadPublic_fp.h"
+#  include "NV_ReadPublic_fp.h"
 #endif
 #if CC_NV_Write
-#include "NV_Write_fp.h"
+#  include "NV_Write_fp.h"
 #endif
 #if CC_NV_Increment
-#include "NV_Increment_fp.h"
+#  include "NV_Increment_fp.h"
 #endif
 #if CC_NV_Extend
-#include "NV_Extend_fp.h"
+#  include "NV_Extend_fp.h"
 #endif
 #if CC_NV_SetBits
-#include "NV_SetBits_fp.h"
+#  include "NV_SetBits_fp.h"
 #endif
 #if CC_NV_WriteLock
-#include "NV_WriteLock_fp.h"
+#  include "NV_WriteLock_fp.h"
 #endif
 #if CC_NV_GlobalWriteLock
-#include "NV_GlobalWriteLock_fp.h"
+#  include "NV_GlobalWriteLock_fp.h"
 #endif
 #if CC_NV_Read
-#include "NV_Read_fp.h"
+#  include "NV_Read_fp.h"
 #endif
 #if CC_NV_ReadLock
-#include "NV_ReadLock_fp.h"
+#  include "NV_ReadLock_fp.h"
 #endif
 #if CC_NV_ChangeAuth
-#include "NV_ChangeAuth_fp.h"
+#  include "NV_ChangeAuth_fp.h"
 #endif
 #if CC_NV_Certify
-#include "NV_Certify_fp.h"
+#  include "NV_Certify_fp.h"
 #endif
 
 // Attached Components
 #if CC_AC_GetCapability
-#include "AC_GetCapability_fp.h"
+#  include "AC_GetCapability_fp.h"
 #endif
 #if CC_AC_Send
-#include "AC_Send_fp.h"
+#  include "AC_Send_fp.h"
 #endif
 #if CC_Policy_AC_SendSelect
-#include "Policy_AC_SendSelect_fp.h"
+#  include "Policy_AC_SendSelect_fp.h"
 #endif
 
 // Authenticated Countdown Timer
 #if CC_ACT_SetTimeout
-#include "ACT_SetTimeout_fp.h"
+#  include "ACT_SetTimeout_fp.h"
 #endif
 
 // Vendor Specific
 #if CC_Vendor_TCG_Test
-#include "Vendor_TCG_Test_fp.h"
+#  include "Vendor_TCG_Test_fp.h"
 #endif
 
 #endif

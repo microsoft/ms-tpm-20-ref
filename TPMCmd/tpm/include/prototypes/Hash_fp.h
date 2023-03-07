@@ -37,35 +37,34 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_Hash // Command must be enabled
+#if CC_Hash  // Command must be enabled
 
-#ifndef _Hash_FP_H_
-#define _Hash_FP_H_
+#  ifndef _Hash_FP_H_
+#    define _Hash_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPM2B_MAX_BUFFER            data;
-    TPMI_ALG_HASH               hashAlg;
-    TPMI_RH_HIERARCHY           hierarchy;
+typedef struct
+{
+    TPM2B_MAX_BUFFER  data;
+    TPMI_ALG_HASH     hashAlg;
+    TPMI_RH_HIERARCHY hierarchy;
 } Hash_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_DIGEST                outHash;
-    TPMT_TK_HASHCHECK           validation;
+typedef struct
+{
+    TPM2B_DIGEST      outHash;
+    TPMT_TK_HASHCHECK validation;
 } Hash_Out;
 
 // Response code modifiers
-#define RC_Hash_data            (TPM_RC_P + TPM_RC_1)
-#define RC_Hash_hashAlg         (TPM_RC_P + TPM_RC_2)
-#define RC_Hash_hierarchy       (TPM_RC_P + TPM_RC_3)
+#    define RC_Hash_data      (TPM_RC_P + TPM_RC_1)
+#    define RC_Hash_hashAlg   (TPM_RC_P + TPM_RC_2)
+#    define RC_Hash_hierarchy (TPM_RC_P + TPM_RC_3)
 
 // Function prototype
 TPM_RC
-TPM2_Hash(
-    Hash_In                     *in,
-    Hash_Out                    *out
-);
+TPM2_Hash(Hash_In* in, Hash_Out* out);
 
-#endif  // _Hash_FP_H_
-#endif  // CC_Hash
+#  endif  // _Hash_FP_H_
+#endif    // CC_Hash

@@ -43,15 +43,14 @@
 //      TPM_RC_VALUE         a conflicting request for the attribute has
 //                           already been processed
 TPM_RC
-TPM2_PolicyNvWritten(
-    PolicyNvWritten_In  *in             // IN: input parameter list
-    )
+TPM2_PolicyNvWritten(PolicyNvWritten_In* in  // IN: input parameter list
+)
 {
-    SESSION     *session;
-    TPM_CC       commandCode = TPM_CC_PolicyNvWritten;
-    HASH_STATE   hashState;
+    SESSION*   session;
+    TPM_CC     commandCode = TPM_CC_PolicyNvWritten;
+    HASH_STATE hashState;
 
-// Input Validation
+    // Input Validation
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -60,12 +59,11 @@ TPM2_PolicyNvWritten(
     // is a conflicting setting, it is an error
     if(session->attributes.checkNvWritten == SET)
     {
-        if(((session->attributes.nvWrittenState == SET)
-            != (in->writtenSet == YES)))
+        if(((session->attributes.nvWrittenState == SET) != (in->writtenSet == YES)))
             return TPM_RCS_VALUE + RC_PolicyNvWritten_writtenSet;
     }
 
-// Internal Data Update
+    // Internal Data Update
 
     // Set session attributes so that the NV Index needs to be checked
     session->attributes.checkNvWritten = SET;
@@ -92,4 +90,4 @@ TPM2_PolicyNvWritten(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyNvWritten
+#endif  // CC_PolicyNvWritten

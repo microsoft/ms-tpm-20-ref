@@ -37,37 +37,36 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_Certify // Command must be enabled
+#if CC_Certify  // Command must be enabled
 
-#ifndef _Certify_FP_H_
-#define _Certify_FP_H_
+#  ifndef _Certify_FP_H_
+#    define _Certify_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              objectHandle;
-    TPMI_DH_OBJECT              signHandle;
-    TPM2B_DATA                  qualifyingData;
-    TPMT_SIG_SCHEME             inScheme;
+typedef struct
+{
+    TPMI_DH_OBJECT  objectHandle;
+    TPMI_DH_OBJECT  signHandle;
+    TPM2B_DATA      qualifyingData;
+    TPMT_SIG_SCHEME inScheme;
 } Certify_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_ATTEST                certifyInfo;
-    TPMT_SIGNATURE              signature;
+typedef struct
+{
+    TPM2B_ATTEST   certifyInfo;
+    TPMT_SIGNATURE signature;
 } Certify_Out;
 
 // Response code modifiers
-#define RC_Certify_objectHandle (TPM_RC_H + TPM_RC_1)
-#define RC_Certify_signHandle   (TPM_RC_H + TPM_RC_2)
-#define RC_Certify_qualifyingData   (TPM_RC_P + TPM_RC_1)
-#define RC_Certify_inScheme     (TPM_RC_P + TPM_RC_2)
+#    define RC_Certify_objectHandle   (TPM_RC_H + TPM_RC_1)
+#    define RC_Certify_signHandle     (TPM_RC_H + TPM_RC_2)
+#    define RC_Certify_qualifyingData (TPM_RC_P + TPM_RC_1)
+#    define RC_Certify_inScheme       (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_Certify(
-    Certify_In                  *in,
-    Certify_Out                 *out
-);
+TPM2_Certify(Certify_In* in, Certify_Out* out);
 
-#endif  // _Certify_FP_H_
-#endif  // CC_Certify
+#  endif  // _Certify_FP_H_
+#endif    // CC_Certify

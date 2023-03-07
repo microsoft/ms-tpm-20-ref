@@ -50,16 +50,13 @@
 // environment.
 //
 // The DA parameters will be restored to these initial values by TPM2_Clear().
-void
-DAPreInstall_Init(
-    void
-    )
+void DAPreInstall_Init(void)
 {
-    gp.failedTries = 0;
-    gp.maxTries = 3;
-    gp.recoveryTime = 1000;         // in seconds (~16.67 minutes)
-    gp.lockoutRecovery = 1000;      // in seconds
-    gp.lockOutAuthEnabled = TRUE;   // Use of lockoutAuth is enabled
+    gp.failedTries        = 0;
+    gp.maxTries           = 3;
+    gp.recoveryTime       = 1000;  // in seconds (~16.67 minutes)
+    gp.lockoutRecovery    = 1000;  // in seconds
+    gp.lockOutAuthEnabled = TRUE;  // Use of lockoutAuth is enabled
 
     // Record persistent DA parameter changes to NV
     NV_SYNC_PERSISTENT(failedTries);
@@ -71,7 +68,6 @@ DAPreInstall_Init(
     return;
 }
 
-
 //*** DAStartup()
 // This function is called  by TPM2_Startup() to initialize the DA parameters.
 // In the case of Startup(CLEAR), use of lockoutAuth will be enabled if the
@@ -79,16 +75,14 @@ DAPreInstall_Init(
 // the TPM has been continuously powered for the lockoutRecovery time.
 //
 // This function requires that NV be available and not rate limiting.
-BOOL
-DAStartup(
-    STARTUP_TYPE     type           // IN: startup type
-    )
+BOOL DAStartup(STARTUP_TYPE type  // IN: startup type
+)
 {
     NOT_REFERENCED(type);
 #if !ACCUMULATE_SELF_HEAL_TIMER
     _plat__TimerWasReset();
     s_selfHealTimer = 0;
-    s_lockoutTimer = 0;
+    s_lockoutTimer  = 0;
 #else
     if(_plat__TimerWasReset())
     {
@@ -98,7 +92,7 @@ DAStartup(
             // any useful value so reset the timer to 0. This is what the tick
             // was reset to
             s_selfHealTimer = 0;
-            s_lockoutTimer = 0;
+            s_lockoutTimer  = 0;
         }
         else
         {
@@ -121,8 +115,7 @@ DAStartup(
 
     // If DA has not been disabled and the previous shutdown is not orderly
     // failedTries is not already at its maximum then increment 'failedTries'
-    if(gp.recoveryTime != 0
-       && gp.failedTries < gp.maxTries
+    if(gp.recoveryTime != 0 && gp.failedTries < gp.maxTries
        && !IS_ORDERLY(g_prevOrderlyState))
     {
 #if USE_DA_USED
@@ -146,10 +139,8 @@ DAStartup(
 // that is subject to dictionary-attack protection. When a DA failure is
 // triggered, register the failure by resetting the relevant self-healing
 // timer to the current time.
-void
-DARegisterFailure(
-    TPM_HANDLE       handle         // IN: handle for failure
-    )
+void DARegisterFailure(TPM_HANDLE handle  // IN: handle for failure
+)
 {
     // Reset the timer associated with lockout if the handle is the lockoutAuth.
     if(handle == TPM_RH_LOCKOUT)
@@ -164,10 +155,7 @@ DARegisterFailure(
 // decrement of failedTries or to re-enable use of lockoutAuth.
 //
 // This function should be called when the time interval is updated.
-void
-DASelfHeal(
-    void
-    )
+void DASelfHeal(void)
 {
     // Regular authorization self healing logic
     // If no failed authorization tries, do nothing.  Otherwise, try to
@@ -184,10 +172,10 @@ DASelfHeal(
         }
         else
         {
-            UINT64          decreaseCount;
-#if 0 // Errata eliminates this code
-            // In the unlikely event that failedTries should become larger than
-            // maxTries
+            UINT64 decreaseCount;
+#if 0  // Errata eliminates this code                                      \
+       // In the unlikely event that failedTries should become larger than \
+       // maxTries
             if(gp.failedTries > gp.maxTries)
                 gp.failedTries = gp.maxTries;
 #endif
@@ -195,8 +183,8 @@ DASelfHeal(
 
             // Cast s_selfHealTimer to an int in case it became negative at
             // startup
-            decreaseCount = ((g_time - (INT64)s_selfHealTimer) / 1000)
-                / gp.recoveryTime;
+            decreaseCount =
+                ((g_time - (INT64)s_selfHealTimer) / 1000) / gp.recoveryTime;
 
             if(gp.failedTries <= (UINT32)decreaseCount)
                 // should not set failedTries below zero

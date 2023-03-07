@@ -52,14 +52,11 @@
 //     == 0         failure
 INT16
 X509AddSigningAlgorithmRSA(
-    OBJECT              *signKey,
-    TPMT_SIG_SCHEME     *scheme,
-    ASN1MarshalContext  *ctx
-)
+    OBJECT* signKey, TPMT_SIG_SCHEME* scheme, ASN1MarshalContext* ctx)
 {
-    TPM_ALG_ID           hashAlg = scheme->details.any.hashAlg;
-    PHASH_DEF            hashDef = CryptGetHashDef(hashAlg);
-//
+    TPM_ALG_ID hashAlg = scheme->details.any.hashAlg;
+    PHASH_DEF  hashDef = CryptGetHashDef(hashAlg);
+    //
     NOT_REFERENCED(signKey);
     // return failure if hash isn't implemented
     if(hashDef->hashAlg != hashAlg)
@@ -108,16 +105,16 @@ X509AddSigningAlgorithmRSA(
 
                 // The indentation is just to keep track of where we are in the
                 // structure
-                ASN1StartMarshalContext(ctx); // SEQUENCE (2 elements)
+                ASN1StartMarshalContext(ctx);  // SEQUENCE (2 elements)
                 {
-                    ASN1StartMarshalContext(ctx);   // SEQUENCE (3 elements)
+                    ASN1StartMarshalContext(ctx);  // SEQUENCE (3 elements)
                     {
                         // [2] (1 elem)  salt length
                         //    INTEGER 32
                         ASN1StartMarshalContext(ctx);
                         {
-                            INT16       saltSize =
-                                CryptRsaPssSaltSize((INT16)hashDef->digestSize,
+                            INT16 saltSize = CryptRsaPssSaltSize(
+                                (INT16)hashDef->digestSize,
                                 (INT16)signKey->publicArea.unique.rsa.t.size);
                             ASN1PushUINT(ctx, saltSize);
                         }
@@ -130,15 +127,15 @@ X509AddSigningAlgorithmRSA(
                         //      SEQUENCE (2 elem) 2nd
                         //        OBJECT IDENTIFIER 2.16.840.1.101.3.4.2.1 sha-256
                         //        NULL
-                        ASN1StartMarshalContext(ctx);   // mask context [1] (1 elem)
+                        ASN1StartMarshalContext(ctx);  // mask context [1] (1 elem)
                         {
-                            ASN1StartMarshalContext(ctx);   // SEQUENCE (2 elem) 1st
+                            ASN1StartMarshalContext(ctx);  // SEQUENCE (2 elem) 1st
                             // Handle the 2nd Sequence (sequence (object, null))
                             {
                                 // This adds a NULL, then an OID and a SEQUENCE
                                 // wrapper.
                                 X509PushAlgorithmIdentifierSequence(ctx,
-                                    hashDef->OID);
+                                                                    hashDef->OID);
                                 // add the pkcs1-MGF OID
                                 ASN1PushOID(ctx, OID_MGF1);
                             }
@@ -154,7 +151,7 @@ X509AddSigningAlgorithmRSA(
                         //              X509PushAlgorithmIdentifierSequence)
                         //     OBJECT IDENTIFIER 2.16.840.1.101.3.4.2.1 sha-256 (NIST)
                         //     NULL
-                        ASN1StartMarshalContext(ctx); // [0] (1 elem)
+                        ASN1StartMarshalContext(ctx);  // [0] (1 elem)
                         {
                             X509PushAlgorithmIdentifierSequence(ctx, hashDef->OID);
                         }
@@ -184,14 +181,11 @@ X509AddSigningAlgorithmRSA(
 //      > 0         number of bytes added
 //     == 0         failure
 INT16
-X509AddPublicRSA(
-    OBJECT                  *object,
-    ASN1MarshalContext    *ctx
-)
+X509AddPublicRSA(OBJECT* object, ASN1MarshalContext* ctx)
 {
-    UINT32          exp = object->publicArea.parameters.rsaDetail.exponent;
-//
-/*
+    UINT32 exp = object->publicArea.parameters.rsaDetail.exponent;
+    //
+    /*
     SEQUENCE (2 elem) 1st
       SEQUENCE (2 elem) 2nd
         OBJECT IDENTIFIER 1.2.840.113549.1.1.1 rsaEncryption (PKCS #1)
@@ -205,9 +199,9 @@ X509AddPublicRSA(
     // Need to mark the end sequence
     if(ctx == NULL)
         return 1;
-    ASN1StartMarshalContext(ctx); // SEQUENCE (2 elem) 1st
-    ASN1StartMarshalContext(ctx); // BIT STRING
-    ASN1StartMarshalContext(ctx); // SEQUENCE *(2 elem) 3rd
+    ASN1StartMarshalContext(ctx);  // SEQUENCE (2 elem) 1st
+    ASN1StartMarshalContext(ctx);  // BIT STRING
+    ASN1StartMarshalContext(ctx);  // SEQUENCE *(2 elem) 3rd
 
     // Get public exponent in big-endian byte order.
     if(exp == 0)
@@ -217,10 +211,11 @@ X509AddPublicRSA(
     // extended if the high order byte is negative.
     ASN1PushUINT(ctx, exp);
     // Push the public key as an integer
-    ASN1PushInteger(ctx, object->publicArea.unique.rsa.t.size,
-                             object->publicArea.unique.rsa.t.buffer);
+    ASN1PushInteger(ctx,
+                    object->publicArea.unique.rsa.t.size,
+                    object->publicArea.unique.rsa.t.buffer);
     // Embed this in a SEQUENCE tag and length in for the key, exponent sequence
-    ASN1EndEncapsulation(ctx, ASN1_CONSTRUCTED_SEQUENCE); // SEQUENCE (3rd)
+    ASN1EndEncapsulation(ctx, ASN1_CONSTRUCTED_SEQUENCE);  // SEQUENCE (3rd)
 
     // Embed this in a BIT STRING
     ASN1EndEncapsulation(ctx, ASN1_BITSTRING);
@@ -232,4 +227,4 @@ X509AddPublicRSA(
     return ASN1EndEncapsulation(ctx, ASN1_CONSTRUCTED_SEQUENCE);
 }
 
-#endif // ALG_RSA
+#endif  // ALG_RSA

@@ -37,34 +37,33 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ObjectChangeAuth // Command must be enabled
+#if CC_ObjectChangeAuth  // Command must be enabled
 
-#ifndef _Object_Change_Auth_FP_H_
-#define _Object_Change_Auth_FP_H_
+#  ifndef _Object_Change_Auth_FP_H_
+#    define _Object_Change_Auth_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              objectHandle;
-    TPMI_DH_OBJECT              parentHandle;
-    TPM2B_AUTH                  newAuth;
+typedef struct
+{
+    TPMI_DH_OBJECT objectHandle;
+    TPMI_DH_OBJECT parentHandle;
+    TPM2B_AUTH     newAuth;
 } ObjectChangeAuth_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_PRIVATE               outPrivate;
+typedef struct
+{
+    TPM2B_PRIVATE outPrivate;
 } ObjectChangeAuth_Out;
 
 // Response code modifiers
-#define RC_ObjectChangeAuth_objectHandle    (TPM_RC_H + TPM_RC_1)
-#define RC_ObjectChangeAuth_parentHandle    (TPM_RC_H + TPM_RC_2)
-#define RC_ObjectChangeAuth_newAuth (TPM_RC_P + TPM_RC_1)
+#    define RC_ObjectChangeAuth_objectHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_ObjectChangeAuth_parentHandle (TPM_RC_H + TPM_RC_2)
+#    define RC_ObjectChangeAuth_newAuth      (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_ObjectChangeAuth(
-    ObjectChangeAuth_In         *in,
-    ObjectChangeAuth_Out        *out
-);
+TPM2_ObjectChangeAuth(ObjectChangeAuth_In* in, ObjectChangeAuth_Out* out);
 
-#endif  // _Object_Change_Auth_FP_H_
-#endif  // CC_ObjectChangeAuth
+#  endif  // _Object_Change_Auth_FP_H_
+#endif    // CC_ObjectChangeAuth

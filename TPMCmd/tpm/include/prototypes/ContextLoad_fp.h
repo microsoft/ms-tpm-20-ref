@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ContextLoad // Command must be enabled
+#if CC_ContextLoad  // Command must be enabled
 
-#ifndef _Context_Load_FP_H_
-#define _Context_Load_FP_H_
+#  ifndef _Context_Load_FP_H_
+#    define _Context_Load_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMS_CONTEXT                context;
+typedef struct
+{
+    TPMS_CONTEXT context;
 } ContextLoad_In;
 
 // Output structure definition
-typedef struct {
-    TPMI_DH_CONTEXT             loadedHandle;
+typedef struct
+{
+    TPMI_DH_CONTEXT loadedHandle;
 } ContextLoad_Out;
 
 // Response code modifiers
-#define RC_ContextLoad_context  (TPM_RC_P + TPM_RC_1)
+#    define RC_ContextLoad_context (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_ContextLoad(
-    ContextLoad_In              *in,
-    ContextLoad_Out             *out
-);
+TPM2_ContextLoad(ContextLoad_In* in, ContextLoad_Out* out);
 
-#endif  // _Context_Load_FP_H_
-#endif  // CC_ContextLoad
+#  endif  // _Context_Load_FP_H_
+#endif    // CC_ContextLoad

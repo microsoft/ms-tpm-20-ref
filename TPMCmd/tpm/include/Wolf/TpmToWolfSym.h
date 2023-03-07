@@ -42,7 +42,7 @@
 
 #define SYM_LIB_WOLF
 
-#define SYM_ALIGNMENT   RADIX_BYTES
+#define SYM_ALIGNMENT RADIX_BYTES
 
 #include <wolfssl/wolfcrypt/aes.h>
 #include <wolfssl/wolfcrypt/des3.h>
@@ -51,24 +51,20 @@
 //** Links to the wolfCrypt AES code
 //***************************************************************
 #if ALG_SM4
-#undef ALG_SM4
-#define ALG_SM4 ALG_NO
+#  undef ALG_SM4
+#  define ALG_SM4 ALG_NO
 //#error "SM4 is not available"
 #endif
 
 #if ALG_CAMELLIA
-#undef ALG_CAMELLIA
-#define ALG_CAMELLIA ALG_NO
+#  undef ALG_CAMELLIA
+#  define ALG_CAMELLIA ALG_NO
 //#error "Camellia is not available"
 #endif
 
 // Define the order of parameters to the library functions that do block encryption
 // and decryption.
-typedef void(*TpmCryptSetSymKeyCall_t)(
-    void        *keySchedule,
-    BYTE        *out,
-    const BYTE  *in
-    );
+typedef void (*TpmCryptSetSymKeyCall_t)(void* keySchedule, BYTE* out, const BYTE* in);
 
 // The Crypt functions that call the block encryption function use the parameters
 // in the order:
@@ -77,22 +73,30 @@ typedef void(*TpmCryptSetSymKeyCall_t)(
 //  3) out buffer
 // Since wolfcrypt uses the order in encryptoCall_t above, need to swizzle the
 // values to the order required by the library.
-#define SWIZZLE(keySchedule, in, out)                                   \
-    (void *)(keySchedule), (BYTE *)(out), (const BYTE *)(in)
+#define SWIZZLE(keySchedule, in, out) \
+  (void*)(keySchedule), (BYTE*)(out), (const BYTE*)(in)
 
 // Macros to set up the encryption/decryption key schedules
 //
 // AES:
-#define TpmCryptSetEncryptKeyAES(key, keySizeInBits, schedule)            \
-    wc_AesSetKeyDirect((tpmKeyScheduleAES *)(schedule), key, BITS_TO_BYTES(keySizeInBits), 0, AES_ENCRYPTION)
-#define TpmCryptSetDecryptKeyAES(key, keySizeInBits, schedule)            \
-    wc_AesSetKeyDirect((tpmKeyScheduleAES *)(schedule), key, BITS_TO_BYTES(keySizeInBits), 0, AES_DECRYPTION)
+#define TpmCryptSetEncryptKeyAES(key, keySizeInBits, schedule) \
+  wc_AesSetKeyDirect((tpmKeyScheduleAES*)(schedule),           \
+                     key,                                      \
+                     BITS_TO_BYTES(keySizeInBits),             \
+                     0,                                        \
+                     AES_ENCRYPTION)
+#define TpmCryptSetDecryptKeyAES(key, keySizeInBits, schedule) \
+  wc_AesSetKeyDirect((tpmKeyScheduleAES*)(schedule),           \
+                     key,                                      \
+                     BITS_TO_BYTES(keySizeInBits),             \
+                     0,                                        \
+                     AES_DECRYPTION)
 
 // TDES:
-#define TpmCryptSetEncryptKeyTDES(key, keySizeInBits, schedule)            \
-    TDES_setup_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES *)(schedule))
-#define TpmCryptSetDecryptKeyTDES(key, keySizeInBits, schedule)            \
-    TDES_setup_decrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES *)(schedule))
+#define TpmCryptSetEncryptKeyTDES(key, keySizeInBits, schedule) \
+  TDES_setup_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES*)(schedule))
+#define TpmCryptSetDecryptKeyTDES(key, keySizeInBits, schedule) \
+  TDES_setup_decrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES*)(schedule))
 
 // Macros to alias encryption calls to specific algorithms. This should be used
 // sparingly. Currently, only used by CryptRand.c
@@ -100,21 +104,21 @@ typedef void(*TpmCryptSetSymKeyCall_t)(
 // When using these calls, to call the AES block encryption code, the caller
 // should use:
 //      TpmCryptEncryptAES(SWIZZLE(keySchedule, in, out));
-#define TpmCryptEncryptAES          wc_AesEncryptDirect
-#define TpmCryptDecryptAES          wc_AesDecryptDirect
-#define tpmKeyScheduleAES           Aes
+#define TpmCryptEncryptAES wc_AesEncryptDirect
+#define TpmCryptDecryptAES wc_AesDecryptDirect
+#define tpmKeyScheduleAES  Aes
 
-#define TpmCryptEncryptTDES         TDES_encrypt
-#define TpmCryptDecryptTDES         TDES_decrypt
-#define tpmKeyScheduleTDES          Des3
+#define TpmCryptEncryptTDES TDES_encrypt
+#define TpmCryptDecryptTDES TDES_decrypt
+#define tpmKeyScheduleTDES  Des3
 
 typedef union tpmCryptKeySchedule_t tpmCryptKeySchedule_t;
 
 #if ALG_TDES
-#include "TpmToWolfDesSupport_fp.h"
+#  include "TpmToWolfDesSupport_fp.h"
 #endif
 
 // This definition would change if there were something to report
 #define SymLibSimulationEnd()
 
-#endif // SYM_LIB_DEFINED
+#endif  // SYM_LIB_DEFINED

@@ -37,7 +37,7 @@
 
 #if CC_Rewrap  // Conditional expansion of this file
 
-#include "Object_spt_fp.h"
+#  include "Object_spt_fp.h"
 
 /*(See part 3 specification)
 // This command allows the TPM to serve in the role as an MA.
@@ -59,24 +59,23 @@
 //                              encrypted buffer to a ECC public key, or
 //                              unmarshal the private buffer to 'sensitive'
 TPM_RC
-TPM2_Rewrap(
-    Rewrap_In       *in,            // IN: input parameter list
-    Rewrap_Out      *out            // OUT: output parameter list
-    )
+TPM2_Rewrap(Rewrap_In*  in,  // IN: input parameter list
+            Rewrap_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                  result = TPM_RC_SUCCESS;
-    TPM2B_DATA              data;               // symmetric key
-    UINT16                  hashSize = 0;
-    TPM2B_PRIVATE           privateBlob;        // A temporary private blob
-                                                // to transit between old
-                                                // and new wrappers
-// Input Validation
+    TPM_RC        result = TPM_RC_SUCCESS;
+    TPM2B_DATA    data;  // symmetric key
+    UINT16        hashSize = 0;
+    TPM2B_PRIVATE privateBlob;  // A temporary private blob
+                                // to transit between old
+                                // and new wrappers
+                                // Input Validation
     if((in->inSymSeed.t.size == 0 && in->oldParent != TPM_RH_NULL)
        || (in->inSymSeed.t.size != 0 && in->oldParent == TPM_RH_NULL))
         return TPM_RCS_HANDLE + RC_Rewrap_oldParent;
     if(in->oldParent != TPM_RH_NULL)
     {
-        OBJECT              *oldParent = HandleToObject(in->oldParent);
+        OBJECT* oldParent = HandleToObject(in->oldParent);
 
         // old parent key must be a storage object
         if(!ObjectIsStorage(in->oldParent))
@@ -84,24 +83,28 @@ TPM2_Rewrap(
         // Decrypt input secret data via asymmetric decryption.  A
         // TPM_RC_VALUE, TPM_RC_KEY or unmarshal errors may be returned at this
         // point
-        result = CryptSecretDecrypt(oldParent, NULL, DUPLICATE_STRING,
-                                    &in->inSymSeed, &data);
+        result = CryptSecretDecrypt(
+            oldParent, NULL, DUPLICATE_STRING, &in->inSymSeed, &data);
         if(result != TPM_RC_SUCCESS)
             return TPM_RCS_VALUE + RC_Rewrap_inSymSeed;
         // Unwrap Outer
-        result = UnwrapOuter(oldParent, &in->name.b,
-                             oldParent->publicArea.nameAlg, &data.b,
+        result = UnwrapOuter(oldParent,
+                             &in->name.b,
+                             oldParent->publicArea.nameAlg,
+                             &data.b,
                              FALSE,
-                             in->inDuplicate.t.size, in->inDuplicate.t.buffer);
+                             in->inDuplicate.t.size,
+                             in->inDuplicate.t.buffer);
         if(result != TPM_RC_SUCCESS)
             return RcSafeAddToResult(result, RC_Rewrap_inDuplicate);
         // Copy unwrapped data to temporary variable, remove the integrity field
-        hashSize = sizeof(UINT16) +
-            CryptHashGetDigestSize(oldParent->publicArea.nameAlg);
+        hashSize =
+            sizeof(UINT16) + CryptHashGetDigestSize(oldParent->publicArea.nameAlg);
         privateBlob.t.size = in->inDuplicate.t.size - hashSize;
         pAssert(privateBlob.t.size <= sizeof(privateBlob.t.buffer));
-        MemoryCopy(privateBlob.t.buffer, in->inDuplicate.t.buffer + hashSize,
-                     privateBlob.t.size);
+        MemoryCopy(privateBlob.t.buffer,
+                   in->inDuplicate.t.buffer + hashSize,
+                   privateBlob.t.size);
     }
     else
     {
@@ -110,7 +113,7 @@ TPM2_Rewrap(
     }
     if(in->newParent != TPM_RH_NULL)
     {
-        OBJECT          *newParent;
+        OBJECT* newParent;
         newParent = HandleToObject(in->newParent);
 
         // New parent must be a storage object
@@ -120,27 +123,28 @@ TPM2_Rewrap(
         // TPM_RC_VALUE error may be returned at this point if RSA algorithm is
         // enabled in TPM
         out->outSymSeed.t.size = sizeof(out->outSymSeed.t.secret);
-        result = CryptSecretEncrypt(newParent, DUPLICATE_STRING, &data,
-                                    &out->outSymSeed);
+        result =
+            CryptSecretEncrypt(newParent, DUPLICATE_STRING, &data, &out->outSymSeed);
         if(result != TPM_RC_SUCCESS)
             return result;
         // Copy temporary variable to output, reserve the space for integrity
-        hashSize = sizeof(UINT16) +
-            CryptHashGetDigestSize(newParent->publicArea.nameAlg);
- // Make sure that everything fits into the output buffer
- // Note: this is mostly only an issue if there was no outer wrapper on
- // 'inDuplicate'. It could be as large as a TPM2B_PRIVATE buffer. If we add
- // a digest for an outer wrapper, it won't fit anymore.
+        hashSize =
+            sizeof(UINT16) + CryptHashGetDigestSize(newParent->publicArea.nameAlg);
+        // Make sure that everything fits into the output buffer
+        // Note: this is mostly only an issue if there was no outer wrapper on
+        // 'inDuplicate'. It could be as large as a TPM2B_PRIVATE buffer. If we add
+        // a digest for an outer wrapper, it won't fit anymore.
         if((privateBlob.t.size + hashSize) > sizeof(out->outDuplicate.t.buffer))
             return TPM_RCS_VALUE + RC_Rewrap_inDuplicate;
-// Command output
+        // Command output
         out->outDuplicate.t.size = privateBlob.t.size;
-        pAssert(privateBlob.t.size
-                <= sizeof(out->outDuplicate.t.buffer) - hashSize);
-        MemoryCopy(out->outDuplicate.t.buffer + hashSize, privateBlob.t.buffer,
+        pAssert(privateBlob.t.size <= sizeof(out->outDuplicate.t.buffer) - hashSize);
+        MemoryCopy(out->outDuplicate.t.buffer + hashSize,
+                   privateBlob.t.buffer,
                    privateBlob.t.size);
         // Produce outer wrapper for output
-        out->outDuplicate.t.size = ProduceOuterWrap(newParent, &in->name.b,
+        out->outDuplicate.t.size = ProduceOuterWrap(newParent,
+                                                    &in->name.b,
                                                     newParent->publicArea.nameAlg,
                                                     &data.b,
                                                     FALSE,
@@ -157,4 +161,4 @@ TPM2_Rewrap(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_Rewrap
+#endif  // CC_Rewrap

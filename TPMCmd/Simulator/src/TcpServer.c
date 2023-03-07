@@ -43,29 +43,29 @@
 #include <stdbool.h>
 
 #ifdef _MSC_VER
-#   pragma warning(push, 3)
-#   include <windows.h>
-#   include <winsock.h>
-#   pragma warning(pop)
-    typedef int socklen_t;
+#  pragma warning(push, 3)
+#  include <windows.h>
+#  include <winsock.h>
+#  pragma warning(pop)
+typedef int socklen_t;
 #elif defined(__unix__) || defined(__APPLE__)
-#   include <string.h>
-#   include <unistd.h>
-#   include <errno.h>
-#   include <stdint.h>
-#   include <netinet/in.h>
-#   include <sys/socket.h>
-#   include <pthread.h>
-#   define ZeroMemory(ptr, sz) (memset((ptr), 0, (sz)))
-#   define closesocket(x) close(x)
-#   define INVALID_SOCKET (-1)
-#   define SOCKET_ERROR   (-1)
-#   define WSAGetLastError() (errno)
-#   define INT_PTR intptr_t
+#  include <string.h>
+#  include <unistd.h>
+#  include <errno.h>
+#  include <stdint.h>
+#  include <netinet/in.h>
+#  include <sys/socket.h>
+#  include <pthread.h>
+#  define ZeroMemory(ptr, sz) (memset((ptr), 0, (sz)))
+#  define closesocket(x)      close(x)
+#  define INVALID_SOCKET      (-1)
+#  define SOCKET_ERROR        (-1)
+#  define WSAGetLastError()   (errno)
+#  define INT_PTR             intptr_t
 
-    typedef int SOCKET;
+typedef int SOCKET;
 #else
-#   error "Unsupported platform."
+#  error "Unsupported platform."
 #endif
 
 #include "TpmTcpProtocol.h"
@@ -82,36 +82,32 @@ void RsaKeyCacheControl(int state);
 
 static uint32_t ServerVersion = 1;
 
-#define MAX_BUFFER 1048576
-char InputBuffer[MAX_BUFFER];       //The input data buffer for the simulator.
-char OutputBuffer[MAX_BUFFER];      //The output data buffer for the simulator.
+#  define MAX_BUFFER 1048576
+char InputBuffer[MAX_BUFFER];   //The input data buffer for the simulator.
+char OutputBuffer[MAX_BUFFER];  //The output data buffer for the simulator.
 
 struct
 {
-    uint32_t    largestCommandSize;
-    uint32_t    largestCommand;
-    uint32_t    largestResponseSize;
-    uint32_t    largestResponse;
+    uint32_t largestCommandSize;
+    uint32_t largestCommand;
+    uint32_t largestResponseSize;
+    uint32_t largestResponse;
 } CommandResponseSizes = {0};
 
-#endif // __IGNORE_STATE___
+#endif  // __IGNORE_STATE___
 
 //** Functions
 
 //*** CreateSocket()
 // This function creates a socket listening on 'PortNumber'.
-static int
-CreateSocket(
-    int                  PortNumber,
-    SOCKET              *listenSocket
-    )
+static int CreateSocket(int PortNumber, SOCKET* listenSocket)
 {
-    struct               sockaddr_in MyAddress;
-    int res;
+    struct sockaddr_in MyAddress;
+    int                res;
 //
-    // Initialize Winsock
+// Initialize Winsock
 #ifdef _MSC_VER
-    WSADATA              wsaData;
+    WSADATA wsaData;
     res = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if(res != 0)
     {
@@ -129,10 +125,10 @@ CreateSocket(
     }
     // bind the listening socket to the specified port
     ZeroMemory(&MyAddress, sizeof(MyAddress));
-    MyAddress.sin_port = htons((short)PortNumber);
+    MyAddress.sin_port   = htons((short)PortNumber);
     MyAddress.sin_family = AF_INET;
 
-    res = bind(*listenSocket, (struct sockaddr*) &MyAddress, sizeof(MyAddress));
+    res = bind(*listenSocket, (struct sockaddr*)&MyAddress, sizeof(MyAddress));
     if(res == SOCKET_ERROR)
     {
         printf("Bind error.  Error is 0x%x\n", WSAGetLastError());
@@ -150,14 +146,11 @@ CreateSocket(
 
 //*** PlatformServer()
 // This function processes incoming platform requests.
-bool
-PlatformServer(
-    SOCKET           s
-    )
+bool PlatformServer(SOCKET s)
 {
-    bool                 OK = true;
-    uint32_t             Command;
-//
+    bool     OK = true;
+    uint32_t Command;
+    //
     for(;;)
     {
         OK = ReadBytes(s, (char*)&Command, 4);
@@ -216,8 +209,8 @@ PlatformServer(
                 _rpc__ForceFailureMode();
                 break;
             case TPM_GET_COMMAND_RESPONSE_SIZES:
-                OK = WriteVarBytes(s, (char *)&CommandResponseSizes,
-                                   sizeof(CommandResponseSizes));
+                OK = WriteVarBytes(
+                    s, (char*)&CommandResponseSizes, sizeof(CommandResponseSizes));
                 memset(&CommandResponseSizes, 0, sizeof(CommandResponseSizes));
                 if(!OK)
                     return true;
@@ -230,8 +223,7 @@ PlatformServer(
                 break;
             }
             default:
-                printf("Unrecognized platform interface command %d\n",
-                       (int)Command);
+                printf("Unrecognized platform interface command %d\n", (int)Command);
                 WriteUINT32(s, 1);
                 return true;
         }
@@ -242,18 +234,15 @@ PlatformServer(
 //*** PlatformSvcRoutine()
 // This function is called to set up the socket interfaces to listen for
 // commands.
-DWORD WINAPI
-PlatformSvcRoutine(
-    LPVOID           port
-    )
+DWORD WINAPI PlatformSvcRoutine(LPVOID port)
 {
-    int                  PortNumber = (int)(INT_PTR)port;
-    SOCKET               listenSocket, serverSocket;
-    struct               sockaddr_in HerAddress;
-    int                  res;
-    socklen_t            length;
-    bool                 continueServing;
-//
+    int                PortNumber = (int)(INT_PTR)port;
+    SOCKET             listenSocket, serverSocket;
+    struct sockaddr_in HerAddress;
+    int                res;
+    socklen_t          length;
+    bool               continueServing;
+    //
     res = CreateSocket(PortNumber, &listenSocket);
     if(res != 0)
     {
@@ -268,10 +257,8 @@ PlatformSvcRoutine(
         printf("Platform server listening on port %d\n", PortNumber);
 
         // blocking accept
-        length = sizeof(HerAddress);
-        serverSocket = accept(listenSocket,
-                              (struct sockaddr*) &HerAddress,
-                              &length);
+        length       = sizeof(HerAddress);
+        serverSocket = accept(listenSocket, (struct sockaddr*)&HerAddress, &length);
         if(serverSocket == INVALID_SOCKET)
         {
             printf("Accept error.  Error is 0x%x\n", WSAGetLastError());
@@ -292,20 +279,20 @@ PlatformSvcRoutine(
 // This function starts a new thread waiting for platform signals.
 // Platform signals are processed one at a time in the order in which they are
 // received.
-int
-PlatformSignalService(
-    int              PortNumber
-    )
+int PlatformSignalService(int PortNumber)
 {
 #if defined(_MSC_VER)
-    HANDLE               hPlatformSvc;
-    int                  ThreadId;
-    int                  port = PortNumber;
-//
+    HANDLE hPlatformSvc;
+    int    ThreadId;
+    int    port = PortNumber;
+    //
     // Create service thread for platform signals
-    hPlatformSvc = CreateThread(NULL, 0,
+    hPlatformSvc = CreateThread(NULL,
+                                0,
                                 (LPTHREAD_START_ROUTINE)PlatformSvcRoutine,
-                                (LPVOID)(INT_PTR)port, 0, (LPDWORD)&ThreadId);
+                                (LPVOID)(INT_PTR)port,
+                                0,
+                                (LPDWORD)&ThreadId);
     if(hPlatformSvc == NULL)
     {
         printf("Thread Creation failed\n");
@@ -313,34 +300,31 @@ PlatformSignalService(
     }
     return 0;
 #else
-    pthread_t            thread_id;
-    int                  ret;
-    int                  port = PortNumber;
+    pthread_t thread_id;
+    int       ret;
+    int       port = PortNumber;
 
-    ret = pthread_create(&thread_id, NULL, (void*)PlatformSvcRoutine,
-                         (LPVOID)(INT_PTR)port);
-    if (ret == -1)
+    ret            = pthread_create(
+        &thread_id, NULL, (void*)PlatformSvcRoutine, (LPVOID)(INT_PTR)port);
+    if(ret == -1)
     {
         printf("pthread_create failed: %s", strerror(ret));
     }
     return ret;
-#endif // _MSC_VER
+#endif  // _MSC_VER
 }
 
 //*** RegularCommandService()
 // This function services regular commands.
-int
-RegularCommandService(
-    int              PortNumber
-    )
+int RegularCommandService(int PortNumber)
 {
-    SOCKET               listenSocket;
-    SOCKET               serverSocket;
-    struct               sockaddr_in HerAddress;
-    int                  res;
-    socklen_t            length;
-    bool                 continueServing;
-//
+    SOCKET             listenSocket;
+    SOCKET             serverSocket;
+    struct sockaddr_in HerAddress;
+    int                res;
+    socklen_t          length;
+    bool               continueServing;
+    //
     res = CreateSocket(PortNumber, &listenSocket);
     if(res != 0)
     {
@@ -355,10 +339,8 @@ RegularCommandService(
         printf("TPM command server listening on port %d\n", PortNumber);
 
         // blocking accept
-        length = sizeof(HerAddress);
-        serverSocket = accept(listenSocket,
-                              (struct sockaddr*) &HerAddress,
-                              &length);
+        length       = sizeof(HerAddress);
+        serverSocket = accept(listenSocket, (struct sockaddr*)&HerAddress, &length);
         if(serverSocket == INVALID_SOCKET)
         {
             printf("Accept error.  Error is 0x%x\n", WSAGetLastError());
@@ -378,34 +360,31 @@ RegularCommandService(
 
 //*** SimulatorTimeServiceRoutine()
 // This function is called to service the time 'ticks'.
-static unsigned long WINAPI
-SimulatorTimeServiceRoutine(
-    LPVOID           notUsed
-)
+static unsigned long WINAPI SimulatorTimeServiceRoutine(LPVOID notUsed)
 {
     // All time is in ms
-    const int64_t   tick = 1000;
-    uint64_t        prevTime = _plat__RealTime();
-    int64_t         timeout = tick;
+    const int64_t tick     = 1000;
+    uint64_t      prevTime = _plat__RealTime();
+    int64_t       timeout  = tick;
 
     (void)notUsed;
 
-    while (true)
+    while(true)
     {
-        uint64_t  curTime;
+        uint64_t curTime;
 
-#if defined(_MSC_VER)
+#  if defined(_MSC_VER)
         Sleep((DWORD)timeout);
-#else
-        struct timespec     req = { timeout / 1000, (timeout % 1000) * 1000 };
-        struct timespec     rem;
+#  else
+        struct timespec req = {timeout / 1000, (timeout % 1000) * 1000};
+        struct timespec rem;
         nanosleep(&req, &rem);
-#endif // _MSC_VER
+#  endif  // _MSC_VER
         curTime = _plat__RealTime();
 
         // May need to issue several ticks if the Sleep() took longer than asked,
         // or no ticks at all, it Sleep() was interrupted prematurely.
-        while (prevTime < curTime - tick / 2)
+        while(prevTime < curTime - tick / 2)
         {
             //printf("%05lld | %05lld\n",
             //      prevTime % 100000, (curTime - tick / 2) % 100000);
@@ -426,37 +405,39 @@ SimulatorTimeServiceRoutine(
 // Return Type: int
 //  ==0         success
 //  !=0         failure
-static int
-ActTimeService(
-    void
-)
+static int ActTimeService(void)
 {
-    static bool          running = false;
-    int                  ret = 0;
+    static bool running = false;
+    int         ret     = 0;
     if(!running)
     {
-#if defined(_MSC_VER)
-        HANDLE               hThr;
-        int                  ThreadId;
-    //
+#  if defined(_MSC_VER)
+        HANDLE hThr;
+        int    ThreadId;
+        //
         printf("Starting ACT thread...\n");
         //  Don't allow ticks to be processed before TPM is manufactured.
         _plat__ACT_EnableTicks(false);
 
         // Create service thread for ACT internal timer
-        hThr = CreateThread(NULL, 0,
-            (LPTHREAD_START_ROUTINE)SimulatorTimeServiceRoutine,
-                            (LPVOID)(INT_PTR)NULL, 0, (LPDWORD)&ThreadId);
+        hThr = CreateThread(NULL,
+                            0,
+                            (LPTHREAD_START_ROUTINE)SimulatorTimeServiceRoutine,
+                            (LPVOID)(INT_PTR)NULL,
+                            0,
+                            (LPDWORD)&ThreadId);
         if(hThr != NULL)
             CloseHandle(hThr);
         else
             ret = -1;
-#else
-        pthread_t            thread_id;
-//
-        ret = pthread_create(&thread_id, NULL, (void*)SimulatorTimeServiceRoutine,
-            (LPVOID)(INT_PTR)NULL);
-#endif // _MSC_VER
+#  else
+        pthread_t thread_id;
+        //
+        ret = pthread_create(&thread_id,
+                             NULL,
+                             (void*)SimulatorTimeServiceRoutine,
+                             (LPVOID)(INT_PTR)NULL);
+#  endif  // _MSC_VER
 
         if(ret != 0)
             printf("ACT thread Creation failed\n");
@@ -466,19 +447,16 @@ ActTimeService(
     return ret;
 }
 
-#endif // RH_ACT_0
+#endif  // RH_ACT_0
 
 //*** StartTcpServer()
 // This is the main entry-point to the TCP server.  The server listens on port
 // specified.
 //
 // Note that there is no way to specify the network interface in this implementation.
-int
-StartTcpServer(
-    int              PortNumber
-    )
+int StartTcpServer(int PortNumber)
 {
-    int                  res;
+    int res;
 //
 #ifdef RH_ACT_0
     // Start the Time Service routine
@@ -510,16 +488,11 @@ StartTcpServer(
 //*** ReadBytes()
 // This function reads the indicated number of bytes ('NumBytes') into buffer
 // from the indicated socket.
-bool
-ReadBytes(
-    SOCKET           s,
-    char            *buffer,
-    int              NumBytes
-    )
+bool ReadBytes(SOCKET s, char* buffer, int NumBytes)
 {
-    int                  res;
-    int                  numGot = 0;
-//
+    int res;
+    int numGot = 0;
+    //
     while(numGot < NumBytes)
     {
         res = recv(s, buffer + numGot, NumBytes - numGot, 0);
@@ -540,16 +513,11 @@ ReadBytes(
 //*** WriteBytes()
 // This function will send the indicated number of bytes ('NumBytes') to the
 // indicated socket
-bool
-WriteBytes(
-    SOCKET           s,
-    char            *buffer,
-    int              NumBytes
-    )
+bool WriteBytes(SOCKET s, char* buffer, int NumBytes)
 {
-    int                  res;
-    int                  numSent = 0;
-//
+    int res;
+    int numSent = 0;
+    //
     while(numSent < NumBytes)
     {
         res = send(s, buffer + numSent, NumBytes - numSent, 0);
@@ -572,76 +540,59 @@ WriteBytes(
 
 //*** WriteUINT32()
 // Send 4 byte integer
-bool
-WriteUINT32(
-    SOCKET           s,
-    uint32_t         val
-    )
+bool WriteUINT32(SOCKET s, uint32_t val)
 {
     uint32_t netVal = htonl(val);
-//
+    //
     return WriteBytes(s, (char*)&netVal, 4);
 }
 
 //*** ReadUINT32()
 // Function to read 4 byte integer from socket.
-bool
-ReadUINT32(
-    SOCKET           s,
-    uint32_t        *val
-)
+bool ReadUINT32(SOCKET s, uint32_t* val)
 {
     uint32_t netVal;
-//
-    if (!ReadBytes(s, (char*)&netVal, 4))
+    //
+    if(!ReadBytes(s, (char*)&netVal, 4))
         return false;
     *val = ntohl(netVal);
     return true;
 }
 
-
 //*** ReadVarBytes()
 // Get a uint32-length-prepended binary array.  Note that the 4-byte length is
 // in network byte order (big-endian).
-bool
-ReadVarBytes(
-    SOCKET           s,
-    char            *buffer,
-    uint32_t        *BytesReceived,
-    int              MaxLen
-    )
+bool ReadVarBytes(SOCKET s, char* buffer, uint32_t* BytesReceived, int MaxLen)
 {
-    int                  length;
-    bool                 res;
-//
+    int  length;
+    bool res;
+    //
     res = ReadBytes(s, (char*)&length, 4);
-    if(!res) return res;
-    length = ntohl(length);
+    if(!res)
+        return res;
+    length         = ntohl(length);
     *BytesReceived = length;
     if(length > MaxLen)
     {
         printf("Buffer too big.  Client says %d\n", length);
         return false;
     }
-    if(length == 0) return true;
+    if(length == 0)
+        return true;
     res = ReadBytes(s, buffer, length);
-    if(!res) return res;
+    if(!res)
+        return res;
     return true;
 }
 
 //*** WriteVarBytes()
 // Send a uint32-length-prepended binary array.  Note that the 4-byte length is
 // in network byte order (big-endian).
-bool
-WriteVarBytes(
-    SOCKET           s,
-    char            *buffer,
-    int              BytesToSend
-    )
+bool WriteVarBytes(SOCKET s, char* buffer, int BytesToSend)
 {
-    uint32_t             netLength = htonl(BytesToSend);
-    bool res;
-//
+    uint32_t netLength = htonl(BytesToSend);
+    bool     res;
+    //
     res = WriteBytes(s, (char*)&netLength, 4);
     if(!res)
         return res;
@@ -654,20 +605,17 @@ WriteVarBytes(
 //*** TpmServer()
 // Processing incoming TPM command requests using the protocol / interface
 // defined above.
-bool
-TpmServer(
-    SOCKET           s
-    )
+bool TpmServer(SOCKET s)
 {
-    uint32_t             length;
-    uint32_t             Command;
-    uint8_t              locality;
-    bool                 OK;
-    int                  result;
-    int                  clientVersion;
-    _IN_BUFFER           InBuffer;
-    _OUT_BUFFER          OutBuffer;
-//
+    uint32_t    length;
+    uint32_t    Command;
+    uint8_t     locality;
+    bool        OK;
+    int         result;
+    int         clientVersion;
+    _IN_BUFFER  InBuffer;
+    _OUT_BUFFER OutBuffer;
+    //
     for(;;)
     {
         OK = ReadBytes(s, (char*)&Command, 4);
@@ -687,8 +635,9 @@ TpmServer(
                 break;
             case TPM_SIGNAL_HASH_DATA:
                 OK = ReadVarBytes(s, InputBuffer, &length, MAX_BUFFER);
-                if(!OK) return true;
-                InBuffer.Buffer = (uint8_t*)InputBuffer;
+                if(!OK)
+                    return true;
+                InBuffer.Buffer     = (uint8_t*)InputBuffer;
                 InBuffer.BufferSize = length;
                 _rpc__Signal_Hash_Data(InBuffer);
                 break;
@@ -699,31 +648,30 @@ TpmServer(
                 OK = ReadVarBytes(s, InputBuffer, &length, MAX_BUFFER);
                 if(!OK)
                     return true;
-                InBuffer.Buffer = (uint8_t*)InputBuffer;
-                InBuffer.BufferSize = length;
+                InBuffer.Buffer      = (uint8_t*)InputBuffer;
+                InBuffer.BufferSize  = length;
                 OutBuffer.BufferSize = MAX_BUFFER;
-                OutBuffer.Buffer = (_OUTPUT_BUFFER)OutputBuffer;
+                OutBuffer.Buffer     = (_OUTPUT_BUFFER)OutputBuffer;
                 // record the number of bytes in the command if it is the largest
                 // we have seen so far.
                 if(InBuffer.BufferSize > CommandResponseSizes.largestCommandSize)
                 {
                     CommandResponseSizes.largestCommandSize = InBuffer.BufferSize;
                     memcpy(&CommandResponseSizes.largestCommand,
-                           &InputBuffer[6], sizeof(uint32_t));
+                           &InputBuffer[6],
+                           sizeof(uint32_t));
                 }
                 _rpc__Send_Command(locality, InBuffer, &OutBuffer);
                 // record the number of bytes in the response if it is the largest
                 // we have seen so far.
                 if(OutBuffer.BufferSize > CommandResponseSizes.largestResponseSize)
                 {
-                    CommandResponseSizes.largestResponseSize
-                        = OutBuffer.BufferSize;
+                    CommandResponseSizes.largestResponseSize = OutBuffer.BufferSize;
                     memcpy(&CommandResponseSizes.largestResponse,
-                           &OutputBuffer[6], sizeof(uint32_t));
+                           &OutputBuffer[6],
+                           sizeof(uint32_t));
                 }
-                OK = WriteVarBytes(s,
-                                   (char*)OutBuffer.Buffer,
-                                   OutBuffer.BufferSize);
+                OK = WriteVarBytes(s, (char*)OutBuffer.Buffer, OutBuffer.BufferSize);
                 if(!OK)
                     return true;
                 break;
@@ -737,8 +685,8 @@ TpmServer(
                     return true;
                 }
                 OK &= WriteUINT32(s, ServerVersion);
-                OK &= WriteUINT32(s, tpmInRawMode
-                                  | tpmPlatformAvailable | tpmSupportsPP);
+                OK &= WriteUINT32(
+                    s, tpmInRawMode | tpmPlatformAvailable | tpmSupportsPP);
                 break;
             case TPM_SET_ALTERNATIVE_RESULT:
                 OK = ReadBytes(s, (char*)&result, 4);

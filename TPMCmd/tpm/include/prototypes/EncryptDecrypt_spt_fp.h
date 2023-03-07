@@ -37,8 +37,8 @@
  *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _ENCRYPT_DECRYPT_SPT_FP_H_
-#define    _ENCRYPT_DECRYPT_SPT_FP_H_
+#ifndef _ENCRYPT_DECRYPT_SPT_FP_H_
+#define _ENCRYPT_DECRYPT_SPT_FP_H_
 
 #if CC_EncryptDecrypt2
 
@@ -51,14 +51,12 @@
 //      TPM_RC_VALUE        'keyHandle' is restricted and the argument 'mode' does
 //                          not match the key's mode
 TPM_RC
-EncryptDecryptShared(
-    TPMI_DH_OBJECT        keyHandleIn,
-    TPMI_YES_NO           decryptIn,
-    TPMI_ALG_SYM_MODE     modeIn,
-    TPM2B_IV              *ivIn,
-    TPM2B_MAX_BUFFER      *inData,
-    EncryptDecrypt_Out    *out
-);
-#endif // CC_EncryptDecrypt
+EncryptDecryptShared(TPMI_DH_OBJECT      keyHandleIn,
+                     TPMI_YES_NO         decryptIn,
+                     TPMI_ALG_SYM_MODE   modeIn,
+                     TPM2B_IV*           ivIn,
+                     TPM2B_MAX_BUFFER*   inData,
+                     EncryptDecrypt_Out* out);
+#endif  // CC_EncryptDecrypt
 
 #endif  // _ENCRYPT_DECRYPT_SPT_FP_H_

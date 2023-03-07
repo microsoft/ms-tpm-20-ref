@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_FieldUpgradeStart // Command must be enabled
+#if CC_FieldUpgradeStart  // Command must be enabled
 
-#ifndef _Field_Upgrade_Start_FP_H_
-#define _Field_Upgrade_Start_FP_H_
+#  ifndef _Field_Upgrade_Start_FP_H_
+#    define _Field_Upgrade_Start_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PLATFORM                authorization;
-    TPMI_DH_OBJECT                  keyHandle;
-    TPM2B_DIGEST                    fuDigest;
-    TPMT_SIGNATURE                  manifestSignature;
+typedef struct
+{
+    TPMI_RH_PLATFORM authorization;
+    TPMI_DH_OBJECT   keyHandle;
+    TPM2B_DIGEST     fuDigest;
+    TPMT_SIGNATURE   manifestSignature;
 } FieldUpgradeStart_In;
 
 // Response code modifiers
-#define RC_FieldUpgradeStart_authorization  (TPM_RC_H + TPM_RC_1)
-#define RC_FieldUpgradeStart_keyHandle  (TPM_RC_H + TPM_RC_2)
-#define RC_FieldUpgradeStart_fuDigest   (TPM_RC_P + TPM_RC_1)
-#define RC_FieldUpgradeStart_manifestSignature  (TPM_RC_P + TPM_RC_2)
+#    define RC_FieldUpgradeStart_authorization     (TPM_RC_H + TPM_RC_1)
+#    define RC_FieldUpgradeStart_keyHandle         (TPM_RC_H + TPM_RC_2)
+#    define RC_FieldUpgradeStart_fuDigest          (TPM_RC_P + TPM_RC_1)
+#    define RC_FieldUpgradeStart_manifestSignature (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_FieldUpgradeStart(
-    FieldUpgradeStart_In            *in
-);
+TPM2_FieldUpgradeStart(FieldUpgradeStart_In* in);
 
-#endif  // _Field_Upgrade_Start_FP_H_
-#endif  // CC_FieldUpgradeStart
+#  endif  // _Field_Upgrade_Start_FP_H_
+#endif    // CC_FieldUpgradeStart

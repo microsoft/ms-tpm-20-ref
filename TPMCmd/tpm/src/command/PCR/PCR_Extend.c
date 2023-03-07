@@ -44,13 +44,12 @@
 //      TPM_RC_LOCALITY             current command locality is not allowed to
 //                                  extend the PCR referenced by 'pcrHandle'
 TPM_RC
-TPM2_PCR_Extend(
-    PCR_Extend_In   *in             // IN: input parameter list
-    )
+TPM2_PCR_Extend(PCR_Extend_In* in  // IN: input parameter list
+)
 {
-    UINT32              i;
+    UINT32 i;
 
-// Input Validation
+    // Input Validation
 
     // NOTE: This function assumes that the unmarshaling function for 'digests' will
     // have validated that all of the indicated hash algorithms are valid. If the
@@ -73,17 +72,18 @@ TPM2_PCR_Extend(
     if(PCRIsStateSaved(in->pcrHandle))
         RETURN_IF_ORDERLY;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Iterate input digest list to extend
     for(i = 0; i < in->digests.count; i++)
     {
-        PCRExtend(in->pcrHandle, in->digests.digests[i].hashAlg,
+        PCRExtend(in->pcrHandle,
+                  in->digests.digests[i].hashAlg,
                   CryptHashGetDigestSize(in->digests.digests[i].hashAlg),
-                  (BYTE *)&in->digests.digests[i].digest);
+                  (BYTE*)&in->digests.digests[i].digest);
     }
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PCR_Extend
+#endif  // CC_PCR_Extend

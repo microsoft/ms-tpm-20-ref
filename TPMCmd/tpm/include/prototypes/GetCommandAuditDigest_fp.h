@@ -37,37 +37,37 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_GetCommandAuditDigest // Command must be enabled
+#if CC_GetCommandAuditDigest  // Command must be enabled
 
-#ifndef _Get_Command_Audit_Digest_FP_H_
-#define _Get_Command_Audit_Digest_FP_H_
+#  ifndef _Get_Command_Audit_Digest_FP_H_
+#    define _Get_Command_Audit_Digest_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_ENDORSEMENT                 privacyHandle;
-    TPMI_DH_OBJECT                      signHandle;
-    TPM2B_DATA                          qualifyingData;
-    TPMT_SIG_SCHEME                     inScheme;
+typedef struct
+{
+    TPMI_RH_ENDORSEMENT privacyHandle;
+    TPMI_DH_OBJECT      signHandle;
+    TPM2B_DATA          qualifyingData;
+    TPMT_SIG_SCHEME     inScheme;
 } GetCommandAuditDigest_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_ATTEST                        auditInfo;
-    TPMT_SIGNATURE                      signature;
+typedef struct
+{
+    TPM2B_ATTEST   auditInfo;
+    TPMT_SIGNATURE signature;
 } GetCommandAuditDigest_Out;
 
 // Response code modifiers
-#define RC_GetCommandAuditDigest_privacyHandle  (TPM_RC_H + TPM_RC_1)
-#define RC_GetCommandAuditDigest_signHandle (TPM_RC_H + TPM_RC_2)
-#define RC_GetCommandAuditDigest_qualifyingData (TPM_RC_P + TPM_RC_1)
-#define RC_GetCommandAuditDigest_inScheme   (TPM_RC_P + TPM_RC_2)
+#    define RC_GetCommandAuditDigest_privacyHandle  (TPM_RC_H + TPM_RC_1)
+#    define RC_GetCommandAuditDigest_signHandle     (TPM_RC_H + TPM_RC_2)
+#    define RC_GetCommandAuditDigest_qualifyingData (TPM_RC_P + TPM_RC_1)
+#    define RC_GetCommandAuditDigest_inScheme       (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_GetCommandAuditDigest(
-    GetCommandAuditDigest_In            *in,
-    GetCommandAuditDigest_Out           *out
-);
+TPM2_GetCommandAuditDigest(GetCommandAuditDigest_In*  in,
+                           GetCommandAuditDigest_Out* out);
 
-#endif  // _Get_Command_Audit_Digest_FP_H_
-#endif  // CC_GetCommandAuditDigest
+#  endif  // _Get_Command_Audit_Digest_FP_H_
+#endif    // CC_GetCommandAuditDigest

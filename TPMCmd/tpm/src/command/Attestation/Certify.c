@@ -49,25 +49,24 @@
 //                          the result in 'signature' is too small (for an RSA key);
 //                          invalid commit status (for an ECC key with a split scheme)
 TPM_RC
-TPM2_Certify(
-    Certify_In      *in,            // IN: input parameter list
-    Certify_Out     *out            // OUT: output parameter list
-    )
+TPM2_Certify(Certify_In*  in,  // IN: input parameter list
+             Certify_Out* out  // OUT: output parameter list
+)
 {
-    TPMS_ATTEST             certifyInfo;
-    OBJECT                  *signObject = HandleToObject(in->signHandle);
-    OBJECT                  *certifiedObject = HandleToObject(in->objectHandle);
-// Input validation
+    TPMS_ATTEST certifyInfo;
+    OBJECT*     signObject      = HandleToObject(in->signHandle);
+    OBJECT*     certifiedObject = HandleToObject(in->objectHandle);
+    // Input validation
     if(!IsSigningObject(signObject))
         return TPM_RCS_KEY + RC_Certify_signHandle;
     if(!CryptSelectSignScheme(signObject, &in->inScheme))
         return TPM_RCS_SCHEME + RC_Certify_inScheme;
 
-// Command Output
+    // Command Output
     // Filling in attest information
     // Common fields
-    FillInAttestInfo(in->signHandle, &in->inScheme, &in->qualifyingData,
-                     &certifyInfo);
+    FillInAttestInfo(
+        in->signHandle, &in->inScheme, &in->qualifyingData, &certifyInfo);
 
     // Certify specific fields
     certifyInfo.type = TPM_ST_ATTEST_CERTIFY;
@@ -82,13 +81,16 @@ TPM2_Certify(
     else
         certifyInfo.attested.certify.qualifiedName = certifiedObject->qualifiedName;
 
-
     // Sign attestation structure.  A NULL signature will be returned if
     // signHandle is TPM_RH_NULL.  A TPM_RC_NV_UNAVAILABLE, TPM_RC_NV_RATE,
     // TPM_RC_VALUE, TPM_RC_SCHEME or TPM_RC_ATTRIBUTES error may be returned
     // by SignAttestInfo()
-    return SignAttestInfo(signObject, &in->inScheme, &certifyInfo,
-                          &in->qualifyingData, &out->certifyInfo, &out->signature);
+    return SignAttestInfo(signObject,
+                          &in->inScheme,
+                          &certifyInfo,
+                          &in->qualifyingData,
+                          &out->certifyInfo,
+                          &out->signature);
 }
 
-#endif // CC_Certify
+#endif  // CC_Certify

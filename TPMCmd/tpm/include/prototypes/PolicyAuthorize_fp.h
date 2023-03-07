@@ -37,32 +37,31 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PolicyAuthorize // Command must be enabled
+#if CC_PolicyAuthorize  // Command must be enabled
 
-#ifndef _Policy_Authorize_FP_H_
-#define _Policy_Authorize_FP_H_
+#  ifndef _Policy_Authorize_FP_H_
+#    define _Policy_Authorize_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_SH_POLICY              policySession;
-    TPM2B_DIGEST                approvedPolicy;
-    TPM2B_NONCE                 policyRef;
-    TPM2B_NAME                  keySign;
-    TPMT_TK_VERIFIED            checkTicket;
+typedef struct
+{
+    TPMI_SH_POLICY   policySession;
+    TPM2B_DIGEST     approvedPolicy;
+    TPM2B_NONCE      policyRef;
+    TPM2B_NAME       keySign;
+    TPMT_TK_VERIFIED checkTicket;
 } PolicyAuthorize_In;
 
 // Response code modifiers
-#define RC_PolicyAuthorize_policySession    (TPM_RC_H + TPM_RC_1)
-#define RC_PolicyAuthorize_approvedPolicy   (TPM_RC_P + TPM_RC_1)
-#define RC_PolicyAuthorize_policyRef    (TPM_RC_P + TPM_RC_2)
-#define RC_PolicyAuthorize_keySign  (TPM_RC_P + TPM_RC_3)
-#define RC_PolicyAuthorize_checkTicket  (TPM_RC_P + TPM_RC_4)
+#    define RC_PolicyAuthorize_policySession  (TPM_RC_H + TPM_RC_1)
+#    define RC_PolicyAuthorize_approvedPolicy (TPM_RC_P + TPM_RC_1)
+#    define RC_PolicyAuthorize_policyRef      (TPM_RC_P + TPM_RC_2)
+#    define RC_PolicyAuthorize_keySign        (TPM_RC_P + TPM_RC_3)
+#    define RC_PolicyAuthorize_checkTicket    (TPM_RC_P + TPM_RC_4)
 
 // Function prototype
 TPM_RC
-TPM2_PolicyAuthorize(
-    PolicyAuthorize_In          *in
-);
+TPM2_PolicyAuthorize(PolicyAuthorize_In* in);
 
-#endif  // _Policy_Authorize_FP_H_
-#endif  // CC_PolicyAuthorize
+#  endif  // _Policy_Authorize_FP_H_
+#endif    // CC_PolicyAuthorize

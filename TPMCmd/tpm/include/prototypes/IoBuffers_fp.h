@@ -37,40 +37,30 @@
  *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _IO_BUFFERS_FP_H_
-#define    _IO_BUFFERS_FP_H_
+#ifndef _IO_BUFFERS_FP_H_
+#define _IO_BUFFERS_FP_H_
 
 //*** MemoryIoBufferAllocationReset()
 // This function is used to reset the allocation of buffers.
-void
-MemoryIoBufferAllocationReset(
-    void
-);
+void MemoryIoBufferAllocationReset(void);
 
 //*** MemoryIoBufferZero()
 // Function zeros the action I/O buffer at the end of a command. Calling this is
 // not mandatory for proper functionality.
-void
-MemoryIoBufferZero(
-    void
-);
+void MemoryIoBufferZero(void);
 
 //*** MemoryGetInBuffer()
 // This function returns the address of the buffer into which the
 // command parameters will be unmarshaled in preparation for calling
 // the command actions.
-BYTE *
-MemoryGetInBuffer(
-    UINT32           size           // Size, in bytes, required for the input
-                                    // unmarshaling
+BYTE* MemoryGetInBuffer(UINT32 size  // Size, in bytes, required for the input
+                                     // unmarshaling
 );
 
 //*** MemoryGetOutBuffer()
 // This function returns the address of the buffer into which the command
 // action code places its output values.
-BYTE *
-MemoryGetOutBuffer(
-    UINT32           size           // required size of the buffer
+BYTE* MemoryGetOutBuffer(UINT32 size  // required size of the buffer
 );
 
 //*** IsLabelProperlyFormatted()
@@ -79,9 +69,6 @@ MemoryGetOutBuffer(
 //  Return Type: BOOL
 //      TRUE(1)         string is null terminated
 //      FALSE(0)        string is not null terminated
-BOOL
-IsLabelProperlyFormatted(
-    TPM2B           *x
-);
+BOOL IsLabelProperlyFormatted(TPM2B* x);
 
 #endif  // _IO_BUFFERS_FP_H_

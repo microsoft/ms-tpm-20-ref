@@ -37,28 +37,27 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_EvictControl // Command must be enabled
+#if CC_EvictControl  // Command must be enabled
 
-#ifndef _Evict_Control_FP_H_
-#define _Evict_Control_FP_H_
+#  ifndef _Evict_Control_FP_H_
+#    define _Evict_Control_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PROVISION           auth;
-    TPMI_DH_OBJECT              objectHandle;
-    TPMI_DH_PERSISTENT          persistentHandle;
+typedef struct
+{
+    TPMI_RH_PROVISION  auth;
+    TPMI_DH_OBJECT     objectHandle;
+    TPMI_DH_PERSISTENT persistentHandle;
 } EvictControl_In;
 
 // Response code modifiers
-#define RC_EvictControl_auth    (TPM_RC_H + TPM_RC_1)
-#define RC_EvictControl_objectHandle    (TPM_RC_H + TPM_RC_2)
-#define RC_EvictControl_persistentHandle    (TPM_RC_P + TPM_RC_1)
+#    define RC_EvictControl_auth             (TPM_RC_H + TPM_RC_1)
+#    define RC_EvictControl_objectHandle     (TPM_RC_H + TPM_RC_2)
+#    define RC_EvictControl_persistentHandle (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_EvictControl(
-    EvictControl_In             *in
-);
+TPM2_EvictControl(EvictControl_In* in);
 
-#endif  // _Evict_Control_FP_H_
-#endif  // CC_EvictControl
+#  endif  // _Evict_Control_FP_H_
+#endif    // CC_EvictControl

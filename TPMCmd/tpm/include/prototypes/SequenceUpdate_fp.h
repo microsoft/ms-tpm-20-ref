@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_SequenceUpdate // Command must be enabled
+#if CC_SequenceUpdate  // Command must be enabled
 
-#ifndef _Sequence_Update_FP_H_
-#define _Sequence_Update_FP_H_
+#  ifndef _Sequence_Update_FP_H_
+#    define _Sequence_Update_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              sequenceHandle;
-    TPM2B_MAX_BUFFER            buffer;
+typedef struct
+{
+    TPMI_DH_OBJECT   sequenceHandle;
+    TPM2B_MAX_BUFFER buffer;
 } SequenceUpdate_In;
 
 // Response code modifiers
-#define RC_SequenceUpdate_sequenceHandle    (TPM_RC_H + TPM_RC_1)
-#define RC_SequenceUpdate_buffer    (TPM_RC_P + TPM_RC_1)
+#    define RC_SequenceUpdate_sequenceHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_SequenceUpdate_buffer         (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_SequenceUpdate(
-    SequenceUpdate_In           *in
-);
+TPM2_SequenceUpdate(SequenceUpdate_In* in);
 
-#endif  // _Sequence_Update_FP_H_
-#endif  // CC_SequenceUpdate
+#  endif  // _Sequence_Update_FP_H_
+#endif    // CC_SequenceUpdate

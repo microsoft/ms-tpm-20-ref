@@ -37,8 +37,8 @@
  *  Date: Apr  2, 2019  Time: 04:23:27PM
  */
 
-#ifndef    _COMMAND_AUDIT_FP_H_
-#define    _COMMAND_AUDIT_FP_H_
+#ifndef _COMMAND_AUDIT_FP_H_
+#define _COMMAND_AUDIT_FP_H_
 
 //*** CommandAuditPreInstall_Init()
 // This function initializes the command audit list. This function simulates
@@ -48,16 +48,11 @@
 //
 // This function would not be implemented outside of a manufacturing or
 // simulation environment.
-void
-CommandAuditPreInstall_Init(
-    void
-);
+void CommandAuditPreInstall_Init(void);
 
 //*** CommandAuditStartup()
 // This function clears the command audit digest on a TPM Reset.
-BOOL
-CommandAuditStartup(
-    STARTUP_TYPE     type           // IN: start up type
+BOOL CommandAuditStartup(STARTUP_TYPE type  // IN: start up type
 );
 
 //*** CommandAuditSet()
@@ -73,9 +68,7 @@ CommandAuditStartup(
 //  Return Type: BOOL
 //      TRUE(1)         command code audit status was changed
 //      FALSE(0)        command code audit status was not changed
-BOOL
-CommandAuditSet(
-    TPM_CC           commandCode    // IN: command code
+BOOL CommandAuditSet(TPM_CC commandCode  // IN: command code
 );
 
 //*** CommandAuditClear()
@@ -89,9 +82,7 @@ CommandAuditSet(
 //  Return Type: BOOL
 //      TRUE(1)         command code audit status was changed
 //      FALSE(0)        command code audit status was not changed
-BOOL
-CommandAuditClear(
-    TPM_CC           commandCode    // IN: command code
+BOOL CommandAuditClear(TPM_CC commandCode  // IN: command code
 );
 
 //*** CommandAuditIsRequired()
@@ -99,9 +90,7 @@ CommandAuditClear(
 //  Return Type: BOOL
 //      TRUE(1)         command is audited
 //      FALSE(0)        command is not audited
-BOOL
-CommandAuditIsRequired(
-    COMMAND_INDEX    commandIndex   // IN: command index
+BOOL CommandAuditIsRequired(COMMAND_INDEX commandIndex  // IN: command index
 );
 
 //*** CommandAuditCapGetCCList()
@@ -112,10 +101,9 @@ CommandAuditIsRequired(
 //      YES         if there are more command code available
 //      NO          all the available command code has been returned
 TPMI_YES_NO
-CommandAuditCapGetCCList(
-    TPM_CC           commandCode,   // IN: start command code
-    UINT32           count,         // IN: count of returned TPM_CC
-    TPML_CC         *commandList    // OUT: list of TPM_CC
+CommandAuditCapGetCCList(TPM_CC   commandCode,  // IN: start command code
+                         UINT32   count,        // IN: count of returned TPM_CC
+                         TPML_CC* commandList   // OUT: list of TPM_CC
 );
 
 //*** CommandAuditGetDigest
@@ -123,9 +111,7 @@ CommandAuditCapGetCCList(
 // commands are processed in ascending numeric order with a list of TPM_CC being
 // added to a hash. This operates as if all the audited command codes were
 // concatenated and then hashed.
-void
-CommandAuditGetDigest(
-    TPM2B_DIGEST    *digest         // OUT: command digest
+void CommandAuditGetDigest(TPM2B_DIGEST* digest  // OUT: command digest
 );
 
 #endif  // _COMMAND_AUDIT_FP_H_

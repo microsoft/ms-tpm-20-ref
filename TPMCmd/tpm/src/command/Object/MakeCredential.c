@@ -37,7 +37,7 @@
 
 #if CC_MakeCredential  // Conditional expansion of this file
 
-#include "Object_spt_fp.h"
+#  include "Object_spt_fp.h"
 
 /*(See part 3 specification)
 // Make Credential with an object
@@ -50,17 +50,16 @@
 //      TPM_RC_TYPE             'handle' does not reference an asymmetric
 //                              decryption key
 TPM_RC
-TPM2_MakeCredential(
-    MakeCredential_In   *in,            // IN: input parameter list
-    MakeCredential_Out  *out            // OUT: output parameter list
-    )
+TPM2_MakeCredential(MakeCredential_In*  in,  // IN: input parameter list
+                    MakeCredential_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC               result = TPM_RC_SUCCESS;
+    TPM_RC     result = TPM_RC_SUCCESS;
 
-    OBJECT              *object;
-    TPM2B_DATA           data;
+    OBJECT*    object;
+    TPM2B_DATA data;
 
-// Input Validation
+    // Input Validation
 
     // Get object pointer
     object = HandleToObject(in->handle);
@@ -69,8 +68,7 @@ TPM2_MakeCredential(
     // NOTE: Needs to be restricted to have a symmetric value.
     if(!CryptIsAsymAlgorithm(object->publicArea.type)
        || !IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, decrypt)
-       || !IS_ATTRIBUTE(object->publicArea.objectAttributes,
-                        TPMA_OBJECT, restricted))
+       || !IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, restricted))
         return TPM_RCS_TYPE + RC_MakeCredential_handle;
 
     // The credential information may not be larger than the digest size used for
@@ -78,7 +76,7 @@ TPM2_MakeCredential(
     if(in->credential.t.size > CryptHashGetDigestSize(object->publicArea.nameAlg))
         return TPM_RCS_SIZE + RC_MakeCredential_credential;
 
-// Command Output
+    // Command Output
 
     // Make encrypt key and its associated secret structure.
     out->secret.t.size = sizeof(out->secret.t.secret);
@@ -87,10 +85,10 @@ TPM2_MakeCredential(
         return result;
 
     // Prepare output credential data from secret
-    SecretToCredential(&in->credential, &in->objectName.b, &data.b,
-                       object, &out->credentialBlob);
+    SecretToCredential(
+        &in->credential, &in->objectName.b, &data.b, object, &out->credentialBlob);
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_MakeCredential
+#endif  // CC_MakeCredential

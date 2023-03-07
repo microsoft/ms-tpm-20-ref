@@ -51,10 +51,7 @@
 
 //*** MemoryIoBufferAllocationReset()
 // This function is used to reset the allocation of buffers.
-void
-MemoryIoBufferAllocationReset(
-    void
-)
+void MemoryIoBufferAllocationReset(void)
 {
     s_actionIoAllocation = 0;
 }
@@ -62,10 +59,7 @@ MemoryIoBufferAllocationReset(
 //*** MemoryIoBufferZero()
 // Function zeros the action I/O buffer at the end of a command. Calling this is
 // not mandatory for proper functionality.
-void
-MemoryIoBufferZero(
-    void
-)
+void MemoryIoBufferZero(void)
 {
     memset(s_actionIoBuffer, 0, s_actionIoAllocation);
 }
@@ -74,34 +68,30 @@ MemoryIoBufferZero(
 // This function returns the address of the buffer into which the
 // command parameters will be unmarshaled in preparation for calling
 // the command actions.
-BYTE *
-MemoryGetInBuffer(
-    UINT32           size           // Size, in bytes, required for the input
-                                    // unmarshaling
-    )
+BYTE* MemoryGetInBuffer(UINT32 size  // Size, in bytes, required for the input
+                                     // unmarshaling
+)
 {
     pAssert(size <= sizeof(s_actionIoBuffer));
-    // In this implementation, a static buffer is set aside for the command action
-    // buffers. The buffer is shared between input and output. This is because
-    // there is no need to allocate for the worst case input and worst case output
-    // at the same time.
-    // Round size up
-    #define UoM  (sizeof(s_actionIoBuffer[0]))
+// In this implementation, a static buffer is set aside for the command action
+// buffers. The buffer is shared between input and output. This is because
+// there is no need to allocate for the worst case input and worst case output
+// at the same time.
+// Round size up
+#define UoM (sizeof(s_actionIoBuffer[0]))
     size = (size + (UoM - 1)) & (UINT32_MAX - (UoM - 1));
     memset(s_actionIoBuffer, 0, size);
     s_actionIoAllocation = size;
-    return (BYTE *)&s_actionIoBuffer[0];
+    return (BYTE*)&s_actionIoBuffer[0];
 }
 
 //*** MemoryGetOutBuffer()
 // This function returns the address of the buffer into which the command
 // action code places its output values.
-BYTE *
-MemoryGetOutBuffer(
-    UINT32           size           // required size of the buffer
-    )
+BYTE* MemoryGetOutBuffer(UINT32 size  // required size of the buffer
+)
 {
-    BYTE        *retVal = (BYTE *)(&s_actionIoBuffer[s_actionIoAllocation / UoM]);
+    BYTE* retVal = (BYTE*)(&s_actionIoBuffer[s_actionIoAllocation / UoM]);
     pAssert((size + s_actionIoAllocation) < (sizeof(s_actionIoBuffer)));
     // In this implementation, a static buffer is set aside for the command action
     // output buffer.
@@ -116,10 +106,7 @@ MemoryGetOutBuffer(
 //  Return Type: BOOL
 //      TRUE(1)         string is null terminated
 //      FALSE(0)        string is not null terminated
-BOOL
-IsLabelProperlyFormatted(
-    TPM2B           *x
-    )
+BOOL IsLabelProperlyFormatted(TPM2B* x)
 {
     return (((x)->size == 0) || ((x)->buffer[(x)->size - 1] == 0));
 }

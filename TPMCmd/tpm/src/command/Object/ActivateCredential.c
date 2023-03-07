@@ -37,7 +37,7 @@
 
 #if CC_ActivateCredential  // Conditional expansion of this file
 
-#include "Object_spt_fp.h"
+#  include "Object_spt_fp.h"
 
 /*(See part 3 specification)
 // Activate Credential with an object
@@ -53,17 +53,16 @@
 //      TPM_RC_TYPE             'keyHandle' does not reference an asymmetric key.
 //      TPM_RC_VALUE            'secret' is invalid (when 'keyHandle' is an RSA key)
 TPM_RC
-TPM2_ActivateCredential(
-    ActivateCredential_In   *in,            // IN: input parameter list
-    ActivateCredential_Out  *out            // OUT: output parameter list
-    )
+TPM2_ActivateCredential(ActivateCredential_In*  in,  // IN: input parameter list
+                        ActivateCredential_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                   result = TPM_RC_SUCCESS;
-    OBJECT                  *object;            // decrypt key
-    OBJECT                  *activateObject;    // key associated with credential
-    TPM2B_DATA               data;          // credential data
+    TPM_RC     result = TPM_RC_SUCCESS;
+    OBJECT*    object;          // decrypt key
+    OBJECT*    activateObject;  // key associated with credential
+    TPM2B_DATA data;            // credential data
 
-// Input Validation
+    // Input Validation
 
     // Get decrypt key pointer
     object = HandleToObject(in->keyHandle);
@@ -74,11 +73,10 @@ TPM2_ActivateCredential(
     // input decrypt key must be an asymmetric, restricted decryption key
     if(!CryptIsAsymAlgorithm(object->publicArea.type)
        || !IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, decrypt)
-       || !IS_ATTRIBUTE(object->publicArea.objectAttributes,
-                        TPMA_OBJECT, restricted))
+       || !IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, restricted))
         return TPM_RCS_TYPE + RC_ActivateCredential_keyHandle;
 
-// Command output
+    // Command output
 
     // Decrypt input credential data via asymmetric decryption.  A
     // TPM_RC_VALUE, TPM_RC_KEY or unmarshal errors may be returned at this
@@ -104,4 +102,4 @@ TPM2_ActivateCredential(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_ActivateCredential
+#endif  // CC_ActivateCredential

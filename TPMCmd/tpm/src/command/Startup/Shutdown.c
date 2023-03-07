@@ -44,23 +44,22 @@
 //      TPM_RC_TYPE             if PCR bank has been re-configured, a
 //                              Shutdown(CLEAR) is required
 TPM_RC
-TPM2_Shutdown(
-    Shutdown_In     *in             // IN: input parameter list
-    )
+TPM2_Shutdown(Shutdown_In* in  // IN: input parameter list
+)
 {
     // The command needs NV update.  Check if NV is available.
     // A TPM_RC_NV_UNAVAILABLE or TPM_RC_NV_RATE error may be returned at
     // this point
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
-// Input Validation
+    // Input Validation
     // If PCR bank has been reconfigured, a CLEAR state save is required
     if(g_pcrReConfig && in->shutdownType == TPM_SU_STATE)
         return TPM_RCS_TYPE + RC_Shutdown_shutdownType;
-// Internal Data Update
+    // Internal Data Update
     gp.orderlyState = in->shutdownType;
 
-#if USE_DA_USED
+#  if USE_DA_USED
     // CLEAR g_daUsed so that any future DA-protected access will cause the
     // shutdown to become non-orderly. It is not sufficient to invalidate the
     // shutdown state after a DA failure because an attacker can inhibit access
@@ -68,7 +67,7 @@ TPM2_Shutdown(
     // indication of an authorization failure. By making sure that the orderly state
     // is CLEAR before any DA attempt, this prevents the possibility of this 'attack.'
     g_daUsed = FALSE;
-#endif
+#  endif
 
     // PCR private date state save
     PCRStateSave(in->shutdownType);
@@ -79,10 +78,10 @@ TPM2_Shutdown(
     // Save RAM backed NV index data
     NvUpdateIndexOrderlyData();
 
-#if ACCUMULATE_SELF_HEAL_TIMER
+#  if ACCUMULATE_SELF_HEAL_TIMER
     // Save the current time value
     go.time = g_time;
-#endif
+#  endif
 
     // Save all orderly data
     NvWrite(NV_ORDERLY_DATA, sizeof(ORDERLY_DATA), &go);
@@ -107,4 +106,4 @@ TPM2_Shutdown(
 
     return TPM_RC_SUCCESS;
 }
-#endif // CC_Shutdown
+#endif  // CC_Shutdown

@@ -35,11 +35,8 @@
 #include "Tpm.h"
 #include "_TPM_Init_fp.h"
 
- // This function is used to process a _TPM_Init indication.
-LIB_EXPORT void
-_TPM_Init(
-    void
-    )
+// This function is used to process a _TPM_Init indication.
+LIB_EXPORT void _TPM_Init(void)
 {
     g_powerWasLost = g_powerWasLost | _plat__WasPowerLost();
 

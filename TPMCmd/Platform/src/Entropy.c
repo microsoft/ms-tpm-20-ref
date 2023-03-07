@@ -41,9 +41,9 @@
 #include "Platform.h"
 
 #ifdef _MSC_VER
-#include <process.h>
+#  include <process.h>
 #else
-#include <unistd.h>
+#  include <unistd.h>
 #endif
 
 // This is the last 32-bits of hardware entropy produced. We have to check to
@@ -56,18 +56,15 @@
 // generated. Each subsequent generation of an n-bit block shall be compared with
 // the previously generated block. The test shall fail if any two compared n-bit
 // blocks are equal."
-extern uint32_t        lastEntropy;
+extern uint32_t lastEntropy;
 
 //** Functions
 
 //*** rand32()
 // Local function to get a 32-bit random number
-static uint32_t
-rand32(
-    void
-)
+static uint32_t rand32(void)
 {
-    uint32_t    rndNum = rand();
+    uint32_t rndNum = rand();
 #if RAND_MAX < UINT16_MAX
     // If the maximum value of the random number is a 15-bit number, then shift it up
     // 15 bits, get 15 more bits, shift that up 2 and then XOR in another value to get
@@ -84,7 +81,6 @@ rand32(
     return rndNum;
 }
 
-
 //*** _plat__GetEntropy()
 // This function is used to get available hardware entropy. In a hardware
 // implementation of this function, there would be no call to the system
@@ -93,15 +89,13 @@ rand32(
 //  < 0        hardware failure of the entropy generator, this is sticky
 // >= 0        the returned amount of entropy (bytes)
 //
-LIB_EXPORT int32_t
-_plat__GetEntropy(
-    unsigned char       *entropy,           // output buffer
-    uint32_t             amount             // amount requested
+LIB_EXPORT int32_t _plat__GetEntropy(unsigned char* entropy,  // output buffer
+                                     uint32_t       amount    // amount requested
 )
 {
-    uint32_t            rndNum;
-    int32_t             ret;
-//
+    uint32_t rndNum;
+    int32_t  ret;
+    //
     if(amount == 0)
     {
         // Seed the platform entropy source if the entropy source is software. There
@@ -124,7 +118,7 @@ _plat__GetEntropy(
         srand((unsigned)_plat__RealTime() ^ getpid());
 #endif
         lastEntropy = rand32();
-        ret = 0;
+        ret         = 0;
     }
     else
     {

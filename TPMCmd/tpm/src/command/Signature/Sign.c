@@ -37,7 +37,7 @@
 
 #if CC_Sign  // Conditional expansion of this file
 
-#include "Attest_spt_fp.h"
+#  include "Attest_spt_fp.h"
 
 /*(See part 3 specification)
 // sign an externally provided hash using an asymmetric signing key
@@ -55,16 +55,15 @@
 //                              type of 'keyHandle'
 
 TPM_RC
-TPM2_Sign(
-    Sign_In         *in,            // IN: input parameter list
-    Sign_Out        *out            // OUT: output parameter list
-    )
+TPM2_Sign(Sign_In*  in,  // IN: input parameter list
+          Sign_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                   result;
-    TPMT_TK_HASHCHECK        ticket;
-    OBJECT                  *signObject = HandleToObject(in->keyHandle);
-//
-// Input Validation
+    TPM_RC            result;
+    TPMT_TK_HASHCHECK ticket;
+    OBJECT*           signObject = HandleToObject(in->keyHandle);
+    //
+    // Input Validation
     if(!IsSigningObject(signObject))
         return TPM_RCS_KEY + RC_Sign_keyHandle;
 
@@ -79,13 +78,14 @@ TPM2_Sign(
 
     // If validation is provided, or the key is restricted, check the ticket
     if(in->validation.digest.t.size != 0
-       || IS_ATTRIBUTE(signObject->publicArea.objectAttributes,
-                       TPMA_OBJECT, restricted))
+       || IS_ATTRIBUTE(
+           signObject->publicArea.objectAttributes, TPMA_OBJECT, restricted))
     {
         // Compute and compare ticket
         TicketComputeHashCheck(in->validation.hierarchy,
                                in->inScheme.details.any.hashAlg,
-                               &in->digest, &ticket);
+                               &in->digest,
+                               &ticket);
 
         if(!MemoryEqual2B(&in->validation.digest.b, &ticket.digest.b))
             return TPM_RCS_TICKET + RC_Sign_validation;
@@ -101,7 +101,7 @@ TPM2_Sign(
             return TPM_RCS_SIZE + RC_Sign_digest;
     }
 
-// Command Output
+    // Command Output
     // Sign the hash. A TPM_RC_VALUE or TPM_RC_SCHEME
     // error may be returned at this point
     result = CryptSign(signObject, &in->inScheme, &in->digest, &out->signature);
@@ -109,4 +109,4 @@ TPM2_Sign(
     return result;
 }
 
-#endif // CC_Sign
+#endif  // CC_Sign

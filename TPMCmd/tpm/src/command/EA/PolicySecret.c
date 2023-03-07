@@ -37,8 +37,8 @@
 
 #if CC_PolicySecret  // Conditional expansion of this file
 
-#include "Policy_spt_fp.h"
-#include "NV_spt_fp.h"
+#  include "Policy_spt_fp.h"
+#  include "NV_spt_fp.h"
 
 /*(See part 3 specification)
 // Add a secret-based authorization to the policy evaluation
@@ -52,16 +52,15 @@
 //      TPM_RC_SIZE             'cpHashA' is not the size of a digest for the
 //                              hash associated with 'policySession'
 TPM_RC
-TPM2_PolicySecret(
-    PolicySecret_In     *in,            // IN: input parameter list
-    PolicySecret_Out    *out            // OUT: output parameter list
-    )
+TPM2_PolicySecret(PolicySecret_In*  in,  // IN: input parameter list
+                  PolicySecret_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                   result;
-    SESSION                 *session;
-    TPM2B_NAME               entityName;
-    UINT64                   authTimeout = 0;
-// Input Validation
+    TPM_RC     result;
+    SESSION*   session;
+    TPM2B_NAME entityName;
+    UINT64     authTimeout = 0;
+    // Input Validation
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
 
@@ -70,35 +69,44 @@ TPM2_PolicySecret(
     {
         authTimeout = ComputeAuthTimeout(session, in->expiration, &in->nonceTPM);
 
-        result = PolicyParameterChecks(session, authTimeout,
-                                       &in->cpHashA, &in->nonceTPM,
+        result      = PolicyParameterChecks(session,
+                                       authTimeout,
+                                       &in->cpHashA,
+                                       &in->nonceTPM,
                                        RC_PolicySecret_nonceTPM,
                                        RC_PolicySecret_cpHashA,
                                        RC_PolicySecret_expiration);
         if(result != TPM_RC_SUCCESS)
             return result;
     }
-// Internal Data Update
+    // Internal Data Update
     // Update policy context with input policyRef and name of authorizing key
     // This value is computed even for trial sessions. Possibly update the cpHash
     PolicyContextUpdate(TPM_CC_PolicySecret,
-                        EntityGetName(in->authHandle, &entityName), &in->policyRef,
-                        &in->cpHashA, authTimeout, session);
-// Command Output
+                        EntityGetName(in->authHandle, &entityName),
+                        &in->policyRef,
+                        &in->cpHashA,
+                        authTimeout,
+                        session);
+    // Command Output
     // Create ticket and timeout buffer if in->expiration < 0 and this is not
     // a trial session.
     // NOTE: PolicyParameterChecks() makes sure that nonceTPM is present
     // when expiration is non-zero.
-    if(in->expiration < 0
-       && session->attributes.isTrialPolicy == CLEAR
+    if(in->expiration < 0 && session->attributes.isTrialPolicy == CLEAR
        && !NvIsPinPassIndex(in->authHandle))
     {
-        BOOL        expiresOnReset = (in->nonceTPM.t.size == 0);
+        BOOL expiresOnReset = (in->nonceTPM.t.size == 0);
         // Compute policy ticket
         authTimeout &= ~EXPIRATION_BIT;
-        TicketComputeAuth(TPM_ST_AUTH_SECRET, EntityGetHierarchy(in->authHandle),
-                          authTimeout, expiresOnReset, &in->cpHashA, &in->policyRef,
-                          &entityName, &out->policyTicket);
+        TicketComputeAuth(TPM_ST_AUTH_SECRET,
+                          EntityGetHierarchy(in->authHandle),
+                          authTimeout,
+                          expiresOnReset,
+                          &in->cpHashA,
+                          &in->policyRef,
+                          &entityName,
+                          &out->policyTicket);
         // Generate timeout buffer.  The format of output timeout buffer is
         // TPM-specific.
         // Note: In this implementation, the timeout buffer value is computed after
@@ -118,11 +126,11 @@ TPM2_PolicySecret(
         out->timeout.t.size = 0;
 
         // authorization ticket is null
-        out->policyTicket.tag = TPM_ST_AUTH_SECRET;
-        out->policyTicket.hierarchy = TPM_RH_NULL;
+        out->policyTicket.tag           = TPM_ST_AUTH_SECRET;
+        out->policyTicket.hierarchy     = TPM_RH_NULL;
         out->policyTicket.digest.t.size = 0;
     }
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicySecret
+#endif  // CC_PolicySecret

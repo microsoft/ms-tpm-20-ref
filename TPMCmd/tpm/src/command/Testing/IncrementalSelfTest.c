@@ -45,13 +45,12 @@
 //                              completed)
 //      TPM_RC_VALUE            an algorithm in the toTest list is not implemented
 TPM_RC
-TPM2_IncrementalSelfTest(
-    IncrementalSelfTest_In      *in,            // IN: input parameter list
-    IncrementalSelfTest_Out     *out            // OUT: output parameter list
-    )
+TPM2_IncrementalSelfTest(IncrementalSelfTest_In*  in,  // IN: input parameter list
+                         IncrementalSelfTest_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                       result;
-// Command Output
+    TPM_RC result;
+    // Command Output
 
     // Call incremental self test function in crypt module. If this function
     // returns TPM_RC_VALUE, it means that an algorithm on the 'toTest' list is
@@ -62,4 +61,4 @@ TPM2_IncrementalSelfTest(
     return result;
 }
 
-#endif // CC_IncrementalSelfTest
+#endif  // CC_IncrementalSelfTest

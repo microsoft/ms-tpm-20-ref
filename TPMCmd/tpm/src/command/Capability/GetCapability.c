@@ -47,13 +47,12 @@
 //      TPM_RC_VALUE        invalid 'capability'; or 'property' is not 0 for the
 //                          TPM_CAP_PCRS 'capability' value
 TPM_RC
-TPM2_GetCapability(
-    GetCapability_In    *in,            // IN: input parameter list
-    GetCapability_Out   *out            // OUT: output parameter list
-    )
+TPM2_GetCapability(GetCapability_In*  in,  // IN: input parameter list
+                   GetCapability_Out* out  // OUT: output parameter list
+)
 {
-    TPMU_CAPABILITIES   *data = &out->capabilityData.data;
-// Command Output
+    TPMU_CAPABILITIES* data = &out->capabilityData.data;
+    // Command Output
 
     // Set output capability type the same as input type
     out->capabilityData.capability = in->capability;
@@ -61,58 +60,50 @@ TPM2_GetCapability(
     switch(in->capability)
     {
         case TPM_CAP_ALGS:
-            out->moreData = AlgorithmCapGetImplemented((TPM_ALG_ID)in->property,
-                                                       in->propertyCount,
-                                                       &data->algorithms);
+            out->moreData = AlgorithmCapGetImplemented(
+                (TPM_ALG_ID)in->property, in->propertyCount, &data->algorithms);
             break;
         case TPM_CAP_HANDLES:
             switch(HandleGetType((TPM_HANDLE)in->property))
             {
                 case TPM_HT_TRANSIENT:
                     // Get list of handles of loaded transient objects
-                    out->moreData = ObjectCapGetLoaded((TPM_HANDLE)in->property,
-                                                       in->propertyCount,
-                                                       &data->handles);
+                    out->moreData = ObjectCapGetLoaded(
+                        (TPM_HANDLE)in->property, in->propertyCount, &data->handles);
                     break;
                 case TPM_HT_PERSISTENT:
                     // Get list of handles of persistent objects
-                    out->moreData = NvCapGetPersistent((TPM_HANDLE)in->property,
-                                                       in->propertyCount,
-                                                       &data->handles);
+                    out->moreData = NvCapGetPersistent(
+                        (TPM_HANDLE)in->property, in->propertyCount, &data->handles);
                     break;
                 case TPM_HT_NV_INDEX:
                     // Get list of defined NV index
-                    out->moreData = NvCapGetIndex((TPM_HANDLE)in->property,
-                                                  in->propertyCount,
-                                                  &data->handles);
+                    out->moreData = NvCapGetIndex(
+                        (TPM_HANDLE)in->property, in->propertyCount, &data->handles);
                     break;
                 case TPM_HT_LOADED_SESSION:
                     // Get list of handles of loaded sessions
-                    out->moreData = SessionCapGetLoaded((TPM_HANDLE)in->property,
-                                                        in->propertyCount,
-                                                        &data->handles);
+                    out->moreData = SessionCapGetLoaded(
+                        (TPM_HANDLE)in->property, in->propertyCount, &data->handles);
                     break;
-#ifdef TPM_HT_SAVED_SESSION
+#  ifdef TPM_HT_SAVED_SESSION
                 case TPM_HT_SAVED_SESSION:
-#else
+#  else
                 case TPM_HT_ACTIVE_SESSION:
-#endif
-            // Get list of handles of
-                    out->moreData = SessionCapGetSaved((TPM_HANDLE)in->property,
-                                                       in->propertyCount,
-                                                       &data->handles);
+#  endif
+                    // Get list of handles of
+                    out->moreData = SessionCapGetSaved(
+                        (TPM_HANDLE)in->property, in->propertyCount, &data->handles);
                     break;
                 case TPM_HT_PCR:
                     // Get list of handles of PCR
-                    out->moreData = PCRCapGetHandles((TPM_HANDLE)in->property,
-                                                     in->propertyCount,
-                                                     &data->handles);
+                    out->moreData = PCRCapGetHandles(
+                        (TPM_HANDLE)in->property, in->propertyCount, &data->handles);
                     break;
                 case TPM_HT_PERMANENT:
                     // Get list of permanent handles
-                    out->moreData = PermanentCapGetHandles((TPM_HANDLE)in->property,
-                                                           in->propertyCount,
-                                                           &data->handles);
+                    out->moreData = PermanentCapGetHandles(
+                        (TPM_HANDLE)in->property, in->propertyCount, &data->handles);
                     break;
                 default:
                     // Unsupported input handle type
@@ -121,58 +112,50 @@ TPM2_GetCapability(
             }
             break;
         case TPM_CAP_COMMANDS:
-            out->moreData = CommandCapGetCCList((TPM_CC)in->property,
-                                                in->propertyCount,
-                                                &data->command);
+            out->moreData = CommandCapGetCCList(
+                (TPM_CC)in->property, in->propertyCount, &data->command);
             break;
         case TPM_CAP_PP_COMMANDS:
-            out->moreData = PhysicalPresenceCapGetCCList((TPM_CC)in->property,
-                                                         in->propertyCount,
-                                                         &data->ppCommands);
+            out->moreData = PhysicalPresenceCapGetCCList(
+                (TPM_CC)in->property, in->propertyCount, &data->ppCommands);
             break;
         case TPM_CAP_AUDIT_COMMANDS:
-            out->moreData = CommandAuditCapGetCCList((TPM_CC)in->property,
-                                                     in->propertyCount,
-                                                     &data->auditCommands);
+            out->moreData = CommandAuditCapGetCCList(
+                (TPM_CC)in->property, in->propertyCount, &data->auditCommands);
             break;
         case TPM_CAP_PCRS:
             // Input property must be 0
             if(in->property != 0)
                 return TPM_RCS_VALUE + RC_GetCapability_property;
-            out->moreData = PCRCapGetAllocation(in->propertyCount,
-                                                &data->assignedPCR);
+            out->moreData =
+                PCRCapGetAllocation(in->propertyCount, &data->assignedPCR);
             break;
         case TPM_CAP_PCR_PROPERTIES:
-            out->moreData = PCRCapGetProperties((TPM_PT_PCR)in->property,
-                                                in->propertyCount,
-                                                &data->pcrProperties);
+            out->moreData = PCRCapGetProperties(
+                (TPM_PT_PCR)in->property, in->propertyCount, &data->pcrProperties);
             break;
         case TPM_CAP_TPM_PROPERTIES:
-            out->moreData = TPMCapGetProperties((TPM_PT)in->property,
-                                                in->propertyCount,
-                                                &data->tpmProperties);
+            out->moreData = TPMCapGetProperties(
+                (TPM_PT)in->property, in->propertyCount, &data->tpmProperties);
             break;
-#if ALG_ECC
+#  if ALG_ECC
         case TPM_CAP_ECC_CURVES:
-            out->moreData = CryptCapGetECCCurve((TPM_ECC_CURVE)in->property,
-                                                in->propertyCount,
-                                                &data->eccCurves);
+            out->moreData = CryptCapGetECCCurve(
+                (TPM_ECC_CURVE)in->property, in->propertyCount, &data->eccCurves);
             break;
-#endif // ALG_ECC
+#  endif  // ALG_ECC
         case TPM_CAP_AUTH_POLICIES:
             if(HandleGetType((TPM_HANDLE)in->property) != TPM_HT_PERMANENT)
-               return TPM_RCS_VALUE + RC_GetCapability_property;
-            out->moreData = PermanentHandleGetPolicy((TPM_HANDLE)in->property,
-                                                     in->propertyCount,
-                                                     &data->authPolicies);
+                return TPM_RCS_VALUE + RC_GetCapability_property;
+            out->moreData = PermanentHandleGetPolicy(
+                (TPM_HANDLE)in->property, in->propertyCount, &data->authPolicies);
             break;
         case TPM_CAP_ACT:
             if(((TPM_RH)in->property < TPM_RH_ACT_0)
                || ((TPM_RH)in->property > TPM_RH_ACT_F))
                 return TPM_RCS_VALUE + RC_GetCapability_property;
-            out->moreData = ActGetCapabilityData((TPM_HANDLE)in->property,
-                                                 in->propertyCount,
-                                                 &data->actData);
+            out->moreData = ActGetCapabilityData(
+                (TPM_HANDLE)in->property, in->propertyCount, &data->actData);
             break;
         case TPM_CAP_VENDOR_PROPERTY:
             // vendor property is not implemented
@@ -185,4 +168,4 @@ TPM2_GetCapability(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_GetCapability
+#endif  // CC_GetCapability

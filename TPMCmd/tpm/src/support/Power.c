@@ -45,10 +45,7 @@
 
 //*** TPMInit()
 // This function is used to process a power on event.
-void
-TPMInit(
-    void
-    )
+void TPMInit(void)
 {
     // Set state as not initialized. This means that Startup is required
     g_initialized = FALSE;
@@ -58,10 +55,7 @@ TPMInit(
 //*** TPMRegisterStartup()
 // This function registers the fact that the TPM has been initialized
 // (a TPM2_Startup() has completed successfully).
-BOOL
-TPMRegisterStartup(
-    void
-    )
+BOOL TPMRegisterStartup(void)
 {
     g_initialized = TRUE;
     return TRUE;
@@ -73,10 +67,7 @@ TPMRegisterStartup(
 //  Return Type: BOOL
 //      TRUE(1)         TPM has been initialized
 //      FALSE(0)        TPM has not been initialized
-BOOL
-TPMIsStarted(
-    void
-    )
+BOOL TPMIsStarted(void)
 {
     return g_initialized;
 }

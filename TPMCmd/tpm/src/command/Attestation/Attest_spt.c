@@ -41,15 +41,14 @@
 
 //***FillInAttestInfo()
 // Fill in common fields of TPMS_ATTEST structure.
-void
-FillInAttestInfo(
-    TPMI_DH_OBJECT       signHandle,    // IN: handle of signing object
-    TPMT_SIG_SCHEME     *scheme,        // IN/OUT: scheme to be used for signing
-    TPM2B_DATA          *data,          // IN: qualifying data
-    TPMS_ATTEST         *attest         // OUT: attest structure
-    )
+void FillInAttestInfo(
+    TPMI_DH_OBJECT   signHandle,  // IN: handle of signing object
+    TPMT_SIG_SCHEME* scheme,      // IN/OUT: scheme to be used for signing
+    TPM2B_DATA*      data,        // IN: qualifying data
+    TPMS_ATTEST*     attest       // OUT: attest structure
+)
 {
-    OBJECT              *signObject = HandleToObject(signHandle);
+    OBJECT* signObject = HandleToObject(signHandle);
 
     // Magic number
     attest->magic = TPM_GENERATED_VALUE;
@@ -60,7 +59,7 @@ FillInAttestInfo(
         // This is defined because UINT32_TO_BYTE_ARRAY does a cast. If the
         // size of the cast is smaller than a constant, the compiler warns
         // about the truncation of a constant value.
-        TPM_HANDLE      nullHandle = TPM_RH_NULL;
+        TPM_HANDLE nullHandle          = TPM_RH_NULL;
         attest->qualifiedSigner.t.size = sizeof(TPM_HANDLE);
         UINT32_TO_BYTE_ARRAY(nullHandle, attest->qualifiedSigner.t.name);
     }
@@ -88,10 +87,16 @@ FillInAttestInfo(
     {
         // For signing key that is not in platform or endorsement hierarchy,
         // obfuscate the reset, restart and firmware version information
-        UINT64          obfuscation[2];
-        CryptKDFa(CONTEXT_INTEGRITY_HASH_ALG, &gp.shProof.b, OBFUSCATE_STRING,
-                  &attest->qualifiedSigner.b, NULL, 128,
-                  (BYTE *)&obfuscation[0], NULL, FALSE);
+        UINT64 obfuscation[2];
+        CryptKDFa(CONTEXT_INTEGRITY_HASH_ALG,
+                  &gp.shProof.b,
+                  OBFUSCATE_STRING,
+                  &attest->qualifiedSigner.b,
+                  NULL,
+                  128,
+                  (BYTE*)&obfuscation[0],
+                  NULL,
+                  FALSE);
         // Obfuscate data
         attest->firmwareVersion += obfuscation[0];
         attest->clockInfo.resetCount += (UINT32)(obfuscation[1] >> 32);
@@ -105,7 +110,7 @@ FillInAttestInfo(
         // If we move the data to the attestation structure, then it is not
         // used in the signing operation except as part of the signed data
         attest->extraData = *data;
-        data->t.size = 0;
+        data->t.size      = 0;
     }
 }
 
@@ -121,41 +126,42 @@ FillInAttestInfo(
 //                          invalid commit status or failed to generate "r" value
 //                          (for an ECC key)
 TPM_RC
-SignAttestInfo(
-    OBJECT              *signKey,           // IN: sign object
-    TPMT_SIG_SCHEME     *scheme,            // IN: sign scheme
-    TPMS_ATTEST         *certifyInfo,       // IN: the data to be signed
-    TPM2B_DATA          *qualifyingData,    // IN: extra data for the signing
-                                            //     process
-    TPM2B_ATTEST        *attest,            // OUT: marshaled attest blob to be
-                                            //     signed
-    TPMT_SIGNATURE      *signature          // OUT: signature
-    )
+SignAttestInfo(OBJECT*          signKey,         // IN: sign object
+               TPMT_SIG_SCHEME* scheme,          // IN: sign scheme
+               TPMS_ATTEST*     certifyInfo,     // IN: the data to be signed
+               TPM2B_DATA*      qualifyingData,  // IN: extra data for the signing
+                                                 //     process
+               TPM2B_ATTEST* attest,             // OUT: marshaled attest blob to be
+                                                 //     signed
+               TPMT_SIGNATURE* signature         // OUT: signature
+)
 {
-    BYTE                    *buffer;
-    HASH_STATE              hashState;
-    TPM2B_DIGEST            digest;
-    TPM_RC                  result;
+    BYTE*        buffer;
+    HASH_STATE   hashState;
+    TPM2B_DIGEST digest;
+    TPM_RC       result;
 
     // Marshal TPMS_ATTEST structure for hash
-    buffer = attest->t.attestationData;
+    buffer         = attest->t.attestationData;
     attest->t.size = TPMS_ATTEST_Marshal(certifyInfo, &buffer, NULL);
 
     if(signKey == NULL)
     {
         signature->sigAlg = TPM_ALG_NULL;
-        result = TPM_RC_SUCCESS;
+        result            = TPM_RC_SUCCESS;
     }
     else
     {
-        TPMI_ALG_HASH           hashAlg;
+        TPMI_ALG_HASH hashAlg;
         // Compute hash
         hashAlg = scheme->details.any.hashAlg;
         // need to set the receive buffer to get something put in it
         digest.t.size = sizeof(digest.t.buffer);
-        digest.t.size = CryptHashBlock(hashAlg, attest->t.size,
+        digest.t.size = CryptHashBlock(hashAlg,
+                                       attest->t.size,
                                        attest->t.attestationData,
-                                       digest.t.size, digest.t.buffer);
+                                       digest.t.size,
+                                       digest.t.buffer);
         // If there is qualifying data, need to rehash the data
         // hash(qualifyingData || hash(attestationData))
         if(qualifyingData->t.size != 0)
@@ -188,12 +194,10 @@ SignAttestInfo(
 //  Return Type: BOOL
 //      TRUE(1)         object may sign
 //      FALSE(0)        object may not sign
-BOOL
-IsSigningObject(
-    OBJECT          *object         // IN:
-    )
+BOOL IsSigningObject(OBJECT* object  // IN:
+)
 {
     return ((object == NULL)
             || ((IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, sign)
-               && object->publicArea.type != TPM_ALG_SYMCIPHER)));
+                 && object->publicArea.type != TPM_ALG_SYMCIPHER)));
 }

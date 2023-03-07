@@ -37,7 +37,7 @@
 
 #if CC_Load  // Conditional expansion of this file
 
-#include "Object_spt_fp.h"
+#  include "Object_spt_fp.h"
 
 /*(See part 3 specification)
 // Load an ordinary or temporary object
@@ -65,17 +65,16 @@
 //                              match the parameters of the parent.
 //      TPM_RC_VALUE            decryption failure
 TPM_RC
-TPM2_Load(
-    Load_In         *in,            // IN: input parameter list
-    Load_Out        *out            // OUT: output parameter list
-    )
+TPM2_Load(Load_In*  in,  // IN: input parameter list
+          Load_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                   result = TPM_RC_SUCCESS;
-    TPMT_SENSITIVE           sensitive;
-    OBJECT                  *parentObject;
-    OBJECT                  *newObject;
+    TPM_RC         result = TPM_RC_SUCCESS;
+    TPMT_SENSITIVE sensitive;
+    OBJECT*        parentObject;
+    OBJECT*        newObject;
 
-// Input Validation
+    // Input Validation
     // Don't get invested in loading if there is no place to put it.
     newObject = FindEmptyObjectSlot(&out->objectHandle);
     if(newObject == NULL)
@@ -97,17 +96,22 @@ TPM2_Load(
         return TPM_RCS_HASH + RC_Load_inPublic;
 
     // Retrieve sensitive data.
-    result = PrivateToSensitive(&in->inPrivate.b, &out->name.b, parentObject,
+    result = PrivateToSensitive(&in->inPrivate.b,
+                                &out->name.b,
+                                parentObject,
                                 in->inPublic.publicArea.nameAlg,
                                 &sensitive);
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, RC_Load_inPrivate);
 
-// Internal Data Update
+    // Internal Data Update
     // Load and validate object
-    result = ObjectLoad(newObject, parentObject,
-                        &in->inPublic.publicArea, &sensitive,
-                        RC_Load_inPublic, RC_Load_inPrivate,
+    result = ObjectLoad(newObject,
+                        parentObject,
+                        &in->inPublic.publicArea,
+                        &sensitive,
+                        RC_Load_inPublic,
+                        RC_Load_inPrivate,
                         &out->name);
     if(result == TPM_RC_SUCCESS)
     {
@@ -115,7 +119,6 @@ TPM2_Load(
         ObjectSetLoadedAttributes(newObject, in->parentHandle);
     }
     return result;
-
 }
 
-#endif // CC_Load
+#endif  // CC_Load

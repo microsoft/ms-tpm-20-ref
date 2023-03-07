@@ -37,8 +37,8 @@
  *  Date: Oct 24, 2019  Time: 11:37:07AM
  */
 
-#ifndef    _TPM_TO_OSSL_MATH_FP_H_
-#define    _TPM_TO_OSSL_MATH_FP_H_
+#ifndef _TPM_TO_OSSL_MATH_FP_H_
+#define _TPM_TO_OSSL_MATH_FP_H_
 
 #ifdef MATH_LIB_OSSL
 
@@ -50,29 +50,18 @@
 //      TRUE(1)         success
 //      FALSE(0)        failure because value will not fit or OpenSSL variable doesn't
 //                      exist
-BOOL
-OsslToTpmBn(
-    bigNum          bn,
-    BIGNUM          *osslBn
-);
+BOOL OsslToTpmBn(bigNum bn, BIGNUM* osslBn);
 
 //*** BigInitialized()
 // This function initializes an OSSL BIGNUM from a TPM bigConst. Do not use this for
 // values that are passed to OpenSLL when they are not declared as const in the
 // function prototype. Instead, use BnNewVariable().
-BIGNUM *
-BigInitialized(
-    BIGNUM             *toInit,
-    bigConst            initializer
-);
-#if LIBRARY_COMPATIBILITY_CHECK
+BIGNUM* BigInitialized(BIGNUM* toInit, bigConst initializer);
+#  if LIBRARY_COMPATIBILITY_CHECK
 
 //*** MathLibraryCompatibilityCheck()
-BOOL
-MathLibraryCompatibilityCheck(
-    void
-);
-#endif
+BOOL MathLibraryCompatibilityCheck(void);
+#  endif
 
 //*** BnModMult()
 // This function does a modular multiply. It first does a multiply and then a divide
@@ -80,25 +69,15 @@ MathLibraryCompatibilityCheck(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnModMult(
-    bigNum              result,
-    bigConst            op1,
-    bigConst            op2,
-    bigConst            modulus
-);
+LIB_EXPORT BOOL BnModMult(
+    bigNum result, bigConst op1, bigConst op2, bigConst modulus);
 
 //*** BnMult()
 // Multiplies two numbers
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnMult(
-    bigNum               result,
-    bigConst             multiplicand,
-    bigConst             multiplier
-);
+LIB_EXPORT BOOL BnMult(bigNum result, bigConst multiplicand, bigConst multiplier);
 
 //*** BnDiv()
 // This function divides two bigNum values. The function returns FALSE if
@@ -106,25 +85,18 @@ BnMult(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnDiv(
-    bigNum               quotient,
-    bigNum               remainder,
-    bigConst             dividend,
-    bigConst             divisor
-);
+LIB_EXPORT BOOL BnDiv(
+    bigNum quotient, bigNum remainder, bigConst dividend, bigConst divisor);
 
-#if ALG_RSA
+#  if ALG_RSA
 //*** BnGcd()
 // Get the greatest common divisor of two numbers
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnGcd(
-    bigNum      gcd,            // OUT: the common divisor
-    bigConst    number1,        // IN:
-    bigConst    number2         // IN:
+LIB_EXPORT BOOL BnGcd(bigNum   gcd,      // OUT: the common divisor
+                      bigConst number1,  // IN:
+                      bigConst number2   // IN:
 );
 
 //***BnModExp()
@@ -133,12 +105,10 @@ BnGcd(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnModExp(
-    bigNum               result,         // OUT: the result
-    bigConst             number,         // IN: number to exponentiate
-    bigConst             exponent,       // IN:
-    bigConst             modulus         // IN:
+LIB_EXPORT BOOL BnModExp(bigNum   result,    // OUT: the result
+                         bigConst number,    // IN: number to exponentiate
+                         bigConst exponent,  // IN:
+                         bigConst modulus    // IN:
 );
 
 //*** BnModInverse()
@@ -146,14 +116,9 @@ BnModExp(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnModInverse(
-    bigNum               result,
-    bigConst             number,
-    bigConst             modulus
-);
-#endif // ALG_RSA
-#if ALG_ECC
+LIB_EXPORT BOOL BnModInverse(bigNum result, bigConst number, bigConst modulus);
+#  endif  // ALG_RSA
+#  if ALG_ECC
 
 //*** BnCurveInitialize()
 // This function initializes the OpenSSL curve information structure. This
@@ -163,46 +128,37 @@ BnModInverse(
 //      NULL        the TPM_ECC_CURVE is not valid or there was a problem in
 //                  in initializing the curve data
 //      non-NULL    points to 'E'
-LIB_EXPORT bigCurve
-BnCurveInitialize(
-    bigCurve          E,           // IN: curve structure to initialize
-    TPM_ECC_CURVE     curveId      // IN: curve identifier
+LIB_EXPORT bigCurve BnCurveInitialize(
+    bigCurve      E,       // IN: curve structure to initialize
+    TPM_ECC_CURVE curveId  // IN: curve identifier
 );
 
 //*** BnCurveFree()
 // This function will free the allocated components of the curve and end the
 // frame in which the curve data exists
-LIB_EXPORT void
-BnCurveFree(
-    bigCurve                    E
-);
+LIB_EXPORT void BnCurveFree(bigCurve E);
 
 //*** BnEccModMult()
 // This function does a point multiply of the form R = [d]S
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation; treat as result being point at infinity
-LIB_EXPORT BOOL
-BnEccModMult(
-    bigPoint             R,         // OUT: computed point
-    pointConst           S,         // IN: point to multiply by 'd' (optional)
-    bigConst             d,         // IN: scalar for [d]S
-    bigCurve             E
-);
+LIB_EXPORT BOOL BnEccModMult(bigPoint   R,  // OUT: computed point
+                             pointConst S,  // IN: point to multiply by 'd' (optional)
+                             bigConst   d,  // IN: scalar for [d]S
+                             bigCurve   E);
 
 //*** BnEccModMult2()
 // This function does a point multiply of the form R = [d]G + [u]Q
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation; treat as result being point at infinity
-LIB_EXPORT BOOL
-BnEccModMult2(
-    bigPoint             R,         // OUT: computed point
-    pointConst           S,         // IN: optional point
-    bigConst             d,         // IN: scalar for [d]S or [d]G
-    pointConst           Q,         // IN: second point
-    bigConst             u,         // IN: second scalar
-    bigCurve             E          // IN: curve
+LIB_EXPORT BOOL BnEccModMult2(bigPoint   R,  // OUT: computed point
+                              pointConst S,  // IN: optional point
+                              bigConst   d,  // IN: scalar for [d]S or [d]G
+                              pointConst Q,  // IN: second point
+                              bigConst   u,  // IN: second scalar
+                              bigCurve   E   // IN: curve
 );
 
 //** BnEccAdd()
@@ -210,14 +166,12 @@ BnEccModMult2(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation; treat as result being point at infinity
-LIB_EXPORT BOOL
-BnEccAdd(
-    bigPoint             R,         // OUT: computed point
-    pointConst           S,         // IN: point to multiply by 'd'
-    pointConst           Q,         // IN: second point
-    bigCurve             E          // IN: curve
+LIB_EXPORT BOOL BnEccAdd(bigPoint   R,  // OUT: computed point
+                         pointConst S,  // IN: point to multiply by 'd'
+                         pointConst Q,  // IN: second point
+                         bigCurve   E   // IN: curve
 );
-#endif // ALG_ECC
-#endif // MATHLIB OSSL
+#  endif  // ALG_ECC
+#endif    // MATHLIB OSSL
 
 #endif  // _TPM_TO_OSSL_MATH_FP_H_

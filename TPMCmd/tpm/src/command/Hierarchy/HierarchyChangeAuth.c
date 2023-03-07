@@ -37,7 +37,7 @@
 
 #if CC_HierarchyChangeAuth  // Conditional expansion of this file
 
-#include "Object_spt_fp.h"
+#  include "Object_spt_fp.h"
 
 /*(See part 3 specification)
 // Set a hierarchy authValue
@@ -46,9 +46,8 @@
 //      TPM_RC_SIZE        'newAuth' size is greater than that of integrity hash
 //                          digest
 TPM_RC
-TPM2_HierarchyChangeAuth(
-    HierarchyChangeAuth_In  *in             // IN: input parameter list
-    )
+TPM2_HierarchyChangeAuth(HierarchyChangeAuth_In* in  // IN: input parameter list
+)
 {
     // The command needs NV update.
     RETURN_IF_NV_IS_NOT_AVAILABLE;
@@ -88,4 +87,4 @@ TPM2_HierarchyChangeAuth(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_HierarchyChangeAuth
+#endif  // CC_HierarchyChangeAuth

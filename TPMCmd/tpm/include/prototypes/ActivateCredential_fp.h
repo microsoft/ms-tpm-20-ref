@@ -37,36 +37,35 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ActivateCredential // Command must be enabled
+#if CC_ActivateCredential  // Command must be enabled
 
-#ifndef _Activate_Credential_FP_H_
-#define _Activate_Credential_FP_H_
+#  ifndef _Activate_Credential_FP_H_
+#    define _Activate_Credential_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT                  activateHandle;
-    TPMI_DH_OBJECT                  keyHandle;
-    TPM2B_ID_OBJECT                 credentialBlob;
-    TPM2B_ENCRYPTED_SECRET          secret;
+typedef struct
+{
+    TPMI_DH_OBJECT         activateHandle;
+    TPMI_DH_OBJECT         keyHandle;
+    TPM2B_ID_OBJECT        credentialBlob;
+    TPM2B_ENCRYPTED_SECRET secret;
 } ActivateCredential_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_DIGEST                    certInfo;
+typedef struct
+{
+    TPM2B_DIGEST certInfo;
 } ActivateCredential_Out;
 
 // Response code modifiers
-#define RC_ActivateCredential_activateHandle    (TPM_RC_H + TPM_RC_1)
-#define RC_ActivateCredential_keyHandle (TPM_RC_H + TPM_RC_2)
-#define RC_ActivateCredential_credentialBlob    (TPM_RC_P + TPM_RC_1)
-#define RC_ActivateCredential_secret    (TPM_RC_P + TPM_RC_2)
+#    define RC_ActivateCredential_activateHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_ActivateCredential_keyHandle      (TPM_RC_H + TPM_RC_2)
+#    define RC_ActivateCredential_credentialBlob (TPM_RC_P + TPM_RC_1)
+#    define RC_ActivateCredential_secret         (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_ActivateCredential(
-    ActivateCredential_In           *in,
-    ActivateCredential_Out          *out
-);
+TPM2_ActivateCredential(ActivateCredential_In* in, ActivateCredential_Out* out);
 
-#endif  // _Activate_Credential_FP_H_
-#endif  // CC_ActivateCredential
+#  endif  // _Activate_Credential_FP_H_
+#endif    // CC_ActivateCredential

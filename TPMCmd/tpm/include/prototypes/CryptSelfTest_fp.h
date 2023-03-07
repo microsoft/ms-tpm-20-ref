@@ -37,8 +37,8 @@
  *  Date: Mar  4, 2020  Time: 02:36:44PM
  */
 
-#ifndef    _CRYPT_SELF_TEST_FP_H_
-#define    _CRYPT_SELF_TEST_FP_H_
+#ifndef _CRYPT_SELF_TEST_FP_H_
+#define _CRYPT_SELF_TEST_FP_H_
 
 //*** CryptSelfTest()
 // This function is called to start/complete a full self-test.
@@ -55,8 +55,7 @@
 //      TPM_RC_CANCELED        if the command is canceled
 LIB_EXPORT
 TPM_RC
-CryptSelfTest(
-    TPMI_YES_NO      fullTest       // IN: if full test is required
+CryptSelfTest(TPMI_YES_NO fullTest  // IN: if full test is required
 );
 
 //*** CryptIncrementalSelfTest()
@@ -72,19 +71,15 @@ CryptSelfTest(
 //      TPM_RC_TESTING          if toTest list is not empty
 //      TPM_RC_VALUE            an algorithm in the toTest list is not implemented
 TPM_RC
-CryptIncrementalSelfTest(
-    TPML_ALG            *toTest,        // IN: list of algorithms to be tested
-    TPML_ALG            *toDoList       // OUT: list of algorithms needing test
+CryptIncrementalSelfTest(TPML_ALG* toTest,   // IN: list of algorithms to be tested
+                         TPML_ALG* toDoList  // OUT: list of algorithms needing test
 );
 
 //*** CryptInitializeToTest()
 // This function will initialize the data structures for testing all the
 // algorithms. This should not be called unless CryptAlgsSetImplemented() has
 // been called
-void
-CryptInitializeToTest(
-    void
-);
+void CryptInitializeToTest(void);
 
 //*** CryptTestAlgorithm()
 // Only point of contact with the actual self tests. If a self-test fails, there
@@ -100,9 +95,6 @@ CryptInitializeToTest(
 //      TPM_RC_CANCELED     test was canceled
 LIB_EXPORT
 TPM_RC
-CryptTestAlgorithm(
-    TPM_ALG_ID           alg,
-    ALGORITHM_VECTOR    *toTest
-);
+CryptTestAlgorithm(TPM_ALG_ID alg, ALGORITHM_VECTOR* toTest);
 
 #endif  // _CRYPT_SELF_TEST_FP_H_

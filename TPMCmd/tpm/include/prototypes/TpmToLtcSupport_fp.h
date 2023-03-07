@@ -37,8 +37,8 @@
  *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
-#ifndef    _TPM_TO_LTC_SUPPORT_FP_H_
-#define    _TPM_TO_LTC_SUPPORT_FP_H_
+#ifndef _TPM_TO_LTC_SUPPORT_FP_H_
+#define _TPM_TO_LTC_SUPPORT_FP_H_
 
 #if defined(HASH_LIB_LTC) || defined(MATH_LIB_LTC) || defined(SYM_LIB_LTC)
 
@@ -47,26 +47,15 @@
 // to get a random number. In turn, this will call the random RandGenerate
 // function that was passed in LibraryInit(). This function will pass the pointer
 // to the current rand state along with the random byte request.
-uint32_t     LtcRand(
-    void            *buf,
-    size_t           blen
-);
+uint32_t LtcRand(void* buf, size_t blen);
 
 //*** SupportLibInit()
 // This does any initialization required by the support library.
-LIB_EXPORT int
-SupportLibInit(
-    void
-);
+LIB_EXPORT int SupportLibInit(void);
 
 //*** LtcPoolInit()
 // Function to initialize a pool. ****
-LIB_EXPORT mpa_scratch_mem
-LtcPoolInit(
-    mpa_word_t      *poolAddress,
-    int              vars,
-    int              bits
-);
-#endif // HASH_LIB_LTC || MATH_LIB_LTC || SYM_LIB_LTC
+LIB_EXPORT mpa_scratch_mem LtcPoolInit(mpa_word_t* poolAddress, int vars, int bits);
+#endif  // HASH_LIB_LTC || MATH_LIB_LTC || SYM_LIB_LTC
 
 #endif  // _TPM_TO_LTC_SUPPORT_FP_H_

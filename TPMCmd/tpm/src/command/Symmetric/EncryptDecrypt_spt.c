@@ -50,45 +50,43 @@
 //      TPM_RC_VALUE        'keyHandle' is restricted and the argument 'mode' does
 //                          not match the key's mode
 TPM_RC
-EncryptDecryptShared(
-    TPMI_DH_OBJECT        keyHandleIn,
-    TPMI_YES_NO           decryptIn,
-    TPMI_ALG_SYM_MODE     modeIn,
-    TPM2B_IV              *ivIn,
-    TPM2B_MAX_BUFFER      *inData,
-    EncryptDecrypt_Out    *out
-    )
+EncryptDecryptShared(TPMI_DH_OBJECT      keyHandleIn,
+                     TPMI_YES_NO         decryptIn,
+                     TPMI_ALG_SYM_MODE   modeIn,
+                     TPM2B_IV*           ivIn,
+                     TPM2B_MAX_BUFFER*   inData,
+                     EncryptDecrypt_Out* out)
 {
-    OBJECT              *symKey;
-    UINT16               keySize;
-    UINT16               blockSize;
-    BYTE                *key;
-    TPM_ALG_ID           alg;
-    TPM_ALG_ID           mode;
-    TPM_RC               result;
-    BOOL                 OK;
-// Input Validation
+    OBJECT*    symKey;
+    UINT16     keySize;
+    UINT16     blockSize;
+    BYTE*      key;
+    TPM_ALG_ID alg;
+    TPM_ALG_ID mode;
+    TPM_RC     result;
+    BOOL       OK;
+    // Input Validation
     symKey = HandleToObject(keyHandleIn);
-    mode = symKey->publicArea.parameters.symDetail.sym.mode.sym;
+    mode   = symKey->publicArea.parameters.symDetail.sym.mode.sym;
 
     // The input key should be a symmetric key
     if(symKey->publicArea.type != TPM_ALG_SYMCIPHER)
         return TPM_RCS_KEY + RC_EncryptDecrypt_keyHandle;
     // The key must be unrestricted and allow the selected operation
-    OK = !IS_ATTRIBUTE(symKey->publicArea.objectAttributes,
-                       TPMA_OBJECT, restricted);
+    OK = !IS_ATTRIBUTE(symKey->publicArea.objectAttributes, TPMA_OBJECT, restricted);
     if(YES == decryptIn)
-        OK = OK && IS_ATTRIBUTE(symKey->publicArea.objectAttributes,
-                                TPMA_OBJECT, decrypt);
+        OK = OK
+             && IS_ATTRIBUTE(
+                 symKey->publicArea.objectAttributes, TPMA_OBJECT, decrypt);
     else
-        OK = OK && IS_ATTRIBUTE(symKey->publicArea.objectAttributes,
-                                TPMA_OBJECT, sign);
+        OK = OK
+             && IS_ATTRIBUTE(symKey->publicArea.objectAttributes, TPMA_OBJECT, sign);
     if(!OK)
         return TPM_RCS_ATTRIBUTES + RC_EncryptDecrypt_keyHandle;
 
     // Make sure that key is an encrypt/decrypt key and not SMAC
     if(!CryptSymModeIsValid(mode, TRUE))
-       return TPM_RCS_MODE + RC_EncryptDecrypt_keyHandle;
+        return TPM_RCS_MODE + RC_EncryptDecrypt_keyHandle;
 
     // If the key mode is not TPM_ALG_NULL...
     // or TPM_ALG_NULL
@@ -107,14 +105,13 @@ EncryptDecryptShared(
     }
     // The input iv for ECB mode should be an Empty Buffer.  All the other modes
     // should have an iv size same as encryption block size
-    keySize = symKey->publicArea.parameters.symDetail.sym.keyBits.sym;
-    alg = symKey->publicArea.parameters.symDetail.sym.algorithm;
+    keySize   = symKey->publicArea.parameters.symDetail.sym.keyBits.sym;
+    alg       = symKey->publicArea.parameters.symDetail.sym.algorithm;
     blockSize = CryptGetSymmetricBlockSize(alg, keySize);
 
     // reverify the algorithm. This is mainly to keep static analysis tools happy
     if(blockSize == 0)
         return TPM_RCS_KEY + RC_EncryptDecrypt_keyHandle;
-
 
     if(((mode == TPM_ALG_ECB) && (ivIn->t.size != 0))
        || ((mode != TPM_ALG_ECB) && (ivIn->t.size != blockSize)))
@@ -131,7 +128,7 @@ EncryptDecryptShared(
     // will modify the output buffer, not the input buffer
     out->ivOut = *ivIn;
 
-// Command Output
+    // Command Output
     key = symKey->sensitive.sensitive.sym.t.buffer;
     // For symmetric encryption, the cipher data size is the same as plain data
     // size.
@@ -139,18 +136,28 @@ EncryptDecryptShared(
     if(decryptIn == YES)
     {
         // Decrypt data to output
-        result = CryptSymmetricDecrypt(out->outData.t.buffer, alg, keySize, key,
-                                       &(out->ivOut), mode, inData->t.size,
+        result = CryptSymmetricDecrypt(out->outData.t.buffer,
+                                       alg,
+                                       keySize,
+                                       key,
+                                       &(out->ivOut),
+                                       mode,
+                                       inData->t.size,
                                        inData->t.buffer);
     }
     else
     {
         // Encrypt data to output
-        result = CryptSymmetricEncrypt(out->outData.t.buffer, alg, keySize, key,
-                                       &(out->ivOut), mode, inData->t.size,
+        result = CryptSymmetricEncrypt(out->outData.t.buffer,
+                                       alg,
+                                       keySize,
+                                       key,
+                                       &(out->ivOut),
+                                       mode,
+                                       inData->t.size,
                                        inData->t.buffer);
     }
     return result;
 }
 
-#endif // CC_EncryptDecrypt
+#endif  // CC_EncryptDecrypt

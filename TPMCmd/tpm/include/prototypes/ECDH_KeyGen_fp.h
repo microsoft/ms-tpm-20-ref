@@ -37,31 +37,30 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ECDH_KeyGen // Command must be enabled
+#if CC_ECDH_KeyGen  // Command must be enabled
 
-#ifndef _ECDH_Key_Gen_FP_H_
-#define _ECDH_Key_Gen_FP_H_
+#  ifndef _ECDH_Key_Gen_FP_H_
+#    define _ECDH_Key_Gen_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              keyHandle;
+typedef struct
+{
+    TPMI_DH_OBJECT keyHandle;
 } ECDH_KeyGen_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_ECC_POINT             zPoint;
-    TPM2B_ECC_POINT             pubPoint;
+typedef struct
+{
+    TPM2B_ECC_POINT zPoint;
+    TPM2B_ECC_POINT pubPoint;
 } ECDH_KeyGen_Out;
 
 // Response code modifiers
-#define RC_ECDH_KeyGen_keyHandle    (TPM_RC_H + TPM_RC_1)
+#    define RC_ECDH_KeyGen_keyHandle (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_ECDH_KeyGen(
-    ECDH_KeyGen_In              *in,
-    ECDH_KeyGen_Out             *out
-);
+TPM2_ECDH_KeyGen(ECDH_KeyGen_In* in, ECDH_KeyGen_Out* out);
 
-#endif  // _ECDH_Key_Gen_FP_H_
-#endif  // CC_ECDH_KeyGen
+#  endif  // _ECDH_Key_Gen_FP_H_
+#endif    // CC_ECDH_KeyGen

@@ -43,12 +43,11 @@
 //  Return Type: TPM_RC
 //      TPM_RC_OBJECT_MEMORY        no space to create an internal object
 TPM_RC
-TPM2_HashSequenceStart(
-    HashSequenceStart_In    *in,            // IN: input parameter list
-    HashSequenceStart_Out   *out            // OUT: output parameter list
-    )
+TPM2_HashSequenceStart(HashSequenceStart_In*  in,  // IN: input parameter list
+                       HashSequenceStart_Out* out  // OUT: output parameter list
+)
 {
-// Internal Data Update
+    // Internal Data Update
 
     if(in->hashAlg == TPM_ALG_NULL)
         // Start a event sequence.  A TPM_RC_OBJECT_MEMORY error may be
@@ -60,4 +59,4 @@ TPM2_HashSequenceStart(
     return ObjectCreateHashSequence(in->hashAlg, &in->auth, &out->sequenceHandle);
 }
 
-#endif // CC_HashSequenceStart
+#endif  // CC_HashSequenceStart

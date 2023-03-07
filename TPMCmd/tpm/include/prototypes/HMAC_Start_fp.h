@@ -37,34 +37,33 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_HMAC_Start // Command must be enabled
+#if CC_HMAC_Start  // Command must be enabled
 
-#ifndef _HMAC_Start_FP_H_
-#define _HMAC_Start_FP_H_
+#  ifndef _HMAC_Start_FP_H_
+#    define _HMAC_Start_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              handle;
-    TPM2B_AUTH                  auth;
-    TPMI_ALG_HASH               hashAlg;
+typedef struct
+{
+    TPMI_DH_OBJECT handle;
+    TPM2B_AUTH     auth;
+    TPMI_ALG_HASH  hashAlg;
 } HMAC_Start_In;
 
 // Output structure definition
-typedef struct {
-    TPMI_DH_OBJECT              sequenceHandle;
+typedef struct
+{
+    TPMI_DH_OBJECT sequenceHandle;
 } HMAC_Start_Out;
 
 // Response code modifiers
-#define RC_HMAC_Start_handle    (TPM_RC_H + TPM_RC_1)
-#define RC_HMAC_Start_auth      (TPM_RC_P + TPM_RC_1)
-#define RC_HMAC_Start_hashAlg   (TPM_RC_P + TPM_RC_2)
+#    define RC_HMAC_Start_handle  (TPM_RC_H + TPM_RC_1)
+#    define RC_HMAC_Start_auth    (TPM_RC_P + TPM_RC_1)
+#    define RC_HMAC_Start_hashAlg (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_HMAC_Start(
-    HMAC_Start_In               *in,
-    HMAC_Start_Out              *out
-);
+TPM2_HMAC_Start(HMAC_Start_In* in, HMAC_Start_Out* out);
 
-#endif  // _HMAC_Start_FP_H_
-#endif  // CC_HMAC_Start
+#  endif  // _HMAC_Start_FP_H_
+#endif    // CC_HMAC_Start

@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ContextSave // Command must be enabled
+#if CC_ContextSave  // Command must be enabled
 
-#ifndef _Context_Save_FP_H_
-#define _Context_Save_FP_H_
+#  ifndef _Context_Save_FP_H_
+#    define _Context_Save_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_CONTEXT             saveHandle;
+typedef struct
+{
+    TPMI_DH_CONTEXT saveHandle;
 } ContextSave_In;
 
 // Output structure definition
-typedef struct {
-    TPMS_CONTEXT                context;
+typedef struct
+{
+    TPMS_CONTEXT context;
 } ContextSave_Out;
 
 // Response code modifiers
-#define RC_ContextSave_saveHandle   (TPM_RC_H + TPM_RC_1)
+#    define RC_ContextSave_saveHandle (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_ContextSave(
-    ContextSave_In              *in,
-    ContextSave_Out             *out
-);
+TPM2_ContextSave(ContextSave_In* in, ContextSave_Out* out);
 
-#endif  // _Context_Save_FP_H_
-#endif  // CC_ContextSave
+#  endif  // _Context_Save_FP_H_
+#endif    // CC_ContextSave

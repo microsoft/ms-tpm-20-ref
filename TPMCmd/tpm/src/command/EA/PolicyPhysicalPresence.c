@@ -42,15 +42,14 @@
 // authorization is performed
 */
 TPM_RC
-TPM2_PolicyPhysicalPresence(
-    PolicyPhysicalPresence_In   *in             // IN: input parameter list
-    )
+TPM2_PolicyPhysicalPresence(PolicyPhysicalPresence_In* in  // IN: input parameter list
+)
 {
-    SESSION     *session;
-    TPM_CC      commandCode = TPM_CC_PolicyPhysicalPresence;
-    HASH_STATE  hashState;
+    SESSION*   session;
+    TPM_CC     commandCode = TPM_CC_PolicyPhysicalPresence;
+    HASH_STATE hashState;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -75,4 +74,4 @@ TPM2_PolicyPhysicalPresence(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyPhysicalPresence
+#endif  // CC_PolicyPhysicalPresence

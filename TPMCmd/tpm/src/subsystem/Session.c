@@ -138,20 +138,17 @@
     Note if we subtract the counter value, from each slot that contains a saved
     contextID we get (- - - - B - 2 - 8) and the oldest entry is now easy to find.
 */
-static void
-ContextIdSetOldest(
-    void
-    )
+static void ContextIdSetOldest(void)
 {
-    CONTEXT_SLOT    lowBits;
-    CONTEXT_SLOT    entry;
-    CONTEXT_SLOT    smallest = ((CONTEXT_SLOT)~0);
-    UINT32  i;
+    CONTEXT_SLOT lowBits;
+    CONTEXT_SLOT entry;
+    CONTEXT_SLOT smallest = ((CONTEXT_SLOT)~0);
+    UINT32       i;
 
     // Set oldestSaveContext to a value indicating none assigned
     s_oldestSavedSession = MAX_ACTIVE_SESSIONS + 1;
 
-    lowBits = (CONTEXT_SLOT)gr.contextCounter;
+    lowBits              = (CONTEXT_SLOT)gr.contextCounter;
     for(i = 0; i < MAX_ACTIVE_SESSIONS; i++)
     {
         entry = gr.contextArray[i];
@@ -164,7 +161,7 @@ ContextIdSetOldest(
             // value for smallest.
             if(((CONTEXT_SLOT)(entry - lowBits)) <= smallest)
             {
-                smallest = (entry - lowBits);
+                smallest             = (entry - lowBits);
                 s_oldestSavedSession = i;
             }
         }
@@ -175,17 +172,14 @@ ContextIdSetOldest(
 
 //** Startup Function -- SessionStartup()
 // This function initializes the session subsystem on TPM2_Startup().
-BOOL
-SessionStartup(
-    STARTUP_TYPE     type
-    )
+BOOL SessionStartup(STARTUP_TYPE type)
 {
-    UINT32               i;
+    UINT32 i;
 
     // Initialize session slots.  At startup, all the in-memory session slots
     // are cleared and marked as not occupied
     for(i = 0; i < MAX_LOADED_SESSIONS; i++)
-        s_sessions[i].occupied = FALSE;   // session slot is not occupied
+        s_sessions[i].occupied = FALSE;  // session slot is not occupied
 
     // The free session slots the number of maximum allowed loaded sessions
     s_freeSessionSlots = MAX_LOADED_SESSIONS;
@@ -239,10 +233,8 @@ SessionStartup(
 //      TRUE(1)         session is loaded
 //      FALSE(0)        session is not loaded
 //
-BOOL
-SessionIsLoaded(
-    TPM_HANDLE       handle         // IN: session handle
-    )
+BOOL SessionIsLoaded(TPM_HANDLE handle  // IN: session handle
+)
 {
     pAssert(HandleGetType(handle) == TPM_HT_POLICY_SESSION
             || HandleGetType(handle) == TPM_HT_HMAC_SESSION);
@@ -251,8 +243,7 @@ SessionIsLoaded(
 
     // if out of range of possible active session, or not assigned to a loaded
     // session return false
-    if(handle >= MAX_ACTIVE_SESSIONS
-       || gr.contextArray[handle] == 0
+    if(handle >= MAX_ACTIVE_SESSIONS || gr.contextArray[handle] == 0
        || gr.contextArray[handle] > MAX_LOADED_SESSIONS)
         return FALSE;
 
@@ -271,10 +262,8 @@ SessionIsLoaded(
 //      TRUE(1)         session is saved
 //      FALSE(0)        session is not saved
 //
-BOOL
-SessionIsSaved(
-    TPM_HANDLE       handle         // IN: session handle
-    )
+BOOL SessionIsSaved(TPM_HANDLE handle  // IN: session handle
+)
 {
     pAssert(HandleGetType(handle) == TPM_HT_POLICY_SESSION
             || HandleGetType(handle) == TPM_HT_HMAC_SESSION);
@@ -282,10 +271,8 @@ SessionIsSaved(
     handle = handle & HR_HANDLE_MASK;
     // if out of range of possible active session, or not assigned, or
     // assigned to a loaded session, return false
-    if(handle >= MAX_ACTIVE_SESSIONS
-       || gr.contextArray[handle] == 0
-       || gr.contextArray[handle] <= MAX_LOADED_SESSIONS
-       )
+    if(handle >= MAX_ACTIVE_SESSIONS || gr.contextArray[handle] == 0
+       || gr.contextArray[handle] <= MAX_LOADED_SESSIONS)
         return FALSE;
 
     return TRUE;
@@ -294,26 +281,25 @@ SessionIsSaved(
 //*** SequenceNumberForSavedContextIsValid()
 // This function validates that the sequence number and handle value within a
 // saved context are valid.
-BOOL
-SequenceNumberForSavedContextIsValid(
-    TPMS_CONTEXT    *context        // IN: pointer to a context structure to be
-                                    //     validated
-    )
+BOOL SequenceNumberForSavedContextIsValid(
+    TPMS_CONTEXT* context  // IN: pointer to a context structure to be
+                           //     validated
+)
 {
-#define MAX_CONTEXT_GAP ((UINT64)((CONTEXT_SLOT) ~0) + 1)
+#define MAX_CONTEXT_GAP ((UINT64)((CONTEXT_SLOT)~0) + 1)
 
-    TPM_HANDLE           handle = context->savedHandle & HR_HANDLE_MASK;
+    TPM_HANDLE handle = context->savedHandle & HR_HANDLE_MASK;
 
-    if(// Handle must be with the range of active sessions
-       handle >= MAX_ACTIVE_SESSIONS
-       // the array entry must be for a saved context
-       || gr.contextArray[handle] <= MAX_LOADED_SESSIONS
-           // the array entry must agree with the sequence number
-       || gr.contextArray[handle] != (CONTEXT_SLOT)context->sequence
-           // the provided sequence number has to be less than the current counter
-       || context->sequence > gr.contextCounter
-           // but not so much that it could not be a valid sequence number
-       || gr.contextCounter - context->sequence > MAX_CONTEXT_GAP)
+    if(  // Handle must be with the range of active sessions
+        handle >= MAX_ACTIVE_SESSIONS
+        // the array entry must be for a saved context
+        || gr.contextArray[handle] <= MAX_LOADED_SESSIONS
+        // the array entry must agree with the sequence number
+        || gr.contextArray[handle] != (CONTEXT_SLOT)context->sequence
+        // the provided sequence number has to be less than the current counter
+        || context->sequence > gr.contextCounter
+        // but not so much that it could not be a valid sequence number
+        || gr.contextCounter - context->sequence > MAX_CONTEXT_GAP)
         return FALSE;
 
     return TRUE;
@@ -328,14 +314,10 @@ SequenceNumberForSavedContextIsValid(
 //  Return Type: BOOL
 //      TRUE(1)         PCR value is current
 //      FALSE(0)        PCR value is not current
-BOOL
-SessionPCRValueIsCurrent(
-    SESSION         *session        // IN: session structure
-    )
+BOOL SessionPCRValueIsCurrent(SESSION* session  // IN: session structure
+)
 {
-    if(session->pcrCounter != 0
-       && session->pcrCounter != gr.pcrCounter
-       )
+    if(session->pcrCounter != 0 && session->pcrCounter != gr.pcrCounter)
         return FALSE;
     else
         return TRUE;
@@ -346,17 +328,14 @@ SessionPCRValueIsCurrent(
 // session handle.
 //
 // The function requires that the session is loaded.
-SESSION *
-SessionGet(
-    TPM_HANDLE       handle         // IN: session handle
-    )
+SESSION* SessionGet(TPM_HANDLE handle  // IN: session handle
+)
 {
-    size_t          slotIndex;
-    CONTEXT_SLOT    sessionIndex;
+    size_t       slotIndex;
+    CONTEXT_SLOT sessionIndex;
 
     pAssert(HandleGetType(handle) == TPM_HT_POLICY_SESSION
-            || HandleGetType(handle) == TPM_HT_HMAC_SESSION
-            );
+            || HandleGetType(handle) == TPM_HT_HMAC_SESSION);
 
     slotIndex = handle & HR_HANDLE_MASK;
 
@@ -390,15 +369,14 @@ SessionGet(
 //                              saved session context is recycled
 //      TPM_RC_SESSION_HANDLE   there is no slot available in the context array
 //                              for tracking of this session context
-static TPM_RC
-ContextIdSessionCreate(
-    TPM_HANDLE      *handle,        // OUT: receives the assigned handle. This will
-                                    //     be an index that must be adjusted by the
-                                    //     caller according to the type of the
-                                    //     session created
-    UINT32           sessionIndex   // IN: The session context array entry that will
-                                    //     be occupied by the created session
-    )
+static TPM_RC ContextIdSessionCreate(
+    TPM_HANDLE* handle,  // OUT: receives the assigned handle. This will
+                         //     be an index that must be adjusted by the
+                         //     caller according to the type of the
+                         //     session created
+    UINT32 sessionIndex  // IN: The session context array entry that will
+                         //     be occupied by the created session
+)
 {
     pAssert(sessionIndex < MAX_LOADED_SESSIONS);
 
@@ -407,16 +385,14 @@ ContextIdSessionCreate(
     // array entry?  If so, then there will be no room to recycle the
     // oldest context if needed.  If the gap is not at maximum, then
     // it will be possible to save a context if it becomes necessary.
-    if(s_oldestSavedSession < MAX_ACTIVE_SESSIONS
-       && s_freeSessionSlots == 1)
+    if(s_oldestSavedSession < MAX_ACTIVE_SESSIONS && s_freeSessionSlots == 1)
     {
         // See if the gap is at maximum
         // The current value of the contextCounter will be assigned to the next
         // saved context. If the value to be assigned would make the same as an
         // existing context, then we can't use it because of the ambiguity it would
         // create.
-        if((CONTEXT_SLOT)gr.contextCounter
-           == gr.contextArray[s_oldestSavedSession])
+        if((CONTEXT_SLOT)gr.contextCounter == gr.contextArray[s_oldestSavedSession])
             return TPM_RC_CONTEXT_GAP;
     }
 
@@ -447,23 +423,21 @@ ContextIdSessionCreate(
 //      TPM_RC_SESSION_HANDLE       active session space is full
 //      TPM_RC_SESSION_MEMORY       loaded session space is full
 TPM_RC
-SessionCreate(
-    TPM_SE           sessionType,   // IN: the session type
-    TPMI_ALG_HASH    authHash,      // IN: the hash algorithm
-    TPM2B_NONCE     *nonceCaller,   // IN: initial nonceCaller
-    TPMT_SYM_DEF    *symmetric,     // IN: the symmetric algorithm
-    TPMI_DH_ENTITY   bind,          // IN: the bind object
-    TPM2B_DATA      *seed,          // IN: seed data
-    TPM_HANDLE      *sessionHandle, // OUT: the session handle
-    TPM2B_NONCE     *nonceTpm       // OUT: the session nonce
-    )
+SessionCreate(TPM_SE         sessionType,    // IN: the session type
+              TPMI_ALG_HASH  authHash,       // IN: the hash algorithm
+              TPM2B_NONCE*   nonceCaller,    // IN: initial nonceCaller
+              TPMT_SYM_DEF*  symmetric,      // IN: the symmetric algorithm
+              TPMI_DH_ENTITY bind,           // IN: the bind object
+              TPM2B_DATA*    seed,           // IN: seed data
+              TPM_HANDLE*    sessionHandle,  // OUT: the session handle
+              TPM2B_NONCE*   nonceTpm        // OUT: the session nonce
+)
 {
-    TPM_RC               result = TPM_RC_SUCCESS;
-    CONTEXT_SLOT         slotIndex;
-    SESSION             *session = NULL;
+    TPM_RC       result = TPM_RC_SUCCESS;
+    CONTEXT_SLOT slotIndex;
+    SESSION*     session = NULL;
 
-    pAssert(sessionType == TPM_SE_HMAC
-            || sessionType == TPM_SE_POLICY
+    pAssert(sessionType == TPM_SE_HMAC || sessionType == TPM_SE_POLICY
             || sessionType == TPM_SE_TRIAL);
 
     // If there are no open spots in the session array, then no point in searching
@@ -526,8 +500,7 @@ SessionCreate(
     // Create initial session nonce
     session->nonceTPM.t.size = nonceCaller->t.size;
     CryptRandomGenerate(session->nonceTPM.t.size, session->nonceTPM.t.buffer);
-    MemoryCopy2B(&nonceTpm->b, &session->nonceTPM.b,
-                 sizeof(nonceTpm->t.buffer));
+    MemoryCopy2B(&nonceTpm->b, &session->nonceTPM.b, sizeof(nonceTpm->t.buffer));
 
     // Set up session parameter encryption algorithm
     session->symmetric = *symmetric;
@@ -541,23 +514,28 @@ SessionCreate(
         // The HMAC key for generating the sessionSecret can be the concatenation
         // of an authorization value and a seed value
         TPM2B_TYPE(KEY, (sizeof(TPMT_HA) + sizeof(seed->t.buffer)));
-        TPM2B_KEY            key;
+        TPM2B_KEY key;
 
         // Get hash size, which is also the length of sessionKey
         session->sessionKey.t.size = CryptHashGetDigestSize(session->authHashAlg);
 
         // Get authValue of associated entity
-        EntityGetAuthValue(bind, (TPM2B_AUTH *)&key);
+        EntityGetAuthValue(bind, (TPM2B_AUTH*)&key);
         pAssert(key.t.size + seed->t.size <= sizeof(key.t.buffer));
 
         // Concatenate authValue and seed
         MemoryConcat2B(&key.b, &seed->b, sizeof(key.t.buffer));
 
         // Compute the session key
-        CryptKDFa(session->authHashAlg, &key.b, SESSION_KEY, &session->nonceTPM.b,
+        CryptKDFa(session->authHashAlg,
+                  &key.b,
+                  SESSION_KEY,
+                  &session->nonceTPM.b,
                   &nonceCaller->b,
-                  session->sessionKey.t.size * 8, session->sessionKey.t.buffer,
-                  NULL, FALSE);
+                  session->sessionKey.t.size * 8,
+                  session->sessionKey.t.buffer,
+                  NULL,
+                  FALSE);
     }
 
     // Copy the name of the entity that the HMAC session is bound to
@@ -570,11 +548,11 @@ SessionCreate(
     // If there is a bind object and it is subject to DA, then use of this session
     // is subject to DA regardless of how it is used.
     session->attributes.isDaBound = (bind != TPM_RH_NULL)
-        && (IsDAExempted(bind) == FALSE);
+                                    && (IsDAExempted(bind) == FALSE);
 
-// If the session is bound, then check to see if it is bound to lockoutAuth
+    // If the session is bound, then check to see if it is bound to lockoutAuth
     session->attributes.isLockoutBound = (session->attributes.isDaBound == SET)
-        && (bind == TPM_RH_LOCKOUT);
+                                         && (bind == TPM_RH_LOCKOUT);
     return TPM_RC_SUCCESS;
 }
 
@@ -592,21 +570,20 @@ SessionCreate(
 //      TPM_RC_TOO_MANY_CONTEXTS        the counter maxed out
 //
 TPM_RC
-SessionContextSave(
-    TPM_HANDLE           handle,        // IN: session handle
-    CONTEXT_COUNTER     *contextID      // OUT: assigned contextID
-    )
+SessionContextSave(TPM_HANDLE       handle,    // IN: session handle
+                   CONTEXT_COUNTER* contextID  // OUT: assigned contextID
+)
 {
-    UINT32                      contextIndex;
-    CONTEXT_SLOT                slotIndex;
+    UINT32       contextIndex;
+    CONTEXT_SLOT slotIndex;
 
     pAssert(SessionIsLoaded(handle));
 
     // check to see if the gap is already maxed out
     // Need to have a saved session
     if(s_oldestSavedSession < MAX_ACTIVE_SESSIONS
-          // if the oldest saved session has the same value as the low bits
-          // of the contextCounter, then the GAP is maxed out.
+       // if the oldest saved session has the same value as the low bits
+       // of the contextCounter, then the GAP is maxed out.
        && gr.contextArray[s_oldestSavedSession] == (CONTEXT_SLOT)gr.contextCounter)
         return TPM_RC_CONTEXT_GAP;
 
@@ -669,13 +646,12 @@ SessionContextSave(
 //                                  is not the oldest saved context
 //
 TPM_RC
-SessionContextLoad(
-    SESSION_BUF     *session,       // IN: session structure from saved context
-    TPM_HANDLE      *handle         // IN/OUT: session handle
-    )
+SessionContextLoad(SESSION_BUF* session,  // IN: session structure from saved context
+                   TPM_HANDLE*  handle    // IN/OUT: session handle
+)
 {
-    UINT32              contextIndex;
-    CONTEXT_SLOT        slotIndex;
+    UINT32       contextIndex;
+    CONTEXT_SLOT slotIndex;
 
     pAssert(HandleGetType(*handle) == TPM_HT_POLICY_SESSION
             || HandleGetType(*handle) == TPM_HT_HMAC_SESSION);
@@ -686,17 +662,17 @@ SessionContextLoad(
 
     // Find a free session slot to load the session
     for(slotIndex = 0; slotIndex < MAX_LOADED_SESSIONS; slotIndex++)
-        if(s_sessions[slotIndex].occupied == FALSE) break;
+        if(s_sessions[slotIndex].occupied == FALSE)
+            break;
 
     // if no spot found, then this is an internal error
     pAssert(slotIndex < MAX_LOADED_SESSIONS);
 
-    contextIndex = *handle & HR_HANDLE_MASK;   // extract the index
+    contextIndex = *handle & HR_HANDLE_MASK;  // extract the index
 
     // If there is only one slot left, and the gap is at maximum, the only session
     // context that we can safely load is the oldest one.
-    if(s_oldestSavedSession < MAX_ACTIVE_SESSIONS
-       && s_freeSessionSlots == 1
+    if(s_oldestSavedSession < MAX_ACTIVE_SESSIONS && s_freeSessionSlots == 1
        && (CONTEXT_SLOT)gr.contextCounter == gr.contextArray[s_oldestSavedSession]
        && contextIndex != s_oldestSavedSession)
         return TPM_RC_CONTEXT_GAP;
@@ -714,7 +690,7 @@ SessionContextLoad(
     // Copy session data to session slot
     MemoryCopy(&s_sessions[slotIndex].session, session, sizeof(SESSION));
 
-           // Set session slot as occupied
+    // Set session slot as occupied
     s_sessions[slotIndex].occupied = TRUE;
 
     // Reduce the number of open spots
@@ -730,22 +706,18 @@ SessionContextLoad(
 //
 // This function requires that 'handle' be a valid active session.
 //
-void
-SessionFlush(
-    TPM_HANDLE       handle         // IN: loaded or saved session handle
-    )
+void SessionFlush(TPM_HANDLE handle  // IN: loaded or saved session handle
+)
 {
-    CONTEXT_SLOT         slotIndex;
-    UINT32               contextIndex;   // Index into contextArray
+    CONTEXT_SLOT slotIndex;
+    UINT32       contextIndex;  // Index into contextArray
 
     pAssert((HandleGetType(handle) == TPM_HT_POLICY_SESSION
-             || HandleGetType(handle) == TPM_HT_HMAC_SESSION
-             )
-            && (SessionIsLoaded(handle) || SessionIsSaved(handle))
-            );
+             || HandleGetType(handle) == TPM_HT_HMAC_SESSION)
+            && (SessionIsLoaded(handle) || SessionIsSaved(handle)));
 
-         // Flush context ID of this session
-         // Convert handle to an index into the contextArray
+    // Flush context ID of this session
+    // Convert handle to an index into the contextArray
     contextIndex = handle & HR_HANDLE_MASK;
 
     pAssert(contextIndex < sizeof(gr.contextArray) / sizeof(gr.contextArray[0]));
@@ -784,21 +756,19 @@ SessionFlush(
 // For those values, the Name and the authValue are concatenated
 // into the bind buffer.  If they will not both fit, the will be overlapped
 // by XORing bytes.  If XOR is required, the bind value will be full.
-void
-SessionComputeBoundEntity(
-    TPMI_DH_ENTITY       entityHandle,  // IN: handle of entity
-    TPM2B_NAME          *bind           // OUT: binding value
-    )
+void SessionComputeBoundEntity(TPMI_DH_ENTITY entityHandle,  // IN: handle of entity
+                               TPM2B_NAME*    bind           // OUT: binding value
+)
 {
-    TPM2B_AUTH           auth;
-    BYTE                *pAuth = auth.t.buffer;
-    UINT16               i;
+    TPM2B_AUTH auth;
+    BYTE*      pAuth = auth.t.buffer;
+    UINT16     i;
 
     // Get name
     EntityGetName(entityHandle, bind);
 
-//    // The bound value of a reserved handle is the handle itself
-//    if(bind->t.size == sizeof(TPM_HANDLE)) return;
+    //    // The bound value of a reserved handle is the handle itself
+    //    if(bind->t.size == sizeof(TPM_HANDLE)) return;
 
     // For all the other entities, concatenate the authorization value to the name.
     // Get a local copy of the authorization value because some overlapping
@@ -817,28 +787,23 @@ SessionComputeBoundEntity(
     return;
 }
 
-
 //*** SessionSetStartTime()
 // This function is used to initialize the session timing
-void
-SessionSetStartTime(
-    SESSION         *session        // IN: the session to update
-    )
+void SessionSetStartTime(SESSION* session  // IN: the session to update
+)
 {
     session->startTime = g_time;
-    session->epoch = g_timeEpoch;
-    session->timeout = 0;
+    session->epoch     = g_timeEpoch;
+    session->timeout   = 0;
 }
 
 //*** SessionResetPolicyData()
 // This function is used to reset the policy data without changing the nonce
 // or the start time of the session.
-void
-SessionResetPolicyData(
-    SESSION         *session        // IN: the session to reset
-    )
+void SessionResetPolicyData(SESSION* session  // IN: the session to reset
+)
 {
-    SESSION_ATTRIBUTES      oldAttributes;
+    SESSION_ATTRIBUTES oldAttributes;
     pAssert(session != NULL);
 
     // Will need later
@@ -860,18 +825,17 @@ SessionResetPolicyData(
     session->pcrCounter = 0;
 
     // Reset the policy hash
-    MemorySet(&session->u2.policyDigest.t.buffer, 0,
-              session->u2.policyDigest.t.size);
+    MemorySet(&session->u2.policyDigest.t.buffer, 0, session->u2.policyDigest.t.size);
 
     // Reset the session attributes
     MemorySet(&session->attributes, 0, sizeof(SESSION_ATTRIBUTES));
 
     // Restore the policy attributes
-    session->attributes.isPolicy = SET;
+    session->attributes.isPolicy      = SET;
     session->attributes.isTrialPolicy = oldAttributes.isTrialPolicy;
 
     // Restore the bind attributes
-    session->attributes.isDaBound = oldAttributes.isDaBound;
+    session->attributes.isDaBound      = oldAttributes.isDaBound;
     session->attributes.isLockoutBound = oldAttributes.isLockoutBound;
 }
 
@@ -885,14 +849,13 @@ SessionResetPolicyData(
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO
-SessionCapGetLoaded(
-    TPMI_SH_POLICY   handle,        // IN: start handle
-    UINT32           count,         // IN: count of returned handles
-    TPML_HANDLE     *handleList     // OUT: list of handle
-    )
+SessionCapGetLoaded(TPMI_SH_POLICY handle,     // IN: start handle
+                    UINT32         count,      // IN: count of returned handles
+                    TPML_HANDLE*   handleList  // OUT: list of handle
+)
 {
-    TPMI_YES_NO     more = NO;
-    UINT32          i;
+    TPMI_YES_NO more = NO;
+    UINT32      i;
 
     pAssert(HandleGetType(handle) == TPM_HT_LOADED_SESSION);
 
@@ -900,7 +863,8 @@ SessionCapGetLoaded(
     handleList->count = 0;
 
     // The maximum count of handles we may return is MAX_CAP_HANDLES
-    if(count > MAX_CAP_HANDLES) count = MAX_CAP_HANDLES;
+    if(count > MAX_CAP_HANDLES)
+        count = MAX_CAP_HANDLES;
 
     // Iterate session context ID slots to get loaded session handles
     for(i = handle & HR_HANDLE_MASK; i < MAX_ACTIVE_SESSIONS; i++)
@@ -913,12 +877,12 @@ SessionCapGetLoaded(
             {
                 if(handleList->count < count)
                 {
-                    SESSION         *session;
+                    SESSION* session;
 
                     // If we have not filled up the return list, add this
                     // session handle to it
                     // assume that this is going to be an HMAC session
-                    handle = i + HMAC_SESSION_FIRST;
+                    handle  = i + HMAC_SESSION_FIRST;
                     session = SessionGet(handle);
                     if(session->attributes.isPolicy)
                         handle = i + POLICY_SESSION_FIRST;
@@ -950,16 +914,15 @@ SessionCapGetLoaded(
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO
-SessionCapGetSaved(
-    TPMI_SH_HMAC     handle,        // IN: start handle
-    UINT32           count,         // IN: count of returned handles
-    TPML_HANDLE     *handleList     // OUT: list of handle
-    )
+SessionCapGetSaved(TPMI_SH_HMAC handle,     // IN: start handle
+                   UINT32       count,      // IN: count of returned handles
+                   TPML_HANDLE* handleList  // OUT: list of handle
+)
 {
-    TPMI_YES_NO     more = NO;
-    UINT32          i;
+    TPMI_YES_NO more = NO;
+    UINT32      i;
 
-#ifdef  TPM_HT_SAVED_SESSION
+#ifdef TPM_HT_SAVED_SESSION
     pAssert(HandleGetType(handle) == TPM_HT_SAVED_SESSION);
 #else
     pAssert(HandleGetType(handle) == TPM_HT_ACTIVE_SESSION);
@@ -969,7 +932,8 @@ SessionCapGetSaved(
     handleList->count = 0;
 
     // The maximum count of handles we may return is MAX_CAP_HANDLES
-    if(count > MAX_CAP_HANDLES) count = MAX_CAP_HANDLES;
+    if(count > MAX_CAP_HANDLES)
+        count = MAX_CAP_HANDLES;
 
     // Iterate session context ID slots to get loaded session handles
     for(i = handle & HR_HANDLE_MASK; i < MAX_ACTIVE_SESSIONS; i++)
@@ -1005,9 +969,7 @@ SessionCapGetSaved(
 // This function return the number of authorization sessions currently
 // loaded into TPM RAM.
 UINT32
-SessionCapGetLoadedNumber(
-    void
-    )
+SessionCapGetLoadedNumber(void)
 {
     return MAX_LOADED_SESSIONS - s_freeSessionSlots;
 }
@@ -1019,9 +981,7 @@ SessionCapGetLoadedNumber(
 //       requirement for the estimate is, if it is one or more, then at least one
 //       session must be loadable.
 UINT32
-SessionCapGetLoadedAvail(
-    void
-    )
+SessionCapGetLoadedAvail(void)
 {
     return s_freeSessionSlots;
 }
@@ -1030,17 +990,16 @@ SessionCapGetLoadedAvail(
 // This function returns the number of active authorization sessions currently
 // being tracked by the TPM.
 UINT32
-SessionCapGetActiveNumber(
-    void
-    )
+SessionCapGetActiveNumber(void)
 {
-    UINT32              i;
-    UINT32              num = 0;
+    UINT32 i;
+    UINT32 num = 0;
 
     // Iterate the context array to find the number of non-zero slots
     for(i = 0; i < MAX_ACTIVE_SESSIONS; i++)
     {
-        if(gr.contextArray[i] != 0) num++;
+        if(gr.contextArray[i] != 0)
+            num++;
     }
 
     return num;
@@ -1051,17 +1010,16 @@ SessionCapGetActiveNumber(
 // type, that could be created. This not the number of slots for sessions, but
 // the number of additional sessions that the TPM is capable of tracking.
 UINT32
-SessionCapGetActiveAvail(
-    void
-    )
+SessionCapGetActiveAvail(void)
 {
-    UINT32              i;
-    UINT32              num = 0;
+    UINT32 i;
+    UINT32 num = 0;
 
     // Iterate the context array to find the number of zero slots
     for(i = 0; i < MAX_ACTIVE_SESSIONS; i++)
     {
-        if(gr.contextArray[i] == 0) num++;
+        if(gr.contextArray[i] == 0)
+            num++;
     }
 
     return num;

@@ -35,7 +35,7 @@
 #include "Tpm.h"
 #include "Policy_AC_SendSelect_fp.h"
 
-#if CC_Policy_AC_SendSelect      // Conditional expansion of this file
+#if CC_Policy_AC_SendSelect  // Conditional expansion of this file
 
 /*(See part 3 specification)
 // allows qualification of attached component and object to be sent.
@@ -44,15 +44,14 @@
 //      TPM_RC_COMMAND_CODE   'commandCode' of 'policySession' is not empty
 //      TPM_RC_CPHASH         'cpHash' of 'policySession' is not empty
 TPM_RC
-TPM2_Policy_AC_SendSelect(
-    Policy_AC_SendSelect_In  *in                // IN: input parameter list
-    )
+TPM2_Policy_AC_SendSelect(Policy_AC_SendSelect_In* in  // IN: input parameter list
+)
 {
-    SESSION         *session;
-    HASH_STATE      hashState;
-    TPM_CC          commandCode = TPM_CC_Policy_AC_SendSelect;
+    SESSION*   session;
+    HASH_STATE hashState;
+    TPM_CC     commandCode = TPM_CC_Policy_AC_SendSelect;
 
-// Input Validation
+    // Input Validation
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -63,7 +62,7 @@ TPM2_Policy_AC_SendSelect(
     // commandCode in session context must be empty
     if(session->commandCode != 0)
         return TPM_RC_COMMAND_CODE;
-// Internal Data Update
+    // Internal Data Update
     // Update name hash
     session->u1.cpHash.t.size = CryptHashStart(&hashState, session->authHashAlg);
 
@@ -82,9 +81,9 @@ TPM2_Policy_AC_SendSelect(
     // update policy hash
     // Old policyDigest size should be the same as the new policyDigest size since
     // they are using the same hash algorithm
-    session->u2.policyDigest.t.size
-        = CryptHashStart(&hashState, session->authHashAlg);
-//  add old policy
+    session->u2.policyDigest.t.size =
+        CryptHashStart(&hashState, session->authHashAlg);
+    //  add old policy
     CryptDigestUpdate2B(&hashState, &session->u2.policyDigest.b);
 
     //  add command code
@@ -112,4 +111,4 @@ TPM2_Policy_AC_SendSelect(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_Policy_AC_SendSelect
+#endif  // CC_Policy_AC_SendSelect

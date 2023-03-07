@@ -37,34 +37,33 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_VerifySignature // Command must be enabled
+#if CC_VerifySignature  // Command must be enabled
 
-#ifndef _Verify_Signature_FP_H_
-#define _Verify_Signature_FP_H_
+#  ifndef _Verify_Signature_FP_H_
+#    define _Verify_Signature_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              keyHandle;
-    TPM2B_DIGEST                digest;
-    TPMT_SIGNATURE              signature;
+typedef struct
+{
+    TPMI_DH_OBJECT keyHandle;
+    TPM2B_DIGEST   digest;
+    TPMT_SIGNATURE signature;
 } VerifySignature_In;
 
 // Output structure definition
-typedef struct {
-    TPMT_TK_VERIFIED            validation;
+typedef struct
+{
+    TPMT_TK_VERIFIED validation;
 } VerifySignature_Out;
 
 // Response code modifiers
-#define RC_VerifySignature_keyHandle    (TPM_RC_H + TPM_RC_1)
-#define RC_VerifySignature_digest   (TPM_RC_P + TPM_RC_1)
-#define RC_VerifySignature_signature    (TPM_RC_P + TPM_RC_2)
+#    define RC_VerifySignature_keyHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_VerifySignature_digest    (TPM_RC_P + TPM_RC_1)
+#    define RC_VerifySignature_signature (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_VerifySignature(
-    VerifySignature_In          *in,
-    VerifySignature_Out         *out
-);
+TPM2_VerifySignature(VerifySignature_In* in, VerifySignature_Out* out);
 
-#endif  // _Verify_Signature_FP_H_
-#endif  // CC_VerifySignature
+#  endif  // _Verify_Signature_FP_H_
+#endif    // CC_VerifySignature

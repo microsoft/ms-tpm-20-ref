@@ -37,96 +37,67 @@
  *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
-#ifndef    _TPM_TO_LTC_MATH_FP_H_
-#define    _TPM_TO_LTC_MATH_FP_H_
+#ifndef _TPM_TO_LTC_MATH_FP_H_
+#define _TPM_TO_LTC_MATH_FP_H_
 
 #ifdef MATH_LIB_LTC
 
 //*** BnModMult()
 // Does multiply and divide returning the remainder of the divide.
-LIB_EXPORT BOOL
-BnModMult(
-    bigNum              result,
-    bigConst            op1,
-    bigConst            op2,
-    bigConst            modulus
-);
+LIB_EXPORT BOOL BnModMult(
+    bigNum result, bigConst op1, bigConst op2, bigConst modulus);
 
 //*** BnMult()
 // Multiplies two numbers
-LIB_EXPORT BOOL
-BnMult(
-    bigNum               result,
-    bigConst             multiplicand,
-    bigConst             multiplier
-);
+LIB_EXPORT BOOL BnMult(bigNum result, bigConst multiplicand, bigConst multiplier);
 
 //*** BnDiv()
 // This function divides two BIGNUM values. The function always returns TRUE.
-LIB_EXPORT BOOL
-BnDiv(
-    bigNum               quotient,
-    bigNum               remainder,
-    bigConst             dividend,
-    bigConst             divisor
-);
+LIB_EXPORT BOOL BnDiv(
+    bigNum quotient, bigNum remainder, bigConst dividend, bigConst divisor);
 
-#ifdef TPM_ALG_RSA
+#  ifdef TPM_ALG_RSA
 //*** BnGcd()
 // Get the greatest common divisor of two numbers
-LIB_EXPORT BOOL
-BnGcd(
-    bigNum      gcd,            // OUT: the common divisor
-    bigConst    number1,        // IN:
-    bigConst    number2         // IN:
+LIB_EXPORT BOOL BnGcd(bigNum   gcd,      // OUT: the common divisor
+                      bigConst number1,  // IN:
+                      bigConst number2   // IN:
 );
 
 //***BnModExp()
 // Do modular exponentiation using BIGNUM values. The conversion from a bignum_t
 // to a BIGNUM is trivial as they are based on the same structure
-LIB_EXPORT BOOL
-BnModExp(
-    bigNum               result,         // OUT: the result
-    bigConst             number,         // IN: number to exponentiate
-    bigConst             exponent,       // IN:
-    bigConst             modulus         // IN:
+LIB_EXPORT BOOL BnModExp(bigNum   result,    // OUT: the result
+                         bigConst number,    // IN: number to exponentiate
+                         bigConst exponent,  // IN:
+                         bigConst modulus    // IN:
 );
 
 //*** BnModInverse()
 // Modular multiplicative inverse
-LIB_EXPORT BOOL
-BnModInverse(
-    bigNum               result,
-    bigConst             number,
-    bigConst             modulus
-);
-#endif // TPM_ALG_RSA
-#ifdef TPM_ALG_ECC
+LIB_EXPORT BOOL BnModInverse(bigNum result, bigConst number, bigConst modulus);
+#  endif  // TPM_ALG_RSA
+#  ifdef TPM_ALG_ECC
 
 //*** BnEccModMult()
 // This function does a point multiply of the form R = [d]S
 // return type: BOOL
 //  FALSE       failure in operation; treat as result being point at infinity
-LIB_EXPORT BOOL
-BnEccModMult(
-    bigPoint             R,         // OUT: computed point
-    pointConst           S,         // IN: point to multiply by 'd'
-    bigConst             d,         // IN: scalar for [d]S
-    bigCurve             E
-);
+LIB_EXPORT BOOL BnEccModMult(bigPoint   R,  // OUT: computed point
+                             pointConst S,  // IN: point to multiply by 'd'
+                             bigConst   d,  // IN: scalar for [d]S
+                             bigCurve   E);
 
 //*** BnEccModMult2()
 // This function does a point multiply of the form R = [d]S + [u]Q
 // return type: BOOL
 //  FALSE       failure in operation; treat as result being point at infinity
-LIB_EXPORT BOOL
-BnEccModMult2(
-    bigPoint             R,         // OUT: computed point
-    pointConst           S,         // IN: first point (optional)
-    bigConst             d,         // IN: scalar for [d]S or [d]G
-    pointConst           Q,         // IN: second point
-    bigConst             u,         // IN: second scalar
-    bigCurve             E          // IN: curve
+LIB_EXPORT BOOL BnEccModMult2(bigPoint   R,  // OUT: computed point
+                              pointConst S,  // IN: first point (optional)
+                              bigConst   d,  // IN: scalar for [d]S or [d]G
+                              pointConst Q,  // IN: second point
+                              bigConst   u,  // IN: second scalar
+                              bigCurve   E   // IN: curve
 );
 
 //*** BnEccAdd()
@@ -136,14 +107,12 @@ BnEccModMult2(
 // variant is enabled.
 // return type: BOOL
 //  FALSE       failure in operation; treat as result being point at infinity
-LIB_EXPORT BOOL
-BnEccAdd(
-    bigPoint             R,         // OUT: computed point
-    pointConst           S,         // IN: point to multiply by 'd'
-    pointConst           Q,         // IN: second point
-    bigCurve             E          // IN: curve
+LIB_EXPORT BOOL BnEccAdd(bigPoint   R,  // OUT: computed point
+                         pointConst S,  // IN: point to multiply by 'd'
+                         pointConst Q,  // IN: second point
+                         bigCurve   E   // IN: curve
 );
-#endif // TPM_ALG_ECC
-#endif // MATH_LIB_LTC
+#  endif  // TPM_ALG_ECC
+#endif    // MATH_LIB_LTC
 
 #endif  // _TPM_TO_LTC_MATH_FP_H_

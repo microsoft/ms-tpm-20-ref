@@ -48,16 +48,15 @@
 //      TPM_RC_HANDLE             the input handle is references an HMAC key but
 //                                the private portion is not loaded
 TPM_RC
-TPM2_VerifySignature(
-    VerifySignature_In      *in,            // IN: input parameter list
-    VerifySignature_Out     *out            // OUT: output parameter list
-    )
+TPM2_VerifySignature(VerifySignature_In*  in,  // IN: input parameter list
+                     VerifySignature_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                   result;
-    OBJECT                  *signObject = HandleToObject(in->keyHandle);
-    TPMI_RH_HIERARCHY        hierarchy;
+    TPM_RC            result;
+    OBJECT*           signObject = HandleToObject(in->keyHandle);
+    TPMI_RH_HIERARCHY hierarchy;
 
-// Input Validation
+    // Input Validation
     // The object to validate the signature must be a signing key.
     if(!IS_ATTRIBUTE(signObject->publicArea.objectAttributes, TPMA_OBJECT, sign))
         return TPM_RCS_ATTRIBUTES + RC_VerifySignature_keyHandle;
@@ -68,26 +67,25 @@ TPM2_VerifySignature(
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, RC_VerifySignature_signature);
 
-// Command Output
+    // Command Output
 
     hierarchy = GetHierarchy(in->keyHandle);
-    if(hierarchy == TPM_RH_NULL
-       || signObject->publicArea.nameAlg == TPM_ALG_NULL)
+    if(hierarchy == TPM_RH_NULL || signObject->publicArea.nameAlg == TPM_ALG_NULL)
     {
         // produce empty ticket if hierarchy is TPM_RH_NULL or nameAlg is
         // TPM_ALG_NULL
-        out->validation.tag = TPM_ST_VERIFIED;
-        out->validation.hierarchy = TPM_RH_NULL;
+        out->validation.tag           = TPM_ST_VERIFIED;
+        out->validation.hierarchy     = TPM_RH_NULL;
         out->validation.digest.t.size = 0;
     }
     else
     {
         // Compute ticket
-        TicketComputeVerified(hierarchy, &in->digest, &signObject->name,
-                              &out->validation);
+        TicketComputeVerified(
+            hierarchy, &in->digest, &signObject->name, &out->validation);
     }
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_VerifySignature
+#endif  // CC_VerifySignature

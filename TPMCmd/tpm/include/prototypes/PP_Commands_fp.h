@@ -37,28 +37,27 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PP_Commands // Command must be enabled
+#if CC_PP_Commands  // Command must be enabled
 
-#ifndef _PP_Commands_FP_H_
-#define _PP_Commands_FP_H_
+#  ifndef _PP_Commands_FP_H_
+#    define _PP_Commands_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PLATFORM            auth;
-    TPML_CC                     setList;
-    TPML_CC                     clearList;
+typedef struct
+{
+    TPMI_RH_PLATFORM auth;
+    TPML_CC          setList;
+    TPML_CC          clearList;
 } PP_Commands_In;
 
 // Response code modifiers
-#define RC_PP_Commands_auth     (TPM_RC_H + TPM_RC_1)
-#define RC_PP_Commands_setList  (TPM_RC_P + TPM_RC_1)
-#define RC_PP_Commands_clearList    (TPM_RC_P + TPM_RC_2)
+#    define RC_PP_Commands_auth      (TPM_RC_H + TPM_RC_1)
+#    define RC_PP_Commands_setList   (TPM_RC_P + TPM_RC_1)
+#    define RC_PP_Commands_clearList (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_PP_Commands(
-    PP_Commands_In              *in
-);
+TPM2_PP_Commands(PP_Commands_In* in);
 
-#endif  // _PP_Commands_FP_H_
-#endif  // CC_PP_Commands
+#  endif  // _PP_Commands_FP_H_
+#endif    // CC_PP_Commands

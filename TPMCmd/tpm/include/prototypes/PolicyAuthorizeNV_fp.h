@@ -37,28 +37,27 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PolicyAuthorizeNV // Command must be enabled
+#if CC_PolicyAuthorizeNV  // Command must be enabled
 
-#ifndef _Policy_Authorize_NV_FP_H_
-#define _Policy_Authorize_NV_FP_H_
+#  ifndef _Policy_Authorize_NV_FP_H_
+#    define _Policy_Authorize_NV_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_NV_AUTH                 authHandle;
-    TPMI_RH_NV_INDEX                nvIndex;
-    TPMI_SH_POLICY                  policySession;
+typedef struct
+{
+    TPMI_RH_NV_AUTH  authHandle;
+    TPMI_RH_NV_INDEX nvIndex;
+    TPMI_SH_POLICY   policySession;
 } PolicyAuthorizeNV_In;
 
 // Response code modifiers
-#define RC_PolicyAuthorizeNV_authHandle (TPM_RC_H + TPM_RC_1)
-#define RC_PolicyAuthorizeNV_nvIndex    (TPM_RC_H + TPM_RC_2)
-#define RC_PolicyAuthorizeNV_policySession  (TPM_RC_H + TPM_RC_3)
+#    define RC_PolicyAuthorizeNV_authHandle    (TPM_RC_H + TPM_RC_1)
+#    define RC_PolicyAuthorizeNV_nvIndex       (TPM_RC_H + TPM_RC_2)
+#    define RC_PolicyAuthorizeNV_policySession (TPM_RC_H + TPM_RC_3)
 
 // Function prototype
 TPM_RC
-TPM2_PolicyAuthorizeNV(
-    PolicyAuthorizeNV_In            *in
-);
+TPM2_PolicyAuthorizeNV(PolicyAuthorizeNV_In* in);
 
-#endif  // _Policy_Authorize_NV_FP_H_
-#endif  // CC_PolicyAuthorizeNV
+#  endif  // _Policy_Authorize_NV_FP_H_
+#endif    // CC_PolicyAuthorizeNV

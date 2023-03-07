@@ -37,37 +37,36 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_GetTime // Command must be enabled
+#if CC_GetTime  // Command must be enabled
 
-#ifndef _Get_Time_FP_H_
-#define _Get_Time_FP_H_
+#  ifndef _Get_Time_FP_H_
+#    define _Get_Time_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_ENDORSEMENT         privacyAdminHandle;
-    TPMI_DH_OBJECT              signHandle;
-    TPM2B_DATA                  qualifyingData;
-    TPMT_SIG_SCHEME             inScheme;
+typedef struct
+{
+    TPMI_RH_ENDORSEMENT privacyAdminHandle;
+    TPMI_DH_OBJECT      signHandle;
+    TPM2B_DATA          qualifyingData;
+    TPMT_SIG_SCHEME     inScheme;
 } GetTime_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_ATTEST                timeInfo;
-    TPMT_SIGNATURE              signature;
+typedef struct
+{
+    TPM2B_ATTEST   timeInfo;
+    TPMT_SIGNATURE signature;
 } GetTime_Out;
 
 // Response code modifiers
-#define RC_GetTime_privacyAdminHandle   (TPM_RC_H + TPM_RC_1)
-#define RC_GetTime_signHandle   (TPM_RC_H + TPM_RC_2)
-#define RC_GetTime_qualifyingData   (TPM_RC_P + TPM_RC_1)
-#define RC_GetTime_inScheme     (TPM_RC_P + TPM_RC_2)
+#    define RC_GetTime_privacyAdminHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_GetTime_signHandle         (TPM_RC_H + TPM_RC_2)
+#    define RC_GetTime_qualifyingData     (TPM_RC_P + TPM_RC_1)
+#    define RC_GetTime_inScheme           (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_GetTime(
-    GetTime_In                  *in,
-    GetTime_Out                 *out
-);
+TPM2_GetTime(GetTime_In* in, GetTime_Out* out);
 
-#endif  // _Get_Time_FP_H_
-#endif  // CC_GetTime
+#  endif  // _Get_Time_FP_H_
+#endif    // CC_GetTime

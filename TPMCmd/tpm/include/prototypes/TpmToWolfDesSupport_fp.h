@@ -37,52 +37,31 @@
  *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
-#ifndef    _TPM_TO_WOLF_DES_SUPPORT_FP_H_
-#define    _TPM_TO_WOLF_DES_SUPPORT_FP_H_
+#ifndef _TPM_TO_WOLF_DES_SUPPORT_FP_H_
+#define _TPM_TO_WOLF_DES_SUPPORT_FP_H_
 
-#if (defined SYM_LIB_WOLF) && ALG_TDES
+#if(defined SYM_LIB_WOLF) && ALG_TDES
 
 //**Functions
 //** TDES_setup
 // This function calls the wolfcrypt function to generate a TDES key schedule. If the
 // If the key is two key (16 bytes), then the first DES key is replicated to the third
 // key position.
-int TDES_setup(
-    const BYTE          *key,
-    UINT32               keyBits,
-    tpmKeyScheduleTDES       *skey,
-    int dir
-);
+int TDES_setup(const BYTE* key, UINT32 keyBits, tpmKeyScheduleTDES* skey, int dir);
 
 //** TDES_setup_encrypt_key
 // This function calls into TDES_setup(), specifically for an encryption key.
-int TDES_setup_encrypt_key(
-    const BYTE          *key,
-    UINT32               keyBits,
-    tpmKeyScheduleTDES       *skey
-);
+int TDES_setup_encrypt_key(const BYTE* key, UINT32 keyBits, tpmKeyScheduleTDES* skey);
 
 //** TDES_setup_decrypt_key
 // This function calls into TDES_setup(), specifically for an decryption key.
-int TDES_setup_decrypt_key(
-    const BYTE          *key,
-    UINT32               keyBits,
-    tpmKeyScheduleTDES       *skey
-);
+int TDES_setup_decrypt_key(const BYTE* key, UINT32 keyBits, tpmKeyScheduleTDES* skey);
 
 //*** TDES_encyrpt()
-void TDES_encrypt(
-    const BYTE              *in,
-    BYTE                    *out,
-    tpmKeyScheduleTDES      *ks
-);
+void TDES_encrypt(const BYTE* in, BYTE* out, tpmKeyScheduleTDES* ks);
 
 //*** TDES_decrypt()
-void TDES_decrypt(
-    const BYTE          *in,
-    BYTE                *out,
-    tpmKeyScheduleTDES   *ks
-);
-#endif // MATH_LIB_WOLF && ALG_TDES
+void TDES_decrypt(const BYTE* in, BYTE* out, tpmKeyScheduleTDES* ks);
+#endif  // MATH_LIB_WOLF && ALG_TDES
 
 #endif  // _TPM_TO_WOLF_DES_SUPPORT_FP_H_

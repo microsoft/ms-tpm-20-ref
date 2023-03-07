@@ -41,9 +41,8 @@
 // Restore a policy session to its initial state
 */
 TPM_RC
-TPM2_PolicyRestart(
-    PolicyRestart_In    *in             // IN: input parameter list
-    )
+TPM2_PolicyRestart(PolicyRestart_In* in  // IN: input parameter list
+)
 {
     // Initialize policy session data
     SessionResetPolicyData(SessionGet(in->sessionHandle));
@@ -51,4 +50,4 @@ TPM2_PolicyRestart(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyRestart
+#endif  // CC_PolicyRestart

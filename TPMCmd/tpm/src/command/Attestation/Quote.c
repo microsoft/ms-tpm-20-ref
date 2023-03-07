@@ -48,21 +48,20 @@
 //                              scheme, or the chosen scheme is not a valid
 //                              sign scheme
 TPM_RC
-TPM2_Quote(
-    Quote_In        *in,            // IN: input parameter list
-    Quote_Out       *out            // OUT: output parameter list
-    )
+TPM2_Quote(Quote_In*  in,  // IN: input parameter list
+           Quote_Out* out  // OUT: output parameter list
+)
 {
-    TPMI_ALG_HASH            hashAlg;
-    TPMS_ATTEST              quoted;
-    OBJECT                 *signObject = HandleToObject(in->signHandle);
-// Input Validation
+    TPMI_ALG_HASH hashAlg;
+    TPMS_ATTEST   quoted;
+    OBJECT*       signObject = HandleToObject(in->signHandle);
+    // Input Validation
     if(!IsSigningObject(signObject))
         return TPM_RCS_KEY + RC_Quote_signHandle;
     if(!CryptSelectSignScheme(signObject, &in->inScheme))
         return TPM_RCS_SCHEME + RC_Quote_inScheme;
 
-// Command Output
+    // Command Output
 
     // Filling in attest information
     // Common fields
@@ -82,8 +81,8 @@ TPM2_Quote(
         return TPM_RCS_SCHEME + RC_Quote_inScheme;
 
     // Compute PCR digest
-    PCRComputeCurrentDigest(hashAlg, &in->PCRselect,
-                            &quoted.attested.quote.pcrDigest);
+    PCRComputeCurrentDigest(
+        hashAlg, &in->PCRselect, &quoted.attested.quote.pcrDigest);
 
     // Copy PCR select.  "PCRselect" is modified in PCRComputeCurrentDigest
     // function
@@ -91,8 +90,12 @@ TPM2_Quote(
 
     // Sign attestation structure.  A NULL signature will be returned if
     // signObject is NULL.
-    return SignAttestInfo(signObject, &in->inScheme, &quoted, &in->qualifyingData,
-                          &out->quoted, &out->signature);
+    return SignAttestInfo(signObject,
+                          &in->inScheme,
+                          &quoted,
+                          &in->qualifyingData,
+                          &out->quoted,
+                          &out->signature);
 }
 
-#endif // CC_Quote
+#endif  // CC_Quote

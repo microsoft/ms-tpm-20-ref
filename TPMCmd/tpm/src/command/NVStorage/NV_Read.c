@@ -55,20 +55,19 @@
 //      TPM_RC_VALUE                    the read size is larger than the
 //                                      MAX_NV_BUFFER_SIZE
 TPM_RC
-TPM2_NV_Read(
-    NV_Read_In      *in,            // IN: input parameter list
-    NV_Read_Out     *out            // OUT: output parameter list
-    )
+TPM2_NV_Read(NV_Read_In*  in,  // IN: input parameter list
+             NV_Read_Out* out  // OUT: output parameter list
+)
 {
-    NV_REF           locator;
-    NV_INDEX        *nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
-    TPM_RC           result;
+    NV_REF    locator;
+    NV_INDEX* nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
+    TPM_RC    result;
 
-// Input Validation
+    // Input Validation
     // Common read access checks. NvReadAccessChecks() may return
     // TPM_RC_NV_AUTHORIZATION, TPM_RC_NV_LOCKED, or TPM_RC_NV_UNINITIALIZED
-    result = NvReadAccessChecks(in->authHandle, in->nvIndex,
-                                nvIndex->publicArea.attributes);
+    result = NvReadAccessChecks(
+        in->authHandle, in->nvIndex, nvIndex->publicArea.attributes);
     if(result != TPM_RC_SUCCESS)
         return result;
 
@@ -84,7 +83,7 @@ TPM2_NV_Read(
     if(in->size > (nvIndex->publicArea.dataSize - in->offset))
         return TPM_RC_NV_RANGE;
 
-// Command Output
+    // Command Output
     // Set the return size
     out->data.t.size = in->size;
 
@@ -94,4 +93,4 @@ TPM2_NV_Read(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_NV_Read
+#endif  // CC_NV_Read

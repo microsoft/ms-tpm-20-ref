@@ -37,21 +37,17 @@
  *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
-#ifndef    _TPM_TO_LTC_DES_SUPPORT_FP_H_
-#define    _TPM_TO_LTC_DES_SUPPORT_FP_H_
+#ifndef _TPM_TO_LTC_DES_SUPPORT_FP_H_
+#define _TPM_TO_LTC_DES_SUPPORT_FP_H_
 
-#if (defined SYM_LIB_LTC) && ALG_TDES
+#if(defined SYM_LIB_LTC) && ALG_TDES
 
 //** TDES_setup
 // This function calls the LTC function to generate a TDES key schedule. If the
 // key is one DES key (8 bytes), then it is replicated two more times to create a
 // 24-byte TDES key. If the key is two key (16 bytes), then the first DES key is
 // replicated to the third key position.
-void TDES_setup(
-    const BYTE          *key,
-    UINT32               keyBits,
-    symmetric_key       *skey
-);
-#endif // MATH_LIB_LTC && ALG_TDES
+void TDES_setup(const BYTE* key, UINT32 keyBits, symmetric_key* skey);
+#endif  // MATH_LIB_LTC && ALG_TDES
 
 #endif  // _TPM_TO_LTC_DES_SUPPORT_FP_H_

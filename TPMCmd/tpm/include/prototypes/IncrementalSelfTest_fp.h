@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_IncrementalSelfTest // Command must be enabled
+#if CC_IncrementalSelfTest  // Command must be enabled
 
-#ifndef _Incremental_Self_Test_FP_H_
-#define _Incremental_Self_Test_FP_H_
+#  ifndef _Incremental_Self_Test_FP_H_
+#    define _Incremental_Self_Test_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPML_ALG                        toTest;
+typedef struct
+{
+    TPML_ALG toTest;
 } IncrementalSelfTest_In;
 
 // Output structure definition
-typedef struct {
-    TPML_ALG                        toDoList;
+typedef struct
+{
+    TPML_ALG toDoList;
 } IncrementalSelfTest_Out;
 
 // Response code modifiers
-#define RC_IncrementalSelfTest_toTest   (TPM_RC_P + TPM_RC_1)
+#    define RC_IncrementalSelfTest_toTest (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_IncrementalSelfTest(
-    IncrementalSelfTest_In          *in,
-    IncrementalSelfTest_Out         *out
-);
+TPM2_IncrementalSelfTest(IncrementalSelfTest_In* in, IncrementalSelfTest_Out* out);
 
-#endif  // _Incremental_Self_Test_FP_H_
-#endif  // CC_IncrementalSelfTest
+#  endif  // _Incremental_Self_Test_FP_H_
+#endif    // CC_IncrementalSelfTest

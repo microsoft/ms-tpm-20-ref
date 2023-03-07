@@ -37,7 +37,7 @@
 
 #if CC_Import  // Conditional expansion of this file
 
-#include "Object_spt_fp.h"
+#  include "Object_spt_fp.h"
 
 /*(See part 3 specification)
 // This command allows an asymmetrically encrypted blob, containing a duplicated
@@ -100,21 +100,20 @@
 //                              size of the digest produced by the name algorithm of
 //                              the symmetric key referenced by 'parentHandle'
 TPM_RC
-TPM2_Import(
-    Import_In       *in,            // IN: input parameter list
-    Import_Out      *out            // OUT: output parameter list
-    )
+TPM2_Import(Import_In*  in,  // IN: input parameter list
+            Import_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                   result = TPM_RC_SUCCESS;
-    OBJECT                  *parentObject;
-    TPM2B_DATA               data;                   // symmetric key
-    TPMT_SENSITIVE           sensitive;
-    TPM2B_NAME               name;
-    TPMA_OBJECT              attributes;
-    UINT16                   innerKeySize = 0;       // encrypt key size for inner
-                                                     // wrapper
+    TPM_RC         result = TPM_RC_SUCCESS;
+    OBJECT*        parentObject;
+    TPM2B_DATA     data;  // symmetric key
+    TPMT_SENSITIVE sensitive;
+    TPM2B_NAME     name;
+    TPMA_OBJECT    attributes;
+    UINT16         innerKeySize = 0;  // encrypt key size for inner
+                                      // wrapper
 
-// Input Validation
+    // Input Validation
     // to save typing
     attributes = in->objectPublic.publicArea.objectAttributes;
     // FixedTPM and fixedParent must be CLEAR
@@ -158,8 +157,8 @@ TPM2_Import(
         // Decrypt input secret data via asymmetric decryption. TPM_RC_ATTRIBUTES,
         // TPM_RC_ECC_POINT, TPM_RC_INSUFFICIENT, TPM_RC_KEY, TPM_RC_NO_RESULT,
         // TPM_RC_SIZE, TPM_RC_VALUE may be returned at this point
-        result = CryptSecretDecrypt(parentObject, NULL, DUPLICATE_STRING,
-                                    &in->inSymSeed, &data);
+        result = CryptSecretDecrypt(
+            parentObject, NULL, DUPLICATE_STRING, &in->inSymSeed, &data);
         pAssert(result != TPM_RC_BINDING);
         if(result != TPM_RC_SUCCESS)
             return RcSafeAddToResult(result, RC_Import_inSymSeed);
@@ -179,10 +178,14 @@ TPM2_Import(
 
     // Retrieve sensitive from private.
     // TPM_RC_INSUFFICIENT, TPM_RC_INTEGRITY, TPM_RC_SIZE may be returned here.
-    result = DuplicateToSensitive(&in->duplicate.b, &name.b, parentObject,
+    result = DuplicateToSensitive(&in->duplicate.b,
+                                  &name.b,
+                                  parentObject,
                                   in->objectPublic.publicArea.nameAlg,
-                                  &data.b, &in->symmetricAlg,
-                                  &in->encryptionKey.b, &sensitive);
+                                  &data.b,
+                                  &in->symmetricAlg,
+                                  &in->encryptionKey.b,
+                                  &sensitive);
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, RC_Import_duplicate);
 
@@ -191,19 +194,25 @@ TPM2_Import(
     // when it is actually loaded.
     if(IS_ATTRIBUTE(parentObject->publicArea.objectAttributes, TPMA_OBJECT, fixedTPM))
     {
-        result = ObjectLoad(NULL, NULL, &in->objectPublic.publicArea,
-                            &sensitive, RC_Import_objectPublic, RC_Import_duplicate,
+        result = ObjectLoad(NULL,
+                            NULL,
+                            &in->objectPublic.publicArea,
+                            &sensitive,
+                            RC_Import_objectPublic,
+                            RC_Import_duplicate,
                             NULL);
     }
-// Command output
+    // Command output
     if(result == TPM_RC_SUCCESS)
     {
         // Prepare output private data from sensitive
-        SensitiveToPrivate(&sensitive, &name, parentObject,
+        SensitiveToPrivate(&sensitive,
+                           &name,
+                           parentObject,
                            in->objectPublic.publicArea.nameAlg,
                            &out->outPrivate);
     }
     return result;
 }
 
-#endif // CC_Import
+#endif  // CC_Import

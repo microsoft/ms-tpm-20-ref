@@ -37,8 +37,8 @@
  *  Date: Aug 30, 2019  Time: 02:11:54PM
  */
 
-#ifndef    _CRYPT_PRIME_SIEVE_FP_H_
-#define    _CRYPT_PRIME_SIEVE_FP_H_
+#ifndef _CRYPT_PRIME_SIEVE_FP_H_
+#define _CRYPT_PRIME_SIEVE_FP_H_
 
 #if RSA_KEY_SIEVE
 
@@ -48,20 +48,14 @@
 // limit (primeLimit) set up by this function. This causes the sieve
 // process to stop when an appropriate number of primes have been
 // sieved.
-LIB_EXPORT void
-RsaAdjustPrimeLimit(
-    uint32_t        requestedPrimes
-);
+LIB_EXPORT void RsaAdjustPrimeLimit(uint32_t requestedPrimes);
 
 //*** RsaNextPrime()
 // This the iterator used during the sieve process. The input is the
 // last prime returned (or any starting point) and the output is the
 // next higher prime. The function returns 0 when the primeLimit is
 // reached.
-LIB_EXPORT uint32_t
-RsaNextPrime(
-    uint32_t    lastPrime
-);
+LIB_EXPORT uint32_t RsaNextPrime(uint32_t lastPrime);
 
 //*** FindNthSetBit()
 // This function finds the nth SET bit in a bit array. The 'n' parameter is
@@ -70,11 +64,10 @@ RsaNextPrime(
 //  Return Type: unsigned int
 //      <0      no bit is set or no bit with the requested number is set
 //      >=0    the number of the bit in the array that is the nth set
-LIB_EXPORT int
-FindNthSetBit(
-    const UINT16     aSize,         // IN: the size of the array to check
-    const BYTE      *a,             // IN: the array to check
-    const UINT32     n              // IN, the number of the SET bit
+LIB_EXPORT int FindNthSetBit(
+    const UINT16 aSize,  // IN: the size of the array to check
+    const BYTE*  a,      // IN: the array to check
+    const UINT32 n       // IN, the number of the SET bit
 );
 
 //*** PrimeSieve()
@@ -91,21 +84,16 @@ FindNthSetBit(
 // reduce the number of times that the large prime is divided into a few large
 // divides and then use smaller divides to get to the final 16 bit (or smaller)
 // remainders.
-LIB_EXPORT UINT32
-PrimeSieve(
-    bigNum           bnN,       // IN/OUT: number to sieve
-    UINT32           fieldSize, // IN: size of the field area in bytes
-    BYTE            *field      // IN: field
+LIB_EXPORT UINT32 PrimeSieve(bigNum bnN,        // IN/OUT: number to sieve
+                             UINT32 fieldSize,  // IN: size of the field area in bytes
+                             BYTE*  field       // IN: field
 );
-#ifdef SIEVE_DEBUG
+#  ifdef SIEVE_DEBUG
 
 //***SetFieldSize()
 // Function to set the field size used for prime generation. Used for tuning.
-LIB_EXPORT uint32_t
-SetFieldSize(
-    uint32_t         newFieldSize
-);
-#endif // SIEVE_DEBUG
+LIB_EXPORT uint32_t SetFieldSize(uint32_t newFieldSize);
+#  endif  // SIEVE_DEBUG
 
 //*** PrimeSelectWithSieve()
 // This function will sieve the field around the input prime candidate. If the
@@ -121,43 +109,29 @@ SetFieldSize(
 //      TPM_RC_SUCCESS      candidate is probably prime
 //      TPM_RC_NO_RESULT    candidate is not prime and couldn't find and alternative
 //                          in the field
-LIB_EXPORT TPM_RC
-PrimeSelectWithSieve(
-    bigNum           candidate,         // IN/OUT: The candidate to filter
-    UINT32           e,                 // IN: the exponent
-    RAND_STATE      *rand               // IN: the random number generator state
+LIB_EXPORT TPM_RC PrimeSelectWithSieve(
+    bigNum      candidate,  // IN/OUT: The candidate to filter
+    UINT32      e,          // IN: the exponent
+    RAND_STATE* rand        // IN: the random number generator state
 );
-#if RSA_INSTRUMENT
+#  if RSA_INSTRUMENT
 
 //*** PrintTuple()
-char *
-PrintTuple(
-    UINT32      *i
-);
+char* PrintTuple(UINT32* i);
 
 //*** RsaSimulationEnd()
-void
-RsaSimulationEnd(
-    void
-);
+void RsaSimulationEnd(void);
 
 //*** GetSieveStats()
-LIB_EXPORT void
-GetSieveStats(
-    uint32_t        *trials,
-    uint32_t        *emptyFields,
-    uint32_t        *averageBits
-);
-#endif
-#endif // RSA_KEY_SIEVE
+LIB_EXPORT void GetSieveStats(
+    uint32_t* trials, uint32_t* emptyFields, uint32_t* averageBits);
+#  endif
+#endif  // RSA_KEY_SIEVE
 #if !RSA_INSTRUMENT
 
 //*** RsaSimulationEnd()
 // Stub for call when not doing instrumentation.
-void
-RsaSimulationEnd(
-    void
-);
+void RsaSimulationEnd(void);
 #endif
 
 #endif  // _CRYPT_PRIME_SIEVE_FP_H_

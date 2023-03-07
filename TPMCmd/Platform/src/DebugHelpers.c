@@ -46,23 +46,19 @@
 
 #if CERTIFYX509_DEBUG
 
-const char      *debugFileName = "DebugFile.txt";
+const char* debugFileName = "DebugFile.txt";
 
 //*** fileOpen()
 // This exists to allow use of the 'safe' version of fopen() with a MS runtime.
-static FILE *
-fileOpen(
-    const char      *fn,
-    const char      *mode
-)
+static FILE* fileOpen(const char* fn, const char* mode)
 {
-    FILE        *f;
-#   if defined _MSC_VER
+    FILE*     f;
+#  if defined _MSC_VER
     if(fopen_s(&f, fn, mode) != 0)
         f = NULL;
-#   else
+#  else
     f = fopen(fn, mode);
-#   endif
+#  endif
     return f;
 }
 
@@ -72,22 +68,19 @@ fileOpen(
 //  Return Type: int
 //   0              success
 //  != 0            error
-int
-DebugFileInit(
-    void
-)
+int DebugFileInit(void)
 {
-    FILE            *f = NULL;
-    time_t           t = time(NULL);
+    FILE*  f = NULL;
+    time_t t = time(NULL);
 //
-    // Get current date and time.
-#   if defined _MSC_VER
-    char                 timeString[100];
+// Get current date and time.
+#  if defined _MSC_VER
+    char      timeString[100];
     ctime_s(timeString, (size_t)sizeof(timeString), &t);
-#   else
-    char                *timeString;
+#  else
+    char* timeString;
     timeString = ctime(&t);
-#   endif
+#  endif
     // Try to open the debug file
     f = fileOpen(debugFileName, "w");
     if(f)
@@ -101,16 +94,11 @@ DebugFileInit(
 }
 
 //*** DebugDumpBuffer()
-void
-DebugDumpBuffer(
-    int             size,
-    unsigned char   *buf,
-    const char      *identifier
-)
+void DebugDumpBuffer(int size, unsigned char* buf, const char* identifier)
 {
-    int              i;
-//
-    FILE *f = fileOpen(debugFileName, "a");
+    int i;
+    //
+    FILE* f = fileOpen(debugFileName, "a");
     if(!f)
         return;
     if(identifier)
@@ -129,4 +117,4 @@ DebugDumpBuffer(
     fclose(f);
 }
 
-#endif // CERTIFYX509_DEBUG
+#endif  // CERTIFYX509_DEBUG

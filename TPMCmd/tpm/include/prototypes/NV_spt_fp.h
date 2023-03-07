@@ -37,8 +37,8 @@
  *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _NV_SPT_FP_H_
-#define    _NV_SPT_FP_H_
+#ifndef _NV_SPT_FP_H_
+#define _NV_SPT_FP_H_
 
 //*** NvReadAccessChecks()
 // Common routine for validating a read
@@ -50,11 +50,10 @@
 //      TPM_RC_NV_UNINITIALIZED     Try to read an uninitialized index
 //
 TPM_RC
-NvReadAccessChecks(
-    TPM_HANDLE       authHandle,    // IN: the handle that provided the
-                                    //     authorization
-    TPM_HANDLE       nvHandle,      // IN: the handle of the NV index to be read
-    TPMA_NV          attributes     // IN: the attributes of 'nvHandle'
+NvReadAccessChecks(TPM_HANDLE authHandle,  // IN: the handle that provided the
+                                           //     authorization
+                   TPM_HANDLE nvHandle,   // IN: the handle of the NV index to be read
+                   TPMA_NV    attributes  // IN: the attributes of 'nvHandle'
 );
 
 //*** NvWriteAccessChecks()
@@ -66,28 +65,24 @@ NvReadAccessChecks(
 //
 TPM_RC
 NvWriteAccessChecks(
-    TPM_HANDLE       authHandle,    // IN: the handle that provided the
-                                    //     authorization
-    TPM_HANDLE       nvHandle,      // IN: the handle of the NV index to be written
-    TPMA_NV          attributes     // IN: the attributes of 'nvHandle'
+    TPM_HANDLE authHandle,  // IN: the handle that provided the
+                            //     authorization
+    TPM_HANDLE nvHandle,    // IN: the handle of the NV index to be written
+    TPMA_NV    attributes   // IN: the attributes of 'nvHandle'
 );
 
 //*** NvClearOrderly()
 // This function is used to cause gp.orderlyState to be cleared to the
 // non-orderly state.
 TPM_RC
-NvClearOrderly(
-    void
-);
+NvClearOrderly(void);
 
 //*** NvIsPinPassIndex()
 // Function to check to see if an NV index is a PIN Pass Index
 //  Return Type: BOOL
 //      TRUE(1)         is pin pass
 //      FALSE(0)        is not pin pass
-BOOL
-NvIsPinPassIndex(
-    TPM_HANDLE          index       // IN: Handle to check
+BOOL NvIsPinPassIndex(TPM_HANDLE index  // IN: Handle to check
 );
 
 #endif  // _NV_SPT_FP_H_
