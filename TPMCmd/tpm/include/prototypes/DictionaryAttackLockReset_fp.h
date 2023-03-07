@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_DictionaryAttackLockReset // Command must be enabled
+#if CC_DictionaryAttackLockReset  // Command must be enabled
 
-#ifndef _Dictionary_Attack_Lock_Reset_FP_H_
-#define _Dictionary_Attack_Lock_Reset_FP_H_
+#  ifndef _Dictionary_Attack_Lock_Reset_FP_H_
+#    define _Dictionary_Attack_Lock_Reset_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_LOCKOUT                         lockHandle;
+typedef struct
+{
+    TPMI_RH_LOCKOUT lockHandle;
 } DictionaryAttackLockReset_In;
 
 // Response code modifiers
-#define RC_DictionaryAttackLockReset_lockHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_DictionaryAttackLockReset_lockHandle (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_DictionaryAttackLockReset(
-    DictionaryAttackLockReset_In            *in
-);
+TPM2_DictionaryAttackLockReset(DictionaryAttackLockReset_In* in);
 
-#endif  // _Dictionary_Attack_Lock_Reset_FP_H_
-#endif  // CC_DictionaryAttackLockReset
+#  endif  // _Dictionary_Attack_Lock_Reset_FP_H_
+#endif    // CC_DictionaryAttackLockReset

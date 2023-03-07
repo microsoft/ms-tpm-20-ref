@@ -37,8 +37,8 @@
  *  Date: Mar  7, 2020  Time: 07:17:48PM
  */
 
-#ifndef    _SESSION_PROCESS_FP_H_
-#define    _SESSION_PROCESS_FP_H_
+#ifndef _SESSION_PROCESS_FP_H_
+#define _SESSION_PROCESS_FP_H_
 
 //*** IsDAExempted()
 // This function indicates if a handle is exempted from DA logic.
@@ -51,24 +51,17 @@
 //  Return Type: BOOL
 //      TRUE(1)         handle is exempted from DA logic
 //      FALSE(0)        handle is not exempted from DA logic
-BOOL
-IsDAExempted(
-    TPM_HANDLE       handle         // IN: entity handle
+BOOL IsDAExempted(TPM_HANDLE handle  // IN: entity handle
 );
 
 //*** ClearCpRpHashes()
-void
-ClearCpRpHashes(
-    COMMAND         *command
-);
+void ClearCpRpHashes(COMMAND* command);
 
 //*** CompareNameHash()
 // This function computes the name hash and compares it to the nameHash in the
 // session data.
-BOOL
-CompareNameHash(
-    COMMAND         *command,       // IN: main parsing structure
-    SESSION         *session        // IN: session structure with nameHash
+BOOL CompareNameHash(COMMAND* command,  // IN: main parsing structure
+                     SESSION* session   // IN: session structure with nameHash
 );
 
 //*** ParseSessionBuffer()
@@ -81,8 +74,7 @@ CompareNameHash(
 //        various           parsing failure or authorization failure
 //
 TPM_RC
-ParseSessionBuffer(
-    COMMAND         *command        // IN: the structure that contains
+ParseSessionBuffer(COMMAND* command  // IN: the structure that contains
 );
 
 //*** CheckAuthNoSession()
@@ -93,8 +85,7 @@ ParseSessionBuffer(
 //      TPM_RC_AUTH_MISSING         failure - one or more handles require
 //                                  authorization
 TPM_RC
-CheckAuthNoSession(
-    COMMAND         *command        // IN: command parsing structure
+CheckAuthNoSession(COMMAND* command  // IN: command parsing structure
 );
 
 //*** BuildResponseSession()
@@ -105,19 +96,14 @@ CheckAuthNoSession(
 // in the response buffer to be filled. This is where the authorization sessions
 // will go, if any. command->parameterSize is the number of bytes that have been
 // marshaled as parameters in the output buffer.
-void
-BuildResponseSession(
-    COMMAND         *command        // IN: structure that has relevant command
-                                    //     information
+void BuildResponseSession(COMMAND* command  // IN: structure that has relevant command
+                                            //     information
 );
 
 //*** SessionRemoveAssociationToHandle()
 // This function deals with the case where an entity associated with an authorization
 // is deleted during command processing. The primary use of this is to support
 // UndefineSpaceSpecial().
-void
-SessionRemoveAssociationToHandle(
-    TPM_HANDLE       handle
-);
+void SessionRemoveAssociationToHandle(TPM_HANDLE handle);
 
 #endif  // _SESSION_PROCESS_FP_H_

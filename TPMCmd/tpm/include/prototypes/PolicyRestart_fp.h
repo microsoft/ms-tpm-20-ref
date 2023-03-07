@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PolicyRestart // Command must be enabled
+#if CC_PolicyRestart  // Command must be enabled
 
-#ifndef _Policy_Restart_FP_H_
-#define _Policy_Restart_FP_H_
+#  ifndef _Policy_Restart_FP_H_
+#    define _Policy_Restart_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_SH_POLICY              sessionHandle;
+typedef struct
+{
+    TPMI_SH_POLICY sessionHandle;
 } PolicyRestart_In;
 
 // Response code modifiers
-#define RC_PolicyRestart_sessionHandle  (TPM_RC_H + TPM_RC_1)
+#    define RC_PolicyRestart_sessionHandle (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_PolicyRestart(
-    PolicyRestart_In            *in
-);
+TPM2_PolicyRestart(PolicyRestart_In* in);
 
-#endif  // _Policy_Restart_FP_H_
-#endif  // CC_PolicyRestart
+#  endif  // _Policy_Restart_FP_H_
+#endif    // CC_PolicyRestart

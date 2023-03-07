@@ -44,29 +44,28 @@
 //      TPM_RC_MODE             'sequenceHandle' does not reference a hash or HMAC
 //                              sequence object
 TPM_RC
-TPM2_SequenceUpdate(
-    SequenceUpdate_In   *in             // IN: input parameter list
-    )
+TPM2_SequenceUpdate(SequenceUpdate_In* in  // IN: input parameter list
+)
 {
-    OBJECT                  *object;
-    HASH_OBJECT             *hashObject;
+    OBJECT*      object;
+    HASH_OBJECT* hashObject;
 
-// Input Validation
+    // Input Validation
 
     // Get sequence object pointer
-    object = HandleToObject(in->sequenceHandle);
-    hashObject = (HASH_OBJECT *)object;
+    object     = HandleToObject(in->sequenceHandle);
+    hashObject = (HASH_OBJECT*)object;
 
     // Check that referenced object is a sequence object.
     if(!ObjectIsSequence(object))
         return TPM_RCS_MODE + RC_SequenceUpdate_sequenceHandle;
 
-// Internal Data Update
+    // Internal Data Update
 
     if(object->attributes.eventSeq == SET)
     {
         // Update event sequence object
-        UINT32           i;
+        UINT32 i;
         for(i = 0; i < HASH_COUNT; i++)
         {
             // Update sequence object
@@ -103,4 +102,4 @@ TPM2_SequenceUpdate(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_SequenceUpdate
+#endif  // CC_SequenceUpdate

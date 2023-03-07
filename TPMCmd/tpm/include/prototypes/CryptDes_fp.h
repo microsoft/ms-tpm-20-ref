@@ -37,8 +37,8 @@
  *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _CRYPT_DES_FP_H_
-#define    _CRYPT_DES_FP_H_
+#ifndef _CRYPT_DES_FP_H_
+#define _CRYPT_DES_FP_H_
 
 #if ALG_TDES
 
@@ -47,29 +47,24 @@
 // bit is of each byte is replaced with the odd parity of the other 7 bits in the
 // byte. With odd parity, no byte will ever be 0x00.
 UINT64
-CryptSetOddByteParity(
-    UINT64          k
-);
+CryptSetOddByteParity(UINT64 k);
 
 //*** CryptDesValidateKey()
 // Function to check to see if the input key is a valid DES key where the definition
 // of valid is that none of the elements are on the list of weak, semi-weak, or
 // possibly weak keys; and that for two keys, K1!=K2, and for three keys that
 // K1!=K2 and K2!=K3.
-BOOL
-CryptDesValidateKey(
-    TPM2B_SYM_KEY       *desKey     // IN: key to validate
+BOOL CryptDesValidateKey(TPM2B_SYM_KEY* desKey  // IN: key to validate
 );
 
 //*** CryptGenerateKeyDes()
 // This function is used to create a DES key of the appropriate size. The key will
 // have odd parity in the bytes.
 TPM_RC
-CryptGenerateKeyDes(
-    TPMT_PUBLIC             *publicArea,        // IN/OUT: The public area template
+CryptGenerateKeyDes(TPMT_PUBLIC* publicArea,    // IN/OUT: The public area template
                                                 //     for the new key.
-    TPMT_SENSITIVE          *sensitive,         // OUT: sensitive area
-    RAND_STATE              *rand               // IN: the "entropy" source for
+                    TPMT_SENSITIVE* sensitive,  // OUT: sensitive area
+                    RAND_STATE*     rand        // IN: the "entropy" source for
 );
 #endif
 

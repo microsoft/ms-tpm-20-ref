@@ -43,9 +43,8 @@
 //  Return Type: TPM_RC
 //      TPM_RC_DISABLED             Clear command has been disabled
 TPM_RC
-TPM2_Clear(
-    Clear_In        *in             // IN: input parameter list
-    )
+TPM2_Clear(Clear_In* in  // IN: input parameter list
+)
 {
     // Input parameter is not reference in command action
     NOT_REFERENCED(in);
@@ -55,13 +54,13 @@ TPM2_Clear(
     // this point
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
-// Input Validation
+    // Input Validation
 
     // If Clear command is disabled, return an error
     if(gp.disableClear)
         return TPM_RC_DISABLED;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Reset storage hierarchy seed from RNG
     CryptRandomGenerate(sizeof(gp.SPSeed.t.buffer), gp.SPSeed.t.buffer);
@@ -96,13 +95,13 @@ TPM2_Clear(
     DAPreInstall_Init();
 
     // Reset clock
-    go.clock = 0;
+    go.clock     = 0;
     go.clockSafe = YES;
     NvWrite(NV_ORDERLY_DATA, sizeof(ORDERLY_DATA), &go);
 
     // Reset counters
     gp.resetCount = gr.restartCount = gr.clearCount = 0;
-    gp.auditCounter = 0;
+    gp.auditCounter                                 = 0;
 
     // Save persistent data changes to NV
     // Note: since there are so many changes to the persistent data structure, the
@@ -115,11 +114,10 @@ TPM2_Clear(
     // Bump the PCR counter
     PCRChanged(0);
 
-
     // orderly state should be cleared because of the update to state clear data
     g_clearOrderly = TRUE;
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_Clear
+#endif  // CC_Clear

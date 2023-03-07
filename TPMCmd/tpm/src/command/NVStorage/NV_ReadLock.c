@@ -49,28 +49,25 @@
 //                                      is not allowed to read from the Index
 //                                      referenced by 'nvIndex'
 TPM_RC
-TPM2_NV_ReadLock(
-    NV_ReadLock_In  *in             // IN: input parameter list
-    )
+TPM2_NV_ReadLock(NV_ReadLock_In* in  // IN: input parameter list
+)
 {
-    TPM_RC           result;
-    NV_REF           locator;
+    TPM_RC result;
+    NV_REF locator;
     // The referenced index has been checked multiple times before this is called
     // so it must be present and will be loaded into cache
-    NV_INDEX        *nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
-    TPMA_NV          nvAttributes = nvIndex->publicArea.attributes;
+    NV_INDEX* nvIndex      = NvGetIndexInfo(in->nvIndex, &locator);
+    TPMA_NV   nvAttributes = nvIndex->publicArea.attributes;
 
-// Input Validation
+    // Input Validation
     // Common read access checks. NvReadAccessChecks() may return
     // TPM_RC_NV_AUTHORIZATION, TPM_RC_NV_LOCKED, or TPM_RC_NV_UNINITIALIZED
-    result = NvReadAccessChecks(in->authHandle,
-                                in->nvIndex,
-                                nvAttributes);
+    result = NvReadAccessChecks(in->authHandle, in->nvIndex, nvAttributes);
     if(result == TPM_RC_NV_AUTHORIZATION)
         return TPM_RC_NV_AUTHORIZATION;
     // Index is already locked for write
     else if(result == TPM_RC_NV_LOCKED)
-            return TPM_RC_SUCCESS;
+        return TPM_RC_SUCCESS;
 
     // If NvReadAccessChecks return TPM_RC_NV_UNINITALIZED, then continue.
     // It is not an error to read lock an uninitialized Index.
@@ -79,15 +76,13 @@ TPM2_NV_ReadLock(
     if(!IS_ATTRIBUTE(nvAttributes, TPMA_NV, READ_STCLEAR))
         return TPM_RCS_ATTRIBUTES + RC_NV_ReadLock_nvIndex;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Set the READLOCK attribute
     SET_ATTRIBUTE(nvAttributes, TPMA_NV, READLOCKED);
 
     // Write NV info back
-    return NvWriteIndexAttributes(nvIndex->publicArea.nvIndex,
-                                  locator,
-                                  nvAttributes);
+    return NvWriteIndexAttributes(nvIndex->publicArea.nvIndex, locator, nvAttributes);
 }
 
-#endif // CC_NV_ReadLock
+#endif  // CC_NV_ReadLock

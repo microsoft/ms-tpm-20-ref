@@ -52,12 +52,11 @@
 
 //*** RunSelfTest()
 // Local function to run self-test
-static TPM_RC
-CryptRunSelfTests(
-    ALGORITHM_VECTOR    *toTest         // IN: the vector of the algorithms to test
-    )
+static TPM_RC CryptRunSelfTests(
+    ALGORITHM_VECTOR* toTest  // IN: the vector of the algorithms to test
+)
 {
-    TPM_ALG_ID           alg;
+    TPM_ALG_ID alg;
 
     // For each of the algorithms that are in the toTestVecor, need to run a
     // test
@@ -65,7 +64,7 @@ CryptRunSelfTests(
     {
         if(TEST_BIT(alg, *toTest))
         {
-            TPM_RC          result = CryptTestAlgorithm(alg, toTest);
+            TPM_RC result = CryptTestAlgorithm(alg, toTest);
             if(result != TPM_RC_SUCCESS)
                 return result;
         }
@@ -88,9 +87,8 @@ CryptRunSelfTests(
 //      TPM_RC_CANCELED        if the command is canceled
 LIB_EXPORT
 TPM_RC
-CryptSelfTest(
-    TPMI_YES_NO      fullTest       // IN: if full test is required
-    )
+CryptSelfTest(TPMI_YES_NO fullTest  // IN: if full test is required
+)
 {
 #if SIMULATION
     if(g_forceFailureMode)
@@ -101,9 +99,7 @@ CryptSelfTest(
     // all the tests will be run
     if(fullTest == YES)
     {
-        MemoryCopy(g_toTest,
-                   g_implementedAlgorithms,
-                   sizeof(g_toTest));
+        MemoryCopy(g_toTest, g_implementedAlgorithms, sizeof(g_toTest));
     }
     return CryptRunSelfTests(&g_toTest);
 }
@@ -121,14 +117,13 @@ CryptSelfTest(
 //      TPM_RC_TESTING          if toTest list is not empty
 //      TPM_RC_VALUE            an algorithm in the toTest list is not implemented
 TPM_RC
-CryptIncrementalSelfTest(
-    TPML_ALG            *toTest,        // IN: list of algorithms to be tested
-    TPML_ALG            *toDoList       // OUT: list of algorithms needing test
-    )
+CryptIncrementalSelfTest(TPML_ALG* toTest,   // IN: list of algorithms to be tested
+                         TPML_ALG* toDoList  // OUT: list of algorithms needing test
+)
 {
-    ALGORITHM_VECTOR     toTestVector = {0};
-    TPM_ALG_ID           alg;
-    UINT32               i;
+    ALGORITHM_VECTOR toTestVector = {0};
+    TPM_ALG_ID       alg;
+    UINT32           i;
 
     pAssert(toTest != NULL && toDoList != NULL);
     if(toTest->count > 0)
@@ -151,7 +146,7 @@ CryptIncrementalSelfTest(
     toDoList->count = 0;
 
     for(alg = TPM_ALG_FIRST;
-    toDoList->count < MAX_ALG_LIST_SIZE && alg <= TPM_ALG_LAST;
+        toDoList->count < MAX_ALG_LIST_SIZE && alg <= TPM_ALG_LAST;
         alg++)
     {
         if(TEST_BIT(alg, g_toTest))
@@ -164,10 +159,7 @@ CryptIncrementalSelfTest(
 // This function will initialize the data structures for testing all the
 // algorithms. This should not be called unless CryptAlgsSetImplemented() has
 // been called
-void
-CryptInitializeToTest(
-    void
-    )
+void CryptInitializeToTest(void)
 {
     // Indicate that nothing has been tested
     memset(&g_cryptoSelfTestState, 0, sizeof(g_cryptoSelfTestState));
@@ -196,12 +188,9 @@ CryptInitializeToTest(
 //      TPM_RC_CANCELED     test was canceled
 LIB_EXPORT
 TPM_RC
-CryptTestAlgorithm(
-    TPM_ALG_ID           alg,
-    ALGORITHM_VECTOR    *toTest
-    )
+CryptTestAlgorithm(TPM_ALG_ID alg, ALGORITHM_VECTOR* toTest)
 {
-    TPM_RC                   result;
+    TPM_RC result;
 #if SELF_TEST
     result = TestAlgorithm(alg, toTest);
 #else

@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_NV_ChangeAuth // Command must be enabled
+#if CC_NV_ChangeAuth  // Command must be enabled
 
-#ifndef _NV_Change_Auth_FP_H_
-#define _NV_Change_Auth_FP_H_
+#  ifndef _NV_Change_Auth_FP_H_
+#    define _NV_Change_Auth_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_NV_INDEX            nvIndex;
-    TPM2B_AUTH                  newAuth;
+typedef struct
+{
+    TPMI_RH_NV_INDEX nvIndex;
+    TPM2B_AUTH       newAuth;
 } NV_ChangeAuth_In;
 
 // Response code modifiers
-#define RC_NV_ChangeAuth_nvIndex    (TPM_RC_H + TPM_RC_1)
-#define RC_NV_ChangeAuth_newAuth    (TPM_RC_P + TPM_RC_1)
+#    define RC_NV_ChangeAuth_nvIndex (TPM_RC_H + TPM_RC_1)
+#    define RC_NV_ChangeAuth_newAuth (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_NV_ChangeAuth(
-    NV_ChangeAuth_In            *in
-);
+TPM2_NV_ChangeAuth(NV_ChangeAuth_In* in);
 
-#endif  // _NV_Change_Auth_FP_H_
-#endif  // CC_NV_ChangeAuth
+#  endif  // _NV_Change_Auth_FP_H_
+#endif    // CC_NV_ChangeAuth

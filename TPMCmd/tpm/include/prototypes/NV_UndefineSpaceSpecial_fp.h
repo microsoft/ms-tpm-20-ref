@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_NV_UndefineSpaceSpecial // Command must be enabled
+#if CC_NV_UndefineSpaceSpecial  // Command must be enabled
 
-#ifndef _NV_Undefine_Space_Special_FP_H_
-#define _NV_Undefine_Space_Special_FP_H_
+#  ifndef _NV_Undefine_Space_Special_FP_H_
+#    define _NV_Undefine_Space_Special_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_NV_INDEX                    nvIndex;
-    TPMI_RH_PLATFORM                    platform;
+typedef struct
+{
+    TPMI_RH_NV_INDEX nvIndex;
+    TPMI_RH_PLATFORM platform;
 } NV_UndefineSpaceSpecial_In;
 
 // Response code modifiers
-#define RC_NV_UndefineSpaceSpecial_nvIndex  (TPM_RC_H + TPM_RC_1)
-#define RC_NV_UndefineSpaceSpecial_platform (TPM_RC_H + TPM_RC_2)
+#    define RC_NV_UndefineSpaceSpecial_nvIndex  (TPM_RC_H + TPM_RC_1)
+#    define RC_NV_UndefineSpaceSpecial_platform (TPM_RC_H + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_NV_UndefineSpaceSpecial(
-    NV_UndefineSpaceSpecial_In          *in
-);
+TPM2_NV_UndefineSpaceSpecial(NV_UndefineSpaceSpecial_In* in);
 
-#endif  // _NV_Undefine_Space_Special_FP_H_
-#endif  // CC_NV_UndefineSpaceSpecial
+#  endif  // _NV_Undefine_Space_Special_FP_H_
+#endif    // CC_NV_UndefineSpaceSpecial

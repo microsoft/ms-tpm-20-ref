@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ClearControl // Command must be enabled
+#if CC_ClearControl  // Command must be enabled
 
-#ifndef _Clear_Control_FP_H_
-#define _Clear_Control_FP_H_
+#  ifndef _Clear_Control_FP_H_
+#    define _Clear_Control_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_CLEAR               auth;
-    TPMI_YES_NO                 disable;
+typedef struct
+{
+    TPMI_RH_CLEAR auth;
+    TPMI_YES_NO   disable;
 } ClearControl_In;
 
 // Response code modifiers
-#define RC_ClearControl_auth    (TPM_RC_H + TPM_RC_1)
-#define RC_ClearControl_disable (TPM_RC_P + TPM_RC_1)
+#    define RC_ClearControl_auth    (TPM_RC_H + TPM_RC_1)
+#    define RC_ClearControl_disable (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_ClearControl(
-    ClearControl_In             *in
-);
+TPM2_ClearControl(ClearControl_In* in);
 
-#endif  // _Clear_Control_FP_H_
-#endif  // CC_ClearControl
+#  endif  // _Clear_Control_FP_H_
+#endif    // CC_ClearControl

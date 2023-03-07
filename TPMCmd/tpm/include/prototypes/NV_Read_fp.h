@@ -37,36 +37,35 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_NV_Read // Command must be enabled
+#if CC_NV_Read  // Command must be enabled
 
-#ifndef _NV_Read_FP_H_
-#define _NV_Read_FP_H_
+#  ifndef _NV_Read_FP_H_
+#    define _NV_Read_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_NV_AUTH             authHandle;
-    TPMI_RH_NV_INDEX            nvIndex;
-    UINT16                      size;
-    UINT16                      offset;
+typedef struct
+{
+    TPMI_RH_NV_AUTH  authHandle;
+    TPMI_RH_NV_INDEX nvIndex;
+    UINT16           size;
+    UINT16           offset;
 } NV_Read_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_MAX_NV_BUFFER         data;
+typedef struct
+{
+    TPM2B_MAX_NV_BUFFER data;
 } NV_Read_Out;
 
 // Response code modifiers
-#define RC_NV_Read_authHandle   (TPM_RC_H + TPM_RC_1)
-#define RC_NV_Read_nvIndex      (TPM_RC_H + TPM_RC_2)
-#define RC_NV_Read_size         (TPM_RC_P + TPM_RC_1)
-#define RC_NV_Read_offset       (TPM_RC_P + TPM_RC_2)
+#    define RC_NV_Read_authHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_NV_Read_nvIndex    (TPM_RC_H + TPM_RC_2)
+#    define RC_NV_Read_size       (TPM_RC_P + TPM_RC_1)
+#    define RC_NV_Read_offset     (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_NV_Read(
-    NV_Read_In                  *in,
-    NV_Read_Out                 *out
-);
+TPM2_NV_Read(NV_Read_In* in, NV_Read_Out* out);
 
-#endif  // _NV_Read_FP_H_
-#endif  // CC_NV_Read
+#  endif  // _NV_Read_FP_H_
+#endif    // CC_NV_Read

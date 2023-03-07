@@ -65,54 +65,50 @@
 
 #if USE_RSA_KEY_CACHE
 
-#include  <stdio.h>
-#include "RsaKeyCache_fp.h"
+#  include <stdio.h>
+#  include "RsaKeyCache_fp.h"
 
-#if CRT_FORMAT_RSA == YES
-#define CACHE_FILE_NAME "RsaKeyCacheCrt.data"
-#else
-#define CACHE_FILE_NAME "RsaKeyCacheNoCrt.data"
-#endif
+#  if CRT_FORMAT_RSA == YES
+#    define CACHE_FILE_NAME "RsaKeyCacheCrt.data"
+#  else
+#    define CACHE_FILE_NAME "RsaKeyCacheNoCrt.data"
+#  endif
 
 typedef struct _RSA_KEY_CACHE_
 {
-    TPM2B_PUBLIC_KEY_RSA        publicModulus;
-    TPM2B_PRIVATE_KEY_RSA       privateExponent;
+    TPM2B_PUBLIC_KEY_RSA  publicModulus;
+    TPM2B_PRIVATE_KEY_RSA privateExponent;
 } RSA_KEY_CACHE;
 
 // Determine the number of RSA key sizes for the cache
-TPMI_RSA_KEY_BITS       SupportedRsaKeySizes[] = {
-#if RSA_1024
+TPMI_RSA_KEY_BITS SupportedRsaKeySizes[] = {
+#  if RSA_1024
     1024,
-#endif
-#if RSA_2048
+#  endif
+#  if RSA_2048
     2048,
-#endif
-#if RSA_3072
+#  endif
+#  if RSA_3072
     3072,
-#endif
-#if RSA_4096
+#  endif
+#  if RSA_4096
     4096,
-#endif
-    0
-};
+#  endif
+    0};
 
-#define RSA_KEY_CACHE_ENTRIES (RSA_1024 + RSA_2048 + RSA_3072 + RSA_4096)
+#  define RSA_KEY_CACHE_ENTRIES (RSA_1024 + RSA_2048 + RSA_3072 + RSA_4096)
 
 // The key cache holds one entry for each of the supported key sizes
-RSA_KEY_CACHE        s_rsaKeyCache[RSA_KEY_CACHE_ENTRIES];
+RSA_KEY_CACHE s_rsaKeyCache[RSA_KEY_CACHE_ENTRIES];
 // Indicates if the key cache is loaded. It can be loaded and enabled or disabled.
-BOOL                 s_keyCacheLoaded = 0;
+BOOL s_keyCacheLoaded = 0;
 
 // Indicates if the key cache is enabled
-int                  s_rsaKeyCacheEnabled = FALSE;
+int s_rsaKeyCacheEnabled = FALSE;
 
 //*** RsaKeyCacheControl()
 // Used to enable and disable the RSA key cache.
-LIB_EXPORT void
-RsaKeyCacheControl(
-    int             state
-    )
+LIB_EXPORT void RsaKeyCacheControl(int state)
 {
     s_rsaKeyCacheEnabled = state;
 }
@@ -123,44 +119,41 @@ RsaKeyCacheControl(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure
-static BOOL
-InitializeKeyCache(
-    TPMT_PUBLIC         *publicArea,
-    TPMT_SENSITIVE      *sensitive,
-    RAND_STATE          *rand               // IN: if not NULL, the deterministic
-                                            //     RNG state
-    )
+static BOOL InitializeKeyCache(TPMT_PUBLIC*    publicArea,
+                               TPMT_SENSITIVE* sensitive,
+                               RAND_STATE* rand  // IN: if not NULL, the deterministic
+                                                 //     RNG state
+)
 {
-    int                  index;
-    TPM_KEY_BITS         keySave = publicArea->parameters.rsaDetail.keyBits;
-    BOOL                 OK = TRUE;
-//
+    int          index;
+    TPM_KEY_BITS keySave = publicArea->parameters.rsaDetail.keyBits;
+    BOOL         OK      = TRUE;
+    //
     s_rsaKeyCacheEnabled = FALSE;
     for(index = 0; OK && index < RSA_KEY_CACHE_ENTRIES; index++)
     {
-        publicArea->parameters.rsaDetail.keyBits
-            = SupportedRsaKeySizes[index];
+        publicArea->parameters.rsaDetail.keyBits = SupportedRsaKeySizes[index];
         OK = (CryptRsaGenerateKey(publicArea, sensitive, rand) == TPM_RC_SUCCESS);
         if(OK)
         {
-            s_rsaKeyCache[index].publicModulus = publicArea->unique.rsa;
+            s_rsaKeyCache[index].publicModulus   = publicArea->unique.rsa;
             s_rsaKeyCache[index].privateExponent = sensitive->sensitive.rsa;
         }
     }
     publicArea->parameters.rsaDetail.keyBits = keySave;
-    s_keyCacheLoaded = OK;
-#if SIMULATION && USE_RSA_KEY_CACHE && USE_KEY_CACHE_FILE
+    s_keyCacheLoaded                         = OK;
+#  if SIMULATION && USE_RSA_KEY_CACHE && USE_KEY_CACHE_FILE
     if(OK)
     {
-        FILE                *cacheFile;
-        const char          *fn = CACHE_FILE_NAME;
+        FILE*       cacheFile;
+        const char* fn = CACHE_FILE_NAME;
 
-#if defined _MSC_VER
+#    if defined     _MSC_VER
         if(fopen_s(&cacheFile, fn, "w+b") != 0)
-#else
+#    else
         cacheFile = fopen(fn, "w+b");
         if(NULL == cacheFile)
-#endif
+#    endif
         {
             printf("Can't open %s for write.\n", fn);
         }
@@ -176,7 +169,7 @@ InitializeKeyCache(
         if(cacheFile)
             fclose(cacheFile);
     }
-#endif
+#  endif
     return s_keyCacheLoaded;
 }
 
@@ -185,38 +178,36 @@ InitializeKeyCache(
 //  Return Type: BOOL
 //      TRUE(1)         cache loaded
 //      FALSE(0)        cache not loaded
-static BOOL
-KeyCacheLoaded(
-    TPMT_PUBLIC         *publicArea,
-    TPMT_SENSITIVE      *sensitive,
-    RAND_STATE          *rand               // IN: if not NULL, the deterministic
-                                            //     RNG state
-    )
+static BOOL KeyCacheLoaded(TPMT_PUBLIC*    publicArea,
+                           TPMT_SENSITIVE* sensitive,
+                           RAND_STATE*     rand  // IN: if not NULL, the deterministic
+                                                 //     RNG state
+)
 {
-#if SIMULATION && USE_RSA_KEY_CACHE && USE_KEY_CACHE_FILE
+#  if SIMULATION && USE_RSA_KEY_CACHE && USE_KEY_CACHE_FILE
     if(!s_keyCacheLoaded)
     {
-        FILE            *cacheFile;
-        const char *     fn = CACHE_FILE_NAME;
-#if defined _MSC_VER && 1
+        FILE*       cacheFile;
+        const char* fn = CACHE_FILE_NAME;
+#    if defined     _MSC_VER && 1
         if(fopen_s(&cacheFile, fn, "r+b") == 0)
-#else
+#    else
         cacheFile = fopen(fn, "r+b");
         if(NULL != cacheFile)
-#endif
+#    endif
         {
             fseek(cacheFile, 0L, SEEK_END);
             if(ftell(cacheFile) == sizeof(s_rsaKeyCache))
             {
                 fseek(cacheFile, 0L, SEEK_SET);
-                s_keyCacheLoaded = (
-                    fread(&s_rsaKeyCache, 1, sizeof(s_rsaKeyCache), cacheFile)
-                    == sizeof(s_rsaKeyCache));
+                s_keyCacheLoaded =
+                    (fread(&s_rsaKeyCache, 1, sizeof(s_rsaKeyCache), cacheFile)
+                     == sizeof(s_rsaKeyCache));
             }
             fclose(cacheFile);
         }
     }
-#endif
+#  endif
     if(!s_keyCacheLoaded)
         s_rsaKeyCacheEnabled = InitializeKeyCache(publicArea, sensitive, rand);
     return s_keyCacheLoaded;
@@ -226,24 +217,22 @@ KeyCacheLoaded(
 //  Return Type: BOOL
 //      TRUE(1)         key loaded
 //      FALSE(0)        key not loaded
-BOOL
-GetCachedRsaKey(
-    TPMT_PUBLIC         *publicArea,
-    TPMT_SENSITIVE      *sensitive,
-    RAND_STATE          *rand               // IN: if not NULL, the deterministic
-                                            //     RNG state
-    )
+BOOL GetCachedRsaKey(TPMT_PUBLIC*    publicArea,
+                     TPMT_SENSITIVE* sensitive,
+                     RAND_STATE*     rand  // IN: if not NULL, the deterministic
+                                           //     RNG state
+)
 {
-    int                      keyBits = publicArea->parameters.rsaDetail.keyBits;
-    int                      index;
-//
+    int keyBits = publicArea->parameters.rsaDetail.keyBits;
+    int index;
+    //
     if(KeyCacheLoaded(publicArea, sensitive, rand))
     {
         for(index = 0; index < RSA_KEY_CACHE_ENTRIES; index++)
         {
             if((s_rsaKeyCache[index].publicModulus.t.size * 8) == keyBits)
             {
-                publicArea->unique.rsa = s_rsaKeyCache[index].publicModulus;
+                publicArea->unique.rsa   = s_rsaKeyCache[index].publicModulus;
                 sensitive->sensitive.rsa = s_rsaKeyCache[index].privateExponent;
                 return TRUE;
             }

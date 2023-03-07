@@ -37,14 +37,13 @@
  *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _HANDLE_FP_H_
-#define    _HANDLE_FP_H_
+#ifndef _HANDLE_FP_H_
+#define _HANDLE_FP_H_
 
 //*** HandleGetType()
 // This function returns the type of a handle which is the MSO of the handle.
 TPM_HT
-HandleGetType(
-    TPM_HANDLE       handle         // IN: a handle to be checked
+HandleGetType(TPM_HANDLE handle  // IN: a handle to be checked
 );
 
 //*** NextPermanentHandle()
@@ -52,8 +51,7 @@ HandleGetType(
 // is the next higher value. If there is no handle with the input value and there
 // is no next higher value, it returns 0:
 TPM_HANDLE
-NextPermanentHandle(
-    TPM_HANDLE       inHandle       // IN: the handle to check
+NextPermanentHandle(TPM_HANDLE inHandle  // IN: the handle to check
 );
 
 //*** PermanentCapGetHandles()
@@ -64,10 +62,9 @@ NextPermanentHandle(
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO
-PermanentCapGetHandles(
-    TPM_HANDLE       handle,        // IN: start handle
-    UINT32           count,         // IN: count of returned handles
-    TPML_HANDLE     *handleList     // OUT: list of handle
+PermanentCapGetHandles(TPM_HANDLE   handle,     // IN: start handle
+                       UINT32       count,      // IN: count of returned handles
+                       TPML_HANDLE* handleList  // OUT: list of handle
 );
 
 //*** PermanentHandleGetPolicy()
@@ -78,10 +75,9 @@ PermanentCapGetHandles(
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO
-PermanentHandleGetPolicy(
-    TPM_HANDLE           handle,        // IN: start handle
-    UINT32               count,         // IN: max count of returned handles
-    TPML_TAGGED_POLICY  *policyList     // OUT: list of handle
+PermanentHandleGetPolicy(TPM_HANDLE handle,  // IN: start handle
+                         UINT32     count,   // IN: max count of returned handles
+                         TPML_TAGGED_POLICY* policyList  // OUT: list of handle
 );
 
 #endif  // _HANDLE_FP_H_

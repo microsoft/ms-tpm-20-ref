@@ -59,16 +59,15 @@
 //                              if 'encryptedSecret' is greater than the
 //                              public modulus of 'tpmKey'.
 TPM_RC
-TPM2_StartAuthSession(
-    StartAuthSession_In     *in,            // IN: input parameter buffer
-    StartAuthSession_Out    *out            // OUT: output parameter buffer
-    )
+TPM2_StartAuthSession(StartAuthSession_In*  in,  // IN: input parameter buffer
+                      StartAuthSession_Out* out  // OUT: output parameter buffer
+)
 {
-    TPM_RC                   result = TPM_RC_SUCCESS;
-    OBJECT                  *tpmKey;                // TPM key for decrypt salt
-    TPM2B_DATA               salt;
+    TPM_RC     result = TPM_RC_SUCCESS;
+    OBJECT*    tpmKey;  // TPM key for decrypt salt
+    TPM2B_DATA salt;
 
-// Input Validation
+    // Input Validation
 
     // Check input nonce size.  IT should be at least 16 bytes but not larger
     // than the digest size of session hash.
@@ -101,8 +100,8 @@ TPM2_StartAuthSession(
             return TPM_RCS_ATTRIBUTES + RC_StartAuthSession_tpmKey;
         // Secret Decryption.  A TPM_RC_VALUE, TPM_RC_KEY or Unmarshal errors
         // may be returned at this point
-        result = CryptSecretDecrypt(tpmKey, &in->nonceCaller, SECRET_KEY,
-                                    &in->encryptedSalt, &salt);
+        result = CryptSecretDecrypt(
+            tpmKey, &in->nonceCaller, SECRET_KEY, &in->encryptedSalt, &salt);
         if(result != TPM_RC_SUCCESS)
             return TPM_RCS_VALUE + RC_StartAuthSession_encryptedSalt;
     }
@@ -117,7 +116,7 @@ TPM2_StartAuthSession(
     {
         case TPM_HT_TRANSIENT:
         {
-            OBJECT      *object = HandleToObject(in->bind);
+            OBJECT* object = HandleToObject(in->bind);
             // If the bind handle references a transient object, make sure that we
             // can get to the authorization value. Also, make sure that the object
             // has a proper Name (nameAlg != TPM_ALG_NULL). If it doesn't, then
@@ -130,14 +129,14 @@ TPM2_StartAuthSession(
             break;
         }
         case TPM_HT_NV_INDEX:
-        // a PIN index can't be a bind object
-        {
-            NV_INDEX       *nvIndex = NvGetIndexInfo(in->bind, NULL);
-            if(IsNvPinPassIndex(nvIndex->publicArea.attributes)
-               || IsNvPinFailIndex(nvIndex->publicArea.attributes))
-                return TPM_RCS_HANDLE + RC_StartAuthSession_bind;
-            break;
-        }
+            // a PIN index can't be a bind object
+            {
+                NV_INDEX* nvIndex = NvGetIndexInfo(in->bind, NULL);
+                if(IsNvPinPassIndex(nvIndex->publicArea.attributes)
+                   || IsNvPinFailIndex(nvIndex->publicArea.attributes))
+                    return TPM_RCS_HANDLE + RC_StartAuthSession_bind;
+                break;
+            }
         default:
             break;
     }
@@ -148,7 +147,7 @@ TPM2_StartAuthSession(
        && in->symmetric.mode.sym != TPM_ALG_CFB)
         return TPM_RCS_MODE + RC_StartAuthSession_symmetric;
 
-// Internal Data Update and command output
+    // Internal Data Update and command output
 
     // Create internal session structure.  TPM_RC_CONTEXT_GAP, TPM_RC_NO_HANDLES
     // or TPM_RC_SESSION_MEMORY errors may be returned at this point.
@@ -156,10 +155,15 @@ TPM2_StartAuthSession(
     // The detailed actions for creating the session context are not shown here
     // as the details are implementation dependent
     // SessionCreate sets the output handle and nonceTPM
-    result = SessionCreate(in->sessionType, in->authHash, &in->nonceCaller,
-                           &in->symmetric, in->bind, &salt, &out->sessionHandle,
+    result = SessionCreate(in->sessionType,
+                           in->authHash,
+                           &in->nonceCaller,
+                           &in->symmetric,
+                           in->bind,
+                           &salt,
+                           &out->sessionHandle,
                            &out->nonceTPM);
     return result;
 }
 
-#endif // CC_StartAuthSession
+#endif  // CC_StartAuthSession

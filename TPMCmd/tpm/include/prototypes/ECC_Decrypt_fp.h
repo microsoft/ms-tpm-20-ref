@@ -37,38 +37,37 @@
  *  Date: Feb 28, 2020  Time: 03:04:47PM
  */
 
-#if CC_ECC_Decrypt // Command must be enabled
+#if CC_ECC_Decrypt  // Command must be enabled
 
-#ifndef _ECC_DECRYPT_FP_H_
-#define _ECC_DECRYPT_FP_H_
+#  ifndef _ECC_DECRYPT_FP_H_
+#    define _ECC_DECRYPT_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              keyHandle;
-    TPM2B_ECC_POINT             C1;
-    TPM2B_MAX_BUFFER            C2;
-    TPM2B_DIGEST                C3;
-    TPMT_KDF_SCHEME             inScheme;
+typedef struct
+{
+    TPMI_DH_OBJECT   keyHandle;
+    TPM2B_ECC_POINT  C1;
+    TPM2B_MAX_BUFFER C2;
+    TPM2B_DIGEST     C3;
+    TPMT_KDF_SCHEME  inScheme;
 } ECC_Decrypt_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_MAX_BUFFER            plainText;
+typedef struct
+{
+    TPM2B_MAX_BUFFER plainText;
 } ECC_Decrypt_Out;
 
 // Response code modifiers
-#define RC_ECC_Decrypt_keyHandle    (TPM_RC_H + TPM_RC_1)
-#define RC_ECC_Decrypt_C1       (TPM_RC_P + TPM_RC_1)
-#define RC_ECC_Decrypt_C2       (TPM_RC_P + TPM_RC_2)
-#define RC_ECC_Decrypt_C3       (TPM_RC_P + TPM_RC_3)
-#define RC_ECC_Decrypt_inScheme (TPM_RC_P + TPM_RC_4)
+#    define RC_ECC_Decrypt_keyHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_ECC_Decrypt_C1        (TPM_RC_P + TPM_RC_1)
+#    define RC_ECC_Decrypt_C2        (TPM_RC_P + TPM_RC_2)
+#    define RC_ECC_Decrypt_C3        (TPM_RC_P + TPM_RC_3)
+#    define RC_ECC_Decrypt_inScheme  (TPM_RC_P + TPM_RC_4)
 
 // Function prototype
 TPM_RC
-TPM2_ECC_Decrypt(
-    ECC_Decrypt_In              *in,
-    ECC_Decrypt_Out             *out
-);
+TPM2_ECC_Decrypt(ECC_Decrypt_In* in, ECC_Decrypt_Out* out);
 
-#endif  // _ECC_DECRYPT_FP_H_
-#endif  // CC_ECC_Decrypt
+#  endif  // _ECC_DECRYPT_FP_H_
+#endif    // CC_ECC_Decrypt

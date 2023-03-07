@@ -41,11 +41,11 @@
 // NOTE: Since bit numbering starts at zero, when TPM_ALG_LAST is a multiple of 8,
 // ALGORITHM_VECTOR will need to have byte for the single bit in the last byte. So,
 // for example, when TPM_ALG_LAST is 8, ALGORITHM_VECTOR will need 2 bytes.
-#define ALGORITHM_VECTOR_BYTES  ((TPM_ALG_LAST + 8) / 8)
-typedef BYTE    ALGORITHM_VECTOR[ALGORITHM_VECTOR_BYTES];
+#define ALGORITHM_VECTOR_BYTES ((TPM_ALG_LAST + 8) / 8)
+typedef BYTE ALGORITHM_VECTOR[ALGORITHM_VECTOR_BYTES];
 
-#ifdef  TEST_SELF_TEST
-LIB_EXPORT    extern  ALGORITHM_VECTOR    LibToTest;
+#ifdef TEST_SELF_TEST
+LIB_EXPORT extern ALGORITHM_VECTOR LibToTest;
 #endif
 
 // This structure is used to contain self-test tracking information for the
@@ -55,16 +55,15 @@ LIB_EXPORT    extern  ALGORITHM_VECTOR    LibToTest;
 // to be tested.
 typedef struct
 {
-    UINT32      rng;
-    UINT32      hash;
-    UINT32      sym;
+    UINT32 rng;
+    UINT32 hash;
+    UINT32 sym;
 #if ALG_RSA
-    UINT32      rsa;
+    UINT32 rsa;
 #endif
 #if ALG_ECC
-    UINT32      ecc;
+    UINT32 ecc;
 #endif
 } CRYPTO_SELF_TEST_STATE;
 
-
-#endif // _CRYPT_TEST_H
+#endif  // _CRYPT_TEST_H

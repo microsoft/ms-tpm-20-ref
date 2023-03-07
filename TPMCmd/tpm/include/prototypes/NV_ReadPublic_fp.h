@@ -37,31 +37,30 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_NV_ReadPublic // Command must be enabled
+#if CC_NV_ReadPublic  // Command must be enabled
 
-#ifndef _NV_Read_Public_FP_H_
-#define _NV_Read_Public_FP_H_
+#  ifndef _NV_Read_Public_FP_H_
+#    define _NV_Read_Public_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_NV_INDEX            nvIndex;
+typedef struct
+{
+    TPMI_RH_NV_INDEX nvIndex;
 } NV_ReadPublic_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_NV_PUBLIC             nvPublic;
-    TPM2B_NAME                  nvName;
+typedef struct
+{
+    TPM2B_NV_PUBLIC nvPublic;
+    TPM2B_NAME      nvName;
 } NV_ReadPublic_Out;
 
 // Response code modifiers
-#define RC_NV_ReadPublic_nvIndex    (TPM_RC_H + TPM_RC_1)
+#    define RC_NV_ReadPublic_nvIndex (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_NV_ReadPublic(
-    NV_ReadPublic_In            *in,
-    NV_ReadPublic_Out           *out
-);
+TPM2_NV_ReadPublic(NV_ReadPublic_In* in, NV_ReadPublic_Out* out);
 
-#endif  // _NV_Read_Public_FP_H_
-#endif  // CC_NV_ReadPublic
+#  endif  // _NV_Read_Public_FP_H_
+#endif    // CC_NV_ReadPublic

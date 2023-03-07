@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_Clear // Command must be enabled
+#if CC_Clear  // Command must be enabled
 
-#ifndef _Clear_FP_H_
-#define _Clear_FP_H_
+#  ifndef _Clear_FP_H_
+#    define _Clear_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_CLEAR               authHandle;
+typedef struct
+{
+    TPMI_RH_CLEAR authHandle;
 } Clear_In;
 
 // Response code modifiers
-#define RC_Clear_authHandle     (TPM_RC_H + TPM_RC_1)
+#    define RC_Clear_authHandle (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_Clear(
-    Clear_In                    *in
-);
+TPM2_Clear(Clear_In* in);
 
-#endif  // _Clear_FP_H_
-#endif  // CC_Clear
+#  endif  // _Clear_FP_H_
+#endif    // CC_Clear

@@ -37,8 +37,8 @@
  *  Date: Apr  2, 2019  Time: 04:23:27PM
  */
 
-#ifndef    _TIME_FP_H_
-#define    _TIME_FP_H_
+#ifndef _TIME_FP_H_
+#define _TIME_FP_H_
 
 //*** TimePowerOn()
 // This function initialize time info at _TPM_Init().
@@ -49,10 +49,7 @@
 // for systems that could get powered up but not run any TPM commands for some
 // period of time.
 //
-void
-TimePowerOn(
-    void
-);
+void TimePowerOn(void);
 
 //*** TimeStartup()
 // This function updates the resetCount and restartCount components of
@@ -63,9 +60,7 @@ TimePowerOn(
 // TPM_Startup() has not been run. This is because the state of NV is not known
 // until startup completes. When Startup is done, then it will create the epoch
 // nonce to complete the initializations by calling this function.
-BOOL
-TimeStartup(
-    STARTUP_TYPE     type           // IN: start up type
+BOOL TimeStartup(STARTUP_TYPE type  // IN: start up type
 );
 
 //*** TimeClockUpdate()
@@ -74,9 +69,7 @@ TimeStartup(
 // go.clock is not updated and the function returns an error. If 'newTime' would
 // not cause an NV write, then go.clock is updated. If an NV write occurs, then
 // go.safe is SET.
-void
-TimeClockUpdate(
-    UINT64           newTime    // IN: New time value in mS.
+void TimeClockUpdate(UINT64 newTime  // IN: New time value in mS.
 );
 
 //*** TimeUpdate()
@@ -87,10 +80,7 @@ TimeClockUpdate(
 // this implementation, the go structure is not read from NV until TPM2_Startup().
 // The reason for this is that the initialization code (_TPM_Init()) may run before
 // NV is accessible.
-void
-TimeUpdate(
-    void
-);
+void TimeUpdate(void);
 
 //*** TimeUpdateToCurrent()
 // This function updates the 'Time' and 'Clock' in the global
@@ -108,16 +98,11 @@ TimeUpdate(
 // This implementation does not do rate limiting. If the implementation does do
 // rate limiting, then the 'Clock' update should not be inhibited even when doing
 // rate limiting.
-void
-TimeUpdateToCurrent(
-    void
-);
+void TimeUpdateToCurrent(void);
 
 //*** TimeSetAdjustRate()
 // This function is used to perform rate adjustment on 'Time' and 'Clock'.
-void
-TimeSetAdjustRate(
-    TPM_CLOCK_ADJUST     adjust         // IN: adjust constant
+void TimeSetAdjustRate(TPM_CLOCK_ADJUST adjust  // IN: adjust constant
 );
 
 //*** TimeGetMarshaled()
@@ -125,15 +110,11 @@ TimeSetAdjustRate(
 // The function collects the time information and marshals it into 'dataBuffer'
 // and returns the marshaled size
 UINT16
-TimeGetMarshaled(
-    TIME_INFO       *dataBuffer     // OUT: result buffer
+TimeGetMarshaled(TIME_INFO* dataBuffer  // OUT: result buffer
 );
 
 //*** TimeFillInfo
 // This function gathers information to fill in a TPMS_CLOCK_INFO structure.
-void
-TimeFillInfo(
-    TPMS_CLOCK_INFO     *clockInfo
-);
+void TimeFillInfo(TPMS_CLOCK_INFO* clockInfo);
 
 #endif  // _TIME_FP_H_

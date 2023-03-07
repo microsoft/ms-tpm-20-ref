@@ -49,9 +49,8 @@ _REDUCE_WARNING_LEVEL_(2)
 #include "tomcrypt_mpa.h"
 _NORMAL_WARNING_LEVEL_
 
-
 #if RADIX_BITS != 32
-#error "The mpa library used with LibTomCrypt only works for 32-bit words"
+#  error "The mpa library used with LibTomCrypt only works for 32-bit words"
 #endif
 
 // These macros handle entering and leaving a scope
@@ -61,29 +60,28 @@ _NORMAL_WARNING_LEVEL_
 // own stack).
 extern mpa_scratch_mem external_mem_pool;
 
-#define MPA_ENTER(vars, bits)                                       \
-    mpa_word_t           POOL_ [                                    \
-                         mpa_scratch_mem_size_in_U32(vars, bits)];  \
-    mpa_scratch_mem      pool_save = external_mem_pool;             \
-    mpa_scratch_mem      POOL = LtcPoolInit(POOL_, vars, bits)
+#define MPA_ENTER(vars, bits)                                     \
+  mpa_word_t      POOL_[mpa_scratch_mem_size_in_U32(vars, bits)]; \
+  mpa_scratch_mem pool_save = external_mem_pool;                  \
+  mpa_scratch_mem POOL      = LtcPoolInit(POOL_, vars, bits)
 
-#define MPA_LEAVE()     init_mpa_tomcrypt(pool_save)
+#define MPA_LEAVE() init_mpa_tomcrypt(pool_save)
 
 typedef ECC_CURVE_DATA bnCurve_t;
 
-typedef bnCurve_t  *bigCurve;
+typedef bnCurve_t*     bigCurve;
 
-#define AccessCurveData(E)  (E)
+#define AccessCurveData(E) (E)
 
 // Include the support functions for the routines that are used by LTC thunk.
 #include "TpmToLtcSupport_fp.h"
 
-#define CURVE_INITIALIZED(name, initializer)                        \
-    bnCurve_t      *name = (ECC_CURVE_DATA *)GetCurveData(initializer)
+#define CURVE_INITIALIZED(name, initializer) \
+  bnCurve_t* name = (ECC_CURVE_DATA*)GetCurveData(initializer)
 
 #define CURVE_FREE(E)
 
 // This definition would change if there were something to report
 #define MathLibSimulationEnd()
 
-#endif // MATH_LIB_DEFINED
+#endif  // MATH_LIB_DEFINED

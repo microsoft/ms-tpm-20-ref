@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_HierarchyChangeAuth // Command must be enabled
+#if CC_HierarchyChangeAuth  // Command must be enabled
 
-#ifndef _Hierarchy_Change_Auth_FP_H_
-#define _Hierarchy_Change_Auth_FP_H_
+#  ifndef _Hierarchy_Change_Auth_FP_H_
+#    define _Hierarchy_Change_Auth_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_HIERARCHY_AUTH          authHandle;
-    TPM2B_AUTH                      newAuth;
+typedef struct
+{
+    TPMI_RH_HIERARCHY_AUTH authHandle;
+    TPM2B_AUTH             newAuth;
 } HierarchyChangeAuth_In;
 
 // Response code modifiers
-#define RC_HierarchyChangeAuth_authHandle   (TPM_RC_H + TPM_RC_1)
-#define RC_HierarchyChangeAuth_newAuth  (TPM_RC_P + TPM_RC_1)
+#    define RC_HierarchyChangeAuth_authHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_HierarchyChangeAuth_newAuth    (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_HierarchyChangeAuth(
-    HierarchyChangeAuth_In          *in
-);
+TPM2_HierarchyChangeAuth(HierarchyChangeAuth_In* in);
 
-#endif  // _Hierarchy_Change_Auth_FP_H_
-#endif  // CC_HierarchyChangeAuth
+#  endif  // _Hierarchy_Change_Auth_FP_H_
+#endif    // CC_HierarchyChangeAuth

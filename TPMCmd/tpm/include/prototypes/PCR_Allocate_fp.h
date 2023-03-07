@@ -37,35 +37,34 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PCR_Allocate // Command must be enabled
+#if CC_PCR_Allocate  // Command must be enabled
 
-#ifndef _PCR_Allocate_FP_H_
-#define _PCR_Allocate_FP_H_
+#  ifndef _PCR_Allocate_FP_H_
+#    define _PCR_Allocate_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PLATFORM            authHandle;
-    TPML_PCR_SELECTION          pcrAllocation;
+typedef struct
+{
+    TPMI_RH_PLATFORM   authHandle;
+    TPML_PCR_SELECTION pcrAllocation;
 } PCR_Allocate_In;
 
 // Output structure definition
-typedef struct {
-    TPMI_YES_NO                 allocationSuccess;
-    UINT32                      maxPCR;
-    UINT32                      sizeNeeded;
-    UINT32                      sizeAvailable;
+typedef struct
+{
+    TPMI_YES_NO allocationSuccess;
+    UINT32      maxPCR;
+    UINT32      sizeNeeded;
+    UINT32      sizeAvailable;
 } PCR_Allocate_Out;
 
 // Response code modifiers
-#define RC_PCR_Allocate_authHandle  (TPM_RC_H + TPM_RC_1)
-#define RC_PCR_Allocate_pcrAllocation   (TPM_RC_P + TPM_RC_1)
+#    define RC_PCR_Allocate_authHandle    (TPM_RC_H + TPM_RC_1)
+#    define RC_PCR_Allocate_pcrAllocation (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_PCR_Allocate(
-    PCR_Allocate_In             *in,
-    PCR_Allocate_Out            *out
-);
+TPM2_PCR_Allocate(PCR_Allocate_In* in, PCR_Allocate_Out* out);
 
-#endif  // _PCR_Allocate_FP_H_
-#endif  // CC_PCR_Allocate
+#  endif  // _PCR_Allocate_FP_H_
+#endif    // CC_PCR_Allocate

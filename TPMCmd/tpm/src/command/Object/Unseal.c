@@ -44,13 +44,10 @@
 //      TPM_RC_ATTRIBUTES         'itemHandle' has wrong attributes
 //      TPM_RC_TYPE               'itemHandle' is not a KEYEDHASH data object
 TPM_RC
-TPM2_Unseal(
-    Unseal_In           *in,
-    Unseal_Out          *out
-    )
+TPM2_Unseal(Unseal_In* in, Unseal_Out* out)
 {
-    OBJECT                  *object;
-// Input Validation
+    OBJECT* object;
+    // Input Validation
     // Get pointer to loaded object
     object = HandleToObject(in->itemHandle);
 
@@ -61,10 +58,10 @@ TPM2_Unseal(
        || IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, sign)
        || IS_ATTRIBUTE(object->publicArea.objectAttributes, TPMA_OBJECT, restricted))
         return TPM_RCS_ATTRIBUTES + RC_Unseal_itemHandle;
-// Command Output
+    // Command Output
     // Copy data
     out->outData = object->sensitive.sensitive.bits;
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_Unseal
+#endif  // CC_Unseal

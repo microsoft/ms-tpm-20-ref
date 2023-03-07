@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_DictionaryAttackParameters // Command must be enabled
+#if CC_DictionaryAttackParameters  // Command must be enabled
 
-#ifndef _Dictionary_Attack_Parameters_FP_H_
-#define _Dictionary_Attack_Parameters_FP_H_
+#  ifndef _Dictionary_Attack_Parameters_FP_H_
+#    define _Dictionary_Attack_Parameters_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_LOCKOUT                         lockHandle;
-    UINT32                                  newMaxTries;
-    UINT32                                  newRecoveryTime;
-    UINT32                                  lockoutRecovery;
+typedef struct
+{
+    TPMI_RH_LOCKOUT lockHandle;
+    UINT32          newMaxTries;
+    UINT32          newRecoveryTime;
+    UINT32          lockoutRecovery;
 } DictionaryAttackParameters_In;
 
 // Response code modifiers
-#define RC_DictionaryAttackParameters_lockHandle    (TPM_RC_H + TPM_RC_1)
-#define RC_DictionaryAttackParameters_newMaxTries   (TPM_RC_P + TPM_RC_1)
-#define RC_DictionaryAttackParameters_newRecoveryTime   (TPM_RC_P + TPM_RC_2)
-#define RC_DictionaryAttackParameters_lockoutRecovery   (TPM_RC_P + TPM_RC_3)
+#    define RC_DictionaryAttackParameters_lockHandle      (TPM_RC_H + TPM_RC_1)
+#    define RC_DictionaryAttackParameters_newMaxTries     (TPM_RC_P + TPM_RC_1)
+#    define RC_DictionaryAttackParameters_newRecoveryTime (TPM_RC_P + TPM_RC_2)
+#    define RC_DictionaryAttackParameters_lockoutRecovery (TPM_RC_P + TPM_RC_3)
 
 // Function prototype
 TPM_RC
-TPM2_DictionaryAttackParameters(
-    DictionaryAttackParameters_In           *in
-);
+TPM2_DictionaryAttackParameters(DictionaryAttackParameters_In* in);
 
-#endif  // _Dictionary_Attack_Parameters_FP_H_
-#endif  // CC_DictionaryAttackParameters
+#  endif  // _Dictionary_Attack_Parameters_FP_H_
+#endif    // CC_DictionaryAttackParameters

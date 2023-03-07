@@ -36,9 +36,9 @@
 
 #if CC_PolicyAuthorizeNV  // Conditional expansion of this file
 
-#include "PolicyAuthorizeNV_fp.h"
-#include "Policy_spt_fp.h"
-#include "Marshal.h"
+#  include "PolicyAuthorizeNV_fp.h"
+#  include "Policy_spt_fp.h"
+#  include "Marshal.h"
 
 /*(See part 3 specification)
 // Change policy by a signature from authority
@@ -51,21 +51,19 @@
 //                          match 'approvedPolicy'; or 'checkTicket' doesn't match
 //                          the provided values
 TPM_RC
-TPM2_PolicyAuthorizeNV(
-    PolicyAuthorizeNV_In    *in
-    )
+TPM2_PolicyAuthorizeNV(PolicyAuthorizeNV_In* in)
 {
-    SESSION                 *session;
-    TPM_RC                   result;
-    NV_REF                   locator;
-    NV_INDEX                *nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
-    TPM2B_NAME               name;
-    TPMT_HA                  policyInNv;
-    BYTE                     nvTemp[sizeof(TPMT_HA)];
-    BYTE                    *buffer = nvTemp;
-    INT32                    size;
+    SESSION*   session;
+    TPM_RC     result;
+    NV_REF     locator;
+    NV_INDEX*  nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
+    TPM2B_NAME name;
+    TPMT_HA    policyInNv;
+    BYTE       nvTemp[sizeof(TPMT_HA)];
+    BYTE*      buffer = nvTemp;
+    INT32      size;
 
-// Input Validation
+    // Input Validation
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
 
@@ -76,8 +74,8 @@ TPM2_PolicyAuthorizeNV(
         // Common read access checks. NvReadAccessChecks() returns
         // TPM_RC_NV_AUTHORIZATION, TPM_RC_NV_LOCKED, or TPM_RC_NV_UNINITIALIZED
         // error may be returned at this point
-        result = NvReadAccessChecks(in->authHandle, in->nvIndex,
-                                    nvIndex->publicArea.attributes);
+        result = NvReadAccessChecks(
+            in->authHandle, in->nvIndex, nvIndex->publicArea.attributes);
         if(result != TPM_RC_SUCCESS)
             return result;
 
@@ -99,21 +97,26 @@ TPM2_PolicyAuthorizeNV(
 
         // See if the contents of the digest in the Index matches the value
         // in the policy
-        if(!MemoryEqual(&policyInNv.digest, &session->u2.policyDigest.t.buffer,
+        if(!MemoryEqual(&policyInNv.digest,
+                        &session->u2.policyDigest.t.buffer,
                         session->u2.policyDigest.t.size))
             return TPM_RC_VALUE;
     }
 
-// Internal Data Update
+    // Internal Data Update
 
     // Set policyDigest to zero digest
     PolicyDigestClear(session);
 
     // Update policyDigest
-    PolicyContextUpdate(TPM_CC_PolicyAuthorizeNV, EntityGetName(in->nvIndex, &name),
-                        NULL, NULL, 0, session);
+    PolicyContextUpdate(TPM_CC_PolicyAuthorizeNV,
+                        EntityGetName(in->nvIndex, &name),
+                        NULL,
+                        NULL,
+                        0,
+                        session);
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyAuthorize
+#endif  // CC_PolicyAuthorize

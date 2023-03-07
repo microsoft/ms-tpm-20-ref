@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PolicyOR // Command must be enabled
+#if CC_PolicyOR  // Command must be enabled
 
-#ifndef _Policy_OR_FP_H_
-#define _Policy_OR_FP_H_
+#  ifndef _Policy_OR_FP_H_
+#    define _Policy_OR_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_SH_POLICY              policySession;
-    TPML_DIGEST                 pHashList;
+typedef struct
+{
+    TPMI_SH_POLICY policySession;
+    TPML_DIGEST    pHashList;
 } PolicyOR_In;
 
 // Response code modifiers
-#define RC_PolicyOR_policySession   (TPM_RC_H + TPM_RC_1)
-#define RC_PolicyOR_pHashList   (TPM_RC_P + TPM_RC_1)
+#    define RC_PolicyOR_policySession (TPM_RC_H + TPM_RC_1)
+#    define RC_PolicyOR_pHashList     (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_PolicyOR(
-    PolicyOR_In                 *in
-);
+TPM2_PolicyOR(PolicyOR_In* in);
 
-#endif  // _Policy_OR_FP_H_
-#endif  // CC_PolicyOR
+#  endif  // _Policy_OR_FP_H_
+#endif    // CC_PolicyOR

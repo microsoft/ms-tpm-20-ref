@@ -47,27 +47,25 @@
 //*** CryptSmacStart()
 // Function to start an SMAC.
 UINT16
-CryptSmacStart(
-    HASH_STATE              *state,
-    TPMU_PUBLIC_PARMS       *keyParameters,
-    TPM_ALG_ID               macAlg,          // IN: the type of MAC
-    TPM2B                   *key
-)
+CryptSmacStart(HASH_STATE*        state,
+               TPMU_PUBLIC_PARMS* keyParameters,
+               TPM_ALG_ID         macAlg,  // IN: the type of MAC
+               TPM2B*             key)
 {
-    UINT16                  retVal = 0;
-//
+    UINT16 retVal = 0;
+    //
     // Make sure that the key size is correct. This should have been checked
     // at key load, but...
     if(BITS_TO_BYTES(keyParameters->symDetail.sym.keyBits.sym) == key->size)
     {
         switch(macAlg)
         {
-#if ALG_CMAC
+#  if ALG_CMAC
             case TPM_ALG_CMAC:
-                retVal = CryptCmacStart(&state->state.smac, keyParameters,
-                                        macAlg, key);
+                retVal =
+                    CryptCmacStart(&state->state.smac, keyParameters, macAlg, key);
                 break;
-#endif
+#  endif
             default:
                 break;
         }
@@ -80,12 +78,10 @@ CryptSmacStart(
 // Function to start either an HMAC or an SMAC. Cannot reuse the CryptHmacStart
 // function because of the difference in number of parameters.
 UINT16
-CryptMacStart(
-    HMAC_STATE              *state,
-    TPMU_PUBLIC_PARMS       *keyParameters,
-    TPM_ALG_ID               macAlg,          // IN: the type of MAC
-    TPM2B                   *key
-)
+CryptMacStart(HMAC_STATE*        state,
+              TPMU_PUBLIC_PARMS* keyParameters,
+              TPM_ALG_ID         macAlg,  // IN: the type of MAC
+              TPM2B*             key)
 {
     MemorySet(state, 0, sizeof(HMAC_STATE));
     if(CryptHashIsValidAlg(macAlg, FALSE))
@@ -103,16 +99,12 @@ CryptMacStart(
 //*** CryptMacEnd()
 // Dispatch to the MAC end function using a size and buffer pointer.
 UINT16
-CryptMacEnd(
-    HMAC_STATE          *state,
-    UINT32               size,
-    BYTE                *buffer
-)
+CryptMacEnd(HMAC_STATE* state, UINT32 size, BYTE* buffer)
 {
-    UINT16              retVal = 0;
+    UINT16 retVal = 0;
     if(state->hashState.type == HASH_STATE_SMAC)
         retVal = (state->hashState.state.smac.smacMethods.end)(
-                    &state->hashState.state.smac.state, size, buffer);
+            &state->hashState.state.smac.state, size, buffer);
     else if(state->hashState.type == HASH_STATE_HMAC)
         retVal = CryptHmacEnd(state, size, buffer);
     state->hashState.type = HASH_STATE_EMPTY;
@@ -122,11 +114,8 @@ CryptMacEnd(
 //*** CryptMacEnd2B()
 // Dispatch to the MAC end function using a 2B.
 UINT16
-CryptMacEnd2B (
-    HMAC_STATE          *state,
-    TPM2B               *data
-)
+CryptMacEnd2B(HMAC_STATE* state, TPM2B* data)
 {
     return CryptMacEnd(state, data->size, data->buffer);
 }
-#endif // SMAC_IMPLEMENTED
+#endif  // SMAC_IMPLEMENTED

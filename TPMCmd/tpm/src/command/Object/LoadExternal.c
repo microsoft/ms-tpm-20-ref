@@ -37,7 +37,7 @@
 
 #if CC_LoadExternal  // Conditional expansion of this file
 
-#include "Object_spt_fp.h"
+#  include "Object_spt_fp.h"
 
 /*(See part 3 specification)
 // to load an object that is not a Protected Object into the public portion
@@ -68,21 +68,19 @@
 //      TPM_RC_SYMMETRIC        symmetric algorithm not provided when required
 //      TPM_RC_TYPE             'inPublic' and 'inPrivate' are not the same type
 TPM_RC
-TPM2_LoadExternal(
-    LoadExternal_In     *in,            // IN: input parameter list
-    LoadExternal_Out    *out            // OUT: output parameter list
-    )
+TPM2_LoadExternal(LoadExternal_In*  in,  // IN: input parameter list
+                  LoadExternal_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC               result;
-    OBJECT              *object;
-    TPMT_SENSITIVE      *sensitive = NULL;
+    TPM_RC          result;
+    OBJECT*         object;
+    TPMT_SENSITIVE* sensitive = NULL;
 
-// Input Validation
+    // Input Validation
     // Don't get invested in loading if there is no place to put it.
     object = FindEmptyObjectSlot(&out->objectHandle);
     if(object == NULL)
         return TPM_RC_OBJECT_MEMORY;
-
 
     // If the hierarchy to be associated with this object is turned off, the object
     // cannot be loaded.
@@ -99,12 +97,12 @@ TPM2_LoadExternal(
         // An external object with a sensitive area must have fixedTPM == CLEAR
         // fixedParent == CLEAR so that it does not appear to be a key created by
         // this TPM.
-        if(IS_ATTRIBUTE(in->inPublic.publicArea.objectAttributes, TPMA_OBJECT,
-                        fixedTPM)
-           || IS_ATTRIBUTE(in->inPublic.publicArea.objectAttributes, TPMA_OBJECT,
-                           fixedParent)
-           || IS_ATTRIBUTE(in->inPublic.publicArea.objectAttributes, TPMA_OBJECT,
-                           restricted))
+        if(IS_ATTRIBUTE(
+               in->inPublic.publicArea.objectAttributes, TPMA_OBJECT, fixedTPM)
+           || IS_ATTRIBUTE(
+               in->inPublic.publicArea.objectAttributes, TPMA_OBJECT, fixedParent)
+           || IS_ATTRIBUTE(
+               in->inPublic.publicArea.objectAttributes, TPMA_OBJECT, restricted))
             return TPM_RCS_ATTRIBUTES + RC_LoadExternal_inPublic;
 
         // Have sensitive point to something other than NULL so that object
@@ -116,9 +114,12 @@ TPM2_LoadExternal(
     PublicMarshalAndComputeName(&in->inPublic.publicArea, &out->name);
 
     // Load and validate key
-    result = ObjectLoad(object, NULL,
-                        &in->inPublic.publicArea, sensitive,
-                        RC_LoadExternal_inPublic, RC_LoadExternal_inPrivate,
+    result = ObjectLoad(object,
+                        NULL,
+                        &in->inPublic.publicArea,
+                        sensitive,
+                        RC_LoadExternal_inPublic,
+                        RC_LoadExternal_inPrivate,
                         &out->name);
     if(result == TPM_RC_SUCCESS)
     {
@@ -129,4 +130,4 @@ TPM2_LoadExternal(
     return result;
 }
 
-#endif // CC_LoadExternal
+#endif  // CC_LoadExternal

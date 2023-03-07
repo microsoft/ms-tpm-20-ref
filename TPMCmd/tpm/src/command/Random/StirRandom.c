@@ -41,14 +41,13 @@
 // add entropy to the RNG state
 */
 TPM_RC
-TPM2_StirRandom(
-    StirRandom_In   *in             // IN: input parameter list
-    )
+TPM2_StirRandom(StirRandom_In* in  // IN: input parameter list
+)
 {
-// Internal Data Update
+    // Internal Data Update
     CryptRandomStir(in->inData.t.size, in->inData.t.buffer);
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_StirRandom
+#endif  // CC_StirRandom

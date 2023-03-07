@@ -43,14 +43,11 @@
 
 #if defined(HASH_LIB_OSSL) || defined(MATH_LIB_OSSL) || defined(SYM_LIB_OSSL)
 // Used to pass the pointers to the correct sub-keys
-typedef const BYTE *desKeyPointers[3];
+typedef const BYTE* desKeyPointers[3];
 
 //*** SupportLibInit()
 // This does any initialization required by the support library.
-LIB_EXPORT int
-SupportLibInit(
-    void
-    )
+LIB_EXPORT int SupportLibInit(void)
 {
     return TRUE;
 }
@@ -58,22 +55,16 @@ SupportLibInit(
 //*** OsslContextEnter()
 // This function is used to initialize an OpenSSL context at the start of a function
 // that will call to an OpenSSL math function.
-BN_CTX *
-OsslContextEnter(
-    void
-    )
+BN_CTX* OsslContextEnter(void)
 {
-    BN_CTX              *CTX = BN_CTX_new();
-//
+    BN_CTX* CTX = BN_CTX_new();
+    //
     return OsslPushContext(CTX);
 }
 
 //*** OsslContextLeave()
 // This is the companion function to OsslContextEnter().
-void
-OsslContextLeave(
-    BN_CTX          *CTX
-    )
+void OsslContextLeave(BN_CTX* CTX)
 {
     OsslPopContext(CTX);
     BN_CTX_free(CTX);
@@ -83,10 +74,7 @@ OsslContextLeave(
 // This function is used to create a frame in a context. All values allocated within
 // this context after the frame is started will be automatically freed when the
 // context (OsslPopContext()
-BN_CTX *
-OsslPushContext(
-    BN_CTX          *CTX
-    )
+BN_CTX* OsslPushContext(BN_CTX* CTX)
 {
     if(CTX == NULL)
         FAIL(FATAL_ERROR_ALLOCATION);
@@ -96,14 +84,11 @@ OsslPushContext(
 
 //*** OsslPopContext()
 // This is the companion function to OsslPushContext().
-void
-OsslPopContext(
-    BN_CTX          *CTX
-    )
+void OsslPopContext(BN_CTX* CTX)
 {
     // BN_CTX_end can't be called with NULL. It will blow up.
     if(CTX != NULL)
         BN_CTX_end(CTX);
 }
 
-#endif // HASH_LIB_OSSL || MATH_LIB_OSSL || SYM_LIB_OSSL
+#endif  // HASH_LIB_OSSL || MATH_LIB_OSSL || SYM_LIB_OSSL

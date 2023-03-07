@@ -54,27 +54,26 @@
 //                          (for an ECC key)
 TPM_RC
 TPM2_GetCommandAuditDigest(
-    GetCommandAuditDigest_In    *in,            // IN: input parameter list
-    GetCommandAuditDigest_Out   *out            // OUT: output parameter list
-    )
+    GetCommandAuditDigest_In*  in,  // IN: input parameter list
+    GetCommandAuditDigest_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                  result;
-    TPMS_ATTEST             auditInfo;
-    OBJECT                 *signObject = HandleToObject(in->signHandle);
-// Input validation
+    TPM_RC      result;
+    TPMS_ATTEST auditInfo;
+    OBJECT*     signObject = HandleToObject(in->signHandle);
+    // Input validation
     if(!IsSigningObject(signObject))
         return TPM_RCS_KEY + RC_GetCommandAuditDigest_signHandle;
     if(!CryptSelectSignScheme(signObject, &in->inScheme))
         return TPM_RCS_SCHEME + RC_GetCommandAuditDigest_inScheme;
 
-// Command Output
+    // Command Output
     // Fill in attest information common fields
-    FillInAttestInfo(in->signHandle, &in->inScheme, &in->qualifyingData,
-                     &auditInfo);
+    FillInAttestInfo(in->signHandle, &in->inScheme, &in->qualifyingData, &auditInfo);
 
     // CommandAuditDigest specific fields
-    auditInfo.type = TPM_ST_ATTEST_COMMAND_AUDIT;
-    auditInfo.attested.commandAudit.digestAlg = gp.auditHashAlg;
+    auditInfo.type                               = TPM_ST_ATTEST_COMMAND_AUDIT;
+    auditInfo.attested.commandAudit.digestAlg    = gp.auditHashAlg;
     auditInfo.attested.commandAudit.auditCounter = gp.auditCounter;
 
     // Copy command audit log
@@ -85,8 +84,11 @@ TPM2_GetCommandAuditDigest(
     // signHandle is TPM_RH_NULL.  A TPM_RC_NV_UNAVAILABLE, TPM_RC_NV_RATE,
     // TPM_RC_VALUE, TPM_RC_SCHEME or TPM_RC_ATTRIBUTES error may be returned at
     // this point
-    result = SignAttestInfo(signObject, &in->inScheme, &auditInfo,
-                            &in->qualifyingData, &out->auditInfo,
+    result = SignAttestInfo(signObject,
+                            &in->inScheme,
+                            &auditInfo,
+                            &in->qualifyingData,
+                            &out->auditInfo,
                             &out->signature);
     // Internal Data Update
     if(result == TPM_RC_SUCCESS && in->signHandle != TPM_RH_NULL)
@@ -96,4 +98,4 @@ TPM2_GetCommandAuditDigest(
     return result;
 }
 
-#endif // CC_GetCommandAuditDigest
+#endif  // CC_GetCommandAuditDigest

@@ -57,7 +57,7 @@
 #include "Tpm.h"
 
 #ifdef MATH_LIB_OSSL
-#include "TpmToOsslMath_fp.h"
+#  include "TpmToOsslMath_fp.h"
 
 //** Functions
 
@@ -69,19 +69,15 @@
 //      TRUE(1)         success
 //      FALSE(0)        failure because value will not fit or OpenSSL variable doesn't
 //                      exist
-BOOL
-OsslToTpmBn(
-    bigNum          bn,
-    BIGNUM          *osslBn
-    )
+BOOL OsslToTpmBn(bigNum bn, BIGNUM* osslBn)
 {
     VERIFY(osslBn != NULL);
     // If the bn is NULL, it means that an output value pointer was NULL meaning that
     // the results is simply to be discarded.
     if(bn != NULL)
     {
-        int         i;
-    //
+        int i;
+        //
         VERIFY((unsigned)osslBn->top <= BnGetAllocated(bn));
         for(i = 0; i < osslBn->top; i++)
             bn->d[i] = osslBn->d[i];
@@ -96,42 +92,33 @@ Error:
 // This function initializes an OSSL BIGNUM from a TPM bigConst. Do not use this for
 // values that are passed to OpenSLL when they are not declared as const in the
 // function prototype. Instead, use BnNewVariable().
-BIGNUM *
-BigInitialized(
-    BIGNUM             *toInit,
-    bigConst            initializer
-    )
+BIGNUM* BigInitialized(BIGNUM* toInit, bigConst initializer)
 {
     if(initializer == NULL)
         FAIL(FATAL_ERROR_PARAMETER);
     if(toInit == NULL || initializer == NULL)
         return NULL;
-    toInit->d = (BN_ULONG *)&initializer->d[0];
-    toInit->dmax = (int)initializer->allocated;
-    toInit->top = (int)initializer->size;
-    toInit->neg = 0;
+    toInit->d     = (BN_ULONG*)&initializer->d[0];
+    toInit->dmax  = (int)initializer->allocated;
+    toInit->top   = (int)initializer->size;
+    toInit->neg   = 0;
     toInit->flags = 0;
     return toInit;
 }
 
-#ifndef OSSL_DEBUG
-#   define BIGNUM_PRINT(label, bn, eol)
-#   define DEBUG_PRINT(x)
-#else
-#   define DEBUG_PRINT(x)   printf("%s", x)
-#   define BIGNUM_PRINT(label, bn, eol) BIGNUM_print((label), (bn), (eol))
+#  ifndef OSSL_DEBUG
+#    define BIGNUM_PRINT(label, bn, eol)
+#    define DEBUG_PRINT(x)
+#  else
+#    define DEBUG_PRINT(x)               printf("%s", x)
+#    define BIGNUM_PRINT(label, bn, eol) BIGNUM_print((label), (bn), (eol))
 
 //*** BIGNUM_print()
-static void
-BIGNUM_print(
-    const char      *label,
-    const BIGNUM    *a,
-    BOOL             eol
-    )
+static void BIGNUM_print(const char* label, const BIGNUM* a, BOOL eol)
 {
-    BN_ULONG        *d;
-    int              i;
-    int              notZero = FALSE;
+    BN_ULONG* d;
+    int       i;
+    int       notZero = FALSE;
 
     if(label != NULL)
         printf("%s", label);
@@ -140,15 +127,15 @@ BIGNUM_print(
         printf("NULL");
         goto done;
     }
-    if (a->neg)
+    if(a->neg)
         printf("-");
     for(i = a->top, d = &a->d[i - 1]; i > 0; i--)
     {
-        int         j;
-        BN_ULONG    l = *d--;
+        int      j;
+        BN_ULONG l = *d--;
         for(j = BN_BITS2 - 8; j >= 0; j -= 8)
         {
-            BYTE    b = (BYTE)((l >> j) & 0xFF);
+            BYTE b  = (BYTE)((l >> j) & 0xFF);
             notZero = notZero || (b != 0);
             if(notZero)
                 printf("%02x", b);
@@ -161,18 +148,15 @@ done:
         printf("\n");
     return;
 }
-#endif
+#  endif
 
 //*** BnNewVariable()
 // This function allocates a new variable in the provided context. If the context
 // does not exist or the allocation fails, it is a catastrophic failure.
-static BIGNUM *
-BnNewVariable(
-    BN_CTX          *CTX
-)
+static BIGNUM* BnNewVariable(BN_CTX* CTX)
 {
-    BIGNUM          *new;
-//
+    BIGNUM* new;
+    //
     // This check is intended to protect against calling this function without
     // having initialized the CTX.
     if((CTX == NULL) || ((new = BN_CTX_get(CTX)) == NULL))
@@ -180,23 +164,19 @@ BnNewVariable(
     return new;
 }
 
-#if LIBRARY_COMPATIBILITY_CHECK
+#  if LIBRARY_COMPATIBILITY_CHECK
 
 //*** MathLibraryCompatibilityCheck()
-BOOL
-MathLibraryCompatibilityCheck(
-    void
-    )
+BOOL MathLibraryCompatibilityCheck(void)
 {
     OSSL_ENTER();
-    BIGNUM              *osslTemp = BnNewVariable(CTX);
-    crypt_uword_t        i;
-    BYTE                 test[] = {0x1F, 0x1E, 0x1D, 0x1C, 0x1B, 0x1A, 0x19, 0x18,
-                                   0x17, 0x16, 0x15, 0x14, 0x13, 0x12, 0x11, 0x10,
-                                   0x0F, 0x0E, 0x0D, 0x0C, 0x0B, 0x0A, 0x09, 0x08,
-                                   0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
-    BN_VAR(tpmTemp, sizeof(test) * 8); // allocate some space for a test value
-//
+    BIGNUM*       osslTemp = BnNewVariable(CTX);
+    crypt_uword_t i;
+    BYTE test[] = {0x1F, 0x1E, 0x1D, 0x1C, 0x1B, 0x1A, 0x19, 0x18, 0x17, 0x16, 0x15,
+                   0x14, 0x13, 0x12, 0x11, 0x10, 0x0F, 0x0E, 0x0D, 0x0C, 0x0B, 0x0A,
+                   0x09, 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00};
+    BN_VAR(tpmTemp, sizeof(test) * 8);  // allocate some space for a test value
+                                        //
     // Convert the test data to a bigNum
     BnFromBytes(tpmTemp, test, sizeof(test));
     // Convert the test data to an OpenSSL BIGNUM
@@ -210,7 +190,7 @@ MathLibraryCompatibilityCheck(
 Error:
     return 0;
 }
-#endif
+#  endif
 
 //*** BnModMult()
 // This function does a modular multiply. It first does a multiply and then a divide
@@ -218,22 +198,16 @@ Error:
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnModMult(
-    bigNum              result,
-    bigConst            op1,
-    bigConst            op2,
-    bigConst            modulus
-    )
+LIB_EXPORT BOOL BnModMult(bigNum result, bigConst op1, bigConst op2, bigConst modulus)
 {
     OSSL_ENTER();
-    BOOL                OK = TRUE;
-    BIGNUM              *bnResult = BN_NEW();
-    BIGNUM              *bnTemp = BN_NEW();
+    BOOL    OK       = TRUE;
+    BIGNUM* bnResult = BN_NEW();
+    BIGNUM* bnTemp   = BN_NEW();
     BIG_INITIALIZED(bnOp1, op1);
     BIG_INITIALIZED(bnOp2, op2);
     BIG_INITIALIZED(bnMod, modulus);
-//
+    //
     VERIFY(BN_mul(bnTemp, bnOp1, bnOp2, CTX));
     VERIFY(BN_div(NULL, bnResult, bnTemp, bnMod, CTX));
     VERIFY(OsslToTpmBn(result, bnResult));
@@ -250,19 +224,14 @@ Exit:
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnMult(
-    bigNum               result,
-    bigConst             multiplicand,
-    bigConst             multiplier
-    )
+LIB_EXPORT BOOL BnMult(bigNum result, bigConst multiplicand, bigConst multiplier)
 {
     OSSL_ENTER();
-    BIGNUM              *bnTemp = BN_NEW();
-    BOOL                 OK = TRUE;
+    BIGNUM* bnTemp = BN_NEW();
+    BOOL    OK     = TRUE;
     BIG_INITIALIZED(bnA, multiplicand);
     BIG_INITIALIZED(bnB, multiplier);
-//
+    //
     VERIFY(BN_mul(bnTemp, bnA, bnB, CTX));
     VERIFY(OsslToTpmBn(result, bnTemp));
     goto Exit;
@@ -279,21 +248,16 @@ Exit:
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnDiv(
-    bigNum               quotient,
-    bigNum               remainder,
-    bigConst             dividend,
-    bigConst             divisor
-    )
+LIB_EXPORT BOOL BnDiv(
+    bigNum quotient, bigNum remainder, bigConst dividend, bigConst divisor)
 {
     OSSL_ENTER();
-    BIGNUM              *bnQ = BN_NEW();
-    BIGNUM              *bnR = BN_NEW();
-    BOOL                 OK = TRUE;
+    BIGNUM* bnQ = BN_NEW();
+    BIGNUM* bnR = BN_NEW();
+    BOOL    OK  = TRUE;
     BIG_INITIALIZED(bnDend, dividend);
     BIG_INITIALIZED(bnSor, divisor);
-//
+    //
     if(BnEqualZero(divisor))
         FAIL(FATAL_ERROR_DIVIDE_ZERO);
     VERIFY(BN_div(bnQ, bnR, bnDend, bnSor, CTX));
@@ -312,25 +276,23 @@ Exit:
     return OK;
 }
 
-#if ALG_RSA
+#  if ALG_RSA
 //*** BnGcd()
 // Get the greatest common divisor of two numbers
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnGcd(
-    bigNum      gcd,            // OUT: the common divisor
-    bigConst    number1,        // IN:
-    bigConst    number2         // IN:
-    )
+LIB_EXPORT BOOL BnGcd(bigNum   gcd,      // OUT: the common divisor
+                      bigConst number1,  // IN:
+                      bigConst number2   // IN:
+)
 {
     OSSL_ENTER();
-    BIGNUM              *bnGcd = BN_NEW();
-    BOOL                 OK = TRUE;
+    BIGNUM* bnGcd = BN_NEW();
+    BOOL    OK    = TRUE;
     BIG_INITIALIZED(bn1, number1);
     BIG_INITIALIZED(bn2, number2);
-//
+    //
     VERIFY(BN_gcd(bnGcd, bn1, bn2, CTX));
     VERIFY(OsslToTpmBn(gcd, bnGcd));
     goto Exit;
@@ -347,21 +309,19 @@ Exit:
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnModExp(
-    bigNum               result,         // OUT: the result
-    bigConst             number,         // IN: number to exponentiate
-    bigConst             exponent,       // IN:
-    bigConst             modulus         // IN:
-    )
+LIB_EXPORT BOOL BnModExp(bigNum   result,    // OUT: the result
+                         bigConst number,    // IN: number to exponentiate
+                         bigConst exponent,  // IN:
+                         bigConst modulus    // IN:
+)
 {
     OSSL_ENTER();
-    BIGNUM              *bnResult = BN_NEW();
-    BOOL                 OK = TRUE;
+    BIGNUM* bnResult = BN_NEW();
+    BOOL    OK       = TRUE;
     BIG_INITIALIZED(bnN, number);
     BIG_INITIALIZED(bnE, exponent);
     BIG_INITIALIZED(bnM, modulus);
-//
+    //
     VERIFY(BN_mod_exp(bnResult, bnN, bnE, bnM, CTX));
     VERIFY(OsslToTpmBn(result, bnResult));
     goto Exit;
@@ -377,19 +337,14 @@ Exit:
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-LIB_EXPORT BOOL
-BnModInverse(
-    bigNum               result,
-    bigConst             number,
-    bigConst             modulus
-    )
+LIB_EXPORT BOOL BnModInverse(bigNum result, bigConst number, bigConst modulus)
 {
     OSSL_ENTER();
-    BIGNUM              *bnResult = BN_NEW();
-    BOOL                 OK = TRUE;
+    BIGNUM* bnResult = BN_NEW();
+    BOOL    OK       = TRUE;
     BIG_INITIALIZED(bnN, number);
     BIG_INITIALIZED(bnM, modulus);
-//
+    //
     VERIFY(BN_mod_inverse(bnResult, bnN, bnM, CTX) != NULL);
     VERIFY(OsslToTpmBn(result, bnResult));
     goto Exit;
@@ -399,27 +354,25 @@ Exit:
     OSSL_LEAVE();
     return OK;
 }
-#endif // ALG_RSA
+#  endif  // ALG_RSA
 
-#if ALG_ECC
+#  if ALG_ECC
 
 //*** PointFromOssl()
 // Function to copy the point result from an OSSL function to a bigNum
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation
-static BOOL
-PointFromOssl(
-    bigPoint         pOut,      // OUT: resulting point
-    EC_POINT        *pIn,       // IN: the point to return
-    bigCurve         E          // IN: the curve
-    )
+static BOOL PointFromOssl(bigPoint  pOut,  // OUT: resulting point
+                          EC_POINT* pIn,   // IN: the point to return
+                          bigCurve  E      // IN: the curve
+)
 {
-    BIGNUM         *x = NULL;
-    BIGNUM         *y = NULL;
-    BOOL            OK;
+    BIGNUM* x = NULL;
+    BIGNUM* y = NULL;
+    BOOL    OK;
     BN_CTX_start(E->CTX);
-//
+    //
     x = BN_CTX_get(E->CTX);
     y = BN_CTX_get(E->CTX);
 
@@ -441,13 +394,9 @@ PointFromOssl(
 
 //*** EcPointInitialized()
 // Allocate and initialize a point.
-static EC_POINT *
-EcPointInitialized(
-    pointConst          initializer,
-    bigCurve            E
-    )
+static EC_POINT* EcPointInitialized(pointConst initializer, bigCurve E)
 {
-    EC_POINT            *P = NULL;
+    EC_POINT* P = NULL;
 
     if(initializer != NULL)
     {
@@ -470,21 +419,20 @@ EcPointInitialized(
 //      NULL        the TPM_ECC_CURVE is not valid or there was a problem in
 //                  in initializing the curve data
 //      non-NULL    points to 'E'
-LIB_EXPORT bigCurve
-BnCurveInitialize(
-    bigCurve          E,           // IN: curve structure to initialize
-    TPM_ECC_CURVE     curveId      // IN: curve identifier
+LIB_EXPORT bigCurve BnCurveInitialize(
+    bigCurve      E,       // IN: curve structure to initialize
+    TPM_ECC_CURVE curveId  // IN: curve identifier
 )
 {
-    const ECC_CURVE_DATA    *C = GetCurveData(curveId);
+    const ECC_CURVE_DATA* C = GetCurveData(curveId);
     if(C == NULL)
         E = NULL;
     if(E != NULL)
     {
         // This creates the OpenSSL memory context that stays in effect as long as the
         // curve (E) is defined.
-        OSSL_ENTER();                       // if the allocation fails, the TPM fails
-        EC_POINT                *P = NULL;
+        OSSL_ENTER();  // if the allocation fails, the TPM fails
+        EC_POINT* P = NULL;
         BIG_INITIALIZED(bnP, C->prime);
         BIG_INITIALIZED(bnA, C->a);
         BIG_INITIALIZED(bnB, C->b);
@@ -492,8 +440,8 @@ BnCurveInitialize(
         BIG_INITIALIZED(bnY, C->base.y);
         BIG_INITIALIZED(bnN, C->order);
         BIG_INITIALIZED(bnH, C->h);
-    //
-        E->C = C;
+        //
+        E->C   = C;
         E->CTX = CTX;
 
         // initialize EC group, associate a generator point and initialize the point
@@ -526,10 +474,7 @@ Exit:
 //*** BnCurveFree()
 // This function will free the allocated components of the curve and end the
 // frame in which the curve data exists
-LIB_EXPORT void
-BnCurveFree(
-    bigCurve                    E
-)
+LIB_EXPORT void BnCurveFree(bigCurve E)
 {
     if(E)
     {
@@ -538,22 +483,18 @@ BnCurveFree(
     }
 }
 
-
 //*** BnEccModMult()
 // This function does a point multiply of the form R = [d]S
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation; treat as result being point at infinity
-LIB_EXPORT BOOL
-BnEccModMult(
-    bigPoint             R,         // OUT: computed point
-    pointConst           S,         // IN: point to multiply by 'd' (optional)
-    bigConst             d,         // IN: scalar for [d]S
-    bigCurve             E
-    )
+LIB_EXPORT BOOL BnEccModMult(bigPoint   R,  // OUT: computed point
+                             pointConst S,  // IN: point to multiply by 'd' (optional)
+                             bigConst   d,  // IN: scalar for [d]S
+                             bigCurve   E)
 {
-    EC_POINT            *pR = EC_POINT_new(E->G);
-    EC_POINT            *pS = EcPointInitialized(S, E);
+    EC_POINT* pR = EC_POINT_new(E->G);
+    EC_POINT* pS = EcPointInitialized(S, E);
     BIG_INITIALIZED(bnD, d);
 
     if(S == NULL)
@@ -571,30 +512,28 @@ BnEccModMult(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation; treat as result being point at infinity
-LIB_EXPORT BOOL
-BnEccModMult2(
-    bigPoint             R,         // OUT: computed point
-    pointConst           S,         // IN: optional point
-    bigConst             d,         // IN: scalar for [d]S or [d]G
-    pointConst           Q,         // IN: second point
-    bigConst             u,         // IN: second scalar
-    bigCurve             E          // IN: curve
-    )
+LIB_EXPORT BOOL BnEccModMult2(bigPoint   R,  // OUT: computed point
+                              pointConst S,  // IN: optional point
+                              bigConst   d,  // IN: scalar for [d]S or [d]G
+                              pointConst Q,  // IN: second point
+                              bigConst   u,  // IN: second scalar
+                              bigCurve   E   // IN: curve
+)
 {
-    EC_POINT            *pR = EC_POINT_new(E->G);
-    EC_POINT            *pS = EcPointInitialized(S, E);
+    EC_POINT* pR = EC_POINT_new(E->G);
+    EC_POINT* pS = EcPointInitialized(S, E);
     BIG_INITIALIZED(bnD, d);
-    EC_POINT            *pQ = EcPointInitialized(Q, E);
+    EC_POINT* pQ = EcPointInitialized(Q, E);
     BIG_INITIALIZED(bnU, u);
 
-    if(S == NULL || S == (pointConst)&(AccessCurveData(E)->base))
+    if(S == NULL || S == (pointConst) & (AccessCurveData(E)->base))
         EC_POINT_mul(E->G, pR, bnD, pQ, bnU, E->CTX);
     else
     {
-        const EC_POINT        *points[2];
-        const BIGNUM          *scalars[2];
-        points[0] = pS;
-        points[1] = pQ;
+        const EC_POINT* points[2];
+        const BIGNUM*   scalars[2];
+        points[0]  = pS;
+        points[1]  = pQ;
         scalars[0] = bnD;
         scalars[1] = bnU;
         EC_POINTs_mul(E->G, pR, NULL, 2, points, scalars, E->CTX);
@@ -611,18 +550,16 @@ BnEccModMult2(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure in operation; treat as result being point at infinity
-LIB_EXPORT BOOL
-BnEccAdd(
-    bigPoint             R,         // OUT: computed point
-    pointConst           S,         // IN: point to multiply by 'd'
-    pointConst           Q,         // IN: second point
-    bigCurve             E          // IN: curve
-    )
+LIB_EXPORT BOOL BnEccAdd(bigPoint   R,  // OUT: computed point
+                         pointConst S,  // IN: point to multiply by 'd'
+                         pointConst Q,  // IN: second point
+                         bigCurve   E   // IN: curve
+)
 {
-    EC_POINT            *pR = EC_POINT_new(E->G);
-    EC_POINT            *pS = EcPointInitialized(S, E);
-    EC_POINT            *pQ = EcPointInitialized(Q, E);
-//
+    EC_POINT* pR = EC_POINT_new(E->G);
+    EC_POINT* pS = EcPointInitialized(S, E);
+    EC_POINT* pQ = EcPointInitialized(Q, E);
+    //
     EC_POINT_add(E->G, pR, pS, pQ, E->CTX);
 
     PointFromOssl(R, pR, E);
@@ -632,7 +569,6 @@ BnEccAdd(
     return !BnEqualZero(R->z);
 }
 
-#endif // ALG_ECC
+#  endif  // ALG_ECC
 
-
-#endif // MATHLIB OSSL
+#endif  // MATHLIB OSSL

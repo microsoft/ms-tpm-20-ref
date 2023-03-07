@@ -44,8 +44,8 @@
 */
 TPM_RC
 TPM2_DictionaryAttackLockReset(
-    DictionaryAttackLockReset_In    *in             // IN: input parameter list
-    )
+    DictionaryAttackLockReset_In* in  // IN: input parameter list
+)
 {
     // Input parameter is not reference in command action
     NOT_REFERENCED(in);
@@ -53,7 +53,7 @@ TPM2_DictionaryAttackLockReset(
     // The command needs NV update.
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Set failed tries to 0
     gp.failedTries = 0;
@@ -64,4 +64,4 @@ TPM2_DictionaryAttackLockReset(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_DictionaryAttackLockReset
+#endif  // CC_DictionaryAttackLockReset

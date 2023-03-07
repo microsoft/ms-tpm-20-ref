@@ -34,22 +34,19 @@
  */
 //** Includes and Function Prototypes
 
-#include    "Platform.h"
-#include    "_TPM_Init_fp.h"
+#include "Platform.h"
+#include "_TPM_Init_fp.h"
 
 //** Functions
 
 //***_plat__Signal_PowerOn()
 // Signal platform power on
-LIB_EXPORT int
-_plat__Signal_PowerOn(
-    void
-    )
+LIB_EXPORT int _plat__Signal_PowerOn(void)
 {
     // Reset the timer
     _plat__TimerReset();
 
-   // Need to indicate that we lost power
+    // Need to indicate that we lost power
     s_powerLost = TRUE;
 
     return 0;
@@ -67,22 +64,16 @@ _plat__Signal_PowerOn(
 //  Return Type: int
 //      TRUE(1)         power was lost
 //      FALSE(0)        power was not lost
-LIB_EXPORT int
-_plat__WasPowerLost(
-    void
-    )
+LIB_EXPORT int _plat__WasPowerLost(void)
 {
-    int         retVal = s_powerLost;
+    int retVal  = s_powerLost;
     s_powerLost = FALSE;
     return retVal;
 }
 
 //*** _plat_Signal_Reset()
 // This a TPM reset without a power loss.
-LIB_EXPORT int
-_plat__Signal_Reset(
-    void
-    )
+LIB_EXPORT int _plat__Signal_Reset(void)
 {
     // Initialize locality
     s_locality = 0;
@@ -100,10 +91,7 @@ _plat__Signal_Reset(
 
 //***_plat__Signal_PowerOff()
 // Signal platform power off
-LIB_EXPORT void
-_plat__Signal_PowerOff(
-    void
-    )
+LIB_EXPORT void _plat__Signal_PowerOff(void)
 {
     // Prepare NV memory for power off
     _plat__NVDisable(0);

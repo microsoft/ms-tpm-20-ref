@@ -41,12 +41,11 @@
 // Read a set of PCR
 */
 TPM_RC
-TPM2_PCR_Read(
-    PCR_Read_In     *in,            // IN: input parameter list
-    PCR_Read_Out    *out            // OUT: output parameter list
-    )
+TPM2_PCR_Read(PCR_Read_In*  in,  // IN: input parameter list
+              PCR_Read_Out* out  // OUT: output parameter list
+)
 {
-// Command Output
+    // Command Output
 
     // Call PCR read function.  input pcrSelectionIn parameter could be changed
     // to reflect the actual PCR being returned
@@ -57,4 +56,4 @@ TPM2_PCR_Read(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PCR_Read
+#endif  // CC_PCR_Read

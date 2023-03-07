@@ -50,23 +50,21 @@
 //      TPM_RC_NV_LOCKED                the Index referenced by 'nvIndex' is locked
 //                                      for writing
 TPM_RC
-TPM2_NV_SetBits(
-    NV_SetBits_In   *in             // IN: input parameter list
-    )
+TPM2_NV_SetBits(NV_SetBits_In* in  // IN: input parameter list
+)
 {
-    TPM_RC           result;
-    NV_REF           locator;
-    NV_INDEX        *nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
-    UINT64           oldValue;
-    UINT64           newValue;
+    TPM_RC    result;
+    NV_REF    locator;
+    NV_INDEX* nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
+    UINT64    oldValue;
+    UINT64    newValue;
 
-// Input Validation
+    // Input Validation
 
     // Common access checks, NvWriteAccessCheck() may return TPM_RC_NV_AUTHORIZATION
     // or TPM_RC_NV_LOCKED
-    result = NvWriteAccessChecks(in->authHandle,
-                                 in->nvIndex,
-                                 nvIndex->publicArea.attributes);
+    result = NvWriteAccessChecks(
+        in->authHandle, in->nvIndex, nvIndex->publicArea.attributes);
     if(result != TPM_RC_SUCCESS)
         return result;
 
@@ -84,8 +82,8 @@ TPM2_NV_SetBits(
     // Figure out what the new value is going to be
     newValue = oldValue | in->bits;
 
-// Internal Data Update
-    return  NvWriteUINT64Data(nvIndex, newValue);
+    // Internal Data Update
+    return NvWriteUINT64Data(nvIndex, newValue);
 }
 
-#endif // CC_NV_SetBits
+#endif  // CC_NV_SetBits

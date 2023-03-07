@@ -44,18 +44,16 @@
 //      TPM_RC_VALUE                invalid new clock
 
 TPM_RC
-TPM2_ClockSet(
-    ClockSet_In     *in             // IN: input parameter list
-    )
+TPM2_ClockSet(ClockSet_In* in  // IN: input parameter list
+)
 {
-// Input Validation
+    // Input Validation
     // new time can not be bigger than 0xFFFF000000000000 or smaller than
     // current clock
-    if(in->newTime > 0xFFFF000000000000ULL
-       || in->newTime < go.clock)
+    if(in->newTime > 0xFFFF000000000000ULL || in->newTime < go.clock)
         return TPM_RCS_VALUE + RC_ClockSet_newTime;
 
-// Internal Data Update
+    // Internal Data Update
     // Can't modify the clock if NV is not available.
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
@@ -63,4 +61,4 @@ TPM2_ClockSet(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_ClockSet
+#endif  // CC_ClockSet

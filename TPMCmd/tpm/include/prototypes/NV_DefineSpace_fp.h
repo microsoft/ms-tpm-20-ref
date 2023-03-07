@@ -37,28 +37,27 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_NV_DefineSpace // Command must be enabled
+#if CC_NV_DefineSpace  // Command must be enabled
 
-#ifndef _NV_Define_Space_FP_H_
-#define _NV_Define_Space_FP_H_
+#  ifndef _NV_Define_Space_FP_H_
+#    define _NV_Define_Space_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PROVISION           authHandle;
-    TPM2B_AUTH                  auth;
-    TPM2B_NV_PUBLIC             publicInfo;
+typedef struct
+{
+    TPMI_RH_PROVISION authHandle;
+    TPM2B_AUTH        auth;
+    TPM2B_NV_PUBLIC   publicInfo;
 } NV_DefineSpace_In;
 
 // Response code modifiers
-#define RC_NV_DefineSpace_authHandle    (TPM_RC_H + TPM_RC_1)
-#define RC_NV_DefineSpace_auth  (TPM_RC_P + TPM_RC_1)
-#define RC_NV_DefineSpace_publicInfo    (TPM_RC_P + TPM_RC_2)
+#    define RC_NV_DefineSpace_authHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_NV_DefineSpace_auth       (TPM_RC_P + TPM_RC_1)
+#    define RC_NV_DefineSpace_publicInfo (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_NV_DefineSpace(
-    NV_DefineSpace_In           *in
-);
+TPM2_NV_DefineSpace(NV_DefineSpace_In* in);
 
-#endif  // _NV_Define_Space_FP_H_
-#endif  // CC_NV_DefineSpace
+#  endif  // _NV_Define_Space_FP_H_
+#endif    // CC_NV_DefineSpace

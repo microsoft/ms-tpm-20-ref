@@ -45,14 +45,13 @@
 //                                  process may have been made)
 //      TPM_RC_TESTING              self test in process
 TPM_RC
-TPM2_SelfTest(
-    SelfTest_In     *in             // IN: input parameter list
-    )
+TPM2_SelfTest(SelfTest_In* in  // IN: input parameter list
+)
 {
-// Command Output
+    // Command Output
 
     // Call self test function in crypt module
     return CryptSelfTest(in->fullTest);
 }
 
-#endif // CC_SelfTest
+#endif  // CC_SelfTest

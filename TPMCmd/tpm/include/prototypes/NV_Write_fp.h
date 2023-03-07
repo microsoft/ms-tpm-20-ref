@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_NV_Write // Command must be enabled
+#if CC_NV_Write  // Command must be enabled
 
-#ifndef _NV_Write_FP_H_
-#define _NV_Write_FP_H_
+#  ifndef _NV_Write_FP_H_
+#    define _NV_Write_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_NV_AUTH             authHandle;
-    TPMI_RH_NV_INDEX            nvIndex;
-    TPM2B_MAX_NV_BUFFER         data;
-    UINT16                      offset;
+typedef struct
+{
+    TPMI_RH_NV_AUTH     authHandle;
+    TPMI_RH_NV_INDEX    nvIndex;
+    TPM2B_MAX_NV_BUFFER data;
+    UINT16              offset;
 } NV_Write_In;
 
 // Response code modifiers
-#define RC_NV_Write_authHandle  (TPM_RC_H + TPM_RC_1)
-#define RC_NV_Write_nvIndex     (TPM_RC_H + TPM_RC_2)
-#define RC_NV_Write_data        (TPM_RC_P + TPM_RC_1)
-#define RC_NV_Write_offset      (TPM_RC_P + TPM_RC_2)
+#    define RC_NV_Write_authHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_NV_Write_nvIndex    (TPM_RC_H + TPM_RC_2)
+#    define RC_NV_Write_data       (TPM_RC_P + TPM_RC_1)
+#    define RC_NV_Write_offset     (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_NV_Write(
-    NV_Write_In                 *in
-);
+TPM2_NV_Write(NV_Write_In* in);
 
-#endif  // _NV_Write_FP_H_
-#endif  // CC_NV_Write
+#  endif  // _NV_Write_FP_H_
+#endif    // CC_NV_Write

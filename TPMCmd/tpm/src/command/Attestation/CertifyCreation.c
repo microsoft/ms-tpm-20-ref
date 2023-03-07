@@ -50,16 +50,15 @@
 //                          the result in 'signature' is too small (for an RSA key);
 //                          invalid commit status (for an ECC key with a split scheme).
 TPM_RC
-TPM2_CertifyCreation(
-    CertifyCreation_In      *in,            // IN: input parameter list
-    CertifyCreation_Out     *out            // OUT: output parameter list
-    )
+TPM2_CertifyCreation(CertifyCreation_In*  in,  // IN: input parameter list
+                     CertifyCreation_Out* out  // OUT: output parameter list
+)
 {
-    TPMT_TK_CREATION        ticket;
-    TPMS_ATTEST             certifyInfo;
-    OBJECT                  *certified = HandleToObject(in->objectHandle);
-    OBJECT                  *signObject = HandleToObject(in->signHandle);
-// Input Validation
+    TPMT_TK_CREATION ticket;
+    TPMS_ATTEST      certifyInfo;
+    OBJECT*          certified  = HandleToObject(in->objectHandle);
+    OBJECT*          signObject = HandleToObject(in->signHandle);
+    // Input Validation
     if(!IsSigningObject(signObject))
         return TPM_RCS_KEY + RC_CertifyCreation_signHandle;
     if(!CryptSelectSignScheme(signObject, &in->inScheme))
@@ -67,20 +66,20 @@ TPM2_CertifyCreation(
 
     // CertifyCreation specific input validation
     // Re-compute ticket
-    TicketComputeCreation(in->creationTicket.hierarchy, &certified->name,
-                          &in->creationHash, &ticket);
+    TicketComputeCreation(
+        in->creationTicket.hierarchy, &certified->name, &in->creationHash, &ticket);
     // Compare ticket
     if(!MemoryEqual2B(&ticket.digest.b, &in->creationTicket.digest.b))
         return TPM_RCS_TICKET + RC_CertifyCreation_creationTicket;
 
-// Command Output
+    // Command Output
     // Common fields
-    FillInAttestInfo(in->signHandle, &in->inScheme, &in->qualifyingData,
-                     &certifyInfo);
+    FillInAttestInfo(
+        in->signHandle, &in->inScheme, &in->qualifyingData, &certifyInfo);
 
     // CertifyCreation specific fields
     // Attestation type
-    certifyInfo.type = TPM_ST_ATTEST_CREATION;
+    certifyInfo.type                         = TPM_ST_ATTEST_CREATION;
     certifyInfo.attested.creation.objectName = certified->name;
 
     // Copy the creationHash
@@ -90,9 +89,12 @@ TPM2_CertifyCreation(
     // signObject is TPM_RH_NULL.  A TPM_RC_NV_UNAVAILABLE, TPM_RC_NV_RATE,
     // TPM_RC_VALUE, TPM_RC_SCHEME or TPM_RC_ATTRIBUTES error may be returned at
     // this point
-    return SignAttestInfo(signObject, &in->inScheme, &certifyInfo,
-                          &in->qualifyingData, &out->certifyInfo,
+    return SignAttestInfo(signObject,
+                          &in->inScheme,
+                          &certifyInfo,
+                          &in->qualifyingData,
+                          &out->certifyInfo,
                           &out->signature);
 }
 
-#endif // CC_CertifyCreation
+#endif  // CC_CertifyCreation

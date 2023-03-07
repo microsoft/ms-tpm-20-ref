@@ -33,8 +33,8 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef    _PLATFORM_H_
-#define    _PLATFORM_H_
+#ifndef _PLATFORM_H_
+#define _PLATFORM_H_
 
 #include "TpmBuildSwitches.h"
 #include "BaseTypes.h"
@@ -47,6 +47,5 @@
 #include "PlatformClock.h"
 #include "PlatformData.h"
 #include "Platform_fp.h"
-
 
 #endif  // _PLATFORM_H_

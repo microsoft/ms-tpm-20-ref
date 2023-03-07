@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PolicyNvWritten // Command must be enabled
+#if CC_PolicyNvWritten  // Command must be enabled
 
-#ifndef _Policy_Nv_Written_FP_H_
-#define _Policy_Nv_Written_FP_H_
+#  ifndef _Policy_Nv_Written_FP_H_
+#    define _Policy_Nv_Written_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_SH_POLICY              policySession;
-    TPMI_YES_NO                 writtenSet;
+typedef struct
+{
+    TPMI_SH_POLICY policySession;
+    TPMI_YES_NO    writtenSet;
 } PolicyNvWritten_In;
 
 // Response code modifiers
-#define RC_PolicyNvWritten_policySession    (TPM_RC_H + TPM_RC_1)
-#define RC_PolicyNvWritten_writtenSet   (TPM_RC_P + TPM_RC_1)
+#    define RC_PolicyNvWritten_policySession (TPM_RC_H + TPM_RC_1)
+#    define RC_PolicyNvWritten_writtenSet    (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_PolicyNvWritten(
-    PolicyNvWritten_In          *in
-);
+TPM2_PolicyNvWritten(PolicyNvWritten_In* in);
 
-#endif  // _Policy_Nv_Written_FP_H_
-#endif  // CC_PolicyNvWritten
+#  endif  // _Policy_Nv_Written_FP_H_
+#endif    // CC_PolicyNvWritten

@@ -52,28 +52,29 @@
 //      TPM_RC_SIGNATURE        the signature is not genuine
 //      TPM_RC_SIZE             input cpHash has wrong size
 TPM_RC
-TPM2_PolicySigned(
-    PolicySigned_In     *in,            // IN: input parameter list
-    PolicySigned_Out    *out            // OUT: output parameter list
-    )
+TPM2_PolicySigned(PolicySigned_In*  in,  // IN: input parameter list
+                  PolicySigned_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                   result = TPM_RC_SUCCESS;
-    SESSION                 *session;
-    TPM2B_NAME               entityName;
-    TPM2B_DIGEST             authHash;
-    HASH_STATE               hashState;
-    UINT64                   authTimeout = 0;
-// Input Validation
+    TPM_RC       result = TPM_RC_SUCCESS;
+    SESSION*     session;
+    TPM2B_NAME   entityName;
+    TPM2B_DIGEST authHash;
+    HASH_STATE   hashState;
+    UINT64       authTimeout = 0;
+    // Input Validation
     // Set up local pointers
-    session = SessionGet(in->policySession);    // the session structure
+    session = SessionGet(in->policySession);  // the session structure
 
     // Only do input validation if this is not a trial policy session
     if(session->attributes.isTrialPolicy == CLEAR)
     {
         authTimeout = ComputeAuthTimeout(session, in->expiration, &in->nonceTPM);
 
-        result = PolicyParameterChecks(session, authTimeout,
-                                       &in->cpHashA, &in->nonceTPM,
+        result      = PolicyParameterChecks(session,
+                                       authTimeout,
+                                       &in->cpHashA,
+                                       &in->nonceTPM,
                                        RC_PolicySigned_nonceTPM,
                                        RC_PolicySigned_cpHashA,
                                        RC_PolicySigned_expiration);
@@ -99,8 +100,7 @@ TPM2_PolicySigned(
         //                  object.  Set to the NULLdigest if no hash is present.
         */
         // Start hash
-        authHash.t.size = CryptHashStart(&hashState,
-                                         CryptGetSignHashAlg(&in->auth));
+        authHash.t.size = CryptHashStart(&hashState, CryptGetSignHashAlg(&in->auth));
         // If there is no digest size, then we don't have a verification function
         // for this algorithm (e.g. TPM_ALG_ECDAA) so indicate that it is a
         // bad scheme.
@@ -128,28 +128,34 @@ TPM2_PolicySigned(
         if(result != TPM_RC_SUCCESS)
             return RcSafeAddToResult(result, RC_PolicySigned_auth);
     }
-// Internal Data Update
+    // Internal Data Update
     // Update policy with input policyRef and name of authorization key
     // These values are updated even if the session is a trial session
     PolicyContextUpdate(TPM_CC_PolicySigned,
                         EntityGetName(in->authObject, &entityName),
                         &in->policyRef,
-                        &in->cpHashA, authTimeout, session);
-// Command Output
+                        &in->cpHashA,
+                        authTimeout,
+                        session);
+    // Command Output
     // Create ticket and timeout buffer if in->expiration < 0 and this is not
     // a trial session.
     // NOTE: PolicyParameterChecks() makes sure that nonceTPM is present
     // when expiration is non-zero.
-    if(in->expiration < 0
-       && session->attributes.isTrialPolicy == CLEAR)
+    if(in->expiration < 0 && session->attributes.isTrialPolicy == CLEAR)
     {
-        BOOL        expiresOnReset = (in->nonceTPM.t.size == 0);
+        BOOL expiresOnReset = (in->nonceTPM.t.size == 0);
         // Compute policy ticket
         authTimeout &= ~EXPIRATION_BIT;
 
-        TicketComputeAuth(TPM_ST_AUTH_SIGNED, EntityGetHierarchy(in->authObject),
-                          authTimeout, expiresOnReset, &in->cpHashA, &in->policyRef,
-                          &entityName, &out->policyTicket);
+        TicketComputeAuth(TPM_ST_AUTH_SIGNED,
+                          EntityGetHierarchy(in->authObject),
+                          authTimeout,
+                          expiresOnReset,
+                          &in->cpHashA,
+                          &in->policyRef,
+                          &entityName,
+                          &out->policyTicket);
         // Generate timeout buffer.  The format of output timeout buffer is
         // TPM-specific.
         // Note: In this implementation, the timeout buffer value is computed after
@@ -170,11 +176,11 @@ TPM2_PolicySigned(
         out->timeout.t.size = 0;
 
         // authorization ticket is null
-        out->policyTicket.tag = TPM_ST_AUTH_SIGNED;
-        out->policyTicket.hierarchy = TPM_RH_NULL;
+        out->policyTicket.tag           = TPM_ST_AUTH_SIGNED;
+        out->policyTicket.hierarchy     = TPM_RH_NULL;
         out->policyTicket.digest.t.size = 0;
     }
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicySigned
+#endif  // CC_PolicySigned

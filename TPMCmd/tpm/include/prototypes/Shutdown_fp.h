@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_Shutdown // Command must be enabled
+#if CC_Shutdown  // Command must be enabled
 
-#ifndef _Shutdown_FP_H_
-#define _Shutdown_FP_H_
+#  ifndef _Shutdown_FP_H_
+#    define _Shutdown_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPM_SU                      shutdownType;
+typedef struct
+{
+    TPM_SU shutdownType;
 } Shutdown_In;
 
 // Response code modifiers
-#define RC_Shutdown_shutdownType    (TPM_RC_P + TPM_RC_1)
+#    define RC_Shutdown_shutdownType (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_Shutdown(
-    Shutdown_In                 *in
-);
+TPM2_Shutdown(Shutdown_In* in);
 
-#endif  // _Shutdown_FP_H_
-#endif  // CC_Shutdown
+#  endif  // _Shutdown_FP_H_
+#endif    // CC_Shutdown

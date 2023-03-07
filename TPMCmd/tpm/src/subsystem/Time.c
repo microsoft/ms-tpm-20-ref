@@ -52,10 +52,7 @@
 // for systems that could get powered up but not run any TPM commands for some
 // period of time.
 //
-void
-TimePowerOn(
-    void
-    )
+void TimePowerOn(void)
 {
     g_time = _plat__TimerRead();
 }
@@ -64,13 +61,10 @@ TimePowerOn(
 // This function does the processing to generate a new time epoch nonce and
 // set NV for update. This function is only called when NV is known to be available
 // and the clock is running. The epoch is updated to persistent data.
-static void
-TimeNewEpoch(
-    void
-    )
+static void TimeNewEpoch(void)
 {
 #if CLOCK_STOPS
-    CryptRandomGenerate(sizeof(CLOCK_NONCE), (BYTE *)&g_timeEpoch);
+    CryptRandomGenerate(sizeof(CLOCK_NONCE), (BYTE*)&g_timeEpoch);
 #else
     // if the epoch is kept in NV, update it.
     gp.timeEpoch++;
@@ -89,10 +83,8 @@ TimeNewEpoch(
 // TPM_Startup() has not been run. This is because the state of NV is not known
 // until startup completes. When Startup is done, then it will create the epoch
 // nonce to complete the initializations by calling this function.
-BOOL
-TimeStartup(
-    STARTUP_TYPE     type           // IN: start up type
-    )
+BOOL TimeStartup(STARTUP_TYPE type  // IN: start up type
+)
 {
     NOT_REFERENCED(type);
     // If the previous cycle is orderly shut down, the value of the safe bit
@@ -108,12 +100,10 @@ TimeStartup(
 // go.clock is not updated and the function returns an error. If 'newTime' would
 // not cause an NV write, then go.clock is updated. If an NV write occurs, then
 // go.safe is SET.
-void
-TimeClockUpdate(
-    UINT64           newTime    // IN: New time value in mS.
-    )
+void TimeClockUpdate(UINT64 newTime  // IN: New time value in mS.
+)
 {
-#define CLOCK_UPDATE_MASK  ((1ULL << NV_CLOCK_UPDATE_INTERVAL)- 1)
+#define CLOCK_UPDATE_MASK ((1ULL << NV_CLOCK_UPDATE_INTERVAL) - 1)
 
     // Check to see if the update will cause a need for an nvClock update
     if((newTime | CLOCK_UPDATE_MASK) > (go.clock | CLOCK_UPDATE_MASK))
@@ -131,7 +121,6 @@ TimeClockUpdate(
     else
         // No NV update needed so just update
         go.clock = newTime;
-
 }
 
 //*** TimeUpdate()
@@ -142,15 +131,12 @@ TimeClockUpdate(
 // this implementation, the go structure is not read from NV until TPM2_Startup().
 // The reason for this is that the initialization code (_TPM_Init()) may run before
 // NV is accessible.
-void
-TimeUpdate(
-    void
-    )
+void TimeUpdate(void)
 {
-    UINT64          elapsed;
-//
+    UINT64 elapsed;
+    //
     // Make sure that we consume the current _plat__TimerWasStopped() state.
-   if(_plat__TimerWasStopped())
+    if(_plat__TimerWasStopped())
     {
         TimeNewEpoch();
     }
@@ -184,10 +170,7 @@ TimeUpdate(
 // This implementation does not do rate limiting. If the implementation does do
 // rate limiting, then the 'Clock' update should not be inhibited even when doing
 // rate limiting.
-void
-TimeUpdateToCurrent(
-    void
-)
+void TimeUpdateToCurrent(void)
 {
     // Can't update time during the dark interval or when rate limiting so don't
     // make any modifications to the internal clock value. Also, defer any clock
@@ -198,13 +181,10 @@ TimeUpdateToCurrent(
     TimeUpdate();
 }
 
-
 //*** TimeSetAdjustRate()
 // This function is used to perform rate adjustment on 'Time' and 'Clock'.
-void
-TimeSetAdjustRate(
-    TPM_CLOCK_ADJUST     adjust         // IN: adjust constant
-    )
+void TimeSetAdjustRate(TPM_CLOCK_ADJUST adjust  // IN: adjust constant
+)
 {
     switch(adjust)
     {
@@ -241,29 +221,25 @@ TimeSetAdjustRate(
 // The function collects the time information and marshals it into 'dataBuffer'
 // and returns the marshaled size
 UINT16
-TimeGetMarshaled(
-    TIME_INFO       *dataBuffer     // OUT: result buffer
-    )
+TimeGetMarshaled(TIME_INFO* dataBuffer  // OUT: result buffer
+)
 {
-    TPMS_TIME_INFO      timeInfo;
+    TPMS_TIME_INFO timeInfo;
 
     // Fill TPMS_TIME_INFO structure
     timeInfo.time = g_time;
     TimeFillInfo(&timeInfo.clockInfo);
 
     // Marshal TPMS_TIME_INFO to canonical form
-    return TPMS_TIME_INFO_Marshal(&timeInfo, (BYTE **)&dataBuffer, NULL);
+    return TPMS_TIME_INFO_Marshal(&timeInfo, (BYTE**)&dataBuffer, NULL);
 }
 
 //*** TimeFillInfo
 // This function gathers information to fill in a TPMS_CLOCK_INFO structure.
-void
-TimeFillInfo(
-    TPMS_CLOCK_INFO     *clockInfo
-    )
+void TimeFillInfo(TPMS_CLOCK_INFO* clockInfo)
 {
-    clockInfo->clock = go.clock;
-    clockInfo->resetCount = gp.resetCount;
+    clockInfo->clock        = go.clock;
+    clockInfo->resetCount   = gp.resetCount;
     clockInfo->restartCount = gr.restartCount;
 
     // If NV is not available, clock stopped advancing and the value reported is

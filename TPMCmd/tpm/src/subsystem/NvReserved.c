@@ -78,19 +78,15 @@
 
 //** Includes, Defines
 #define NV_C
-#include    "Tpm.h"
+#include "Tpm.h"
 
 //************************************************
 //** Functions
 //************************************************
 
-
 //*** NvInitStatic()
 // This function initializes the static variables used in the NV subsystem.
-static void
-NvInitStatic(
-    void
-    )
+static void NvInitStatic(void)
 {
     // In some implementations, the end of NV is variable and is set at boot time.
     // This value will be the same for each boot, but is not necessarily known
@@ -106,13 +102,10 @@ NvInitStatic(
 //
 // This function is called at the beginning of ExecuteCommand before any potential
 // check of g_NvStatus.
-void
-NvCheckState(
-    void
-    )
+void NvCheckState(void)
 {
-    int     func_return;
-//
+    int func_return;
+    //
     func_return = _plat__IsNvAvailable();
     if(func_return == 0)
         g_NvStatus = TPM_RC_SUCCESS;
@@ -125,10 +118,7 @@ NvCheckState(
 
 //*** NvCommit
 // This is a wrapper for the platform function to commit pending NV writes.
-BOOL
-NvCommit(
-    void
-    )
+BOOL NvCommit(void)
 {
     return (_plat__NvCommit() == 0);
 }
@@ -139,12 +129,9 @@ NvCommit(
 //      TRUE(1)         all NV was initialized
 //      FALSE(0)        the NV containing saved state had an error and
 //                      TPM2_Startup(CLEAR) is required
-BOOL
-NvPowerOn(
-    void
-    )
+BOOL NvPowerOn(void)
 {
-    int          nvError = 0;
+    int nvError = 0;
     // If power was lost, need to re-establish the RAM data that is loaded from
     // NV and initialize the static variables
     if(g_powerWasLost)
@@ -163,10 +150,7 @@ NvPowerOn(
 // simulation.
 //
 // The layout of NV memory space is an implementation choice.
-void
-NvManufacture(
-    void
-    )
+void NvManufacture(void)
 {
 #if SIMULATION
     // Simulate the NV memory being in the erased state.
@@ -189,12 +173,10 @@ NvManufacture(
 
 //*** NvRead()
 // This function is used to move reserved data from NV memory to RAM.
-void
-NvRead(
-    void            *outBuffer,     // OUT: buffer to receive data
-    UINT32           nvOffset,      // IN: offset in NV of value
-    UINT32           size           // IN: size of the value to read
-    )
+void NvRead(void*  outBuffer,  // OUT: buffer to receive data
+            UINT32 nvOffset,   // IN: offset in NV of value
+            UINT32 size        // IN: size of the value to read
+)
 {
     // Input type should be valid
     pAssert(nvOffset + size < NV_MEMORY_SIZE);
@@ -205,18 +187,16 @@ NvRead(
 //*** NvWrite()
 // This function is used to post reserved data for writing to NV memory. Before
 // the TPM completes the operation, the value will be written.
-BOOL
-NvWrite(
-    UINT32           nvOffset,      // IN: location in NV to receive data
-    UINT32           size,          // IN: size of the data to move
-    void            *inBuffer       // IN: location containing data to write
-    )
+BOOL NvWrite(UINT32 nvOffset,  // IN: location in NV to receive data
+             UINT32 size,      // IN: size of the data to move
+             void*  inBuffer   // IN: location containing data to write
+)
 {
     // Input type should be valid
     if(nvOffset + size <= NV_MEMORY_SIZE)
     {
-    // Set the flag that a NV write happened
-    SET_NV_UPDATE(UT_NV);
+        // Set the flag that a NV write happened
+        SET_NV_UPDATE(UT_NV);
         return _plat__NvMemoryWrite(nvOffset, size, inBuffer);
     }
     return FALSE;
@@ -225,12 +205,11 @@ NvWrite(
 //*** NvUpdatePersistent()
 // This function is used to update a value in the PERSISTENT_DATA structure and
 // commits the value to NV.
-void
-NvUpdatePersistent(
-    UINT32           offset,        // IN: location in PERMANENT_DATA to be updated
-    UINT32           size,          // IN: size of the value
-    void            *buffer         // IN: the new data
-    )
+void NvUpdatePersistent(
+    UINT32 offset,  // IN: location in PERMANENT_DATA to be updated
+    UINT32 size,    // IN: size of the value
+    void*  buffer   // IN: the new data
+)
 {
     pAssert(offset + size <= sizeof(gp));
     MemoryCopy(&gp + offset, buffer, size);
@@ -239,12 +218,10 @@ NvUpdatePersistent(
 
 //*** NvClearPersistent()
 // This function is used to clear a persistent data entry and commit it to NV
-void
-NvClearPersistent(
-    UINT32           offset,        // IN: the offset in the PERMANENT_DATA
-                                    //     structure to be cleared (zeroed)
-    UINT32           size           // IN: number of bytes to clear
-    )
+void NvClearPersistent(UINT32 offset,  // IN: the offset in the PERMANENT_DATA
+                                       //     structure to be cleared (zeroed)
+                       UINT32 size     // IN: number of bytes to clear
+)
 {
     pAssert(offset + size <= sizeof(gp));
     MemorySet((&gp) + offset, 0, size);
@@ -253,10 +230,7 @@ NvClearPersistent(
 
 //*** NvReadPersistent()
 // This function reads persistent data to the RAM copy of the 'gp' structure.
-void
-NvReadPersistent(
-    void
-    )
+void NvReadPersistent(void)
 {
     NvRead(&gp, NV_PERSISTENT_DATA, sizeof(gp));
     return;

@@ -73,21 +73,20 @@
 //      TPM_RC_TYPE             cannot create the object of the indicated type
 //                              (usually only occurs if trying to derive an RSA key).
 TPM_RC
-TPM2_CreateLoaded(
-    CreateLoaded_In    *in,            // IN: input parameter list
-    CreateLoaded_Out   *out            // OUT: output parameter list
-    )
+TPM2_CreateLoaded(CreateLoaded_In*  in,  // IN: input parameter list
+                  CreateLoaded_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                       result = TPM_RC_SUCCESS;
-    OBJECT                      *parent = HandleToObject(in->parentHandle);
-    OBJECT                      *newObject;
-    BOOL                         derivation;
-    TPMT_PUBLIC                 *publicArea;
-    RAND_STATE                   randState;
-    RAND_STATE                  *rand = &randState;
-    TPMS_DERIVE                  labelContext;
+    TPM_RC       result = TPM_RC_SUCCESS;
+    OBJECT*      parent = HandleToObject(in->parentHandle);
+    OBJECT*      newObject;
+    BOOL         derivation;
+    TPMT_PUBLIC* publicArea;
+    RAND_STATE   randState;
+    RAND_STATE*  rand = &randState;
+    TPMS_DERIVE  labelContext;
 
-// Input Validation
+    // Input Validation
 
     // How the public area is unmarshaled is determined by the parent, so
     // see if parent is a derivation parent
@@ -114,8 +113,7 @@ TPM2_CreateLoaded(
     // unmarshaled like other public areas. Since it is not, this command needs its
     // on template that is a TPM2B that is unmarshaled as a BYTE array with a
     // its own unmarshal function.
-    result = UnmarshalToPublic(publicArea, &in->inPublic, derivation,
-                               &labelContext);
+    result = UnmarshalToPublic(publicArea, &in->inPublic, derivation, &labelContext);
     if(result != TPM_RC_SUCCESS)
         return result + RC_CreateLoaded_inPublic;
 
@@ -126,7 +124,7 @@ TPM2_CreateLoaded(
     // Command output
     if(derivation)
     {
-        TPMT_KEYEDHASH_SCHEME       *scheme;
+        TPMT_KEYEDHASH_SCHEME* scheme;
         scheme = &parent->publicArea.parameters.keyedHashDetail.scheme;
 
         // SP800-108 is the only KDF supported by this implementation and there is
@@ -138,8 +136,8 @@ TPM2_CreateLoaded(
             return TPM_RCS_TYPE + RC_CreateLoaded_inPublic;
         // sensitiveDataOrigin has to be CLEAR in a derived object. Since this
         // is specific to a derived object, it is checked here.
-        if(IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT,
-                        sensitiveDataOrigin))
+        if(IS_ATTRIBUTE(
+               publicArea->objectAttributes, TPMA_OBJECT, sensitiveDataOrigin))
             return TPM_RCS_ATTRIBUTES;
         // Check the reset of the attributes
         result = PublicAttributesValidation(parent, publicArea);
@@ -151,7 +149,7 @@ TPM2_CreateLoaded(
         if(result != TPM_RC_SUCCESS)
             return result;
         // Set up the KDF for object generation
-        DRBG_InstantiateSeededKdf((KDF_STATE *)rand,
+        DRBG_InstantiateSeededKdf((KDF_STATE*)rand,
                                   scheme->details.xor.hashAlg,
                                   scheme->details.xor.kdf,
                                   &parent->sensitive.sensitive.bits.b,
@@ -167,35 +165,35 @@ TPM2_CreateLoaded(
         // Check attributes in input public area. CreateChecks() checks the things
         // that are unique to creation and then validates the attributes and values
         // that are common to create and load.
-        result = CreateChecks(parent, publicArea,
-                              in->inSensitive.sensitive.data.t.size);
+        result =
+            CreateChecks(parent, publicArea, in->inSensitive.sensitive.data.t.size);
         if(result != TPM_RC_SUCCESS)
             return RcSafeAddToResult(result, RC_CreateLoaded_inPublic);
         // Creating a primary object
         if(parent == NULL)
         {
-            TPM2B_NAME              name;
+            TPM2B_NAME name;
             newObject->attributes.primary = SET;
             if(in->parentHandle == TPM_RH_ENDORSEMENT)
                 newObject->attributes.epsHierarchy = SET;
             // If so, use the primary seed and the digest of the template
             // to seed the DRBG
-            result = DRBG_InstantiateSeeded((DRBG_STATE *)rand,
-                                   &HierarchyGetPrimarySeed(in->parentHandle)->b,
-                                   PRIMARY_OBJECT_CREATION,
-                                   (TPM2B *)PublicMarshalAndComputeName(publicArea,
-                                                                        &name),
-                                   &in->inSensitive.sensitive.data.b);
+            result = DRBG_InstantiateSeeded(
+                (DRBG_STATE*)rand,
+                &HierarchyGetPrimarySeed(in->parentHandle)->b,
+                PRIMARY_OBJECT_CREATION,
+                (TPM2B*)PublicMarshalAndComputeName(publicArea, &name),
+                &in->inSensitive.sensitive.data.b);
             if(result != TPM_RC_SUCCESS)
                 return result;
         }
         else
         {
-           // This is an ordinary object so use the normal random number generator
+            // This is an ordinary object so use the normal random number generator
             rand = NULL;
         }
     }
-// Internal data update
+    // Internal data update
     // Create the object
     result = CryptCreateObject(newObject, &in->inSensitive.sensitive, rand);
     if(result != TPM_RC_SUCCESS)
@@ -204,18 +202,20 @@ TPM2_CreateLoaded(
     // area
     if(parent != NULL && !derivation)
         // Prepare output private data from sensitive
-        SensitiveToPrivate(&newObject->sensitive, &newObject->name,
-                           parent, newObject->publicArea.nameAlg,
+        SensitiveToPrivate(&newObject->sensitive,
+                           &newObject->name,
+                           parent,
+                           newObject->publicArea.nameAlg,
                            &out->outPrivate);
     else
         out->outPrivate.t.size = 0;
     // Set the remaining return values
     out->outPublic.publicArea = newObject->publicArea;
-    out->name = newObject->name;
+    out->name                 = newObject->name;
     // Set the remaining attributes for a loaded object
     ObjectSetLoadedAttributes(newObject, in->parentHandle);
 
     return result;
 }
 
-#endif // CC_CreateLoaded
+#endif  // CC_CreateLoaded

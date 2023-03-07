@@ -37,17 +37,16 @@
  *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _ATTEST_SPT_FP_H_
-#define    _ATTEST_SPT_FP_H_
+#ifndef _ATTEST_SPT_FP_H_
+#define _ATTEST_SPT_FP_H_
 
 //***FillInAttestInfo()
 // Fill in common fields of TPMS_ATTEST structure.
-void
-FillInAttestInfo(
-    TPMI_DH_OBJECT       signHandle,    // IN: handle of signing object
-    TPMT_SIG_SCHEME     *scheme,        // IN/OUT: scheme to be used for signing
-    TPM2B_DATA          *data,          // IN: qualifying data
-    TPMS_ATTEST         *attest         // OUT: attest structure
+void FillInAttestInfo(
+    TPMI_DH_OBJECT   signHandle,  // IN: handle of signing object
+    TPMT_SIG_SCHEME* scheme,      // IN/OUT: scheme to be used for signing
+    TPM2B_DATA*      data,        // IN: qualifying data
+    TPMS_ATTEST*     attest       // OUT: attest structure
 );
 
 //***SignAttestInfo()
@@ -62,15 +61,14 @@ FillInAttestInfo(
 //                          invalid commit status or failed to generate "r" value
 //                          (for an ECC key)
 TPM_RC
-SignAttestInfo(
-    OBJECT              *signKey,           // IN: sign object
-    TPMT_SIG_SCHEME     *scheme,            // IN: sign scheme
-    TPMS_ATTEST         *certifyInfo,       // IN: the data to be signed
-    TPM2B_DATA          *qualifyingData,    // IN: extra data for the signing
-                                            //     process
-    TPM2B_ATTEST        *attest,            // OUT: marshaled attest blob to be
-                                            //     signed
-    TPMT_SIGNATURE      *signature          // OUT: signature
+SignAttestInfo(OBJECT*          signKey,         // IN: sign object
+               TPMT_SIG_SCHEME* scheme,          // IN: sign scheme
+               TPMS_ATTEST*     certifyInfo,     // IN: the data to be signed
+               TPM2B_DATA*      qualifyingData,  // IN: extra data for the signing
+                                                 //     process
+               TPM2B_ATTEST* attest,             // OUT: marshaled attest blob to be
+                                                 //     signed
+               TPMT_SIGNATURE* signature         // OUT: signature
 );
 
 //*** IsSigningObject()
@@ -80,9 +78,7 @@ SignAttestInfo(
 //  Return Type: BOOL
 //      TRUE(1)         object may sign
 //      FALSE(0)        object may not sign
-BOOL
-IsSigningObject(
-    OBJECT          *object         // IN:
+BOOL IsSigningObject(OBJECT* object  // IN:
 );
 
 #endif  // _ATTEST_SPT_FP_H_

@@ -37,31 +37,30 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_FieldUpgradeData // Command must be enabled
+#if CC_FieldUpgradeData  // Command must be enabled
 
-#ifndef _Field_Upgrade_Data_FP_H_
-#define _Field_Upgrade_Data_FP_H_
+#  ifndef _Field_Upgrade_Data_FP_H_
+#    define _Field_Upgrade_Data_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPM2B_MAX_BUFFER            fuData;
+typedef struct
+{
+    TPM2B_MAX_BUFFER fuData;
 } FieldUpgradeData_In;
 
 // Output structure definition
-typedef struct {
-    TPMT_HA                     nextDigest;
-    TPMT_HA                     firstDigest;
+typedef struct
+{
+    TPMT_HA nextDigest;
+    TPMT_HA firstDigest;
 } FieldUpgradeData_Out;
 
 // Response code modifiers
-#define RC_FieldUpgradeData_fuData  (TPM_RC_P + TPM_RC_1)
+#    define RC_FieldUpgradeData_fuData (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_FieldUpgradeData(
-    FieldUpgradeData_In         *in,
-    FieldUpgradeData_Out        *out
-);
+TPM2_FieldUpgradeData(FieldUpgradeData_In* in, FieldUpgradeData_Out* out);
 
-#endif  // _Field_Upgrade_Data_FP_H_
-#endif  // CC_FieldUpgradeData
+#  endif  // _Field_Upgrade_Data_FP_H_
+#endif    // CC_FieldUpgradeData

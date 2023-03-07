@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PolicyGetDigest // Command must be enabled
+#if CC_PolicyGetDigest  // Command must be enabled
 
-#ifndef _Policy_Get_Digest_FP_H_
-#define _Policy_Get_Digest_FP_H_
+#  ifndef _Policy_Get_Digest_FP_H_
+#    define _Policy_Get_Digest_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_SH_POLICY              policySession;
+typedef struct
+{
+    TPMI_SH_POLICY policySession;
 } PolicyGetDigest_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_DIGEST                policyDigest;
+typedef struct
+{
+    TPM2B_DIGEST policyDigest;
 } PolicyGetDigest_Out;
 
 // Response code modifiers
-#define RC_PolicyGetDigest_policySession    (TPM_RC_H + TPM_RC_1)
+#    define RC_PolicyGetDigest_policySession (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_PolicyGetDigest(
-    PolicyGetDigest_In          *in,
-    PolicyGetDigest_Out         *out
-);
+TPM2_PolicyGetDigest(PolicyGetDigest_In* in, PolicyGetDigest_Out* out);
 
-#endif  // _Policy_Get_Digest_FP_H_
-#endif  // CC_PolicyGetDigest
+#  endif  // _Policy_Get_Digest_FP_H_
+#endif    // CC_PolicyGetDigest

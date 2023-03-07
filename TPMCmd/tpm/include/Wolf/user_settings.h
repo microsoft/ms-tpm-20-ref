@@ -33,9 +33,7 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 /* TPM specific preprocessor flags for wolfcrypt */
-
 
 #ifndef WOLF_CRYPT_USER_SETTINGS_H
 #define WOLF_CRYPT_USER_SETTINGS_H
@@ -56,40 +54,40 @@
 
 /* Enable/Disable algorithm support based on TPM implementation header */
 #if ALG_SHA256
-    #define WOLFSSL_SHA256
+#  define WOLFSSL_SHA256
 #endif
 #if ALG_SHA384 || ALG_SHA512
-    #define WOLFSSL_SHA384
-    #define WOLFSSL_SHA512
+#  define WOLFSSL_SHA384
+#  define WOLFSSL_SHA512
 #endif
 #if ALG_TDES
-    #define WOLFSSL_DES_ECB
+#  define WOLFSSL_DES_ECB
 #endif
 #if ALG_RSA
-    /* Turn on RSA key generation functionality */
-    #define WOLFSSL_KEY_GEN
+/* Turn on RSA key generation functionality */
+#  define WOLFSSL_KEY_GEN
 #endif
 #if ALG_ECC || defined(WOLFSSL_LIB)
-    #define HAVE_ECC
+#  define HAVE_ECC
 
-    /* Expose additional ECC primitives */
-    #define WOLFSSL_PUBLIC_ECC_ADD_DBL
-    #define ECC_TIMING_RESISTANT
+/* Expose additional ECC primitives */
+#  define WOLFSSL_PUBLIC_ECC_ADD_DBL
+#  define ECC_TIMING_RESISTANT
 
-    /* Enables Shamir calc method */
-    #define ECC_SHAMIR
+/* Enables Shamir calc method */
+#  define ECC_SHAMIR
 
-    /* The TPM only needs low level ECC crypto */
-    #define NO_ECC_SIGN
-    #define NO_ECC_VERIFY
-    #define NO_ECC_SECP
+/* The TPM only needs low level ECC crypto */
+#  define NO_ECC_SIGN
+#  define NO_ECC_VERIFY
+#  define NO_ECC_SECP
 
-    #undef ECC_BN_P256
-    #undef ECC_SM2_P256
-    #undef ECC_BN_P638
-    #define ECC_BN_P256     NO
-    #define ECC_SM2_P256    NO
-    #define ECC_BN_P638     NO
+#  undef ECC_BN_P256
+#  undef ECC_SM2_P256
+#  undef ECC_BN_P638
+#  define ECC_BN_P256  NO
+#  define ECC_SM2_P256 NO
+#  define ECC_BN_P638  NO
 
 #endif
 
@@ -103,4 +101,4 @@
 
 #define WOLFSSL_
 
-#endif // WOLF_CRYPT_USER_SETTINGS_H
+#endif  // WOLF_CRYPT_USER_SETTINGS_H

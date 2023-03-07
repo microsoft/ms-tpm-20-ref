@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ClockRateAdjust // Command must be enabled
+#if CC_ClockRateAdjust  // Command must be enabled
 
-#ifndef _Clock_Rate_Adjust_FP_H_
-#define _Clock_Rate_Adjust_FP_H_
+#  ifndef _Clock_Rate_Adjust_FP_H_
+#    define _Clock_Rate_Adjust_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PROVISION           auth;
-    TPM_CLOCK_ADJUST            rateAdjust;
+typedef struct
+{
+    TPMI_RH_PROVISION auth;
+    TPM_CLOCK_ADJUST  rateAdjust;
 } ClockRateAdjust_In;
 
 // Response code modifiers
-#define RC_ClockRateAdjust_auth (TPM_RC_H + TPM_RC_1)
-#define RC_ClockRateAdjust_rateAdjust   (TPM_RC_P + TPM_RC_1)
+#    define RC_ClockRateAdjust_auth       (TPM_RC_H + TPM_RC_1)
+#    define RC_ClockRateAdjust_rateAdjust (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_ClockRateAdjust(
-    ClockRateAdjust_In          *in
-);
+TPM2_ClockRateAdjust(ClockRateAdjust_In* in);
 
-#endif  // _Clock_Rate_Adjust_FP_H_
-#endif  // CC_ClockRateAdjust
+#  endif  // _Clock_Rate_Adjust_FP_H_
+#endif    // CC_ClockRateAdjust

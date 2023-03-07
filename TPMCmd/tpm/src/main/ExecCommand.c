@@ -83,33 +83,32 @@
 // will SET g_inFailureMode and call _plat__Fail(). That function should not return
 // but may call ExecuteCommand().
 //
-LIB_EXPORT void
-ExecuteCommand(
-    uint32_t         requestSize,   // IN: command buffer size
-    unsigned char   *request,       // IN: command buffer
-    uint32_t        *responseSize,  // IN/OUT: response buffer size
-    unsigned char   **response      // IN/OUT: response buffer
-    )
+LIB_EXPORT void ExecuteCommand(
+    uint32_t        requestSize,   // IN: command buffer size
+    unsigned char*  request,       // IN: command buffer
+    uint32_t*       responseSize,  // IN/OUT: response buffer size
+    unsigned char** response       // IN/OUT: response buffer
+)
 {
     // Command local variables
-    UINT32               commandSize;
-    COMMAND              command;
+    UINT32  commandSize;
+    COMMAND command;
 
     // Response local variables
-    UINT32               maxResponse = *responseSize;
-    TPM_RC               result;            // return code for the command
+    UINT32 maxResponse = *responseSize;
+    TPM_RC result;  // return code for the command
 
-// This next function call is used in development to size the command and response
-// buffers. The values printed are the sizes of the internal structures and
-// not the sizes of the canonical forms of the command response structures. Also,
-// the sizes do not include the tag, command.code, requestSize, or the authorization
-// fields.
-//CommandResponseSizes();
+    // This next function call is used in development to size the command and response
+    // buffers. The values printed are the sizes of the internal structures and
+    // not the sizes of the canonical forms of the command response structures. Also,
+    // the sizes do not include the tag, command.code, requestSize, or the authorization
+    // fields.
+    //CommandResponseSizes();
     // Set flags for NV access state. This should happen before any other
     // operation that may require a NV write. Note, that this needs to be done
     // even when in failure mode. Otherwise, g_updateNV would stay SET while in
     // Failure mode and the NV would be written on each call.
-    g_updateNV = UT_NONE;
+    g_updateNV     = UT_NONE;
     g_clearOrderly = FALSE;
     if(g_inFailureMode)
     {
@@ -139,20 +138,18 @@ ExecuteCommand(
 
     // Get command buffer size and command buffer.
     command.parameterBuffer = request;
-    command.parameterSize = requestSize;
+    command.parameterSize   = requestSize;
 
     // Parse command header: tag, commandSize and command.code.
     // First parse the tag. The unmarshaling routine will validate
     // that it is either TPM_ST_SESSIONS or TPM_ST_NO_SESSIONS.
-    result = TPMI_ST_COMMAND_TAG_Unmarshal(&command.tag,
-                                           &command.parameterBuffer,
-                                           &command.parameterSize);
+    result = TPMI_ST_COMMAND_TAG_Unmarshal(
+        &command.tag, &command.parameterBuffer, &command.parameterSize);
     if(result != TPM_RC_SUCCESS)
         goto Cleanup;
     // Unmarshal the commandSize indicator.
-    result = UINT32_Unmarshal(&commandSize,
-                              &command.parameterBuffer,
-                              &command.parameterSize);
+    result = UINT32_Unmarshal(
+        &commandSize, &command.parameterBuffer, &command.parameterSize);
     if(result != TPM_RC_SUCCESS)
         goto Cleanup;
     // On a TPM that receives bytes on a port, the number of bytes that were
@@ -168,8 +165,8 @@ ExecuteCommand(
         goto Cleanup;
     }
     // Unmarshal the command code.
-    result = TPM_CC_Unmarshal(&command.code, &command.parameterBuffer,
-                              &command.parameterSize);
+    result = TPM_CC_Unmarshal(
+        &command.code, &command.parameterBuffer, &command.parameterSize);
     if(result != TPM_RC_SUCCESS)
         goto Cleanup;
     // Check to see if the command is implemented.
@@ -179,7 +176,7 @@ ExecuteCommand(
         result = TPM_RC_COMMAND_CODE;
         goto Cleanup;
     }
-#if  FIELD_UPGRADE_IMPLEMENTED  == YES
+#if FIELD_UPGRADE_IMPLEMENTED == YES
     // If the TPM is in FUM, then the only allowed command is
     // TPM_CC_FieldUpgradeData.
     if(IsFieldUgradeMode() && (command.code != TPM_CC_FieldUpgradeData))
@@ -189,16 +186,16 @@ ExecuteCommand(
     }
     else
 #endif
-    // Excepting FUM, the TPM only accepts TPM2_Startup() after
-    // _TPM_Init. After getting a TPM2_Startup(), TPM2_Startup()
-    // is no longer allowed.
-    if((!TPMIsStarted() && command.code != TPM_CC_Startup)
-        || (TPMIsStarted() && command.code == TPM_CC_Startup))
-    {
-        result = TPM_RC_INITIALIZE;
-        goto Cleanup;
-    }
-// Start regular command process.
+        // Excepting FUM, the TPM only accepts TPM2_Startup() after
+        // _TPM_Init. After getting a TPM2_Startup(), TPM2_Startup()
+        // is no longer allowed.
+        if((!TPMIsStarted() && command.code != TPM_CC_Startup)
+           || (TPMIsStarted() && command.code == TPM_CC_Startup))
+        {
+            result = TPM_RC_INITIALIZE;
+            goto Cleanup;
+        }
+    // Start regular command process.
     NvIndexCacheInit();
     // Parse Handle buffer.
     result = ParseHandleBuffer(&command);
@@ -214,7 +211,7 @@ ExecuteCommand(
     if(command.tag == TPM_ST_SESSIONS)
     {
         // Find out session buffer size.
-        result = UINT32_Unmarshal((UINT32 *)&command.authSize,
+        result = UINT32_Unmarshal((UINT32*)&command.authSize,
                                   &command.parameterBuffer,
                                   &command.parameterSize);
         if(result != TPM_RC_SUCCESS)
@@ -224,8 +221,7 @@ ExecuteCommand(
         // the command, then it is an error. NOTE: This check could pass but the
         // session size could still be wrong. That will be determined after the
         // sessions are unmarshaled.
-        if(command.authSize < 9
-           || command.authSize > command.parameterSize)
+        if(command.authSize < 9 || command.authSize > command.parameterSize)
         {
             result = TPM_RC_SIZE;
             goto Cleanup;
@@ -252,7 +248,7 @@ ExecuteCommand(
     }
     // Set up the response buffer pointers. CommandDispatch will marshal the
     // response parameters starting at the address in command.responseBuffer.
-//*response = MemoryGetResponseBuffer(command.index);
+    //*response = MemoryGetResponseBuffer(command.index);
     // leave space for the command header
     command.responseBuffer = *response + STD_RESPONSE_HEADER;
 
@@ -273,8 +269,7 @@ ExecuteCommand(
     BuildResponseSession(&command);
 
 Cleanup:
-    if(g_clearOrderly == TRUE
-        && NV_IS_ORDERLY)
+    if(g_clearOrderly == TRUE && NV_IS_ORDERLY)
     {
 #if USE_DA_USED
         gp.orderlyState = g_daUsed ? SU_DA_USED_VALUE : SU_NONE_VALUE;

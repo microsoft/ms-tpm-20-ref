@@ -37,22 +37,20 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ReadClock // Command must be enabled
+#if CC_ReadClock  // Command must be enabled
 
-#ifndef _Read_Clock_FP_H_
-#define _Read_Clock_FP_H_
+#  ifndef _Read_Clock_FP_H_
+#    define _Read_Clock_FP_H_
 
 // Output structure definition
-typedef struct {
-    TPMS_TIME_INFO              currentTime;
+typedef struct
+{
+    TPMS_TIME_INFO currentTime;
 } ReadClock_Out;
-
 
 // Function prototype
 TPM_RC
-TPM2_ReadClock(
-    ReadClock_Out               *out
-);
+TPM2_ReadClock(ReadClock_Out* out);
 
-#endif  // _Read_Clock_FP_H_
-#endif  // CC_ReadClock
+#  endif  // _Read_Clock_FP_H_
+#endif    // CC_ReadClock

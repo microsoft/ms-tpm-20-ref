@@ -50,85 +50,83 @@
 #define SYMMETRIC_ALIGNMENT RADIX_BYTES
 
 #if OPENSSL_VERSION_NUMBER >= 0x10200000L
-    // Check the bignum_st definition in crypto/bn/bn_lcl.h and either update the
-    // version check or provide the new definition for this version.
-#   error Untested OpenSSL version
+// Check the bignum_st definition in crypto/bn/bn_lcl.h and either update the
+// version check or provide the new definition for this version.
+#  error Untested OpenSSL version
 #elif OPENSSL_VERSION_NUMBER >= 0x10100000L
-    // from crypto/bn/bn_lcl.h
-    struct bignum_st {
-        BN_ULONG *d;                /* Pointer to an array of 'BN_BITS2' bit
+// from crypto/bn/bn_lcl.h
+struct bignum_st
+{
+    BN_ULONG* d;   /* Pointer to an array of 'BN_BITS2' bit
                                     * chunks. */
-        int top;                    /* Index of last used d +1. */
-                                    /* The next are internal book keeping for bn_expand. */
-        int dmax;                   /* Size of the d array. */
-        int neg;                    /* one if the number is negative */
-        int flags;
-    };
+    int       top; /* Index of last used d +1. */
+                   /* The next are internal book keeping for bn_expand. */
+    int dmax;      /* Size of the d array. */
+    int neg;       /* one if the number is negative */
+    int flags;
+};
 #else
-#   define EC_POINT_get_affine_coordinates EC_POINT_get_affine_coordinates_GFp
-#   define EC_POINT_set_affine_coordinates EC_POINT_set_affine_coordinates_GFp
-#endif // OPENSSL_VERSION_NUMBER
+#  define EC_POINT_get_affine_coordinates EC_POINT_get_affine_coordinates_GFp
+#  define EC_POINT_set_affine_coordinates EC_POINT_set_affine_coordinates_GFp
+#endif  // OPENSSL_VERSION_NUMBER
 
 #include <openssl/bn.h>
 
 //** Macros and Defines
 
 // Make sure that the library is using the correct size for a crypt word
-#if    defined THIRTY_TWO_BIT && (RADIX_BITS != 32)  \
+#if defined THIRTY_TWO_BIT && (RADIX_BITS != 32)                \
     || ((defined SIXTY_FOUR_BIT_LONG || defined SIXTY_FOUR_BIT) \
         && (RADIX_BITS != 64))
-#   error Ossl library is using different radix
+#  error Ossl library is using different radix
 #endif
 
 // Allocate a local BIGNUM value. For the allocation, a bigNum structure is created
 // as is a local BIGNUM. The bigNum is initialized and then the BIGNUM is
 // set to reference the local value.
-#define BIG_VAR(name, bits)                                         \
-    BN_VAR(name##Bn, (bits));                                       \
-    BIGNUM          _##name;                                        \
-    BIGNUM          *name = BigInitialized(&_##name,                \
-                                BnInit(name##Bn,                    \
-                                BYTES_TO_CRYPT_WORDS(sizeof(_##name##Bn.d))))
+#define BIG_VAR(name, bits)      \
+  BN_VAR(name##Bn, (bits));      \
+  BIGNUM  _##name;               \
+  BIGNUM* name = BigInitialized( \
+      &_##name, BnInit(name##Bn, BYTES_TO_CRYPT_WORDS(sizeof(_##name##Bn.d))))
 
 // Allocate a BIGNUM and initialize with the values in a bigNum initializer
-#define BIG_INITIALIZED(name, initializer)                      \
-    BIGNUM           _##name;                                   \
-    BIGNUM          *name = BigInitialized(&_##name, initializer)
-
+#define BIG_INITIALIZED(name, initializer) \
+  BIGNUM  _##name;                         \
+  BIGNUM* name = BigInitialized(&_##name, initializer)
 
 typedef struct
 {
-    const ECC_CURVE_DATA    *C;     // the TPM curve values
-    EC_GROUP                *G;     // group parameters
-    BN_CTX                  *CTX;   // the context for the math (this might not be
-                                    // the context in which the curve was created>;
+    const ECC_CURVE_DATA* C;    // the TPM curve values
+    EC_GROUP*             G;    // group parameters
+    BN_CTX*               CTX;  // the context for the math (this might not be
+                                // the context in which the curve was created>;
 } OSSL_CURVE_DATA;
 
-typedef OSSL_CURVE_DATA      *bigCurve;
+typedef OSSL_CURVE_DATA* bigCurve;
 
-#define AccessCurveData(E)      ((E)->C)
-
+#define AccessCurveData(E) ((E)->C)
 
 #include "TpmToOsslSupport_fp.h"
 
 // Start and end a context within which the OpenSSL memory management works
-#define OSSL_ENTER()    BN_CTX          *CTX = OsslContextEnter()
-#define OSSL_LEAVE()    OsslContextLeave(CTX)
+#define OSSL_ENTER() BN_CTX* CTX = OsslContextEnter()
+#define OSSL_LEAVE() OsslContextLeave(CTX)
 
 // Start and end a context that spans multiple ECC functions. This is used so that
 // the group for the curve can persist across multiple frames.
-#define CURVE_INITIALIZED(name, initializer)                        \
-    OSSL_CURVE_DATA     _##name;                                    \
-    bigCurve            name =  BnCurveInitialize(&_##name, initializer)
-#define CURVE_FREE(name)               BnCurveFree(name)
+#define CURVE_INITIALIZED(name, initializer) \
+  OSSL_CURVE_DATA _##name;                   \
+  bigCurve        name = BnCurveInitialize(&_##name, initializer)
+#define CURVE_FREE(name) BnCurveFree(name)
 
 // Start and end a local stack frame within the context of the curve frame
-#define ECC_ENTER()     BN_CTX         *CTX = OsslPushContext(E->CTX)
-#define ECC_LEAVE()     OsslPopContext(CTX)
+#define ECC_ENTER() BN_CTX* CTX = OsslPushContext(E->CTX)
+#define ECC_LEAVE() OsslPopContext(CTX)
 
-#define BN_NEW()        BnNewVariable(CTX)
+#define BN_NEW() BnNewVariable(CTX)
 
 // This definition would change if there were something to report
 #define MathLibSimulationEnd()
 
-#endif // MATH_LIB_DEFINED
+#endif  // MATH_LIB_DEFINED

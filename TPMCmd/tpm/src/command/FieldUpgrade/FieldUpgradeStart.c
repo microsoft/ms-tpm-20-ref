@@ -40,9 +40,8 @@
 // FieldUpgradeStart
 */
 TPM_RC
-TPM2_FieldUpgradeStart(
-    FieldUpgradeStart_In    *in             // IN: input parameter list
-    )
+TPM2_FieldUpgradeStart(FieldUpgradeStart_In* in  // IN: input parameter list
+)
 {
     // Not implemented
     UNUSED_PARAMETER(in);

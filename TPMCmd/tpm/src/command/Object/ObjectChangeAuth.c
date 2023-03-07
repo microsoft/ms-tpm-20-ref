@@ -37,7 +37,7 @@
 
 #if CC_ObjectChangeAuth  // Conditional expansion of this file
 
-#include "Object_spt_fp.h"
+#  include "Object_spt_fp.h"
 
 /*(See part 3 specification)
 // Create an object
@@ -49,17 +49,16 @@
 //                              parent of the object referenced by 'objectHandle';
 //                              or 'objectHandle' is a sequence object.
 TPM_RC
-TPM2_ObjectChangeAuth(
-    ObjectChangeAuth_In     *in,            // IN: input parameter list
-    ObjectChangeAuth_Out    *out            // OUT: output parameter list
-    )
+TPM2_ObjectChangeAuth(ObjectChangeAuth_In*  in,  // IN: input parameter list
+                      ObjectChangeAuth_Out* out  // OUT: output parameter list
+)
 {
-    TPMT_SENSITIVE           sensitive;
+    TPMT_SENSITIVE sensitive;
 
-    OBJECT                  *object = HandleToObject(in->objectHandle);
-    TPM2B_NAME               QNCompare;
+    OBJECT*        object = HandleToObject(in->objectHandle);
+    TPM2B_NAME     QNCompare;
 
-// Input Validation
+    // Input Validation
 
     // Can not change authorization on sequence object
     if(ObjectIsSequence(object))
@@ -72,22 +71,23 @@ TPM2_ObjectChangeAuth(
     // Parent handle should be the parent of object handle.  In this
     // implementation we verify this by checking the QN of object.  Other
     // implementation may choose different method to verify this attribute.
-    ComputeQualifiedName(in->parentHandle,
-                         object->publicArea.nameAlg,
-                         &object->name, &QNCompare);
+    ComputeQualifiedName(
+        in->parentHandle, object->publicArea.nameAlg, &object->name, &QNCompare);
     if(!MemoryEqual2B(&object->qualifiedName.b, &QNCompare.b))
         return TPM_RCS_TYPE + RC_ObjectChangeAuth_parentHandle;
 
-// Command Output
+    // Command Output
     // Prepare the sensitive area with the new authorization value
-    sensitive = object->sensitive;
+    sensitive           = object->sensitive;
     sensitive.authValue = in->newAuth;
 
     // Protect the sensitive area
-    SensitiveToPrivate(&sensitive, &object->name, HandleToObject(in->parentHandle),
+    SensitiveToPrivate(&sensitive,
+                       &object->name,
+                       HandleToObject(in->parentHandle),
                        object->publicArea.nameAlg,
                        &out->outPrivate);
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_ObjectChangeAuth
+#endif  // CC_ObjectChangeAuth

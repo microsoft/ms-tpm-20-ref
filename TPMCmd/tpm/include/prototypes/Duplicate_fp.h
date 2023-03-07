@@ -37,38 +37,37 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_Duplicate // Command must be enabled
+#if CC_Duplicate  // Command must be enabled
 
-#ifndef _Duplicate_FP_H_
-#define _Duplicate_FP_H_
+#  ifndef _Duplicate_FP_H_
+#    define _Duplicate_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              objectHandle;
-    TPMI_DH_OBJECT              newParentHandle;
-    TPM2B_DATA                  encryptionKeyIn;
-    TPMT_SYM_DEF_OBJECT         symmetricAlg;
+typedef struct
+{
+    TPMI_DH_OBJECT      objectHandle;
+    TPMI_DH_OBJECT      newParentHandle;
+    TPM2B_DATA          encryptionKeyIn;
+    TPMT_SYM_DEF_OBJECT symmetricAlg;
 } Duplicate_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_DATA                  encryptionKeyOut;
-    TPM2B_PRIVATE               duplicate;
-    TPM2B_ENCRYPTED_SECRET      outSymSeed;
+typedef struct
+{
+    TPM2B_DATA             encryptionKeyOut;
+    TPM2B_PRIVATE          duplicate;
+    TPM2B_ENCRYPTED_SECRET outSymSeed;
 } Duplicate_Out;
 
 // Response code modifiers
-#define RC_Duplicate_objectHandle   (TPM_RC_H + TPM_RC_1)
-#define RC_Duplicate_newParentHandle    (TPM_RC_H + TPM_RC_2)
-#define RC_Duplicate_encryptionKeyIn    (TPM_RC_P + TPM_RC_1)
-#define RC_Duplicate_symmetricAlg   (TPM_RC_P + TPM_RC_2)
+#    define RC_Duplicate_objectHandle    (TPM_RC_H + TPM_RC_1)
+#    define RC_Duplicate_newParentHandle (TPM_RC_H + TPM_RC_2)
+#    define RC_Duplicate_encryptionKeyIn (TPM_RC_P + TPM_RC_1)
+#    define RC_Duplicate_symmetricAlg    (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_Duplicate(
-    Duplicate_In                *in,
-    Duplicate_Out               *out
-);
+TPM2_Duplicate(Duplicate_In* in, Duplicate_Out* out);
 
-#endif  // _Duplicate_FP_H_
-#endif  // CC_Duplicate
+#  endif  // _Duplicate_FP_H_
+#endif    // CC_Duplicate

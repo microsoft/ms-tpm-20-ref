@@ -37,26 +37,25 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PCR_SetAuthValue // Command must be enabled
+#if CC_PCR_SetAuthValue  // Command must be enabled
 
-#ifndef _PCR_Set_Auth_Value_FP_H_
-#define _PCR_Set_Auth_Value_FP_H_
+#  ifndef _PCR_Set_Auth_Value_FP_H_
+#    define _PCR_Set_Auth_Value_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_PCR                 pcrHandle;
-    TPM2B_DIGEST                auth;
+typedef struct
+{
+    TPMI_DH_PCR  pcrHandle;
+    TPM2B_DIGEST auth;
 } PCR_SetAuthValue_In;
 
 // Response code modifiers
-#define RC_PCR_SetAuthValue_pcrHandle   (TPM_RC_H + TPM_RC_1)
-#define RC_PCR_SetAuthValue_auth    (TPM_RC_P + TPM_RC_1)
+#    define RC_PCR_SetAuthValue_pcrHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_PCR_SetAuthValue_auth      (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_PCR_SetAuthValue(
-    PCR_SetAuthValue_In         *in
-);
+TPM2_PCR_SetAuthValue(PCR_SetAuthValue_In* in);
 
-#endif  // _PCR_Set_Auth_Value_FP_H_
-#endif  // CC_PCR_SetAuthValue
+#  endif  // _PCR_Set_Auth_Value_FP_H_
+#endif    // CC_PCR_SetAuthValue

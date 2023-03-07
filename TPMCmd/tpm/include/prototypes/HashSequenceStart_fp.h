@@ -37,32 +37,31 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_HashSequenceStart // Command must be enabled
+#if CC_HashSequenceStart  // Command must be enabled
 
-#ifndef _Hash_Sequence_Start_FP_H_
-#define _Hash_Sequence_Start_FP_H_
+#  ifndef _Hash_Sequence_Start_FP_H_
+#    define _Hash_Sequence_Start_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPM2B_AUTH                      auth;
-    TPMI_ALG_HASH                   hashAlg;
+typedef struct
+{
+    TPM2B_AUTH    auth;
+    TPMI_ALG_HASH hashAlg;
 } HashSequenceStart_In;
 
 // Output structure definition
-typedef struct {
-    TPMI_DH_OBJECT                  sequenceHandle;
+typedef struct
+{
+    TPMI_DH_OBJECT sequenceHandle;
 } HashSequenceStart_Out;
 
 // Response code modifiers
-#define RC_HashSequenceStart_auth   (TPM_RC_P + TPM_RC_1)
-#define RC_HashSequenceStart_hashAlg    (TPM_RC_P + TPM_RC_2)
+#    define RC_HashSequenceStart_auth    (TPM_RC_P + TPM_RC_1)
+#    define RC_HashSequenceStart_hashAlg (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_HashSequenceStart(
-    HashSequenceStart_In            *in,
-    HashSequenceStart_Out           *out
-);
+TPM2_HashSequenceStart(HashSequenceStart_In* in, HashSequenceStart_Out* out);
 
-#endif  // _Hash_Sequence_Start_FP_H_
-#endif  // CC_HashSequenceStart
+#  endif  // _Hash_Sequence_Start_FP_H_
+#endif    // CC_HashSequenceStart

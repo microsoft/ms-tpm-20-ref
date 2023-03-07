@@ -41,9 +41,8 @@
 // TestParms
 */
 TPM_RC
-TPM2_TestParms(
-    TestParms_In    *in             // IN: input parameter list
-    )
+TPM2_TestParms(TestParms_In* in  // IN: input parameter list
+)
 {
     // Input parameter is not reference in command action
     NOT_REFERENCED(in);
@@ -53,4 +52,4 @@ TPM2_TestParms(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_TestParms
+#endif  // CC_TestParms

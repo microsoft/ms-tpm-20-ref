@@ -42,18 +42,17 @@
 // Physical Presence in addition to platformAuth/platformPolicy.
 */
 TPM_RC
-TPM2_PP_Commands(
-    PP_Commands_In  *in             // IN: input parameter list
-    )
+TPM2_PP_Commands(PP_Commands_In* in  // IN: input parameter list
+)
 {
-    UINT32          i;
+    UINT32 i;
 
     // The command needs NV update.  Check if NV is available.
     // A TPM_RC_NV_UNAVAILABLE or TPM_RC_NV_RATE error may be returned at
     // this point
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Process set list
     for(i = 0; i < in->setList.count; i++)
@@ -77,4 +76,4 @@ TPM2_PP_Commands(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PP_Commands
+#endif  // CC_PP_Commands

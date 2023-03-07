@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_SetCommandCodeAuditStatus // Command must be enabled
+#if CC_SetCommandCodeAuditStatus  // Command must be enabled
 
-#ifndef _Set_Command_Code_Audit_Status_FP_H_
-#define _Set_Command_Code_Audit_Status_FP_H_
+#  ifndef _Set_Command_Code_Audit_Status_FP_H_
+#    define _Set_Command_Code_Audit_Status_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PROVISION                       auth;
-    TPMI_ALG_HASH                           auditAlg;
-    TPML_CC                                 setList;
-    TPML_CC                                 clearList;
+typedef struct
+{
+    TPMI_RH_PROVISION auth;
+    TPMI_ALG_HASH     auditAlg;
+    TPML_CC           setList;
+    TPML_CC           clearList;
 } SetCommandCodeAuditStatus_In;
 
 // Response code modifiers
-#define RC_SetCommandCodeAuditStatus_auth   (TPM_RC_H + TPM_RC_1)
-#define RC_SetCommandCodeAuditStatus_auditAlg   (TPM_RC_P + TPM_RC_1)
-#define RC_SetCommandCodeAuditStatus_setList    (TPM_RC_P + TPM_RC_2)
-#define RC_SetCommandCodeAuditStatus_clearList  (TPM_RC_P + TPM_RC_3)
+#    define RC_SetCommandCodeAuditStatus_auth      (TPM_RC_H + TPM_RC_1)
+#    define RC_SetCommandCodeAuditStatus_auditAlg  (TPM_RC_P + TPM_RC_1)
+#    define RC_SetCommandCodeAuditStatus_setList   (TPM_RC_P + TPM_RC_2)
+#    define RC_SetCommandCodeAuditStatus_clearList (TPM_RC_P + TPM_RC_3)
 
 // Function prototype
 TPM_RC
-TPM2_SetCommandCodeAuditStatus(
-    SetCommandCodeAuditStatus_In            *in
-);
+TPM2_SetCommandCodeAuditStatus(SetCommandCodeAuditStatus_In* in);
 
-#endif  // _Set_Command_Code_Audit_Status_FP_H_
-#endif  // CC_SetCommandCodeAuditStatus
+#  endif  // _Set_Command_Code_Audit_Status_FP_H_
+#endif    // CC_SetCommandCodeAuditStatus

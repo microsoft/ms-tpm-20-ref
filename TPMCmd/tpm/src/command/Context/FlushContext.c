@@ -43,11 +43,10 @@
 //  Return Type: TPM_RC
 //      TPM_RC_HANDLE      'flushHandle' does not reference a loaded object or session
 TPM_RC
-TPM2_FlushContext(
-    FlushContext_In     *in             // IN: input parameter list
-    )
+TPM2_FlushContext(FlushContext_In* in  // IN: input parameter list
+)
 {
-// Internal Data Update
+    // Internal Data Update
 
     // Call object or session specific routine to flush
     switch(HandleGetType(in->flushHandle))
@@ -55,14 +54,12 @@ TPM2_FlushContext(
         case TPM_HT_TRANSIENT:
             if(!IsObjectPresent(in->flushHandle))
                 return TPM_RCS_HANDLE + RC_FlushContext_flushHandle;
-           // Flush object
+            // Flush object
             FlushObject(in->flushHandle);
             break;
         case TPM_HT_HMAC_SESSION:
         case TPM_HT_POLICY_SESSION:
-            if(!SessionIsLoaded(in->flushHandle)
-               && !SessionIsSaved(in->flushHandle)
-               )
+            if(!SessionIsLoaded(in->flushHandle) && !SessionIsSaved(in->flushHandle))
                 return TPM_RCS_HANDLE + RC_FlushContext_flushHandle;
 
             // If the session to be flushed is the exclusive audit session, then
@@ -83,4 +80,4 @@ TPM2_FlushContext(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_FlushContext
+#endif  // CC_FlushContext

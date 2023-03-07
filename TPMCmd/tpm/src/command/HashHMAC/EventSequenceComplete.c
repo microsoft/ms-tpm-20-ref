@@ -45,16 +45,16 @@
 //      TPM_RC_MODE         input handle is not a valid event sequence object
 TPM_RC
 TPM2_EventSequenceComplete(
-    EventSequenceComplete_In    *in,            // IN: input parameter list
-    EventSequenceComplete_Out   *out            // OUT: output parameter list
-    )
+    EventSequenceComplete_In*  in,  // IN: input parameter list
+    EventSequenceComplete_Out* out  // OUT: output parameter list
+)
 {
-    HASH_OBJECT         *hashObject;
-    UINT32               i;
-    TPM_ALG_ID           hashAlg;
-// Input validation
+    HASH_OBJECT* hashObject;
+    UINT32       i;
+    TPM_ALG_ID   hashAlg;
+    // Input validation
     // get the event sequence object pointer
-    hashObject = (HASH_OBJECT *)HandleToObject(in->sequenceHandle);
+    hashObject = (HASH_OBJECT*)HandleToObject(in->sequenceHandle);
 
     // input handle must reference an event sequence object
     if(hashObject->attributes.eventSeq != SET)
@@ -79,7 +79,7 @@ TPM2_EventSequenceComplete(
         if(PCRIsStateSaved(in->pcrHandle))
             RETURN_IF_ORDERLY;
     }
-// Command Output
+    // Command Output
     out->results.count = 0;
 
     for(i = 0; i < HASH_COUNT; i++)
@@ -91,19 +91,20 @@ TPM2_EventSequenceComplete(
         out->results.digests[out->results.count].hashAlg = hashAlg;
         CryptHashEnd(&hashObject->state.hashState[i],
                      CryptHashGetDigestSize(hashAlg),
-                     (BYTE *)&out->results.digests[out->results.count].digest);
-     // Extend PCR
+                     (BYTE*)&out->results.digests[out->results.count].digest);
+        // Extend PCR
         if(in->pcrHandle != TPM_RH_NULL)
-            PCRExtend(in->pcrHandle, hashAlg,
+            PCRExtend(in->pcrHandle,
+                      hashAlg,
                       CryptHashGetDigestSize(hashAlg),
-                      (BYTE *)&out->results.digests[out->results.count].digest);
+                      (BYTE*)&out->results.digests[out->results.count].digest);
         out->results.count++;
     }
-// Internal Data Update
+    // Internal Data Update
     // mark sequence object as evict so it will be flushed on the way out
     hashObject->attributes.evict = SET;
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_EventSequenceComplete
+#endif  // CC_EventSequenceComplete

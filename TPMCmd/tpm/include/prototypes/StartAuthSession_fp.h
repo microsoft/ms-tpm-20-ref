@@ -37,43 +37,42 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_StartAuthSession // Command must be enabled
+#if CC_StartAuthSession  // Command must be enabled
 
-#ifndef _Start_Auth_Session_FP_H_
-#define _Start_Auth_Session_FP_H_
+#  ifndef _Start_Auth_Session_FP_H_
+#    define _Start_Auth_Session_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              tpmKey;
-    TPMI_DH_ENTITY              bind;
-    TPM2B_NONCE                 nonceCaller;
-    TPM2B_ENCRYPTED_SECRET      encryptedSalt;
-    TPM_SE                      sessionType;
-    TPMT_SYM_DEF                symmetric;
-    TPMI_ALG_HASH               authHash;
+typedef struct
+{
+    TPMI_DH_OBJECT         tpmKey;
+    TPMI_DH_ENTITY         bind;
+    TPM2B_NONCE            nonceCaller;
+    TPM2B_ENCRYPTED_SECRET encryptedSalt;
+    TPM_SE                 sessionType;
+    TPMT_SYM_DEF           symmetric;
+    TPMI_ALG_HASH          authHash;
 } StartAuthSession_In;
 
 // Output structure definition
-typedef struct {
-    TPMI_SH_AUTH_SESSION        sessionHandle;
-    TPM2B_NONCE                 nonceTPM;
+typedef struct
+{
+    TPMI_SH_AUTH_SESSION sessionHandle;
+    TPM2B_NONCE          nonceTPM;
 } StartAuthSession_Out;
 
 // Response code modifiers
-#define RC_StartAuthSession_tpmKey  (TPM_RC_H + TPM_RC_1)
-#define RC_StartAuthSession_bind    (TPM_RC_H + TPM_RC_2)
-#define RC_StartAuthSession_nonceCaller (TPM_RC_P + TPM_RC_1)
-#define RC_StartAuthSession_encryptedSalt   (TPM_RC_P + TPM_RC_2)
-#define RC_StartAuthSession_sessionType (TPM_RC_P + TPM_RC_3)
-#define RC_StartAuthSession_symmetric   (TPM_RC_P + TPM_RC_4)
-#define RC_StartAuthSession_authHash    (TPM_RC_P + TPM_RC_5)
+#    define RC_StartAuthSession_tpmKey        (TPM_RC_H + TPM_RC_1)
+#    define RC_StartAuthSession_bind          (TPM_RC_H + TPM_RC_2)
+#    define RC_StartAuthSession_nonceCaller   (TPM_RC_P + TPM_RC_1)
+#    define RC_StartAuthSession_encryptedSalt (TPM_RC_P + TPM_RC_2)
+#    define RC_StartAuthSession_sessionType   (TPM_RC_P + TPM_RC_3)
+#    define RC_StartAuthSession_symmetric     (TPM_RC_P + TPM_RC_4)
+#    define RC_StartAuthSession_authHash      (TPM_RC_P + TPM_RC_5)
 
 // Function prototype
 TPM_RC
-TPM2_StartAuthSession(
-    StartAuthSession_In         *in,
-    StartAuthSession_Out        *out
-);
+TPM2_StartAuthSession(StartAuthSession_In* in, StartAuthSession_Out* out);
 
-#endif  // _Start_Auth_Session_FP_H_
-#endif  // CC_StartAuthSession
+#  endif  // _Start_Auth_Session_FP_H_
+#endif    // CC_StartAuthSession

@@ -45,15 +45,14 @@
 //      TPM_RC_SIZE       'nameHash' is not the size of the digest produced by the
 //                        hash algorithm associated with 'policySession'
 TPM_RC
-TPM2_PolicyNameHash(
-    PolicyNameHash_In   *in             // IN: input parameter list
-    )
+TPM2_PolicyNameHash(PolicyNameHash_In* in  // IN: input parameter list
+)
 {
-    SESSION             *session;
-    TPM_CC               commandCode = TPM_CC_PolicyNameHash;
-    HASH_STATE           hashState;
+    SESSION*   session;
+    TPM_CC     commandCode = TPM_CC_PolicyNameHash;
+    HASH_STATE hashState;
 
-// Input Validation
+    // Input Validation
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -65,13 +64,11 @@ TPM2_PolicyNameHash(
         return TPM_RCS_SIZE + RC_PolicyNameHash_nameHash;
 
     // u1 in the policy session context cannot otherwise be occupied
-    if(session->u1.cpHash.b.size != 0
-       || session->attributes.isBound
-       || session->attributes.isCpHashDefined
-       || session->attributes.isTemplateSet)
+    if(session->u1.cpHash.b.size != 0 || session->attributes.isBound
+       || session->attributes.isCpHashDefined || session->attributes.isTemplateSet)
         return TPM_RC_CPHASH;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Update policy hash
     // policyDigestnew = hash(policyDigestold || TPM_CC_PolicyNameHash || nameHash)
@@ -96,4 +93,4 @@ TPM2_PolicyNameHash(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyNameHash
+#endif  // CC_PolicyNameHash

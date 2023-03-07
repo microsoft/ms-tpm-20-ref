@@ -38,18 +38,18 @@
 
 // These are the basic unmarshaling types. This is in the first byte of
 // each structure descriptor that is passed to Marshal()/Unmarshal() for processing.
-#define UINT_MTYPE          0
-#define VALUES_MTYPE        (UINT_MTYPE + 1)
-#define TABLE_MTYPE         (VALUES_MTYPE + 1)
-#define MIN_MAX_MTYPE       (TABLE_MTYPE + 1)
-#define ATTRIBUTES_MTYPE    (MIN_MAX_MTYPE + 1)
-#define STRUCTURE_MTYPE     (ATTRIBUTES_MTYPE + 1)
-#define TPM2B_MTYPE         (STRUCTURE_MTYPE + 1)
-#define TPM2BS_MTYPE        (TPM2B_MTYPE + 1)
-#define LIST_MTYPE          (TPM2BS_MTYPE + 1) // TPML
-#define ERROR_MTYPE         (LIST_MTYPE + 1)
-#define NULL_MTYPE          (ERROR_MTYPE + 1)
-#define COMPOSITE_MTYPE     (NULL_MTYPE + 1)
+#define UINT_MTYPE       0
+#define VALUES_MTYPE     (UINT_MTYPE + 1)
+#define TABLE_MTYPE      (VALUES_MTYPE + 1)
+#define MIN_MAX_MTYPE    (TABLE_MTYPE + 1)
+#define ATTRIBUTES_MTYPE (MIN_MAX_MTYPE + 1)
+#define STRUCTURE_MTYPE  (ATTRIBUTES_MTYPE + 1)
+#define TPM2B_MTYPE      (STRUCTURE_MTYPE + 1)
+#define TPM2BS_MTYPE     (TPM2B_MTYPE + 1)
+#define LIST_MTYPE       (TPM2BS_MTYPE + 1)  // TPML
+#define ERROR_MTYPE      (LIST_MTYPE + 1)
+#define NULL_MTYPE       (ERROR_MTYPE + 1)
+#define COMPOSITE_MTYPE  (NULL_MTYPE + 1)
 
 //*** The Marshal Index
 // A structure is used to hold the values that guide the marshaling/unmarshaling of
@@ -71,7 +71,7 @@
 // NULL_FLAG is SET. There is also the opportunity to SET the NULL_FLAG in the called
 // structure if the NULL_FLAG was set in the call to the calling structure. This is
 // indicated by:
-#define NULL_MASK       ~(NULL_FLAG)
+#define NULL_MASK ~(NULL_FLAG)
 
 // When looking up the value to marshal, the upper bit of the marshal index is
 // masked to yield the actual index. The MSb is the flag bit that indicates if a
@@ -84,92 +84,98 @@
 // NOTE: LSb0 bit numbering is assumed in these typedefs.
 //
 // When used in an UINT_MTYPE
-typedef struct integerModifier {
-    unsigned            size : 2;
-    unsigned            sign : 1;
-    unsigned            unused : 7;
+typedef struct integerModifier
+{
+    unsigned size   : 2;
+    unsigned sign   : 1;
+    unsigned unused : 7;
 } integerModifier;
 
 // When used in a VALUES_MTYPE
-typedef struct valuesModifier {
-    unsigned            size : 2;
-    unsigned            sign : 1;
-    unsigned            unused : 5;
-    unsigned            takesNull : 1;
+typedef struct valuesModifier
+{
+    unsigned size      : 2;
+    unsigned sign      : 1;
+    unsigned unused    : 5;
+    unsigned takesNull : 1;
 } valuesModifier;
 
 // When used in a TABLE_MTYPE
-typedef struct tableModifier {
-    unsigned            size : 2;
-    unsigned            sign : 1;
-    unsigned            unused : 3;
-    unsigned            hasBits : 1;
-    unsigned            takesNull : 1;
+typedef struct tableModifier
+{
+    unsigned size      : 2;
+    unsigned sign      : 1;
+    unsigned unused    : 3;
+    unsigned hasBits   : 1;
+    unsigned takesNull : 1;
 } tableModifier;
 
 // the modifier byte for MIN_MAX_MTYPE
-typedef struct minMaxModifier {
-    unsigned            size : 2;
-    unsigned            sign : 1;
-    unsigned            unused : 3;
-    unsigned            hasBits : 1;
-    unsigned            takesNull : 1;
+typedef struct minMaxModifier
+{
+    unsigned size      : 2;
+    unsigned sign      : 1;
+    unsigned unused    : 3;
+    unsigned hasBits   : 1;
+    unsigned takesNull : 1;
 } minMaxModifier;
 
 // the modifier byte for ATTRIBUTES_MTYPE
-typedef struct attributesModifier {
-    unsigned            size : 2;
-    unsigned            sign : 1;
-    unsigned            unused : 5;
+typedef struct attributesModifier
+{
+    unsigned size   : 2;
+    unsigned sign   : 1;
+    unsigned unused : 5;
 } attributesModifier;
 
 // the modifier byte is not present in a STRUCTURE_MTYPE or an TPM2B_MTYPE
 
 // the modifier byte for a TPM2BS_MTYPE
-typedef struct tpm2bsModifier {
-    unsigned            offset : 4;
-    unsigned            unused : 2;
-    unsigned            sizeEqual : 1;
-    unsigned            propigateNull : 1;
+typedef struct tpm2bsModifier
+{
+    unsigned offset        : 4;
+    unsigned unused        : 2;
+    unsigned sizeEqual     : 1;
+    unsigned propigateNull : 1;
 } tpm2bsModifier;
 
 // the modifier byte for a LIST_MTYPE
-typedef struct listModifier {
-    unsigned            offset : 4;
-    unsigned            unused : 2;
-    unsigned            sizeEqual : 1;
-    unsigned            propigateNull : 1;
+typedef struct listModifier
+{
+    unsigned offset        : 4;
+    unsigned unused        : 2;
+    unsigned sizeEqual     : 1;
+    unsigned propigateNull : 1;
 } listModifier;
-
 
 //*** Modifier Octet Values
 // These are in used in anything that is an integer value. Theses would not be in
 // structure modifier bytes (they would be used in values in structures but not the
 // STRUCTURE_MTYPE header.
-#define ONE_BYTES           (0)
-#define TWO_BYTES           (1)
-#define FOUR_BYTES          (2)
-#define EIGHT_BYTES         (3)
-#define SIZE_MASK           (0x3)
-#define IS_SIGNED           (1 << 2)    // when the unmarshaled type is a signed value
-#define SIGNED_MASK         (SIZE_MASK | IS_SIGNED)
+#define ONE_BYTES   (0)
+#define TWO_BYTES   (1)
+#define FOUR_BYTES  (2)
+#define EIGHT_BYTES (3)
+#define SIZE_MASK   (0x3)
+#define IS_SIGNED   (1 << 2)  // when the unmarshaled type is a signed value
+#define SIGNED_MASK (SIZE_MASK | IS_SIGNED)
 
 // This may be used for any type except a UINT_MTYPE
-#define TAKES_NULL          (1 << 7)    // when the type takes a null
+#define TAKES_NULL (1 << 7)  // when the type takes a null
 
 // When referencing a structure, this flag indicates if a null is to be propagated
 // to the referenced structure or type.
-#define PROPAGATE_NULL      (TAKES_NULL)
+#define PROPAGATE_NULL (TAKES_NULL)
 
 // Can be used in min-max or table structures.
-#define HAS_BITS            (1 << 6)    // when bit mask is present
+#define HAS_BITS (1 << 6)  // when bit mask is present
 
 // In a union, we need to know if this is a union of constant arrays.
-#define IS_ARRAY_UNION      (1 << 6)
+#define IS_ARRAY_UNION (1 << 6)
 
 // In a TPM2BS_MTYPE
-#define SIZE_EQUAL          (1 << 6)
-#define OFFSET_MASK         (0xF)
+#define SIZE_EQUAL  (1 << 6)
+#define OFFSET_MASK (0xF)
 
 // Right now, there are three spare bits in the modifiers field.
 
@@ -182,14 +188,14 @@ typedef struct listModifier {
 
 // These are the values used in a STRUCTURE_MTYPE to identify the sub-type of the
 // thing being processed
-#define SIMPLE_STYPE                0
-#define UNION_STYPE                 1
-#define ARRAY_STYPE                 2
+#define SIMPLE_STYPE 0
+#define UNION_STYPE  1
+#define ARRAY_STYPE  2
 
 // The code used GET_ to get the element type and the compiler uses SET_ to initialize
 // the value. The element type is the three bits (2:0).
-#define GET_ELEMENT_TYPE(val)       (val & 7)
-#define SET_ELEMENT_TYPE(val)       (val & 7)
+#define GET_ELEMENT_TYPE(val) (val & 7)
+#define SET_ELEMENT_TYPE(val) (val & 7)
 
 // When an entry is an array or union, this references the structure entry that
 // contains the dimension or selector value. The code then uses this number to look up
@@ -199,15 +205,15 @@ typedef struct listModifier {
 // of the associated value (ONE_BYTES, TWO_BYTES ...)
 //
 // The entry size/number is 6 bits (13:8).
-#define GET_ELEMENT_NUMBER(val)     (((val) >> 8) & 0x3F)
-#define SET_ELEMENT_NUMBER(val)     (((val) & 0x3F) << 8)
-#define GET_ELEMENT_SIZE(val)       GET_ELEMENT_NUMBER(val)
-#define SET_ELEMENT_SIZE(val)       SET_ELEMENT_NUMBER(val)
+#define GET_ELEMENT_NUMBER(val) (((val) >> 8) & 0x3F)
+#define SET_ELEMENT_NUMBER(val) (((val)&0x3F) << 8)
+#define GET_ELEMENT_SIZE(val)   GET_ELEMENT_NUMBER(val)
+#define SET_ELEMENT_SIZE(val)   SET_ELEMENT_NUMBER(val)
 // This determines if the null flag is propagated to this type. If generate, the
 // NULL_FLAG is SET in the index value. This flag is one bit (7)
-#define ELEMENT_PROPAGATE           (PROPAGATE_NULL)
+#define ELEMENT_PROPAGATE (PROPAGATE_NULL)
 
-#define INDEX_MASK                  ((UINT16)NULL_MASK)
+#define INDEX_MASK ((UINT16)NULL_MASK)
 
 // This is used in all bit-field checks. These are used when a value that is checked
 // is conditional (dependent on the compilation). For example, if AES_128 is (NO),
@@ -220,11 +226,11 @@ typedef struct listModifier {
 // if that key size is allowed in the implementation. The smallest bit field has
 // 32-bits because it is implemented as part of the 'values' array in structures
 // that allow bit fields.
-#define IS_BIT_SET32(bit, bits)                                                     \
-                        ((((UINT32 *)bits)[bit >> 5] & (1 << (bit & 0x1F))) != 0)
+#define IS_BIT_SET32(bit, bits) \
+  ((((UINT32*)bits)[bit >> 5] & (1 << (bit & 0x1F))) != 0)
 
 // For a COMPOSITE_MTYPE, the qualifiers byte has an element size and count.
-#define SET_ELEMENT_COUNT(count)    ((count & 0x1F) << 3)
-#define GET_ELEMENT_COUNT(val)      ((val  >> 3) & 0x1F)
+#define SET_ELEMENT_COUNT(count) ((count & 0x1F) << 3)
+#define GET_ELEMENT_COUNT(val)   ((val >> 3) & 0x1F)
 
-#endif // _TABLE_MARSHAL_H_
+#endif  // _TABLE_MARSHAL_H_

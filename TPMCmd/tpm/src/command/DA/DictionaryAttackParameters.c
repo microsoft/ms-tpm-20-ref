@@ -42,27 +42,27 @@
 */
 TPM_RC
 TPM2_DictionaryAttackParameters(
-    DictionaryAttackParameters_In   *in             // IN: input parameter list
-    )
+    DictionaryAttackParameters_In* in  // IN: input parameter list
+)
 {
     // The command needs NV update.
     RETURN_IF_NV_IS_NOT_AVAILABLE;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Set dictionary attack parameters
-    gp.maxTries = in->newMaxTries;
-    gp.recoveryTime = in->newRecoveryTime;
+    gp.maxTries        = in->newMaxTries;
+    gp.recoveryTime    = in->newRecoveryTime;
     gp.lockoutRecovery = in->lockoutRecovery;
 
-#if 0   // Errata eliminates this code
+#  if 0  // Errata eliminates this code
     // This functionality has been disabled. The preferred implementation is now
     // to leave failedTries unchanged when the parameters are changed. This could
     // have the effect of putting the TPM into DA lockout if in->newMaxTries is
     // not greater than the current value of gp.failedTries.
     // Set failed tries to 0
     gp.failedTries = 0;
-#endif
+#  endif
 
     // Record the changes to NV
     NV_SYNC_PERSISTENT(failedTries);
@@ -73,4 +73,4 @@ TPM2_DictionaryAttackParameters(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_DictionaryAttackParameters
+#endif  // CC_DictionaryAttackParameters

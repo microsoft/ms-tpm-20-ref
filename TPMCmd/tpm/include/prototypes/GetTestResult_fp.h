@@ -37,23 +37,21 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_GetTestResult // Command must be enabled
+#if CC_GetTestResult  // Command must be enabled
 
-#ifndef _Get_Test_Result_FP_H_
-#define _Get_Test_Result_FP_H_
+#  ifndef _Get_Test_Result_FP_H_
+#    define _Get_Test_Result_FP_H_
 
 // Output structure definition
-typedef struct {
-    TPM2B_MAX_BUFFER            outData;
-    TPM_RC                      testResult;
+typedef struct
+{
+    TPM2B_MAX_BUFFER outData;
+    TPM_RC           testResult;
 } GetTestResult_Out;
-
 
 // Function prototype
 TPM_RC
-TPM2_GetTestResult(
-    GetTestResult_Out           *out
-);
+TPM2_GetTestResult(GetTestResult_Out* out);
 
-#endif  // _Get_Test_Result_FP_H_
-#endif  // CC_GetTestResult
+#  endif  // _Get_Test_Result_FP_H_
+#endif    // CC_GetTestResult

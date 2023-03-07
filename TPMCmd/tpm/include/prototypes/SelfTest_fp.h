@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_SelfTest // Command must be enabled
+#if CC_SelfTest  // Command must be enabled
 
-#ifndef _Self_Test_FP_H_
-#define _Self_Test_FP_H_
+#  ifndef _Self_Test_FP_H_
+#    define _Self_Test_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_YES_NO                 fullTest;
+typedef struct
+{
+    TPMI_YES_NO fullTest;
 } SelfTest_In;
 
 // Response code modifiers
-#define RC_SelfTest_fullTest    (TPM_RC_P + TPM_RC_1)
+#    define RC_SelfTest_fullTest (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_SelfTest(
-    SelfTest_In                 *in
-);
+TPM2_SelfTest(SelfTest_In* in);
 
-#endif  // _Self_Test_FP_H_
-#endif  // CC_SelfTest
+#  endif  // _Self_Test_FP_H_
+#endif    // CC_SelfTest

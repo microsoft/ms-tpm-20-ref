@@ -37,35 +37,34 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_Load // Command must be enabled
+#if CC_Load  // Command must be enabled
 
-#ifndef _Load_FP_H_
-#define _Load_FP_H_
+#  ifndef _Load_FP_H_
+#    define _Load_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              parentHandle;
-    TPM2B_PRIVATE               inPrivate;
-    TPM2B_PUBLIC                inPublic;
+typedef struct
+{
+    TPMI_DH_OBJECT parentHandle;
+    TPM2B_PRIVATE  inPrivate;
+    TPM2B_PUBLIC   inPublic;
 } Load_In;
 
 // Output structure definition
-typedef struct {
-    TPM_HANDLE                  objectHandle;
-    TPM2B_NAME                  name;
+typedef struct
+{
+    TPM_HANDLE objectHandle;
+    TPM2B_NAME name;
 } Load_Out;
 
 // Response code modifiers
-#define RC_Load_parentHandle    (TPM_RC_H + TPM_RC_1)
-#define RC_Load_inPrivate       (TPM_RC_P + TPM_RC_1)
-#define RC_Load_inPublic        (TPM_RC_P + TPM_RC_2)
+#    define RC_Load_parentHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_Load_inPrivate    (TPM_RC_P + TPM_RC_1)
+#    define RC_Load_inPublic     (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_Load(
-    Load_In                     *in,
-    Load_Out                    *out
-);
+TPM2_Load(Load_In* in, Load_Out* out);
 
-#endif  // _Load_FP_H_
-#endif  // CC_Load
+#  endif  // _Load_FP_H_
+#endif    // CC_Load

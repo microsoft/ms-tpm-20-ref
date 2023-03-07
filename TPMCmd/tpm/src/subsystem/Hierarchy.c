@@ -47,10 +47,7 @@
 // when the TPM is simulated. This function should not be called if the
 // TPM is not in a manufacturing mode at the manufacturer, or in a simulated
 // environment.
-void
-HierarchyPreInstall_Init(
-    void
-    )
+void HierarchyPreInstall_Init(void)
 {
     // Allow lockout clear command
     gp.disableClear = FALSE;
@@ -59,7 +56,7 @@ HierarchyPreInstall_Init(
     gp.EPSeed.t.size = sizeof(gp.EPSeed.t.buffer);
     gp.SPSeed.t.size = sizeof(gp.SPSeed.t.buffer);
     gp.PPSeed.t.size = sizeof(gp.PPSeed.t.buffer);
-#if (defined USE_PLATFORM_EPS) && (USE_PLATFORM_EPS != NO)
+#if(defined USE_PLATFORM_EPS) && (USE_PLATFORM_EPS != NO)
     _plat__GetEPS(gp.EPSeed.t.size, gp.EPSeed.t.buffer);
 #else
     CryptRandomGenerate(gp.EPSeed.t.size, gp.EPSeed.t.buffer);
@@ -68,17 +65,17 @@ HierarchyPreInstall_Init(
     CryptRandomGenerate(gp.PPSeed.t.size, gp.PPSeed.t.buffer);
 
     // Initialize owner, endorsement and lockout authorization
-    gp.ownerAuth.t.size = 0;
+    gp.ownerAuth.t.size       = 0;
     gp.endorsementAuth.t.size = 0;
-    gp.lockoutAuth.t.size = 0;
+    gp.lockoutAuth.t.size     = 0;
 
     // Initialize owner, endorsement, and lockout policy
-    gp.ownerAlg = TPM_ALG_NULL;
-    gp.ownerPolicy.t.size = 0;
-    gp.endorsementAlg = TPM_ALG_NULL;
+    gp.ownerAlg                 = TPM_ALG_NULL;
+    gp.ownerPolicy.t.size       = 0;
+    gp.endorsementAlg           = TPM_ALG_NULL;
     gp.endorsementPolicy.t.size = 0;
-    gp.lockoutAlg = TPM_ALG_NULL;
-    gp.lockoutPolicy.t.size = 0;
+    gp.lockoutAlg               = TPM_ALG_NULL;
+    gp.lockoutPolicy.t.size     = 0;
 
     // Initialize ehProof, shProof and phProof
     gp.phProof.t.size = sizeof(gp.phProof.t.buffer);
@@ -112,10 +109,8 @@ HierarchyPreInstall_Init(
 //*** HierarchyStartup()
 // This function is called at TPM2_Startup() to initialize the hierarchy
 // related values.
-BOOL
-HierarchyStartup(
-    STARTUP_TYPE     type           // IN: start up type
-    )
+BOOL HierarchyStartup(STARTUP_TYPE type  // IN: start up type
+)
 {
     // phEnable is SET on any startup
     g_phEnable = TRUE;
@@ -124,9 +119,9 @@ HierarchyStartup(
     // TPM_RESTART
     if(type != SU_RESUME)
     {
-        gc.platformAuth.t.size = 0;
+        gc.platformAuth.t.size   = 0;
         gc.platformPolicy.t.size = 0;
-        gc.platformAlg = TPM_ALG_NULL;
+        gc.platformAlg           = TPM_ALG_NULL;
 
         // enable the storage and endorsement hierarchies and the platformNV
         gc.shEnable = gc.ehEnable = gc.phEnableNV = TRUE;
@@ -147,12 +142,10 @@ HierarchyStartup(
 //*** HierarchyGetProof()
 // This function finds the proof value associated with a hierarchy.It returns a
 // pointer to the proof value.
-TPM2B_PROOF *
-HierarchyGetProof(
-    TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy constant
-    )
+TPM2B_PROOF* HierarchyGetProof(TPMI_RH_HIERARCHY hierarchy  // IN: hierarchy constant
+)
 {
-    TPM2B_PROOF         *proof = NULL;
+    TPM2B_PROOF* proof = NULL;
 
     switch(hierarchy)
     {
@@ -178,12 +171,10 @@ HierarchyGetProof(
 
 //*** HierarchyGetPrimarySeed()
 // This function returns the primary seed of a hierarchy.
-TPM2B_SEED *
-HierarchyGetPrimarySeed(
-    TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy
-    )
+TPM2B_SEED* HierarchyGetPrimarySeed(TPMI_RH_HIERARCHY hierarchy  // IN: hierarchy
+)
 {
-    TPM2B_SEED          *seed = NULL;
+    TPM2B_SEED* seed = NULL;
     switch(hierarchy)
     {
         case TPM_RH_PLATFORM:
@@ -195,7 +186,7 @@ HierarchyGetPrimarySeed(
         case TPM_RH_ENDORSEMENT:
             seed = &gp.EPSeed;
             break;
-         default:
+        default:
             seed = &gr.nullSeed;
             break;
     }
@@ -208,12 +199,10 @@ HierarchyGetPrimarySeed(
 //  Return Type: BOOL
 //      TRUE(1)         hierarchy is enabled
 //      FALSE(0)        hierarchy is disabled
-BOOL
-HierarchyIsEnabled(
-    TPMI_RH_HIERARCHY    hierarchy      // IN: hierarchy
-    )
+BOOL HierarchyIsEnabled(TPMI_RH_HIERARCHY hierarchy  // IN: hierarchy
+)
 {
-    BOOL            enabled = FALSE;
+    BOOL enabled = FALSE;
 
     switch(hierarchy)
     {

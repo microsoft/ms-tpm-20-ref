@@ -37,32 +37,31 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_Policy_AC_SendSelect // Command must be enabled
+#if CC_Policy_AC_SendSelect  // Command must be enabled
 
-#ifndef _Policy_AC_Send_Select_FP_H_
-#define _Policy_AC_Send_Select_FP_H_
+#  ifndef _Policy_AC_Send_Select_FP_H_
+#    define _Policy_AC_Send_Select_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_SH_POLICY                  policySession;
-    TPM2B_NAME                      objectName;
-    TPM2B_NAME                      authHandleName;
-    TPM2B_NAME                      acName;
-    TPMI_YES_NO                     includeObject;
+typedef struct
+{
+    TPMI_SH_POLICY policySession;
+    TPM2B_NAME     objectName;
+    TPM2B_NAME     authHandleName;
+    TPM2B_NAME     acName;
+    TPMI_YES_NO    includeObject;
 } Policy_AC_SendSelect_In;
 
 // Response code modifiers
-#define RC_Policy_AC_SendSelect_policySession   (TPM_RC_H + TPM_RC_1)
-#define RC_Policy_AC_SendSelect_objectName  (TPM_RC_P + TPM_RC_1)
-#define RC_Policy_AC_SendSelect_authHandleName  (TPM_RC_P + TPM_RC_2)
-#define RC_Policy_AC_SendSelect_acName  (TPM_RC_P + TPM_RC_3)
-#define RC_Policy_AC_SendSelect_includeObject   (TPM_RC_P + TPM_RC_4)
+#    define RC_Policy_AC_SendSelect_policySession  (TPM_RC_H + TPM_RC_1)
+#    define RC_Policy_AC_SendSelect_objectName     (TPM_RC_P + TPM_RC_1)
+#    define RC_Policy_AC_SendSelect_authHandleName (TPM_RC_P + TPM_RC_2)
+#    define RC_Policy_AC_SendSelect_acName         (TPM_RC_P + TPM_RC_3)
+#    define RC_Policy_AC_SendSelect_includeObject  (TPM_RC_P + TPM_RC_4)
 
 // Function prototype
 TPM_RC
-TPM2_Policy_AC_SendSelect(
-    Policy_AC_SendSelect_In         *in
-);
+TPM2_Policy_AC_SendSelect(Policy_AC_SendSelect_In* in);
 
-#endif  // _Policy_AC_Send_Select_FP_H_
-#endif  // CC_Policy_AC_SendSelect
+#  endif  // _Policy_AC_Send_Select_FP_H_
+#endif    // CC_Policy_AC_SendSelect

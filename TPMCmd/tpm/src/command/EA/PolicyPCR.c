@@ -36,9 +36,8 @@
 
 #if CC_PolicyPCR  // Conditional expansion of this file
 
-#include "PolicyPCR_fp.h"
-#include "Marshal.h"
-
+#  include "PolicyPCR_fp.h"
+#  include "Marshal.h"
 
 /*(See part 3 specification)
 // Add a PCR gate for a policy session
@@ -49,19 +48,18 @@
 //      TPM_RC_PCR_CHANGED    a previous TPM2_PolicyPCR() set
 //                            pcrCounter and it has changed
 TPM_RC
-TPM2_PolicyPCR(
-    PolicyPCR_In    *in             // IN: input parameter list
-    )
+TPM2_PolicyPCR(PolicyPCR_In* in  // IN: input parameter list
+)
 {
-    SESSION         *session;
-    TPM2B_DIGEST     pcrDigest;
-    BYTE             pcrs[sizeof(TPML_PCR_SELECTION)];
-    UINT32           pcrSize;
-    BYTE            *buffer;
-    TPM_CC           commandCode = TPM_CC_PolicyPCR;
-    HASH_STATE       hashState;
+    SESSION*     session;
+    TPM2B_DIGEST pcrDigest;
+    BYTE         pcrs[sizeof(TPML_PCR_SELECTION)];
+    UINT32       pcrSize;
+    BYTE*        buffer;
+    TPM_CC       commandCode = TPM_CC_PolicyPCR;
+    HASH_STATE   hashState;
 
-// Input Validation
+    // Input Validation
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -92,7 +90,7 @@ TPM2_PolicyPCR(
         if(in->pcrDigest.t.size != 0)
             pcrDigest = in->pcrDigest;
     }
-// Internal Data Update
+    // Internal Data Update
     // Update policy hash
     // policyDigestnew = hash(   policyDigestold || TPM_CC_PolicyPCR
     //                      || PCRS || pcrDigest)
@@ -106,7 +104,7 @@ TPM2_PolicyPCR(
     CryptDigestUpdateInt(&hashState, sizeof(TPM_CC), commandCode);
 
     //  add PCRS
-    buffer = pcrs;
+    buffer  = pcrs;
     pcrSize = TPML_PCR_SELECTION_Marshal(&in->pcrs, &buffer, NULL);
     CryptDigestUpdate(&hashState, pcrSize, pcrs);
 
@@ -125,4 +123,4 @@ TPM2_PolicyPCR(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyPCR
+#endif  // CC_PolicyPCR

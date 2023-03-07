@@ -37,22 +37,21 @@
 
 #if CC_PolicyPassword  // Conditional expansion of this file
 
-#include "Policy_spt_fp.h"
+#  include "Policy_spt_fp.h"
 
 /*(See part 3 specification)
 // allows a policy to be bound to the authorization value of the authorized
 // object
 */
 TPM_RC
-TPM2_PolicyPassword(
-    PolicyPassword_In   *in             // IN: input parameter list
-    )
+TPM2_PolicyPassword(PolicyPassword_In* in  // IN: input parameter list
+)
 {
-    SESSION             *session;
-    TPM_CC               commandCode = TPM_CC_PolicyAuthValue;
-    HASH_STATE           hashState;
+    SESSION*   session;
+    TPM_CC     commandCode = TPM_CC_PolicyAuthValue;
+    HASH_STATE hashState;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -72,10 +71,10 @@ TPM2_PolicyPassword(
     CryptHashEnd2B(&hashState, &session->u2.policyDigest.b);
 
     //  Update isPasswordNeeded bit
-    session->attributes.isPasswordNeeded = SET;
+    session->attributes.isPasswordNeeded  = SET;
     session->attributes.isAuthValueNeeded = CLEAR;
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyPassword
+#endif  // CC_PolicyPassword

@@ -43,9 +43,10 @@
 
 #include "CryptSym.h"
 
-#define     KEY_BLOCK_SIZES(ALG, alg)                                               \
-static const INT16       alg##KeyBlockSizes[] = {                                   \
-                                ALG##_KEY_SIZES_BITS, -1, ALG##_BLOCK_SIZES };
+#define KEY_BLOCK_SIZES(ALG, alg)                                  \
+  static const INT16 alg##KeyBlockSizes[] = {ALG##_KEY_SIZES_BITS, \
+                                             -1,                   \
+                                             ALG##_BLOCK_SIZES};
 
 FOR_EACH_SYM(KEY_BLOCK_SIZES)
 
@@ -53,20 +54,14 @@ FOR_EACH_SYM(KEY_BLOCK_SIZES)
 //
 //*** CryptSymInit()
 // This function is called to do _TPM_Init processing
-BOOL
-CryptSymInit(
-    void
-    )
+BOOL CryptSymInit(void)
 {
     return TRUE;
 }
 
 //*** CryptSymStartup()
 // This function is called to do TPM2_Startup() processing
-BOOL
-CryptSymStartup(
-    void
-    )
+BOOL CryptSymStartup(void)
 {
     return TRUE;
 }
@@ -81,21 +76,23 @@ CryptSymStartup(
 //  Return Type: INT16
 //   <= 0     cipher not supported
 //   > 0      the cipher block size in bytes
-LIB_EXPORT INT16
-CryptGetSymmetricBlockSize(
-    TPM_ALG_ID      symmetricAlg,   // IN: the symmetric algorithm
-    UINT16          keySizeInBits   // IN: the key size
-    )
+LIB_EXPORT INT16 CryptGetSymmetricBlockSize(
+    TPM_ALG_ID symmetricAlg,  // IN: the symmetric algorithm
+    UINT16     keySizeInBits  // IN: the key size
+)
 {
-    const INT16    *sizes;
-    INT16            i;
-#define ALG_CASE(SYM, sym)  case TPM_ALG_##SYM: sizes = sym##KeyBlockSizes; break
+    const INT16* sizes;
+    INT16        i;
+#define ALG_CASE(SYM, sym)      \
+  case TPM_ALG_##SYM:           \
+    sizes = sym##KeyBlockSizes; \
+    break
     switch(symmetricAlg)
     {
-#define GET_KEY_BLOCK_POINTER(SYM, sym)                                             \
-        case TPM_ALG_##SYM:                                                         \
-            sizes =  sym##KeyBlockSizes;                                            \
-            break;
+#define GET_KEY_BLOCK_POINTER(SYM, sym) \
+  case TPM_ALG_##SYM:                   \
+    sizes = sym##KeyBlockSizes;         \
+    break;
         // Get the pointer to the block size array
         FOR_EACH_SYM(GET_KEY_BLOCK_POINTER);
 
@@ -113,7 +110,8 @@ CryptGetSymmetricBlockSize(
     if(*sizes++ < 0)
         return 0;
     // Advance until the end of the list is found
-    while(*sizes++ >= 0);
+    while(*sizes++ >= 0)
+        ;
     // sizes is pointing to the first entry in the list of block sizes. Use the
     // ith index to find the block size for the corresponding key size.
     return sizes[i];
@@ -125,30 +123,29 @@ CryptGetSymmetricBlockSize(
 //      TPM_RC_SIZE         'dSize' is not a multiple of the block size for an
 //                          algorithm that requires it
 //      TPM_RC_FAILURE      Fatal error
-LIB_EXPORT TPM_RC
-CryptSymmetricEncrypt(
-    BYTE                *dOut,          // OUT:
-    TPM_ALG_ID           algorithm,     // IN: the symmetric algorithm
-    UINT16               keySizeInBits, // IN: key size in bits
-    const BYTE          *key,           // IN: key buffer. The size of this buffer
-                                        //     in bytes is (keySizeInBits + 7) / 8
-    TPM2B_IV            *ivInOut,       // IN/OUT: IV for decryption.
-    TPM_ALG_ID           mode,          // IN: Mode to use
-    INT32                dSize,         // IN: data size (may need to be a
-                                        //     multiple of the blockSize)
-    const BYTE          *dIn            // IN: data buffer
-    )
+LIB_EXPORT TPM_RC CryptSymmetricEncrypt(
+    BYTE*       dOut,           // OUT:
+    TPM_ALG_ID  algorithm,      // IN: the symmetric algorithm
+    UINT16      keySizeInBits,  // IN: key size in bits
+    const BYTE* key,            // IN: key buffer. The size of this buffer
+                                //     in bytes is (keySizeInBits + 7) / 8
+    TPM2B_IV*  ivInOut,         // IN/OUT: IV for decryption.
+    TPM_ALG_ID mode,            // IN: Mode to use
+    INT32      dSize,           // IN: data size (may need to be a
+                                //     multiple of the blockSize)
+    const BYTE* dIn             // IN: data buffer
+)
 {
-    BYTE                *pIv;
-    int                  i;
-    BYTE                 tmp[MAX_SYM_BLOCK_SIZE];
-    BYTE                *pT;
-    tpmCryptKeySchedule_t        keySchedule;
-    INT16                blockSize;
-    TpmCryptSetSymKeyCall_t        encrypt;
-    BYTE                *iv;
-    BYTE                 defaultIv[MAX_SYM_BLOCK_SIZE] = {0};
-//
+    BYTE*                   pIv;
+    int                     i;
+    BYTE                    tmp[MAX_SYM_BLOCK_SIZE];
+    BYTE*                   pT;
+    tpmCryptKeySchedule_t   keySchedule;
+    INT16                   blockSize;
+    TpmCryptSetSymKeyCall_t encrypt;
+    BYTE*                   iv;
+    BYTE                    defaultIv[MAX_SYM_BLOCK_SIZE] = {0};
+    //
     pAssert(dOut != NULL && key != NULL && dIn != NULL);
     if(dSize == 0)
         return TPM_RC_SUCCESS;
@@ -163,14 +160,14 @@ CryptSymmetricEncrypt(
     if((ivInOut != NULL) && (mode != TPM_ALG_ECB))
     {
         ivInOut->t.size = blockSize;
-        iv = ivInOut->t.buffer;
+        iv              = ivInOut->t.buffer;
     }
     else
         iv = defaultIv;
     pIv = iv;
 
     // Create encrypt key schedule and set the encryption function pointer.
-    switch (algorithm)
+    switch(algorithm)
     {
         FOR_EACH_SYM(ENCRYPT_CASE)
 
@@ -262,7 +259,7 @@ CryptSymmetricEncrypt(
             for(; dSize > 0; dSize -= blockSize)
             {
                 ENCRYPT(&keySchedule, dIn, dOut);
-                dIn = &dIn[blockSize];
+                dIn  = &dIn[blockSize];
                 dOut = &dOut[blockSize];
             }
             break;
@@ -279,30 +276,29 @@ CryptSymmetricEncrypt(
 //      TPM_RC_FAILURE      A fatal error
 //      TPM_RCS_SIZE        'dSize' is not a multiple of the block size for an
 //                          algorithm that requires it
-LIB_EXPORT TPM_RC
-CryptSymmetricDecrypt(
-    BYTE                *dOut,          // OUT: decrypted data
-    TPM_ALG_ID           algorithm,     // IN: the symmetric algorithm
-    UINT16               keySizeInBits, // IN: key size in bits
-    const BYTE          *key,           // IN: key buffer. The size of this buffer
-                                        //     in bytes is (keySizeInBits + 7) / 8
-    TPM2B_IV            *ivInOut,       // IN/OUT: IV for decryption.
-    TPM_ALG_ID           mode,          // IN: Mode to use
-    INT32                dSize,         // IN: data size (may need to be a
-                                        //     multiple of the blockSize)
-    const BYTE          *dIn            // IN: data buffer
-    )
+LIB_EXPORT TPM_RC CryptSymmetricDecrypt(
+    BYTE*       dOut,           // OUT: decrypted data
+    TPM_ALG_ID  algorithm,      // IN: the symmetric algorithm
+    UINT16      keySizeInBits,  // IN: key size in bits
+    const BYTE* key,            // IN: key buffer. The size of this buffer
+                                //     in bytes is (keySizeInBits + 7) / 8
+    TPM2B_IV*  ivInOut,         // IN/OUT: IV for decryption.
+    TPM_ALG_ID mode,            // IN: Mode to use
+    INT32      dSize,           // IN: data size (may need to be a
+                                //     multiple of the blockSize)
+    const BYTE* dIn             // IN: data buffer
+)
 {
-    BYTE                *pIv;
-    int                  i;
-    BYTE                 tmp[MAX_SYM_BLOCK_SIZE];
-    BYTE                *pT;
-    tpmCryptKeySchedule_t        keySchedule;
-    INT16                blockSize;
-    BYTE                *iv;
-    TpmCryptSetSymKeyCall_t        encrypt;
-    TpmCryptSetSymKeyCall_t        decrypt;
-    BYTE                 defaultIv[MAX_SYM_BLOCK_SIZE] = {0};
+    BYTE*                   pIv;
+    int                     i;
+    BYTE                    tmp[MAX_SYM_BLOCK_SIZE];
+    BYTE*                   pT;
+    tpmCryptKeySchedule_t   keySchedule;
+    INT16                   blockSize;
+    BYTE*                   iv;
+    TpmCryptSetSymKeyCall_t encrypt;
+    TpmCryptSetSymKeyCall_t decrypt;
+    BYTE                    defaultIv[MAX_SYM_BLOCK_SIZE] = {0};
 
     // These are used but the compiler can't tell because they are initialized
     // in case statements and it can't tell if they are always initialized
@@ -325,7 +321,7 @@ CryptSymmetricDecrypt(
     if((ivInOut != NULL) && (mode != TPM_ALG_ECB))
     {
         ivInOut->t.size = blockSize;
-        iv = ivInOut->t.buffer;
+        iv              = ivInOut->t.buffer;
     }
     else
         iv = defaultIv;
@@ -337,13 +333,13 @@ CryptSymmetricDecrypt(
     switch(mode)
     {
 #if ALG_CBC || ALG_ECB
-        case TPM_ALG_CBC: // decrypt = decrypt
+        case TPM_ALG_CBC:  // decrypt = decrypt
         case TPM_ALG_ECB:
             // For ECB and CBC, the data size must be an even multiple of the
             // cipher block size
             if((dSize % blockSize) != 0)
                 return TPM_RC_SIZE;
-            switch (algorithm)
+            switch(algorithm)
             {
                 FOR_EACH_SYM(DECRYPT_CASE)
                 default:
@@ -353,7 +349,7 @@ CryptSymmetricDecrypt(
 #endif
         default:
             // For the remaining stream ciphers, use encryption to decrypt
-            switch (algorithm)
+            switch(algorithm)
             {
                 FOR_EACH_SYM(ENCRYPT_CASE)
                 default:
@@ -374,7 +370,7 @@ CryptSymmetricDecrypt(
                     *pT++ = *dIn++;
                 DECRYPT(&keySchedule, tmp, dOut);
                 pIv = iv;
-                pT = tmp;
+                pT  = tmp;
                 for(i = blockSize; i > 0; i--)
                 {
                     *dOut++ ^= *pIv;
@@ -388,7 +384,7 @@ CryptSymmetricDecrypt(
             {
                 // Encrypt the IV into the temp buffer
                 ENCRYPT(&keySchedule, iv, tmp);
-                pT = tmp;
+                pT  = tmp;
                 pIv = iv;
                 for(i = (dSize < blockSize) ? dSize : blockSize; i > 0; i--)
                     // Copy the current cipher text to IV, XOR
@@ -426,7 +422,7 @@ CryptSymmetricDecrypt(
             for(; dSize > 0; dSize -= blockSize)
             {
                 DECRYPT(&keySchedule, dIn, dOut);
-                dIn = &dIn[blockSize];
+                dIn  = &dIn[blockSize];
                 dOut = &dOut[blockSize];
             }
             break;
@@ -458,18 +454,13 @@ CryptSymmetricDecrypt(
 //      TPM_RC_KEY_SIZE         Key size specifiers do not match
 //      TPM_RC_KEY              Key is not allowed
 TPM_RC
-CryptSymKeyValidate(
-    TPMT_SYM_DEF_OBJECT *symDef,
-    TPM2B_SYM_KEY       *key
-    )
+CryptSymKeyValidate(TPMT_SYM_DEF_OBJECT* symDef, TPM2B_SYM_KEY* key)
 {
     if(key->t.size != BITS_TO_BYTES(symDef->keyBits.sym))
         return TPM_RCS_KEY_SIZE;
 #if ALG_TDES
     if(symDef->algorithm == TPM_ALG_TDES && !CryptDesValidateKey(key))
         return TPM_RCS_KEY;
-#endif // ALG_TDES
+#endif  // ALG_TDES
     return TPM_RC_SUCCESS;
 }
-
-

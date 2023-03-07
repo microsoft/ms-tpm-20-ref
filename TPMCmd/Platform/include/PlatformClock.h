@@ -39,13 +39,13 @@
 #define _PLATFORM_CLOCK_H_
 
 #ifndef _ARM_
-#ifdef _MSC_VER
-#include <sys/types.h>
-#include <sys/timeb.h>
-#else
-#include <sys/time.h>
-#include <time.h>
-#endif
+#  ifdef _MSC_VER
+#    include <sys/types.h>
+#    include <sys/timeb.h>
+#  else
+#    include <sys/time.h>
+#    include <time.h>
+#  endif
 #endif
 // CLOCK_NOMINAL is the number of hardware ticks per mS. A value of 300000 means
 // that the nominal clock rate used to drive the hardware clock is 30 MHz. The
@@ -55,15 +55,15 @@
 // of a pre-scaler. The pre-scaler would divide the ticks from the clock by some
 // value that would compensate for the difference between clock time and real time.
 // The code in Clock does the emulation of this function.
-#define     CLOCK_NOMINAL           30000
+#define CLOCK_NOMINAL 30000
 // A 1% change in rate is 300 counts
-#define     CLOCK_ADJUST_COARSE     300
+#define CLOCK_ADJUST_COARSE 300
 // A 0.1% change in rate is 30 counts
-#define     CLOCK_ADJUST_MEDIUM     30
+#define CLOCK_ADJUST_MEDIUM 30
 // A minimum change in rate is 1 count
-#define     CLOCK_ADJUST_FINE       1
+#define CLOCK_ADJUST_FINE 1
 // The clock tolerance is +/-15% (4500 counts)
 // Allow some guard band (16.7%)
-#define     CLOCK_ADJUST_LIMIT      5000
+#define CLOCK_ADJUST_LIMIT 5000
 
-#endif // _PLATFORM_CLOCK_H_
+#endif  // _PLATFORM_CLOCK_H_

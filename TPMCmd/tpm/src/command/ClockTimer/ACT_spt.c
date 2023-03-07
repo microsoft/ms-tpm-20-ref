@@ -51,10 +51,8 @@
 //*** _ActResume()
 // This function does the resume processing for an ACT. It updates the saved count
 // and turns signaling back on if necessary.
-static void
-_ActResume(
-    UINT32              act,            //IN: the act number
-    ACT_STATE          *actData         //IN: pointer to the saved ACT data
+static void _ActResume(UINT32     act,     //IN: the act number
+                       ACT_STATE* actData  //IN: pointer to the saved ACT data
 )
 {
     // If the act was non-zero, then restore the counter value.
@@ -67,17 +65,14 @@ _ActResume(
 
 //*** ActStartup()
 // This function is called by TPM2_Startup() to initialize the ACT counter values.
-BOOL
-ActStartup(
-    STARTUP_TYPE        type
-)
+BOOL ActStartup(STARTUP_TYPE type)
 {
     // Reset all the ACT hardware
     _plat__ACT_Initialize();
 
     // If this not a cold start, copy all the current 'signaled' settings to
     // 'preservedSignaled'.
-    if (g_powerWasLost)
+    if(g_powerWasLost)
         go.preservedSignaled = 0;
     else
         go.preservedSignaled |= go.signaledACT;
@@ -87,15 +82,15 @@ ActStartup(
     if(type != SU_RESUME)
     {
         go.signaledACT = 0;
-#define CLEAR_ACT_POLICY(N)                                                         \
-            go.ACT_##N.hashAlg = TPM_ALG_NULL;                                      \
-            go.ACT_##N.authPolicy.b.size = 0;
+#define CLEAR_ACT_POLICY(N)                    \
+  go.ACT_##N.hashAlg           = TPM_ALG_NULL; \
+  go.ACT_##N.authPolicy.b.size = 0;
         FOR_EACH_ACT(CLEAR_ACT_POLICY)
     }
     else
     {
         // Resume each of the implemented ACT
-#define RESUME_ACT(N)   _ActResume(0x##N, &go.ACT_##N);
+#define RESUME_ACT(N) _ActResume(0x##N, &go.ACT_##N);
 
         FOR_EACH_ACT(RESUME_ACT)
     }
@@ -109,11 +104,7 @@ ActStartup(
 //*** _ActSaveState()
 // Get the counter state and the signaled state for an ACT. If the ACT has not been
 // updated since the last time it was saved, then divide the count by 2.
-static void
-_ActSaveState(
-    UINT32              act,
-    P_ACT_STATE         actData
-)
+static void _ActSaveState(UINT32 act, P_ACT_STATE actData)
 {
     actData->remaining = _plat__ACT_GetRemaining(act);
     // If the ACT hasn't been updated since the last startup, then it should be
@@ -130,21 +121,16 @@ _ActSaveState(
 
 //*** ActGetSignaled()
 // This function returns the state of the signaled flag associated with an ACT.
-BOOL
-ActGetSignaled(
-    TPM_RH              actHandle
-)
+BOOL ActGetSignaled(TPM_RH actHandle)
 {
-    UINT32              act = actHandle - TPM_RH_ACT_0;
-//
+    UINT32 act = actHandle - TPM_RH_ACT_0;
+    //
     return _plat__ACT_GetSignaled(act);
 }
 
 //***ActShutdown()
 // This function saves the current state of the counters
-BOOL
-ActShutdown(
-    TPM_SU              state       //IN: the type of the shutdown.
+BOOL ActShutdown(TPM_SU state  //IN: the type of the shutdown.
 )
 {
     // if this is not shutdown state, then the only type of startup is TPM_RESTART
@@ -164,22 +150,18 @@ ActShutdown(
     return TRUE;
 }
 
-
 //*** ActIsImplemented()
 // This function determines if an ACT is implemented in both the TPM and the platform
 // code.
-BOOL
-ActIsImplemented(
-    UINT32          act
-)
+BOOL ActIsImplemented(UINT32 act)
 {
     // This switch accounts for the TPM implemented values.
     switch(act)
     {
         FOR_EACH_ACT(CASE_ACT_NUMBER)
-            // This ensures that the platform implements the values implemented by
-            // the TPM
-            return _plat__ACT_GetImplemented(act);
+        // This ensures that the platform implements the values implemented by
+        // the TPM
+        return _plat__ACT_GetImplemented(act);
         default:
             break;
     }
@@ -190,14 +172,13 @@ ActIsImplemented(
 // This function updates the ACT counter. If the counter already has a pending update,
 // it returns TPM_RC_RETRY so that the update can be tried again later.
 TPM_RC
-ActCounterUpdate(
-    TPM_RH          handle,         //IN: the handle of the act
-    UINT32          newValue        //IN: the value to set in the ACT
+ActCounterUpdate(TPM_RH handle,   //IN: the handle of the act
+                 UINT32 newValue  //IN: the value to set in the ACT
 )
 {
-    UINT32          act;
-    TPM_RC          result;
-//
+    UINT32 act;
+    TPM_RC result;
+    //
     act = handle - TPM_RH_ACT_0;
     // This should never fail, but...
     if(!_plat__ACT_GetImplemented(act))
@@ -223,12 +204,11 @@ ActCounterUpdate(
             // Need to clear the orderly flag
             g_clearOrderly = TRUE;
 
-            result = TPM_RC_SUCCESS;
+            result         = TPM_RC_SUCCESS;
         }
     }
     return result;
 }
-
 
 //*** ActGetCapabilityData()
 // This function returns the list of ACT data
@@ -236,10 +216,9 @@ ActCounterUpdate(
 //      YES             if more ACT data is available
 //      NO              if no more ACT data to
 TPMI_YES_NO
-ActGetCapabilityData(
-    TPM_HANDLE       actHandle,     // IN: the handle for the starting ACT
-    UINT32           maxCount,      // IN: maximum allowed return values
-    TPML_ACT_DATA   *actList        // OUT: ACT data list
+ActGetCapabilityData(TPM_HANDLE     actHandle,  // IN: the handle for the starting ACT
+                     UINT32         maxCount,   // IN: maximum allowed return values
+                     TPML_ACT_DATA* actList     // OUT: ACT data list
 )
 {
     // Initialize output property list
@@ -254,21 +233,21 @@ ActGetCapabilityData(
     // Scan the ACT data from the starting ACT
     for(; actHandle <= TPM_RH_ACT_F; actHandle++)
     {
-        UINT32          act = actHandle - TPM_RH_ACT_0;
+        UINT32 act = actHandle - TPM_RH_ACT_0;
         if(actList->count < maxCount)
         {
             if(ActIsImplemented(act))
             {
-                TPMS_ACT_DATA    *actData = &actList->actData[actList->count];
-            //
+                TPMS_ACT_DATA* actData = &actList->actData[actList->count];
+                //
                 memset(&actData->attributes, 0, sizeof(actData->attributes));
-                actData->handle = actHandle;
+                actData->handle  = actHandle;
                 actData->timeout = _plat__ACT_GetRemaining(act);
                 if(_plat__ACT_GetSignaled(act))
                     SET_ATTRIBUTE(actData->attributes, TPMA_ACT, signaled);
                 else
                     CLEAR_ATTRIBUTE(actData->attributes, TPMA_ACT, signaled);
-                if (go.preservedSignaled & (1 << act))
+                if(go.preservedSignaled & (1 << act))
                     SET_ATTRIBUTE(actData->attributes, TPMA_ACT, preserveSignaled);
                 actList->count++;
             }
@@ -283,6 +262,3 @@ ActGetCapabilityData(
     // was filled and there are no more ACT values to return
     return NO;
 }
-
-
-

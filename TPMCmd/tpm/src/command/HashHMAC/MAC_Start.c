@@ -48,19 +48,18 @@
 //      TPM_RC_VALUE            'hashAlg' is not compatible with the hash algorithm
 //                              of the scheme of the object referenced by 'handle'
 TPM_RC
-TPM2_MAC_Start(
-    MAC_Start_In   *in,            // IN: input parameter list
-    MAC_Start_Out  *out            // OUT: output parameter list
-    )
+TPM2_MAC_Start(MAC_Start_In*  in,  // IN: input parameter list
+               MAC_Start_Out* out  // OUT: output parameter list
+)
 {
-    OBJECT                  *keyObject;
-    TPMT_PUBLIC             *publicArea;
-    TPM_RC                   result;
+    OBJECT*      keyObject;
+    TPMT_PUBLIC* publicArea;
+    TPM_RC       result;
 
-// Input Validation
+    // Input Validation
 
     // Get HMAC key object and public area pointers
-    keyObject = HandleToObject(in->handle);
+    keyObject  = HandleToObject(in->handle);
     publicArea = &keyObject->publicArea;
 
     // Make sure that the key can do what is required
@@ -80,13 +79,11 @@ TPM2_MAC_Start(
     if(!IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign))
         return TPM_RCS_KEY + RC_MAC_Start_handle;
 
-// Internal Data Update
+    // Internal Data Update
     // Create a HMAC sequence object. A TPM_RC_OBJECT_MEMORY error may be
     // returned at this point
-    return ObjectCreateHMACSequence(in->inScheme,
-                                    keyObject,
-                                    &in->auth,
-                                    &out->sequenceHandle);
+    return ObjectCreateHMACSequence(
+        in->inScheme, keyObject, &in->auth, &out->sequenceHandle);
 }
 
-#endif // CC_MAC_Start
+#endif  // CC_MAC_Start

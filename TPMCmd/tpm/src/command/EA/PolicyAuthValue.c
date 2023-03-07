@@ -37,22 +37,21 @@
 
 #if CC_PolicyAuthValue  // Conditional expansion of this file
 
-#include "Policy_spt_fp.h"
+#  include "Policy_spt_fp.h"
 
 /*(See part 3 specification)
 // allows a policy to be bound to the authorization value of the authorized
 // object
 */
 TPM_RC
-TPM2_PolicyAuthValue(
-    PolicyAuthValue_In  *in             // IN: input parameter list
-    )
+TPM2_PolicyAuthValue(PolicyAuthValue_In* in  // IN: input parameter list
+)
 {
-    SESSION             *session;
-    TPM_CC               commandCode = TPM_CC_PolicyAuthValue;
-    HASH_STATE           hashState;
+    SESSION*   session;
+    TPM_CC     commandCode = TPM_CC_PolicyAuthValue;
+    HASH_STATE hashState;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -73,9 +72,9 @@ TPM2_PolicyAuthValue(
 
     // update isAuthValueNeeded bit in the session context
     session->attributes.isAuthValueNeeded = SET;
-    session->attributes.isPasswordNeeded = CLEAR;
+    session->attributes.isPasswordNeeded  = CLEAR;
 
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyAuthValue
+#endif  // CC_PolicyAuthValue

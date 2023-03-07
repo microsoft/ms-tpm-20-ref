@@ -47,17 +47,16 @@
 //      TPM_RC_VALUE           'hashAlg' is not compatible with the hash algorithm
 //                              of the scheme of the object referenced by 'handle'
 TPM_RC
-TPM2_HMAC(
-    HMAC_In         *in,            // IN: input parameter list
-    HMAC_Out        *out            // OUT: output parameter list
-    )
+TPM2_HMAC(HMAC_In*  in,  // IN: input parameter list
+          HMAC_Out* out  // OUT: output parameter list
+)
 {
-    HMAC_STATE               hmacState;
-    OBJECT                  *hmacObject;
-    TPMI_ALG_HASH            hashAlg;
-    TPMT_PUBLIC             *publicArea;
+    HMAC_STATE    hmacState;
+    OBJECT*       hmacObject;
+    TPMI_ALG_HASH hashAlg;
+    TPMT_PUBLIC*  publicArea;
 
-// Input Validation
+    // Input Validation
 
     // Get HMAC key object and public area pointers
     hmacObject = HandleToObject(in->handle);
@@ -81,8 +80,7 @@ TPM2_HMAC(
     else
     {
         // key has a default so use it
-        hashAlg
-            = publicArea->parameters.keyedHashDetail.scheme.details.hmac.hashAlg;
+        hashAlg = publicArea->parameters.keyedHashDetail.scheme.details.hmac.hashAlg;
         // and verify that the input was either the  TPM_ALG_NULL or the default
         if(in->hashAlg != TPM_ALG_NULL && in->hashAlg != hashAlg)
             hashAlg = TPM_ALG_NULL;
@@ -91,11 +89,11 @@ TPM2_HMAC(
     if(hashAlg == TPM_ALG_NULL)
         return TPM_RCS_VALUE + RC_HMAC_hashAlg;
 
-// Command Output
+    // Command Output
 
     // Start HMAC stack
-    out->outHMAC.t.size = CryptHmacStart2B(&hmacState, hashAlg,
-                                           &hmacObject->sensitive.sensitive.bits.b);
+    out->outHMAC.t.size = CryptHmacStart2B(
+        &hmacState, hashAlg, &hmacObject->sensitive.sensitive.bits.b);
     // Adding HMAC data
     CryptDigestUpdate2B(&hmacState.hashState, &in->buffer.b);
 
@@ -105,4 +103,4 @@ TPM2_HMAC(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_HMAC
+#endif  // CC_HMAC

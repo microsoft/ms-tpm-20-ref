@@ -44,12 +44,11 @@
 //  Return Type: TPM_RC
 //      TPM_RC_VALUE                    Unsupported ECC curve ID
 TPM_RC
-TPM2_ECC_Parameters(
-    ECC_Parameters_In   *in,            // IN: input parameter list
-    ECC_Parameters_Out  *out            // OUT: output parameter list
-    )
+TPM2_ECC_Parameters(ECC_Parameters_In*  in,  // IN: input parameter list
+                    ECC_Parameters_Out* out  // OUT: output parameter list
+)
 {
-// Command Output
+    // Command Output
 
     // Get ECC curve parameters
     if(CryptEccGetParameters(in->curveID, &out->parameters))
@@ -58,4 +57,4 @@ TPM2_ECC_Parameters(
         return TPM_RCS_VALUE + RC_ECC_Parameters_curveID;
 }
 
-#endif // CC_ECC_Parameters
+#endif  // CC_ECC_Parameters

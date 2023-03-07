@@ -42,22 +42,17 @@
 
 #include "Tpm.h"
 
-#if (defined SYM_LIB_WOLF) && ALG_TDES
+#if(defined SYM_LIB_WOLF) && ALG_TDES
 
 //**Functions
 //** TDES_setup
 // This function calls the wolfcrypt function to generate a TDES key schedule. If the
 // If the key is two key (16 bytes), then the first DES key is replicated to the third
 // key position.
-int TDES_setup(
-    const BYTE          *key,
-    UINT32               keyBits,
-    tpmKeyScheduleTDES       *skey,
-    int dir
-    )
+int TDES_setup(const BYTE* key, UINT32 keyBits, tpmKeyScheduleTDES* skey, int dir)
 {
-    BYTE                 k[24];
-    BYTE                *kp;
+    BYTE  k[24];
+    BYTE* kp;
 
     // If this is two-key, make it three key by replicating K1
     if(keyBits == 128)
@@ -67,51 +62,35 @@ int TDES_setup(
         kp = k;
     }
     else
-        kp = (BYTE *)key;
+        kp = (BYTE*)key;
 
-    return wc_Des3_SetKey( skey, kp, 0, dir );
+    return wc_Des3_SetKey(skey, kp, 0, dir);
 }
 
 //** TDES_setup_encrypt_key
 // This function calls into TDES_setup(), specifically for an encryption key.
-int TDES_setup_encrypt_key(
-    const BYTE          *key,
-    UINT32               keyBits,
-    tpmKeyScheduleTDES       *skey
-)
+int TDES_setup_encrypt_key(const BYTE* key, UINT32 keyBits, tpmKeyScheduleTDES* skey)
 {
-    return TDES_setup( key, keyBits, skey, DES_ENCRYPTION );
+    return TDES_setup(key, keyBits, skey, DES_ENCRYPTION);
 }
 
 //** TDES_setup_decrypt_key
 // This function calls into TDES_setup(), specifically for an decryption key.
-int TDES_setup_decrypt_key(
-    const BYTE          *key,
-    UINT32               keyBits,
-    tpmKeyScheduleTDES       *skey
-)
+int TDES_setup_decrypt_key(const BYTE* key, UINT32 keyBits, tpmKeyScheduleTDES* skey)
 {
-    return TDES_setup( key, keyBits, skey, DES_DECRYPTION );
+    return TDES_setup(key, keyBits, skey, DES_DECRYPTION);
 }
 
 //*** TDES_encyrpt()
-void TDES_encrypt(
-    const BYTE              *in,
-    BYTE                    *out,
-    tpmKeyScheduleTDES      *ks
-    )
+void TDES_encrypt(const BYTE* in, BYTE* out, tpmKeyScheduleTDES* ks)
 {
-    wc_Des3_EcbEncrypt( ks, out, in, DES_BLOCK_SIZE );
+    wc_Des3_EcbEncrypt(ks, out, in, DES_BLOCK_SIZE);
 }
 
 //*** TDES_decrypt()
-void TDES_decrypt(
-    const BYTE          *in,
-    BYTE                *out,
-    tpmKeyScheduleTDES   *ks
-    )
+void TDES_decrypt(const BYTE* in, BYTE* out, tpmKeyScheduleTDES* ks)
 {
-    wc_Des3_EcbDecrypt( ks, out, in, DES_BLOCK_SIZE );
+    wc_Des3_EcbDecrypt(ks, out, in, DES_BLOCK_SIZE);
 }
 
-#endif // MATH_LIB_WOLF && ALG_TDES
+#endif  // MATH_LIB_WOLF && ALG_TDES

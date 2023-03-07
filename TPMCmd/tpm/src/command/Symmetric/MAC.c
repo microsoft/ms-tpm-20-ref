@@ -47,19 +47,18 @@
 //      TPM_RC_VALUE           'hashAlg' is not compatible with the hash algorithm
 //                              of the scheme of the object referenced by 'handle'
 TPM_RC
-TPM2_MAC(
-    MAC_In         *in,            // IN: input parameter list
-    MAC_Out        *out            // OUT: output parameter list
-    )
+TPM2_MAC(MAC_In*  in,  // IN: input parameter list
+         MAC_Out* out  // OUT: output parameter list
+)
 {
-    OBJECT                  *keyObject;
-    HMAC_STATE               state;
-    TPMT_PUBLIC             *publicArea;
-    TPM_RC                   result;
+    OBJECT*      keyObject;
+    HMAC_STATE   state;
+    TPMT_PUBLIC* publicArea;
+    TPM_RC       result;
 
-// Input Validation
+    // Input Validation
     // Get MAC key object and public area pointers
-    keyObject = HandleToObject(in->handle);
+    keyObject  = HandleToObject(in->handle);
     publicArea = &keyObject->publicArea;
 
     // If the key is not able to do a MAC, indicate that the handle selects an
@@ -77,8 +76,9 @@ TPM2_MAC(
     // and that it is a signing key
     if(!IS_ATTRIBUTE(publicArea->objectAttributes, TPMA_OBJECT, sign))
         return TPM_RCS_KEY + RC_MAC_handle;
-// Command Output
-    out->outMAC.t.size = CryptMacStart(&state, &publicArea->parameters,
+    // Command Output
+    out->outMAC.t.size = CryptMacStart(&state,
+                                       &publicArea->parameters,
                                        in->inScheme,
                                        &keyObject->sensitive.sensitive.any.b);
     // If the mac can't start, treat it as a fatal error
@@ -91,4 +91,4 @@ TPM2_MAC(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_MAC
+#endif  // CC_MAC

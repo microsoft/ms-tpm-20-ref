@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_Startup // Command must be enabled
+#if CC_Startup  // Command must be enabled
 
-#ifndef _Startup_FP_H_
-#define _Startup_FP_H_
+#  ifndef _Startup_FP_H_
+#    define _Startup_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPM_SU                      startupType;
+typedef struct
+{
+    TPM_SU startupType;
 } Startup_In;
 
 // Response code modifiers
-#define RC_Startup_startupType  (TPM_RC_P + TPM_RC_1)
+#    define RC_Startup_startupType (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_Startup(
-    Startup_In                  *in
-);
+TPM2_Startup(Startup_In* in);
 
-#endif  // _Startup_FP_H_
-#endif  // CC_Startup
+#  endif  // _Startup_FP_H_
+#endif    // CC_Startup

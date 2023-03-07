@@ -49,20 +49,17 @@
 //      > 0         number of bytes added
 //     == 0         failure
 INT16
-X509PushPoint(
-    ASN1MarshalContext      *ctx,
-    TPMS_ECC_POINT          *p
-)
+X509PushPoint(ASN1MarshalContext* ctx, TPMS_ECC_POINT* p)
 {
     // Push a bit string containing the public key. For now, push the x, and y
     // coordinates of the public point, bottom up
-    ASN1StartMarshalContext(ctx); // BIT STRING
+    ASN1StartMarshalContext(ctx);  // BIT STRING
     {
         ASN1PushBytes(ctx, p->y.t.size, p->y.t.buffer);
         ASN1PushBytes(ctx, p->x.t.size, p->x.t.buffer);
         ASN1PushByte(ctx, 0x04);
     }
-    return ASN1EndEncapsulation(ctx, ASN1_BITSTRING); // Ends BIT STRING
+    return ASN1EndEncapsulation(ctx, ASN1_BITSTRING);  // Ends BIT STRING
 }
 
 //*** X509AddSigningAlgorithmECC()
@@ -72,13 +69,10 @@ X509PushPoint(
 //     == 0         failure
 INT16
 X509AddSigningAlgorithmECC(
-    OBJECT              *signKey,
-    TPMT_SIG_SCHEME     *scheme,
-    ASN1MarshalContext  *ctx
-)
+    OBJECT* signKey, TPMT_SIG_SCHEME* scheme, ASN1MarshalContext* ctx)
 {
-    PHASH_DEF            hashDef = CryptGetHashDef(scheme->details.any.hashAlg);
-//
+    PHASH_DEF hashDef = CryptGetHashDef(scheme->details.any.hashAlg);
+    //
     NOT_REFERENCED(signKey);
     // If the desired hashAlg definition wasn't found...
     if(hashDef->hashAlg != scheme->details.any.hashAlg)
@@ -98,13 +92,12 @@ X509AddSigningAlgorithmECC(
             ASN1StartMarshalContext(ctx);
             ASN1PushOID(ctx, hashDef->ECDSA);
             return ASN1EndEncapsulation(ctx, ASN1_CONSTRUCTED_SEQUENCE);
-#endif //  ALG_ECDSA
+#endif  //  ALG_ECDSA
         default:
             break;
     }
     return 0;
 }
-
 
 //*** X509AddPublicECC()
 // This function will add the publicKey description to the DER data. If ctx is
@@ -114,36 +107,33 @@ X509AddSigningAlgorithmECC(
 //      > 0         number of bytes added
 //     == 0         failure
 INT16
-X509AddPublicECC(
-    OBJECT                *object,
-    ASN1MarshalContext    *ctx
-)
+X509AddPublicECC(OBJECT* object, ASN1MarshalContext* ctx)
 {
-    const BYTE      *curveOid =
+    const BYTE* curveOid =
         CryptEccGetOID(object->publicArea.parameters.eccDetail.curveID);
     if((curveOid == NULL) || (*curveOid != ASN1_OBJECT_IDENTIFIER))
         return 0;
-//
-//
-//  SEQUENCE (2 elem) 1st
-//    SEQUENCE (2 elem) 2nd
-//      OBJECT IDENTIFIER 1.2.840.10045.2.1 ecPublicKey (ANSI X9.62 public key type)
-//      OBJECT IDENTIFIER 1.2.840.10045.3.1.7 prime256v1 (ANSI X9.62 named curve)
-//    BIT STRING (520 bit) 000001001010000111010101010111001001101101000100000010...
-//
+    //
+    //
+    //  SEQUENCE (2 elem) 1st
+    //    SEQUENCE (2 elem) 2nd
+    //      OBJECT IDENTIFIER 1.2.840.10045.2.1 ecPublicKey (ANSI X9.62 public key type)
+    //      OBJECT IDENTIFIER 1.2.840.10045.3.1.7 prime256v1 (ANSI X9.62 named curve)
+    //    BIT STRING (520 bit) 000001001010000111010101010111001001101101000100000010...
+    //
     // If this is a check to see if the key can be encoded, it can.
     // Need to mark the end sequence
     if(ctx == NULL)
         return 1;
-    ASN1StartMarshalContext(ctx); // SEQUENCE (2 elem) 1st
+    ASN1StartMarshalContext(ctx);  // SEQUENCE (2 elem) 1st
     {
-        X509PushPoint(ctx, &object->publicArea.unique.ecc); // BIT STRING
-        ASN1StartMarshalContext(ctx); // SEQUENCE (2 elem) 2nd
+        X509PushPoint(ctx, &object->publicArea.unique.ecc);  // BIT STRING
+        ASN1StartMarshalContext(ctx);                        // SEQUENCE (2 elem) 2nd
         {
-            ASN1PushOID(ctx, curveOid); // curve dependent
-            ASN1PushOID(ctx, OID_ECC_PUBLIC); // (1.2.840.10045.2.1)
+            ASN1PushOID(ctx, curveOid);        // curve dependent
+            ASN1PushOID(ctx, OID_ECC_PUBLIC);  // (1.2.840.10045.2.1)
         }
-        ASN1EndEncapsulation(ctx, ASN1_CONSTRUCTED_SEQUENCE); // Ends SEQUENCE 2nd
+        ASN1EndEncapsulation(ctx, ASN1_CONSTRUCTED_SEQUENCE);  // Ends SEQUENCE 2nd
     }
-    return ASN1EndEncapsulation(ctx, ASN1_CONSTRUCTED_SEQUENCE); // Ends SEQUENCE 1st
+    return ASN1EndEncapsulation(ctx, ASN1_CONSTRUCTED_SEQUENCE);  // Ends SEQUENCE 1st
 }

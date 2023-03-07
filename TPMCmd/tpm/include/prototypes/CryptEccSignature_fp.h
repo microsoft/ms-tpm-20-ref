@@ -37,8 +37,8 @@
  *  Date: Mar 28, 2019  Time: 08:25:18PM
  */
 
-#ifndef    _CRYPT_ECC_SIGNATURE_FP_H_
-#define    _CRYPT_ECC_SIGNATURE_FP_H_
+#ifndef _CRYPT_ECC_SIGNATURE_FP_H_
+#define _CRYPT_ECC_SIGNATURE_FP_H_
 
 #if ALG_ECC
 
@@ -46,14 +46,13 @@
 // This function implements the ECDSA signing algorithm. The method is described
 // in the comments below.
 TPM_RC
-BnSignEcdsa(
-    bigNum                   bnR,           // OUT: 'r' component of the signature
-    bigNum                   bnS,           // OUT: 's' component of the signature
-    bigCurve                 E,             // IN: the curve used in the signature
-                                            //     process
-    bigNum                   bnD,           // IN: private signing key
-    const TPM2B_DIGEST      *digest,        // IN: the digest to sign
-    RAND_STATE              *rand           // IN: used in debug of signing
+BnSignEcdsa(bigNum   bnR,                // OUT: 'r' component of the signature
+            bigNum   bnS,                // OUT: 's' component of the signature
+            bigCurve E,                  // IN: the curve used in the signature
+                                         //     process
+            bigNum              bnD,     // IN: private signing key
+            const TPM2B_DIGEST* digest,  // IN: the digest to sign
+            RAND_STATE*         rand     // IN: used in debug of signing
 );
 
 //*** CryptEccSign()
@@ -69,15 +68,12 @@ BnSignEcdsa(
 // different for the caller than what was in previous versions of the code.
 //  Return Type: TPM_RC
 //      TPM_RC_SCHEME            'scheme' is not supported
-LIB_EXPORT TPM_RC
-CryptEccSign(
-    TPMT_SIGNATURE          *signature,     // OUT: signature
-    OBJECT                  *signKey,       // IN: ECC key to sign the hash
-    const TPM2B_DIGEST      *digest,        // IN: digest to sign
-    TPMT_ECC_SCHEME         *scheme,        // IN: signing scheme
-    RAND_STATE              *rand
-);
-#if ALG_ECDSA
+LIB_EXPORT TPM_RC CryptEccSign(TPMT_SIGNATURE* signature,  // OUT: signature
+                               OBJECT* signKey,  // IN: ECC key to sign the hash
+                               const TPM2B_DIGEST* digest,  // IN: digest to sign
+                               TPMT_ECC_SCHEME*    scheme,  // IN: signing scheme
+                               RAND_STATE*         rand);
+#  if ALG_ECDSA
 
 //*** BnValidateSignatureEcdsa()
 // This function validates an ECDSA signature. rIn and sIn should have been checked
@@ -85,26 +81,24 @@ CryptEccSign(
 //  Return Type: TPM_RC
 //      TPM_RC_SIGNATURE           signature not valid
 TPM_RC
-BnValidateSignatureEcdsa(
-    bigNum                   bnR,           // IN: 'r' component of the signature
-    bigNum                   bnS,           // IN: 's' component of the signature
-    bigCurve                 E,             // IN: the curve used in the signature
-                                            //     process
-    bn_point_t              *ecQ,           // IN: the public point of the key
-    const TPM2B_DIGEST      *digest         // IN: the digest that was signed
+BnValidateSignatureEcdsa(bigNum   bnR,  // IN: 'r' component of the signature
+                         bigNum   bnS,  // IN: 's' component of the signature
+                         bigCurve E,    // IN: the curve used in the signature
+                                        //     process
+                         bn_point_t*         ecQ,  // IN: the public point of the key
+                         const TPM2B_DIGEST* digest  // IN: the digest that was signed
 );
-#endif      // ALG_ECDSA
+#  endif  // ALG_ECDSA
 
 //*** CryptEccValidateSignature()
 // This function validates an EcDsa or EcSchnorr signature.
 // The point 'Qin' needs to have been validated to be on the curve of 'curveId'.
 //  Return Type: TPM_RC
 //      TPM_RC_SIGNATURE            not a valid signature
-LIB_EXPORT TPM_RC
-CryptEccValidateSignature(
-    TPMT_SIGNATURE          *signature,     // IN: signature to be verified
-    OBJECT                  *signKey,       // IN: ECC key signed the hash
-    const TPM2B_DIGEST      *digest         // IN: digest that was signed
+LIB_EXPORT TPM_RC CryptEccValidateSignature(
+    TPMT_SIGNATURE*     signature,  // IN: signature to be verified
+    OBJECT*             signKey,    // IN: ECC key signed the hash
+    const TPM2B_DIGEST* digest      // IN: digest that was signed
 );
 
 //***CryptEccCommitCompute()
@@ -123,16 +117,15 @@ CryptEccValidateSignature(
 //                              at infinity
 //      TPM_RC_CANCELED         a cancel indication was asserted during this
 //                              function
-LIB_EXPORT TPM_RC
-CryptEccCommitCompute(
-    TPMS_ECC_POINT          *K,             // OUT: [d]B or [r]Q
-    TPMS_ECC_POINT          *L,             // OUT: [r]B
-    TPMS_ECC_POINT          *E,             // OUT: [r]M
-    TPM_ECC_CURVE            curveId,       // IN: the curve for the computations
-    TPMS_ECC_POINT          *M,             // IN: M (optional)
-    TPMS_ECC_POINT          *B,             // IN: B (optional)
-    TPM2B_ECC_PARAMETER     *d,             // IN: d (optional)
-    TPM2B_ECC_PARAMETER     *r              // IN: the computed r value (required)
+LIB_EXPORT TPM_RC CryptEccCommitCompute(
+    TPMS_ECC_POINT*      K,        // OUT: [d]B or [r]Q
+    TPMS_ECC_POINT*      L,        // OUT: [r]B
+    TPMS_ECC_POINT*      E,        // OUT: [r]M
+    TPM_ECC_CURVE        curveId,  // IN: the curve for the computations
+    TPMS_ECC_POINT*      M,        // IN: M (optional)
+    TPMS_ECC_POINT*      B,        // IN: B (optional)
+    TPM2B_ECC_PARAMETER* d,        // IN: d (optional)
+    TPM2B_ECC_PARAMETER* r         // IN: the computed r value (required)
 );
 #endif  // ALG_ECC
 

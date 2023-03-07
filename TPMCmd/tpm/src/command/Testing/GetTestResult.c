@@ -46,11 +46,10 @@
 // not in failure mode meaning that all tests that have been run have completed
 // successfully. There is not test data and the test result is TPM_RC_SUCCESS.
 TPM_RC
-TPM2_GetTestResult(
-    GetTestResult_Out   *out            // OUT: output parameter list
-    )
+TPM2_GetTestResult(GetTestResult_Out* out  // OUT: output parameter list
+)
 {
-// Command Output
+    // Command Output
 
     // Call incremental self test function in crypt module
     out->testResult = CryptGetTestResult(&out->outData);
@@ -58,4 +57,4 @@ TPM2_GetTestResult(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_GetTestResult
+#endif  // CC_GetTestResult

@@ -37,34 +37,25 @@
  *  Date: Apr  2, 2019  Time: 03:18:00PM
  */
 
-#ifndef    _CRYPT_RSA_FP_H_
-#define    _CRYPT_RSA_FP_H_
+#ifndef _CRYPT_RSA_FP_H_
+#define _CRYPT_RSA_FP_H_
 
 #if ALG_RSA
 
 //*** CryptRsaInit()
 // Function called at _TPM_Init().
-BOOL
-CryptRsaInit(
-    void
-);
+BOOL CryptRsaInit(void);
 
 //*** CryptRsaStartup()
 // Function called at TPM2_Startup()
-BOOL
-CryptRsaStartup(
-    void
-);
+BOOL CryptRsaStartup(void);
 
 //*** CryptRsaPssSaltSize()
 // This function computes the salt size used in PSS. It is broken out so that
 // the X509 code can get the same value that is used by the encoding function in this
 // module.
 INT16
-CryptRsaPssSaltSize(
-    INT16              hashSize,
-    INT16               outSize
-);
+CryptRsaPssSaltSize(INT16 hashSize, INT16 outSize);
 
 //*** MakeDerTag()
 // Construct the DER value that is used in RSASSA
@@ -72,11 +63,7 @@ CryptRsaPssSaltSize(
 //   > 0        size of value
 //   <= 0       no hash exists
 INT16
-MakeDerTag(
-    TPM_ALG_ID   hashAlg,
-    INT16        sizeOfBuffer,
-    BYTE        *buffer
-);
+MakeDerTag(TPM_ALG_ID hashAlg, INT16 sizeOfBuffer, BYTE* buffer);
 
 //*** CryptRsaSelectScheme()
 // This function is used by TPM2_RSA_Decrypt and TPM2_RSA_Encrypt.  It sets up
@@ -89,10 +76,9 @@ MakeDerTag(
 // if the scheme are not compatible, a NULL pointer will be returned.
 //
 // The return pointer may point to a TPM_ALG_NULL scheme.
-TPMT_RSA_DECRYPT*
-CryptRsaSelectScheme(
-    TPMI_DH_OBJECT       rsaHandle,     // IN: handle of an RSA key
-    TPMT_RSA_DECRYPT    *scheme         // IN: a sign or decrypt scheme
+TPMT_RSA_DECRYPT* CryptRsaSelectScheme(
+    TPMI_DH_OBJECT    rsaHandle,  // IN: handle of an RSA key
+    TPMT_RSA_DECRYPT* scheme      // IN: a sign or decrypt scheme
 );
 
 //*** CryptRsaLoadPrivateExponent()
@@ -100,10 +86,7 @@ CryptRsaSelectScheme(
 //  Return Type: TPM_RC
 //      TPM_RC_BINDING      public and private parts of 'rsaKey' are not matched
 TPM_RC
-CryptRsaLoadPrivateExponent(
-    TPMT_PUBLIC             *publicArea,
-    TPMT_SENSITIVE          *sensitive
-);
+CryptRsaLoadPrivateExponent(TPMT_PUBLIC* publicArea, TPMT_SENSITIVE* sensitive);
 
 //*** CryptRsaEncrypt()
 // This is the entry point for encryption using RSA. Encryption is
@@ -126,16 +109,15 @@ CryptRsaLoadPrivateExponent(
 //                        of the modulus)
 //      TPM_RC_SCHEME    'padType' is not a supported scheme
 //
-LIB_EXPORT TPM_RC
-CryptRsaEncrypt(
-    TPM2B_PUBLIC_KEY_RSA        *cOut,          // OUT: the encrypted data
-    TPM2B                       *dIn,           // IN: the data to encrypt
-    OBJECT                      *key,           // IN: the key used for encryption
-    TPMT_RSA_DECRYPT            *scheme,        // IN: the type of padding and hash
-                                                //     if needed
-    const TPM2B                 *label,         // IN: in case it is needed
-    RAND_STATE                  *rand           // IN: random number generator
-                                                //     state (mostly for testing)
+LIB_EXPORT TPM_RC CryptRsaEncrypt(
+    TPM2B_PUBLIC_KEY_RSA* cOut,    // OUT: the encrypted data
+    TPM2B*                dIn,     // IN: the data to encrypt
+    OBJECT*               key,     // IN: the key used for encryption
+    TPMT_RSA_DECRYPT*     scheme,  // IN: the type of padding and hash
+                                   //     if needed
+    const TPM2B* label,            // IN: in case it is needed
+    RAND_STATE*  rand              // IN: random number generator
+                                   //     state (mostly for testing)
 );
 
 //*** CryptRsaDecrypt()
@@ -150,13 +132,12 @@ CryptRsaEncrypt(
 //      TPM_RC_VALUE       'dOutSize' is not large enough for the result
 //      TPM_RC_SCHEME      'padType' is not supported
 //
-LIB_EXPORT TPM_RC
-CryptRsaDecrypt(
-    TPM2B               *dOut,          // OUT: the decrypted data
-    TPM2B               *cIn,           // IN: the data to decrypt
-    OBJECT              *key,           // IN: the key to use for decryption
-    TPMT_RSA_DECRYPT    *scheme,        // IN: the padding scheme
-    const TPM2B         *label          // IN: in case it is needed for the scheme
+LIB_EXPORT TPM_RC CryptRsaDecrypt(
+    TPM2B*            dOut,    // OUT: the decrypted data
+    TPM2B*            cIn,     // IN: the data to decrypt
+    OBJECT*           key,     // IN: the key to use for decryption
+    TPMT_RSA_DECRYPT* scheme,  // IN: the padding scheme
+    const TPM2B*      label    // IN: in case it is needed for the scheme
 );
 
 //*** CryptRsaSign()
@@ -167,13 +148,11 @@ CryptRsaDecrypt(
 //      TPM_RC_SCHEME       'scheme' or 'hashAlg' are not supported
 //      TPM_RC_VALUE        'hInSize' does not match 'hashAlg' (for RSASSA)
 //
-LIB_EXPORT TPM_RC
-CryptRsaSign(
-    TPMT_SIGNATURE      *sigOut,
-    OBJECT              *key,           // IN: key to use
-    TPM2B_DIGEST        *hIn,           // IN: the digest to sign
-    RAND_STATE          *rand           // IN: the random number generator
-                                        //      to use (mostly for testing)
+LIB_EXPORT TPM_RC CryptRsaSign(TPMT_SIGNATURE* sigOut,
+                               OBJECT*         key,  // IN: key to use
+                               TPM2B_DIGEST*   hIn,  // IN: the digest to sign
+                               RAND_STATE* rand  // IN: the random number generator
+                                                 //      to use (mostly for testing)
 );
 
 //*** CryptRsaValidateSignature()
@@ -185,11 +164,10 @@ CryptRsaSign(
 //      TPM_RC_SIGNATURE    the signature does not check
 //      TPM_RC_SCHEME       unsupported scheme or hash algorithm
 //
-LIB_EXPORT TPM_RC
-CryptRsaValidateSignature(
-    TPMT_SIGNATURE  *sig,           // IN: signature
-    OBJECT          *key,           // IN: public modulus
-    TPM2B_DIGEST    *digest         // IN: The digest being validated
+LIB_EXPORT TPM_RC CryptRsaValidateSignature(
+    TPMT_SIGNATURE* sig,    // IN: signature
+    OBJECT*         key,    // IN: public modulus
+    TPM2B_DIGEST*   digest  // IN: The digest being validated
 );
 
 //*** CryptRsaGenerateKey()
@@ -198,13 +176,12 @@ CryptRsaValidateSignature(
 //      TPM_RC_CANCELED     operation was canceled
 //      TPM_RC_RANGE        public exponent is not supported
 //      TPM_RC_VALUE        could not find a prime using the provided parameters
-LIB_EXPORT TPM_RC
-CryptRsaGenerateKey(
-    TPMT_PUBLIC         *publicArea,
-    TPMT_SENSITIVE      *sensitive,
-    RAND_STATE          *rand               // IN: if not NULL, the deterministic
-                                            //     RNG state
+LIB_EXPORT TPM_RC CryptRsaGenerateKey(
+    TPMT_PUBLIC*    publicArea,
+    TPMT_SENSITIVE* sensitive,
+    RAND_STATE*     rand  // IN: if not NULL, the deterministic
+                          //     RNG state
 );
-#endif // ALG_RSA
+#endif  // ALG_RSA
 
 #endif  // _CRYPT_RSA_FP_H_

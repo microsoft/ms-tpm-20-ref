@@ -37,24 +37,18 @@
  *  Date: Apr  2, 2019  Time: 03:18:00PM
  */
 
-#ifndef    _CRYPT_SYM_FP_H_
-#define    _CRYPT_SYM_FP_H_
+#ifndef _CRYPT_SYM_FP_H_
+#define _CRYPT_SYM_FP_H_
 
 //** Initialization and Data Access Functions
 //
 //*** CryptSymInit()
 // This function is called to do _TPM_Init processing
-BOOL
-CryptSymInit(
-    void
-);
+BOOL CryptSymInit(void);
 
 //*** CryptSymStartup()
 // This function is called to do TPM2_Startup() processing
-BOOL
-CryptSymStartup(
-    void
-);
+BOOL CryptSymStartup(void);
 
 //*** CryptGetSymmetricBlockSize()
 // This function returns the block size of the algorithm. The table of bit sizes has
@@ -66,10 +60,9 @@ CryptSymStartup(
 //  Return Type: INT16
 //   <= 0     cipher not supported
 //   > 0      the cipher block size in bytes
-LIB_EXPORT INT16
-CryptGetSymmetricBlockSize(
-    TPM_ALG_ID      symmetricAlg,   // IN: the symmetric algorithm
-    UINT16          keySizeInBits   // IN: the key size
+LIB_EXPORT INT16 CryptGetSymmetricBlockSize(
+    TPM_ALG_ID symmetricAlg,  // IN: the symmetric algorithm
+    UINT16     keySizeInBits  // IN: the key size
 );
 
 //** Symmetric Encryption
@@ -78,18 +71,17 @@ CryptGetSymmetricBlockSize(
 //      TPM_RC_SIZE         'dSize' is not a multiple of the block size for an
 //                          algorithm that requires it
 //      TPM_RC_FAILURE      Fatal error
-LIB_EXPORT TPM_RC
-CryptSymmetricEncrypt(
-    BYTE                *dOut,          // OUT:
-    TPM_ALG_ID           algorithm,     // IN: the symmetric algorithm
-    UINT16               keySizeInBits, // IN: key size in bits
-    const BYTE          *key,           // IN: key buffer. The size of this buffer
-                                        //     in bytes is (keySizeInBits + 7) / 8
-    TPM2B_IV            *ivInOut,       // IN/OUT: IV for decryption.
-    TPM_ALG_ID           mode,          // IN: Mode to use
-    INT32                dSize,         // IN: data size (may need to be a
-                                        //     multiple of the blockSize)
-    const BYTE          *dIn            // IN: data buffer
+LIB_EXPORT TPM_RC CryptSymmetricEncrypt(
+    BYTE*       dOut,           // OUT:
+    TPM_ALG_ID  algorithm,      // IN: the symmetric algorithm
+    UINT16      keySizeInBits,  // IN: key size in bits
+    const BYTE* key,            // IN: key buffer. The size of this buffer
+                                //     in bytes is (keySizeInBits + 7) / 8
+    TPM2B_IV*  ivInOut,         // IN/OUT: IV for decryption.
+    TPM_ALG_ID mode,            // IN: Mode to use
+    INT32      dSize,           // IN: data size (may need to be a
+                                //     multiple of the blockSize)
+    const BYTE* dIn             // IN: data buffer
 );
 
 //*** CryptSymmetricDecrypt()
@@ -98,18 +90,17 @@ CryptSymmetricEncrypt(
 //      TPM_RC_FAILURE      A fatal error
 //      TPM_RCS_SIZE        'dSize' is not a multiple of the block size for an
 //                          algorithm that requires it
-LIB_EXPORT TPM_RC
-CryptSymmetricDecrypt(
-    BYTE                *dOut,          // OUT: decrypted data
-    TPM_ALG_ID           algorithm,     // IN: the symmetric algorithm
-    UINT16               keySizeInBits, // IN: key size in bits
-    const BYTE          *key,           // IN: key buffer. The size of this buffer
-                                        //     in bytes is (keySizeInBits + 7) / 8
-    TPM2B_IV            *ivInOut,       // IN/OUT: IV for decryption.
-    TPM_ALG_ID           mode,          // IN: Mode to use
-    INT32                dSize,         // IN: data size (may need to be a
-                                        //     multiple of the blockSize)
-    const BYTE          *dIn            // IN: data buffer
+LIB_EXPORT TPM_RC CryptSymmetricDecrypt(
+    BYTE*       dOut,           // OUT: decrypted data
+    TPM_ALG_ID  algorithm,      // IN: the symmetric algorithm
+    UINT16      keySizeInBits,  // IN: key size in bits
+    const BYTE* key,            // IN: key buffer. The size of this buffer
+                                //     in bytes is (keySizeInBits + 7) / 8
+    TPM2B_IV*  ivInOut,         // IN/OUT: IV for decryption.
+    TPM_ALG_ID mode,            // IN: Mode to use
+    INT32      dSize,           // IN: data size (may need to be a
+                                //     multiple of the blockSize)
+    const BYTE* dIn             // IN: data buffer
 );
 
 //*** CryptSymKeyValidate()
@@ -118,9 +109,6 @@ CryptSymmetricDecrypt(
 //      TPM_RC_KEY_SIZE         Key size specifiers do not match
 //      TPM_RC_KEY              Key is not allowed
 TPM_RC
-CryptSymKeyValidate(
-    TPMT_SYM_DEF_OBJECT *symDef,
-    TPM2B_SYM_KEY       *key
-);
+CryptSymKeyValidate(TPMT_SYM_DEF_OBJECT* symDef, TPM2B_SYM_KEY* key);
 
 #endif  // _CRYPT_SYM_FP_H_

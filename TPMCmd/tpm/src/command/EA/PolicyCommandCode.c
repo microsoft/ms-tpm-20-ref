@@ -45,25 +45,24 @@
 //                          a different value
 
 TPM_RC
-TPM2_PolicyCommandCode(
-    PolicyCommandCode_In    *in             // IN: input parameter list
-    )
+TPM2_PolicyCommandCode(PolicyCommandCode_In* in  // IN: input parameter list
+)
 {
-    SESSION     *session;
-    TPM_CC      commandCode = TPM_CC_PolicyCommandCode;
-    HASH_STATE  hashState;
+    SESSION*   session;
+    TPM_CC     commandCode = TPM_CC_PolicyCommandCode;
+    HASH_STATE hashState;
 
-// Input validation
+    // Input validation
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
 
     if(session->commandCode != 0 && session->commandCode != in->code)
-            return TPM_RCS_VALUE + RC_PolicyCommandCode_code;
+        return TPM_RCS_VALUE + RC_PolicyCommandCode_code;
     if(CommandCodeToCommandIndex(in->code) == UNIMPLEMENTED_COMMAND_INDEX)
         return TPM_RCS_POLICY_CC + RC_PolicyCommandCode_code;
 
-// Internal Data Update
+    // Internal Data Update
     // Update policy hash
     // policyDigestnew = hash(policyDigestold || TPM_CC_PolicyCommandCode || code)
     //  Start hash
@@ -87,4 +86,4 @@ TPM2_PolicyCommandCode(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyCommandCode
+#endif  // CC_PolicyCommandCode

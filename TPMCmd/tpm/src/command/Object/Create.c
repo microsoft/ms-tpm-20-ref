@@ -85,17 +85,16 @@
 //                              unsupported name algorithm for an ECC key
 //      TPM_RC_OBJECT_MEMORY    there is no free slot for the object
 TPM_RC
-TPM2_Create(
-    Create_In       *in,            // IN: input parameter list
-    Create_Out      *out            // OUT: output parameter list
-    )
+TPM2_Create(Create_In*  in,  // IN: input parameter list
+            Create_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                   result = TPM_RC_SUCCESS;
-    OBJECT                  *parentObject;
-    OBJECT                  *newObject;
-    TPMT_PUBLIC             *publicArea;
+    TPM_RC       result = TPM_RC_SUCCESS;
+    OBJECT*      parentObject;
+    OBJECT*      newObject;
+    TPMT_PUBLIC* publicArea;
 
-// Input Validation
+    // Input Validation
     parentObject = HandleToObject(in->parentHandle);
     pAssert(parentObject != NULL);
 
@@ -119,30 +118,37 @@ TPM2_Create(
     // Check attributes in input public area. CreateChecks() checks the things that
     // are unique to creation and then validates the attributes and values that are
     // common to create and load.
-    result = CreateChecks(parentObject, publicArea,
-                          in->inSensitive.sensitive.data.t.size);
+    result =
+        CreateChecks(parentObject, publicArea, in->inSensitive.sensitive.data.t.size);
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, RC_Create_inPublic);
     // Clean up the authValue if necessary
     if(!AdjustAuthSize(&in->inSensitive.sensitive.userAuth, publicArea->nameAlg))
         return TPM_RCS_SIZE + RC_Create_inSensitive;
 
-// Command Output
+    // Command Output
     // Create the object using the default TPM random-number generator
     result = CryptCreateObject(newObject, &in->inSensitive.sensitive, NULL);
     if(result != TPM_RC_SUCCESS)
         return result;
     // Fill in creation data
-    FillInCreationData(in->parentHandle, publicArea->nameAlg,
-                       &in->creationPCR, &in->outsideInfo,
-                       &out->creationData, &out->creationHash);
+    FillInCreationData(in->parentHandle,
+                       publicArea->nameAlg,
+                       &in->creationPCR,
+                       &in->outsideInfo,
+                       &out->creationData,
+                       &out->creationHash);
 
     // Compute creation ticket
-    TicketComputeCreation(EntityGetHierarchy(in->parentHandle), &newObject->name,
-                          &out->creationHash, &out->creationTicket);
+    TicketComputeCreation(EntityGetHierarchy(in->parentHandle),
+                          &newObject->name,
+                          &out->creationHash,
+                          &out->creationTicket);
 
     // Prepare output private data from sensitive
-    SensitiveToPrivate(&newObject->sensitive, &newObject->name, parentObject,
+    SensitiveToPrivate(&newObject->sensitive,
+                       &newObject->name,
+                       parentObject,
                        publicArea->nameAlg,
                        &out->outPrivate);
 
@@ -152,4 +158,4 @@ TPM2_Create(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_Create
+#endif  // CC_Create

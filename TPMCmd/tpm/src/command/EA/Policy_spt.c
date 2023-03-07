@@ -45,15 +45,13 @@
 // and TPM2_PolicySecret(). The common parameters are 'nonceTPM',
 // 'expiration', and 'cpHashA'.
 TPM_RC
-PolicyParameterChecks(
-    SESSION         *session,
-    UINT64           authTimeout,
-    TPM2B_DIGEST    *cpHashA,
-    TPM2B_NONCE     *nonce,
-    TPM_RC           blameNonce,
-    TPM_RC           blameCpHash,
-    TPM_RC           blameExpiration
-    )
+PolicyParameterChecks(SESSION*      session,
+                      UINT64        authTimeout,
+                      TPM2B_DIGEST* cpHashA,
+                      TPM2B_NONCE*  nonce,
+                      TPM_RC        blameNonce,
+                      TPM_RC        blameCpHash,
+                      TPM_RC        blameExpiration)
 {
     // Validate that input nonceTPM is correct if present
     if(nonce != NULL && nonce->t.size != 0)
@@ -71,8 +69,7 @@ PolicyParameterChecks(
 
         // if the time has already passed or the time epoch has changed then the
         // time value is no longer good.
-        if((authTimeout < g_time)
-           || (session->epoch != g_timeEpoch))
+        if((authTimeout < g_time) || (session->epoch != g_timeEpoch))
             return TPM_RCS_EXPIRED + blameExpiration;
     }
     // If the cpHash is present, then check it
@@ -97,21 +94,19 @@ PolicyParameterChecks(
 //      objectName to it. This will also update the cpHash if it is present.
 //
 //  Return Type: void
-void
-PolicyContextUpdate(
-    TPM_CC           commandCode,   // IN: command code
-    TPM2B_NAME      *name,          // IN: name of entity
-    TPM2B_NONCE     *ref,           // IN: the reference data
-    TPM2B_DIGEST    *cpHash,        // IN: the cpHash (optional)
-    UINT64           policyTimeout, // IN: the timeout value for the policy
-    SESSION         *session        // IN/OUT: policy session to be updated
-    )
+void PolicyContextUpdate(
+    TPM_CC        commandCode,    // IN: command code
+    TPM2B_NAME*   name,           // IN: name of entity
+    TPM2B_NONCE*  ref,            // IN: the reference data
+    TPM2B_DIGEST* cpHash,         // IN: the cpHash (optional)
+    UINT64        policyTimeout,  // IN: the timeout value for the policy
+    SESSION*      session         // IN/OUT: policy session to be updated
+)
 {
-    HASH_STATE           hashState;
+    HASH_STATE hashState;
 
     // Start hash
-   CryptHashStart(&hashState, session->authHashAlg);
-
+    CryptHashStart(&hashState, session->authHashAlg);
 
     // policyDigest size should always be the digest size of session hash algorithm.
     pAssert(session->u2.policyDigest.t.size
@@ -152,7 +147,7 @@ PolicyContextUpdate(
     // to do here is copy it and set the isCpHashDefined attribute
     if(cpHash != NULL && cpHash->t.size != 0)
     {
-        session->u1.cpHash = *cpHash;
+        session->u1.cpHash                  = *cpHash;
         session->attributes.isCpHashDefined = SET;
     }
 
@@ -170,16 +165,15 @@ PolicyContextUpdate(
 // This function is used to determine what the authorization timeout value for
 // the session should be.
 UINT64
-ComputeAuthTimeout(
-    SESSION         *session,               // IN: the session containing the time
-                                            //     values
-    INT32            expiration,            // IN: either the number of seconds from
-                                            //     the start of the session or the
-                                            //     time in g_timer;
-    TPM2B_NONCE     *nonce                  // IN: indicator of the time base
-    )
+ComputeAuthTimeout(SESSION* session,   // IN: the session containing the time
+                                       //     values
+                   INT32 expiration,   // IN: either the number of seconds from
+                                       //     the start of the session or the
+                                       //     time in g_timer;
+                   TPM2B_NONCE* nonce  // IN: indicator of the time base
+)
 {
-    UINT64           policyTime;
+    UINT64 policyTime;
     // If no expiration, policy time is 0
     if(expiration == 0)
         policyTime = 0;
@@ -197,32 +191,21 @@ ComputeAuthTimeout(
             // The policy timeout is the absolute value of the expiration in seconds
             // added to the start time of the policy.
             policyTime = session->startTime + (((UINT64)expiration) * 1000);
-
     }
     return policyTime;
 }
 
 //*** PolicyDigestClear()
 // Function to reset the policyDigest of a session
-void
-PolicyDigestClear(
-    SESSION         *session
-    )
+void PolicyDigestClear(SESSION* session)
 {
     session->u2.policyDigest.t.size = CryptHashGetDigestSize(session->authHashAlg);
-    MemorySet(session->u2.policyDigest.t.buffer, 0,
-              session->u2.policyDigest.t.size);
+    MemorySet(session->u2.policyDigest.t.buffer, 0, session->u2.policyDigest.t.size);
 }
 
 //*** PolicySptCheckCondition()
 // Checks to see if the condition in the policy is satisfied.
-BOOL
-PolicySptCheckCondition(
-    TPM_EO          operation,
-    BYTE            *opA,
-    BYTE            *opB,
-    UINT16           size
-    )
+BOOL PolicySptCheckCondition(TPM_EO operation, BYTE* opA, BYTE* opB, UINT16 size)
 {
     // Arithmetic Comparison
     switch(operation)
@@ -269,22 +252,22 @@ PolicySptCheckCondition(
             break;
         case TPM_EO_BITSET:
             // All bits SET in B are SET in A. ((A&B)=B)
-        {
-            UINT32 i;
-            for(i = 0; i < size; i++)
-                if((opA[i] & opB[i]) != opB[i])
-                    return FALSE;
-        }
-        break;
+            {
+                UINT32 i;
+                for(i = 0; i < size; i++)
+                    if((opA[i] & opB[i]) != opB[i])
+                        return FALSE;
+            }
+            break;
         case TPM_EO_BITCLEAR:
             // All bits SET in B are CLEAR in A. ((A&B)=0)
-        {
-            UINT32 i;
-            for(i = 0; i < size; i++)
-                if((opA[i] & opB[i]) != 0)
-                    return FALSE;
-        }
-        break;
+            {
+                UINT32 i;
+                for(i = 0; i < size; i++)
+                    if((opA[i] & opB[i]) != 0)
+                        return FALSE;
+            }
+            break;
         default:
             FAIL(FATAL_ERROR_INTERNAL);
             break;

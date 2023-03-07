@@ -49,15 +49,14 @@
 //      TPM_RC_SCHEME                   the scheme of the key referenced by 'keyA'
 //                                      is not TPM_ALG_NULL, TPM_ALG_ECDH,
 TPM_RC
-TPM2_ECDH_ZGen(
-    ECDH_ZGen_In    *in,            // IN: input parameter list
-    ECDH_ZGen_Out   *out            // OUT: output parameter list
-    )
+TPM2_ECDH_ZGen(ECDH_ZGen_In*  in,  // IN: input parameter list
+               ECDH_ZGen_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                   result;
-    OBJECT                  *eccKey;
+    TPM_RC  result;
+    OBJECT* eccKey;
 
-// Input Validation
+    // Input Validation
     eccKey = HandleToObject(in->keyHandle);
 
     // Selected key must be a non-restricted, decrypt ECC key
@@ -69,18 +68,19 @@ TPM2_ECDH_ZGen(
         return TPM_RCS_ATTRIBUTES + RC_ECDH_ZGen_keyHandle;
     // Make sure the scheme allows this use
     if(eccKey->publicArea.parameters.eccDetail.scheme.scheme != TPM_ALG_ECDH
-       &&  eccKey->publicArea.parameters.eccDetail.scheme.scheme != TPM_ALG_NULL)
+       && eccKey->publicArea.parameters.eccDetail.scheme.scheme != TPM_ALG_NULL)
         return TPM_RCS_SCHEME + RC_ECDH_ZGen_keyHandle;
-// Command Output
+    // Command Output
     // Compute Z. TPM_RC_ECC_POINT or TPM_RC_NO_RESULT may be returned here.
     result = CryptEccPointMultiply(&out->outPoint.point,
                                    eccKey->publicArea.parameters.eccDetail.curveID,
                                    &in->inPoint.point,
                                    &eccKey->sensitive.sensitive.ecc,
-                                   NULL, NULL);
+                                   NULL,
+                                   NULL);
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, RC_ECDH_ZGen_inPoint);
     return result;
 }
 
-#endif // CC_ECDH_ZGen
+#endif  // CC_ECDH_ZGen

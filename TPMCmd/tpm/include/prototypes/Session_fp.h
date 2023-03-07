@@ -37,15 +37,12 @@
  *  Date: Mar  4, 2020  Time: 02:36:44PM
  */
 
-#ifndef    _SESSION_FP_H_
-#define    _SESSION_FP_H_
+#ifndef _SESSION_FP_H_
+#define _SESSION_FP_H_
 
 //** Startup Function -- SessionStartup()
 // This function initializes the session subsystem on TPM2_Startup().
-BOOL
-SessionStartup(
-    STARTUP_TYPE     type
-);
+BOOL SessionStartup(STARTUP_TYPE type);
 
 //*** SessionIsLoaded()
 // This function test a session handle references a loaded session.  The handle
@@ -57,9 +54,7 @@ SessionStartup(
 //      TRUE(1)         session is loaded
 //      FALSE(0)        session is not loaded
 //
-BOOL
-SessionIsLoaded(
-    TPM_HANDLE       handle         // IN: session handle
+BOOL SessionIsLoaded(TPM_HANDLE handle  // IN: session handle
 );
 
 //*** SessionIsSaved()
@@ -74,18 +69,15 @@ SessionIsLoaded(
 //      TRUE(1)         session is saved
 //      FALSE(0)        session is not saved
 //
-BOOL
-SessionIsSaved(
-    TPM_HANDLE       handle         // IN: session handle
+BOOL SessionIsSaved(TPM_HANDLE handle  // IN: session handle
 );
 
 //*** SequenceNumberForSavedContextIsValid()
 // This function validates that the sequence number and handle value within a
 // saved context are valid.
-BOOL
-SequenceNumberForSavedContextIsValid(
-    TPMS_CONTEXT    *context        // IN: pointer to a context structure to be
-                                    //     validated
+BOOL SequenceNumberForSavedContextIsValid(
+    TPMS_CONTEXT* context  // IN: pointer to a context structure to be
+                           //     validated
 );
 
 //*** SessionPCRValueIsCurrent()
@@ -97,9 +89,7 @@ SequenceNumberForSavedContextIsValid(
 //  Return Type: BOOL
 //      TRUE(1)         PCR value is current
 //      FALSE(0)        PCR value is not current
-BOOL
-SessionPCRValueIsCurrent(
-    SESSION         *session        // IN: session structure
+BOOL SessionPCRValueIsCurrent(SESSION* session  // IN: session structure
 );
 
 //*** SessionGet()
@@ -107,9 +97,7 @@ SessionPCRValueIsCurrent(
 // session handle.
 //
 // The function requires that the session is loaded.
-SESSION *
-SessionGet(
-    TPM_HANDLE       handle         // IN: session handle
+SESSION* SessionGet(TPM_HANDLE handle  // IN: session handle
 );
 
 //*** SessionCreate()
@@ -125,15 +113,14 @@ SessionGet(
 //      TPM_RC_SESSION_HANDLE       active session space is full
 //      TPM_RC_SESSION_MEMORY       loaded session space is full
 TPM_RC
-SessionCreate(
-    TPM_SE           sessionType,   // IN: the session type
-    TPMI_ALG_HASH    authHash,      // IN: the hash algorithm
-    TPM2B_NONCE     *nonceCaller,   // IN: initial nonceCaller
-    TPMT_SYM_DEF    *symmetric,     // IN: the symmetric algorithm
-    TPMI_DH_ENTITY   bind,          // IN: the bind object
-    TPM2B_DATA      *seed,          // IN: seed data
-    TPM_HANDLE      *sessionHandle, // OUT: the session handle
-    TPM2B_NONCE     *nonceTpm       // OUT: the session nonce
+SessionCreate(TPM_SE         sessionType,    // IN: the session type
+              TPMI_ALG_HASH  authHash,       // IN: the hash algorithm
+              TPM2B_NONCE*   nonceCaller,    // IN: initial nonceCaller
+              TPMT_SYM_DEF*  symmetric,      // IN: the symmetric algorithm
+              TPMI_DH_ENTITY bind,           // IN: the bind object
+              TPM2B_DATA*    seed,           // IN: seed data
+              TPM_HANDLE*    sessionHandle,  // OUT: the session handle
+              TPM2B_NONCE*   nonceTpm        // OUT: the session nonce
 );
 
 //*** SessionContextSave()
@@ -150,9 +137,8 @@ SessionCreate(
 //      TPM_RC_TOO_MANY_CONTEXTS        the counter maxed out
 //
 TPM_RC
-SessionContextSave(
-    TPM_HANDLE           handle,        // IN: session handle
-    CONTEXT_COUNTER     *contextID      // OUT: assigned contextID
+SessionContextSave(TPM_HANDLE       handle,    // IN: session handle
+                   CONTEXT_COUNTER* contextID  // OUT: assigned contextID
 );
 
 //*** SessionContextLoad()
@@ -170,9 +156,8 @@ SessionContextSave(
 //                                  is not the oldest saved context
 //
 TPM_RC
-SessionContextLoad(
-    SESSION_BUF     *session,       // IN: session structure from saved context
-    TPM_HANDLE      *handle         // IN/OUT: session handle
+SessionContextLoad(SESSION_BUF* session,  // IN: session structure from saved context
+                   TPM_HANDLE*  handle    // IN/OUT: session handle
 );
 
 //*** SessionFlush()
@@ -182,9 +167,7 @@ SessionContextLoad(
 //
 // This function requires that 'handle' be a valid active session.
 //
-void
-SessionFlush(
-    TPM_HANDLE       handle         // IN: loaded or saved session handle
+void SessionFlush(TPM_HANDLE handle  // IN: loaded or saved session handle
 );
 
 //*** SessionComputeBoundEntity()
@@ -194,25 +177,19 @@ SessionFlush(
 // For those values, the Name and the authValue are concatenated
 // into the bind buffer.  If they will not both fit, the will be overlapped
 // by XORing bytes.  If XOR is required, the bind value will be full.
-void
-SessionComputeBoundEntity(
-    TPMI_DH_ENTITY       entityHandle,  // IN: handle of entity
-    TPM2B_NAME          *bind           // OUT: binding value
+void SessionComputeBoundEntity(TPMI_DH_ENTITY entityHandle,  // IN: handle of entity
+                               TPM2B_NAME*    bind           // OUT: binding value
 );
 
 //*** SessionSetStartTime()
 // This function is used to initialize the session timing
-void
-SessionSetStartTime(
-    SESSION         *session        // IN: the session to update
+void SessionSetStartTime(SESSION* session  // IN: the session to update
 );
 
 //*** SessionResetPolicyData()
 // This function is used to reset the policy data without changing the nonce
 // or the start time of the session.
-void
-SessionResetPolicyData(
-    SESSION         *session        // IN: the session to reset
+void SessionResetPolicyData(SESSION* session  // IN: the session to reset
 );
 
 //*** SessionCapGetLoaded()
@@ -225,10 +202,9 @@ SessionResetPolicyData(
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO
-SessionCapGetLoaded(
-    TPMI_SH_POLICY   handle,        // IN: start handle
-    UINT32           count,         // IN: count of returned handles
-    TPML_HANDLE     *handleList     // OUT: list of handle
+SessionCapGetLoaded(TPMI_SH_POLICY handle,     // IN: start handle
+                    UINT32         count,      // IN: count of returned handles
+                    TPML_HANDLE*   handleList  // OUT: list of handle
 );
 
 //*** SessionCapGetSaved()
@@ -242,19 +218,16 @@ SessionCapGetLoaded(
 //      YES         if there are more handles available
 //      NO          all the available handles has been returned
 TPMI_YES_NO
-SessionCapGetSaved(
-    TPMI_SH_HMAC     handle,        // IN: start handle
-    UINT32           count,         // IN: count of returned handles
-    TPML_HANDLE     *handleList     // OUT: list of handle
+SessionCapGetSaved(TPMI_SH_HMAC handle,     // IN: start handle
+                   UINT32       count,      // IN: count of returned handles
+                   TPML_HANDLE* handleList  // OUT: list of handle
 );
 
 //*** SessionCapGetLoadedNumber()
 // This function return the number of authorization sessions currently
 // loaded into TPM RAM.
 UINT32
-SessionCapGetLoadedNumber(
-    void
-);
+SessionCapGetLoadedNumber(void);
 
 //*** SessionCapGetLoadedAvail()
 // This function returns the number of additional authorization sessions, of
@@ -263,25 +236,19 @@ SessionCapGetLoadedNumber(
 //       requirement for the estimate is, if it is one or more, then at least one
 //       session must be loadable.
 UINT32
-SessionCapGetLoadedAvail(
-    void
-);
+SessionCapGetLoadedAvail(void);
 
 //*** SessionCapGetActiveNumber()
 // This function returns the number of active authorization sessions currently
 // being tracked by the TPM.
 UINT32
-SessionCapGetActiveNumber(
-    void
-);
+SessionCapGetActiveNumber(void);
 
 //*** SessionCapGetActiveAvail()
 // This function returns the number of additional authorization sessions, of any
 // type, that could be created. This not the number of slots for sessions, but
 // the number of additional sessions that the TPM is capable of tracking.
 UINT32
-SessionCapGetActiveAvail(
-    void
-);
+SessionCapGetActiveAvail(void);
 
 #endif  // _SESSION_FP_H_

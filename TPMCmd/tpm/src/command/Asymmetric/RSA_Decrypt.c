@@ -57,16 +57,15 @@
 //                              valid
 
 TPM_RC
-TPM2_RSA_Decrypt(
-    RSA_Decrypt_In      *in,            // IN: input parameter list
-    RSA_Decrypt_Out     *out            // OUT: output parameter list
-    )
+TPM2_RSA_Decrypt(RSA_Decrypt_In*  in,  // IN: input parameter list
+                 RSA_Decrypt_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC                       result;
-    OBJECT                      *rsaKey;
-    TPMT_RSA_DECRYPT            *scheme;
+    TPM_RC            result;
+    OBJECT*           rsaKey;
+    TPMT_RSA_DECRYPT* scheme;
 
-// Input Validation
+    // Input Validation
 
     rsaKey = HandleToObject(in->keyHandle);
 
@@ -87,7 +86,7 @@ TPM2_RSA_Decrypt(
     // If label is present, make sure that it is a NULL-terminated string
     if(!IsLabelProperlyFormatted(&in->label.b))
         return TPM_RCS_VALUE + RC_RSA_Decrypt_label;
-// Command Output
+    // Command Output
     // Select a scheme for decrypt.
     scheme = CryptRsaSelectScheme(in->keyHandle, &in->inScheme);
     if(scheme == NULL)
@@ -98,9 +97,9 @@ TPM2_RSA_Decrypt(
     // NOTE: CryptRsaDecrypt can also return TPM_RC_ATTRIBUTES or TPM_RC_BINDING
     // when the key is not a decryption key but that was checked above.
     out->message.t.size = sizeof(out->message.t.buffer);
-    result = CryptRsaDecrypt(&out->message.b, &in->cipherText.b, rsaKey,
-                             scheme, &in->label.b);
+    result              = CryptRsaDecrypt(
+        &out->message.b, &in->cipherText.b, rsaKey, scheme, &in->label.b);
     return result;
 }
 
-#endif // CC_RSA_Decrypt
+#endif  // CC_RSA_Decrypt

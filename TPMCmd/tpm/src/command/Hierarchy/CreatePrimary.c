@@ -65,50 +65,48 @@
 //                              from TPM_ALG_NULL
 //      TPM_RC_TYPE             unknown object type
 TPM_RC
-TPM2_CreatePrimary(
-    CreatePrimary_In    *in,            // IN: input parameter list
-    CreatePrimary_Out   *out            // OUT: output parameter list
-    )
+TPM2_CreatePrimary(CreatePrimary_In*  in,  // IN: input parameter list
+                   CreatePrimary_Out* out  // OUT: output parameter list
+)
 {
-    TPM_RC               result = TPM_RC_SUCCESS;
-    TPMT_PUBLIC         *publicArea;
-    DRBG_STATE           rand;
-    OBJECT              *newObject;
-    TPM2B_NAME           name;
+    TPM_RC       result = TPM_RC_SUCCESS;
+    TPMT_PUBLIC* publicArea;
+    DRBG_STATE   rand;
+    OBJECT*      newObject;
+    TPM2B_NAME   name;
 
-// Input Validation
+    // Input Validation
     // Will need a place to put the result
     newObject = FindEmptyObjectSlot(&out->objectHandle);
     if(newObject == NULL)
         return TPM_RC_OBJECT_MEMORY;
     // Get the address of the public area in the new object
     // (this is just to save typing)
-    publicArea = &newObject->publicArea;
+    publicArea  = &newObject->publicArea;
 
     *publicArea = in->inPublic.publicArea;
 
     // Check attributes in input public area. CreateChecks() checks the things that
     // are unique to creation and then validates the attributes and values that are
     // common to create and load.
-    result = CreateChecks(NULL, publicArea,
-                          in->inSensitive.sensitive.data.t.size);
+    result = CreateChecks(NULL, publicArea, in->inSensitive.sensitive.data.t.size);
     if(result != TPM_RC_SUCCESS)
         return RcSafeAddToResult(result, RC_CreatePrimary_inPublic);
     // Validate the sensitive area values
-    if(!AdjustAuthSize(&in->inSensitive.sensitive.userAuth,
-                       publicArea->nameAlg))
+    if(!AdjustAuthSize(&in->inSensitive.sensitive.userAuth, publicArea->nameAlg))
         return TPM_RCS_SIZE + RC_CreatePrimary_inSensitive;
-// Command output
+    // Command output
     // Compute the name using out->name as a scratch area (this is not the value
     // that ultimately will be returned, then instantiate the state that will be
     // used as a random number generator during the object creation.
     // The caller does not know the seed values so the actual name does not have
     // to be over the input, it can be over the unmarshaled structure.
-    result = DRBG_InstantiateSeeded(&rand,
-                           &HierarchyGetPrimarySeed(in->primaryHandle)->b,
-                           PRIMARY_OBJECT_CREATION,
-                           (TPM2B *)PublicMarshalAndComputeName(publicArea, &name),
-                           &in->inSensitive.sensitive.data.b);
+    result =
+        DRBG_InstantiateSeeded(&rand,
+                               &HierarchyGetPrimarySeed(in->primaryHandle)->b,
+                               PRIMARY_OBJECT_CREATION,
+                               (TPM2B*)PublicMarshalAndComputeName(publicArea, &name),
+                               &in->inSensitive.sensitive.data.b);
     if(result == TPM_RC_SUCCESS)
     {
         newObject->attributes.primary = SET;
@@ -116,28 +114,33 @@ TPM2_CreatePrimary(
             newObject->attributes.epsHierarchy = SET;
 
         // Create the primary object.
-        result = CryptCreateObject(newObject, &in->inSensitive.sensitive,
-            (RAND_STATE *)&rand);
+        result = CryptCreateObject(
+            newObject, &in->inSensitive.sensitive, (RAND_STATE*)&rand);
     }
     if(result != TPM_RC_SUCCESS)
         return result;
 
     // Set the publicArea and name from the computed values
     out->outPublic.publicArea = newObject->publicArea;
-    out->name = newObject->name;
+    out->name                 = newObject->name;
 
     // Fill in creation data
-    FillInCreationData(in->primaryHandle, publicArea->nameAlg,
-                       &in->creationPCR, &in->outsideInfo, &out->creationData,
+    FillInCreationData(in->primaryHandle,
+                       publicArea->nameAlg,
+                       &in->creationPCR,
+                       &in->outsideInfo,
+                       &out->creationData,
                        &out->creationHash);
 
     // Compute creation ticket
-    TicketComputeCreation(EntityGetHierarchy(in->primaryHandle), &out->name,
-                          &out->creationHash, &out->creationTicket);
+    TicketComputeCreation(EntityGetHierarchy(in->primaryHandle),
+                          &out->name,
+                          &out->creationHash,
+                          &out->creationTicket);
 
     // Set the remaining attributes for a loaded object
     ObjectSetLoadedAttributes(newObject, in->primaryHandle);
     return result;
 }
 
-#endif // CC_CreatePrimary
+#endif  // CC_CreatePrimary

@@ -37,34 +37,33 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PolicyTicket // Command must be enabled
+#if CC_PolicyTicket  // Command must be enabled
 
-#ifndef _Policy_Ticket_FP_H_
-#define _Policy_Ticket_FP_H_
+#  ifndef _Policy_Ticket_FP_H_
+#    define _Policy_Ticket_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_SH_POLICY              policySession;
-    TPM2B_TIMEOUT               timeout;
-    TPM2B_DIGEST                cpHashA;
-    TPM2B_NONCE                 policyRef;
-    TPM2B_NAME                  authName;
-    TPMT_TK_AUTH                ticket;
+typedef struct
+{
+    TPMI_SH_POLICY policySession;
+    TPM2B_TIMEOUT  timeout;
+    TPM2B_DIGEST   cpHashA;
+    TPM2B_NONCE    policyRef;
+    TPM2B_NAME     authName;
+    TPMT_TK_AUTH   ticket;
 } PolicyTicket_In;
 
 // Response code modifiers
-#define RC_PolicyTicket_policySession   (TPM_RC_H + TPM_RC_1)
-#define RC_PolicyTicket_timeout (TPM_RC_P + TPM_RC_1)
-#define RC_PolicyTicket_cpHashA (TPM_RC_P + TPM_RC_2)
-#define RC_PolicyTicket_policyRef   (TPM_RC_P + TPM_RC_3)
-#define RC_PolicyTicket_authName    (TPM_RC_P + TPM_RC_4)
-#define RC_PolicyTicket_ticket  (TPM_RC_P + TPM_RC_5)
+#    define RC_PolicyTicket_policySession (TPM_RC_H + TPM_RC_1)
+#    define RC_PolicyTicket_timeout       (TPM_RC_P + TPM_RC_1)
+#    define RC_PolicyTicket_cpHashA       (TPM_RC_P + TPM_RC_2)
+#    define RC_PolicyTicket_policyRef     (TPM_RC_P + TPM_RC_3)
+#    define RC_PolicyTicket_authName      (TPM_RC_P + TPM_RC_4)
+#    define RC_PolicyTicket_ticket        (TPM_RC_P + TPM_RC_5)
 
 // Function prototype
 TPM_RC
-TPM2_PolicyTicket(
-    PolicyTicket_In             *in
-);
+TPM2_PolicyTicket(PolicyTicket_In* in);
 
-#endif  // _Policy_Ticket_FP_H_
-#endif  // CC_PolicyTicket
+#  endif  // _Policy_Ticket_FP_H_
+#endif    // CC_PolicyTicket

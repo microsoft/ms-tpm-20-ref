@@ -37,8 +37,8 @@
  *  Date: Mar  4, 2020  Time: 02:36:44PM
  */
 
-#ifndef    _ALGORITHM_TESTS_FP_H_
-#define    _ALGORITHM_TESTS_FP_H_
+#ifndef _ALGORITHM_TESTS_FP_H_
+#define _ALGORITHM_TESTS_FP_H_
 
 #if SELF_TEST
 
@@ -63,10 +63,7 @@
 //      TPM_RC_CANCELED     test was canceled
 LIB_EXPORT
 TPM_RC
-TestAlgorithm(
-    TPM_ALG_ID               alg,
-    ALGORITHM_VECTOR        *toTest
-);
-#endif // SELF_TESTS
+TestAlgorithm(TPM_ALG_ID alg, ALGORITHM_VECTOR* toTest);
+#endif  // SELF_TESTS
 
 #endif  // _ALGORITHM_TESTS_FP_H_

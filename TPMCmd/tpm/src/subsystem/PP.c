@@ -52,12 +52,9 @@
 //
 // When set, these cannot be cleared.
 //
-void
-PhysicalPresencePreInstall_Init(
-    void
-    )
+void PhysicalPresencePreInstall_Init(void)
 {
-    COMMAND_INDEX        commandIndex;
+    COMMAND_INDEX commandIndex;
     // Clear all the PP commands
     MemorySet(&gp.ppList, 0, sizeof(gp.ppList));
 
@@ -65,7 +62,7 @@ PhysicalPresencePreInstall_Init(
     for(commandIndex = 0; commandIndex < COMMAND_COUNT; commandIndex++)
     {
         if(s_commandAttributes[commandIndex] & IS_IMPLEMENTED
-           &&  s_commandAttributes[commandIndex] & PP_REQUIRED)
+           && s_commandAttributes[commandIndex] & PP_REQUIRED)
             SET_BIT(commandIndex, gp.ppList);
     }
     // Write PP list to NV
@@ -76,12 +73,10 @@ PhysicalPresencePreInstall_Init(
 //*** PhysicalPresenceCommandSet()
 // This function is used to set the indicator that a command requires
 // PP confirmation.
-void
-PhysicalPresenceCommandSet(
-    TPM_CC           commandCode    // IN: command code
-    )
+void PhysicalPresenceCommandSet(TPM_CC commandCode  // IN: command code
+)
 {
-    COMMAND_INDEX       commandIndex = CommandCodeToCommandIndex(commandCode);
+    COMMAND_INDEX commandIndex = CommandCodeToCommandIndex(commandCode);
 
     // if the command isn't implemented, the do nothing
     if(commandIndex == UNIMPLEMENTED_COMMAND_INDEX)
@@ -96,12 +91,10 @@ PhysicalPresenceCommandSet(
 //*** PhysicalPresenceCommandClear()
 // This function is used to clear the indicator that a command requires PP
 // confirmation.
-void
-PhysicalPresenceCommandClear(
-    TPM_CC           commandCode    // IN: command code
-    )
+void PhysicalPresenceCommandClear(TPM_CC commandCode  // IN: command code
+)
 {
-    COMMAND_INDEX       commandIndex = CommandCodeToCommandIndex(commandCode);
+    COMMAND_INDEX commandIndex = CommandCodeToCommandIndex(commandCode);
 
     // If the command isn't implemented, then don't do anything
     if(commandIndex == UNIMPLEMENTED_COMMAND_INDEX)
@@ -119,10 +112,8 @@ PhysicalPresenceCommandClear(
 //  Return Type: BOOL
 //      TRUE(1)         physical presence is required
 //      FALSE(0)        physical presence is not required
-BOOL
-PhysicalPresenceIsRequired(
-    COMMAND_INDEX    commandIndex   // IN: command index
-    )
+BOOL PhysicalPresenceIsRequired(COMMAND_INDEX commandIndex  // IN: command index
+)
 {
     // Check the bit map.  If the bit is SET, PP authorization is required
     return (TEST_BIT(commandIndex, gp.ppList));
@@ -136,24 +127,24 @@ PhysicalPresenceIsRequired(
 //      YES         if there are more command codes available
 //      NO          all the available command codes have been returned
 TPMI_YES_NO
-PhysicalPresenceCapGetCCList(
-    TPM_CC           commandCode,   // IN: start command code
-    UINT32           count,         // IN: count of returned TPM_CC
-    TPML_CC         *commandList    // OUT: list of TPM_CC
-    )
+PhysicalPresenceCapGetCCList(TPM_CC   commandCode,  // IN: start command code
+                             UINT32   count,        // IN: count of returned TPM_CC
+                             TPML_CC* commandList   // OUT: list of TPM_CC
+)
 {
-    TPMI_YES_NO     more = NO;
-    COMMAND_INDEX   commandIndex;
+    TPMI_YES_NO   more = NO;
+    COMMAND_INDEX commandIndex;
 
     // Initialize output handle list
     commandList->count = 0;
 
     // The maximum count of command we may return is MAX_CAP_CC
-    if(count > MAX_CAP_CC) count = MAX_CAP_CC;
+    if(count > MAX_CAP_CC)
+        count = MAX_CAP_CC;
 
     // Collect PP commands
     for(commandIndex = GetClosestCommandIndex(commandCode);
-    commandIndex != UNIMPLEMENTED_COMMAND_INDEX;
+        commandIndex != UNIMPLEMENTED_COMMAND_INDEX;
         commandIndex = GetNextCommandIndex(commandIndex))
     {
         if(PhysicalPresenceIsRequired(commandIndex))
@@ -162,8 +153,8 @@ PhysicalPresenceCapGetCCList(
             {
                 // If we have not filled up the return list, add this command
                 // code to it
-                commandList->commandCodes[commandList->count]
-                    = GetCommandCode(commandIndex);
+                commandList->commandCodes[commandList->count] =
+                    GetCommandCode(commandIndex);
                 commandList->count++;
             }
             else

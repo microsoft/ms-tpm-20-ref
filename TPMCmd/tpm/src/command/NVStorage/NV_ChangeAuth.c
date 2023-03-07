@@ -45,14 +45,13 @@
 //                                      size of the Name algorithm for the Index
 //                                      referenced by 'nvIndex'
 TPM_RC
-TPM2_NV_ChangeAuth(
-    NV_ChangeAuth_In    *in             // IN: input parameter list
-    )
+TPM2_NV_ChangeAuth(NV_ChangeAuth_In* in  // IN: input parameter list
+)
 {
-    NV_REF           locator;
-    NV_INDEX        *nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
+    NV_REF    locator;
+    NV_INDEX* nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
 
-// Input Validation
+    // Input Validation
 
     // Remove trailing zeros and make sure that the result is not larger than the
     // digest of the nameAlg.
@@ -60,9 +59,9 @@ TPM2_NV_ChangeAuth(
        > CryptHashGetDigestSize(nvIndex->publicArea.nameAlg))
         return TPM_RCS_SIZE + RC_NV_ChangeAuth_newAuth;
 
-// Internal Data Update
+    // Internal Data Update
     // Change authValue
     return NvWriteIndexAuth(locator, &in->newAuth);
 }
 
-#endif // CC_NV_ChangeAuth
+#endif  // CC_NV_ChangeAuth

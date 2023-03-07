@@ -53,25 +53,21 @@
 //  Return Type: BOOL
 //      TRUE(1)         bit is set
 //      FALSE(0)        bit is not set
-BOOL
-TestBit(
-    unsigned int     bitNum,        // IN: number of the bit in 'bArray'
-    BYTE            *bArray,        // IN: array containing the bits
-    unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
-    )
+BOOL TestBit(unsigned int bitNum,       // IN: number of the bit in 'bArray'
+             BYTE*        bArray,       // IN: array containing the bits
+             unsigned int bytesInArray  // IN: size in bytes of 'bArray'
+)
 {
     pAssert(bytesInArray > (bitNum >> 3));
-    return((bArray[bitNum >> 3] & (1 << (bitNum & 7))) != 0);
+    return ((bArray[bitNum >> 3] & (1 << (bitNum & 7))) != 0);
 }
 
 //*** SetBit()
 // This function will set the indicated bit in 'bArray'.
-void
-SetBit(
-    unsigned int     bitNum,        // IN: number of the bit in 'bArray'
-    BYTE            *bArray,        // IN: array containing the bits
-    unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
-    )
+void SetBit(unsigned int bitNum,       // IN: number of the bit in 'bArray'
+            BYTE*        bArray,       // IN: array containing the bits
+            unsigned int bytesInArray  // IN: size in bytes of 'bArray'
+)
 {
     pAssert(bytesInArray > (bitNum >> 3));
     bArray[bitNum >> 3] |= (1 << (bitNum & 7));
@@ -79,14 +75,11 @@ SetBit(
 
 //*** ClearBit()
 // This function will clear the indicated bit in 'bArray'.
-void
-ClearBit(
-    unsigned int     bitNum,        // IN: number of the bit in 'bArray'.
-    BYTE            *bArray,        // IN: array containing the bits
-    unsigned int     bytesInArray   // IN: size in bytes of 'bArray'
-    )
+void ClearBit(unsigned int bitNum,       // IN: number of the bit in 'bArray'.
+              BYTE*        bArray,       // IN: array containing the bits
+              unsigned int bytesInArray  // IN: size in bytes of 'bArray'
+)
 {
     pAssert(bytesInArray > (bitNum >> 3));
     bArray[bitNum >> 3] &= ~(1 << (bitNum & 7));
 }
-

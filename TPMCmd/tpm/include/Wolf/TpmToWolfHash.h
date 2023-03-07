@@ -42,26 +42,25 @@
 
 #define HASH_LIB_WOLF
 
-#define HASH_ALIGNMENT  RADIX_BYTES
+#define HASH_ALIGNMENT RADIX_BYTES
 
 #ifndef WOLFSSL_USER_SETTINGS
-#define WOLFSSL_USER_SETTINGS
+#  define WOLFSSL_USER_SETTINGS
 #endif
 
 #if ALG_SHA384 || ALG_SHA512
-#define WOLFSSL_SHA512
+#  define WOLFSSL_SHA512
 #endif
 
 #if ALG_SM3_256
-#undef ALG_SM3_256
-#define ALG_SM3_256 ALG_NO
+#  undef ALG_SM3_256
+#  define ALG_SM3_256 ALG_NO
 //#error "SM3 is not available"
 #endif
 
 #include <wolfssl/wolfcrypt/sha.h>
 #include <wolfssl/wolfcrypt/sha256.h>
 #include <wolfssl/wolfcrypt/sha512.h>
-
 
 //***************************************************************
 //** Links to the wolfcrypt HASH code
@@ -72,13 +71,13 @@
 // These defines need to be known in all parts of the TPM so that the structure
 // sizes can be properly computed when needed.
 
-#define tpmHashStateSHA1_t        wc_Sha
-#define tpmHashStateSHA256_t      wc_Sha256
-#define tpmHashStateSHA384_t      wc_Sha512
-#define tpmHashStateSHA512_t      wc_Sha512
+#define tpmHashStateSHA1_t   wc_Sha
+#define tpmHashStateSHA256_t wc_Sha256
+#define tpmHashStateSHA384_t wc_Sha512
+#define tpmHashStateSHA512_t wc_Sha512
 
 #if ALG_SM3
-#   error "The version of WolfCrypt used by this code does not support SM3"
+#  error "The version of WolfCrypt used by this code does not support SM3"
 #endif
 
 // The defines below are only needed when compiling CryptHash.c or CryptSmac.c.
@@ -88,8 +87,8 @@
 
 #ifdef _CRYPT_HASH_C_
 
-typedef BYTE          *PBYTE;
-typedef const BYTE    *PCBYTE;
+typedef BYTE*       PBYTE;
+typedef const BYTE* PCBYTE;
 
 // Define the interface between CryptHash.c to the functions provided by the
 // library. For each method, define the calling parameters of the method and then
@@ -105,95 +104,86 @@ typedef const BYTE    *PCBYTE;
 // library form.
 //
 // Initialize the hash context
-#define HASH_START_METHOD_DEF   void (HASH_START_METHOD)(PANY_HASH_STATE state)
-#define HASH_START(hashState)                                                   \
-                ((hashState)->def->method.start)(&(hashState)->state);
+#  define HASH_START_METHOD_DEF void(HASH_START_METHOD)(PANY_HASH_STATE state)
+#  define HASH_START(hashState) ((hashState)->def->method.start)(&(hashState)->state);
 
 // Add data to the hash
-#define HASH_DATA_METHOD_DEF                                                    \
-                void (HASH_DATA_METHOD)(PANY_HASH_STATE state,                  \
-                                    PCBYTE buffer,                              \
-                                    size_t size)
-#define HASH_DATA(hashState, dInSize, dIn)                                      \
-                ((hashState)->def->method.data)(&(hashState)->state, dIn, dInSize)
+#  define HASH_DATA_METHOD_DEF \
+    void(HASH_DATA_METHOD)(PANY_HASH_STATE state, PCBYTE buffer, size_t size)
+#  define HASH_DATA(hashState, dInSize, dIn) \
+    ((hashState)->def->method.data)(&(hashState)->state, dIn, dInSize)
 
 // Finalize the hash and get the digest
-#define HASH_END_METHOD_DEF                                                     \
-                void (HASH_END_METHOD)(PANY_HASH_STATE state, BYTE *buffer)
-#define HASH_END(hashState, buffer)                                             \
-                ((hashState)->def->method.end)(&(hashState)->state, buffer)
+#  define HASH_END_METHOD_DEF \
+    void(HASH_END_METHOD)(PANY_HASH_STATE state, BYTE * buffer)
+#  define HASH_END(hashState, buffer) \
+    ((hashState)->def->method.end)(&(hashState)->state, buffer)
 
 // Copy the hash context
 // Note: For import, export, and copy, memcpy() is used since there is no
 // reformatting necessary between the internal and external forms.
-#define HASH_STATE_COPY_METHOD_DEF                                              \
-                void (HASH_STATE_COPY_METHOD)(PANY_HASH_STATE to,               \
-                                              PCANY_HASH_STATE from,            \
-                                              size_t size)
-#define HASH_STATE_COPY(hashStateOut, hashStateIn)                              \
-                ((hashStateIn)->def->method.copy)(&(hashStateOut)->state,       \
-                                              &(hashStateIn)->state,            \
-                                              (hashStateIn)->def->contextSize)
+#  define HASH_STATE_COPY_METHOD_DEF \
+    void(HASH_STATE_COPY_METHOD)(    \
+        PANY_HASH_STATE to, PCANY_HASH_STATE from, size_t size)
+#  define HASH_STATE_COPY(hashStateOut, hashStateIn)          \
+    ((hashStateIn)->def->method.copy)(&(hashStateOut)->state, \
+                                      &(hashStateIn)->state,  \
+                                      (hashStateIn)->def->contextSize)
 
 // Copy (with reformatting when necessary) an internal hash structure to an
 // external blob
-#define  HASH_STATE_EXPORT_METHOD_DEF                                           \
-                void (HASH_STATE_EXPORT_METHOD)(BYTE *to,                       \
-                                          PCANY_HASH_STATE from,                \
-                                          size_t size)
-#define  HASH_STATE_EXPORT(to, hashStateFrom)                                   \
-                ((hashStateFrom)->def->method.copyOut)                          \
-                        (&(((BYTE *)(to))[offsetof(HASH_STATE, state)]),        \
-                         &(hashStateFrom)->state,                               \
-                         (hashStateFrom)->def->contextSize)
+#  define HASH_STATE_EXPORT_METHOD_DEF \
+    void(HASH_STATE_EXPORT_METHOD)(BYTE * to, PCANY_HASH_STATE from, size_t size)
+#  define HASH_STATE_EXPORT(to, hashStateFrom)         \
+    ((hashStateFrom)->def->method.copyOut)(            \
+        &(((BYTE*)(to))[offsetof(HASH_STATE, state)]), \
+        &(hashStateFrom)->state,                       \
+        (hashStateFrom)->def->contextSize)
 
 // Copy from an external blob to an internal formate (with reformatting when
 // necessary
-#define  HASH_STATE_IMPORT_METHOD_DEF                                           \
-                void (HASH_STATE_IMPORT_METHOD)(PANY_HASH_STATE to,             \
-                                                const BYTE *from,               \
-                                                 size_t size)
-#define  HASH_STATE_IMPORT(hashStateTo, from)                                   \
-                ((hashStateTo)->def->method.copyIn)                             \
-                        (&(hashStateTo)->state,                                 \
-                         &(((const BYTE *)(from))[offsetof(HASH_STATE, state)]),\
-                         (hashStateTo)->def->contextSize)
-
+#  define HASH_STATE_IMPORT_METHOD_DEF \
+    void(HASH_STATE_IMPORT_METHOD)(PANY_HASH_STATE to, const BYTE* from, size_t size)
+#  define HASH_STATE_IMPORT(hashStateTo, from)                 \
+    ((hashStateTo)->def->method.copyIn)(                       \
+        &(hashStateTo)->state,                                 \
+        &(((const BYTE*)(from))[offsetof(HASH_STATE, state)]), \
+        (hashStateTo)->def->contextSize)
 
 // Function aliases. The code in CryptHash.c uses the internal designation for the
 // functions. These need to be translated to the function names of the library.
 //          Internal                    External
 //          Designation                 Designation
-#define tpmHashStart_SHA1           wc_InitSha   // external name of the
-                                                // initialization method
-#define tpmHashData_SHA1            wc_ShaUpdate
-#define tpmHashEnd_SHA1             wc_ShaFinal
-#define tpmHashStateCopy_SHA1       memcpy
-#define tpmHashStateExport_SHA1     memcpy
-#define tpmHashStateImport_SHA1     memcpy
-#define tpmHashStart_SHA256         wc_InitSha256
-#define tpmHashData_SHA256          wc_Sha256Update
-#define tpmHashEnd_SHA256           wc_Sha256Final
-#define tpmHashStateCopy_SHA256     memcpy
-#define tpmHashStateExport_SHA256   memcpy
-#define tpmHashStateImport_SHA256   memcpy
-#define tpmHashStart_SHA384         wc_InitSha384
-#define tpmHashData_SHA384          wc_Sha384Update
-#define tpmHashEnd_SHA384           wc_Sha384Final
-#define tpmHashStateCopy_SHA384     memcpy
-#define tpmHashStateExport_SHA384   memcpy
-#define tpmHashStateImport_SHA384   memcpy
-#define tpmHashStart_SHA512         wc_InitSha512
-#define tpmHashData_SHA512          wc_Sha512Update
-#define tpmHashEnd_SHA512           wc_Sha512Final
-#define tpmHashStateCopy_SHA512     memcpy
-#define tpmHashStateExport_SHA512   memcpy
-#define tpmHashStateImport_SHA512   memcpy
+#  define tpmHashStart_SHA1 wc_InitSha  // external name of the
+                                        // initialization method
+#  define tpmHashData_SHA1          wc_ShaUpdate
+#  define tpmHashEnd_SHA1           wc_ShaFinal
+#  define tpmHashStateCopy_SHA1     memcpy
+#  define tpmHashStateExport_SHA1   memcpy
+#  define tpmHashStateImport_SHA1   memcpy
+#  define tpmHashStart_SHA256       wc_InitSha256
+#  define tpmHashData_SHA256        wc_Sha256Update
+#  define tpmHashEnd_SHA256         wc_Sha256Final
+#  define tpmHashStateCopy_SHA256   memcpy
+#  define tpmHashStateExport_SHA256 memcpy
+#  define tpmHashStateImport_SHA256 memcpy
+#  define tpmHashStart_SHA384       wc_InitSha384
+#  define tpmHashData_SHA384        wc_Sha384Update
+#  define tpmHashEnd_SHA384         wc_Sha384Final
+#  define tpmHashStateCopy_SHA384   memcpy
+#  define tpmHashStateExport_SHA384 memcpy
+#  define tpmHashStateImport_SHA384 memcpy
+#  define tpmHashStart_SHA512       wc_InitSha512
+#  define tpmHashData_SHA512        wc_Sha512Update
+#  define tpmHashEnd_SHA512         wc_Sha512Final
+#  define tpmHashStateCopy_SHA512   memcpy
+#  define tpmHashStateExport_SHA512 memcpy
+#  define tpmHashStateImport_SHA512 memcpy
 
-#endif // _CRYPT_HASH_C_
+#endif  // _CRYPT_HASH_C_
 
 #define LibHashInit()
 // This definition would change if there were something to report
 #define HashLibSimulationEnd()
 
-#endif // HASH_LIB_DEFINED
+#endif  // HASH_LIB_DEFINED

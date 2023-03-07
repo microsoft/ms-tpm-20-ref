@@ -37,8 +37,8 @@
  *  Date: Mar  4, 2020  Time: 02:36:44PM
  */
 
-#ifndef    _MANUFACTURE_FP_H_
-#define    _MANUFACTURE_FP_H_
+#ifndef _MANUFACTURE_FP_H_
+#define _MANUFACTURE_FP_H_
 
 //*** TPM_Manufacture()
 // This function initializes the TPM values in preparation for the TPM's first
@@ -48,10 +48,9 @@
 //      -1          failure
 //      0           success
 //      1           manufacturing process previously performed
-LIB_EXPORT int
-TPM_Manufacture(
-    int             firstTime       // IN: indicates if this is the first call from
-                                    //     main()
+LIB_EXPORT int TPM_Manufacture(
+    int firstTime  // IN: indicates if this is the first call from
+                   //     main()
 );
 
 //*** TPM_TearDown()
@@ -64,17 +63,11 @@ TPM_Manufacture(
 //  Return Type: int
 //      0        success
 //      1        TPM not previously manufactured
-LIB_EXPORT int
-TPM_TearDown(
-    void
-);
+LIB_EXPORT int TPM_TearDown(void);
 
 //*** TpmEndSimulation()
 // This function is called at the end of the simulation run. It is used to provoke
 // printing of any statistics that might be needed.
-LIB_EXPORT void
-TpmEndSimulation(
-    void
-);
+LIB_EXPORT void TpmEndSimulation(void);
 
 #endif  // _MANUFACTURE_FP_H_

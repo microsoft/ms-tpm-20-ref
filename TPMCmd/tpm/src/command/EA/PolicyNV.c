@@ -37,7 +37,7 @@
 
 #if CC_PolicyNV  // Conditional expansion of this file
 
-#include "Policy_spt_fp.h"
+#  include "Policy_spt_fp.h"
 
 /*(See part 3 specification)
 // Do comparison to NV location
@@ -51,21 +51,20 @@
 //                                  is less than the size of 'operandB'
 //      TPM_RC_VALUE                'offset' is too large
 TPM_RC
-TPM2_PolicyNV(
-    PolicyNV_In     *in             // IN: input parameter list
-    )
+TPM2_PolicyNV(PolicyNV_In* in  // IN: input parameter list
+)
 {
-    TPM_RC               result;
-    SESSION             *session;
-    NV_REF               locator;
-    NV_INDEX            *nvIndex;
-    BYTE                 nvBuffer[sizeof(in->operandB.t.buffer)];
-    TPM2B_NAME           nvName;
-    TPM_CC               commandCode = TPM_CC_PolicyNV;
-    HASH_STATE           hashState;
-    TPM2B_DIGEST         argHash;
+    TPM_RC       result;
+    SESSION*     session;
+    NV_REF       locator;
+    NV_INDEX*    nvIndex;
+    BYTE         nvBuffer[sizeof(in->operandB.t.buffer)];
+    TPM2B_NAME   nvName;
+    TPM_CC       commandCode = TPM_CC_PolicyNV;
+    HASH_STATE   hashState;
+    TPM2B_DIGEST argHash;
 
-// Input Validation
+    // Input Validation
 
     // Get pointer to the session structure
     session = SessionGet(in->policySession);
@@ -78,9 +77,8 @@ TPM2_PolicyNV(
 
         // Common read access checks. NvReadAccessChecks() may return
         // TPM_RC_NV_AUTHORIZATION, TPM_RC_NV_LOCKED, or TPM_RC_NV_UNINITIALIZED
-        result = NvReadAccessChecks(in->authHandle,
-                                    in->nvIndex,
-                                    nvIndex->publicArea.attributes);
+        result = NvReadAccessChecks(
+            in->authHandle, in->nvIndex, nvIndex->publicArea.attributes);
         if(result != TPM_RC_SUCCESS)
             return result;
 
@@ -92,16 +90,15 @@ TPM2_PolicyNV(
         if((nvIndex->publicArea.dataSize - in->offset) < in->operandB.t.size)
             return TPM_RCS_SIZE + RC_PolicyNV_operandB;
 
-
         // Get NV data.  The size of NV data equals the input operand B size
         NvGetIndexData(nvIndex, locator, in->offset, in->operandB.t.size, nvBuffer);
 
         // Check to see if the condition is valid
-        if(!PolicySptCheckCondition(in->operation, nvBuffer,
-                                    in->operandB.t.buffer, in->operandB.t.size))
+        if(!PolicySptCheckCondition(
+               in->operation, nvBuffer, in->operandB.t.buffer, in->operandB.t.size))
             return TPM_RC_POLICY;
     }
-// Internal Data Update
+    // Internal Data Update
 
     // Start argument hash
     argHash.t.size = CryptHashStart(&hashState, session->authHashAlg);
@@ -140,4 +137,4 @@ TPM2_PolicyNV(
     return TPM_RC_SUCCESS;
 }
 
-#endif // CC_PolicyNV
+#endif  // CC_PolicyNV

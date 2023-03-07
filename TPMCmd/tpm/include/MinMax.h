@@ -37,10 +37,10 @@
 #define _MIN_MAX_H_
 
 #ifndef MAX
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#  define MAX(a, b) ((a) > (b) ? (a) : (b))
 #endif
 #ifndef MIN
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#  define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 
-#endif // _MIN_MAX_H_
+#endif  // _MIN_MAX_H_

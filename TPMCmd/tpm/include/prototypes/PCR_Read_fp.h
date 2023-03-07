@@ -37,32 +37,31 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PCR_Read // Command must be enabled
+#if CC_PCR_Read  // Command must be enabled
 
-#ifndef _PCR_Read_FP_H_
-#define _PCR_Read_FP_H_
+#  ifndef _PCR_Read_FP_H_
+#    define _PCR_Read_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPML_PCR_SELECTION          pcrSelectionIn;
+typedef struct
+{
+    TPML_PCR_SELECTION pcrSelectionIn;
 } PCR_Read_In;
 
 // Output structure definition
-typedef struct {
-    UINT32                      pcrUpdateCounter;
-    TPML_PCR_SELECTION          pcrSelectionOut;
-    TPML_DIGEST                 pcrValues;
+typedef struct
+{
+    UINT32             pcrUpdateCounter;
+    TPML_PCR_SELECTION pcrSelectionOut;
+    TPML_DIGEST        pcrValues;
 } PCR_Read_Out;
 
 // Response code modifiers
-#define RC_PCR_Read_pcrSelectionIn  (TPM_RC_P + TPM_RC_1)
+#    define RC_PCR_Read_pcrSelectionIn (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_PCR_Read(
-    PCR_Read_In                 *in,
-    PCR_Read_Out                *out
-);
+TPM2_PCR_Read(PCR_Read_In* in, PCR_Read_Out* out);
 
-#endif  // _PCR_Read_FP_H_
-#endif  // CC_PCR_Read
+#  endif  // _PCR_Read_FP_H_
+#endif    // CC_PCR_Read

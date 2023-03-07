@@ -51,7 +51,7 @@
 #include <setjmp.h>
 #include "ExecCommand_fp.h"
 
-jmp_buf              s_jumpBuffer;
+jmp_buf s_jumpBuffer;
 
 //** Functions
 
@@ -62,25 +62,20 @@ jmp_buf              s_jumpBuffer;
 // longjump back to RunCommand which will call ExecuteCommand again. However, this
 // time, the TPM will be in failure mode so ExecuteCommand will simply build
 // a failure response and return.
-LIB_EXPORT void
-_plat__RunCommand(
-    uint32_t         requestSize,   // IN: command buffer size
-    unsigned char   *request,       // IN: command buffer
-    uint32_t        *responseSize,  // IN/OUT: response buffer size
-    unsigned char   **response      // IN/OUT: response buffer
-    )
+LIB_EXPORT void _plat__RunCommand(
+    uint32_t        requestSize,   // IN: command buffer size
+    unsigned char*  request,       // IN: command buffer
+    uint32_t*       responseSize,  // IN/OUT: response buffer size
+    unsigned char** response       // IN/OUT: response buffer
+)
 {
     setjmp(s_jumpBuffer);
     ExecuteCommand(requestSize, request, responseSize, response);
 }
 
-
 //***_plat__Fail()
 // This is the platform depended failure exit for the TPM.
-LIB_EXPORT NORETURN void
-_plat__Fail(
-    void
-    )
+LIB_EXPORT NORETURN void _plat__Fail(void)
 {
     longjmp(&s_jumpBuffer[0], 1);
 }

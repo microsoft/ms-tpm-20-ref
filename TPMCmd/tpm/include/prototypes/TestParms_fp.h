@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_TestParms // Command must be enabled
+#if CC_TestParms  // Command must be enabled
 
-#ifndef _Test_Parms_FP_H_
-#define _Test_Parms_FP_H_
+#  ifndef _Test_Parms_FP_H_
+#    define _Test_Parms_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMT_PUBLIC_PARMS           parameters;
+typedef struct
+{
+    TPMT_PUBLIC_PARMS parameters;
 } TestParms_In;
 
 // Response code modifiers
-#define RC_TestParms_parameters (TPM_RC_P + TPM_RC_1)
+#    define RC_TestParms_parameters (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_TestParms(
-    TestParms_In                *in
-);
+TPM2_TestParms(TestParms_In* in);
 
-#endif  // _Test_Parms_FP_H_
-#endif  // CC_TestParms
+#  endif  // _Test_Parms_FP_H_
+#endif    // CC_TestParms

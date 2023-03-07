@@ -41,44 +41,44 @@
 #ifndef _LTC_SETTINGS_H_
 #define _LTC_SETTINGS_H_
 
-#if (defined HASH_LIB_LTC) || (defined SYM_LIB_LTC) || (defined MATH_LIB_LTC)
+#if(defined HASH_LIB_LTC) || (defined SYM_LIB_LTC) || (defined MATH_LIB_LTC)
 
-#if ALG_AES
-#  define LTC_RIJNDAEL
-#endif
-#if ALG_TDES
-#   define LTC_DES
-#endif
+#  if ALG_AES
+#    define LTC_RIJNDAEL
+#  endif
+#  if ALG_TDES
+#    define LTC_DES
+#  endif
 
-#define _Bool   int
+#  define _Bool int
 
 // LibTomCrypt types
-typedef unsigned long long  ulong64;
+typedef unsigned long long ulong64;
 
 /* default no functions m for LTC */
-#define LTC_MUTEX_GLOBAL(x)
-#define LTC_MUTEX_PROTO(x)
-#define LTC_MUTEX_TYPE(x)
-#define LTC_MUTEX_INIT(x)
-#define LTC_MUTEX_LOCK(x)
-#define LTC_MUTEX_UNLOCK(x)
+#  define LTC_MUTEX_GLOBAL(x)
+#  define LTC_MUTEX_PROTO(x)
+#  define LTC_MUTEX_TYPE(x)
+#  define LTC_MUTEX_INIT(x)
+#  define LTC_MUTEX_LOCK(x)
+#  define LTC_MUTEX_UNLOCK(x)
 
-#ifndef XMEM_NEQ
-#define XMEM_NEQ
-#endif
+#  ifndef XMEM_NEQ
+#    define XMEM_NEQ
+#  endif
 
-#define LTC_SHA512
-#define LTC_SHA384
-#define LTC_SHA256
-#define LTC_SHA1
+#  define LTC_SHA512
+#  define LTC_SHA384
+#  define LTC_SHA256
+#  define LTC_SHA1
 
 // Define these function calls as needed
-#define CryptLibStartup()       LtcLibStartup()
+#  define CryptLibStartup() LtcLibStartup()
 
 _REDUCE_WARNING_LEVEL_(0)
-#include "tomcrypt.h"
+#  include "tomcrypt.h"
 _NORMAL_WARNING_LEVEL_
 
 #endif
 
-#endif //
+#endif  //

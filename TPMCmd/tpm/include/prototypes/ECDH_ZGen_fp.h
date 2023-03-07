@@ -37,32 +37,31 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_ECDH_ZGen // Command must be enabled
+#if CC_ECDH_ZGen  // Command must be enabled
 
-#ifndef _ECDH_ZGen_FP_H_
-#define _ECDH_ZGen_FP_H_
+#  ifndef _ECDH_ZGen_FP_H_
+#    define _ECDH_ZGen_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              keyHandle;
-    TPM2B_ECC_POINT             inPoint;
+typedef struct
+{
+    TPMI_DH_OBJECT  keyHandle;
+    TPM2B_ECC_POINT inPoint;
 } ECDH_ZGen_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_ECC_POINT             outPoint;
+typedef struct
+{
+    TPM2B_ECC_POINT outPoint;
 } ECDH_ZGen_Out;
 
 // Response code modifiers
-#define RC_ECDH_ZGen_keyHandle  (TPM_RC_H + TPM_RC_1)
-#define RC_ECDH_ZGen_inPoint    (TPM_RC_P + TPM_RC_1)
+#    define RC_ECDH_ZGen_keyHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_ECDH_ZGen_inPoint   (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_ECDH_ZGen(
-    ECDH_ZGen_In                *in,
-    ECDH_ZGen_Out               *out
-);
+TPM2_ECDH_ZGen(ECDH_ZGen_In* in, ECDH_ZGen_Out* out);
 
-#endif  // _ECDH_ZGen_FP_H_
-#endif  // CC_ECDH_ZGen
+#  endif  // _ECDH_ZGen_FP_H_
+#endif    // CC_ECDH_ZGen

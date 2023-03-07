@@ -37,35 +37,34 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_SequenceComplete // Command must be enabled
+#if CC_SequenceComplete  // Command must be enabled
 
-#ifndef _Sequence_Complete_FP_H_
-#define _Sequence_Complete_FP_H_
+#  ifndef _Sequence_Complete_FP_H_
+#    define _Sequence_Complete_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              sequenceHandle;
-    TPM2B_MAX_BUFFER            buffer;
-    TPMI_RH_HIERARCHY           hierarchy;
+typedef struct
+{
+    TPMI_DH_OBJECT    sequenceHandle;
+    TPM2B_MAX_BUFFER  buffer;
+    TPMI_RH_HIERARCHY hierarchy;
 } SequenceComplete_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_DIGEST                result;
-    TPMT_TK_HASHCHECK           validation;
+typedef struct
+{
+    TPM2B_DIGEST      result;
+    TPMT_TK_HASHCHECK validation;
 } SequenceComplete_Out;
 
 // Response code modifiers
-#define RC_SequenceComplete_sequenceHandle  (TPM_RC_H + TPM_RC_1)
-#define RC_SequenceComplete_buffer  (TPM_RC_P + TPM_RC_1)
-#define RC_SequenceComplete_hierarchy   (TPM_RC_P + TPM_RC_2)
+#    define RC_SequenceComplete_sequenceHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_SequenceComplete_buffer         (TPM_RC_P + TPM_RC_1)
+#    define RC_SequenceComplete_hierarchy      (TPM_RC_P + TPM_RC_2)
 
 // Function prototype
 TPM_RC
-TPM2_SequenceComplete(
-    SequenceComplete_In         *in,
-    SequenceComplete_Out        *out
-);
+TPM2_SequenceComplete(SequenceComplete_In* in, SequenceComplete_Out* out);
 
-#endif  // _Sequence_Complete_FP_H_
-#endif  // CC_SequenceComplete
+#  endif  // _Sequence_Complete_FP_H_
+#endif    // CC_SequenceComplete

@@ -50,25 +50,23 @@
 //      TPM_RC_NV_LOCKED                the Index referenced by 'nvIndex' is locked
 //                                      for writing
 TPM_RC
-TPM2_NV_Extend(
-    NV_Extend_In    *in             // IN: input parameter list
-    )
+TPM2_NV_Extend(NV_Extend_In* in  // IN: input parameter list
+)
 {
-    TPM_RC                   result;
-    NV_REF                   locator;
-    NV_INDEX                *nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
+    TPM_RC       result;
+    NV_REF       locator;
+    NV_INDEX*    nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
 
-    TPM2B_DIGEST            oldDigest;
-    TPM2B_DIGEST            newDigest;
-    HASH_STATE              hashState;
+    TPM2B_DIGEST oldDigest;
+    TPM2B_DIGEST newDigest;
+    HASH_STATE   hashState;
 
-// Input Validation
+    // Input Validation
 
     // Common access checks, NvWriteAccessCheck() may return TPM_RC_NV_AUTHORIZATION
     // or TPM_RC_NV_LOCKED
-    result = NvWriteAccessChecks(in->authHandle,
-                                 in->nvIndex,
-                                 nvIndex->publicArea.attributes);
+    result = NvWriteAccessChecks(
+        in->authHandle, in->nvIndex, nvIndex->publicArea.attributes);
     if(result != TPM_RC_SUCCESS)
         return result;
 
@@ -76,7 +74,7 @@ TPM2_NV_Extend(
     if(!IsNvExtendIndex(nvIndex->publicArea.attributes))
         return TPM_RCS_ATTRIBUTES + RC_NV_Extend_nvIndex;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Perform the write.
     oldDigest.t.size = CryptHashGetDigestSize(nvIndex->publicArea.nameAlg);
@@ -106,4 +104,4 @@ TPM2_NV_Extend(
     return NvWriteIndexData(nvIndex, 0, newDigest.t.size, newDigest.t.buffer);
 }
 
-#endif // CC_NV_Extend
+#endif  // CC_NV_Extend

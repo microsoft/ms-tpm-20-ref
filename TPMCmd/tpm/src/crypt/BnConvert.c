@@ -47,17 +47,12 @@
 // This function will convert a big-endian byte array to the internal number
 // format. If bn is NULL, then the output is NULL. If bytes is null or the
 // required size is 0, then the output is set to zero
-LIB_EXPORT bigNum
-BnFromBytes(
-    bigNum           bn,
-    const BYTE      *bytes,
-    NUMBYTES         nBytes
-    )
+LIB_EXPORT bigNum BnFromBytes(bigNum bn, const BYTE* bytes, NUMBYTES nBytes)
 {
-    const BYTE      *pFrom; // 'p' points to the least significant bytes of source
-    BYTE            *pTo;   // points to least significant bytes of destination
-    crypt_uword_t    size;
-//
+    const BYTE*   pFrom;  // 'p' points to the least significant bytes of source
+    BYTE*         pTo;    // points to least significant bytes of destination
+    crypt_uword_t size;
+    //
 
     size = (bytes != NULL) ? BYTES_TO_CRYPT_WORDS(nBytes) : 0;
 
@@ -75,15 +70,15 @@ BnFromBytes(
         // Moving the input bytes from the end of the list (LSB) end
         pFrom = bytes + nBytes - 1;
         // To the LS0 of the LSW of the bigNum.
-        pTo = (BYTE *)bn->d;
+        pTo = (BYTE*)bn->d;
         for(; nBytes != 0; nBytes--)
             *pTo++ = *pFrom--;
-        // For a little-endian machine, the conversion is a straight byte
-        // reversal. For a big-endian machine, we have to put the words in
-        // big-endian byte order
+            // For a little-endian machine, the conversion is a straight byte
+            // reversal. For a big-endian machine, we have to put the words in
+            // big-endian byte order
 #if BIG_ENDIAN_TPM
         {
-            crypt_word_t   t;
+            crypt_word_t t;
             for(t = (crypt_word_t)size - 1; t >= 0; t--)
                 bn->d[t] = SWAP_CRYPT_WORD(bn->d[t]);
         }
@@ -97,45 +92,40 @@ BnFromBytes(
 // Convert an TPM2B to a BIG_NUM.
 // If the input value does not exist, or the output does not exist, or the input
 // will not fit into the output the function returns NULL
-LIB_EXPORT bigNum
-BnFrom2B(
-    bigNum           bn,         // OUT:
-    const TPM2B     *a2B         // IN: number to convert
-    )
+LIB_EXPORT bigNum BnFrom2B(bigNum       bn,  // OUT:
+                           const TPM2B* a2B  // IN: number to convert
+)
 {
     if(a2B != NULL)
         return BnFromBytes(bn, a2B->buffer, a2B->size);
     // Make sure that the number has an initialized value rather than whatever
     // was there before
-    BnSetTop(bn, 0);    // Function accepts NULL
+    BnSetTop(bn, 0);  // Function accepts NULL
     return NULL;
 }
 
 //*** BnFromHex()
 // Convert a hex string into a bigNum. This is primarily used in debugging.
-LIB_EXPORT bigNum
-BnFromHex(
-    bigNum          bn,         // OUT:
-    const char      *hex        // IN:
-    )
+LIB_EXPORT bigNum BnFromHex(bigNum      bn,  // OUT:
+                            const char* hex  // IN:
+)
 {
-#define FromHex(a)  ((a) - (((a) > 'a') ? ('a' + 10)                               \
-                                       : ((a) > 'A') ? ('A' - 10) : '0'))
-    unsigned             i;
-    unsigned             wordCount;
-    const char          *p;
-    BYTE                *d = (BYTE *)&(bn->d[0]);
-//
+#define FromHex(a) ((a) - (((a) > 'a') ? ('a' + 10) : ((a) > 'A') ? ('A' - 10) : '0'))
+    unsigned    i;
+    unsigned    wordCount;
+    const char* p;
+    BYTE*       d = (BYTE*)&(bn->d[0]);
+    //
     pAssert(bn && hex);
-    i = (unsigned)strlen(hex);
+    i         = (unsigned)strlen(hex);
     wordCount = BYTES_TO_CRYPT_WORDS((i + 1) / 2);
     if((i == 0) || (wordCount >= BnGetAllocated(bn)))
         BnSetWord(bn, 0);
     else
     {
         bn->d[wordCount - 1] = 0;
-        p = hex + i - 1;
-        for(;i > 1; i -= 2)
+        p                    = hex + i - 1;
+        for(; i > 1; i -= 2)
         {
             BYTE a;
             a = FromHex(*p);
@@ -149,7 +139,7 @@ BnFromHex(
 #if !BIG_ENDIAN_TPM
     for(i = 0; i < wordCount; i++)
         bn->d[i] = SWAP_CRYPT_WORD(bn->d[i]);
-#endif // BIG_ENDIAN_TPM
+#endif  // BIG_ENDIAN_TPM
     BnSetTop(bn, wordCount);
     return bn;
 }
@@ -165,20 +155,18 @@ BnFromHex(
 // bytes of the bigNum be reversed. For a big-endian machine, rather than
 // unpack each word individually, the bigNum is converted to little-endian words,
 // copied, and then converted back to big-endian.
-LIB_EXPORT BOOL
-BnToBytes(
-    bigConst             bn,
-    BYTE                *buffer,
-    NUMBYTES            *size           // This the number of bytes that are
-                                        // available in the buffer. The result
-                                        // should be this big.
-    )
+LIB_EXPORT BOOL BnToBytes(bigConst  bn,
+                          BYTE*     buffer,
+                          NUMBYTES* size  // This the number of bytes that are
+                                          // available in the buffer. The result
+                                          // should be this big.
+)
 {
-    crypt_uword_t        requiredSize;
-    BYTE                *pFrom;
-    BYTE                *pTo;
-    crypt_uword_t        count;
-//
+    crypt_uword_t requiredSize;
+    BYTE*         pFrom;
+    BYTE*         pTo;
+    crypt_uword_t count;
+    //
     // validate inputs
     pAssert(bn && buffer && size);
 
@@ -186,7 +174,7 @@ BnToBytes(
     if(requiredSize == 0)
     {
         // If the input value is 0, return a byte of zero
-        *size = 1;
+        *size   = 1;
         *buffer = 0;
     }
     else
@@ -207,8 +195,8 @@ BnToBytes(
         count = *size;
         // Start from the least significant word and offset to the most significant
         // byte which is in some high word
-        pFrom = (BYTE *)(&bn->d[0]) + requiredSize - 1;
-        pTo = buffer;
+        pFrom = (BYTE*)(&bn->d[0]) + requiredSize - 1;
+        pTo   = buffer;
 
         // If the number of output bytes is larger than the number bytes required
         // for the input number, pad with zeros
@@ -228,12 +216,10 @@ BnToBytes(
 // If 'size' is non-zero and less than required by the value in 'bn' then an error
 // is returned. If 'size' is zero, then the TPM2B is assumed to be large enough
 // for the data and a2b->size will be adjusted accordingly.
-LIB_EXPORT BOOL
-BnTo2B(
-    bigConst         bn,                // IN:
-    TPM2B           *a2B,               // OUT:
-    NUMBYTES         size               // IN: the desired size
-    )
+LIB_EXPORT BOOL BnTo2B(bigConst bn,   // IN:
+                       TPM2B*   a2B,  // OUT:
+                       NUMBYTES size  // IN: the desired size
+)
 {
     // Set the output size
     if(bn && a2B)
@@ -250,11 +236,10 @@ BnTo2B(
 // Function to create a BIG_POINT structure from a 2B point.
 // A point is going to be two ECC values in the same buffer. The values are going
 // to be the size of the modulus.  They are in modular form.
-LIB_EXPORT bn_point_t   *
-BnPointFrom2B(
-    bigPoint             ecP,         // OUT: the preallocated point structure
-    TPMS_ECC_POINT      *p            // IN: the number to convert
-    )
+LIB_EXPORT bn_point_t* BnPointFrom2B(
+    bigPoint        ecP,  // OUT: the preallocated point structure
+    TPMS_ECC_POINT* p     // IN: the number to convert
+)
 {
     if(p == NULL)
         return NULL;
@@ -274,15 +259,13 @@ BnPointFrom2B(
 // is dependent on the maximum EC key size used in an implementation.
 // The presumption is that the TPMS_ECC_POINT is large enough to hold 2 TPM2B
 // values, each as large as a MAX_ECC_PARAMETER_BYTES
-LIB_EXPORT BOOL
-BnPointTo2B(
-    TPMS_ECC_POINT  *p,             // OUT: the converted 2B structure
-    bigPoint         ecP,           // IN: the values to be converted
-    bigCurve         E              // IN: curve descriptor for the point
-    )
+LIB_EXPORT BOOL BnPointTo2B(TPMS_ECC_POINT* p,    // OUT: the converted 2B structure
+                            bigPoint        ecP,  // IN: the values to be converted
+                            bigCurve        E  // IN: curve descriptor for the point
+)
 {
-    UINT16           size;
-//
+    UINT16 size;
+    //
     pAssert(p && ecP && E);
     pAssert(BnEqualWord(ecP->z, 1));
     // BnMsb is the bit number of the MSB. This is one less than the number of bits
@@ -292,4 +275,4 @@ BnPointTo2B(
     return TRUE;
 }
 
-#endif // ALG_ECC
+#endif  // ALG_ECC

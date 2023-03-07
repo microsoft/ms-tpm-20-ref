@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PolicyAuthValue // Command must be enabled
+#if CC_PolicyAuthValue  // Command must be enabled
 
-#ifndef _Policy_Auth_Value_FP_H_
-#define _Policy_Auth_Value_FP_H_
+#  ifndef _Policy_Auth_Value_FP_H_
+#    define _Policy_Auth_Value_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_SH_POLICY              policySession;
+typedef struct
+{
+    TPMI_SH_POLICY policySession;
 } PolicyAuthValue_In;
 
 // Response code modifiers
-#define RC_PolicyAuthValue_policySession    (TPM_RC_H + TPM_RC_1)
+#    define RC_PolicyAuthValue_policySession (TPM_RC_H + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_PolicyAuthValue(
-    PolicyAuthValue_In          *in
-);
+TPM2_PolicyAuthValue(PolicyAuthValue_In* in);
 
-#endif  // _Policy_Auth_Value_FP_H_
-#endif  // CC_PolicyAuthValue
+#  endif  // _Policy_Auth_Value_FP_H_
+#endif    // CC_PolicyAuthValue

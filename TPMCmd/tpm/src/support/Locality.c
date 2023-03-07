@@ -41,12 +41,11 @@
 //
 // The function returns the locality attribute.
 TPMA_LOCALITY
-LocalityGetAttributes(
-    UINT8            locality       // IN: locality value
-    )
+LocalityGetAttributes(UINT8 locality  // IN: locality value
+)
 {
-    TPMA_LOCALITY            locality_attributes;
-    BYTE                    *localityAsByte = (BYTE *)&locality_attributes;
+    TPMA_LOCALITY locality_attributes;
+    BYTE*         localityAsByte = (BYTE*)&locality_attributes;
 
     MemorySet(&locality_attributes, 0, sizeof(TPMA_LOCALITY));
     switch(locality)

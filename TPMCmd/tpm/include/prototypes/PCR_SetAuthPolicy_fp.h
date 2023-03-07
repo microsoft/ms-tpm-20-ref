@@ -37,30 +37,29 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_PCR_SetAuthPolicy // Command must be enabled
+#if CC_PCR_SetAuthPolicy  // Command must be enabled
 
-#ifndef _PCR_Set_Auth_Policy_FP_H_
-#define _PCR_Set_Auth_Policy_FP_H_
+#  ifndef _PCR_Set_Auth_Policy_FP_H_
+#    define _PCR_Set_Auth_Policy_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_RH_PLATFORM                authHandle;
-    TPM2B_DIGEST                    authPolicy;
-    TPMI_ALG_HASH                   hashAlg;
-    TPMI_DH_PCR                     pcrNum;
+typedef struct
+{
+    TPMI_RH_PLATFORM authHandle;
+    TPM2B_DIGEST     authPolicy;
+    TPMI_ALG_HASH    hashAlg;
+    TPMI_DH_PCR      pcrNum;
 } PCR_SetAuthPolicy_In;
 
 // Response code modifiers
-#define RC_PCR_SetAuthPolicy_authHandle (TPM_RC_H + TPM_RC_1)
-#define RC_PCR_SetAuthPolicy_authPolicy (TPM_RC_P + TPM_RC_1)
-#define RC_PCR_SetAuthPolicy_hashAlg    (TPM_RC_P + TPM_RC_2)
-#define RC_PCR_SetAuthPolicy_pcrNum (TPM_RC_P + TPM_RC_3)
+#    define RC_PCR_SetAuthPolicy_authHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_PCR_SetAuthPolicy_authPolicy (TPM_RC_P + TPM_RC_1)
+#    define RC_PCR_SetAuthPolicy_hashAlg    (TPM_RC_P + TPM_RC_2)
+#    define RC_PCR_SetAuthPolicy_pcrNum     (TPM_RC_P + TPM_RC_3)
 
 // Function prototype
 TPM_RC
-TPM2_PCR_SetAuthPolicy(
-    PCR_SetAuthPolicy_In            *in
-);
+TPM2_PCR_SetAuthPolicy(PCR_SetAuthPolicy_In* in);
 
-#endif  // _PCR_Set_Auth_Policy_FP_H_
-#endif  // CC_PCR_SetAuthPolicy
+#  endif  // _PCR_Set_Auth_Policy_FP_H_
+#endif    // CC_PCR_SetAuthPolicy

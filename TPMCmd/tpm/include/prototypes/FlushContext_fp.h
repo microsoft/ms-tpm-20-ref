@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_FlushContext // Command must be enabled
+#if CC_FlushContext  // Command must be enabled
 
-#ifndef _Flush_Context_FP_H_
-#define _Flush_Context_FP_H_
+#  ifndef _Flush_Context_FP_H_
+#    define _Flush_Context_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_CONTEXT             flushHandle;
+typedef struct
+{
+    TPMI_DH_CONTEXT flushHandle;
 } FlushContext_In;
 
 // Response code modifiers
-#define RC_FlushContext_flushHandle (TPM_RC_P + TPM_RC_1)
+#    define RC_FlushContext_flushHandle (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_FlushContext(
-    FlushContext_In             *in
-);
+TPM2_FlushContext(FlushContext_In* in);
 
-#endif  // _Flush_Context_FP_H_
-#endif  // CC_FlushContext
+#  endif  // _Flush_Context_FP_H_
+#endif    // CC_FlushContext

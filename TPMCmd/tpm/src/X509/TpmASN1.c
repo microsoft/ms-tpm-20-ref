@@ -46,19 +46,15 @@
 //  Return Type: BOOL
 //      TRUE(1)     success
 //      FALSE(0)    failure
-BOOL
-ASN1UnmarshalContextInitialize(
-    ASN1UnmarshalContext    *ctx,
-    INT16                    size,
-    BYTE                    *buffer
-)
+BOOL ASN1UnmarshalContextInitialize(
+    ASN1UnmarshalContext* ctx, INT16 size, BYTE* buffer)
 {
     VERIFY(buffer != NULL);
     VERIFY(size > 0);
     ctx->buffer = buffer;
-    ctx->size = size;
+    ctx->size   = size;
     ctx->offset = 0;
-    ctx->tag = 0xFF;
+    ctx->tag    = 0xFF;
     return TRUE;
 Error:
     return FALSE;
@@ -70,13 +66,11 @@ Error:
 //      >=0         the extracted length
 //      <0          an error
 INT16
-ASN1DecodeLength(
-    ASN1UnmarshalContext        *ctx
-)
+ASN1DecodeLength(ASN1UnmarshalContext* ctx)
 {
-    BYTE                first;                  // Next octet in buffer
-    INT16               value;
-//
+    BYTE  first;  // Next octet in buffer
+    INT16 value;
+    //
     VERIFY(ctx->offset < ctx->size);
     first = NEXT_OCTET(ctx);
     // If the number of octets of the entity is larger than 127, then the first octet
@@ -108,7 +102,7 @@ ASN1DecodeLength(
     CHECK_SIZE(ctx, value);
     return value;
 Error:
-    ctx->size = -1;             // Makes everything fail from now on.
+    ctx->size = -1;  // Makes everything fail from now on.
     return -1;
 }
 
@@ -121,9 +115,7 @@ Error:
 //     >=0          the number of octets in 'type'
 //     <0           an error
 INT16
-ASN1NextTag(
-    ASN1UnmarshalContext    *ctx
-)
+ASN1NextTag(ASN1UnmarshalContext* ctx)
 {
     // A tag to get?
     VERIFY(ctx->offset < ctx->size);
@@ -136,11 +128,10 @@ ASN1NextTag(
 
 Error:
     // Attempt to read beyond the end of the context or an illegal tag
-    ctx->size = -1;         // Persistent failure
-    ctx->tag = 0xFF;
+    ctx->size = -1;  // Persistent failure
+    ctx->tag  = 0xFF;
     return -1;
 }
-
 
 //*** ASN1GetBitStringValue()
 // Try to parse a bit string of up to 32 bits from a value that is expected to be
@@ -150,17 +141,13 @@ Error:
 //  Return Type: BOOL
 //      TRUE(1)     success
 //      FALSE(0)    failure
-BOOL
-ASN1GetBitStringValue(
-    ASN1UnmarshalContext        *ctx,
-    UINT32                      *val
-)
+BOOL ASN1GetBitStringValue(ASN1UnmarshalContext* ctx, UINT32* val)
 {
-    int                  shift;
-    INT16                length;
-    UINT32               value = 0;
-    int                  inputBits;
-//
+    int    shift;
+    INT16  length;
+    UINT32 value = 0;
+    int    inputBits;
+    //
     length = ASN1NextTag(ctx);
     VERIFY(length >= 1);
     VERIFY(ctx->tag == ASN1_BITSTRING);
@@ -176,9 +163,8 @@ ASN1GetBitStringValue(
     {
 
         // for all but the last octet, just shift and add the new octet
-        VERIFY((value & 0xFF000000) == 0); // can't loose significant bits
+        VERIFY((value & 0xFF000000) == 0);  // can't loose significant bits
         value = (value << 8) + NEXT_OCTET(ctx);
-
     }
     if(length == 1)
     {
@@ -187,7 +173,6 @@ ASN1GetBitStringValue(
         // octet down
         VERIFY(((value & (0xFF000000 << (8 - shift)))) == 0);
         value = (value << (8 - shift)) + (NEXT_OCTET(ctx) >> shift);
-
     }
     // 'Left justify' the result
     if(inputBits > 0)
@@ -245,34 +230,27 @@ Error:
 //*** ASN1InitialializeMarshalContext()
 // This creates a structure for handling marshaling of an ASN.1 formatted data
 // structure.
-void
-ASN1InitialializeMarshalContext(
-    ASN1MarshalContext      *ctx,
-    INT16                    length,
-    BYTE                    *buffer
-)
+void ASN1InitialializeMarshalContext(
+    ASN1MarshalContext* ctx, INT16 length, BYTE* buffer)
 {
     ctx->buffer = buffer;
     if(buffer)
         ctx->offset = length;
     else
         ctx->offset = INT16_MAX;
-    ctx->end = ctx->offset;
+    ctx->end   = ctx->offset;
     ctx->depth = -1;
 }
 
 //*** ASN1StartMarshalContext()
 // This starts a new constructed element. It is constructed on 'top' of the value
 // that was previously placed in the structure.
-void
-ASN1StartMarshalContext(
-    ASN1MarshalContext      *ctx
-)
+void ASN1StartMarshalContext(ASN1MarshalContext* ctx)
 {
     pAssert((ctx->depth + 1) < MAX_DEPTH);
     ctx->depth++;
     ctx->ends[ctx->depth] = ctx->end;
-    ctx->end = ctx->offset;
+    ctx->end              = ctx->offset;
 }
 
 //*** ASN1EndMarshalContext()
@@ -281,13 +259,11 @@ ASN1StartMarshalContext(
 //      > 0             the size of the encapsulated structure that was just ended
 //      <= 0            an error
 INT16
-ASN1EndMarshalContext(
-    ASN1MarshalContext      *ctx
-)
+ASN1EndMarshalContext(ASN1MarshalContext* ctx)
 {
-    INT16                   length;
+    INT16 length;
     pAssert(ctx->depth >= 0);
-    length = ctx->end - ctx->offset;
+    length   = ctx->end - ctx->offset;
     ctx->end = ctx->ends[ctx->depth--];
     if((ctx->depth == -1) && (ctx->buffer))
     {
@@ -295,7 +271,6 @@ ASN1EndMarshalContext(
     }
     return length;
 }
-
 
 //***ASN1EndEncapsulation()
 // This function puts a tag and length in the buffer. In this function, an embedded
@@ -306,24 +281,17 @@ ASN1EndMarshalContext(
 //      > 0         number of octets in the encapsulation
 //      == 0        failure
 UINT16
-ASN1EndEncapsulation(
-    ASN1MarshalContext          *ctx,
-    BYTE                         tag
-)
+ASN1EndEncapsulation(ASN1MarshalContext* ctx, BYTE tag)
 {
     // only add a leading zero for an encapsulated BIT STRING
-    if (tag == ASN1_BITSTRING)
+    if(tag == ASN1_BITSTRING)
         ASN1PushByte(ctx, 0);
     ASN1PushTagAndLength(ctx, tag, ctx->end - ctx->offset);
     return ASN1EndMarshalContext(ctx);
 }
 
 //*** ASN1PushByte()
-BOOL
-ASN1PushByte(
-    ASN1MarshalContext          *ctx,
-    BYTE                         b
-)
+BOOL ASN1PushByte(ASN1MarshalContext* ctx, BYTE b)
 {
     if(ctx->offset > 0)
     {
@@ -342,11 +310,7 @@ ASN1PushByte(
 //      > 0             count bytes
 //      == 0            failure unless count was zero
 INT16
-ASN1PushBytes(
-    ASN1MarshalContext          *ctx,
-    INT16                        count,
-    const BYTE                  *buffer
-)
+ASN1PushBytes(ASN1MarshalContext* ctx, INT16 count, const BYTE* buffer)
 {
     // make sure that count is not negative which would mess up the math; and that
     // if there is a count, there is a buffer
@@ -370,9 +334,7 @@ Error:
 //      > 0             count bytes
 //      == 0            failure unless count was zero
 INT16
-ASN1PushNull(
-    ASN1MarshalContext      *ctx
-)
+ASN1PushNull(ASN1MarshalContext* ctx)
 {
     ASN1PushByte(ctx, 0);
     ASN1PushByte(ctx, ASN1_NULL);
@@ -385,12 +347,9 @@ ASN1PushNull(
 //      > 0         number of bytes added
 //      == 0        failure
 INT16
-ASN1PushLength(
-    ASN1MarshalContext          *ctx,
-    INT16                        len
-)
+ASN1PushLength(ASN1MarshalContext* ctx, INT16 len)
 {
-    UINT16                       start = ctx->offset;
+    UINT16 start = ctx->offset;
     VERIFY(len >= 0);
     if(len <= 127)
         ASN1PushByte(ctx, (BYTE)len);
@@ -418,18 +377,13 @@ Exit:
 //      > 0         number of bytes added
 //      == 0        failure
 INT16
-ASN1PushTagAndLength(
-    ASN1MarshalContext          *ctx,
-    BYTE                         tag,
-    INT16                        length
-)
+ASN1PushTagAndLength(ASN1MarshalContext* ctx, BYTE tag, INT16 length)
 {
-    INT16       bytes;
+    INT16 bytes;
     bytes = ASN1PushLength(ctx, length);
     bytes += (INT16)ASN1PushByte(ctx, tag);
     return (ctx->offset < 0) ? 0 : bytes;
 }
-
 
 //*** ASN1PushTaggedOctetString()
 // This function will push a random octet string.
@@ -438,11 +392,7 @@ ASN1PushTagAndLength(
 //      == 0        failure
 INT16
 ASN1PushTaggedOctetString(
-    ASN1MarshalContext          *ctx,
-    INT16                        size,
-    const BYTE                  *string,
-    BYTE                         tag
-)
+    ASN1MarshalContext* ctx, INT16 size, const BYTE* string, BYTE tag)
 {
     ASN1PushBytes(ctx, size, string);
     // PushTagAndLenght just tells how many octets it added so the total size of this
@@ -459,12 +409,9 @@ ASN1PushTaggedOctetString(
 //      > 0             count bytes
 //      == 0            failure unless count was zero
 INT16
-ASN1PushUINT(
-    ASN1MarshalContext      *ctx,
-    UINT32                   integer
-)
+ASN1PushUINT(ASN1MarshalContext* ctx, UINT32 integer)
 {
-    BYTE                    marshaled[4];
+    BYTE marshaled[4];
     UINT32_TO_BYTE_ARRAY(integer, marshaled);
     return ASN1PushInteger(ctx, 4, marshaled);
 }
@@ -475,10 +422,9 @@ ASN1PushUINT(
 //      > 0         the number of bytes marshaled for the integer
 //      == 0        failure
 INT16
-ASN1PushInteger(
-    ASN1MarshalContext  *ctx,           // IN/OUT: buffer context
-    INT16                iLen,          // IN: octets of the integer
-    BYTE                *integer        // IN: big-endian integer
+ASN1PushInteger(ASN1MarshalContext* ctx,     // IN/OUT: buffer context
+                INT16               iLen,    // IN: octets of the integer
+                BYTE*               integer  // IN: big-endian integer
 )
 {
     // no leading 0's
@@ -491,7 +437,7 @@ ASN1PushInteger(
         iLen += (INT16)ASN1PushByte(ctx, 0);
     // PushTagAndLenght just tells how many octets it added so the total size of this
     // element is the sum of those octets and the adjusted input size.
-    iLen +=  ASN1PushTagAndLength(ctx, ASN1_INTEGER, iLen);
+    iLen += ASN1PushTagAndLength(ctx, ASN1_INTEGER, iLen);
     return iLen;
 }
 
@@ -503,10 +449,7 @@ ASN1PushInteger(
 //      > 0         the number of bytes marshaled for the integer
 //      == 0        failure
 INT16
-ASN1PushOID(
-    ASN1MarshalContext          *ctx,
-    const BYTE                  *OID
-)
+ASN1PushOID(ASN1MarshalContext* ctx, const BYTE* OID)
 {
     if((*OID == ASN1_OBJECT_IDENTIFIER) && ((OID[1] & 0x80) == 0))
     {
@@ -515,5 +458,3 @@ ASN1PushOID(
     ctx->offset = -1;
     return 0;
 }
-
-

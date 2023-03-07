@@ -37,24 +37,23 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_StirRandom // Command must be enabled
+#if CC_StirRandom  // Command must be enabled
 
-#ifndef _Stir_Random_FP_H_
-#define _Stir_Random_FP_H_
+#  ifndef _Stir_Random_FP_H_
+#    define _Stir_Random_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPM2B_SENSITIVE_DATA        inData;
+typedef struct
+{
+    TPM2B_SENSITIVE_DATA inData;
 } StirRandom_In;
 
 // Response code modifiers
-#define RC_StirRandom_inData    (TPM_RC_P + TPM_RC_1)
+#    define RC_StirRandom_inData (TPM_RC_P + TPM_RC_1)
 
 // Function prototype
 TPM_RC
-TPM2_StirRandom(
-    StirRandom_In               *in
-);
+TPM2_StirRandom(StirRandom_In* in);
 
-#endif  // _Stir_Random_FP_H_
-#endif  // CC_StirRandom
+#  endif  // _Stir_Random_FP_H_
+#endif    // CC_StirRandom

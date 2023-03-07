@@ -37,38 +37,27 @@
  *  Date: Apr  2, 2019  Time: 03:18:00PM
  */
 
-#ifndef    _CRYPT_ECC_MAIN_FP_H_
-#define    _CRYPT_ECC_MAIN_FP_H_
+#ifndef _CRYPT_ECC_MAIN_FP_H_
+#define _CRYPT_ECC_MAIN_FP_H_
 
 #if ALG_ECC
 
 //** Functions
-#if SIMULATION
-void
-EccSimulationEnd(
-    void
-);
-#endif // SIMULATION
+#  if SIMULATION
+void EccSimulationEnd(void);
+#  endif  // SIMULATION
 
 //*** CryptEccInit()
 // This function is called at _TPM_Init
-BOOL
-CryptEccInit(
-    void
-);
+BOOL CryptEccInit(void);
 
 //*** CryptEccStartup()
 // This function is called at TPM2_Startup().
-BOOL
-CryptEccStartup(
-    void
-);
+BOOL CryptEccStartup(void);
 
 //*** ClearPoint2B(generic)
 // Initialize the size values of a TPMS_ECC_POINT structure.
-void
-ClearPoint2B(
-    TPMS_ECC_POINT      *p          // IN: the point
+void ClearPoint2B(TPMS_ECC_POINT* p  // IN: the point
 );
 
 //*** CryptEccGetParametersByCurveId()
@@ -79,40 +68,29 @@ ClearPoint2B(
 //  Return Type: const ECC_CURVE_DATA
 //      NULL            curve with the indicated TPM_ECC_CURVE is not implemented
 //      != NULL         pointer to the curve data
-LIB_EXPORT const ECC_CURVE *
-CryptEccGetParametersByCurveId(
-    TPM_ECC_CURVE       curveId     // IN: the curveID
+LIB_EXPORT const ECC_CURVE* CryptEccGetParametersByCurveId(
+    TPM_ECC_CURVE curveId  // IN: the curveID
 );
 
 //*** CryptEccGetKeySizeForCurve()
 // This function returns the key size in bits of the indicated curve.
-LIB_EXPORT UINT16
-CryptEccGetKeySizeForCurve(
-    TPM_ECC_CURVE            curveId    // IN: the curve
+LIB_EXPORT UINT16 CryptEccGetKeySizeForCurve(TPM_ECC_CURVE curveId  // IN: the curve
 );
 
 //*** GetCurveData()
 // This function returns the a pointer for the parameter data
 // associated with a curve.
-const ECC_CURVE_DATA *
-GetCurveData(
-    TPM_ECC_CURVE        curveId     // IN: the curveID
+const ECC_CURVE_DATA* GetCurveData(TPM_ECC_CURVE curveId  // IN: the curveID
 );
 
 //***CryptEccGetOID()
-const BYTE *
-CryptEccGetOID(
-    TPM_ECC_CURVE       curveId
-);
+const BYTE* CryptEccGetOID(TPM_ECC_CURVE curveId);
 
 //*** CryptEccGetCurveByIndex()
 // This function returns the number of the 'i'-th implemented curve. The normal
 // use would be to call this function with 'i' starting at 0. When the 'i' is greater
 // than or equal to the number of implemented curves, TPM_ECC_NONE is returned.
-LIB_EXPORT TPM_ECC_CURVE
-CryptEccGetCurveByIndex(
-    UINT16               i
-);
+LIB_EXPORT TPM_ECC_CURVE CryptEccGetCurveByIndex(UINT16 i);
 
 //*** CryptEccGetParameter()
 // This function returns an ECC curve parameter. The parameter is
@@ -120,11 +98,10 @@ CryptEccGetCurveByIndex(
 //  Return Type: BOOL
 //      TRUE(1)         curve exists and parameter returned
 //      FALSE(0)        curve does not exist or parameter selector
-LIB_EXPORT BOOL
-CryptEccGetParameter(
-    TPM2B_ECC_PARAMETER     *out,       // OUT: place to put parameter
-    char                     p,         // IN: the parameter selector
-    TPM_ECC_CURVE            curveId    // IN: the curve id
+LIB_EXPORT BOOL CryptEccGetParameter(
+    TPM2B_ECC_PARAMETER* out,     // OUT: place to put parameter
+    char                 p,       // IN: the parameter selector
+    TPM_ECC_CURVE        curveId  // IN: the curve id
 );
 
 //*** CryptCapGetECCCurve()
@@ -133,17 +110,15 @@ CryptEccGetParameter(
 //      YES             if no more ECC curve is available
 //      NO              if there are more ECC curves not reported
 TPMI_YES_NO
-CryptCapGetECCCurve(
-    TPM_ECC_CURVE    curveID,       // IN: the starting ECC curve
-    UINT32           maxCount,      // IN: count of returned curves
-    TPML_ECC_CURVE  *curveList      // OUT: ECC curve list
+CryptCapGetECCCurve(TPM_ECC_CURVE   curveID,   // IN: the starting ECC curve
+                    UINT32          maxCount,  // IN: count of returned curves
+                    TPML_ECC_CURVE* curveList  // OUT: ECC curve list
 );
 
 //*** CryptGetCurveSignScheme()
 // This function will return a pointer to the scheme of the curve.
-const TPMT_ECC_SCHEME *
-CryptGetCurveSignScheme(
-    TPM_ECC_CURVE    curveId        // IN: The curve selector
+const TPMT_ECC_SCHEME* CryptGetCurveSignScheme(
+    TPM_ECC_CURVE curveId  // IN: The curve selector
 );
 
 //*** CryptGenerateR()
@@ -157,13 +132,11 @@ CryptGetCurveSignScheme(
 //  Return Type: BOOL
 //      TRUE(1)         r value computed
 //      FALSE(0)        no r value computed
-BOOL
-CryptGenerateR(
-    TPM2B_ECC_PARAMETER     *r,             // OUT: the generated random value
-    UINT16                  *c,             // IN/OUT: count value.
-    TPMI_ECC_CURVE           curveID,       // IN: the curve for the value
-    TPM2B_NAME              *name           // IN: optional name of a key to
-                                            //     associate with 'r'
+BOOL CryptGenerateR(TPM2B_ECC_PARAMETER* r,        // OUT: the generated random value
+                    UINT16*              c,        // IN/OUT: count value.
+                    TPMI_ECC_CURVE       curveID,  // IN: the curve for the value
+                    TPM2B_NAME*          name      // IN: optional name of a key to
+                                                   //     associate with 'r'
 );
 
 //*** CryptCommit()
@@ -171,17 +144,13 @@ CryptGenerateR(
 // value associated with the current count value is SET and g_commitCounter is
 // incremented. The low-order 16 bits of old value of the counter is returned.
 UINT16
-CryptCommit(
-    void
-);
+CryptCommit(void);
 
 //*** CryptEndCommit()
 // This function is called when the signing operation using the committed value
 // is completed. It clears the gr.commitArray bit associated with the count
 // value so that it can't be used again.
-void
-CryptEndCommit(
-    UINT16           c              // IN: the counter value of the commitment
+void CryptEndCommit(UINT16 c  // IN: the counter value of the commitment
 );
 
 //*** CryptEccGetParameters()
@@ -189,47 +158,31 @@ CryptEndCommit(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        unsupported ECC curve ID
-BOOL
-CryptEccGetParameters(
-    TPM_ECC_CURVE                curveId,       // IN: ECC curve ID
-    TPMS_ALGORITHM_DETAIL_ECC   *parameters     // OUT: ECC parameters
+BOOL CryptEccGetParameters(
+    TPM_ECC_CURVE              curveId,    // IN: ECC curve ID
+    TPMS_ALGORITHM_DETAIL_ECC* parameters  // OUT: ECC parameters
 );
 
 //*** BnGetCurvePrime()
 // This function is used to get just the prime modulus associated with a curve.
-const bignum_t *
-BnGetCurvePrime(
-    TPM_ECC_CURVE            curveId
-);
+const bignum_t* BnGetCurvePrime(TPM_ECC_CURVE curveId);
 
 //*** BnGetCurveOrder()
 // This function is used to get just the curve order
-const bignum_t *
-BnGetCurveOrder(
-    TPM_ECC_CURVE            curveId
-);
+const bignum_t* BnGetCurveOrder(TPM_ECC_CURVE curveId);
 
 //*** BnIsOnCurve()
 // This function checks if a point is on the curve.
-BOOL
-BnIsOnCurve(
-    pointConst                   Q,
-    const ECC_CURVE_DATA        *C
-);
+BOOL BnIsOnCurve(pointConst Q, const ECC_CURVE_DATA* C);
 
 //*** BnIsValidPrivateEcc()
 // Checks that 0 < 'x' < 'q'
-BOOL
-BnIsValidPrivateEcc(
-    bigConst                 x,         // IN: private key to check
-    bigCurve                 E          // IN: the curve to check
-);
+BOOL            BnIsValidPrivateEcc(bigConst x,  // IN: private key to check
+                                    bigCurve E   // IN: the curve to check
+           );
 
-LIB_EXPORT BOOL
-CryptEccIsValidPrivateKey(
-    TPM2B_ECC_PARAMETER     *d,
-    TPM_ECC_CURVE            curveId
-);
+LIB_EXPORT BOOL CryptEccIsValidPrivateKey(TPM2B_ECC_PARAMETER* d,
+                                          TPM_ECC_CURVE        curveId);
 
 //*** BnPointMul()
 // This function does a point multiply of the form 'R' = ['d']'S' + ['u']'Q' where the
@@ -244,13 +197,12 @@ CryptEccIsValidPrivateKey(
 //      TPM_RC_ECC_POINT        'S' or 'Q' is not on the curve
 //      TPM_RC_VALUE            'd' or 'u' is not < n
 TPM_RC
-BnPointMult(
-    bigPoint             R,         // OUT: computed point
-    pointConst           S,         // IN: optional point to multiply by 'd'
-    bigConst             d,         // IN: scalar for [d]S or [d]G
-    pointConst           Q,         // IN: optional second point
-    bigConst             u,         // IN: optional second scalar
-    bigCurve             E          // IN: curve parameters
+BnPointMult(bigPoint   R,  // OUT: computed point
+            pointConst S,  // IN: optional point to multiply by 'd'
+            bigConst   d,  // IN: scalar for [d]S or [d]G
+            pointConst Q,  // IN: optional second point
+            bigConst   u,  // IN: optional second scalar
+            bigCurve   E   // IN: curve parameters
 );
 
 //***BnEccGetPrivate()
@@ -261,33 +213,28 @@ BnPointMult(
 //  Return Type: BOOL
 //      TRUE(1)         success
 //      FALSE(0)        failure generating private key
-BOOL
-BnEccGetPrivate(
-    bigNum                   dOut,      // OUT: the qualified random value
-    const ECC_CURVE_DATA    *C,         // IN: curve for which the private key
-                                        //     needs to be appropriate
-    RAND_STATE              *rand       // IN: state for DRBG
+BOOL BnEccGetPrivate(bigNum                dOut,  // OUT: the qualified random value
+                     const ECC_CURVE_DATA* C,  // IN: curve for which the private key
+                                               //     needs to be appropriate
+                     RAND_STATE* rand          // IN: state for DRBG
 );
 
 //*** BnEccGenerateKeyPair()
 // This function gets a private scalar from the source of random bits and does
 // the point multiply to get the public key.
-BOOL
-BnEccGenerateKeyPair(
-    bigNum               bnD,            // OUT: private scalar
-    bn_point_t          *ecQ,            // OUT: public point
-    bigCurve             E,              // IN: curve for the point
-    RAND_STATE          *rand            // IN: DRBG state to use
+BOOL BnEccGenerateKeyPair(bigNum      bnD,  // OUT: private scalar
+                          bn_point_t* ecQ,  // OUT: public point
+                          bigCurve    E,    // IN: curve for the point
+                          RAND_STATE* rand  // IN: DRBG state to use
 );
 
 //***CryptEccNewKeyPair(***)
 // This function creates an ephemeral ECC. It is ephemeral in that
 // is expected that the private part of the key will be discarded
-LIB_EXPORT TPM_RC
-CryptEccNewKeyPair(
-    TPMS_ECC_POINT          *Qout,      // OUT: the public point
-    TPM2B_ECC_PARAMETER     *dOut,      // OUT: the private scalar
-    TPM_ECC_CURVE            curveId    // IN: the curve for the key
+LIB_EXPORT TPM_RC CryptEccNewKeyPair(
+    TPMS_ECC_POINT*      Qout,    // OUT: the public point
+    TPM2B_ECC_PARAMETER* dOut,    // OUT: the private scalar
+    TPM_ECC_CURVE        curveId  // IN: the curve for the key
 );
 
 //*** CryptEccPointMultiply()
@@ -316,16 +263,15 @@ CryptEccNewKeyPair(
 //      TPM_RC_CURVE             bad curve
 //      TPM_RC_VALUE             'dIn' or 'uIn' out of range
 //
-LIB_EXPORT TPM_RC
-CryptEccPointMultiply(
-    TPMS_ECC_POINT      *Rout,              // OUT: the product point R
-    TPM_ECC_CURVE        curveId,           // IN: the curve to use
-    TPMS_ECC_POINT      *Pin,               // IN: first point (can be null)
-    TPM2B_ECC_PARAMETER *dIn,               // IN: scalar value for [dIn]Qin
-                                            //     the Pin
-    TPMS_ECC_POINT      *Qin,               // IN: point Q
-    TPM2B_ECC_PARAMETER *uIn                // IN: scalar value for the multiplier
-                                            //     of Q
+LIB_EXPORT TPM_RC CryptEccPointMultiply(
+    TPMS_ECC_POINT*      Rout,     // OUT: the product point R
+    TPM_ECC_CURVE        curveId,  // IN: the curve to use
+    TPMS_ECC_POINT*      Pin,      // IN: first point (can be null)
+    TPM2B_ECC_PARAMETER* dIn,      // IN: scalar value for [dIn]Qin
+                                   //     the Pin
+    TPMS_ECC_POINT*      Qin,      // IN: point Q
+    TPM2B_ECC_PARAMETER* uIn       // IN: scalar value for the multiplier
+                                   //     of Q
 );
 
 //*** CryptEccIsPointOnCurve()
@@ -336,10 +282,9 @@ CryptEccPointMultiply(
 //  Return Type: BOOL
 //      TRUE(1)         point is on curve
 //      FALSE(0)        point is not on curve or curve is not supported
-LIB_EXPORT BOOL
-CryptEccIsPointOnCurve(
-    TPM_ECC_CURVE            curveId,       // IN: the curve selector
-    TPMS_ECC_POINT          *Qin            // IN: the point.
+LIB_EXPORT BOOL CryptEccIsPointOnCurve(
+    TPM_ECC_CURVE   curveId,  // IN: the curve selector
+    TPMS_ECC_POINT* Qin       // IN: the point.
 );
 
 //*** CryptEccGenerateKey()
@@ -356,18 +301,17 @@ CryptEccIsPointOnCurve(
 //  Return Type: TPM_RC
 //      TPM_RC_CURVE            curve is not supported
 //      TPM_RC_NO_RESULT        could not verify key with signature (FIPS only)
-LIB_EXPORT TPM_RC
-CryptEccGenerateKey(
-    TPMT_PUBLIC         *publicArea,        // IN/OUT: The public area template for
-                                            //      the new key. The public key
-                                            //      area will be replaced computed
-                                            //      ECC public key
-    TPMT_SENSITIVE      *sensitive,         // OUT: the sensitive area will be
-                                            //      updated to contain the private
-                                            //      ECC key and the symmetric
-                                            //      encryption key
-    RAND_STATE          *rand               // IN: if not NULL, the deterministic
-                                            //     RNG state
+LIB_EXPORT TPM_RC CryptEccGenerateKey(
+    TPMT_PUBLIC* publicArea,    // IN/OUT: The public area template for
+                                //      the new key. The public key
+                                //      area will be replaced computed
+                                //      ECC public key
+    TPMT_SENSITIVE* sensitive,  // OUT: the sensitive area will be
+                                //      updated to contain the private
+                                //      ECC key and the symmetric
+                                //      encryption key
+    RAND_STATE* rand            // IN: if not NULL, the deterministic
+                                //     RNG state
 );
 #endif  // ALG_ECC
 

@@ -40,26 +40,24 @@
 
 //*********************
 #ifndef RADIX_BITS
-#   if defined(__x86_64__) || defined(__x86_64)                                     \
-        || defined(__amd64__) || defined(__amd64)                                   \
-        || defined(_WIN64) || defined(_M_X64)                                       \
-        || defined(_M_ARM64) || defined(__aarch64__)                                \
-        || defined(__PPC64__) || defined(__s390x__)                                 \
-        || defined(__powerpc64__) || defined(__ppc64__)
-#       define RADIX_BITS                      64
-#   elif defined(__i386__) || defined(__i386) || defined(i386)                      \
-        || defined(_WIN32) || defined(_M_IX86)                                      \
-        || defined(_M_ARM) || defined(__arm__) || defined(__thumb__)
-#       define RADIX_BITS                      32
-#   else
-#       error Unable to determine RADIX_BITS from compiler environment
-#   endif
-#endif // RADIX_BITS
+#  if defined(__x86_64__) || defined(__x86_64) || defined(__amd64__)                 \
+      || defined(__amd64) || defined(_WIN64) || defined(_M_X64) || defined(_M_ARM64) \
+      || defined(__aarch64__) || defined(__PPC64__) || defined(__s390x__)            \
+      || defined(__powerpc64__) || defined(__ppc64__)
+#    define RADIX_BITS 64
+#  elif defined(__i386__) || defined(__i386) || defined(i386) || defined(_WIN32) \
+      || defined(_M_IX86) || defined(_M_ARM) || defined(__arm__)                 \
+      || defined(__thumb__)
+#    define RADIX_BITS 32
+#  else
+#    error Unable to determine RADIX_BITS from compiler environment
+#  endif
+#endif  // RADIX_BITS
 
 // These macros use the selected libraries to the proper include files.
-#define LIB_QUOTE(_STRING_) #_STRING_
+#define LIB_QUOTE(_STRING_)         #_STRING_
 #define LIB_INCLUDE2(_LIB_, _TYPE_) LIB_QUOTE(_LIB_/TpmTo##_LIB_##_TYPE_.h)
-#define LIB_INCLUDE(_LIB_, _TYPE_) LIB_INCLUDE2(_LIB_, _TYPE_)
+#define LIB_INCLUDE(_LIB_, _TYPE_)  LIB_INCLUDE2(_LIB_, _TYPE_)
 
 // Include the options for hashing and symmetric. Defer the load of the math package
 // Until the bignum parameters are defined.
@@ -69,4 +67,4 @@
 #undef MIN
 #undef MAX
 
-#endif // _LIB_SUPPORT_H_
+#endif  // _LIB_SUPPORT_H_

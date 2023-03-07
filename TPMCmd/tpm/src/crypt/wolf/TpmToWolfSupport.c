@@ -46,15 +46,12 @@
 
 //*** SupportLibInit()
 // This does any initialization required by the support library.
-LIB_EXPORT int
-SupportLibInit(
-    void
-    )
+LIB_EXPORT int SupportLibInit(void)
 {
-#if LIBRARY_COMPATIBILITY_CHECK
+#  if LIBRARY_COMPATIBILITY_CHECK
     MathLibraryCompatibilityCheck();
-#endif
+#  endif
     return TRUE;
 }
 
-#endif // HASH_LIB_WOLF || MATH_LIB_WOLF || SYM_LIB_WOLF
+#endif  // HASH_LIB_WOLF || MATH_LIB_WOLF || SYM_LIB_WOLF

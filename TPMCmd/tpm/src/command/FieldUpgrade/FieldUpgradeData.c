@@ -40,10 +40,9 @@
 // FieldUpgradeData
 */
 TPM_RC
-TPM2_FieldUpgradeData(
-    FieldUpgradeData_In     *in,            // IN: input parameter list
-    FieldUpgradeData_Out    *out            // OUT: output parameter list
-    )
+TPM2_FieldUpgradeData(FieldUpgradeData_In*  in,  // IN: input parameter list
+                      FieldUpgradeData_Out* out  // OUT: output parameter list
+)
 {
     // Not implemented
     UNUSED_PARAMETER(in);

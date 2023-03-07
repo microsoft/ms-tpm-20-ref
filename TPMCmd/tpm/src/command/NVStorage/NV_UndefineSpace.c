@@ -49,14 +49,13 @@
 //                                      created by the platform
 //
 TPM_RC
-TPM2_NV_UndefineSpace(
-    NV_UndefineSpace_In     *in             // IN: input parameter list
-    )
+TPM2_NV_UndefineSpace(NV_UndefineSpace_In* in  // IN: input parameter list
+)
 {
-    NV_REF           locator;
-    NV_INDEX        *nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
+    NV_REF    locator;
+    NV_INDEX* nvIndex = NvGetIndexInfo(in->nvIndex, &locator);
 
-// Input Validation
+    // Input Validation
     // This command can't be used to delete an index with TPMA_NV_POLICY_DELETE SET
     if(IS_ATTRIBUTE(nvIndex->publicArea.attributes, TPMA_NV, POLICY_DELETE))
         return TPM_RCS_ATTRIBUTES + RC_NV_UndefineSpace_nvIndex;
@@ -67,10 +66,10 @@ TPM2_NV_UndefineSpace(
        && IS_ATTRIBUTE(nvIndex->publicArea.attributes, TPMA_NV, PLATFORMCREATE))
         return TPM_RC_NV_AUTHORIZATION;
 
-// Internal Data Update
+    // Internal Data Update
 
     // Call implementation dependent internal routine to delete NV index
     return NvDeleteIndex(nvIndex, locator);
 }
 
-#endif // CC_NV_UndefineSpace
+#endif  // CC_NV_UndefineSpace

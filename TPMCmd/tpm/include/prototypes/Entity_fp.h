@@ -37,8 +37,8 @@
  *  Date: Mar  7, 2020  Time: 07:19:36PM
  */
 
-#ifndef    _ENTITY_FP_H_
-#define    _ENTITY_FP_H_
+#ifndef _ENTITY_FP_H_
+#define _ENTITY_FP_H_
 
 //** Functions
 //*** EntityGetLoadStatus()
@@ -50,8 +50,7 @@
 //      TPM_RC_OBJECT_MEMORY    handle is an evict object but there is no
 //                               space to load it to RAM
 TPM_RC
-EntityGetLoadStatus(
-    COMMAND         *command        // IN/OUT: command parsing structure
+EntityGetLoadStatus(COMMAND* command  // IN/OUT: command parsing structure
 );
 
 //*** EntityGetAuthValue()
@@ -65,9 +64,8 @@ EntityGetLoadStatus(
 // Return Type: UINT16
 //      count           number of bytes in the authValue with 0's stripped
 UINT16
-EntityGetAuthValue(
-    TPMI_DH_ENTITY   handle,        // IN: handle of entity
-    TPM2B_AUTH      *auth           // OUT: authValue of the entity
+EntityGetAuthValue(TPMI_DH_ENTITY handle,  // IN: handle of entity
+                   TPM2B_AUTH*    auth     // OUT: authValue of the entity
 );
 
 //*** EntityGetAuthPolicy()
@@ -81,17 +79,14 @@ EntityGetAuthValue(
 //
 //  The return value is the hash algorithm for the policy.
 TPMI_ALG_HASH
-EntityGetAuthPolicy(
-    TPMI_DH_ENTITY   handle,        // IN: handle of entity
-    TPM2B_DIGEST    *authPolicy     // OUT: authPolicy of the entity
+EntityGetAuthPolicy(TPMI_DH_ENTITY handle,     // IN: handle of entity
+                    TPM2B_DIGEST*  authPolicy  // OUT: authPolicy of the entity
 );
 
 //*** EntityGetName()
 // This function returns the Name associated with a handle.
-TPM2B_NAME *
-EntityGetName(
-    TPMI_DH_ENTITY   handle,        // IN: handle of entity
-    TPM2B_NAME      *name           // OUT: name of entity
+TPM2B_NAME* EntityGetName(TPMI_DH_ENTITY handle,  // IN: handle of entity
+                          TPM2B_NAME*    name     // OUT: name of entity
 );
 
 //*** EntityGetHierarchy()
@@ -101,8 +96,7 @@ EntityGetName(
 //    is SET, otherwise it belongs to TPM_RH_OWNER
 // c) An object handle belongs to its hierarchy.
 TPMI_RH_HIERARCHY
-EntityGetHierarchy(
-    TPMI_DH_ENTITY   handle         // IN :handle of entity
+EntityGetHierarchy(TPMI_DH_ENTITY handle  // IN :handle of entity
 );
 
 #endif  // _ENTITY_FP_H_

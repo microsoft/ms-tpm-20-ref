@@ -37,39 +37,38 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_EncryptDecrypt // Command must be enabled
+#if CC_EncryptDecrypt  // Command must be enabled
 
-#ifndef _Encrypt_Decrypt_FP_H_
-#define _Encrypt_Decrypt_FP_H_
+#  ifndef _Encrypt_Decrypt_FP_H_
+#    define _Encrypt_Decrypt_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              keyHandle;
-    TPMI_YES_NO                 decrypt;
-    TPMI_ALG_CIPHER_MODE        mode;
-    TPM2B_IV                    ivIn;
-    TPM2B_MAX_BUFFER            inData;
+typedef struct
+{
+    TPMI_DH_OBJECT       keyHandle;
+    TPMI_YES_NO          decrypt;
+    TPMI_ALG_CIPHER_MODE mode;
+    TPM2B_IV             ivIn;
+    TPM2B_MAX_BUFFER     inData;
 } EncryptDecrypt_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_MAX_BUFFER            outData;
-    TPM2B_IV                    ivOut;
+typedef struct
+{
+    TPM2B_MAX_BUFFER outData;
+    TPM2B_IV         ivOut;
 } EncryptDecrypt_Out;
 
 // Response code modifiers
-#define RC_EncryptDecrypt_keyHandle (TPM_RC_H + TPM_RC_1)
-#define RC_EncryptDecrypt_decrypt   (TPM_RC_P + TPM_RC_1)
-#define RC_EncryptDecrypt_mode  (TPM_RC_P + TPM_RC_2)
-#define RC_EncryptDecrypt_ivIn  (TPM_RC_P + TPM_RC_3)
-#define RC_EncryptDecrypt_inData    (TPM_RC_P + TPM_RC_4)
+#    define RC_EncryptDecrypt_keyHandle (TPM_RC_H + TPM_RC_1)
+#    define RC_EncryptDecrypt_decrypt   (TPM_RC_P + TPM_RC_1)
+#    define RC_EncryptDecrypt_mode      (TPM_RC_P + TPM_RC_2)
+#    define RC_EncryptDecrypt_ivIn      (TPM_RC_P + TPM_RC_3)
+#    define RC_EncryptDecrypt_inData    (TPM_RC_P + TPM_RC_4)
 
 // Function prototype
 TPM_RC
-TPM2_EncryptDecrypt(
-    EncryptDecrypt_In           *in,
-    EncryptDecrypt_Out          *out
-);
+TPM2_EncryptDecrypt(EncryptDecrypt_In* in, EncryptDecrypt_Out* out);
 
-#endif  // _Encrypt_Decrypt_FP_H_
-#endif  // CC_EncryptDecrypt
+#  endif  // _Encrypt_Decrypt_FP_H_
+#endif    // CC_EncryptDecrypt

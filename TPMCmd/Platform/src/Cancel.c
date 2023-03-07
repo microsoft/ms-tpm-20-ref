@@ -46,10 +46,7 @@
 //  Return Type: int
 //      TRUE(1)         if cancel flag is set
 //      FALSE(0)        if cancel flag is not set
-LIB_EXPORT int
-_plat__IsCanceled(
-    void
-    )
+LIB_EXPORT int _plat__IsCanceled(void)
 {
     // return cancel flag
     return s_isCanceled;
@@ -58,10 +55,7 @@ _plat__IsCanceled(
 //***_plat__SetCancel()
 
 // Set cancel flag.
-LIB_EXPORT void
-_plat__SetCancel(
-    void
-    )
+LIB_EXPORT void _plat__SetCancel(void)
 {
     s_isCanceled = TRUE;
     return;
@@ -69,10 +63,7 @@ _plat__SetCancel(
 
 //***_plat__ClearCancel()
 // Clear cancel flag
-LIB_EXPORT void
-_plat__ClearCancel(
-    void
-    )
+LIB_EXPORT void _plat__ClearCancel(void)
 {
     s_isCanceled = FALSE;
     return;

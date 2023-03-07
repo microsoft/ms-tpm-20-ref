@@ -32,11 +32,11 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef     INTERNAL_ROUTINES_H
-#define     INTERNAL_ROUTINES_H
+#ifndef INTERNAL_ROUTINES_H
+#define INTERNAL_ROUTINES_H
 
 #if !defined _LIB_SUPPORT_H_ && !defined _TPM_H_
-#error "Should not be called"
+#  error "Should not be called"
 #endif
 
 // DRTM functions
@@ -74,8 +74,8 @@
 #include "CommandDispatcher_fp.h"
 
 #ifdef CC_AC_Send
-#   include "AC_spt_fp.h"
-#endif // CC_AC_Send
+#  include "AC_spt_fp.h"
+#endif  // CC_AC_Send
 
 // Miscellaneous
 #include "Bits_fp.h"
@@ -102,22 +102,22 @@
 #include "AlgorithmTests_fp.h"
 
 #if ALG_RSA
-#include "CryptRsa_fp.h"
-#include "CryptPrimeSieve_fp.h"
+#  include "CryptRsa_fp.h"
+#  include "CryptPrimeSieve_fp.h"
 #endif
 
 #if ALG_ECC
-#include "CryptEccMain_fp.h"
-#include "CryptEccSignature_fp.h"
-#include "CryptEccKeyExchange_fp.h"
-#include "CryptEccCrypt_fp.h"
+#  include "CryptEccMain_fp.h"
+#  include "CryptEccSignature_fp.h"
+#  include "CryptEccKeyExchange_fp.h"
+#  include "CryptEccCrypt_fp.h"
 #endif
 
 #if CC_MAC || CC_MAC_Start
-#   include "CryptSmac_fp.h"
-#   if  ALG_CMAC
-#       include "CryptCmac_fp.h"
-#   endif
+#  include "CryptSmac_fp.h"
+#  if ALG_CMAC
+#    include "CryptCmac_fp.h"
+#  endif
 #endif
 
 // Support library

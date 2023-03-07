@@ -37,8 +37,8 @@
  *  Date: Mar 28, 2019  Time: 08:25:19PM
  */
 
-#ifndef    _EXEC_COMMAND_FP_H_
-#define    _EXEC_COMMAND_FP_H_
+#ifndef _EXEC_COMMAND_FP_H_
+#define _EXEC_COMMAND_FP_H_
 
 //** ExecuteCommand()
 //
@@ -77,12 +77,11 @@
 // will SET g_inFailureMode and call _plat__Fail(). That function should not return
 // but may call ExecuteCommand().
 //
-LIB_EXPORT void
-ExecuteCommand(
-    uint32_t         requestSize,   // IN: command buffer size
-    unsigned char   *request,       // IN: command buffer
-    uint32_t        *responseSize,  // IN/OUT: response buffer size
-    unsigned char   **response      // IN/OUT: response buffer
+LIB_EXPORT void ExecuteCommand(
+    uint32_t        requestSize,   // IN: command buffer size
+    unsigned char*  request,       // IN: command buffer
+    uint32_t*       responseSize,  // IN/OUT: response buffer size
+    unsigned char** response       // IN/OUT: response buffer
 );
 
 #endif  // _EXEC_COMMAND_FP_H_

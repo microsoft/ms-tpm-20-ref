@@ -37,37 +37,36 @@
  *  Date: Mar 28, 2019  Time: 08:25:17PM
  */
 
-#if CC_Quote // Command must be enabled
+#if CC_Quote  // Command must be enabled
 
-#ifndef _Quote_FP_H_
-#define _Quote_FP_H_
+#  ifndef _Quote_FP_H_
+#    define _Quote_FP_H_
 
 // Input structure definition
-typedef struct {
-    TPMI_DH_OBJECT              signHandle;
-    TPM2B_DATA                  qualifyingData;
-    TPMT_SIG_SCHEME             inScheme;
-    TPML_PCR_SELECTION          PCRselect;
+typedef struct
+{
+    TPMI_DH_OBJECT     signHandle;
+    TPM2B_DATA         qualifyingData;
+    TPMT_SIG_SCHEME    inScheme;
+    TPML_PCR_SELECTION PCRselect;
 } Quote_In;
 
 // Output structure definition
-typedef struct {
-    TPM2B_ATTEST                quoted;
-    TPMT_SIGNATURE              signature;
+typedef struct
+{
+    TPM2B_ATTEST   quoted;
+    TPMT_SIGNATURE signature;
 } Quote_Out;
 
 // Response code modifiers
-#define RC_Quote_signHandle     (TPM_RC_H + TPM_RC_1)
-#define RC_Quote_qualifyingData (TPM_RC_P + TPM_RC_1)
-#define RC_Quote_inScheme       (TPM_RC_P + TPM_RC_2)
-#define RC_Quote_PCRselect      (TPM_RC_P + TPM_RC_3)
+#    define RC_Quote_signHandle     (TPM_RC_H + TPM_RC_1)
+#    define RC_Quote_qualifyingData (TPM_RC_P + TPM_RC_1)
+#    define RC_Quote_inScheme       (TPM_RC_P + TPM_RC_2)
+#    define RC_Quote_PCRselect      (TPM_RC_P + TPM_RC_3)
 
 // Function prototype
 TPM_RC
-TPM2_Quote(
-    Quote_In                    *in,
-    Quote_Out                   *out
-);
+TPM2_Quote(Quote_In* in, Quote_Out* out);
 
-#endif  // _Quote_FP_H_
-#endif  // CC_Quote
+#  endif  // _Quote_FP_H_
+#endif    // CC_Quote
