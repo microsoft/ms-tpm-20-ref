@@ -141,11 +141,18 @@ CryptGenerateKeyDes(TPMT_PUBLIC* publicArea,    // IN/OUT: The public area templ
                     RAND_STATE*     rand        // IN: the "entropy" source for
 )
 {
-
     // Assume that the publicArea key size has been validated and is a supported
     // number of bits.
     sensitive->sensitive.sym.t.size =
         BITS_TO_BYTES(publicArea->parameters.symDetail.sym.keyBits.sym);
+
+    // Because we use BYTE_ARRAY_TO_UINT64 below, require the requested DES key
+    // to be a multiple of 8 bytes in size.
+    if((sensitive->sensitive.sym.t.size % 8) != 0)
+    {
+        return TPM_RC_SYMMETRIC;
+    }
+
     do
     {
         BYTE* pK = sensitive->sensitive.sym.t.buffer;
