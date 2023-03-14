@@ -43,10 +43,10 @@
 #define FATAL_ERROR_SELF_TEST        (6)
 #define FATAL_ERROR_CRYPTO           (7)
 #define FATAL_ERROR_NV_UNRECOVERABLE (8)
-#define FATAL_ERROR_REMANUFACTURED      \
-  (9)  // indicates that the TPM has    \
-       // been re-manufactured after an \
-       // unrecoverable NV error
+// indicates that the TPM has
+// been re-manufactured after an
+// unrecoverable NV error
+#define FATAL_ERROR_REMANUFACTURED   (9)
 #define FATAL_ERROR_DRBG             (10)
 #define FATAL_ERROR_MOVE_SIZE        (11)
 #define FATAL_ERROR_COUNTER_OVERFLOW (12)

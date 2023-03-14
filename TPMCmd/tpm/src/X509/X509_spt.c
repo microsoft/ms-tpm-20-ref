@@ -134,7 +134,7 @@ X509GetExtensionBits(ASN1UnmarshalContext* ctx, UINT32* value)
 // Return Type: TPM_RC
 //      TPM_RCS_ATTRIBUTES      the attributes of object are not consistent with
 //                              the extension setting
-//      TPM_RC_VALUE            problem parsing the extensions
+//      TPM_RCS_VALUE           problem parsing the extensions
 TPM_RC
 X509ProcessExtensions(
     OBJECT* object,       // IN: The object with the attributes to

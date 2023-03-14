@@ -159,9 +159,9 @@ typedef const BYTE* PCBYTE;
 
 // Function aliases. The code in CryptHash.c uses the internal designation for the
 // functions. These need to be translated to the function names of the library.
-#  define tpmHashStart_SHA1            \
-    SHA1_Init  // external name of the \
-               // initialization method
+// external name of the
+// initialization method
+#  define tpmHashStart_SHA1          SHA1_Init
 #  define tpmHashData_SHA1           SHA1_Update
 #  define tpmHashEnd_SHA1            SHA1_Final
 #  define tpmHashStateCopy_SHA1      memcpy

@@ -154,8 +154,9 @@ typedef const BYTE* PCBYTE;
 // functions. These need to be translated to the function names of the library.
 //          Internal                    External
 //          Designation                 Designation
-#  define tpmHashStart_SHA1 wc_InitSha  // external name of the
-                                        // initialization method
+// external name of the
+// initialization method
+#  define tpmHashStart_SHA1         wc_InitSha
 #  define tpmHashData_SHA1          wc_ShaUpdate
 #  define tpmHashEnd_SHA1           wc_ShaFinal
 #  define tpmHashStateCopy_SHA1     memcpy

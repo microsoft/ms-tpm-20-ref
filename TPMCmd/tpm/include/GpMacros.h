@@ -48,18 +48,30 @@
 //** For Self-test
 // These macros are used in CryptUtil to invoke the incremental self test.
 #if SELF_TEST
-#  define TEST(alg)             \
-    if(TEST_BIT(alg, g_toTest)) \
-    CryptTestAlgorithm(alg, NULL)
+#  define TEST(alg)                    \
+    do                                 \
+    {                                  \
+      if(TEST_BIT(alg, g_toTest))      \
+        CryptTestAlgorithm(alg, NULL); \
+    } while(0)
 
 // Use of TPM_ALG_NULL is reserved for RSAEP/RSADP testing. If someone is wanting
 // to test a hash with that value, don't do it.
-#  define TEST_HASH(alg)                                 \
-    if(TEST_BIT(alg, g_toTest) && (alg != TPM_ALG_NULL)) \
-    CryptTestAlgorithm(alg, NULL)
+#  define TEST_HASH(alg)                                   \
+    do                                                     \
+    {                                                      \
+      if(TEST_BIT(alg, g_toTest) && (alg != TPM_ALG_NULL)) \
+        CryptTestAlgorithm(alg, NULL);                     \
+    } while(0)
 #else
-#  define TEST(alg)
-#  define TEST_HASH(alg)
+#  define TEST(alg) \
+    do              \
+    {               \
+    } while(0)
+#  define TEST_HASH(alg) \
+    do                   \
+    {                    \
+    } while(0)
 #endif  // SELF_TEST
 
 //** For Failures
@@ -82,11 +94,18 @@
 // for not having longjmp, TpmFail() will return and the subsequent code will be
 // executed. This macro accounts for the difference.
 #ifndef NO_LONGJMP
-#  define FAIL_RETURN(returnCode)
+#  define FAIL_RETURN(returnCode) \
+    do                            \
+    {                             \
+    } while(0)
 #  define TPM_FAIL_RETURN NORETURN void
 #else
-#  define FAIL_RETURN(returnCode) return (returnCode)
-#  define TPM_FAIL_RETURN         void
+#  define FAIL_RETURN(returnCode) \
+    do                            \
+    {                             \
+      return (returnCode);        \
+    } while(0)
+#  define TPM_FAIL_RETURN void
 #endif
 
 // This macro tests that a condition is TRUE and puts the TPM into failure mode
@@ -94,25 +113,30 @@
 // a call from which there is no return. Otherwise, it returns and the function
 // will exit with the appropriate return code.
 #define REQUIRE(condition, errorCode, returnCode) \
+  do                                              \
   {                                               \
     if(!!(condition))                             \
     {                                             \
-      FAIL(FATAL_ERROR_errorCode);                \
+      FAIL(FATAL_ERROR_##errorCode);              \
       FAIL_RETURN(returnCode);                    \
     }                                             \
-  }
+  } while(0)
 
 #define PARAMETER_CHECK(condition, returnCode) \
   REQUIRE((condition), PARAMETER, returnCode)
 
 #if(defined EMPTY_ASSERT) && (EMPTY_ASSERT != NO)
-#  define pAssert(a) ((void)0)
+#  define pAssert(a) \
+    do               \
+    {                \
+    } while(0)
 #else
 #  define pAssert(a)                 \
+    do                               \
     {                                \
       if(!(a))                       \
         FAIL(FATAL_ERROR_PARAMETER); \
-    }
+    } while(0)
 #endif
 
 //** Derived from Vendor-specific values
@@ -144,10 +168,11 @@
 // getting too long. This is not to save paper but to allow one to see more
 // useful stuff on the screen at any given time.
 #define ERROR_RETURN(returnCode) \
+  do                             \
   {                              \
-    retVal = returnCode;         \
+    retVal = (returnCode);       \
     goto Exit;                   \
-  }
+  } while(0)
 
 #ifndef MAX
 #  define MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -342,8 +367,11 @@
 #endif
 
 #define VERIFY(_X) \
-  if(!(_X))        \
-  goto Error
+  do               \
+  {                \
+    if(!(_X))      \
+      goto Error;  \
+  } while(0)
 
 // These macros determine if the values in this file are referenced or instanced.
 // Global.c defines GLOBAL_C so all the values in this file will be instanced in
