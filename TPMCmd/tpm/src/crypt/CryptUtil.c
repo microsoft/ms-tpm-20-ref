@@ -873,8 +873,8 @@ void CryptParameterEncryption(
     SESSION* session = SessionGet(handle);  // encrypt session
     TPM2B_TYPE(TEMP_KEY,
                (sizeof(extraKey->t.buffer) + sizeof(session->sessionKey.t.buffer)));
-    TPM2B_TEMP_KEY key;                 // encryption key
-    UINT16         cipherSize = 0;      // size of cipher text
+    TPM2B_TEMP_KEY key;             // encryption key
+    UINT16         cipherSize = 0;  // size of cipher text
 
     if(bufferSize < leadingSizeInByte)
     {
@@ -950,8 +950,8 @@ CryptParameterDecryption(
     // is the size of the buffer which can contain a TPMT_HA.
     TPM2B_TYPE(HMAC_KEY,
                (sizeof(extraKey->t.buffer) + sizeof(session->sessionKey.t.buffer)));
-    TPM2B_HMAC_KEY key;                 // decryption key
-    UINT16         cipherSize = 0;      // size of ciphertext
+    TPM2B_HMAC_KEY key;             // decryption key
+    UINT16         cipherSize = 0;  // size of ciphertext
 
     if(bufferSize < leadingSizeInByte)
     {

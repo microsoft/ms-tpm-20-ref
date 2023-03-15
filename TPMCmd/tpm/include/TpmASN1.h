@@ -85,13 +85,6 @@
 //** Macros
 
 //*** Unmarshaling Macros
-#ifndef VERIFY
-#  define VERIFY(_X_) \
-    {                 \
-      if(!(_X_))      \
-        goto Error;   \
-    }
-#endif
 // Checks the validity of the size making sure that there is no wrap around
 #define CHECK_SIZE(context, length)                            \
   VERIFY((((length) + (context)->offset) >= (context)->offset) \

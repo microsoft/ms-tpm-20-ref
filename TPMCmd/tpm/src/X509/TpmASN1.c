@@ -435,7 +435,7 @@ ASN1PushInteger(ASN1MarshalContext* ctx,     // IN/OUT: buffer context
     // if needed, add a leading byte of 0 to make the number positive
     if(*integer & 0x80)
         iLen += (INT16)ASN1PushByte(ctx, 0);
-    // PushTagAndLenght just tells how many octets it added so the total size of this
+    // PushTagAndLength just tells how many octets it added so the total size of this
     // element is the sum of those octets and the adjusted input size.
     iLen += ASN1PushTagAndLength(ctx, ASN1_INTEGER, iLen);
     return iLen;

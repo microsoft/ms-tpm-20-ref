@@ -173,9 +173,10 @@ void DASelfHeal(void)
         else
         {
             UINT64 decreaseCount;
-#if 0  // Errata eliminates this code                                      \
-       // In the unlikely event that failedTries should become larger than \
-       // maxTries
+            // Errata eliminates this code
+#if 0
+            // In the unlikely event that failedTries should become larger than
+            // maxTries
             if(gp.failedTries > gp.maxTries)
                 gp.failedTries = gp.maxTries;
 #endif

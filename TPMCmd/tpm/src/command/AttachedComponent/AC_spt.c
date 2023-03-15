@@ -41,8 +41,9 @@
 #include "Tpm.h"
 #include "AC_spt_fp.h"
 
-#if 1  // This is the simulated AC data. This should be present in an actual \
-       // implementation.
+// This is the simulated AC data. This should be present in an actual
+// implementation.
+#if 1
 
 typedef struct
 {
