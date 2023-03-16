@@ -257,6 +257,8 @@ void TpmFailureMode(unsigned int    inRequestSize,    // IN: command buffer size
         goto FailureModeReturn;
     if(header.tag != TPM_ST_NO_SESSIONS || header.size < 10)
         goto FailureModeReturn;
+    if(header.size != inRequestSize || header.size > MAX_COMMAND_SIZE)
+        goto FailureModeReturn;
     switch(header.code)
     {
         case TPM_CC_GetTestResult:
