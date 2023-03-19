@@ -245,6 +245,7 @@ void TpmFailureMode(unsigned int    inRequestSize,    // IN: command buffer size
     UINT32 count;   // unmarshaled property count
     UINT8* buffer = inRequest;
     INT32  size   = inRequestSize;
+    TPM_RC failureModeRc = TPM_RC_FAILURE;
 
     // If there is no command buffer, then just return TPM_RC_FAILURE
     if(inRequestSize == 0 || inRequest == NULL)
@@ -254,11 +255,22 @@ void TpmFailureMode(unsigned int    inRequestSize,    // IN: command buffer size
     if(!(Unmarshal16(&header.tag, &buffer, &size)
          && Unmarshal32(&header.size, &buffer, &size)
          && Unmarshal32(&header.code, &buffer, &size)))
+    {
+        failureModeRc = TPM_RC_INSUFFICIENT;
         goto FailureModeReturn;
-    if(header.tag != TPM_ST_NO_SESSIONS || header.size < 10)
+    }
+    if(header.tag == TPM_ST_SESSIONS)
         goto FailureModeReturn;
+    if(header.tag != TPM_ST_NO_SESSIONS)
+    {
+        failureModeRc = TPM_RC_BAD_TAG;
+        goto FailureModeReturn;
+    }
     if(header.size != inRequestSize || header.size > MAX_COMMAND_SIZE)
+    {
+        failureModeRc = TPM_RC_COMMAND_SIZE;
         goto FailureModeReturn;
+    }
     switch(header.code)
     {
         case TPM_CC_GetTestResult:
@@ -407,7 +419,7 @@ FailureModeReturn:
     buffer      = response;
     marshalSize = MarshalUint16(TPM_ST_NO_SESSIONS, &buffer);
     marshalSize += MarshalUint32(10, &buffer);
-    marshalSize += MarshalUint32(TPM_RC_FAILURE, &buffer);
+    marshalSize += MarshalUint32(failureModeRc, &buffer);
     *outResponseSize = marshalSize;
     *outResponse     = (unsigned char*)response;
     return;
@@ -421,5 +433,6 @@ void UnmarshalFail(void* type, BYTE** buffer, INT32* size)
     NOT_REFERENCED(type);
     NOT_REFERENCED(buffer);
     NOT_REFERENCED(size);
+
     FAIL(FATAL_ERROR_INTERNAL);
 }
