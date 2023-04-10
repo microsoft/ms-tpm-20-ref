@@ -51,7 +51,10 @@ AC_ARG_ENABLE(usedeviceid,
     AS_HELP_STRING([--enable-usedeviceid],
     [tpm simulator get seeds derived from hardware parameters. Seeds are not derived from secure hardware source.]))
 
-PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto])
+PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto >= 3.0],
+	[AC_DEFINE([OPENSSL_API_COMPAT], [10101])],
+	[PKG_CHECK_MODULES([LIBCRYPTO], [libcrypto])])
+
 AS_IF([test "x$enable_usedeviceid" = "xyes"], [
     PKG_CHECK_MODULES([LIBUDEV], [libudev])
     [ADDITIONAL_LIBS="-ludev"]
