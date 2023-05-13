@@ -53,7 +53,7 @@
 // Check the bignum_st definition in crypto/bn/bn_lcl.h and either update the
 // version check or provide the new definition for this version.
 #  error Untested OpenSSL version
-#elif OPENSSL_VERSION_NUMBER >= 0x30100000L
+#elif OPENSSL_VERSION_NUMBER >= 0x30000000L
 // from crypto/bn/bn_lcl.h
 struct bignum_st
 {
