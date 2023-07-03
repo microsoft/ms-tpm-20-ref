@@ -353,7 +353,7 @@ BnGeneratePrimeForRSA(bigNum prime,      // IN/OUT: points to the BN that will g
     while(!found)
     {
         // The change below is to make sure that all keys that are generated from the same
-        // seed value will be the same regardless of the endianess or word size of the CPU.
+        // seed value will be the same regardless of the endianness or word size of the CPU.
         //       DRBG_Generate(rand, (BYTE *)prime->d, (UINT16)BITS_TO_BYTES(bits));// old
         //       if(g_inFailureMode)                                                // old
         if(!BnGetRandomBits(prime, bits, rand))  // new

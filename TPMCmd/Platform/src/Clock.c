@@ -121,7 +121,7 @@ LIB_EXPORT uint64_t _plat__RealTime(void)
 LIB_EXPORT uint64_t _plat__TimerRead(void)
 {
 #ifdef HARDWARE_CLOCK
-#  error "need a defintion for reading the hardware clock"
+#  error "need a definition for reading the hardware clock"
     return HARDWARE_CLOCK
 #else
     clock64_t timeDiff;

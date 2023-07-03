@@ -18,7 +18,7 @@ Windows build is implemented as a Visual Studio 2017 solution. Before building i
 
    1. Create `TPMCmd/lib` folder and place a static OpenSSL library (`libcrypto.lib`) built for the `x86` architecture there. For the `x64` architecture use the `TPMCmd/lib/x64` folder.
 
-        The static libs can be either static libraries proper, or import libraries accompanying the corresponding DLLs. In the latter case you'll need to ensure that ther is a matching copy of the OpenSSL DLL in the standard Windows search path, so that it is available when you run the simulator executable (e.g. copy it into the same folder where `simulator.exe` is located).
+        The static libs can be either static libraries proper, or import libraries accompanying the corresponding DLLs. In the latter case you'll need to ensure that there is a matching copy of the OpenSSL DLL in the standard Windows search path, so that it is available when you run the simulator executable (e.g. copy it into the same folder where `simulator.exe` is located).
 
         Recommended version of OpenSSL is `1.1.1d` or higher.
 

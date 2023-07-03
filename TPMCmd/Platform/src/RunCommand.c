@@ -42,7 +42,7 @@
 // code will have set the flag to indicate that the TPM is in failure mode.
 // This call will then recursively call ExecuteCommand in order to build the
 // failure mode response. When ExecuteCommand() returns to _plat__Fail(), the
-// platform will do some platform specif operation to return to the environment in
+// platform will do some platform specific operation to return to the environment in
 // which the TPM is executing. For a simulator, setjmp/longjmp is used. For an OS,
 // a system exit to the OS would be appropriate.
 

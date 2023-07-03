@@ -53,7 +53,7 @@ dnl   macro will check to be sure the preprocessor supports the flag.
 dnl   The flag can be made mandatory by provideing the string 'required' as
 dnl   the second parameter.
 dnl $1: Preprocessor flag to add to EXTRA_CFLAGS.
-dnl $2: Set to "required" t ocause configure failure if preprocesor flag
+dnl $2: Set to "required" to cause configure failure if preprocessor flag
 dnl     is not supported.
 AC_DEFUN([ADD_PREPROC_FLAG],[
     AX_CHECK_PREPROC_FLAG([$1],[
