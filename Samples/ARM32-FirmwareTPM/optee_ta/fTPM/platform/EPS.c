@@ -50,25 +50,31 @@ _plat__GetEPS(UINT16 Size, uint8_t *EndorsementSeed)
 {
     TEE_Result Result = TEE_ERROR_ITEM_NOT_FOUND;
     uint8_t EPS[TEE_EPS_SIZE] = { 0 };
-    size_t EPSLen;
+    size_t EPSLen = sizeof(EPS);
 
     IMSG("Size=%" PRIu16 "",Size);
-    IMSG("EPS=%d",TEE_EPS_SIZE);
+    IMSG("EPS=%d", TEE_EPS_SIZE);
 
     pAssert(Size <= (TEE_EPS_SIZE));
 
-    Result = TEE_GetPropertyAsBinaryBlock(TEE_PROPSET_CURRENT_TA,
+    Result = TEE_GetPropertyAsBinaryBlock(TEE_PROPSET_TEE_IMPLEMENTATION,
                                           "com.microsoft.ta.endorsementSeed",
                                           EPS,
                                           &EPSLen);
 
-    if ((EPSLen < Size) || (Result != TEE_SUCCESS)) {
+    if (Result != TEE_SUCCESS) {
+        IMSG("Retrieval of EPS with property failed. Falling back to creating random EPS.\n"
+             "Return result: %#" PRIx32, Result);
         // We failed to access the property. We can't continue without it
-        // and we can't just fail to manufacture, so randomize EPS and
+        // and we can't just fail to manufacture, so randomize EPS and 
         // continue. If necessary, fTPM TA storage can be cleared, or the
         // TA updated, and we can trigger remanufacture and try again.
-        _plat__GetEntropy(EndorsementSeed, TEE_EPS_SIZE);
+        _plat__GetEntropy(EndorsementSeed, Size);
         return;
+    }
+    if (EPSLen < Size) {
+        IMSG("Expected count of bytes for EPS: %d, Got: %d\n"
+             "This yiels a low entropy for the EPS; do NOT use in production!", Size, EPSLen);
     }
 
     memcpy(EndorsementSeed, EPS, Size);
