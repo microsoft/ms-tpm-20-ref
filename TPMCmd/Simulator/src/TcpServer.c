@@ -572,9 +572,9 @@ bool ReadVarBytes(SOCKET s, char* buffer, uint32_t* BytesReceived, int MaxLen)
         return res;
     length         = ntohl(length);
     *BytesReceived = length;
-    if(length > MaxLen)
+    if(length < 0 || length > MaxLen)
     {
-        printf("Buffer too big.  Client says %d\n", length);
+        printf("Buffer too big.  Client says %u\n", length);
         return false;
     }
     if(length == 0)
