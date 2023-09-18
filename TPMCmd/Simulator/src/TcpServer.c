@@ -562,10 +562,10 @@ bool ReadUINT32(SOCKET s, uint32_t* val)
 //*** ReadVarBytes()
 // Get a uint32-length-prepended binary array.  Note that the 4-byte length is
 // in network byte order (big-endian).
-bool ReadVarBytes(SOCKET s, char* buffer, uint32_t* BytesReceived, int MaxLen)
+bool ReadVarBytes(SOCKET s, char* buffer, uint32_t* BytesReceived, uint32_t MaxLen)
 {
-    int  length;
-    bool res;
+    uint32_t length;
+    bool     res;
     //
     res = ReadBytes(s, (char*)&length, 4);
     if(!res)
@@ -574,7 +574,7 @@ bool ReadVarBytes(SOCKET s, char* buffer, uint32_t* BytesReceived, int MaxLen)
     *BytesReceived = length;
     if(length > MaxLen)
     {
-        printf("Buffer too big.  Client says %d\n", length);
+        printf("Buffer too big.  Client says %u\n", length);
         return false;
     }
     if(length == 0)
