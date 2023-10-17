@@ -93,7 +93,7 @@ bool ReadUINT32(SOCKET s, uint32_t* val);
 //*** ReadVarBytes()
 // Get a uint32-length-prepended binary array.  Note that the 4-byte length is
 // in network byte order (big-endian).
-bool ReadVarBytes(SOCKET s, char* buffer, uint32_t* BytesReceived, int MaxLen);
+bool ReadVarBytes(SOCKET s, char* buffer, uint32_t* BytesReceived, uint32_t MaxLen);
 
 //*** WriteVarBytes()
 // Send a UINT32-length-prepended binary array.  Note that the 4-byte length is
