@@ -39,7 +39,7 @@
 
 // This version requires that the new format for ECC data be used
 #  if !USE_BN_ECC_DATA
-#    error "Need to SET USE_BN_ECC_DATA to YES in Implementaion.h"
+#    error "Need to SET USE_BN_ECC_DATA to YES in Implementation.h"
 #  endif
 
 //** Functions

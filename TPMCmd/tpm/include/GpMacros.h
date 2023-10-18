@@ -386,7 +386,7 @@
 #endif
 
 // This macro will create an OID. All OIDs are in DER form with a first octet of
-// 0x06 indicating an OID fallowed by an octet indicating the number of octets in the
+// 0x06 indicating an OID followed by an octet indicating the number of octets in the
 // rest of the OID. This allows a user of this OID to know how much/little to copy.
 #define MAKE_OID(NAME) EXTERN const BYTE OID##NAME[] INITIALIZER({OID##NAME##_VALUE})
 

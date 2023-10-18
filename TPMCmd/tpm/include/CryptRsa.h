@@ -49,7 +49,7 @@ BN_TYPE(prime, (MAX_RSA_KEY_BITS / 2));
   BN_INITIALIZED(name, MAX_RSA_KEY_BITS / 2, initializer)
 
 #if !CRT_FORMAT_RSA
-#  error This verson only works with CRT formatted data
+#  error This version only works with CRT formatted data
 #endif  // !CRT_FORMAT_RSA
 
 typedef struct privateExponent

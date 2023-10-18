@@ -326,7 +326,7 @@ LIB_EXPORT UINT32 PrimeSieve(bigNum bnN,        // IN/OUT: number to sieve
             // only contains odd numbers and our stride is actually 2 * stride. If the
             // quoitent is even, then that means that when we add 2 * stride, we are going
             // to hit another even number. So, we have to know if we need to back off
-            // by 1 stride before we start couting by 2 * stride.
+            // by 1 stride before we start counting by 2 * stride.
             // We can tell from the remainder whether we are on an even or odd
             // stride when we hit the beginning of the table. If we are on an odd stride
             // (r & 1), we would start half a stride in (next - r)/2. If we are on an
