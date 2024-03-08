@@ -53,20 +53,20 @@
 #include <wolfssl/wolfcrypt/ecc.h>
 
 #define MP_VAR(name) \
-  mp_int  _##name;   \
-  mp_int* name = MpInitialize(&_##name);
+    mp_int  _##name; \
+    mp_int* name = MpInitialize(&_##name);
 
 // Allocate a mp_int and initialize with the values in a mp_int* initializer
 #define MP_INITIALIZED(name, initializer) \
-  MP_VAR(name);                           \
-  BnToWolf(name, initializer);
+    MP_VAR(name);                         \
+    BnToWolf(name, initializer);
 
 #define POINT_CREATE(name, initializer) \
-  ecc_point* name = EcPointInitialized(initializer);
+    ecc_point* name = EcPointInitialized(initializer);
 
-#define POINT_DELETE(name) \
-  wc_ecc_del_point(name);  \
-  name = NULL;
+#define POINT_DELETE(name)  \
+    wc_ecc_del_point(name); \
+    name = NULL;
 
 typedef ECC_CURVE_DATA bnCurve_t;
 
@@ -75,7 +75,7 @@ typedef bnCurve_t*     bigCurve;
 #define AccessCurveData(E) (E)
 
 #define CURVE_INITIALIZED(name, initializer) \
-  bnCurve_t* name = (ECC_CURVE_DATA*)GetCurveData(initializer)
+    bnCurve_t* name = (ECC_CURVE_DATA*)GetCurveData(initializer)
 
 #define CURVE_FREE(E)
 

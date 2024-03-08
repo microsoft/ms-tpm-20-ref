@@ -200,23 +200,23 @@
 #  define TPM_RH_ACT_F (TPM_RH_ACT_0 + 0xF)
 #endif
 
-#define FOR_EACH_ACT(op)   \
-  IF_ACT_0_IMPLEMENTED(op) \
-  IF_ACT_1_IMPLEMENTED(op) \
-  IF_ACT_2_IMPLEMENTED(op) \
-  IF_ACT_3_IMPLEMENTED(op) \
-  IF_ACT_4_IMPLEMENTED(op) \
-  IF_ACT_5_IMPLEMENTED(op) \
-  IF_ACT_6_IMPLEMENTED(op) \
-  IF_ACT_7_IMPLEMENTED(op) \
-  IF_ACT_8_IMPLEMENTED(op) \
-  IF_ACT_9_IMPLEMENTED(op) \
-  IF_ACT_A_IMPLEMENTED(op) \
-  IF_ACT_B_IMPLEMENTED(op) \
-  IF_ACT_C_IMPLEMENTED(op) \
-  IF_ACT_D_IMPLEMENTED(op) \
-  IF_ACT_E_IMPLEMENTED(op) \
-  IF_ACT_F_IMPLEMENTED(op)
+#define FOR_EACH_ACT(op)     \
+    IF_ACT_0_IMPLEMENTED(op) \
+    IF_ACT_1_IMPLEMENTED(op) \
+    IF_ACT_2_IMPLEMENTED(op) \
+    IF_ACT_3_IMPLEMENTED(op) \
+    IF_ACT_4_IMPLEMENTED(op) \
+    IF_ACT_5_IMPLEMENTED(op) \
+    IF_ACT_6_IMPLEMENTED(op) \
+    IF_ACT_7_IMPLEMENTED(op) \
+    IF_ACT_8_IMPLEMENTED(op) \
+    IF_ACT_9_IMPLEMENTED(op) \
+    IF_ACT_A_IMPLEMENTED(op) \
+    IF_ACT_B_IMPLEMENTED(op) \
+    IF_ACT_C_IMPLEMENTED(op) \
+    IF_ACT_D_IMPLEMENTED(op) \
+    IF_ACT_E_IMPLEMENTED(op) \
+    IF_ACT_F_IMPLEMENTED(op)
 
 // This is the mask for ACT that are implemented
 //#define ACT_MASK(N)     | (1 << 0x##N)

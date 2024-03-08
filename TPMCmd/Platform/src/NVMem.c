@@ -76,7 +76,7 @@ static int NvFileOpen(const char* mode)
     if(fopen_s(&s_NvFile, s_NvFilePath, mode) != 0)
         s_NvFile = NULL;
 #  else
-    s_NvFile                 = fopen(s_NvFilePath, mode);
+    s_NvFile = fopen(s_NvFilePath, mode);
 #  endif
     return (s_NvFile == NULL) ? -1 : 0;
 }

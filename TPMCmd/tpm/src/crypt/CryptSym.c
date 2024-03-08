@@ -43,10 +43,10 @@
 
 #include "CryptSym.h"
 
-#define KEY_BLOCK_SIZES(ALG, alg)                                  \
-  static const INT16 alg##KeyBlockSizes[] = {ALG##_KEY_SIZES_BITS, \
-                                             -1,                   \
-                                             ALG##_BLOCK_SIZES};
+#define KEY_BLOCK_SIZES(ALG, alg)                                    \
+    static const INT16 alg##KeyBlockSizes[] = {ALG##_KEY_SIZES_BITS, \
+                                               -1,                   \
+                                               ALG##_BLOCK_SIZES};
 
 FOR_EACH_SYM(KEY_BLOCK_SIZES)
 
@@ -83,16 +83,16 @@ LIB_EXPORT INT16 CryptGetSymmetricBlockSize(
 {
     const INT16* sizes;
     INT16        i;
-#define ALG_CASE(SYM, sym)      \
-  case TPM_ALG_##SYM:           \
-    sizes = sym##KeyBlockSizes; \
-    break
+#define ALG_CASE(SYM, sym)          \
+    case TPM_ALG_##SYM:             \
+        sizes = sym##KeyBlockSizes; \
+        break
     switch(symmetricAlg)
     {
 #define GET_KEY_BLOCK_POINTER(SYM, sym) \
-  case TPM_ALG_##SYM:                   \
-    sizes = sym##KeyBlockSizes;         \
-    break;
+    case TPM_ALG_##SYM:                 \
+        sizes = sym##KeyBlockSizes;     \
+        break;
         // Get the pointer to the block size array
         FOR_EACH_SYM(GET_KEY_BLOCK_POINTER);
 

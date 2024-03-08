@@ -54,33 +54,33 @@
 #  include "HashTestData.h"
 #  include "KdfTestData.h"
 
-#  define TEST_DEFAULT_TEST_HASH(vector)      \
-    if(TEST_BIT(DEFAULT_TEST_HASH, g_toTest)) \
-      TestHash(DEFAULT_TEST_HASH, vector);
+#  define TEST_DEFAULT_TEST_HASH(vector)        \
+      if(TEST_BIT(DEFAULT_TEST_HASH, g_toTest)) \
+          TestHash(DEFAULT_TEST_HASH, vector);
 
 // Make sure that the algorithm has been tested
-#  define CLEAR_BOTH(alg)         \
-    {                             \
-      CLEAR_BIT(alg, *toTest);    \
-      if(toTest != &g_toTest)     \
-        CLEAR_BIT(alg, g_toTest); \
-    }
+#  define CLEAR_BOTH(alg)               \
+      {                                 \
+          CLEAR_BIT(alg, *toTest);      \
+          if(toTest != &g_toTest)       \
+              CLEAR_BIT(alg, g_toTest); \
+      }
 
-#  define SET_BOTH(alg)         \
-    {                           \
-      SET_BIT(alg, *toTest);    \
-      if(toTest != &g_toTest)   \
-        SET_BIT(alg, g_toTest); \
-    }
+#  define SET_BOTH(alg)               \
+      {                               \
+          SET_BIT(alg, *toTest);      \
+          if(toTest != &g_toTest)     \
+              SET_BIT(alg, g_toTest); \
+      }
 
-#  define TEST_BOTH(alg)                                                       \
-    ((toTest != &g_toTest) ? TEST_BIT(alg, *toTest) || TEST_BIT(alg, g_toTest) \
-                           : TEST_BIT(alg, *toTest))
+#  define TEST_BOTH(alg)                                                         \
+      ((toTest != &g_toTest) ? TEST_BIT(alg, *toTest) || TEST_BIT(alg, g_toTest) \
+                             : TEST_BIT(alg, *toTest))
 
 // Can only cancel if doing a list.
-#  define CHECK_CANCELED                           \
-    if(_plat__IsCanceled() && toTest != &g_toTest) \
-      return TPM_RC_CANCELED;
+#  define CHECK_CANCELED                             \
+      if(_plat__IsCanceled() && toTest != &g_toTest) \
+          return TPM_RC_CANCELED;
 
 //** Hash Tests
 
@@ -98,10 +98,10 @@ static TPM_RC TestHash(TPM_ALG_ID hashAlg, ALGORITHM_VECTOR* toTest)
     //    TPM2B_TYPE(HMAC_BLOCK, DEFAULT_TEST_HASH_BLOCK_SIZE);
 
     pAssert(hashAlg != TPM_ALG_NULL);
-#  define HASH_CASE_FOR_TEST(HASH, hash) \
-    case ALG_##HASH##_VALUE:             \
-      testDigest = &c_##HASH##_digest.b; \
-      break;
+#  define HASH_CASE_FOR_TEST(HASH, hash)     \
+      case ALG_##HASH##_VALUE:               \
+          testDigest = &c_##HASH##_digest.b; \
+          break;
     switch(hashAlg)
     {
         FOR_EACH_HASH(HASH_CASE_FOR_TEST)

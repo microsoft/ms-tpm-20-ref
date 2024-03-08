@@ -58,9 +58,9 @@
 
 typedef tpmKeyScheduleAES DRBG_KEY_SCHEDULE;
 #define DRBG_ENCRYPT_SETUP(key, keySizeInBits, schedule) \
-  TpmCryptSetEncryptKeyAES(key, keySizeInBits, schedule)
+    TpmCryptSetEncryptKeyAES(key, keySizeInBits, schedule)
 #define DRBG_ENCRYPT(keySchedule, in, out) \
-  TpmCryptEncryptAES(SWIZZLE(keySchedule, in, out))
+    TpmCryptEncryptAES(SWIZZLE(keySchedule, in, out))
 
 #if((DRBG_KEY_SIZE_BITS % RADIX_BITS) != 0) || ((DRBG_IV_SIZE_BITS % RADIX_BITS) != 0)
 #  error "Key size and IV for DRBG must be even multiples of the radix"

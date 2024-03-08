@@ -41,12 +41,12 @@
 BN_TYPE(rsa, MAX_RSA_KEY_BITS);
 #define BN_RSA(name) BN_VAR(name, MAX_RSA_KEY_BITS)
 #define BN_RSA_INITIALIZED(name, initializer) \
-  BN_INITIALIZED(name, MAX_RSA_KEY_BITS, initializer)
+    BN_INITIALIZED(name, MAX_RSA_KEY_BITS, initializer)
 
 #define BN_PRIME(name) BN_VAR(name, (MAX_RSA_KEY_BITS / 2))
 BN_TYPE(prime, (MAX_RSA_KEY_BITS / 2));
 #define BN_PRIME_INITIALIZED(name, initializer) \
-  BN_INITIALIZED(name, MAX_RSA_KEY_BITS / 2, initializer)
+    BN_INITIALIZED(name, MAX_RSA_KEY_BITS / 2, initializer)
 
 #if !CRT_FORMAT_RSA
 #  error This verson only works with CRT formatted data
@@ -63,7 +63,7 @@ typedef struct privateExponent
 } privateExponent;
 
 #define NEW_PRIVATE_EXPONENT(X) \
-  privateExponent  _##X;        \
-  privateExponent* X = RsaInitializeExponent(&(_##X))
+    privateExponent  _##X;      \
+    privateExponent* X = RsaInitializeExponent(&(_##X))
 
 #endif  // _CRYPT_RSA_H

@@ -80,21 +80,21 @@
 // Disaggregate a UINT into a byte array
 
 #    define UINT8_TO_BYTE_ARRAY(i, b) \
-      {                               \
-        *((uint8_t*)(b)) = (i);       \
-      }
+        {                             \
+            *((uint8_t*)(b)) = (i);   \
+        }
 #    define UINT16_TO_BYTE_ARRAY(i, b) \
-      {                                \
-        *((uint16_t*)(b)) = (i);       \
-      }
+        {                              \
+            *((uint16_t*)(b)) = (i);   \
+        }
 #    define UINT32_TO_BYTE_ARRAY(i, b) \
-      {                                \
-        *((uint32_t*)(b)) = (i);       \
-      }
+        {                              \
+            *((uint32_t*)(b)) = (i);   \
+        }
 #    define UINT64_TO_BYTE_ARRAY(i, b) \
-      {                                \
-        *((uint64_t*)(b)) = (i);       \
-      }
+        {                              \
+            *((uint64_t*)(b)) = (i);   \
+        }
 #  else
 // the little endian macros for machines that allow unaligned memory access
 // the big-endian macros for machines that allow unaligned memory access
@@ -107,21 +107,21 @@
 // Disaggregate a UINT into a byte array
 
 #    define UINT8_TO_BYTE_ARRAY(i, b) \
-      {                               \
-        *((uint8_t*)(b)) = (i);       \
-      }
-#    define UINT16_TO_BYTE_ARRAY(i, b)            \
-      {                                           \
-        *((uint16_t*)(b)) = REVERSE_ENDIAN_16(i); \
-      }
-#    define UINT32_TO_BYTE_ARRAY(i, b)            \
-      {                                           \
-        *((uint32_t*)(b)) = REVERSE_ENDIAN_32(i); \
-      }
-#    define UINT64_TO_BYTE_ARRAY(i, b)            \
-      {                                           \
-        *((uint64_t*)(b)) = REVERSE_ENDIAN_64(i); \
-      }
+        {                             \
+            *((uint8_t*)(b)) = (i);   \
+        }
+#    define UINT16_TO_BYTE_ARRAY(i, b)                \
+        {                                             \
+            *((uint16_t*)(b)) = REVERSE_ENDIAN_16(i); \
+        }
+#    define UINT32_TO_BYTE_ARRAY(i, b)                \
+        {                                             \
+            *((uint32_t*)(b)) = REVERSE_ENDIAN_32(i); \
+        }
+#    define UINT64_TO_BYTE_ARRAY(i, b)                \
+        {                                             \
+            *((uint64_t*)(b)) = REVERSE_ENDIAN_64(i); \
+        }
 #  endif  // BIG_ENDIAN_TPM
 
 #endif  // AUTO_ALIGN == NO

@@ -87,9 +87,9 @@ BOOL CryptHashStartup(void)
 PHASH_DEF
 CryptGetHashDef(TPM_ALG_ID hashAlg)
 {
-#define GET_DEF(HASH, Hash) \
-  case ALG_##HASH##_VALUE:  \
-    return &Hash##_Def;
+#define GET_DEF(HASH, Hash)  \
+    case ALG_##HASH##_VALUE: \
+        return &Hash##_Def;
     switch(hashAlg)
     {
         FOR_EACH_HASH(GET_DEF)
@@ -219,10 +219,10 @@ void CryptHashExportState(
     cAssert(sizeof(HASH_STATE) <= sizeof(EXPORT_HASH_STATE));
     // the following #define is used to move data from an aligned internal data
     // structure to a byte buffer (external format data.
-#define CopyToOffset(value)                    \
-  memcpy(&outBuf[offsetof(HASH_STATE, value)], \
-         &internalFmt->value,                  \
-         sizeof(internalFmt->value))
+#define CopyToOffset(value)                      \
+    memcpy(&outBuf[offsetof(HASH_STATE, value)], \
+           &internalFmt->value,                  \
+           sizeof(internalFmt->value))
     // Copy the hashAlg
     CopyToOffset(hashAlg);
     CopyToOffset(type);
@@ -256,10 +256,10 @@ void CryptHashImportState(
 {
     BYTE* inBuf = (BYTE*)externalFmt;
 //
-#define CopyFromOffset(value)                 \
-  memcpy(&internalFmt->value,                 \
-         &inBuf[offsetof(HASH_STATE, value)], \
-         sizeof(internalFmt->value))
+#define CopyFromOffset(value)                   \
+    memcpy(&internalFmt->value,                 \
+           &inBuf[offsetof(HASH_STATE, value)], \
+           sizeof(internalFmt->value))
 
     // Copy the hashAlg of the byte-aligned input structure to the structure-aligned
     // internal structure.

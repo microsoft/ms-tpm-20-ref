@@ -1262,7 +1262,7 @@ extern int s_rsaKeyCacheEnabled;
 int        GetCachedRsaKey(
            TPMT_PUBLIC* publicArea, TPMT_SENSITIVE* sensitive, RAND_STATE* rand);
 #    define GET_CACHED_KEY(publicArea, sensitive, rand) \
-      (s_rsaKeyCacheEnabled && GetCachedRsaKey(publicArea, sensitive, rand))
+        (s_rsaKeyCacheEnabled && GetCachedRsaKey(publicArea, sensitive, rand))
 #  else
 #    define GET_CACHED_KEY(key, rand)
 #  endif

@@ -500,12 +500,12 @@ EXTERN ALGORITHM_VECTOR g_toTest;
 // code when it is a parameter-, handle-, or session-related error.
 // This is an implementation choice and the same result can be achieved by using
 // a macro.
-#  define g_rcIndexInitializer                                                  \
-    {                                                                           \
-      TPM_RC_1, TPM_RC_2, TPM_RC_3, TPM_RC_4, TPM_RC_5, TPM_RC_6, TPM_RC_7,     \
-          TPM_RC_8, TPM_RC_9, TPM_RC_A, TPM_RC_B, TPM_RC_C, TPM_RC_D, TPM_RC_E, \
-          TPM_RC_F                                                              \
-    }
+#  define g_rcIndexInitializer                                                      \
+      {                                                                             \
+          TPM_RC_1, TPM_RC_2, TPM_RC_3, TPM_RC_4, TPM_RC_5, TPM_RC_6, TPM_RC_7,     \
+              TPM_RC_8, TPM_RC_9, TPM_RC_A, TPM_RC_B, TPM_RC_C, TPM_RC_D, TPM_RC_E, \
+              TPM_RC_F                                                              \
+      }
 EXTERN const UINT16 g_rcIndex[15] INITIALIZER(g_rcIndexInitializer);
 
 //*** g_exclusiveAuditSession
@@ -1064,13 +1064,13 @@ EXTERN STATE_RESET_DATA gr;
 // The NV_READ_PERSISTENT and NV_WRITE_PERSISTENT macros are used to access members
 // of the PERSISTENT_DATA structure in NV.
 #  define NV_READ_PERSISTENT(to, from) \
-    NvRead(&to, offsetof(PERSISTENT_DATA, from), sizeof(to))
+      NvRead(&to, offsetof(PERSISTENT_DATA, from), sizeof(to))
 
 #  define NV_WRITE_PERSISTENT(to, from) \
-    NvWrite(offsetof(PERSISTENT_DATA, to), sizeof(gp.to), &from)
+      NvWrite(offsetof(PERSISTENT_DATA, to), sizeof(gp.to), &from)
 
 #  define CLEAR_PERSISTENT(item) \
-    NvClearPersistent(offsetof(PERSISTENT_DATA, item), sizeof(gp.item))
+      NvClearPersistent(offsetof(PERSISTENT_DATA, item), sizeof(gp.item))
 
 #  define NV_SYNC_PERSISTENT(item) NV_WRITE_PERSISTENT(item, gp.item)
 
@@ -1130,26 +1130,26 @@ typedef struct COMMAND
 // are all using consistent string values.
 
 #  define STRING_INITIALIZER(value) \
-    {                               \
       {                             \
-        sizeof(value),              \
-        {                           \
-          value                     \
-        }                           \
-      }                             \
-    }
-#  define TPM2B_STRING(name, value)                                              \
-    typedef union name##_                                                        \
-    {                                                                            \
-      struct                                                                     \
-      {                                                                          \
-        UINT16 size;                                                             \
-        BYTE   buffer[sizeof(value)];                                            \
-      } t;                                                                       \
-      TPM2B b;                                                                   \
-    } TPM2B_##name##_;                                                           \
-    EXTERN const TPM2B_##name##_ name##_ INITIALIZER(STRING_INITIALIZER(value)); \
-    EXTERN const TPM2B* name             INITIALIZER(&name##_.b)
+          {                         \
+              sizeof(value),        \
+              {                     \
+                  value             \
+              }                     \
+          }                         \
+      }
+#  define TPM2B_STRING(name, value)                                                \
+      typedef union name##_                                                        \
+      {                                                                            \
+          struct                                                                   \
+          {                                                                        \
+              UINT16 size;                                                         \
+              BYTE   buffer[sizeof(value)];                                        \
+          } t;                                                                     \
+          TPM2B b;                                                                 \
+      } TPM2B_##name##_;                                                           \
+      EXTERN const TPM2B_##name##_ name##_ INITIALIZER(STRING_INITIALIZER(value)); \
+      EXTERN const TPM2B* name             INITIALIZER(&name##_.b)
 
 TPM2B_STRING(PRIMARY_OBJECT_CREATION, "Primary Object Creation");
 TPM2B_STRING(CFB_KEY, "CFB");

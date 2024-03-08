@@ -38,12 +38,12 @@
  */
 
 // This macro is added just so that the code is only excessively long.
-#define EXIT_IF_ERROR_PLUS(x)  \
-  if(TPM_RC_SUCCESS != result) \
-  {                            \
-    result += (x);             \
-    goto Exit;                 \
-  }
+#define EXIT_IF_ERROR_PLUS(x)    \
+    if(TPM_RC_SUCCESS != result) \
+    {                            \
+        result += (x);           \
+        goto Exit;               \
+    }
 #if CC_Startup
 case TPM_CC_Startup:
 {

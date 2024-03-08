@@ -86,9 +86,9 @@
 
 //*** Unmarshaling Macros
 // Checks the validity of the size making sure that there is no wrap around
-#define CHECK_SIZE(context, length)                            \
-  VERIFY((((length) + (context)->offset) >= (context)->offset) \
-         && (((length) + (context)->offset) <= (context)->size))
+#define CHECK_SIZE(context, length)                              \
+    VERIFY((((length) + (context)->offset) >= (context)->offset) \
+           && (((length) + (context)->offset) <= (context)->size))
 #define NEXT_OCTET(context) ((context)->buffer[(context)->offset++])
 #define PEEK_NEXT(context)  ((context)->buffer[(context)->offset])
 

@@ -156,9 +156,9 @@ const BYTE bitsInNibble[16] = {0x00,
                                0x03,
                                0x03,
                                0x04};
-#    define BitsInByte(x)                   \
-      (bitsInNibble[(unsigned char)(x)&0xf] \
-       + bitsInNibble[((unsigned char)(x) >> 4) & 0xf])
+#    define BitsInByte(x)                       \
+        (bitsInNibble[(unsigned char)(x) & 0xf] \
+         + bitsInNibble[((unsigned char)(x) >> 4) & 0xf])
 #  endif
 
 //*** BitsInArry()

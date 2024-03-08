@@ -268,10 +268,10 @@ static BYTE* GetSavedPcrPointer(TPM_ALG_ID alg,      // IN: algorithm for bank
     BYTE* retVal;
     switch(alg)
     {
-#define HASH_CASE(HASH, Hash)           \
-  case TPM_ALG_##HASH:                  \
-    retVal = gc.pcrSave.Hash[pcrIndex]; \
-    break;
+#define HASH_CASE(HASH, Hash)               \
+    case TPM_ALG_##HASH:                    \
+        retVal = gc.pcrSave.Hash[pcrIndex]; \
+        break;
 
         FOR_EACH_HASH(HASH_CASE)
 #undef HASH_CASE
@@ -332,10 +332,10 @@ static BYTE* GetPcrPointer(TPM_ALG_ID alg,       // IN: algorithm for bank
 
     switch(alg)
     {
-#define HASH_CASE(HASH, Hash)          \
-  case TPM_ALG_##HASH:                 \
-    pcr = s_pcrs[pcrNumber].Hash##Pcr; \
-    break;
+#define HASH_CASE(HASH, Hash)              \
+    case TPM_ALG_##HASH:                   \
+        pcr = s_pcrs[pcrNumber].Hash##Pcr; \
+        break;
 
         FOR_EACH_HASH(HASH_CASE)
 #undef HASH_CASE
@@ -884,7 +884,7 @@ PCRAllocate(TPML_PCR_SELECTION* allocate,      // IN: required allocation
                              newAllocate.pcrSelections[i].sizeofSelect);
 
 #else  // if DRTM PCR is not required, indicate that the allocation is OK
-        pcrDrtm  = TRUE;
+        pcrDrtm = TRUE;
 #endif
 
 #if defined(HCRTM_PCR)

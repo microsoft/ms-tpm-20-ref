@@ -48,30 +48,30 @@
 //** For Self-test
 // These macros are used in CryptUtil to invoke the incremental self test.
 #if SELF_TEST
-#  define TEST(alg)                    \
-    do                                 \
-    {                                  \
-      if(TEST_BIT(alg, g_toTest))      \
-        CryptTestAlgorithm(alg, NULL); \
-    } while(0)
+#  define TEST(alg)                          \
+      do                                     \
+      {                                      \
+          if(TEST_BIT(alg, g_toTest))        \
+              CryptTestAlgorithm(alg, NULL); \
+      } while(0)
 
 // Use of TPM_ALG_NULL is reserved for RSAEP/RSADP testing. If someone is wanting
 // to test a hash with that value, don't do it.
-#  define TEST_HASH(alg)                                   \
-    do                                                     \
-    {                                                      \
-      if(TEST_BIT(alg, g_toTest) && (alg != TPM_ALG_NULL)) \
-        CryptTestAlgorithm(alg, NULL);                     \
-    } while(0)
+#  define TEST_HASH(alg)                                       \
+      do                                                       \
+      {                                                        \
+          if(TEST_BIT(alg, g_toTest) && (alg != TPM_ALG_NULL)) \
+              CryptTestAlgorithm(alg, NULL);                   \
+      } while(0)
 #else
 #  define TEST(alg) \
-    do              \
-    {               \
-    } while(0)
+      do            \
+      {             \
+      } while(0)
 #  define TEST_HASH(alg) \
-    do                   \
-    {                    \
-    } while(0)
+      do                 \
+      {                  \
+      } while(0)
 #endif  // SELF_TEST
 
 //** For Failures
@@ -95,16 +95,16 @@
 // executed. This macro accounts for the difference.
 #ifndef NO_LONGJMP
 #  define FAIL_RETURN(returnCode) \
-    do                            \
-    {                             \
-    } while(0)
+      do                          \
+      {                           \
+      } while(0)
 #  define TPM_FAIL_RETURN NORETURN void
 #else
 #  define FAIL_RETURN(returnCode) \
-    do                            \
-    {                             \
-      return (returnCode);        \
-    } while(0)
+      do                          \
+      {                           \
+          return (returnCode);    \
+      } while(0)
 #  define TPM_FAIL_RETURN void
 #endif
 
@@ -113,30 +113,30 @@
 // a call from which there is no return. Otherwise, it returns and the function
 // will exit with the appropriate return code.
 #define REQUIRE(condition, errorCode, returnCode) \
-  do                                              \
-  {                                               \
-    if(!!(condition))                             \
+    do                                            \
     {                                             \
-      FAIL(FATAL_ERROR_##errorCode);              \
-      FAIL_RETURN(returnCode);                    \
-    }                                             \
-  } while(0)
+        if(!!(condition))                         \
+        {                                         \
+            FAIL(FATAL_ERROR_##errorCode);        \
+            FAIL_RETURN(returnCode);              \
+        }                                         \
+    } while(0)
 
 #define PARAMETER_CHECK(condition, returnCode) \
-  REQUIRE((condition), PARAMETER, returnCode)
+    REQUIRE((condition), PARAMETER, returnCode)
 
 #if(defined EMPTY_ASSERT) && (EMPTY_ASSERT != NO)
 #  define pAssert(a) \
-    do               \
-    {                \
-    } while(0)
+      do             \
+      {              \
+      } while(0)
 #else
-#  define pAssert(a)                 \
-    do                               \
-    {                                \
-      if(!(a))                       \
-        FAIL(FATAL_ERROR_PARAMETER); \
-    } while(0)
+#  define pAssert(a)                       \
+      do                                   \
+      {                                    \
+          if(!(a))                         \
+              FAIL(FATAL_ERROR_PARAMETER); \
+      } while(0)
 #endif
 
 //** Derived from Vendor-specific values
@@ -168,11 +168,11 @@
 // getting too long. This is not to save paper but to allow one to see more
 // useful stuff on the screen at any given time.
 #define ERROR_RETURN(returnCode) \
-  do                             \
-  {                              \
-    retVal = (returnCode);       \
-    goto Exit;                   \
-  } while(0)
+    do                           \
+    {                            \
+        retVal = (returnCode);   \
+        goto Exit;               \
+    } while(0)
 
 #ifndef MAX
 #  define MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -181,7 +181,7 @@
 #  define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 #ifndef IsOdd
-#  define IsOdd(a) (((a)&1) != 0)
+#  define IsOdd(a) (((a) & 1) != 0)
 #endif
 
 #ifndef BITS_TO_BYTES
@@ -242,25 +242,25 @@
 #  define CONTEXT_INTEGRITY_HASH_SIZE CONCAT(CONTEXT_HASH_ALGORITHM, _DIGEST_SIZE)
 #endif
 #if ALG_RSA
-#  define RSA_SECURITY_STRENGTH                    \
-    (MAX_RSA_KEY_BITS >= 15360                     \
-         ? 256                                     \
-         : (MAX_RSA_KEY_BITS >= 7680               \
-                ? 192                              \
-                : (MAX_RSA_KEY_BITS >= 3072        \
-                       ? 128                       \
-                       : (MAX_RSA_KEY_BITS >= 2048 \
-                              ? 112                \
-                              : (MAX_RSA_KEY_BITS >= 1024 ? 80 : 0)))))
+#  define RSA_SECURITY_STRENGTH                      \
+      (MAX_RSA_KEY_BITS >= 15360                     \
+           ? 256                                     \
+           : (MAX_RSA_KEY_BITS >= 7680               \
+                  ? 192                              \
+                  : (MAX_RSA_KEY_BITS >= 3072        \
+                         ? 128                       \
+                         : (MAX_RSA_KEY_BITS >= 2048 \
+                                ? 112                \
+                                : (MAX_RSA_KEY_BITS >= 1024 ? 80 : 0)))))
 #else
 #  define RSA_SECURITY_STRENGTH 0
 #endif  // ALG_RSA
 
 #if ALG_ECC
 #  define ECC_SECURITY_STRENGTH \
-    (MAX_ECC_KEY_BITS >= 521    \
-         ? 256                  \
-         : (MAX_ECC_KEY_BITS >= 384 ? 192 : (MAX_ECC_KEY_BITS >= 256 ? 128 : 0)))
+      (MAX_ECC_KEY_BITS >= 521  \
+           ? 256                \
+           : (MAX_ECC_KEY_BITS >= 384 ? 192 : (MAX_ECC_KEY_BITS >= 256 ? 128 : 0)))
 #else
 #  define ECC_SECURITY_STRENGTH 0
 #endif  // ALG_ECC
@@ -272,9 +272,9 @@
 // Unless some algorithm is broken...
 #define MAX_SYM_SECURITY_STRENGTH MAX_SYM_KEY_BITS
 
-#define MAX_SECURITY_STRENGTH_BITS \
-  MAX(MAX_ASYM_SECURITY_STRENGTH,  \
-      MAX(MAX_SYM_SECURITY_STRENGTH, MAX_HASH_SECURITY_STRENGTH))
+#define MAX_SECURITY_STRENGTH_BITS  \
+    MAX(MAX_ASYM_SECURITY_STRENGTH, \
+        MAX(MAX_SYM_SECURITY_STRENGTH, MAX_HASH_SECURITY_STRENGTH))
 
 // This is the size that was used before the 1.38 errata requiring that P1.14.4 be
 // followed
@@ -282,7 +282,7 @@
 
 // As required by P1.14.4
 #define COMPLIANT_PROOF_SIZE \
-  (MAX(CONTEXT_INTEGRITY_HASH_SIZE, (2 * MAX_SYM_KEY_BYTES)))
+    (MAX(CONTEXT_INTEGRITY_HASH_SIZE, (2 * MAX_SYM_KEY_BYTES)))
 
 // As required by P1.14.3.1
 #define COMPLIANT_PRIMARY_SEED_SIZE BITS_TO_BYTES(MAX_SECURITY_STRENGTH_BITS * 2)
@@ -355,9 +355,9 @@
 #  define CLEAR_ATTRIBUTE(a, type, b) (a.b = CLEAR)
 #  define GET_ATTRIBUTE(a, type, b)   (a.b)
 #  define TPMA_ZERO_INITIALIZER() \
-    {                             \
-      0                           \
-    }
+      {                           \
+          0                       \
+      }
 #else
 #  define IS_ATTRIBUTE(a, type, b)    ((a & type##_##b) != 0)
 #  define SET_ATTRIBUTE(a, type, b)   (a |= type##_##b)
@@ -366,12 +366,12 @@
 #  define TPMA_ZERO_INITIALIZER()     (0)
 #endif
 
-#define VERIFY(_X) \
-  do               \
-  {                \
-    if(!(_X))      \
-      goto Error;  \
-  } while(0)
+#define VERIFY(_X)      \
+    do                  \
+    {                   \
+        if(!(_X))       \
+            goto Error; \
+    } while(0)
 
 // These macros determine if the values in this file are referenced or instanced.
 // Global.c defines GLOBAL_C so all the values in this file will be instanced in

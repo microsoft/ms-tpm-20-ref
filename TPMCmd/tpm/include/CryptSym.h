@@ -63,11 +63,11 @@
 #  define IF_IMPLEMENTED_TDES(op)
 #endif
 
-#define FOR_EACH_SYM(op)      \
-  IF_IMPLEMENTED_AES(op)      \
-  IF_IMPLEMENTED_SM4(op)      \
-  IF_IMPLEMENTED_CAMELLIA(op) \
-  IF_IMPLEMENTED_TDES(op)
+#define FOR_EACH_SYM(op)        \
+    IF_IMPLEMENTED_AES(op)      \
+    IF_IMPLEMENTED_SM4(op)      \
+    IF_IMPLEMENTED_CAMELLIA(op) \
+    IF_IMPLEMENTED_TDES(op)
 
 // Macros for creating the key schedule union
 #define KEY_SCHEDULE(SYM, sym) tpmKeySchedule##SYM sym;
@@ -102,15 +102,15 @@ typedef union tpmCryptKeySchedule_t
 // functions that use these macros. Those parameters are set by the macro that
 // set the key schedule to be used for the call.
 
-#define ENCRYPT_CASE(ALG, alg)                                        \
-  case TPM_ALG_##ALG:                                                 \
-    TpmCryptSetEncryptKey##ALG(key, keySizeInBits, &keySchedule.alg); \
-    encrypt = (TpmCryptSetSymKeyCall_t)TpmCryptEncrypt##ALG;          \
-    break;
-#define DECRYPT_CASE(ALG, alg)                                        \
-  case TPM_ALG_##ALG:                                                 \
-    TpmCryptSetDecryptKey##ALG(key, keySizeInBits, &keySchedule.alg); \
-    decrypt = (TpmCryptSetSymKeyCall_t)TpmCryptDecrypt##ALG;          \
-    break;
+#define ENCRYPT_CASE(ALG, alg)                                            \
+    case TPM_ALG_##ALG:                                                   \
+        TpmCryptSetEncryptKey##ALG(key, keySizeInBits, &keySchedule.alg); \
+        encrypt = (TpmCryptSetSymKeyCall_t)TpmCryptEncrypt##ALG;          \
+        break;
+#define DECRYPT_CASE(ALG, alg)                                            \
+    case TPM_ALG_##ALG:                                                   \
+        TpmCryptSetDecryptKey##ALG(key, keySizeInBits, &keySchedule.alg); \
+        decrypt = (TpmCryptSetSymKeyCall_t)TpmCryptDecrypt##ALG;          \
+        break;
 
 #endif  // CRYPT_SYM_H

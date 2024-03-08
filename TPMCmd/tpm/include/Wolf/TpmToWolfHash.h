@@ -109,46 +109,47 @@ typedef const BYTE* PCBYTE;
 
 // Add data to the hash
 #  define HASH_DATA_METHOD_DEF \
-    void(HASH_DATA_METHOD)(PANY_HASH_STATE state, PCBYTE buffer, size_t size)
+      void(HASH_DATA_METHOD)(PANY_HASH_STATE state, PCBYTE buffer, size_t size)
 #  define HASH_DATA(hashState, dInSize, dIn) \
-    ((hashState)->def->method.data)(&(hashState)->state, dIn, dInSize)
+      ((hashState)->def->method.data)(&(hashState)->state, dIn, dInSize)
 
 // Finalize the hash and get the digest
 #  define HASH_END_METHOD_DEF \
-    void(HASH_END_METHOD)(PANY_HASH_STATE state, BYTE * buffer)
+      void(HASH_END_METHOD)(PANY_HASH_STATE state, BYTE * buffer)
 #  define HASH_END(hashState, buffer) \
-    ((hashState)->def->method.end)(&(hashState)->state, buffer)
+      ((hashState)->def->method.end)(&(hashState)->state, buffer)
 
 // Copy the hash context
 // Note: For import, export, and copy, memcpy() is used since there is no
 // reformatting necessary between the internal and external forms.
 #  define HASH_STATE_COPY_METHOD_DEF \
-    void(HASH_STATE_COPY_METHOD)(    \
-        PANY_HASH_STATE to, PCANY_HASH_STATE from, size_t size)
-#  define HASH_STATE_COPY(hashStateOut, hashStateIn)          \
-    ((hashStateIn)->def->method.copy)(&(hashStateOut)->state, \
-                                      &(hashStateIn)->state,  \
-                                      (hashStateIn)->def->contextSize)
+      void(HASH_STATE_COPY_METHOD)(  \
+          PANY_HASH_STATE to, PCANY_HASH_STATE from, size_t size)
+#  define HASH_STATE_COPY(hashStateOut, hashStateIn)            \
+      ((hashStateIn)->def->method.copy)(&(hashStateOut)->state, \
+                                        &(hashStateIn)->state,  \
+                                        (hashStateIn)->def->contextSize)
 
 // Copy (with reformatting when necessary) an internal hash structure to an
 // external blob
 #  define HASH_STATE_EXPORT_METHOD_DEF \
-    void(HASH_STATE_EXPORT_METHOD)(BYTE * to, PCANY_HASH_STATE from, size_t size)
-#  define HASH_STATE_EXPORT(to, hashStateFrom)         \
-    ((hashStateFrom)->def->method.copyOut)(            \
-        &(((BYTE*)(to))[offsetof(HASH_STATE, state)]), \
-        &(hashStateFrom)->state,                       \
-        (hashStateFrom)->def->contextSize)
+      void(HASH_STATE_EXPORT_METHOD)(BYTE * to, PCANY_HASH_STATE from, size_t size)
+#  define HASH_STATE_EXPORT(to, hashStateFrom)           \
+      ((hashStateFrom)->def->method.copyOut)(            \
+          &(((BYTE*)(to))[offsetof(HASH_STATE, state)]), \
+          &(hashStateFrom)->state,                       \
+          (hashStateFrom)->def->contextSize)
 
 // Copy from an external blob to an internal formate (with reformatting when
 // necessary
 #  define HASH_STATE_IMPORT_METHOD_DEF \
-    void(HASH_STATE_IMPORT_METHOD)(PANY_HASH_STATE to, const BYTE* from, size_t size)
-#  define HASH_STATE_IMPORT(hashStateTo, from)                 \
-    ((hashStateTo)->def->method.copyIn)(                       \
-        &(hashStateTo)->state,                                 \
-        &(((const BYTE*)(from))[offsetof(HASH_STATE, state)]), \
-        (hashStateTo)->def->contextSize)
+      void(HASH_STATE_IMPORT_METHOD)(  \
+          PANY_HASH_STATE to, const BYTE* from, size_t size)
+#  define HASH_STATE_IMPORT(hashStateTo, from)                   \
+      ((hashStateTo)->def->method.copyIn)(                       \
+          &(hashStateTo)->state,                                 \
+          &(((const BYTE*)(from))[offsetof(HASH_STATE, state)]), \
+          (hashStateTo)->def->contextSize)
 
 // Function aliases. The code in CryptHash.c uses the internal designation for the
 // functions. These need to be translated to the function names of the library.

@@ -339,11 +339,11 @@ EntityGetAuthPolicy(TPMI_DH_ENTITY handle,     // IN: handle of entity
                     *authPolicy = gp.lockoutPolicy;
                     hashAlg     = gp.lockoutAlg;
                     break;
-#define ACT_GET_POLICY(N)                \
-  case TPM_RH_ACT_##N:                   \
-    *authPolicy = go.ACT_##N.authPolicy; \
-    hashAlg     = go.ACT_##N.hashAlg;    \
-    break;
+#define ACT_GET_POLICY(N)                    \
+    case TPM_RH_ACT_##N:                     \
+        *authPolicy = go.ACT_##N.authPolicy; \
+        hashAlg     = go.ACT_##N.hashAlg;    \
+        break;
                     // Get the policy for each implemented ACT
                     FOR_EACH_ACT(ACT_GET_POLICY)
                 default:

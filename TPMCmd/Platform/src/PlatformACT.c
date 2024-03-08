@@ -129,8 +129,8 @@ static P_ACT_DATA ActGetDataPointer(uint32_t act)
 {
 
 #define RETURN_ACT_POINTER(N) \
-  if(0x##N == act)            \
-    return &ACT_##N;
+    if(0x##N == act)          \
+        return &ACT_##N;
 
     FOR_EACH_ACT(RETURN_ACT_POINTER)
 

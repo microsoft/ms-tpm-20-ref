@@ -84,16 +84,16 @@ struct bignum_st
 // Allocate a local BIGNUM value. For the allocation, a bigNum structure is created
 // as is a local BIGNUM. The bigNum is initialized and then the BIGNUM is
 // set to reference the local value.
-#define BIG_VAR(name, bits)      \
-  BN_VAR(name##Bn, (bits));      \
-  BIGNUM  _##name;               \
-  BIGNUM* name = BigInitialized( \
-      &_##name, BnInit(name##Bn, BYTES_TO_CRYPT_WORDS(sizeof(_##name##Bn.d))))
+#define BIG_VAR(name, bits)        \
+    BN_VAR(name##Bn, (bits));      \
+    BIGNUM  _##name;               \
+    BIGNUM* name = BigInitialized( \
+        &_##name, BnInit(name##Bn, BYTES_TO_CRYPT_WORDS(sizeof(_##name##Bn.d))))
 
 // Allocate a BIGNUM and initialize with the values in a bigNum initializer
 #define BIG_INITIALIZED(name, initializer) \
-  BIGNUM  _##name;                         \
-  BIGNUM* name = BigInitialized(&_##name, initializer)
+    BIGNUM  _##name;                       \
+    BIGNUM* name = BigInitialized(&_##name, initializer)
 
 typedef struct
 {
@@ -116,8 +116,8 @@ typedef OSSL_CURVE_DATA* bigCurve;
 // Start and end a context that spans multiple ECC functions. This is used so that
 // the group for the curve can persist across multiple frames.
 #define CURVE_INITIALIZED(name, initializer) \
-  OSSL_CURVE_DATA _##name;                   \
-  bigCurve        name = BnCurveInitialize(&_##name, initializer)
+    OSSL_CURVE_DATA _##name;                 \
+    bigCurve        name = BnCurveInitialize(&_##name, initializer)
 #define CURVE_FREE(name) BnCurveFree(name)
 
 // Start and end a local stack frame within the context of the curve frame

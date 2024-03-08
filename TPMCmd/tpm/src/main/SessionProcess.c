@@ -432,11 +432,11 @@ static BOOL IsAuthPolicyAvailable(TPM_HANDLE    handle,        // IN: handle of 
                     if(gc.platformPolicy.t.size != 0)
                         result = TRUE;
                     break;
-#define ACT_GET_POLICY(N)                 \
-  case TPM_RH_ACT_##N:                    \
-    if(go.ACT_##N.authPolicy.t.size != 0) \
-      result = TRUE;                      \
-    break;
+#define ACT_GET_POLICY(N)                     \
+    case TPM_RH_ACT_##N:                      \
+        if(go.ACT_##N.authPolicy.t.size != 0) \
+            result = TRUE;                    \
+        break;
 
                     FOR_EACH_ACT(ACT_GET_POLICY)
 
@@ -527,10 +527,10 @@ static TPM2B_DIGEST* GetCpHashPointer(COMMAND* command, TPMI_ALG_HASH hashAlg)
 //
 // Define the macro that will expand for each implemented algorithm in the switch
 // statement below.
-#define GET_CP_HASH_POINTER(HASH, Hash)             \
-  case ALG_##HASH##_VALUE:                          \
-    retVal = (TPM2B_DIGEST*)&command->Hash##CpHash; \
-    break;
+#define GET_CP_HASH_POINTER(HASH, Hash)                 \
+    case ALG_##HASH##_VALUE:                            \
+        retVal = (TPM2B_DIGEST*)&command->Hash##CpHash; \
+        break;
 
     switch(hashAlg)
     {
@@ -554,10 +554,10 @@ static TPM2B_DIGEST* GetRpHashPointer(COMMAND* command, TPMI_ALG_HASH hashAlg)
 //
 // Define the macro that will expand for each implemented algorithm in the switch
 // statement below.
-#define GET_RP_HASH_POINTER(HASH, Hash)             \
-  case ALG_##HASH##_VALUE:                          \
-    retVal = (TPM2B_DIGEST*)&command->Hash##RpHash; \
-    break;
+#define GET_RP_HASH_POINTER(HASH, Hash)                 \
+    case ALG_##HASH##_VALUE:                            \
+        retVal = (TPM2B_DIGEST*)&command->Hash##RpHash; \
+        break;
 
     switch(hashAlg)
     {
