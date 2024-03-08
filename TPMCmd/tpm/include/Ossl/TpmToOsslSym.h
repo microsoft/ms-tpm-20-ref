@@ -94,7 +94,7 @@ void SM4_decrypt(const uint8_t* in, uint8_t* out, const SM4_KEY* ks);
 // Since open SSL uses the order in encryptoCall_t above, need to swizzle the
 // values to the order required by the library.
 #define SWIZZLE(keySchedule, in, out) \
-  (const BYTE*)(in), (BYTE*)(out), (void*)(keySchedule)
+    (const BYTE*)(in), (BYTE*)(out), (void*)(keySchedule)
 
 // Define the order of parameters to the library functions that do block encryption
 // and decryption.
@@ -109,9 +109,9 @@ typedef void (*TpmCryptSetSymKeyCall_t)(const BYTE* in, BYTE* out, void* keySche
 //
 // AES:
 #define TpmCryptSetEncryptKeyAES(key, keySizeInBits, schedule) \
-  AES_set_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleAES*)(schedule))
+    AES_set_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleAES*)(schedule))
 #define TpmCryptSetDecryptKeyAES(key, keySizeInBits, schedule) \
-  AES_set_decrypt_key((key), (keySizeInBits), (tpmKeyScheduleAES*)(schedule))
+    AES_set_decrypt_key((key), (keySizeInBits), (tpmKeyScheduleAES*)(schedule))
 
 // Macros to alias encryption calls to specific algorithms. This should be used
 // sparingly. Currently, only used by CryptSym.c and CryptRand.c
@@ -131,9 +131,9 @@ typedef void (*TpmCryptSetSymKeyCall_t)(const BYTE* in, BYTE* out, void* keySche
 #endif
 
 #define TpmCryptSetEncryptKeyTDES(key, keySizeInBits, schedule) \
-  TDES_set_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES*)(schedule))
+    TDES_set_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES*)(schedule))
 #define TpmCryptSetDecryptKeyTDES(key, keySizeInBits, schedule) \
-  TDES_set_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES*)(schedule))
+    TDES_set_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES*)(schedule))
 
 // Macros to alias encryption calls to specific algorithms. This should be used
 // sparingly. Currently, only used by CryptRand.c
@@ -146,9 +146,9 @@ typedef void (*TpmCryptSetSymKeyCall_t)(const BYTE* in, BYTE* out, void* keySche
 //***************************************************************
 // Macros to set up the encryption/decryption key schedules
 #define TpmCryptSetEncryptKeySM4(key, keySizeInBits, schedule) \
-  SM4_set_key((key), (tpmKeyScheduleSM4*)(schedule))
+    SM4_set_key((key), (tpmKeyScheduleSM4*)(schedule))
 #define TpmCryptSetDecryptKeySM4(key, keySizeInBits, schedule) \
-  SM4_set_key((key), (tpmKeyScheduleSM4*)(schedule))
+    SM4_set_key((key), (tpmKeyScheduleSM4*)(schedule))
 
 // Macros to alias encryption calls to specific algorithms. This should be used
 // sparingly.
@@ -161,9 +161,9 @@ typedef void (*TpmCryptSetSymKeyCall_t)(const BYTE* in, BYTE* out, void* keySche
 //***************************************************************
 // Macros to set up the encryption/decryption key schedules
 #define TpmCryptSetEncryptKeyCAMELLIA(key, keySizeInBits, schedule) \
-  Camellia_set_key((key), (keySizeInBits), (tpmKeyScheduleCAMELLIA*)(schedule))
+    Camellia_set_key((key), (keySizeInBits), (tpmKeyScheduleCAMELLIA*)(schedule))
 #define TpmCryptSetDecryptKeyCAMELLIA(key, keySizeInBits, schedule) \
-  Camellia_set_key((key), (keySizeInBits), (tpmKeyScheduleCAMELLIA*)(schedule))
+    Camellia_set_key((key), (keySizeInBits), (tpmKeyScheduleCAMELLIA*)(schedule))
 
 // Macros to alias encryption calls to specific algorithms. This should be used
 // sparingly.

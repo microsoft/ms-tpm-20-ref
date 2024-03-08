@@ -127,15 +127,15 @@ typedef struct SMAC_STATE
 #  define IF_IMPLEMENTED_SHA3_512(op)
 #endif
 
-#define FOR_EACH_HASH(op)     \
-  IF_IMPLEMENTED_SHA1(op)     \
-  IF_IMPLEMENTED_SHA256(op)   \
-  IF_IMPLEMENTED_SHA384(op)   \
-  IF_IMPLEMENTED_SHA512(op)   \
-  IF_IMPLEMENTED_SM3_256(op)  \
-  IF_IMPLEMENTED_SHA3_256(op) \
-  IF_IMPLEMENTED_SHA3_384(op) \
-  IF_IMPLEMENTED_SHA3_512(op)
+#define FOR_EACH_HASH(op)       \
+    IF_IMPLEMENTED_SHA1(op)     \
+    IF_IMPLEMENTED_SHA256(op)   \
+    IF_IMPLEMENTED_SHA384(op)   \
+    IF_IMPLEMENTED_SHA512(op)   \
+    IF_IMPLEMENTED_SM3_256(op)  \
+    IF_IMPLEMENTED_SHA3_256(op) \
+    IF_IMPLEMENTED_SHA3_384(op) \
+    IF_IMPLEMENTED_SHA3_512(op)
 
 #define HASH_TYPE(HASH, Hash) tpmHashState##HASH##_t Hash;
 typedef union
@@ -253,20 +253,21 @@ typedef const struct HASH_DEF
 // Macro to fill in the HASH_DEF for an algorithm. For SHA1, the instance would be:
 //  HASH_DEF_TEMPLATE(Sha1, SHA1)
 // This handles the difference in capitalization for the various pieces.
-#define HASH_DEF_TEMPLATE(HASH, Hash)                                               \
-  HASH_DEF Hash##_Def = {{                                                          \
-                             (HASH_START_METHOD*)&tpmHashStart_##HASH,              \
-                             (HASH_DATA_METHOD*)&tpmHashData_##HASH,                \
-                             (HASH_END_METHOD*)&tpmHashEnd_##HASH,                  \
-                             (HASH_STATE_COPY_METHOD*)&tpmHashStateCopy_##HASH,     \
-                             (HASH_STATE_EXPORT_METHOD*)&tpmHashStateExport_##HASH, \
-                             (HASH_STATE_IMPORT_METHOD*)&tpmHashStateImport_##HASH, \
-                         },                                                         \
-                         HASH##_BLOCK_SIZE,  /*block size */                        \
-                         HASH##_DIGEST_SIZE, /*data size */                         \
-                         sizeof(tpmHashState##HASH##_t),                            \
-                         TPM_ALG_##HASH,                                            \
-                         OID_##HASH PKCS1_OID(HASH) ECDSA_OID(HASH)};
+#define HASH_DEF_TEMPLATE(HASH, Hash)                               \
+    HASH_DEF Hash##_Def =                                           \
+        {{                                                          \
+             (HASH_START_METHOD*)&tpmHashStart_##HASH,              \
+             (HASH_DATA_METHOD*)&tpmHashData_##HASH,                \
+             (HASH_END_METHOD*)&tpmHashEnd_##HASH,                  \
+             (HASH_STATE_COPY_METHOD*)&tpmHashStateCopy_##HASH,     \
+             (HASH_STATE_EXPORT_METHOD*)&tpmHashStateExport_##HASH, \
+             (HASH_STATE_IMPORT_METHOD*)&tpmHashStateImport_##HASH, \
+         },                                                         \
+         HASH##_BLOCK_SIZE,  /*block size */                        \
+         HASH##_DIGEST_SIZE, /*data size */                         \
+         sizeof(tpmHashState##HASH##_t),                            \
+         TPM_ALG_##HASH,                                            \
+         OID_##HASH PKCS1_OID(HASH) ECDSA_OID(HASH)};
 
 // These definitions are for the types that can be in a hash state structure.
 // These types are used in the cryptographic utilities. This is a define rather than

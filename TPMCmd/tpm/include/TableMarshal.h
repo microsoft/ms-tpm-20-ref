@@ -206,7 +206,7 @@ typedef struct listModifier
 //
 // The entry size/number is 6 bits (13:8).
 #define GET_ELEMENT_NUMBER(val) (((val) >> 8) & 0x3F)
-#define SET_ELEMENT_NUMBER(val) (((val)&0x3F) << 8)
+#define SET_ELEMENT_NUMBER(val) (((val) & 0x3F) << 8)
 #define GET_ELEMENT_SIZE(val)   GET_ELEMENT_NUMBER(val)
 #define SET_ELEMENT_SIZE(val)   SET_ELEMENT_NUMBER(val)
 // This determines if the null flag is propagated to this type. If generate, the
@@ -227,7 +227,7 @@ typedef struct listModifier
 // 32-bits because it is implemented as part of the 'values' array in structures
 // that allow bit fields.
 #define IS_BIT_SET32(bit, bits) \
-  ((((UINT32*)bits)[bit >> 5] & (1 << (bit & 0x1F))) != 0)
+    ((((UINT32*)bits)[bit >> 5] & (1 << (bit & 0x1F))) != 0)
 
 // For a COMPOSITE_MTYPE, the qualifiers byte has an element size and count.
 #define SET_ELEMENT_COUNT(count) ((count & 0x1F) << 3)

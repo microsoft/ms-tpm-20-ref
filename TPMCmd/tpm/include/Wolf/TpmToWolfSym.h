@@ -74,29 +74,29 @@ typedef void (*TpmCryptSetSymKeyCall_t)(void* keySchedule, BYTE* out, const BYTE
 // Since wolfcrypt uses the order in encryptoCall_t above, need to swizzle the
 // values to the order required by the library.
 #define SWIZZLE(keySchedule, in, out) \
-  (void*)(keySchedule), (BYTE*)(out), (const BYTE*)(in)
+    (void*)(keySchedule), (BYTE*)(out), (const BYTE*)(in)
 
 // Macros to set up the encryption/decryption key schedules
 //
 // AES:
 #define TpmCryptSetEncryptKeyAES(key, keySizeInBits, schedule) \
-  wc_AesSetKeyDirect((tpmKeyScheduleAES*)(schedule),           \
-                     key,                                      \
-                     BITS_TO_BYTES(keySizeInBits),             \
-                     0,                                        \
-                     AES_ENCRYPTION)
+    wc_AesSetKeyDirect((tpmKeyScheduleAES*)(schedule),         \
+                       key,                                    \
+                       BITS_TO_BYTES(keySizeInBits),           \
+                       0,                                      \
+                       AES_ENCRYPTION)
 #define TpmCryptSetDecryptKeyAES(key, keySizeInBits, schedule) \
-  wc_AesSetKeyDirect((tpmKeyScheduleAES*)(schedule),           \
-                     key,                                      \
-                     BITS_TO_BYTES(keySizeInBits),             \
-                     0,                                        \
-                     AES_DECRYPTION)
+    wc_AesSetKeyDirect((tpmKeyScheduleAES*)(schedule),         \
+                       key,                                    \
+                       BITS_TO_BYTES(keySizeInBits),           \
+                       0,                                      \
+                       AES_DECRYPTION)
 
 // TDES:
 #define TpmCryptSetEncryptKeyTDES(key, keySizeInBits, schedule) \
-  TDES_setup_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES*)(schedule))
+    TDES_setup_encrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES*)(schedule))
 #define TpmCryptSetDecryptKeyTDES(key, keySizeInBits, schedule) \
-  TDES_setup_decrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES*)(schedule))
+    TDES_setup_decrypt_key((key), (keySizeInBits), (tpmKeyScheduleTDES*)(schedule))
 
 // Macros to alias encryption calls to specific algorithms. This should be used
 // sparingly. Currently, only used by CryptRand.c

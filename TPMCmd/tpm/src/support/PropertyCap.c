@@ -228,13 +228,13 @@ static BOOL TPMPropertyIsDefined(TPM_PT  property,  // IN: property
         case TPM_PT_MAX_OBJECT_CONTEXT:
 // Header has 'sequence', 'handle' and 'hierarchy'
 #define SIZE_OF_CONTEXT_HEADER \
-  sizeof(UINT64) + sizeof(TPMI_DH_CONTEXT) + sizeof(TPMI_RH_HIERARCHY)
+    sizeof(UINT64) + sizeof(TPMI_DH_CONTEXT) + sizeof(TPMI_RH_HIERARCHY)
 #define SIZE_OF_CONTEXT_INTEGRITY (sizeof(UINT16) + CONTEXT_INTEGRITY_HASH_SIZE)
 #define SIZE_OF_FINGERPRINT       sizeof(UINT64)
 #define SIZE_OF_CONTEXT_BLOB_OVERHEAD \
-  (sizeof(UINT16) + SIZE_OF_CONTEXT_INTEGRITY + SIZE_OF_FINGERPRINT)
+    (sizeof(UINT16) + SIZE_OF_CONTEXT_INTEGRITY + SIZE_OF_FINGERPRINT)
 #define SIZE_OF_CONTEXT_OVERHEAD \
-  (SIZE_OF_CONTEXT_HEADER + SIZE_OF_CONTEXT_BLOB_OVERHEAD)
+    (SIZE_OF_CONTEXT_HEADER + SIZE_OF_CONTEXT_BLOB_OVERHEAD)
 #if 0
             // maximum size of a TPMS_CONTEXT that will be returned by
             // TPM2_ContextSave for object context

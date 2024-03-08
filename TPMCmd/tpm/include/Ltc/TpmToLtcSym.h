@@ -69,21 +69,21 @@ typedef void (*TpmCryptSetSymKeyCall_t)(const void* in, void* out, void* keySche
 
 // Macro to put the parameters in the order required by the library
 #define SWIZZLE(keySchedule, in, out) \
-  (const void*)(in), (void*)(out), (void*)(keySchedule)
+    (const void*)(in), (void*)(out), (void*)(keySchedule)
 
 // Macros to set up the encryption/decryption key schedules
 //
 // AES:
 #define TpmCryptSetEncryptKeyAES(key, keySizeInBits, schedule) \
-  aes_setup((key), BITS_TO_BYTES(keySizeInBits), 0, (symmetric_key*)(schedule))
+    aes_setup((key), BITS_TO_BYTES(keySizeInBits), 0, (symmetric_key*)(schedule))
 #define TpmCryptSetDecryptKeyAES(key, keySizeInBits, schedule) \
-  aes_setup((key), BITS_TO_BYTES(keySizeInBits), 0, (symmetric_key*)(schedule))
+    aes_setup((key), BITS_TO_BYTES(keySizeInBits), 0, (symmetric_key*)(schedule))
 
 // TDES:
 #define TpmCryptSetEncryptKeyTDES(key, keySizeInBits, schedule) \
-  TDES_setup((key), (keySizeInBits), (symmetric_key*)(schedule))
+    TDES_setup((key), (keySizeInBits), (symmetric_key*)(schedule))
 #define TpmCryptSetDecryptKeyTDES(key, keySizeInBits, schedule) \
-  TDES_setup((key), (keySizeInBits), (symmetric_key*)(schedule))
+    TDES_setup((key), (keySizeInBits), (symmetric_key*)(schedule))
 
 // Macros to alias encrypt and decrypt function calls to library-specific values
 // sparingly. These should be used sparingly. Currently, they are only used by

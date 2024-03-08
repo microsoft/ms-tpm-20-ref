@@ -53,7 +53,7 @@ typedef struct
 extern struct Exernal_Structure_t MarshalData;
 
 #  define IS_SUCCESS(UNMARSHAL_FUNCTION) \
-    (TPM_RC_SUCCESS == (result = (UNMARSHAL_FUNCTION)))
+      (TPM_RC_SUCCESS == (result = (UNMARSHAL_FUNCTION)))
 
 marshalIndex_t IntegerDispatch[] = {UINT8_MARSHAL_REF,
                                     UINT16_MARSHAL_REF,
@@ -66,7 +66,7 @@ marshalIndex_t IntegerDispatch[] = {UINT8_MARSHAL_REF,
 
 #  if 1
 #    define GetDescriptor(reference) \
-      ((MarshalHeader_mst*)(((BYTE*)(&MarshalData)) + (reference & NULL_MASK)))
+        ((MarshalHeader_mst*)(((BYTE*)(&MarshalData)) + (reference & NULL_MASK)))
 #  else
 static const MarshalHeader_mst* GetDescriptor(marshalIndex_t index)
 {
@@ -77,7 +77,7 @@ static const MarshalHeader_mst* GetDescriptor(marshalIndex_t index)
 
 #  define GetUnionDescriptor(_index_) ((UnionMarshal_mst*)GetDescriptor(_index_))
 #  define GetArrayDescriptor(_index_) \
-    ((ArrayMarshal_mst*))(ArrayLookupTable[_index_ & NULL_MASK])
+      ((ArrayMarshal_mst*))(ArrayLookupTable[_index_ & NULL_MASK])
 
 //*** GetUnmarshaledInteger()
 // Gets the unmarshaled value and normalizes it to a UIN32 for other
@@ -734,8 +734,8 @@ UINT16 Marshal(UINT16  typeIndex,  // IN: the thing to marshal
 #    define MM32 0
 #    define MM64 0
 #  else
-// These flip the constant index values so that they count in reverse order when doing
-// little-endian stuff
+            // These flip the constant index values so that they count in reverse order when doing
+            // little-endian stuff
 #    define MM16 1
 #    define MM32 3
 #    define MM64 7

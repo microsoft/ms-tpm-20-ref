@@ -49,16 +49,16 @@ typedef const TPM2B* PC2B;
 
 // This macro helps avoid having to type in the structure in order to create
 // a new TPM2B type that is used in a function.
-#define TPM2B_TYPE(name, bytes) \
-  typedef union                 \
-  {                             \
-    struct                      \
-    {                           \
-      UINT16 size;              \
-      BYTE   buffer[(bytes)];   \
-    } t;                        \
-    TPM2B b;                    \
-  } TPM2B_##name
+#define TPM2B_TYPE(name, bytes)     \
+    typedef union                   \
+    {                               \
+        struct                      \
+        {                           \
+            UINT16 size;            \
+            BYTE   buffer[(bytes)]; \
+        } t;                        \
+        TPM2B b;                    \
+    } TPM2B_##name
 
 // This macro defines a TPM2B with a constant character value. This macro
 // sets the size of the string to the size minus the terminating zero byte.

@@ -62,9 +62,9 @@ typedef int SOCKET;
 #include "Platform_fp.h"
 #include "Simulator_fp.h"
 
-#define PURPOSE                    \
-  "TPM 2.0 Reference Simulator.\n" \
-  "Copyright (c) Microsoft Corporation. All rights reserved."
+#define PURPOSE                      \
+    "TPM 2.0 Reference Simulator.\n" \
+    "Copyright (c) Microsoft Corporation. All rights reserved."
 
 #define DEFAULT_TPM_PORT 2321
 

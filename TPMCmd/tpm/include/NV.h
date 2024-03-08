@@ -47,10 +47,10 @@
 #else
 // If TPM_NT_ORDINARY is not defined, then need to synthesize it from the
 // attributes
-#  define GetNv_TPM_NV(attributes)                    \
-    (IS_ATTRIBUTE(attributes, TPMA_NV, COUNTER)       \
-     + (IS_ATTRIBUTE(attributes, TPMA_NV, BITS) << 1) \
-     + (IS_ATTRIBUTE(attributes, TPMA_NV, EXTEND) << 2))
+#  define GetNv_TPM_NV(attributes)                      \
+      (IS_ATTRIBUTE(attributes, TPMA_NV, COUNTER)       \
+       + (IS_ATTRIBUTE(attributes, TPMA_NV, BITS) << 1) \
+       + (IS_ATTRIBUTE(attributes, TPMA_NV, EXTEND) << 2))
 #  define TPM_NT_ORDINARY (0)
 #  define TPM_NT_COUNTER  (1)
 #  define TPM_NT_BITS     (2)
@@ -121,21 +121,21 @@ typedef UINT32 NV_LIST_TERMINATOR[3];
 
 // Macro to check that an orderly RAM address is with range.
 #define ORDERLY_RAM_ADDRESS_OK(start, offset) \
-  ((start >= RAM_ORDERLY_START) && ((start + offset - 1) < RAM_ORDERLY_END))
+    ((start >= RAM_ORDERLY_START) && ((start + offset - 1) < RAM_ORDERLY_END))
 
-#define RETURN_IF_NV_IS_NOT_AVAILABLE \
-  {                                   \
-    if(g_NvStatus != TPM_RC_SUCCESS)  \
-      return g_NvStatus;              \
-  }
+#define RETURN_IF_NV_IS_NOT_AVAILABLE    \
+    {                                    \
+        if(g_NvStatus != TPM_RC_SUCCESS) \
+            return g_NvStatus;           \
+    }
 
 // Routinely have to clear the orderly flag and fail if the
 // NV is not available so that it can be cleared.
-#define RETURN_IF_ORDERLY                  \
-  {                                        \
-    if(NvClearOrderly() != TPM_RC_SUCCESS) \
-      return g_NvStatus;                   \
-  }
+#define RETURN_IF_ORDERLY                      \
+    {                                          \
+        if(NvClearOrderly() != TPM_RC_SUCCESS) \
+            return g_NvStatus;                 \
+    }
 
 #define NV_IS_AVAILABLE (g_NvStatus == TPM_RC_SUCCESS)
 

@@ -1,4 +1,5 @@
 ---
+# Last formatted with clang-format version 17.0.3
 Language:        Cpp
 BasedOnStyle:  Microsoft
 AccessModifierOffset: -4

@@ -82,9 +82,9 @@ BOOL ActStartup(STARTUP_TYPE type)
     if(type != SU_RESUME)
     {
         go.signaledACT = 0;
-#define CLEAR_ACT_POLICY(N)                    \
-  go.ACT_##N.hashAlg           = TPM_ALG_NULL; \
-  go.ACT_##N.authPolicy.b.size = 0;
+#define CLEAR_ACT_POLICY(N)                      \
+    go.ACT_##N.hashAlg           = TPM_ALG_NULL; \
+    go.ACT_##N.authPolicy.b.size = 0;
         FOR_EACH_ACT(CLEAR_ACT_POLICY)
     }
     else

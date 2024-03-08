@@ -60,10 +60,10 @@ _NORMAL_WARNING_LEVEL_
 // own stack).
 extern mpa_scratch_mem external_mem_pool;
 
-#define MPA_ENTER(vars, bits)                                     \
-  mpa_word_t      POOL_[mpa_scratch_mem_size_in_U32(vars, bits)]; \
-  mpa_scratch_mem pool_save = external_mem_pool;                  \
-  mpa_scratch_mem POOL      = LtcPoolInit(POOL_, vars, bits)
+#define MPA_ENTER(vars, bits)                                       \
+    mpa_word_t      POOL_[mpa_scratch_mem_size_in_U32(vars, bits)]; \
+    mpa_scratch_mem pool_save = external_mem_pool;                  \
+    mpa_scratch_mem POOL      = LtcPoolInit(POOL_, vars, bits)
 
 #define MPA_LEAVE() init_mpa_tomcrypt(pool_save)
 
@@ -77,7 +77,7 @@ typedef bnCurve_t*     bigCurve;
 #include "TpmToLtcSupport_fp.h"
 
 #define CURVE_INITIALIZED(name, initializer) \
-  bnCurve_t* name = (ECC_CURVE_DATA*)GetCurveData(initializer)
+    bnCurve_t* name = (ECC_CURVE_DATA*)GetCurveData(initializer)
 
 #define CURVE_FREE(E)
 

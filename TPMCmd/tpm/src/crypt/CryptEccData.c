@@ -77,18 +77,18 @@
 
 #  if USE_BN_ECC_DATA
 #    define BN_MIN_ALLOC(bytes) \
-      (BYTES_TO_CRYPT_WORDS(bytes) == 0) ? 1 : BYTES_TO_CRYPT_WORDS(bytes)
-#    define ECC_CONST(NAME, bytes, initializer)               \
-      const struct                                            \
-      {                                                       \
-        crypt_uword_t allocate, size, d[BN_MIN_ALLOC(bytes)]; \
-      } NAME = {BN_MIN_ALLOC(bytes), BYTES_TO_CRYPT_WORDS(bytes), {initializer}}
+        (BYTES_TO_CRYPT_WORDS(bytes) == 0) ? 1 : BYTES_TO_CRYPT_WORDS(bytes)
+#    define ECC_CONST(NAME, bytes, initializer)                   \
+        const struct                                              \
+        {                                                         \
+            crypt_uword_t allocate, size, d[BN_MIN_ALLOC(bytes)]; \
+        } NAME = {BN_MIN_ALLOC(bytes), BYTES_TO_CRYPT_WORDS(bytes), {initializer}}
 
 ECC_CONST(ECC_ZERO, 0, 0);
 
 #  else
 #    define ECC_CONST(NAME, bytes, initializer) \
-      const TPM2B_##bytes##_BYTE_VALUE NAME = {bytes, {initializer}}
+        const TPM2B_##bytes##_BYTE_VALUE NAME = {bytes, {initializer}}
 
 // Have to special case ECC_ZERO
 TPM2B_BYTE_VALUE(1);
@@ -507,12 +507,12 @@ const ECC_CURVE_DATA BN_P256 = {(bigNum)&BN_P256_p,
                                  (bigNum)&BN_P256_gZ}};
 
 #    else
-const ECC_CURVE_DATA BN_P256   = {&BN_P256_p.b,
-                                  &BN_P256_n.b,
-                                  &BN_P256_h.b,
-                                  &BN_P256_a.b,
-                                  &BN_P256_b.b,
-                                  {&BN_P256_gX.b, &BN_P256_gY.b, &BN_P256_gZ.b}};
+const ECC_CURVE_DATA BN_P256 = {&BN_P256_p.b,
+                                &BN_P256_n.b,
+                                &BN_P256_h.b,
+                                &BN_P256_a.b,
+                                &BN_P256_b.b,
+                                {&BN_P256_gX.b, &BN_P256_gY.b, &BN_P256_gZ.b}};
 
 #    endif  // USE_BN_ECC_DATA
 
@@ -572,12 +572,12 @@ const ECC_CURVE_DATA BN_P638 = {(bigNum)&BN_P638_p,
                                  (bigNum)&BN_P638_gZ}};
 
 #    else
-const ECC_CURVE_DATA BN_P638   = {&BN_P638_p.b,
-                                  &BN_P638_n.b,
-                                  &BN_P638_h.b,
-                                  &BN_P638_a.b,
-                                  &BN_P638_b.b,
-                                  {&BN_P638_gX.b, &BN_P638_gY.b, &BN_P638_gZ.b}};
+const ECC_CURVE_DATA BN_P638 = {&BN_P638_p.b,
+                                &BN_P638_n.b,
+                                &BN_P638_h.b,
+                                &BN_P638_a.b,
+                                &BN_P638_b.b,
+                                {&BN_P638_gX.b, &BN_P638_gY.b, &BN_P638_gZ.b}};
 
 #    endif  // USE_BN_ECC_DATA
 
@@ -634,12 +634,12 @@ const ECC_CURVE_DATA SM2_P256 = {(bigNum)&SM2_P256_p,
                                   (bigNum)&SM2_P256_gZ}};
 
 #    else
-const ECC_CURVE_DATA SM2_P256  = {&SM2_P256_p.b,
-                                  &SM2_P256_n.b,
-                                  &SM2_P256_h.b,
-                                  &SM2_P256_a.b,
-                                  &SM2_P256_b.b,
-                                  {&SM2_P256_gX.b, &SM2_P256_gY.b, &SM2_P256_gZ.b}};
+const ECC_CURVE_DATA SM2_P256 = {&SM2_P256_p.b,
+                                 &SM2_P256_n.b,
+                                 &SM2_P256_h.b,
+                                 &SM2_P256_a.b,
+                                 &SM2_P256_b.b,
+                                 {&SM2_P256_gX.b, &SM2_P256_gY.b, &SM2_P256_gZ.b}};
 
 #    endif  // USE_BN_ECC_DATA
 
