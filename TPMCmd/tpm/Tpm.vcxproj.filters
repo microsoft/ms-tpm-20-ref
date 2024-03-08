@@ -595,15 +595,6 @@
     <ClCompile Include="src\crypt\wolf\TpmToWolfMath.c">
       <Filter>Source Files\Crypt\wolf</Filter>
     </ClCompile>
-    <ClCompile Include="src\crypt\ltc\TpmToLtcDesSupport.c">
-      <Filter>Source Files\Crypt\ltc</Filter>
-    </ClCompile>
-    <ClCompile Include="src\crypt\ltc\TpmToLtcMath.c">
-      <Filter>Source Files\Crypt\ltc</Filter>
-    </ClCompile>
-    <ClCompile Include="src\crypt\ltc\TpmToLtcSupport.c">
-      <Filter>Source Files\Crypt\ltc</Filter>
-    </ClCompile>
     <ClCompile Include="src\crypt\CryptEccCrypt.c">
       <Filter>Source Files\Crypt</Filter>
     </ClCompile>
@@ -1179,15 +1170,6 @@
     <ClInclude Include="include\prototypes\TpmSizeChecks_fp.h">
       <Filter>Headers\prototypes</Filter>
     </ClInclude>
-    <ClInclude Include="include\prototypes\TpmToLtcDesSupport_fp.h">
-      <Filter>Headers\prototypes</Filter>
-    </ClInclude>
-    <ClInclude Include="include\prototypes\TpmToLtcMath_fp.h">
-      <Filter>Headers\prototypes</Filter>
-    </ClInclude>
-    <ClInclude Include="include\prototypes\TpmToLtcSupport_fp.h">
-      <Filter>Headers\prototypes</Filter>
-    </ClInclude>
     <ClInclude Include="include\prototypes\TpmToOsslDesSupport_fp.h">
       <Filter>Headers\prototypes</Filter>
     </ClInclude>
@@ -1302,18 +1284,6 @@
     <ClInclude Include="include\prototypes\SMAC_fp.h">
       <Filter>Headers\prototypes</Filter>
     </ClInclude>
-    <ClInclude Include="include\ltc\TpmToLtcSym.h">
-      <Filter>Headers\Crypt\ltc</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ltc\TpmToLtcMath.h">
-      <Filter>Headers\Crypt\ltc</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ltc\TpmToLtcHash.h">
-      <Filter>Headers\Crypt\ltc</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ltc\LtcSettings.h">
-      <Filter>Headers\Crypt\ltc</Filter>
-    </ClInclude>
     <ClInclude Include="include\ossl\TpmToOsslHash.h">
       <Filter>Headers\Crypt\ossl</Filter>
     </ClInclude>
@@ -1388,9 +1358,6 @@
     <Filter Include="Source Files\Crypt">
       <UniqueIdentifier>{0ac750c7-149f-40fc-9820-47287d744b3b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Crypt\ltc">
-      <UniqueIdentifier>{be59b71d-f8f7-4132-80f5-e5f6f311614f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Crypt\ossl">
       <UniqueIdentifier>{cdeea2ca-7d66-43fc-9431-4bb51e70e78e}</UniqueIdentifier>
     </Filter>
@@ -1405,9 +1372,6 @@
     </Filter>
     <Filter Include="Source Files\AttachedComponent">
       <UniqueIdentifier>{c1608ff8-dc12-4101-8859-6d763377b840}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Crypt\ltc">
-      <UniqueIdentifier>{eb07d621-fe5c-415a-84f0-d0e4c68039ed}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headers\Crypt\ossl">
       <UniqueIdentifier>{1a979e04-0e58-4286-b6b0-52cb2b86d037}</UniqueIdentifier>

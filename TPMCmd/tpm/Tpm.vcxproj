@@ -222,14 +222,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\
       </AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;%(PreprocessorDefinitions); </PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -333,7 +333,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Static|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_4;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -383,7 +383,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -439,7 +439,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -464,7 +464,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_4;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -523,7 +523,7 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDir)LtcInclude\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\;$(ProjectDir)include\prototypes\;$(SolutionDir)Platform\include\;$(SolutionDir)Platform\include\prototypes\;$(SolutionDIr)OsslInclude\;$(SolutionDir)MsBnInclude\</AdditionalIncludeDirectories>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>TABLE_DRIVEN_DISPATCH=0;HASH_LIB=Ossl;SYM_LIB=Ossl;MATH_LIB=Ossl;CRYPTO_ALIGN_16;NDEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -741,9 +741,6 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='WolfDebug|Win32'">false</ShowIncludes>
     </ClCompile>
     <ClCompile Include="src\crypt\CryptRand.c" />
-    <ClCompile Include="src\crypt\ltc\TpmToLtcDesSupport.c" />
-    <ClCompile Include="src\crypt\ltc\TpmToLtcMath.c" />
-    <ClCompile Include="src\crypt\ltc\TpmToLtcSupport.c" />
     <ClCompile Include="src\crypt\ossl\TpmToOsslDesSupport.c" />
     <ClCompile Include="src\crypt\ossl\TpmToOsslMath.c" />
     <ClCompile Include="src\crypt\ossl\TpmToOsslSupport.c" />
@@ -819,10 +816,6 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     <ClInclude Include="include\HashTestData.h" />
     <ClInclude Include="include\KdfTestData.h" />
     <ClInclude Include="include\LibSupport.h" />
-    <ClInclude Include="include\ltc\LtcSettings.h" />
-    <ClInclude Include="include\ltc\TpmToLtcHash.h" />
-    <ClInclude Include="include\ltc\TpmToLtcMath.h" />
-    <ClInclude Include="include\ltc\TpmToLtcSym.h" />
     <ClInclude Include="include\MinMax.h" />
     <ClInclude Include="include\NV.h" />
     <ClInclude Include="include\OIDs.h" />
@@ -1009,9 +1002,6 @@ del $(SolutionDir)Simulator\RsaKeyCache*.data</Command>
     <ClInclude Include="include\prototypes\TpmASN1_fp.h" />
     <ClInclude Include="include\prototypes\TpmFail_fp.h" />
     <ClInclude Include="include\prototypes\TpmSizeChecks_fp.h" />
-    <ClInclude Include="include\prototypes\TpmToLtcDesSupport_fp.h" />
-    <ClInclude Include="include\prototypes\TpmToLtcMath_fp.h" />
-    <ClInclude Include="include\prototypes\TpmToLtcSupport_fp.h" />
     <ClInclude Include="include\prototypes\TpmToOsslDesSupport_fp.h" />
     <ClInclude Include="include\prototypes\TpmToOsslMath_fp.h" />
     <ClInclude Include="include\prototypes\TpmToOsslSupport_fp.h" />
