@@ -35,14 +35,13 @@ subject to the [Contributing Guidelines](../../CONTRIBUTING.md)
 | AutoTools          | Linux            | YES, Deprecation planned |
 | AutoTools          | MacOsX           | NO                       |
 | CMake              | Windows          | YES                      |
-| CMake              | Linux            | NO, Future plan          |
+| CMake              | Linux            | YES                      |
 | Visual Studio 2017 | Windows          | YES, Deprecation planned |
 | Visual Studio 2022 | Windows          | NO, Future plan          |
 
 ## Future Work
 
-As implied by the table above, CMake is expected to replace AutoTools support,
-and VS2022 will replace VS2017.
+As implied by the table above VS2022 will replace VS2017.
 
 ## Code Layout
 

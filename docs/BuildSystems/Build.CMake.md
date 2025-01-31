@@ -182,3 +182,22 @@ cmake --build DebugOpenSSL32
 
 If everything went well, you should have a working Simulator.exe in:
 `TPMCmd\DebugOpenSSL32\install\bin\Simulator.exe`
+
+## Linux + OpenSSL using command-line cmake
+
+1. Install cmake, gcc and openssl using the linux distribution package manager.
+2. Setup the CMake build environment
+```
+cmake -S TPMCmd/. -B TPMCmd/build/.
+```
+This tells CMake to set the top level of the Source tree to TPMCmd/ and create a Build
+directory "TPMCmd/build/"
+
+4. Execute the build
+Instruct CMake to build the build environment just created.
+```
+cmake --build TPMCmd/build/.
+```
+
+If everything went well, you should have a working binary in:
+`TPMCmd\build\Simulator`
