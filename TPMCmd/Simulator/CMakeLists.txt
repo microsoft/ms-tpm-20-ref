@@ -54,17 +54,17 @@ if(PROJECT_IS_TOP_LEVEL)
     find_package(Tpm_CoreLib CONFIG REQUIRED PATHS ${CMAKE_INSTALL_PREFIX} NO_DEFAULT_PATH )
 endif()
 
-# Link libraries
-target_link_libraries(Simulator PUBLIC TpmConfiguration::TpmConfiguration)
-target_link_libraries(Simulator PUBLIC Tpm_Public_Headers::Tpm_Public_Headers)
-target_link_libraries(Simulator PUBLIC Tpm_PlatformLib::Tpm_PlatformLib)
-target_link_libraries(Simulator PUBLIC Tpm_Platform_Interface::Tpm_Platform_Interface)
-target_link_libraries(Simulator PUBLIC Tpm_CoreLib::Tpm_CoreLib)
-target_link_libraries(Simulator PUBLIC Tpm_CryptoLib_TpmBigNum::Tpm_CryptoLib_TpmBigNum)
-
-set(WIN_LIBCRYPTO_PATH)
 
 if(WIN32)
+    # Link libraries
+    target_link_libraries(Simulator PUBLIC TpmConfiguration::TpmConfiguration)
+    target_link_libraries(Simulator PUBLIC Tpm_Public_Headers::Tpm_Public_Headers)
+    target_link_libraries(Simulator PUBLIC Tpm_PlatformLib::Tpm_PlatformLib)
+    target_link_libraries(Simulator PUBLIC Tpm_Platform_Interface::Tpm_Platform_Interface)
+    target_link_libraries(Simulator PUBLIC Tpm_CoreLib::Tpm_CoreLib)
+    target_link_libraries(Simulator PUBLIC Tpm_CryptoLib_TpmBigNum::Tpm_CryptoLib_TpmBigNum)
+
+    set(WIN_LIBCRYPTO_PATH)
     if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
         set(WIN_LIBCRYPTO_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../lib/x64")
         set(source_filename libcrypto-1_1-x64.dll)
@@ -99,7 +99,17 @@ if(WIN32)
             DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 else()
-    # not supported yet.
+  # Link libraries
+  target_link_libraries(Simulator PUBLIC
+    -Wl,--start-group
+    TpmConfiguration::TpmConfiguration
+    Tpm_Public_Headers::Tpm_Public_Headers
+    Tpm_CryptoLib_TpmBigNum::Tpm_CryptoLib_TpmBigNum
+    Tpm_CoreLib::Tpm_CoreLib
+    Tpm_PlatformLib::Tpm_PlatformLib
+    Tpm_Platform_Interface::Tpm_Platform_Interface
+    -Wl,--end-group
+  )
 endif ()
 
 # include Simulator

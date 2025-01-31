@@ -87,9 +87,8 @@ if (WIN32)
                             )
     target_link_libraries(Tpm_CryptoLib_Math_Ossl INTERFACE libcrypto)
 else()
-    message(FATAL_ERROR "CMake not supported on Linux yet.")
-#    find_package(OpenSLL MODULE REQUIRED)
-#    target_link_libraries(Tpm_CryptoLib_Math_Ossl INTERFACE OpenSSL::Crypto)
+    find_package(OpenSSL 3.0.14 REQUIRED COMPONENTS Crypto)
+    target_link_libraries(Tpm_CryptoLib_Math_Ossl PUBLIC OpenSSL::Crypto)
 endif()
 
 # create install and export information for downstream projects to use
