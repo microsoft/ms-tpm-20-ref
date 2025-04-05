@@ -94,26 +94,6 @@ static INT32 MarshalUint32(UINT32 integer, BYTE** buffer)
     return 4;
 }
 
-//***Unmarshal32()
-static BOOL Unmarshal32(UINT32* target, BYTE** buffer, INT32* size)
-{
-    if((*size -= 4) < 0)
-        return FALSE;
-    *target = BYTE_ARRAY_TO_UINT32(*buffer);
-    *buffer += 4;
-    return TRUE;
-}
-
-//***Unmarshal16()
-static BOOL Unmarshal16(UINT16* target, BYTE** buffer, INT32* size)
-{
-    if((*size -= 2) < 0)
-        return FALSE;
-    *target = BYTE_ARRAY_TO_UINT16(*buffer);
-    *buffer += 2;
-    return TRUE;
-}
-
 //** Public Functions
 
 //*** SetForceFailureMode()
@@ -182,18 +162,18 @@ void TpmFailureMode(uint32_t        inRequestSize,    // IN: command buffer size
     UINT32 pt;      // unmarshaled property type
     UINT32 count;   // unmarshaled property count
     UINT8* buffer = inRequest;
-    INT32  size   = inRequestSize;
 
-    // If there is no command buffer, then just return TPM_RC_FAILURE
-    if(inRequestSize == 0 || inRequest == NULL)
+    // If there is no command buffer or it is too small,
+    // then just return TPM_RC_FAILURE
+    if(inRequestSize < 10 || inRequest == NULL)
         goto FailureModeReturn;
     // If the header is not correct for TPM2_GetCapability() or
     // TPM2_GetTestResult() then just return the in failure mode response;
-    if(!(Unmarshal16(&header.tag, &buffer, &size)
-         && Unmarshal32(&header.size, &buffer, &size)
-         && Unmarshal32(&header.code, &buffer, &size)))
-        goto FailureModeReturn;
-    if(header.tag != TPM_ST_NO_SESSIONS || header.size < 10)
+    header.tag = BYTE_ARRAY_TO_UINT16(buffer);
+    header.size = BYTE_ARRAY_TO_UINT32(buffer + 2);
+    header.code = BYTE_ARRAY_TO_UINT32(buffer + 6);
+    buffer += 10;
+    if(header.tag != TPM_ST_NO_SESSIONS || header.size != inRequestSize)
         goto FailureModeReturn;
     switch(header.code)
     {
@@ -214,12 +194,13 @@ void TpmFailureMode(uint32_t        inRequestSize,    // IN: command buffer size
         case TPM_CC_GetCapability:
             // make sure that the size of the command is exactly the size
             // returned for the capability, property, and count
-            if(header.size != (10 + (3 * sizeof(UINT32)))
-               // also verify that this is requesting TPM properties
-               || !Unmarshal32(&capability, &buffer, &size)
-               || capability != TPM_CAP_TPM_PROPERTIES
-               || !Unmarshal32(&pt, &buffer, &size)
-               || !Unmarshal32(&count, &buffer, &size))
+            if(header.size != (10 + (3 * sizeof(UINT32))))
+                goto FailureModeReturn;
+            capability = BYTE_ARRAY_TO_UINT32(buffer);
+            pt = BYTE_ARRAY_TO_UINT32(buffer + 4);
+            count = BYTE_ARRAY_TO_UINT32(buffer + 8);
+            // also verify that this is requesting TPM properties
+            if(capability != TPM_CAP_TPM_PROPERTIES)
                 goto FailureModeReturn;
 
             if(count > 0)
