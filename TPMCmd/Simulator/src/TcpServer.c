@@ -39,6 +39,7 @@ static int CreateSocket(
 {
     struct sockaddr_in MyAddress;
     int                res;
+    int                optval = 1;
 //
 // Initialize Winsock
 #ifdef _MSC_VER
@@ -58,6 +59,16 @@ static int CreateSocket(
                WSAGetLastError());
         return -1;
     }
+
+    // Set the SO_REUSEADDR socket option to allow the socket to be reused and restarted quickly
+    // when the listening socket is in TIME_WAIT state, which happens often when debugging.
+    if(setsockopt(*ListenSocket, SOL_SOCKET, SO_REUSEADDR, (const char*)&optval, sizeof(optval)) < 0)
+    {
+        printf("setsockopt SO_REUSEADDR failed.  Error is 0x%x\n", WSAGetLastError());
+        closesocket(*ListenSocket);
+        return -1;
+    }
+
     // bind the listening socket to the specified port
     ZeroMemory(&MyAddress, sizeof(MyAddress));
     MyAddress.sin_port   = htons((unsigned short)PortNumber);
