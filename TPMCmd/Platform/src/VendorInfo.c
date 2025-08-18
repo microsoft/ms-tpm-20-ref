@@ -29,7 +29,7 @@ static uint32_t StringToUint32(char s[4])
 
 // return the 4 character Manufacturer Capability code.  This
 // should come from the platform library since that is provided by the manufacturer
-LIB_EXPORT uint32_t _plat__GetManufacturerCapabilityCode()
+LIB_EXPORT uint32_t _plat__GetManufacturerCapabilityCode(void)
 {
     return StringToUint32(MANUFACTURER);
 }
@@ -56,14 +56,14 @@ LIB_EXPORT uint32_t _plat__GetVendorCapabilityCode(int index)
 
 // return the most-significant 32-bits of the TPM Firmware Version reported by
 // getCapability.
-LIB_EXPORT uint32_t _plat__GetTpmFirmwareVersionHigh()
+LIB_EXPORT uint32_t _plat__GetTpmFirmwareVersionHigh(void)
 {
     return FIRMWARE_V1;
 }
 
 // return the least-significant 32-bits of the TPM Firmware Version reported by
 // getCapability.
-LIB_EXPORT uint32_t _plat__GetTpmFirmwareVersionLow()
+LIB_EXPORT uint32_t _plat__GetTpmFirmwareVersionLow(void)
 {
     return FIRMWARE_V2;
 }
