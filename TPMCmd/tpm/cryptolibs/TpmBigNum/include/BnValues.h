@@ -128,7 +128,7 @@ extern const bignum_t BnConstZero;
 // This is used to create a word-size bigNum and initialize it with
 // an input parameter to a function.
 #define BN_WORD_INITIALIZED(name, initial) \
-    BN_STRUCT(RADIX_BITS) name##_;         \
+    BN_STRUCT(name, RADIX_BITS) name##_;         \
     bigNum name = BnInitializeWord(        \
         (bigNum) & name##_, BN_STRUCT_ALLOCATION(RADIX_BITS), initial)
 

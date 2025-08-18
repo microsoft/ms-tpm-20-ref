@@ -2,7 +2,7 @@
 // This file contains utility functions to help using the external Math library
 // for Ecc functions.
 #include "Tpm.h"
-#include "TpmMath_Util_fp.h"
+#include "TpmEcc_Util_fp.h"
 
 #if ALG_ECC
 
